@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PathStart : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private PathFollower pathFollowerPrefab;
+    [SerializeField] private PathNode startNode;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        PathFollower pathFollower = Instantiate(pathFollowerPrefab, startNode.Position, Quaternion.identity);
+        pathFollower.Init(startNode);
     }
 }

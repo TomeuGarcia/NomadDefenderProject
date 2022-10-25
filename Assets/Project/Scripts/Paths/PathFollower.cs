@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PathFollower : MonoBehaviour
 {
+
     
     private PathNode currentNode = null;
     private Vector3 moveDirection;
+    [SerializeField, Min(0f)] private float moveSpeed = 20f;
 
     public Vector3 Position => transform.position;
 
@@ -23,13 +25,22 @@ public class PathFollower : MonoBehaviour
 
     private void Update()
     {
-        
-        if (currentNode.HasArrived(Position))
+        if (currentNode.GetNextNode().HasArrived(Position))
         {
-            // TODO
+            if (!currentNode.IsLastNode)
+            {
+                currentNode = currentNode.GetNextNode();
+                moveDirection = currentNode.GetDirectionToNextNode();
+            }
+            else
+            {
+                moveDirection = Vector3.zero;
+            }
+
+            transform.position = currentNode.Position;
         }
 
-
+        transform.position = Position + (moveDirection * (moveSpeed * Time.deltaTime));
     }
 
 
