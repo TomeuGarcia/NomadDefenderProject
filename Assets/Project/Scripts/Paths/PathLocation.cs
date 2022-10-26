@@ -4,12 +4,27 @@ using UnityEngine;
 
 public class PathLocation : MonoBehaviour
 {
-    private int lives = 2;
-    public bool isDead => lives <= 0;
+    [SerializeField] private int health = 3;
+    private HealthSystem healthSystem;
+
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Material deadMaterial;
 
 
-    public void TakeDamage()
+    public bool IsDead => healthSystem.IsDead();
+
+
+    private void Awake()
     {
-        --lives;
+        healthSystem = new HealthSystem(health);
     }
+
+    public void TakeDamage(int damageAmount)
+    {
+        healthSystem.TakeDamage(damageAmount);
+        if (healthSystem.IsDead())
+            meshRenderer.material = deadMaterial;
+    }
+
+
 }
