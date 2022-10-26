@@ -9,6 +9,9 @@ public class HealthSystem
     [SerializeField] private int maxHealth;
     private int health;
 
+    public float healthRatio => (float)health / (float)maxHealth;
+
+
     public HealthSystem(int maxHealth)
     {
         this.maxHealth = maxHealth;
