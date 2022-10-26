@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PathNode : MonoBehaviour
 {
-    static float arrivedThreshold = 0.05f;
+    static float ARRIVED_THRESHOLD = 0.08f;
 
 
-    [SerializeField] private PathNode nextNode;
+    [SerializeField] protected PathNode nextNode;
 
     public bool IsLastNode => nextNode == null;
     public Vector3 Position => transform.position;
@@ -33,7 +33,7 @@ public class PathNode : MonoBehaviour
 
     public bool HasArrived(Vector3 position)
     {
-        return Vector3.Distance(position, Position) <= arrivedThreshold;
+        return Vector3.Distance(position, Position) <= ARRIVED_THRESHOLD;
     }
 
 

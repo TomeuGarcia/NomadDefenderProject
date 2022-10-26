@@ -8,7 +8,7 @@ public class PathFollower : MonoBehaviour
     // Target Node
     private PathNode targetNode = null;
     private Vector3 moveDirection;
-    [SerializeField, Min(0f)] private float moveSpeed = 20f;
+    [SerializeField, Min(0f)] private float moveSpeed = 10f;
     private Transform transformToMove;
 
     // Path Follow Control
@@ -48,7 +48,7 @@ public class PathFollower : MonoBehaviour
 
     private void Update()
     {
-        if (!finished || paused) FollowPath();
+        if (!finished && !paused) FollowPath();
     }
 
 
@@ -62,7 +62,6 @@ public class PathFollower : MonoBehaviour
             if (targetNode.IsLastNode)
             {
                 finished = true;
-                moveDirection = Vector3.zero;
                 if (OnPathEndReached != null) OnPathEndReached();
             }
             else
@@ -77,7 +76,11 @@ public class PathFollower : MonoBehaviour
         transformToMove.position = Position + (travelStep);
         travelledDistance += travelStep.magnitude;
 
-        transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
+        if (Vector3.Dot(transformToMove.forward, moveDirection) < 1f)
+        {
+            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
+        }
+        
     }
 
 
