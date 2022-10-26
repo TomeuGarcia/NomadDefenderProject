@@ -200,14 +200,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.38663256, y: -0, z: -0, w: 0.9222338}
-  m_LocalPosition: {x: 0.97, y: 9.9, z: -10}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
+  m_LocalPosition: {x: -8, y: 8, z: -2.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45.49, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,6 +677,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb349f63f0f6624492799029208d50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
+  meshRenderer: {fileID: 924111924}
+  deadMaterial: {fileID: 2100000, guid: d25b84825e1204b4494d539f44989c5d, type: 2}
 --- !u!136 &1010859500
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1535,6 +1538,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb349f63f0f6624492799029208d50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
+  meshRenderer: {fileID: 1417054257}
+  deadMaterial: {fileID: 2100000, guid: d25b84825e1204b4494d539f44989c5d, type: 2}
 --- !u!4 &1901861731
 Transform:
   m_ObjectHideFlags: 0
@@ -1724,6 +1730,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 4599594694859222350, guid: 2fa3fab4b5f099844a07ca482790951e,
+    type: 3}
+  projectilePrefab: {fileID: 2563092008309870780, guid: 3f8e41adecb30da4f925fce56f81fddc,
     type: 3}
   startNode: {fileID: 2116998163}
 --- !u!4 &2125660612

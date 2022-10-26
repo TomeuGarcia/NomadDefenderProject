@@ -8,7 +8,7 @@ public class LocationBranchPathNode : PathNode
     private PathNode holderNextNode;
 
     [SerializeField] private PathLocation pathLocation;
-    private bool LocationIsDead => pathLocation.isDead;
+    private bool LocationIsDead => pathLocation.IsDead;
 
 
     void Awake()
