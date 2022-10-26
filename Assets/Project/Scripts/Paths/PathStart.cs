@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class PathStart : MonoBehaviour
 {
-    [SerializeField] private PathFollower pathFollowerPrefab;
+    [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private PathNode startNode;
 
     private void Start()
     {
-        PathFollower pathFollower = Instantiate(pathFollowerPrefab, startNode.Position, Quaternion.identity);
-        pathFollower.Init(startNode);
+        float totalDistance = 0f;
+        PathNode itNode = startNode;
+        while (!itNode.IsLastNode)
+        {
+            totalDistance += itNode.GetDistanceToNextNode();
+            itNode = itNode.GetNextNode();
+        }
+
+
+        Enemy enemy = Instantiate(enemyPrefab, startNode.Position, Quaternion.identity);
+        enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, enemy.transformToMove);
     }
 }

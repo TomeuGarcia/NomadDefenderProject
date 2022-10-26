@@ -5,42 +5,79 @@ using UnityEngine;
 public class PathFollower : MonoBehaviour
 {
 
-    
-    private PathNode currentNode = null;
+    // Target Node
+    private PathNode targetNode = null;
     private Vector3 moveDirection;
     [SerializeField, Min(0f)] private float moveSpeed = 20f;
+    private Transform transformToMove;
 
-    public Vector3 Position => transform.position;
+    // Path Follow Control
+    private bool finished = false;
+    [HideInInspector] public bool paused = false;
+
+    // Distance
+    private float travelledDistance = 0f;
+    private float totalDistanceToTravel = 0f;
+    float DistanceLeftToEnd => totalDistanceToTravel - travelledDistance; 
+
+    // Position
+    public Vector3 Position => transformToMove.position;
 
 
-    public void Init(PathNode startNode)
+
+    // Actions
+    public delegate void PathFollowerAction();
+    public PathFollowerAction OnPathFollowStart;
+    public PathFollowerAction OnPathEndReached;
+
+
+
+    public void Init(PathNode startTargetNode, Vector3 startDirection, float totalDistanceToTravel, Transform transformToMove = null)
     {
-        currentNode = startNode;
+        targetNode = startTargetNode;
+        moveDirection = startDirection;
 
+        this.totalDistanceToTravel = totalDistanceToTravel;
 
-        moveDirection = currentNode.GetDirectionToNextNode();
+        this.transformToMove = transformToMove ? transformToMove : transform;
+
+        if (OnPathFollowStart != null) OnPathFollowStart();
     }
 
 
 
     private void Update()
     {
-        if (currentNode.GetNextNode().HasArrived(Position))
+        if (!finished || paused) FollowPath();
+    }
+
+
+    void FollowPath()
+    {
+        if (targetNode.HasArrived(Position))
         {
-            if (!currentNode.IsLastNode)
+            transformToMove.position = targetNode.Position; // Snap at position
+
+
+            if (targetNode.IsLastNode)
             {
-                currentNode = currentNode.GetNextNode();
-                moveDirection = currentNode.GetDirectionToNextNode();
+                finished = true;
+                moveDirection = Vector3.zero;
+                if (OnPathEndReached != null) OnPathEndReached();
             }
             else
             {
-                moveDirection = Vector3.zero;
+                moveDirection = targetNode.GetDirectionToNextNode();
+                targetNode = targetNode.GetNextNode();
             }
 
-            transform.position = currentNode.Position;
         }
 
-        transform.position = Position + (moveDirection * (moveSpeed * Time.deltaTime));
+        Vector3 travelStep = moveDirection * (moveSpeed * Time.deltaTime);
+        transformToMove.position = Position + (travelStep);
+        travelledDistance += travelStep.magnitude;
+
+        transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
     }
 
 

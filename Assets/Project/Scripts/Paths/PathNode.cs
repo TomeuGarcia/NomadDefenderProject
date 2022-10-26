@@ -21,6 +21,11 @@ public class PathNode : MonoBehaviour
         return nextNode;
     }
 
+    public float GetDistanceToNextNode()
+    {
+        return (nextNode.Position - Position).magnitude;
+    }
+
     public Vector3 GetDirectionToNextNode()
     {
         return (nextNode.Position - Position).normalized;
