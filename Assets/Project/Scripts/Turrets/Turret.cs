@@ -9,19 +9,30 @@ public class Turret : Building
     [SerializeField] int shootCooldown;
     [SerializeField] int attackRange;
     [SerializeField] int targetAmount;
-    Queue<int> enemies;
-
+    [SerializeField] List<(int, float)> enemies = new List<(int, float)>();
+    
     [SerializeField] private Transform shootingPoint;
 
-    //PROBLEMA AMB LA QUEUE
-    //LA TORRE NO HA D'ATACAR A L'ULTIM ENEMIC QUE ENTRA, SI NO AL MÉS AVANÇAT EN EL CAMÍ
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            enemies.Add((1, (float)Random.Range(1, 10)));
+            enemies.Sort(mySort);
+            
+            foreach ((int, float) enemy in enemies)
+            {
+                Debug.Log(enemy.Item1 + ", " + enemy.Item2);
+            }
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Enemy")
         {
-            enemies.Enqueue(0);
-            //enemies.Enqueue(other.gameObject.GetComponent<Enemy>());
+            //Enemy currentEnemy = other.gameObject.GetComponent<Enemy>();
+            //enemies.Enqueue(currentEnemy, currentEnemy.GetDistance());
         }
     }
 
@@ -29,8 +40,13 @@ public class Turret : Building
     {
         if (other.tag == "Enemy")
         {
-
-            //other.gameObject.GetComponent<Enemy>
+            enemies.Sort(mySort);
+            //Enemy currentEnemy = other.gameObject.GetComponent<Enemy>();
         }
+    }
+
+    int mySort((int, float) e1, (int, float) e2)
+    {
+        return e1.Item2.CompareTo(e2.Item2);
     }
 }
