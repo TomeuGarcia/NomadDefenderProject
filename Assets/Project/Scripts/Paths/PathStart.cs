@@ -7,7 +7,15 @@ public class PathStart : MonoBehaviour
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private PathNode startNode;
 
-    private void Start()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SpawnEnemy();
+        }
+    }
+
+    private void SpawnEnemy()
     {
         float totalDistance = 0f;
         PathNode itNode = startNode;
@@ -21,4 +29,5 @@ public class PathStart : MonoBehaviour
         Enemy enemy = Instantiate(enemyPrefab, startNode.Position, Quaternion.identity);
         enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, enemy.transformToMove);
     }
+
 }
