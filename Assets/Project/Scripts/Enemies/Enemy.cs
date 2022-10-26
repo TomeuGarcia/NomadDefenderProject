@@ -32,6 +32,8 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        //TODO - RESET ENEMY
+
         pathFollower.OnPathEndReached += Attack;
     }
 
@@ -53,7 +55,8 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("PathLocation"))
         {
             other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
-            Destroy(gameObject); ///////////////////////////////////////////////////////////
+            gameObject.SetActive(false);
+            //Destroy(gameObject);//////////////////////////
         }
     }
 
@@ -73,9 +76,13 @@ public class Enemy : MonoBehaviour
 
         if (healthSystem.IsDead())
         {
-            Destroy(gameObject);//////////////////////////
+            gameObject.SetActive(false);
+            //Destroy(gameObject);//////////////////////////
         }
     }
 
-
+    public float GetTravelDistance()
+    {
+        return pathFollower.GetTravelDistance();
+    }
 }

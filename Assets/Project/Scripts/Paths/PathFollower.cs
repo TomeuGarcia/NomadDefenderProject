@@ -83,5 +83,8 @@ public class PathFollower : MonoBehaviour
         
     }
 
-
+    public float GetTravelDistance()
+    {
+        return travelledDistance;
+    }
 }

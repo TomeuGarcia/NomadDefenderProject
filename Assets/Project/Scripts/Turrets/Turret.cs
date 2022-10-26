@@ -19,7 +19,7 @@ public class Turret : Building
     [Header("OTHERS")]
     [SerializeField] private Transform shootingPoint;
     
-    private List<(int, float)> enemies = new List<(int, float)>();
+    private List<(Enemy, float)> enemies = new List<(Enemy, float)>();
 
     private void Awake()
     {
@@ -46,41 +46,43 @@ public class Turret : Building
                 {
                     if(i <= enemies.Count - 1)
                     {
-                        //Shoot(enemies[i].Item2);
+                        Shoot(enemies[i].Item1);
                     }
                 }
             }
         }
     }
 
-    private void Shoot(Transform enemyTarget)
+    private void Shoot(Enemy enemyTarget)
     {
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
         currentAttack.transform.position = shootingPoint.position;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Activate(enemyTarget, damage);
+        currentAttack.Init(enemyTarget, damage);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Enemy")
         {
-            enemies.Add((10, 10.0f));
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+            enemies.Add((enemy, enemy.GetTravelDistance()));
             enemies.Sort(mySort);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)  //NOT WORKING
     {
         if (other.tag == "Enemy")
         {
             int i = 0;
-            foreach((int, float) enemy in enemies)
+            foreach((Enemy, float) enemy in enemies)
             {
-                //if(enemy.Item2 == other.gameObject.GetComponent<Enemy>())
-                //{
-                //    enemies.RemoveAt(i);
-                //}
+                if(enemy.Item1 == other.gameObject.GetComponent<Enemy>())
+                {
+                    enemies.RemoveAt(i);
+                    break;
+                }
                 i++;
             }
 
@@ -88,7 +90,7 @@ public class Turret : Building
         }
     }
 
-    int mySort((int, float) e1, (int, float) e2)
+    int mySort((Enemy, float) e1, (Enemy, float) e2)
     {
         return e1.Item2.CompareTo(e2.Item2);
     }

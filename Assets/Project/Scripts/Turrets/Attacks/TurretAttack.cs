@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class TurretAttack : MonoBehaviour
 {
-    public virtual void Activate(Transform newTarget, float damage) { }
+    public virtual void Init(Enemy newEnemy, int damage) { }
 }
