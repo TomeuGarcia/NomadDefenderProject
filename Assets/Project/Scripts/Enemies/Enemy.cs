@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
 
     private HealthSystem healthSystem;
 
+    public delegate void OnDeathAction();
 
     public Vector3 Position => transformToMove.position;
     public Vector3 Right => transformToMove.right;
@@ -55,7 +56,7 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("PathLocation"))
         {
             other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
-            gameObject.SetActive(false);
+            Suicide();
             //Destroy(gameObject);//////////////////////////
         }
     }
@@ -76,9 +77,23 @@ public class Enemy : MonoBehaviour
 
         if (healthSystem.IsDead())
         {
-            gameObject.SetActive(false);
-            //Destroy(gameObject);//////////////////////////
+            Death();
         }
+    }
+
+    private void Suicide()
+    {
+        Deactivation();
+    }
+
+    private void Death()
+    {
+        Deactivation();
+    }
+
+    private void Deactivation()
+    {
+        gameObject.SetActive(false);
     }
 
     public float GetTravelDistance()
