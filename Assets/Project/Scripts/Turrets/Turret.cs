@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class Turret : Building
 {
-    private BoxCollider bc;
-    private Pool attackPool;
+    [Header("COMPONENTS")]
+    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private Pool attackPool;
 
     [Header("STATS")]
     [SerializeField] int playCost;
@@ -18,16 +20,17 @@ public class Turret : Building
 
     [Header("OTHERS")]
     [SerializeField] private Transform shootingPoint;
-    
-    private List<(Enemy, float)> enemies = new List<(Enemy, float)>();
+
+    private List<Enemy> enemies = new List<Enemy>();
+
+    private void OnValidate()
+    {
+        boxCollider.size = new Vector3(attackRange, 1.0f, attackRange);
+    }
 
     private void Awake()
     {
-        attackPool = GameObject.Find("BasicTurretAttackPool").gameObject.GetComponent<Pool>();
         currentShootTimer = 0.0f;
-
-        bc = gameObject.GetComponent<BoxCollider>();
-        bc.size = new Vector3(attackRange, 1.0f, attackRange);
     }
 
     private void Update()
@@ -46,7 +49,7 @@ public class Turret : Building
                 {
                     if(i <= enemies.Count - 1)
                     {
-                        Shoot(enemies[i].Item1);
+                        Shoot(enemies[i]);
                     }
                 }
             }
@@ -57,8 +60,11 @@ public class Turret : Building
     {
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
         currentAttack.transform.position = shootingPoint.position;
+        currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.Init(enemyTarget, damage);
+
+        enemyTarget.ChangeMat();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,32 +72,31 @@ public class Turret : Building
         if(other.tag == "Enemy")
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemies.Add((enemy, enemy.GetTravelDistance()));
+            enemy.OnEnemyDeath += DeleteEnemyFromList;
+            enemies.Add(enemy);
             enemies.Sort(mySort);
         }
     }
 
-    private void OnTriggerExit(Collider other)  //NOT WORKING
+    private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Enemy")
         {
-            int i = 0;
-            foreach((Enemy, float) enemy in enemies)
-            {
-                if(enemy.Item1 == other.gameObject.GetComponent<Enemy>())
-                {
-                    enemies.RemoveAt(i);
-                    break;
-                }
-                i++;
-            }
-
-            enemies.Sort(mySort);
+            other.gameObject.GetComponent<Enemy>().OnEnemyDeath -= DeleteEnemyFromList;
+            DeleteEnemyFromList(other.gameObject.GetComponent<Enemy>());
         }
     }
 
-    int mySort((Enemy, float) e1, (Enemy, float) e2)
+    private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
-        return e1.Item2.CompareTo(e2.Item2);
+        enemyToDelete.ChangeToBaseMat();
+        enemies.Remove(enemyToDelete);
+
+        enemies.Sort(mySort);
+    }
+
+    int mySort(Enemy e1, Enemy e2)
+    {
+        return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }
 }

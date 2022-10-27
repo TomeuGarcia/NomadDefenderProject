@@ -43,7 +43,6 @@ public class PathStart : MonoBehaviour
         }
 
 
-        //Enemy enemy = Instantiate(enemyPrefab, startNode.Position, Quaternion.identity);
         Enemy enemy = enemyPool.GetObject(startNode.Position, Quaternion.identity).gameObject.GetComponent<Enemy>();
         enemy.gameObject.SetActive(true);
         enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, enemy.transformToMove);

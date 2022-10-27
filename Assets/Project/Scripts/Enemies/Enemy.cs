@@ -3,37 +3,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
+    private void OnMouseEnter()
+    {
+        Debug.Log("GOT CLICKED");
+    }
+
+    [Header("Mesh")]
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Material baseMaterial;
+    [SerializeField] private Material selectedMaterial;
+
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Image healthImage;
+    [SerializeField] private BoxCollider boxCollider;
 
     [Header("Stats")]
     [SerializeField] private int damage = 1;
     [SerializeField] private int health = 2;
+    [SerializeField] public int currencyDrop;
 
 
     private HealthSystem healthSystem;
 
-    public delegate void OnDeathAction();
+    public delegate void EnemyAction(Enemy enemy);
+    public static EnemyAction OnEnemyDeathDropCurrency;
+    public EnemyAction OnEnemyDeath;
 
-    public Vector3 Position => transformToMove.position;
+    public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
-
 
     private void Awake()
     {
         healthSystem = new HealthSystem(health);
     }
 
+    private void OnValidate()
+    {
+        boxCollider.center = meshRenderer.gameObject.transform.localPosition;
+        boxCollider.size = meshRenderer.gameObject.transform.localScale;
+    }
+
     private void OnEnable()
     {
-        //TODO - RESET ENEMY
+        ResetEnemy();
 
         pathFollower.OnPathEndReached += Attack;
     }
@@ -41,6 +61,15 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         pathFollower.OnPathEndReached -= Attack;
+    }
+
+    private void ResetEnemy()
+    {
+        StopAllCoroutines();
+
+        meshRenderer.material = baseMaterial;
+        healthSystem.HealToMax();
+        healthImage.fillAmount = healthSystem.healthRatio;
     }
 
     private void Update()
@@ -88,16 +117,24 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
+        if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
         Deactivation();
     }
 
     private void Deactivation()
     {
+        if (OnEnemyDeath != null) OnEnemyDeath(this);
+
+        rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 
-    public float GetTravelDistance()
+    public void ChangeMat()
     {
-        return pathFollower.GetTravelDistance();
+        meshRenderer.material = selectedMaterial;
+    }
+    public void ChangeToBaseMat()
+    {
+        meshRenderer.material = baseMaterial;
     }
 }

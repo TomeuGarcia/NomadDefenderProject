@@ -18,7 +18,7 @@ public class PathFollower : MonoBehaviour
     // Distance
     private float travelledDistance = 0f;
     private float totalDistanceToTravel = 0f;
-    float DistanceLeftToEnd => totalDistanceToTravel - travelledDistance; 
+    public float DistanceLeftToEnd => totalDistanceToTravel - travelledDistance; 
 
     // Position
     public Vector3 Position => transformToMove.position;
@@ -37,6 +37,9 @@ public class PathFollower : MonoBehaviour
         targetNode = startTargetNode;
         moveDirection = startDirection;
 
+        finished = false;
+        paused = false;
+        travelledDistance = 0.0f;
         this.totalDistanceToTravel = totalDistanceToTravel;
 
         this.transformToMove = transformToMove ? transformToMove : transform;
@@ -80,11 +83,5 @@ public class PathFollower : MonoBehaviour
         {
             transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
         }
-        
-    }
-
-    public float GetTravelDistance()
-    {
-        return travelledDistance;
     }
 }

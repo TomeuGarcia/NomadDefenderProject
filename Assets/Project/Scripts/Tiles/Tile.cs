@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileTypes { GRASS }
+    public enum TileTypes { PATH, GRASS }
 }
