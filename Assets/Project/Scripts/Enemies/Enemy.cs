@@ -7,7 +7,7 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    private void OnMouseEnter()
+    private void OnMouseClick()
     {
         Debug.Log("GOT CLICKED");
     }
