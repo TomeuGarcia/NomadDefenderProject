@@ -126,14 +126,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b221c6aae3464bc43a8535aaf1c1d60f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileTypes: 1
+  validTileType: 1
   boxCollider: {fileID: 8996520235991110352}
   attackPool: {fileID: 3773833721592868626}
-  playCost: 1
-  damage: 1
-  attackRange: 20
-  targetAmount: 1
-  shootCooldown: 1
+  stats:
+    playCost: 1
+    damage: 1
+    range: 10
+    targetAmount: 1
+    cadence: 1.5
   shootingPoint: {fileID: 8996520237051216202}
 --- !u!65 &8996520235991110352
 BoxCollider:
@@ -146,7 +147,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 20, y: 1, z: 20}
+  m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8996520237051216197
 GameObject:
