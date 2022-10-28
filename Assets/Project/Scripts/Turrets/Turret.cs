@@ -11,11 +11,7 @@ public class Turret : Building
     [SerializeField] private Pool attackPool;
 
     [Header("STATS")]
-    [SerializeField] int playCost;
-    [SerializeField] int damage;
-    [SerializeField] int attackRange;
-    [SerializeField] int targetAmount;
-    [SerializeField] float shootCooldown;
+    [SerializeField] private TurretStats stats;
     private float currentShootTimer;
 
     [Header("OTHERS")]
@@ -23,9 +19,11 @@ public class Turret : Building
 
     private List<Enemy> enemies = new List<Enemy>();
 
+
+
     private void OnValidate()
     {
-        boxCollider.size = new Vector3(attackRange, 1.0f, attackRange);
+        boxCollider.size = new Vector3(stats.range, 1.0f, stats.range);
     }
 
     private void Awake()
@@ -35,7 +33,7 @@ public class Turret : Building
 
     private void Update()
     {
-        if(currentShootTimer < shootCooldown)
+        if(currentShootTimer < stats.cadence)
         {
             currentShootTimer += Time.deltaTime;
         }
@@ -45,7 +43,7 @@ public class Turret : Building
             {
                 currentShootTimer = 0.0f;
 
-                for (int i = 0; i < targetAmount; i++)
+                for (int i = 0; i < stats.targetAmount; i++)
                 {
                     if(i <= enemies.Count - 1)
                     {
@@ -56,20 +54,9 @@ public class Turret : Building
         }
     }
 
-    private void Shoot(Enemy enemyTarget)
-    {
-        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
-        currentAttack.transform.position = shootingPoint.position;
-        currentAttack.transform.parent = attackPool.transform;
-        currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, damage);
-
-        enemyTarget.ChangeMat();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Enemy")
+        if (other.tag == "Enemy")
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
             enemy.OnEnemyDeath += DeleteEnemyFromList;
@@ -86,6 +73,31 @@ public class Turret : Building
             DeleteEnemyFromList(other.gameObject.GetComponent<Enemy>());
         }
     }
+
+
+    public override void GotPlaced(TurretStats turretStats)
+    {
+        InitStats(turretStats);
+    }
+
+    public void InitStats(TurretStats stats)
+    {
+        this.stats = stats;
+    }
+
+
+    private void Shoot(Enemy enemyTarget)
+    {
+        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
+        currentAttack.transform.position = shootingPoint.position;
+        currentAttack.transform.parent = attackPool.transform;
+        currentAttack.gameObject.SetActive(true);
+        currentAttack.Init(enemyTarget, stats.damage);
+
+        enemyTarget.ChangeMat();
+    }
+
+
 
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
