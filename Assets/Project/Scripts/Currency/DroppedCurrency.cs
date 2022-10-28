@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DroppedCurrency : MonoBehaviour
 {
     private int value;
+    
+    [SerializeField] private float indicatorTime;
 
     private void OnMouseEnter()
     {
-        Debug.Log("GOT CLICKED");
-        GotPickedUp();
+        StartCoroutine(GotPickedUp());
     }
 
     public void SetValue(int newValue)
@@ -17,8 +19,9 @@ public class DroppedCurrency : MonoBehaviour
         value = newValue;
     }
 
-    private void GotPickedUp()
+    private IEnumerator GotPickedUp()
     {
+        yield return new WaitForSeconds(indicatorTime);
         gameObject.SetActive(false);
     }
 }
