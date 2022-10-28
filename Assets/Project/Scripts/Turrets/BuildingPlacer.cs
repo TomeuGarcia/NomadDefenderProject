@@ -38,12 +38,12 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    public bool CanPlaceSelectedBuildingOnTile(Tile tile)
+    private bool CanPlaceSelectedBuildingOnTile(Tile tile)
     {
         return selectedBuilding.validTileType == tile.tileType;
     }
 
-    public void PlaceSelectedBuilding(Tile tile)
+    private void PlaceSelectedBuilding(Tile tile)
     {
         Building building = Instantiate(selectedBuildingCard.buildingPrefab, tile.buildingPlacePosition, Quaternion.identity).GetComponent<Building>();
         building.GotPlaced(selectedBuildingCard.turretStats);
