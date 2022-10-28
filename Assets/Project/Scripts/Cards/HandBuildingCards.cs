@@ -6,12 +6,18 @@ public class HandBuildingCards : MonoBehaviour
 {
     [SerializeField] private BuildingPlacer buildingPlacer;
 
+    [SerializeField] private List<BuildingCard> cards;
+
 
     private BuildingCard selectedCard;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
 
 
+    private void Awake()
+    {
+        InitCardsInHand();
+    }
 
     private void OnEnable()
     {
@@ -40,15 +46,29 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
+    private void InitCardsInHand()
+    {
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            cards[i].transform.SetParent(transform);
+            cards[i].transform.localPosition = Vector3.zero;
+            cards[i].transform.position += transform.right * 1.1f * i;
+            cards[i].transform.localRotation = Quaternion.identity;
+
+            cards[i].InitPositions(cards[0].SelectedPosition);
+        }
+    }
 
     private void SetHoveredCard(BuildingCard card)
     {
         card.HoveredState();
+        BuildingCard.OnCardHovered -= SetHoveredCard;
     }
 
     private void SetStandardCard(BuildingCard card)
     {
         card.StandardState();
+        BuildingCard.OnCardHovered += SetHoveredCard;
     }
 
     private void ResetAndSetStandardCard(BuildingCard card)
