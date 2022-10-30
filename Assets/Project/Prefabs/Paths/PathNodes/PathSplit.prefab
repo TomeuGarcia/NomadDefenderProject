@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4468162949968915250}
   - component: {fileID: 1425550507898017436}
-  m_Layer: 0
+  - component: {fileID: 7669491367092870641}
+  m_Layer: 8
   m_Name: PathSplit
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -48,6 +49,19 @@ MonoBehaviour:
   nextNode: {fileID: 0}
   locationEndNode: {fileID: 0}
   pathLocation: {fileID: 0}
+--- !u!65 &7669491367092870641
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4468162949968915248}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.2, z: 1}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1001 &2601721254872359999
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114,6 +128,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tile_split
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a2d4d15cd0dda1545aa92431f6dabf2e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2d4d15cd0dda1545aa92431f6dabf2e, type: 3}

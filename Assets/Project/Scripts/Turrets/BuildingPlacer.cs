@@ -45,6 +45,8 @@ public class BuildingPlacer : MonoBehaviour
 
     private void PlaceSelectedBuilding(Tile tile)
     {
+        tile.isOccupied = true;
+
         Building building = Instantiate(selectedBuildingCard.buildingPrefab, tile.buildingPlacePosition, Quaternion.identity).GetComponent<Building>();
         building.GotPlaced(selectedBuildingCard.turretStats);
 
