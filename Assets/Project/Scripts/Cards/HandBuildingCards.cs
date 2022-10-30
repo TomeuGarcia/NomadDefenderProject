@@ -4,14 +4,31 @@ using UnityEngine;
 
 public class HandBuildingCards : MonoBehaviour
 {
+    [SerializeField] private AnimationCurve cardsHeightCurve;
+    [SerializeField] private AnimationCurve cardsRotationCurve;
+
+    [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
+
+    [SerializeField] private List<BuildingCard> cards;
 
 
     private BuildingCard selectedCard;
+    private Vector3 selectedPosition;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
 
 
+    private void OnValidate()
+    {
+        ComputeSelectedPosition();
+    }
+
+    private void Awake()
+    {
+        ComputeSelectedPosition();
+        InitCardsInHand();
+    }
 
     private void OnEnable()
     {
@@ -19,7 +36,7 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered += SetStandardCard;
         BuildingCard.OnCardSelected += CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced += RemoveCard;
+        buildingPlacer.OnBuildingPlaced += SubtractCurrencyAndRemoveCard;
     }
 
     private void OnDisable()
@@ -28,7 +45,7 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered -= SetStandardCard;
         BuildingCard.OnCardSelected -= CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced -= RemoveCard;
+        buildingPlacer.OnBuildingPlaced -= SubtractCurrencyAndRemoveCard;
     }
 
     private void Update()
@@ -40,15 +57,43 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
+    private void InitCardsInHand()
+    {
+        float displacementStep = 0.8f;
+        Vector3 widthDisplacement = transform.right * displacementStep;
+
+        float halfCardCount = cards.Count / 2f;
+        float extraWidthDisplacement = cards.Count % 2 > 0 ? BuildingCard.halfWidth * displacementStep : 0f;
+        Vector3 startDisplacement = (extraWidthDisplacement - halfCardCount) * transform.right;
+               
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            float iRatio = (float)i / (cards.Count - 1);
+            Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
+            Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
+            Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
+
+
+            cards[i].transform.SetParent(transform);
+            cards[i].transform.localPosition = Vector3.zero;
+            cards[i].transform.position += startDisplacement + (widthDisplacement * i) + heightDisplacement + depthDisplacement;
+            cards[i].transform.localRotation = rotation;
+
+            cards[i].InitPositions(selectedPosition);
+        }
+    }
 
     private void SetHoveredCard(BuildingCard card)
     {
         card.HoveredState();
+        BuildingCard.OnCardHovered -= SetHoveredCard;
     }
 
     private void SetStandardCard(BuildingCard card)
     {
         card.StandardState();
+        BuildingCard.OnCardHovered += SetHoveredCard;
     }
 
     private void ResetAndSetStandardCard(BuildingCard card)
@@ -62,9 +107,11 @@ public class HandBuildingCards : MonoBehaviour
 
     private void CheckSelectCard(BuildingCard card)
     {
-        if (true) // Check card's playCost !!!!!!
+        int cardCost = card.turretStats.playCost;
+
+        if (currencyCounter.HasEnoughCurrency(cardCost)) // Check card's playCost !!!!!!
         {
-            SetSelectedCard(card);
+            SetSelectedCard(card);            
         }
     }
 
@@ -79,11 +126,21 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
-    private void RemoveCard() // TODO
+    private void SubtractCurrencyAndRemoveCard() // TODO
     {
+        int cardCost = selectedCard.turretStats.playCost;
+        currencyCounter.SubtractCurrency(cardCost);
+
+        // TODO
         // for now reset
-        ResetAndSetStandardCard(selectedCard);
+        ResetAndSetStandardCard(selectedCard); 
     }
 
+
+
+    private void ComputeSelectedPosition()
+    {
+        selectedPosition = (transform.right * (-3f)) + (transform.up * (2f)) + transform.position;
+    }
 
 }

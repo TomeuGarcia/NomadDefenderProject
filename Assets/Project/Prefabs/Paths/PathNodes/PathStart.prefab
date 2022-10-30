@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6573683290837287985}
   - component: {fileID: 6573683290837287984}
-  m_Layer: 0
-  m_Name: StartPath
+  - component: {fileID: -1741320412870381496}
+  m_Layer: 8
+  m_Name: PathStart
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -46,6 +47,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
+--- !u!65 &-1741320412870381496
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6573683290837287986}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.2, z: 1}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1001 &6194889072169439219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112,6 +126,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tile_end
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d61a4c894c57be544923e28773acf42c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d61a4c894c57be544923e28773acf42c, type: 3}

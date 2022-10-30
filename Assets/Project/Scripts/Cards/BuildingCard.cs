@@ -6,6 +6,8 @@ using TMPro;
 
 public class BuildingCard : MonoBehaviour
 {
+    public static float halfWidth = 0.7f;
+
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
 
@@ -27,7 +29,8 @@ public class BuildingCard : MonoBehaviour
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f;
+    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
+    public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
 
 
 
@@ -47,7 +50,6 @@ public class BuildingCard : MonoBehaviour
     private void Awake()
     {
         InitTexts();
-        InitPositions();
     }
 
     private void OnMouseEnter()
@@ -77,14 +79,14 @@ public class BuildingCard : MonoBehaviour
         damageText.text = turretStats.damage.ToString();
         rangeText.text = turretStats.range.ToString();
         targetAmountText.text = turretStats.targetAmount.ToString();
-        cadenceText.text = turretStats.cadence.ToString();
+        cadenceText.text = turretStats.cadence.ToString() + "s";
     }
 
-    private void InitPositions()
+    public void InitPositions(Vector3 selectedPosition)
     {
         standardPosition = transform.position;
         hoveredPosition = transform.position + HoveredTranslation;
-        selectedPosition = transform.position + transform.up + (-transform.right);
+        this.selectedPosition = selectedPosition;
     }
 
     public void StandardState()
