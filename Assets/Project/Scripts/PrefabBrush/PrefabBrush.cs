@@ -41,5 +41,4 @@ public class PrefabBrush : GameObjectBrush
 
         return null;
     }
-
 }
