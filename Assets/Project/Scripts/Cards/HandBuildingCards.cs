@@ -16,18 +16,29 @@ public class HandBuildingCards : MonoBehaviour
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
 
+    private Vector3 defaultHandPosition;
+    private Vector3 hiddenHandPosition;
+    private bool isHidden;
+
     private bool AlreadyHasSelectedCard => selectedCard != null;
+
+    private BuildingCard hoveredCard;
+    private bool IsHoveringCard => hoveredCard != null;
 
 
     private void OnValidate()
     {
         ComputeSelectedPosition();
+        ComputeHiddenPosition();
     }
 
     private void Awake()
     {
         ComputeSelectedPosition();
+        ComputeHiddenPosition();
         InitCardsInHand();
+
+        HideHand();
     }
 
     private void OnEnable()
@@ -56,7 +67,7 @@ public class HandBuildingCards : MonoBehaviour
         }
     }
 
-
+    
     private void InitCardsInHand()
     {
         float displacementStep = 0.8f;
@@ -86,12 +97,21 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SetHoveredCard(BuildingCard card)
     {
+        if (isHidden) ShowHand();
+
+        hoveredCard = card;
         card.HoveredState();
         BuildingCard.OnCardHovered -= SetHoveredCard;
     }
 
     private void SetStandardCard(BuildingCard card)
     {
+        if (!isHidden)
+        {
+            StartCoroutine("WaitToHideHand");
+        }
+
+        hoveredCard = null;
         card.StandardState();
         BuildingCard.OnCardHovered += SetHoveredCard;
     }
@@ -141,6 +161,35 @@ public class HandBuildingCards : MonoBehaviour
     private void ComputeSelectedPosition()
     {
         selectedPosition = (transform.right * (-3f)) + (transform.up * (2f)) + transform.position;
+    }
+    
+    private void ComputeHiddenPosition()
+    {
+        defaultHandPosition = transform.position;
+        hiddenHandPosition = transform.position + (-0.9f * transform.up);
+    }
+
+    private void HideHand()
+    {
+        isHidden = true;
+        transform.position = hiddenHandPosition;
+    }
+
+    private void ShowHand()
+    {
+        isHidden = false;
+        transform.position = defaultHandPosition;
+    }
+
+
+    private IEnumerator WaitToHideHand()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        if (!IsHoveringCard)
+        {
+            HideHand();
+        }
     }
 
 }
