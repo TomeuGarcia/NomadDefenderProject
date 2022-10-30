@@ -6,6 +6,8 @@ using TMPro;
 
 public class BuildingCard : MonoBehaviour
 {
+    public static float halfWidth = 0.7f;
+
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
 
@@ -27,7 +29,7 @@ public class BuildingCard : MonoBehaviour
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f;
+    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
     public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
 
 
