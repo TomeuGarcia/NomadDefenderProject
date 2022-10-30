@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public TileType tileType;
     [SerializeField] private Vector3 buildingPlaceOffset = Vector3.up * 0.2f;
+    [HideInInspector] public bool isOccupied = false;
 
     public Vector3 buildingPlacePosition => transform.position + buildingPlaceOffset;
 
@@ -21,11 +22,15 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (isOccupied) return;
+
         if (OnTileSelected != null) OnTileSelected(this);
     }
 
     private void OnMouseEnter()
     {
+        if (isOccupied) return;
+
         if (OnTileHovered != null) OnTileHovered(this);
     }
 

@@ -13,6 +13,13 @@ public class HomingProjectile : TurretAttack
 
     private void Update()
     {
+        if (targetEnemy == null) //// TODO improve
+        {
+            StopAllCoroutines();
+            Disappear();
+            return;
+        }
+
         moveDirection = targetEnemy.Position - transform.position;
 
         transform.position = transform.position + (moveDirection.normalized * (speed * Time.deltaTime));
@@ -46,7 +53,7 @@ public class HomingProjectile : TurretAttack
 
     private IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1f);
         Disappear();
     }
 

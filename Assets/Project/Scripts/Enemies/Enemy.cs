@@ -7,11 +7,6 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    private void OnMouseClick()
-    {
-        Debug.Log("GOT CLICKED");
-    }
-
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;
