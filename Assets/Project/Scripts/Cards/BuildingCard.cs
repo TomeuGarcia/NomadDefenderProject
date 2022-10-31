@@ -16,7 +16,8 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] public Turret.TurretStats turretStats;
 
     [Header("BUILDING")]
-    [SerializeField] public GameObject buildingPrefab;
+    [SerializeField] private GameObject buildingPrefab;
+    [HideInInspector] public GameObject copyBuildingPrefab;
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
@@ -45,6 +46,9 @@ public class BuildingCard : MonoBehaviour
     private void OnValidate()
     {
         InitTexts();
+
+        if (turretStats.range % 2 == 0)
+            --turretStats.range;
     }
 
     private void Awake()
@@ -89,6 +93,13 @@ public class BuildingCard : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
+    private void CreateCopyBuildingPrefab()
+    {
+        copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
+        copyBuildingPrefab.GetComponent<Building>().Init(turretStats);
+        copyBuildingPrefab.SetActive(false);
+    }
+
     public void StandardState()
     {
         cardState = CardStates.STANDARD;
@@ -105,6 +116,11 @@ public class BuildingCard : MonoBehaviour
     {
         cardState = CardStates.SELECTED;
         transform.position = selectedPosition;
+    }
+
+    public void DoOnCardIsDrawn()
+    {
+        CreateCopyBuildingPrefab();
     }
 
 }

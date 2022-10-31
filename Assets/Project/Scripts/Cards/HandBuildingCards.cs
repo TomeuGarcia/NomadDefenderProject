@@ -92,6 +92,7 @@ public class HandBuildingCards : MonoBehaviour
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
+            cards[i].DoOnCardIsDrawn();
         }
     }
 
@@ -153,6 +154,7 @@ public class HandBuildingCards : MonoBehaviour
 
         // TODO
         // for now reset
+        selectedCard.DoOnCardIsDrawn();
         ResetAndSetStandardCard(selectedCard); 
     }
 
