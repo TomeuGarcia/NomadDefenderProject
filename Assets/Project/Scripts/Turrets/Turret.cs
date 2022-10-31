@@ -1,38 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class Turret : Building
 {
-    private BoxCollider bc;
-    private Pool attackPool;
+    [Header("COMPONENTS")]
+    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private Pool attackPool;
 
     [Header("STATS")]
-    [SerializeField] int playCost;
-    [SerializeField] int damage;
-    [SerializeField] int attackRange;
-    [SerializeField] int targetAmount;
-    [SerializeField] float shootCooldown;
+    [SerializeField] private TurretStats stats;
     private float currentShootTimer;
 
     [Header("OTHERS")]
     [SerializeField] private Transform shootingPoint;
-    
-    private List<(int, float)> enemies = new List<(int, float)>();
+
+    private List<Enemy> enemies = new List<Enemy>();
+
+
+
+    private void OnValidate()
+    {
+        boxCollider.size = new Vector3(stats.range, 1.0f, stats.range);
+    }
 
     private void Awake()
     {
-        attackPool = GameObject.Find("BasicTurretAttackPool").gameObject.GetComponent<Pool>();
         currentShootTimer = 0.0f;
-
-        bc = gameObject.GetComponent<BoxCollider>();
-        bc.size = new Vector3(attackRange, 1.0f, attackRange);
     }
 
     private void Update()
     {
-        if(currentShootTimer < shootCooldown)
+        if(currentShootTimer < stats.cadence)
         {
             currentShootTimer += Time.deltaTime;
         }
@@ -42,30 +43,24 @@ public class Turret : Building
             {
                 currentShootTimer = 0.0f;
 
-                for (int i = 0; i < targetAmount; i++)
+                for (int i = 0; i < stats.targetAmount; i++)
                 {
                     if(i <= enemies.Count - 1)
                     {
-                        //Shoot(enemies[i].Item2);
+                        Shoot(enemies[i]);
                     }
                 }
             }
         }
     }
 
-    private void Shoot(Transform enemyTarget)
-    {
-        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
-        currentAttack.transform.position = shootingPoint.position;
-        currentAttack.gameObject.SetActive(true);
-        currentAttack.Activate(enemyTarget, damage);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Enemy")
+        if (other.tag == "Enemy")
         {
-            enemies.Add((10, 10.0f));
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+            enemy.OnEnemyDeath += DeleteEnemyFromList;
+            enemies.Add(enemy);
             enemies.Sort(mySort);
         }
     }
@@ -74,22 +69,46 @@ public class Turret : Building
     {
         if (other.tag == "Enemy")
         {
-            int i = 0;
-            foreach((int, float) enemy in enemies)
-            {
-                //if(enemy.Item2 == other.gameObject.GetComponent<Enemy>())
-                //{
-                //    enemies.RemoveAt(i);
-                //}
-                i++;
-            }
-
-            enemies.Sort(mySort);
+            other.gameObject.GetComponent<Enemy>().OnEnemyDeath -= DeleteEnemyFromList;
+            DeleteEnemyFromList(other.gameObject.GetComponent<Enemy>());
         }
     }
 
-    int mySort((int, float) e1, (int, float) e2)
+
+    public override void GotPlaced(TurretStats turretStats)
     {
-        return e1.Item2.CompareTo(e2.Item2);
+        InitStats(turretStats);
+    }
+
+    public void InitStats(TurretStats stats)
+    {
+        this.stats = stats;
+    }
+
+
+    private void Shoot(Enemy enemyTarget)
+    {
+        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
+        currentAttack.transform.position = shootingPoint.position;
+        currentAttack.transform.parent = attackPool.transform;
+        currentAttack.gameObject.SetActive(true);
+        currentAttack.Init(enemyTarget, stats.damage);
+
+        enemyTarget.ChangeMat();
+    }
+
+
+
+    private void DeleteEnemyFromList(Enemy enemyToDelete)
+    {
+        enemyToDelete.ChangeToBaseMat();
+        enemies.Remove(enemyToDelete);
+
+        enemies.Sort(mySort);
+    }
+
+    int mySort(Enemy e1, Enemy e2)
+    {
+        return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }
 }
