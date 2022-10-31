@@ -5,28 +5,55 @@ using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
 {
-    private BuildingCard selectedBuildingCard;
-    private Building selectedBuilding;
+    private BuildingCard selectedBuildingCard = null;
+    private Building selectedBuilding = null;
+    private List<Building> placedBuildings = new List<Building>();
 
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+
+    private bool SelectedBuildingIsBeingShown => selectedBuilding != null;
 
 
 
     public void EnablePlacing(BuildingCard selectedBuildingCard)
     {
         this.selectedBuildingCard = selectedBuildingCard;
-        selectedBuilding = selectedBuildingCard.buildingPrefab.GetComponent<Building>();
+        selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
 
+        Tile.OnTileUnhovered += HideBuildingPreview;
+        Tile.OnTileHovered += ShowBuildingOnTilePreview;
         Tile.OnTileSelected += TryPlaceBuilding;
+
+        DisablePlacedBuildingsPlayerInteraction();
     }
 
     public void DisablePlacing()
     {
+        Tile.OnTileUnhovered -= HideBuildingPreview;
+        Tile.OnTileHovered -= ShowBuildingOnTilePreview;
         Tile.OnTileSelected -= TryPlaceBuilding;
+
+        if (SelectedBuildingIsBeingShown)
+        {
+            HideBuildingPreview();
+        }
+
+        EnablePlacedBuildingsPlayerInteraction();
     }
 
+
+
+    private void ShowBuildingOnTilePreview(Tile tile)
+    {
+        ShowAndPositionSelectedBuilding(tile);
+    }
+
+    private void HideBuildingPreview()
+    {
+        HideSelectedBuilding();
+    }
 
 
     private void TryPlaceBuilding(Tile tile)
@@ -34,7 +61,6 @@ public class BuildingPlacer : MonoBehaviour
         if (CanPlaceSelectedBuildingOnTile(tile))
         {
             PlaceSelectedBuilding(tile);
-            DisablePlacing();
         }
     }
 
@@ -47,12 +73,44 @@ public class BuildingPlacer : MonoBehaviour
     {
         tile.isOccupied = true;
 
-        Building building = Instantiate(selectedBuildingCard.buildingPrefab, tile.buildingPlacePosition, Quaternion.identity).GetComponent<Building>();
-        building.GotPlaced(selectedBuildingCard.turretStats);
+        ShowAndPositionSelectedBuilding(tile);
+        selectedBuilding.GotPlaced();
+        placedBuildings.Add(selectedBuilding);
 
-        if (OnBuildingPlaced != null) OnBuildingPlaced();
+        selectedBuildingCard = null;
+        selectedBuilding = null;
+
+        if (OnBuildingPlaced != null) OnBuildingPlaced();        
+    }
+
+    private void ShowAndPositionSelectedBuilding(Tile tile)
+    {
+        selectedBuildingCard.copyBuildingPrefab.SetActive(true);
+        selectedBuildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
+        selectedBuilding.ShowRangePlane();
+    }
+
+    private void HideSelectedBuilding()
+    {
+        selectedBuildingCard.copyBuildingPrefab.SetActive(false);
+        selectedBuilding.HideRangePlane();
+
     }
 
 
+    private void EnablePlacedBuildingsPlayerInteraction()
+    {
+        foreach (Building building in placedBuildings)
+        {
+            building.EnablePlayerInteraction();
+        }
+    }
+    private void DisablePlacedBuildingsPlayerInteraction()
+    {
+        foreach (Building building in placedBuildings)
+        {
+            building.DisablePlayerInteraction();
+        }
+    }
 
 }
