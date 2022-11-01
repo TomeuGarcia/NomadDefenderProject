@@ -14,6 +14,8 @@ public class BuildingCard : MonoBehaviour
 
     [Header("STATS")]
     [SerializeField] public Turret.TurretStats turretStats;
+    [SerializeField] private float hoverSpeed;
+    [SerializeField] private float selectedSpeed;
 
     [Header("BUILDING")]
     [SerializeField] private GameObject buildingPrefab;
@@ -25,6 +27,9 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rangeText;
     [SerializeField] private TextMeshProUGUI targetAmountText;
     [SerializeField] private TextMeshProUGUI cadenceText;
+
+    [Header("OTHER COMPONENTS")]
+    [SerializeField] private Lerp lerp;
 
 
     private Vector3 standardPosition;
@@ -109,13 +114,13 @@ public class BuildingCard : MonoBehaviour
     public void HoveredState()
     {
         cardState = CardStates.HOVERED;
-        transform.position = hoveredPosition;
+        lerp.SpeedLerpPosition(hoveredPosition, hoverSpeed);
     }
 
     public void SelectedState()
     {
         cardState = CardStates.SELECTED;
-        transform.position = selectedPosition;
+        lerp.SpeedLerpPosition(selectedPosition, selectedSpeed);
     }
 
     public void DoOnCardIsDrawn()
