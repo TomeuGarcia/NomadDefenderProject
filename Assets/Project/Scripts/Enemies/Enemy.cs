@@ -7,6 +7,8 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
+    public enum EnemyType { BASIC, FAST, TANK }
+    
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;

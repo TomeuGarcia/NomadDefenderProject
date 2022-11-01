@@ -8,6 +8,9 @@ using static Turret;
 public class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
+    
+    [SerializeField] private GameObject meshObject;
+    [SerializeField] private GameObject previewMeshObject;
 
 
     [System.Serializable]
@@ -15,14 +18,46 @@ public class Building : MonoBehaviour
     {
         public int playCost;
         public int damage;
-        public int range;
+        [SerializeField, Min(1)] public int range;
         public int targetAmount;
         public float cadence;
     }
 
 
-    public virtual void GotPlaced(TurretStats turretStats)
+    protected virtual void DisableFunctionality()
     {
-
+        meshObject.SetActive(false);
+        previewMeshObject.SetActive(true);
     }
+
+    protected virtual void EnableFunctionality()
+    {
+        meshObject.SetActive(true);
+        previewMeshObject.SetActive(false);
+    }
+
+    public virtual void GotPlaced()
+    {
+    }
+
+    public virtual void Init(TurretStats turretStats)
+    {
+    }
+
+    public virtual void ShowRangePlane()
+    {
+    }
+
+    public virtual void HideRangePlane()
+    {
+    }
+
+    public virtual void EnablePlayerInteraction()
+    {
+    }
+
+    public virtual void DisablePlayerInteraction()
+    {
+    }
+
 }
