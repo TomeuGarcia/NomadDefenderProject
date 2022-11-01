@@ -11,9 +11,14 @@ public class Pool : MonoBehaviour
     private List<GameObject> objects;
 
 
-    void Start()
+    void Awake()
     {
         objects = new List<GameObject>();
+    }
+
+    public void SetPooledObject(GameObject gameObject)
+    {
+        pooledObject = gameObject;
     }
 
     public GameObject GetObject()
