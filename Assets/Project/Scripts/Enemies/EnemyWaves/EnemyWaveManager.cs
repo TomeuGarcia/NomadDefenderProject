@@ -11,6 +11,7 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] private PathNode[] startPathNodes;
 
 
+    private int currentWaves = 0;
     private int activeWaves = 0;
     private bool started = false;
 
@@ -54,6 +55,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void StartWave(EnemyWaveSpawner enemyWaveSpawner)
     {
+        ++currentWaves;
         StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies());
         
         debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves + 
@@ -72,7 +74,13 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void FinishWave(EnemyWaveSpawner enemyWaveSpawner)
     {        
-        StartCoroutine(StartNextWave(enemyWaveSpawner));
+        if (--currentWaves == 0)
+        {
+            foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)
+            {
+                StartCoroutine(StartNextWave(enemyWaveSpawnerI));
+            }            
+        }
     }
 
     private void FinishLastWave(EnemyWaveSpawner enemyWaveSpawner)

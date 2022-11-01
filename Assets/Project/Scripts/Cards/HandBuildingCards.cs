@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandBuildingCards : MonoBehaviour
@@ -9,9 +10,11 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
+    [SerializeField] private Lerp lerp;
 
     [SerializeField] private List<BuildingCard> cards;
 
+    [SerializeField] private float lerpSpeed;
 
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
@@ -174,13 +177,13 @@ public class HandBuildingCards : MonoBehaviour
     private void HideHand()
     {
         isHidden = true;
-        transform.position = hiddenHandPosition;
+        lerp.SpeedLerpPosition(hiddenHandPosition, lerpSpeed);
     }
 
     private void ShowHand()
     {
         isHidden = false;
-        transform.position = defaultHandPosition;
+        lerp.SpeedLerpPosition(defaultHandPosition, lerpSpeed);
     }
 
 
