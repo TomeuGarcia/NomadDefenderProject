@@ -70,7 +70,9 @@ public class EnemyWaveSpawner : ScriptableObject
         }
 
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
-        spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, spawnedEnemy.transformToMove);
+        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.2f, 0.2f)) + 
+                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.2f, 0.2f));
+        spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
         /////////////
 
         spawnedEnemy.OnEnemyDeath += SubtractActiveEnemy;
