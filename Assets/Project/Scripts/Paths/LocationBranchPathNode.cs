@@ -11,7 +11,7 @@ public class LocationBranchPathNode : PathNode
     private bool LocationIsDead => pathLocation.IsDead;
 
 
-    void Awake()
+    void Start()
     {
         holderNextNode = nextNode;
         nextNode = locationEndNode;
