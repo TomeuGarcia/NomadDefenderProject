@@ -74,21 +74,26 @@ public class HandBuildingCards : MonoBehaviour
         {
             ResetAndSetStandardCard(selectedCard);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && isHidden)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (OnQueryDrawCard != null) OnQueryDrawCard();
+            ShowHand();
+
+            //// please make this better in the future
+            if (isHidden)
+                StartCoroutine(InvokeDrawCardAfterDelay(lerpSpeed));
+            else
+                if (OnQueryDrawCard != null) OnQueryDrawCard();
+            ////
         }
     }
 
     
     private void InitCardsInHand()
     {
-        float displacementStep = 0.8f;
-        Vector3 widthDisplacement = transform.right * displacementStep;
-
+        float cardCount = cards.Count;
+        float displacementStep = Mathf.Min(0.8f / (cardCount * 0.2f), 0.8f);
         float halfCardCount = cards.Count / 2f;
-        float extraWidthDisplacement = cards.Count % 2 > 0 ? BuildingCard.halfWidth * displacementStep : displacementStep;
-        Vector3 startDisplacement = (extraWidthDisplacement - halfCardCount) * transform.right;
+        Vector3 startDisplacement = (-halfCardCount * displacementStep) * transform.right;
 
         float ratio = 0f;
         if (cards.Count > 0)
@@ -96,6 +101,7 @@ public class HandBuildingCards : MonoBehaviour
         for (int i = 0; i < cards.Count; ++i)
         {
             float iRatio = ratio * (i + 0.5f);
+            Vector3 widthDisplacement = transform.right * displacementStep * i;
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
             Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
@@ -103,7 +109,7 @@ public class HandBuildingCards : MonoBehaviour
 
             cards[i].transform.SetParent(transform);
             cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + (widthDisplacement * i) + heightDisplacement + depthDisplacement;
+            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
@@ -218,6 +224,14 @@ public class HandBuildingCards : MonoBehaviour
         {
             HideHand();
         }
+    }
+
+    private IEnumerator InvokeDrawCardAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        yield return null;
+
+        if (OnQueryDrawCard != null) OnQueryDrawCard();
     }
 
 }
