@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandBuildingCards : MonoBehaviour
@@ -9,9 +10,11 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
+    [SerializeField] private Lerp lerp;
 
     [SerializeField] private List<BuildingCard> cards;
 
+    [SerializeField] private float lerpSpeed;
 
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
@@ -74,13 +77,15 @@ public class HandBuildingCards : MonoBehaviour
         Vector3 widthDisplacement = transform.right * displacementStep;
 
         float halfCardCount = cards.Count / 2f;
-        float extraWidthDisplacement = cards.Count % 2 > 0 ? BuildingCard.halfWidth * displacementStep : 0f;
+        float extraWidthDisplacement = cards.Count % 2 > 0 ? BuildingCard.halfWidth * displacementStep : displacementStep;
         Vector3 startDisplacement = (extraWidthDisplacement - halfCardCount) * transform.right;
-               
 
+        float ratio = 0f;
+        if (cards.Count > 0)
+            ratio = 1f / cards.Count;
         for (int i = 0; i < cards.Count; ++i)
         {
-            float iRatio = (float)i / (cards.Count - 1);
+            float iRatio = ratio * (i + 0.5f);
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
             Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
@@ -116,6 +121,8 @@ public class HandBuildingCards : MonoBehaviour
         card.StandardState();
         BuildingCard.OnCardHovered += SetHoveredCard;
     }
+
+
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
@@ -155,10 +162,12 @@ public class HandBuildingCards : MonoBehaviour
         // TODO
         // for now reset
         selectedCard.DoOnCardIsDrawn();
-        ResetAndSetStandardCard(selectedCard); 
+        selectedCard.gameObject.SetActive(false);
+        cards.Remove(selectedCard);
+        ResetAndSetStandardCard(selectedCard);
+
+        InitCardsInHand();
     }
-
-
 
     private void ComputeSelectedPosition()
     {
@@ -174,13 +183,13 @@ public class HandBuildingCards : MonoBehaviour
     private void HideHand()
     {
         isHidden = true;
-        transform.position = hiddenHandPosition;
+        lerp.SpeedLerpPosition(hiddenHandPosition, lerpSpeed);
     }
 
     private void ShowHand()
     {
         isHidden = false;
-        transform.position = defaultHandPosition;
+        lerp.SpeedLerpPosition(defaultHandPosition, lerpSpeed);
     }
 
 
