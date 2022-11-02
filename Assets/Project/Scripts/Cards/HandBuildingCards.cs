@@ -29,6 +29,12 @@ public class HandBuildingCards : MonoBehaviour
     private bool IsHoveringCard => hoveredCard != null;
 
 
+    public delegate void HandAction();
+    public static event HandAction OnQueryDrawCard;
+
+
+
+
     private void OnValidate()
     {
         ComputeSelectedPosition();
@@ -68,6 +74,10 @@ public class HandBuildingCards : MonoBehaviour
         {
             ResetAndSetStandardCard(selectedCard);
         }
+        if (Input.GetKeyDown(KeyCode.Space) && isHidden)
+        {
+            if (OnQueryDrawCard != null) OnQueryDrawCard();
+        }
     }
 
     
@@ -100,6 +110,13 @@ public class HandBuildingCards : MonoBehaviour
             cards[i].DoOnCardIsDrawn();
         }
     }
+
+    public void AddCard(BuildingCard card)
+    {
+        cards.Add(card);
+        InitCardsInHand();
+    }
+
 
     private void SetHoveredCard(BuildingCard card)
     {
