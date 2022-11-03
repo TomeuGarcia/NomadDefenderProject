@@ -171,13 +171,13 @@ public class HandBuildingCards : MonoBehaviour
 
     private void ComputeSelectedPosition()
     {
-        selectedPosition = (transform.right * (-3f)) + (transform.up * (2f)) + transform.position;
+        selectedPosition = (transform.right * (-2.5f)) + (transform.up * (2f)) + transform.position;
     }
     
     private void ComputeHiddenPosition()
     {
         defaultHandPosition = transform.position;
-        hiddenHandPosition = transform.position + (-0.9f * transform.up);
+        hiddenHandPosition = transform.position + (-0.95f * transform.up);
     }
 
     private void HideHand()
