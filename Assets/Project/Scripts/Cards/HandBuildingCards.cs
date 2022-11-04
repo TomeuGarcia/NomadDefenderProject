@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandBuildingCards : MonoBehaviour
@@ -177,7 +176,7 @@ public class HandBuildingCards : MonoBehaviour
     private void ComputeHiddenPosition()
     {
         defaultHandPosition = transform.position;
-        hiddenHandPosition = transform.position + (-0.95f * transform.up);
+        hiddenHandPosition = transform.position + (-1.15f * transform.up);
     }
 
     private void HideHand()
