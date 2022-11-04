@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,14 +19,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Image healthImage;
     [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
     [SerializeField] private int damage = 1;
     [SerializeField] private int health = 2;
     [SerializeField] public int currencyDrop;
+
+    // Queued damage
+    private int queuedDamage = 0;   
+
 
 
     private HealthSystem healthSystem;
@@ -40,6 +44,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         healthSystem = new HealthSystem(health);
+        healthHUD.Init(healthSystem);
     }
 
     private void OnValidate()
@@ -66,16 +71,10 @@ public class Enemy : MonoBehaviour
 
         meshRenderer.material = baseMaterial;
         healthSystem.HealToMax();
-        healthImage.fillAmount = healthSystem.healthRatio;
+
+        queuedDamage = 0;
     }
 
-    private void Update()
-    {
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        //cameraDirection.y = 0;
-
-        canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -83,7 +82,6 @@ public class Enemy : MonoBehaviour
         {
             other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
             Suicide();
-            //Destroy(gameObject);//////////////////////////
         }
     }
 
@@ -98,8 +96,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         healthSystem.TakeDamage(damageAmount);
-
-        healthImage.fillAmount = healthSystem.healthRatio;
+        RemoveQueuedDamage(damageAmount);
 
         if (healthSystem.IsDead())
         {
@@ -133,5 +130,21 @@ public class Enemy : MonoBehaviour
     public void ChangeToBaseMat()
     {
         meshRenderer.material = baseMaterial;
+    }
+
+
+    public void QueueDamage(int amount)
+    {
+        queuedDamage += amount;
+    }
+
+    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    {
+        queuedDamage -= amount;
+    }
+
+    public bool DiesFromQueuedDamage()
+    {
+        return queuedDamage >= healthSystem.health;
     }
 }

@@ -39,27 +39,11 @@ public class Turret : Building
 
     private void Update()
     {
-        if (!isFunctional) return;
-
-        if(currentShootTimer < stats.cadence)
+        if (isFunctional)
         {
-            currentShootTimer += Time.deltaTime;
+            UpdateShoot();
         }
-        else
-        {
-            if (enemies.Count > 0)
-            {
-                currentShootTimer = 0.0f;
 
-                for (int i = 0; i < stats.targetAmount; i++)
-                {
-                    if(i <= enemies.Count - 1)
-                    {
-                        Shoot(enemies[i]);
-                    }
-                }
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,9 +51,11 @@ public class Turret : Building
         if (other.tag == "Enemy")
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.OnEnemyDeath += DeleteEnemyFromList;
-            enemies.Add(enemy);
-            enemies.Sort(mySort);
+            if (!enemy.DiesFromQueuedDamage())
+            {
+                AddEnemy(enemy);
+            }
+                
         }
     }
 
@@ -77,8 +63,10 @@ public class Turret : Building
     {
         if (other.tag == "Enemy")
         {
-            other.gameObject.GetComponent<Enemy>().OnEnemyDeath -= DeleteEnemyFromList;
-            DeleteEnemyFromList(other.gameObject.GetComponent<Enemy>());
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+
+            if (enemies.Contains(enemy))
+                RemoveEnemy(enemy);
         }
     }
 
@@ -99,6 +87,37 @@ public class Turret : Building
     public void InitStats(TurretStats stats)
     {
         this.stats = stats;
+    }
+
+    private void UpdateShoot()
+    {
+        if (currentShootTimer < stats.cadence)
+        {
+            currentShootTimer += Time.deltaTime;
+            return;
+        }
+
+        if (enemies.Count <= 0) return;
+            
+        
+        currentShootTimer = 0.0f;
+
+        for (int i = 0; i < stats.targetAmount; i++)
+        {
+            if (i <= enemies.Count - 1)
+            {
+                if (enemies[i].DiesFromQueuedDamage())
+                {
+                    RemoveEnemy(enemies[i]);
+                    --i;
+                }
+                else
+                {
+                    Shoot(enemies[i]);
+                }
+            }
+        }
+
     }
 
     protected override void DisableFunctionality()
@@ -146,17 +165,31 @@ public class Turret : Building
 
 
     private void Shoot(Enemy enemyTarget)
-    {
+    {     
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
         currentAttack.transform.position = shootingPoint.position;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.Init(enemyTarget, stats.damage);
 
+        enemyTarget.QueueDamage(stats.damage);
+
         enemyTarget.ChangeMat();
     }
 
 
+    private void AddEnemy(Enemy enemy)
+    {
+        enemy.OnEnemyDeath += DeleteEnemyFromList;
+        enemies.Add(enemy);
+        enemies.Sort(mySort);
+    }
+
+    private void RemoveEnemy(Enemy enemy)
+    {
+        enemy.OnEnemyDeath -= DeleteEnemyFromList;
+        DeleteEnemyFromList(enemy);
+    }
 
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
