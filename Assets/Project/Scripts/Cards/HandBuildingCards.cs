@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandBuildingCards : MonoBehaviour
@@ -9,9 +10,11 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
+    [SerializeField] private Lerp lerp;
 
     [SerializeField] private List<BuildingCard> cards;
 
+    [SerializeField] private float lerpSpeed;
 
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
@@ -24,6 +27,12 @@ public class HandBuildingCards : MonoBehaviour
 
     private BuildingCard hoveredCard;
     private bool IsHoveringCard => hoveredCard != null;
+
+
+    public delegate void HandAction();
+    public static event HandAction OnQueryDrawCard;
+
+
 
 
     private void OnValidate()
@@ -65,22 +74,34 @@ public class HandBuildingCards : MonoBehaviour
         {
             ResetAndSetStandardCard(selectedCard);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ShowHand();
+
+            //// please make this better in the future
+            if (isHidden)
+                StartCoroutine(InvokeDrawCardAfterDelay(lerpSpeed));
+            else
+                if (OnQueryDrawCard != null) OnQueryDrawCard();
+            ////
+        }
     }
 
     
     private void InitCardsInHand()
     {
-        float displacementStep = 0.8f;
-        Vector3 widthDisplacement = transform.right * displacementStep;
-
+        float cardCount = cards.Count;
+        float displacementStep = Mathf.Min(0.8f / (cardCount * 0.2f), 0.8f);
         float halfCardCount = cards.Count / 2f;
-        float extraWidthDisplacement = cards.Count % 2 > 0 ? BuildingCard.halfWidth * displacementStep : 0f;
-        Vector3 startDisplacement = (extraWidthDisplacement - halfCardCount) * transform.right;
-               
+        Vector3 startDisplacement = (-halfCardCount * displacementStep) * transform.right;
 
+        float ratio = 0f;
+        if (cards.Count > 0)
+            ratio = 1f / cards.Count;
         for (int i = 0; i < cards.Count; ++i)
         {
-            float iRatio = (float)i / (cards.Count - 1);
+            float iRatio = ratio * (i + 0.5f);
+            Vector3 widthDisplacement = transform.right * displacementStep * i;
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
             Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
@@ -88,13 +109,20 @@ public class HandBuildingCards : MonoBehaviour
 
             cards[i].transform.SetParent(transform);
             cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + (widthDisplacement * i) + heightDisplacement + depthDisplacement;
+            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
             cards[i].DoOnCardIsDrawn();
         }
     }
+
+    public void AddCard(BuildingCard card)
+    {
+        cards.Add(card);
+        InitCardsInHand();
+    }
+
 
     private void SetHoveredCard(BuildingCard card)
     {
@@ -116,6 +144,8 @@ public class HandBuildingCards : MonoBehaviour
         card.StandardState();
         BuildingCard.OnCardHovered += SetHoveredCard;
     }
+
+
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
@@ -155,10 +185,12 @@ public class HandBuildingCards : MonoBehaviour
         // TODO
         // for now reset
         selectedCard.DoOnCardIsDrawn();
-        ResetAndSetStandardCard(selectedCard); 
+        selectedCard.gameObject.SetActive(false);
+        cards.Remove(selectedCard);
+        ResetAndSetStandardCard(selectedCard);
+
+        InitCardsInHand();
     }
-
-
 
     private void ComputeSelectedPosition()
     {
@@ -174,13 +206,13 @@ public class HandBuildingCards : MonoBehaviour
     private void HideHand()
     {
         isHidden = true;
-        transform.position = hiddenHandPosition;
+        lerp.SpeedLerpPosition(hiddenHandPosition, lerpSpeed);
     }
 
     private void ShowHand()
     {
         isHidden = false;
-        transform.position = defaultHandPosition;
+        lerp.SpeedLerpPosition(defaultHandPosition, lerpSpeed);
     }
 
 
@@ -192,6 +224,14 @@ public class HandBuildingCards : MonoBehaviour
         {
             HideHand();
         }
+    }
+
+    private IEnumerator InvokeDrawCardAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        yield return null;
+
+        if (OnQueryDrawCard != null) OnQueryDrawCard();
     }
 
 }

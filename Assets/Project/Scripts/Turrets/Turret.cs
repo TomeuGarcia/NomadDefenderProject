@@ -90,6 +90,7 @@ public class Turret : Building
     {
         InitStats(turretStats);
 
+        boxCollider.size = new Vector3(stats.range, 1.0f, stats.range);
         rangePlaneMeshObject.transform.localScale = Vector3.one * (stats.range / 10f);
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
         rangePlaneMaterial.SetFloat("_TileNum", (float)stats.range);

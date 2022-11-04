@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 8436797292709200460}
   - component: {fileID: 8436797292709200461}
   - component: {fileID: 8436797292709200466}
+  - component: {fileID: 5941530257423453591}
   m_Layer: 0
   m_Name: BuildingCard
   m_TagString: Untagged
@@ -324,6 +325,8 @@ MonoBehaviour:
     range: 7
     targetAmount: 1
     cadence: 1.5
+  hoverSpeed: 1
+  selectedSpeed: 3
   buildingPrefab: {fileID: 8996520235991110355, guid: 4eca8f0614bb3a8419fd3e0b7dd82938,
     type: 3}
   copyBuildingPrefab: {fileID: 0}
@@ -332,6 +335,7 @@ MonoBehaviour:
   rangeText: {fileID: 8436797293359913963}
   targetAmountText: {fileID: 8436797292568784500}
   cadenceText: {fileID: 8436797293687129635}
+  lerp: {fileID: 5941530257423453591}
 --- !u!65 &8436797292709200466
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -345,6 +349,57 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 0.2}
   m_Center: {x: 0, y: -0.25, z: 0}
+--- !u!114 &5941530257423453591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436797292709200463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c673a9b2aaafb4580791540711ee64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  positionLerpFunction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  finishedColorLerp: 0
+  finishedPositionLerp: 0
+  finishedScaleLerp: 0
 --- !u!1 &8436797292711332139
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,7 +533,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8436797292768502934}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -764,7 +819,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1.5s
+  m_text: 1,5s
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

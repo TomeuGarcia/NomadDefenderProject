@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PathFollower : MonoBehaviour
 {
+    // Interpolation
+    private Vector3 positionOffset;
+    private Vector3 currentStartPosition;
+    private Vector3 currentEndPosition;
+    private float startToEndT;
+    private float step;
+    private float distanceStartToEnd;
 
     // Target Node
     private PathNode targetNode = null;
@@ -32,17 +39,29 @@ public class PathFollower : MonoBehaviour
 
 
 
-    public void Init(PathNode startTargetNode, Vector3 startDirection, float totalDistanceToTravel, Transform transformToMove = null)
+    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, Transform transformToMove = null)
     {
         targetNode = startTargetNode;
         moveDirection = startDirection;
 
         finished = false;
         paused = false;
+
         travelledDistance = 0.0f;
         this.totalDistanceToTravel = totalDistanceToTravel;
 
         this.transformToMove = transformToMove ? transformToMove : transform;
+
+
+        this.positionOffset = positionOffset;
+        currentStartPosition = transformToMove.position + positionOffset;
+        currentEndPosition = targetNode.Position + positionOffset;
+
+        startToEndT = 0f;
+
+        distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
+        step = moveSpeed / distanceStartToEnd;
+
 
         if (OnPathFollowStart != null) OnPathFollowStart();
     }
@@ -51,16 +70,15 @@ public class PathFollower : MonoBehaviour
 
     private void Update()
     {
-        if (!finished && !paused) FollowPath();
+        if (!finished && !paused) FollowPathInterpolated();
     }
 
 
-    void FollowPath()
+    private void FollowPathInterpolated()
     {
-        if (targetNode.HasArrived(Position))
+        if (startToEndT > 0.999999f)
         {
-            transformToMove.position = targetNode.Position; // Snap at position
-
+            transformToMove.position = currentEndPosition; // Snap at position
 
             if (targetNode.IsLastNode)
             {
@@ -71,17 +89,28 @@ public class PathFollower : MonoBehaviour
             {
                 moveDirection = targetNode.GetDirectionToNextNode();
                 targetNode = targetNode.GetNextNode();
-            }
 
+                currentStartPosition = currentEndPosition;
+                currentEndPosition = targetNode.Position + positionOffset;
+
+                startToEndT = 0f;
+
+                distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
+                step = moveSpeed / distanceStartToEnd;
+            }
         }
 
-        Vector3 travelStep = moveDirection * (moveSpeed * Time.deltaTime);
-        transformToMove.position = Position + (travelStep);
-        travelledDistance += travelStep.magnitude;
+        float iterationStep = Time.deltaTime * step;
+        travelledDistance += iterationStep * distanceStartToEnd;
+
+        startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
+        transformToMove.position = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
+
 
         if (Vector3.Dot(transformToMove.forward, moveDirection) < 1f)
         {
             transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
         }
     }
+
 }
