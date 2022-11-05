@@ -17,6 +17,8 @@ public class BuildingCard : MonoBehaviour
     [Header("BUILDING")]
     [SerializeField] private GameObject buildingPrefab;
     [HideInInspector] public GameObject copyBuildingPrefab;
+    public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;
+
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
@@ -34,6 +36,8 @@ public class BuildingCard : MonoBehaviour
     private Vector3 selectedPosition;
     private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
     public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
+
+
 
 
 
@@ -95,7 +99,7 @@ public class BuildingCard : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    private void CreateCopyBuildingPrefab()
+    public void CreateCopyBuildingPrefab()
     {
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.GetComponent<Building>().Init(turretStats);
@@ -118,11 +122,6 @@ public class BuildingCard : MonoBehaviour
     {
         cardState = CardStates.SELECTED;
         lerp.SpeedLerpPosition(selectedPosition, selectedSpeed);
-    }
-
-    public void DoOnCardIsDrawn()
-    {
-        CreateCopyBuildingPrefab();
     }
 
 }
