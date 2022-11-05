@@ -46,6 +46,11 @@ public class HandBuildingCards : MonoBehaviour
         ComputeHiddenPosition();
         InitCardsInHand();
 
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            cards[i].CreateCopyBuildingPrefab();
+        }
+
         HideHand();
     }
 
@@ -112,14 +117,21 @@ public class HandBuildingCards : MonoBehaviour
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
-            cards[i].DoOnCardIsDrawn();
         }
     }
+
+
 
     public void AddCard(BuildingCard card)
     {
         cards.Add(card);
         InitCardsInHand();
+
+        if (!card.AlreadySpawnedCopyBuildingPrefab)
+        {
+            card.CreateCopyBuildingPrefab();
+        }
+
     }
 
 
@@ -183,7 +195,7 @@ public class HandBuildingCards : MonoBehaviour
 
         // TODO
         // for now reset
-        selectedCard.DoOnCardIsDrawn();
+        //selectedCard.DoOnCardIsDrawn();
         selectedCard.gameObject.SetActive(false);
         cards.Remove(selectedCard);
         ResetAndSetStandardCard(selectedCard);
