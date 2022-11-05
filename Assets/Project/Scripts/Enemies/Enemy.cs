@@ -1,37 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
+    public enum EnemyType { BASIC, FAST, TANK }
+    
+    [Header("Mesh")]
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Material baseMaterial;
+    [SerializeField] private Material selectedMaterial;
+
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Image healthImage;
+    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
     [SerializeField] private int damage = 1;
     [SerializeField] private int health = 2;
+    [SerializeField] public int currencyDrop;
+
+    // Queued damage
+    private int queuedDamage = 0;   
+
 
 
     private HealthSystem healthSystem;
 
+    public delegate void EnemyAction(Enemy enemy);
+    public static EnemyAction OnEnemyDeathDropCurrency;
+    public EnemyAction OnEnemyDeath;
 
-    public Vector3 Position => transformToMove.position;
+    public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
-
 
     private void Awake()
     {
         healthSystem = new HealthSystem(health);
+        healthHUD.Init(healthSystem);
+    }
+
+    private void OnValidate()
+    {
+        boxCollider.center = meshRenderer.gameObject.transform.localPosition;
+        boxCollider.size = meshRenderer.gameObject.transform.localScale;
     }
 
     private void OnEnable()
     {
+        ResetEnemy();
+
         pathFollower.OnPathEndReached += Attack;
     }
 
@@ -40,20 +65,23 @@ public class Enemy : MonoBehaviour
         pathFollower.OnPathEndReached -= Attack;
     }
 
-    private void Update()
+    private void ResetEnemy()
     {
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        //cameraDirection.y = 0;
+        StopAllCoroutines();
 
-        canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
+        meshRenderer.material = baseMaterial;
+        healthSystem.HealToMax();
+
+        queuedDamage = 0;
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PathLocation"))
         {
             other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
-            Destroy(gameObject); ///////////////////////////////////////////////////////////
+            Suicide();
         }
     }
 
@@ -68,14 +96,55 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         healthSystem.TakeDamage(damageAmount);
-
-        healthImage.fillAmount = healthSystem.healthRatio;
+        RemoveQueuedDamage(damageAmount);
 
         if (healthSystem.IsDead())
         {
-            Destroy(gameObject);//////////////////////////
+            Death();
         }
     }
 
+    private void Suicide()
+    {
+        Deactivation();
+    }
 
+    private void Death()
+    {
+        if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+        Deactivation();
+    }
+
+    private void Deactivation()
+    {
+        if (OnEnemyDeath != null) OnEnemyDeath(this);
+
+        rb.velocity = Vector3.zero;
+        gameObject.SetActive(false);
+    }
+
+    public void ChangeMat()
+    {
+        meshRenderer.material = selectedMaterial;
+    }
+    public void ChangeToBaseMat()
+    {
+        meshRenderer.material = baseMaterial;
+    }
+
+
+    public void QueueDamage(int amount)
+    {
+        queuedDamage += amount;
+    }
+
+    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    {
+        queuedDamage -= amount;
+    }
+
+    public bool DiesFromQueuedDamage()
+    {
+        return queuedDamage >= healthSystem.health;
+    }
 }

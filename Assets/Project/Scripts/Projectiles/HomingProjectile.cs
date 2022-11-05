@@ -2,22 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomingProjectile : MonoBehaviour
+public class HomingProjectile : TurretAttack
 {
     private Enemy targetEnemy;
     private int damage;
 
     private Vector3 moveDirection;
 
+    [SerializeField] private float speed;
 
     private void Update()
     {
+        if (targetEnemy == null) //// TODO improve
+        {
+            StopAllCoroutines();
+            Disappear();
+            return;
+        }
+
         moveDirection = targetEnemy.Position - transform.position;
 
-        transform.position = transform.position + (moveDirection * (20f * Time.deltaTime));
+        transform.position = transform.position + (moveDirection.normalized * (speed * Time.deltaTime));
+
+        //IF ROTATION IS NEEDED
+        //Quaternion lookRotation = Quaternion.LookRotation(direction);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
-    public void Init(Enemy targetEnemy, int damage)
+    override public void Init(Enemy targetEnemy, int damage)
     {
         this.targetEnemy = targetEnemy;
         this.damage = damage;
@@ -33,16 +45,21 @@ public class HomingProjectile : MonoBehaviour
             if (enemy == targetEnemy)
             {
                 enemy.TakeDamage(damage);
-                Destroy(gameObject);
+                StopAllCoroutines();
+                Disappear();
             }
         }
     }
 
     private IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(4f);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(1f);
+        Disappear();
     }
 
-
+    private void Disappear()
+    {
+        //PARTICLES
+        gameObject.SetActive(false);
+    }
 }

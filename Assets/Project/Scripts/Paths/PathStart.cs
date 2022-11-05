@@ -11,6 +11,14 @@ public class PathStart : MonoBehaviour
 
     private List<Enemy> enemies = new List<Enemy>();
 
+    //ENEMY POOL
+    private Pool enemyPool;
+
+    private void Awake()
+    {
+        enemyPool = GameObject.Find("BasicEnemyPool").GetComponent<Pool>();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -20,7 +28,7 @@ public class PathStart : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.W))
         {
-            ShootProjectile();
+            //ShootProjectile();
         }
     }
 
@@ -35,8 +43,9 @@ public class PathStart : MonoBehaviour
         }
 
 
-        Enemy enemy = Instantiate(enemyPrefab, startNode.Position, Quaternion.identity);
-        enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, enemy.transformToMove);
+        Enemy enemy = enemyPool.GetObject(startNode.Position, Quaternion.identity).gameObject.GetComponent<Enemy>();
+        enemy.gameObject.SetActive(true);
+        enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), Vector3.zero, totalDistance, enemy.transformToMove);
 
         enemies.Add(enemy);
     }
