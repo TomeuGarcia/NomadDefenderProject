@@ -5,6 +5,7 @@ using UnityEngine;
 public class TeslaProjectile : TurretAttack
 {
     [SerializeField] private int maxTargetAmount = 3;
+    [SerializeField] private float range;
     private int currentTarget;
     private Enemy[] targetedEnemies;
 
@@ -12,6 +13,11 @@ public class TeslaProjectile : TurretAttack
     private void Update()
     {
         MoveTowardsEnemyTarget();
+
+        if(Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
+        {
+            OnEnemyTriggerEnter(targetEnemy);
+        }
 
         //IF ROTATION IS NEEDED
         //RotateTowardsEnemyTarget();
@@ -21,7 +27,7 @@ public class TeslaProjectile : TurretAttack
     {      
         this.damage = owner.stats.damage;
 
-        targetedEnemies = owner.GetNearestEnemies(maxTargetAmount, 1.0f);
+        targetedEnemies = owner.GetNearestEnemies(maxTargetAmount, range);
         for (int i = 0; i < targetedEnemies.Length; i++)
         {
             targetedEnemies[i].QueueDamage(damage);
@@ -48,9 +54,6 @@ public class TeslaProjectile : TurretAttack
                 StopAllCoroutines();
                 Disappear();
             }
-
         }
     }
-
-
 }

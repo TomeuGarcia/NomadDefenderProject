@@ -48,8 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 40
   rotationSpeed: 1
-  lifetime: 2
+  lifetime: 10
   maxTargetAmount: 3
+  range: 2
 --- !u!96 &2080374624328513536
 TrailRenderer:
   serializedVersion: 2
@@ -71,7 +72,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55f97c278338b6e4997b1cd06518caf4, type: 2}
+  - {fileID: 2100000, guid: ed1b3ee6878fb8a419814854c3a263d3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,7 +132,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0, g: 0.89109993, b: 1, a: 1}
       key1: {r: 0, g: 0, b: 0, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
