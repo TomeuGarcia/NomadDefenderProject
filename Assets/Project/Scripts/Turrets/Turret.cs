@@ -11,12 +11,13 @@ public class Turret : Building
     [SerializeField] private Pool attackPool;
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
 
-    [Header("STATS")]
-    private TurretStats stats;
-    private float currentShootTimer;
-
     [Header("OTHERS")]
     [SerializeField] private Transform shootingPoint;
+
+    // STATS
+    public TurretStats stats { get; private set; }
+    private float currentShootTimer;
+
 
     private List<Enemy> enemies = new List<Enemy>();
 
@@ -55,7 +56,7 @@ public class Turret : Building
             {
                 AddEnemy(enemy);
             }
-                
+
         }
     }
 
@@ -98,8 +99,8 @@ public class Turret : Building
         }
 
         if (enemies.Count <= 0) return;
-            
-        
+
+
         currentShootTimer = 0.0f;
 
         for (int i = 0; i < stats.targetAmount; i++)
@@ -124,7 +125,7 @@ public class Turret : Building
     {
         base.DisableFunctionality();
         boxCollider.enabled = false;
-        isFunctional = false;        
+        isFunctional = false;
     }
 
     protected override void EnableFunctionality()
@@ -153,7 +154,7 @@ public class Turret : Building
     public override void EnablePlayerInteraction()
     {
         meshMouseNotifier.OnMouseEntered += ShowRangePlane;
-        meshMouseNotifier.OnMouseExited += HideRangePlane; 
+        meshMouseNotifier.OnMouseExited += HideRangePlane;
     }
 
     public override void DisablePlayerInteraction()
@@ -165,14 +166,12 @@ public class Turret : Building
 
 
     private void Shoot(Enemy enemyTarget)
-    {     
+    {
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
         currentAttack.transform.position = shootingPoint.position;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, stats.damage);
-
-        enemyTarget.QueueDamage(stats.damage);
+        currentAttack.Init(enemyTarget, this);
 
         enemyTarget.ChangeMat();
     }
@@ -203,4 +202,28 @@ public class Turret : Building
     {
         return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }
+
+
+
+    /// <summary>
+    /// Returns a List with size up to "amount" 
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public Enemy[] GetEnemies(int amount)
+    {
+        if (amount > enemies.Count)
+            amount = enemies.Count;
+
+        Enemy[] enemyArray = new Enemy[amount];
+
+        for (int i = 0; i < amount; ++i)
+        {
+            enemyArray[i] = enemies[i];
+        }
+
+        return enemyArray;
+    }
+
+
 }

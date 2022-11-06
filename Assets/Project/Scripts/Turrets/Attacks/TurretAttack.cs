@@ -4,5 +4,53 @@ using UnityEngine;
 
 public class TurretAttack : MonoBehaviour
 {
-    public virtual void Init(Enemy newEnemy, int damage) { }
+    protected Enemy targetEnemy;
+    protected int damage;
+    protected Vector3 moveDirection;
+    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float rotationSpeed;
+
+
+    public virtual void Init(Enemy targetEnemy, Turret owner) 
+    {
+    }
+
+    protected virtual void OnEnemyTriggerEnter(Enemy enemy)
+    {
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
+        }
+    }
+
+    protected IEnumerator Lifetime()
+    {
+        yield return new WaitForSeconds(1f);
+        Disappear();
+    }
+
+    protected virtual void Disappear()
+    {
+        //PARTICLES
+        gameObject.SetActive(false);
+    }
+
+
+    protected void MoveTowardsEnemyTarget()
+    {
+        moveDirection = targetEnemy.Position - transform.position;
+        transform.position = transform.position + (moveDirection.normalized * (moveSpeed * Time.deltaTime));
+    }
+    
+    protected void RotateTowardsEnemyTarget()
+    {
+        Quaternion lookRotation = Quaternion.LookRotation(moveDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+    }
+
+
 }
