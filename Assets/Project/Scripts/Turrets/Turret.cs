@@ -92,8 +92,8 @@ public class Turret : Building
         }
 
         if (enemies.Count <= 0) return;
-            
-        
+
+
         currentShootTimer = 0.0f;
 
         for (int i = 0; i < stats.targetAmount; i++)
@@ -121,7 +121,7 @@ public class Turret : Building
 
         meshMouseNotifier.gameObject.SetActive(false);
         boxCollider.enabled = false;
-        isFunctional = false;        
+        isFunctional = false;
     }
 
     protected override void EnableFunctionality()
@@ -153,7 +153,7 @@ public class Turret : Building
     public override void EnablePlayerInteraction()
     {
         meshMouseNotifier.OnMouseEntered += ShowRangePlane;
-        meshMouseNotifier.OnMouseExited += HideRangePlane; 
+        meshMouseNotifier.OnMouseExited += HideRangePlane;
     }
 
     public override void DisablePlayerInteraction()
@@ -165,14 +165,12 @@ public class Turret : Building
 
 
     private void Shoot(Enemy enemyTarget)
-    {     
+    {
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
         currentAttack.transform.position = bodyPart.GetNextShootingPoint();
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, stats.damage);
-
-        enemyTarget.QueueDamage(stats.damage);
+        currentAttack.Init(enemyTarget, this);
 
         enemyTarget.ChangeMat();
     }
@@ -203,4 +201,38 @@ public class Turret : Building
     {
         return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }
+
+
+
+    /// <summary>
+    /// Returns a List with size up to "amount", assumes there is at least 1 enemy in the turret's queue
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public Enemy[] GetNearestEnemies(int amount, float thresholdDistance)
+    { 
+        List<Enemy> enemyList = new List<Enemy>();
+
+        enemyList.Add(enemies[0]);
+        
+        int currentEnemyI = 1;
+        while (currentEnemyI < enemies.Count && enemyList.Count < amount)
+        {
+            if (!enemyList.Contains(enemies[currentEnemyI]) && !enemies[currentEnemyI].DiesFromQueuedDamage())
+            {
+                float distance = Vector3.Distance(enemyList[enemyList.Count - 1].transformToMove.position, enemies[currentEnemyI].transformToMove.position);
+                if (distance < thresholdDistance)
+                {
+                    enemyList.Add(enemies[currentEnemyI]);
+                    currentEnemyI = 0;
+                }
+            }
+
+            ++currentEnemyI;
+        }
+
+        return enemyList.ToArray();
+    }
+
+
 }

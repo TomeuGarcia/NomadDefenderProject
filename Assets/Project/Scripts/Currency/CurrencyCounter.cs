@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class CurrencyCounter : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class CurrencyCounter : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private TextMeshProUGUI currencyCountText;
-
+    [SerializeField] private TextMeshProUGUI addedCurrencyText;
 
     private void OnValidate()
     {
@@ -20,6 +21,8 @@ public class CurrencyCounter : MonoBehaviour
     private void Awake()
     {
         UpdateCurrencyCountText();
+
+        addedCurrencyText.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -40,6 +43,7 @@ public class CurrencyCounter : MonoBehaviour
 
     private void AddCurrency(int amount)
     {
+        StartCoroutine("ShowAddedCurrency", amount);
         currencyCount += amount;
         UpdateCurrencyCountText();
     }
@@ -55,5 +59,19 @@ public class CurrencyCounter : MonoBehaviour
         return currencyCount >= amount;
     }
 
+
+    private IEnumerator ShowAddedCurrency(int amount)
+    {
+        addedCurrencyText.gameObject.SetActive(true);
+        addedCurrencyText.text = "+" + amount.ToString();
+
+        // rotate
+        addedCurrencyText.transform.DOKill();
+        addedCurrencyText.transform.rotation = Quaternion.identity;
+        addedCurrencyText.transform.DOPunchRotation(Vector3.forward * 20f, 0.5f);
+
+        yield return new WaitForSeconds(1.5f);
+        addedCurrencyText.gameObject.SetActive(false);
+    }
 
 }
