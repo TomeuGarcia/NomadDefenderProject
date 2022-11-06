@@ -206,23 +206,33 @@ public class Turret : Building
 
 
     /// <summary>
-    /// Returns a List with size up to "amount" 
+    /// Returns a List with size up to "amount", assumes there is at least 1 enemy in the turret's queue
     /// </summary>
     /// <param name="amount"></param>
     /// <returns></returns>
-    public Enemy[] GetEnemies(int amount)
-    {
-        if (amount > enemies.Count)
-            amount = enemies.Count;
+    public Enemy[] GetNearestEnemies(int amount, float thresholdDistance)
+    { 
+        List<Enemy> enemyList = new List<Enemy>();
 
-        Enemy[] enemyArray = new Enemy[amount];
-
-        for (int i = 0; i < amount; ++i)
+        enemyList.Add(enemies[0]);
+        
+        int currentEnemyI = 1;
+        while (currentEnemyI < enemies.Count && enemyList.Count < amount)
         {
-            enemyArray[i] = enemies[i];
+            if (!enemyList.Contains(enemies[currentEnemyI]) && !enemies[currentEnemyI].DiesFromQueuedDamage())
+            {
+                float distance = Vector3.Distance(enemyList[enemyList.Count - 1].transformToMove.position, enemies[currentEnemyI].transformToMove.position);
+                if (distance < thresholdDistance)
+                {
+                    enemyList.Add(enemies[currentEnemyI]);
+                    currentEnemyI = 0;
+                }
+            }
+
+            ++currentEnemyI;
         }
 
-        return enemyArray;
+        return enemyList.ToArray();
     }
 
 

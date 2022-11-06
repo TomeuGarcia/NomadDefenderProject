@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TeslaProjectile : TurretAttack
 {
-    [SerializeField] private int targetAmount = 3;
+    [SerializeField] private int maxTargetAmount = 3;
     private int currentTarget;
     private Enemy[] targetedEnemies;
 
@@ -21,7 +21,7 @@ public class TeslaProjectile : TurretAttack
     {      
         this.damage = owner.stats.damage;
 
-        targetedEnemies = owner.GetEnemies(targetAmount);
+        targetedEnemies = owner.GetNearestEnemies(maxTargetAmount, 1.0f);
         for (int i = 0; i < targetedEnemies.Length; i++)
         {
             targetedEnemies[i].QueueDamage(damage);

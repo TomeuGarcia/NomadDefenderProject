@@ -9,6 +9,7 @@ public class TurretAttack : MonoBehaviour
     protected Vector3 moveDirection;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float rotationSpeed;
+    [SerializeField] protected float lifetime = 1f;
 
 
     public virtual void Init(Enemy targetEnemy, Turret owner) 
@@ -29,7 +30,7 @@ public class TurretAttack : MonoBehaviour
 
     protected IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(lifetime);
         Disappear();
     }
 
