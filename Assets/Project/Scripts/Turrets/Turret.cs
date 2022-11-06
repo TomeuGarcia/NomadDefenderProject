@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,7 +15,7 @@ public class Turret : Building
     private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
-    private TurretStats stats;
+    [HideInInspector] public TurretStats stats;
     private float currentShootTimer;
 
     private List<Enemy> enemies = new List<Enemy>();
@@ -33,7 +34,18 @@ public class Turret : Building
         if (isFunctional)
         {
             UpdateShoot();
+            
+            if (bodyPart.lookAtTarget && enemies.Count > 0)
+            {
+                LookAtTarget();
+            }
         }
+    }
+
+    private void LookAtTarget()
+    {
+        Quaternion targetRot = Quaternion.LookRotation((enemies[0].transform.position - bodyPart.transform.position).normalized, bodyPart.transform.up);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 300.0f * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -107,6 +119,7 @@ public class Turret : Building
                 }
                 else
                 {
+                    bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
                     Shoot(enemies[i]);
                 }
             }
