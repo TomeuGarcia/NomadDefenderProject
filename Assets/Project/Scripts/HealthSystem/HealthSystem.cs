@@ -7,9 +7,13 @@ using UnityEngine;
 public class HealthSystem
 {
     [SerializeField] private int maxHealth;
-    private int health;
+    public int health { get; private set; }
 
     public float healthRatio => (float)health / (float)maxHealth;
+
+
+    public delegate void HealthSystemAction();
+    public event HealthSystemAction OnHealthUpdated;
 
 
     public HealthSystem(int maxHealth)
@@ -22,17 +26,23 @@ public class HealthSystem
     {
         health -= damageAmount;
         health = health > 0 ? health : 0;
+
+        InvokeOnHealthUpdated();
     }
 
     public void Heal(int healAmount)
     {
         health += healAmount;
         health = health < maxHealth ? health : maxHealth;
+
+        InvokeOnHealthUpdated();
     }
 
     public void HealToMax()
     {
         health = maxHealth;
+
+        InvokeOnHealthUpdated();
     }
 
     public bool IsDead()
@@ -40,5 +50,10 @@ public class HealthSystem
         return health <= 0;
     }
 
+
+    private void InvokeOnHealthUpdated()
+    {
+        if (OnHealthUpdated != null) OnHealthUpdated();
+    }
 
 }

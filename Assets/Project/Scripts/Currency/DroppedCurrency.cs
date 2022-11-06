@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
@@ -75,7 +74,7 @@ public class DroppedCurrency : MonoBehaviour
     {
         value = newValue;
 
-        value = Random.Range(1, 4); // Just for testing
+        //value = Random.Range(1, 4); // Just for testing
         Vector3 minScale = Vector3.one * 0.25f;
         meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
     }

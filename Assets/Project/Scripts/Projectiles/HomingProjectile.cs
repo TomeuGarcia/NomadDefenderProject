@@ -1,65 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class HomingProjectile : TurretAttack
 {
-    private Enemy targetEnemy;
-    private int damage;
-
-    private Vector3 moveDirection;
-
-    [SerializeField] private float speed;
 
     private void Update()
     {
-        if (targetEnemy == null) //// TODO improve
-        {
-            StopAllCoroutines();
-            Disappear();
-            return;
-        }
-
-        moveDirection = targetEnemy.Position - transform.position;
-
-        transform.position = transform.position + (moveDirection.normalized * (speed * Time.deltaTime));
+        MoveTowardsEnemyTarget();
 
         //IF ROTATION IS NEEDED
-        //Quaternion lookRotation = Quaternion.LookRotation(direction);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+        //RotateTowardsEnemyTarget();
     }
 
-    override public void Init(Enemy targetEnemy, int damage)
+    public override void Init(Enemy targetEnemy, Turret owner)
     {
         this.targetEnemy = targetEnemy;
-        this.damage = damage;
+        this.damage = owner.stats.damage;
+
+        targetEnemy.QueueDamage(damage);
 
         StartCoroutine(Lifetime());
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnEnemyTriggerEnter(Enemy enemy)
     {
-        if (other.CompareTag("Enemy"))
+        if (enemy == targetEnemy)
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy == targetEnemy)
-            {
-                enemy.TakeDamage(damage);
-                StopAllCoroutines();
-                Disappear();
-            }
+            enemy.TakeDamage(damage);
+            StopAllCoroutines();
+            Disappear();
         }
     }
 
-    private IEnumerator Lifetime()
-    {
-        yield return new WaitForSeconds(1f);
-        Disappear();
-    }
 
-    private void Disappear()
-    {
-        //PARTICLES
-        gameObject.SetActive(false);
-    }
 }
