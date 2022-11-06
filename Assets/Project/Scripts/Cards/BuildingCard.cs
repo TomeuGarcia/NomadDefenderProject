@@ -99,6 +99,7 @@ public class BuildingCard : MonoBehaviour
         rangeText.text = turretStats.range.ToString();
         targetAmountText.text = turretStats.targetAmount.ToString();
         cadenceText.text = turretStats.cadence.ToString() + "s";
+
     }
 
     public void InitPositions(Vector3 selectedPosition)

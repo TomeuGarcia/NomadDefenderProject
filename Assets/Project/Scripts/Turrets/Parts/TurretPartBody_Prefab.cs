@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TurretPartBody_Prefab : MonoBehaviour
 {
+    [SerializeField] public bool lookAtTarget;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] public Transform shootingPointParent;
     [HideInInspector] private List<Material> defaultMaterials = new List<Material>();
