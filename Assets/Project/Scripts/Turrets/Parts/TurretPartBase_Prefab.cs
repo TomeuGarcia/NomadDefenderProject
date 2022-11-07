@@ -6,26 +6,32 @@ using UnityEngine;
 public class TurretPartBase_Prefab : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRenderer;
-    [HideInInspector] private List<Material> defaultMaterials = new List<Material>();
     [SerializeField] private Material previewMaterial;
+    private Material[] defaultMaterials;
     private Material[] previewMaterials;
 
-    private void Awake()
+
+
+    virtual public void Init(Turret turretOwner, int turretRange)
     {
+        InitMaterials();
+    }
+
+    private void InitMaterials()
+    {
+        defaultMaterials = new Material[meshRenderer.materials.Length];
         previewMaterials = new Material[meshRenderer.materials.Length];
 
         for (int i = 0; i < meshRenderer.materials.Length; ++i)
         {
-            defaultMaterials.Add(meshRenderer.materials[i]);
+            defaultMaterials[i] = meshRenderer.materials[i];
             previewMaterials[i] = previewMaterial;
         }
     }
 
-    virtual public void Init(Turret turretOwner, int turretRange) { }
-
     public void SetDefaultMaterial()
     {
-        meshRenderer.materials = defaultMaterials.ToArray();
+        meshRenderer.materials = defaultMaterials;
     }
 
     public void SetPreviewMaterial()

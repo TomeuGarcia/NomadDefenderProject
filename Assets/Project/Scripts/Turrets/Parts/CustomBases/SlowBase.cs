@@ -10,6 +10,8 @@ public class SlowBase : TurretPartBase_Prefab
 
     override public void Init(Turret turretOwner, int turretRange) 
     {
+        base.Init(turretOwner, turretRange);
+
         turretOwner.OnEnemyEnterRange += SlowEnemy;
         turretOwner.OnEnemyExitRange += StopEnemySlow;
 
