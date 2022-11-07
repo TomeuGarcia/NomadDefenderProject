@@ -25,12 +25,12 @@ Transform:
   m_GameObject: {fileID: 2448137005889541147}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.65, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3930768678740892893}
   m_Father: {fileID: 8996520235991110358}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6085816723125972212
 GameObject:
@@ -63,7 +63,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8996520235991110358}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1751661311648448735
 MeshFilter:
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 8381477815162847133, guid: 8fbdf64ad16999f4e8158456a2cfa33d,
+  pooledObject: {fileID: 2080374624328513538, guid: 3ec2fb236af366d4c890b8ddd5635cd1,
     type: 3}
 --- !u!1 &8996520235579334489
 GameObject:
@@ -282,8 +282,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2773579156483149980}
   - {fileID: 4737832080800986534}
+  - {fileID: 2773579156483149980}
   - {fileID: 8996520235579334494}
   - {fileID: 8996520237051216202}
   - {fileID: 4685910527098029624}
@@ -305,6 +305,9 @@ MonoBehaviour:
   validTileType: 1
   meshObject: {fileID: 8996520235579334489}
   previewMeshObject: {fileID: 2448137005889541147}
+  attackPrefab: {fileID: 0}
+  bodyPrefab: {fileID: 0}
+  basePrefab: {fileID: 0}
   rangePlaneMeshObject: {fileID: 6085816723125972212}
   boxCollider: {fileID: 8996520235991110352}
   attackPool: {fileID: 3773833721592868626}

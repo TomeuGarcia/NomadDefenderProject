@@ -8,12 +8,11 @@ using static Turret;
 public class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
-    
-    [SerializeField] private GameObject meshObject;
-    [SerializeField] private GameObject previewMeshObject;
 
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform bodyHolder;
+    [SerializeField] protected Transform baseHolder;
 
-    [System.Serializable]
     public struct TurretStats
     {
         public int playCost;
@@ -26,21 +25,17 @@ public class Building : MonoBehaviour
 
     protected virtual void DisableFunctionality()
     {
-        meshObject.SetActive(false);
-        previewMeshObject.SetActive(true);
     }
 
     protected virtual void EnableFunctionality()
     {
-        meshObject.SetActive(true);
-        previewMeshObject.SetActive(false);
     }
 
     public virtual void GotPlaced()
     {
     }
 
-    public virtual void Init(TurretStats turretStats)
+    public virtual void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
     {
     }
 

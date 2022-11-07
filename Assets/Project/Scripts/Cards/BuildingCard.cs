@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using static Building;
 
 public class BuildingCard : MonoBehaviour
 {
@@ -10,15 +12,17 @@ public class BuildingCard : MonoBehaviour
 
 
     [Header("STATS")]
-    [SerializeField] public Turret.TurretStats turretStats;
+    [HideInInspector] public Turret.TurretStats turretStats;
     [SerializeField] private float hoverSpeed;
     [SerializeField] private float selectedSpeed;
 
-    [Header("BUILDING")]
-    [SerializeField] private GameObject buildingPrefab;
-    [HideInInspector] public GameObject copyBuildingPrefab;
-    public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;
-
+    [Header("BUILDING PARTS")]
+    [SerializeField] private TurretPartAttack turretPartAttack;
+    [SerializeField] private TurretPartBody turretPartBody;
+    [SerializeField] private TurretPartBase turretPartBase;
+    [SerializeField] public GameObject turretPrefab;
+    [HideInInspector] public GameObject copyTurretPrefab;
+    public bool AlreadySpawnedCopyBuildingPrefab => copyTurretPrefab != null;
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
@@ -38,9 +42,6 @@ public class BuildingCard : MonoBehaviour
     public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
 
 
-
-
-
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public static event BuildingCardAction OnCardHovered;
     public static event BuildingCardAction OnCardUnhovered;
@@ -51,15 +52,23 @@ public class BuildingCard : MonoBehaviour
 
     private void OnValidate()
     {
+        //InitStatsFromTurretParts();
         InitTexts();
-
-        if (turretStats.range % 2 == 0)
-            --turretStats.range;
     }
 
     private void Awake()
     {
+        InitStatsFromTurretParts();
         InitTexts();
+    }
+
+    private void InitStatsFromTurretParts()
+    {
+        turretStats.playCost = turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
+        turretStats.damage = turretPartBody.damage;
+        turretStats.range = turretPartBase.attackRange;
+        turretStats.targetAmount = turretPartAttack.targetAmount;
+        turretStats.cadence = turretPartBody.attackSpeed;
     }
 
     private void OnMouseEnter()
@@ -90,6 +99,7 @@ public class BuildingCard : MonoBehaviour
         rangeText.text = turretStats.range.ToString();
         targetAmountText.text = turretStats.targetAmount.ToString();
         cadenceText.text = turretStats.cadence.ToString() + "s";
+
     }
 
     public void InitPositions(Vector3 selectedPosition)
@@ -101,9 +111,9 @@ public class BuildingCard : MonoBehaviour
 
     public void CreateCopyBuildingPrefab()
     {
-        copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
-        copyBuildingPrefab.GetComponent<Building>().Init(turretStats);
-        copyBuildingPrefab.SetActive(false);
+        copyTurretPrefab = Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
+        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack.prefab, turretPartBody.prefab, turretPartBase.prefab);
+        copyTurretPrefab.SetActive(false);
     }
 
     public void StandardState()

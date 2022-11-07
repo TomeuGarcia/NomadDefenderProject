@@ -44,6 +44,10 @@ public class HandBuildingCards : MonoBehaviour
     {
         ComputeSelectedPosition();
         ComputeHiddenPosition();
+    }
+
+    private void Start()
+    {
         InitCardsInHand();
 
         for (int i = 0; i < cards.Count; ++i)
