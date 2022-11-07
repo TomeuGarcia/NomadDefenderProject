@@ -9,6 +9,7 @@ public class PathLocation : MonoBehaviour
 
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material deadMaterial;
+    [SerializeField] private HealthHUD healthHUD;
 
 
     public bool IsDead => healthSystem.IsDead();
@@ -17,6 +18,7 @@ public class PathLocation : MonoBehaviour
     private void Awake()
     {
         healthSystem = new HealthSystem(health);
+        healthHUD.Init(healthSystem);
     }
 
     public void TakeDamage(int damageAmount)

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -18,6 +15,8 @@ public class Tile : MonoBehaviour
     public delegate void TileAction(Tile tile);
     public static event TileAction OnTileSelected;
     public static event TileAction OnTileHovered;
+    public delegate void TileAction2();
+    public static event TileAction2 OnTileUnhovered;
 
 
     private void OnMouseDown()
@@ -32,6 +31,13 @@ public class Tile : MonoBehaviour
         if (isOccupied) return;
 
         if (OnTileHovered != null) OnTileHovered(this);
+    }
+
+    private void OnMouseExit()
+    {
+        if (isOccupied) return;
+
+        if (OnTileUnhovered != null) OnTileUnhovered();
     }
 
 }

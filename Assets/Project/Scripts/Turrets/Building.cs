@@ -9,20 +9,50 @@ public class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
 
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform bodyHolder;
+    [SerializeField] protected Transform baseHolder;
 
-    [System.Serializable]
     public struct TurretStats
     {
         public int playCost;
         public int damage;
-        public int range;
+        [SerializeField, Min(1)] public int range;
         public int targetAmount;
         public float cadence;
     }
 
 
-    public virtual void GotPlaced(TurretStats turretStats)
+    protected virtual void DisableFunctionality()
     {
-
     }
+
+    protected virtual void EnableFunctionality()
+    {
+    }
+
+    public virtual void GotPlaced()
+    {
+    }
+
+    public virtual void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
+    {
+    }
+
+    public virtual void ShowRangePlane()
+    {
+    }
+
+    public virtual void HideRangePlane()
+    {
+    }
+
+    public virtual void EnablePlayerInteraction()
+    {
+    }
+
+    public virtual void DisablePlayerInteraction()
+    {
+    }
+
 }

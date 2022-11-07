@@ -45,7 +45,7 @@ public class PathStart : MonoBehaviour
 
         Enemy enemy = enemyPool.GetObject(startNode.Position, Quaternion.identity).gameObject.GetComponent<Enemy>();
         enemy.gameObject.SetActive(true);
-        enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), totalDistance, enemy.transformToMove);
+        enemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), Vector3.zero, totalDistance, enemy.transformToMove);
 
         enemies.Add(enemy);
     }
@@ -63,7 +63,7 @@ public class PathStart : MonoBehaviour
         }
 
         HomingProjectile projectile = Instantiate(projectilePrefab, startNode.Position, Quaternion.identity);
-        projectile.Init(topEnemy, 1);
+        projectile.Init(topEnemy, null);
     }
 
 }
