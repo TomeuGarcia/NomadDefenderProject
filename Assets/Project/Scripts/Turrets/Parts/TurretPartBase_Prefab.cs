@@ -21,6 +21,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
         }
     }
 
+    virtual public void Init(Turret turretOwner, int turretRange) { }
+
     public void SetDefaultMaterial()
     {
         meshRenderer.materials = defaultMaterials.ToArray();
