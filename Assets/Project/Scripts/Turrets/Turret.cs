@@ -22,6 +22,11 @@ public class Turret : Building
 
     private bool isFunctional = false;
 
+    public delegate void TurretAction(Enemy enemy);
+    public TurretAction OnEnemyEnterRange;
+    public TurretAction OnEnemyExitRange;
+    //public TurretAction OnEnemyShot;
+
     private void Awake()
     {
         currentShootTimer = 0.0f;
@@ -83,10 +88,16 @@ public class Turret : Building
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
         rangePlaneMaterial.SetFloat("_TileNum", (float)range);
 
-        bodyPart = Instantiate(turretPartBody, bodyHolder).GetComponent<TurretPartBody_Prefab>();
-        basePart = Instantiate(turretPartBase, baseHolder).GetComponent<TurretPartBase_Prefab>();
 
+        TurretAttack _turretAttack = turretAttack.GetComponent<TurretAttack>();
         attackPool.SetPooledObject(turretAttack);
+
+        bodyPart = Instantiate(turretPartBody, bodyHolder).GetComponent<TurretPartBody_Prefab>();
+        bodyPart.Init(_turretAttack.materialForTurret);
+
+        basePart = Instantiate(turretPartBase, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart.Init(this, range);
+
 
         DisableFunctionality();
     }
@@ -191,6 +202,7 @@ public class Turret : Building
 
     private void AddEnemy(Enemy enemy)
     {
+        if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
         enemy.OnEnemyDeath += DeleteEnemyFromList;
         enemies.Add(enemy);
         enemies.Sort(mySort);
@@ -204,6 +216,7 @@ public class Turret : Building
 
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
+        if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
         enemyToDelete.ChangeToBaseMat();
         enemies.Remove(enemyToDelete);
 
