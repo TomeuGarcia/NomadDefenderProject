@@ -141,9 +141,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookAtTarget: 1
-  meshRenderer: {fileID: 4874710325484892712}
   shootingPointParent: {fileID: 7672013433410882491}
+  meshRenderers:
+  - {fileID: 4874710325484892712}
   previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
+  projectileMaterialIndices:
+  - meshI: 0
+    materialI: 1
 --- !u!1 &6387950654494282749
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,28 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class TurretPartBody_Prefab : MonoBehaviour
 {
     [SerializeField] public bool lookAtTarget;
-    [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] public Transform shootingPointParent;
-    [HideInInspector] private List<Material> defaultMaterials = new List<Material>();
+    private int currentShootingPoint = 0;
+
+
+    [SerializeField] private MeshRenderer[] meshRenderers;
     [SerializeField] private Material previewMaterial;
-    private Material[] previewMaterials;
+    private Material[][] defaultMaterials;
+    private Material[][] previewMaterials;
 
-    private void Awake()
+
+    [System.Serializable]
+    private struct MeshAndMaterialI
     {
-        previewMaterials = new Material[meshRenderer.materials.Length];
+        public int meshI, materialI;
+    }
+    [SerializeField] MeshAndMaterialI[] projectileMaterialIndices;
 
-        for (int i = 0; i < meshRenderer.materials.Length; ++i)
-        {
-            defaultMaterials.Add(meshRenderer.materials[i]);
-            previewMaterials[i] = previewMaterial;
-        }
+
+
+    public virtual void Init(Material projectileMaterial)
+    {
+        InitMaterials(projectileMaterial);
     }
 
-    private int currentShootingPoint = 0;
+    private void InitMaterials(Material projectileMaterial)
+    {
+        defaultMaterials = new Material[meshRenderers.Length][];
+        previewMaterials = new Material[meshRenderers.Length][];
+
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        {
+            defaultMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
+            previewMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
+
+            for (int i = 0; i < meshRenderers[meshI].materials.Length; ++i)
+            {
+                defaultMaterials[meshI][i] = meshRenderers[meshI].materials[i];
+                previewMaterials[meshI][i] = previewMaterial;
+            }
+        }
+
+
+        // Replace inital materials for projectile material
+        for (int i = 0; i < projectileMaterialIndices.Length; ++i)
+        {
+            defaultMaterials[projectileMaterialIndices[i].meshI][projectileMaterialIndices[i].materialI] = projectileMaterial;
+        }      
+    }
+
     public Vector3 GetNextShootingPoint()
     {
         currentShootingPoint++;
@@ -33,11 +65,17 @@ public class TurretPartBody_Prefab : MonoBehaviour
 
     public void SetDefaultMaterial()
     {
-        meshRenderer.materials = defaultMaterials.ToArray();
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        {
+            meshRenderers[meshI].materials = defaultMaterials[meshI];
+        }            
     }
 
     public void SetPreviewMaterial()
     {
-        meshRenderer.materials = previewMaterials;
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        {
+            meshRenderers[meshI].materials = previewMaterials[meshI];
+        }        
     }
 }
