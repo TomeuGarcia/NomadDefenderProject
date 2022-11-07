@@ -99,7 +99,7 @@ public class HandBuildingCards : MonoBehaviour
     private void InitCardsInHand()
     {
         float cardCount = cards.Count;
-        float displacementStep = Mathf.Min(0.8f / (cardCount * 0.2f), 0.8f);
+        float displacementStep = Mathf.Min(0.6f / (cardCount * 0.2f), 0.6f);
         float halfCardCount = cards.Count / 2f;
         Vector3 startDisplacement = (-halfCardCount * displacementStep) * transform.right;
 
