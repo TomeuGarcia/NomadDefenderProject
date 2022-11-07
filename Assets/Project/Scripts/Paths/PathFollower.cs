@@ -15,7 +15,8 @@ public class PathFollower : MonoBehaviour
     // Target Node
     private PathNode targetNode = null;
     private Vector3 moveDirection;
-    [SerializeField, Min(0f)] private float moveSpeed = 10f;
+    [SerializeField, Min(0f)] public float moveSpeed = 10f;
+    private float baseMoveSpeed;
     private Transform transformToMove;
 
     // Path Follow Control
@@ -41,6 +42,8 @@ public class PathFollower : MonoBehaviour
 
     public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, Transform transformToMove = null)
     {
+        baseMoveSpeed = moveSpeed;
+
         targetNode = startTargetNode;
         moveDirection = startDirection;
 
@@ -73,6 +76,11 @@ public class PathFollower : MonoBehaviour
         if (!finished && !paused) FollowPathInterpolated();
     }
 
+    public void SetMoveSpeed(float speedCoef)
+    {
+        moveSpeed = (baseMoveSpeed * speedCoef);
+        step = moveSpeed / distanceStartToEnd;
+    }
 
     private void FollowPathInterpolated()
     {

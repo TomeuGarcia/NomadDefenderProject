@@ -147,4 +147,9 @@ public class Enemy : MonoBehaviour
     {
         return queuedDamage >= healthSystem.health;
     }
+
+    public void SetMoveSpeed(float speedCoef)
+    {
+        pathFollower.SetMoveSpeed(speedCoef);
+    }
 }
