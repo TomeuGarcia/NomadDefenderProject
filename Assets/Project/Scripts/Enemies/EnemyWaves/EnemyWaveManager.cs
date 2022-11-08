@@ -19,6 +19,7 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnAllWavesFinished;
 
 
+
     private void Awake()
     {
         activeWaves = enemyWaveSpawners.Length;
@@ -94,5 +95,6 @@ public class EnemyWaveManager : MonoBehaviour
             debugText.text = "All waves finished";
         }
     }
+
 
 }
