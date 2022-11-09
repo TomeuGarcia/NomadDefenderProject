@@ -88,11 +88,16 @@ public class Turret : Building
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
         rangePlaneMaterial.SetFloat("_TileNum", (float)range);
 
+
+        TurretAttack _turretAttack = turretAttack.GetComponent<TurretAttack>();
+        attackPool.SetPooledObject(turretAttack);
+
         bodyPart = Instantiate(turretPartBody, bodyHolder).GetComponent<TurretPartBody_Prefab>();
+        bodyPart.Init(_turretAttack.materialForTurret);
+
         basePart = Instantiate(turretPartBase, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, range);
 
-        attackPool.SetPooledObject(turretAttack);
 
         DisableFunctionality();
     }
