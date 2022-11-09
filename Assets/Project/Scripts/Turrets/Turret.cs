@@ -203,14 +203,14 @@ public class Turret : Building
     private void AddEnemy(Enemy enemy)
     {
         if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
-        enemy.OnEnemyDeath += DeleteEnemyFromList;
+        enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
         enemies.Sort(mySort);
     }
 
     private void RemoveEnemy(Enemy enemy)
     {
-        enemy.OnEnemyDeath -= DeleteEnemyFromList;
+        enemy.OnEnemyDeactivated -= DeleteEnemyFromList;
         DeleteEnemyFromList(enemy);
     }
 
