@@ -75,12 +75,12 @@ public class EnemyWaveSpawner : ScriptableObject
         spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
         /////////////
 
-        spawnedEnemy.OnEnemyDeath += SubtractActiveEnemy;
+        spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;
     }
 
     private void SubtractActiveEnemy(Enemy enemy)
     {
-        enemy.OnEnemyDeath -= SubtractActiveEnemy;
+        enemy.OnEnemyDeactivated -= SubtractActiveEnemy;
 
         if (--activeEnemies == 0)
         {

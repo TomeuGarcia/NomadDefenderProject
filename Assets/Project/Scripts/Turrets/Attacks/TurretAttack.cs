@@ -11,6 +11,7 @@ public class TurretAttack : MonoBehaviour
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected float lifetime = 1f;
 
+    [SerializeField] public Material materialForTurret;
 
     public virtual void Init(Enemy targetEnemy, Turret owner) 
     {

@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
-    public EnemyAction OnEnemyDeath;
+    public EnemyAction OnEnemyDeactivated;
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
@@ -100,7 +100,7 @@ public class Enemy : MonoBehaviour
 
         if (healthSystem.IsDead())
         {
-            Death();
+            Die();
         }
     }
 
@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
         Deactivation();
     }
 
-    private void Death()
+    private void Die()
     {
         if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
         Deactivation();
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
 
     private void Deactivation()
     {
-        if (OnEnemyDeath != null) OnEnemyDeath(this);
+        if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
