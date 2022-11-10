@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,35 +9,30 @@ public class UpgradeCardHolder : MonoBehaviour
     [SerializeField] private AnimationCurve cardsRotationCurve;
 
     [SerializeField] private Transform selectedTransform;
+    [SerializeField, Min(0f)] private float distanceBetweenCards = 0.8f;
 
     // Serialize for now
     [SerializeField] private BuildingCard[] cards;
 
-    private BuildingCard selectedCard = null;
+    public BuildingCard selectedCard { get; private set; }
 
-    private bool AlreadyHasSelectedCard => selectedCard != null;
+    public bool AlreadyHasSelectedCard => selectedCard != null;
 
 
-    private void Awake()
+    private void OnValidate()
     {
         Init(cards);
     }
-
-    private void OnEnable()
+    private void Awake()
     {
+        Init(cards);
         BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardSelected += SetSelectedCard;
-    }
-
-    private void OnDisable()
-    {
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardSelected -= SetSelectedCard;
     }
 
 
     public void Init(BuildingCard[] cards)
     {
+        selectedCard = null;
         this.cards = cards;
         InitCardsInHand();
     }
@@ -45,7 +41,7 @@ public class UpgradeCardHolder : MonoBehaviour
     private void InitCardsInHand()
     {
         float cardCount = cards.Length;
-        float displacementStep = Mathf.Min(0.6f / (cardCount * 0.2f), 0.6f);
+        float displacementStep = Mathf.Min(distanceBetweenCards / (cardCount * 0.2f), distanceBetweenCards);
         float halfCardCount = cardCount / 2f;
         Vector3 startDisplacement = (-halfCardCount * displacementStep) * transform.right;
 
@@ -63,7 +59,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
             cards[i].transform.SetParent(transform);
             cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
+            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement;
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedTransform.position);
@@ -74,7 +70,10 @@ public class UpgradeCardHolder : MonoBehaviour
     private void SetHoveredCard(BuildingCard card)
     {
         card.HoveredState();
+
         BuildingCard.OnCardHovered -= SetHoveredCard;
+        BuildingCard.OnCardUnhovered += SetStandardCard;
+        BuildingCard.OnCardSelected += SetSelectedCard;
     }
 
     private void SetStandardCard(BuildingCard card)
@@ -86,7 +85,10 @@ public class UpgradeCardHolder : MonoBehaviour
 
         //hoveredCard = null;
         card.StandardState();
+  
         BuildingCard.OnCardHovered += SetHoveredCard;
+        BuildingCard.OnCardUnhovered -= SetStandardCard;
+        BuildingCard.OnCardSelected -= SetSelectedCard;
     }
 
     private void SetSelectedCard(BuildingCard card)
@@ -95,6 +97,20 @@ public class UpgradeCardHolder : MonoBehaviour
 
         selectedCard = card;
         selectedCard.SelectedState();
+
+        BuildingCard.OnCardHovered -= SetHoveredCard;
+        BuildingCard.OnCardSelected -= SetSelectedCard;
+        selectedCard.OnCardSelectedNotHovered += RetrieveCard;
+
+    }
+
+
+    private void RetrieveCard(BuildingCard card)
+    {
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+        SetStandardCard(card);
+
+        selectedCard = null;
     }
 
 }
