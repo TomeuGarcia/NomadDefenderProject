@@ -11,9 +11,47 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private PartType partType;
 
 
+    [Header("Components")]
+    [SerializeField] private Animator buttonAnimator;
+    [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
+
+    private bool replacementDone = false;
+
+
+    private void OnEnable()
+    {
+        buttonMouseOverNotifier.OnMousePressed += ProceedReplace;
+    }
+
+    private void OnDisable()
+    {
+        buttonMouseOverNotifier.OnMousePressed -= ProceedReplace;
+    }
+
+
+
+    public void ProceedReplace()
+    {
+        if (replacementDone) return;
+
+        if (CanConfirm())
+        {
+            buttonAnimator.SetTrigger("Pressed");
+            ReplacePartInCard();
+
+            replacementDone = true;
+
+            upgradeCardHolder.RetrieveCard(upgradeCardHolder.selectedCard);
+            cardPartHolder.RetrieveCard(cardPartHolder.selectedCardPart);
+
+            upgradeCardHolder.StopInteractions();
+            cardPartHolder.StopInteractions();
+        }
+    }
 
     private bool CanConfirm()
     {
+        Debug.Log(upgradeCardHolder.AlreadyHasSelectedCard && cardPartHolder.AlreadyHasSelectedPart);
         return upgradeCardHolder.AlreadyHasSelectedCard && cardPartHolder.AlreadyHasSelectedPart;
     }
 
@@ -24,17 +62,17 @@ public class CardPartReplaceManager : MonoBehaviour
         {
             case PartType.ATTACK:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.GetComponent<CardPartAttack>().turretPartAttack);
+                    upgradeCardHolder.selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
                 }
                 break;
             case PartType.BODY:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.GetComponent<CardPartBody>().turretPartBody);
+                    upgradeCardHolder.selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
                 }
                 break;
             case PartType.BASE:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.GetComponent<CardPartBase>().turretPartBase);
+                    upgradeCardHolder.selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase);
                 }
                 break;
             default: break;

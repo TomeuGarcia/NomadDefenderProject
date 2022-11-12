@@ -18,6 +18,8 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public bool AlreadyHasSelectedCard => selectedCard != null;
 
+    private bool canInteract;
+
 
     private void OnValidate()
     {
@@ -27,6 +29,7 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         Init(cards);
         BuildingCard.OnCardHovered += SetHoveredCard;
+        canInteract = true;
     }
 
 
@@ -86,7 +89,7 @@ public class UpgradeCardHolder : MonoBehaviour
         //hoveredCard = null;
         card.StandardState();
   
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        if (canInteract) BuildingCard.OnCardHovered += SetHoveredCard;
         BuildingCard.OnCardUnhovered -= SetStandardCard;
         BuildingCard.OnCardSelected -= SetSelectedCard;
     }
@@ -105,12 +108,17 @@ public class UpgradeCardHolder : MonoBehaviour
     }
 
 
-    private void RetrieveCard(BuildingCard card)
+    public void RetrieveCard(BuildingCard card)
     {
         selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
         SetStandardCard(card);
 
         selectedCard = null;
+    }
+
+    public void StopInteractions()
+    {
+        canInteract = false;
     }
 
 }

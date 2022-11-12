@@ -15,6 +15,7 @@ public class CardPartHolder : MonoBehaviour
 
     public bool AlreadyHasSelectedPart => selectedCardPart != null;
 
+    private bool canInteract;
 
     private void OnValidate()
     {
@@ -24,6 +25,8 @@ public class CardPartHolder : MonoBehaviour
     {
         Init(cardParts);
         CardPart.OnCardHovered += SetHoveredCard;
+
+        canInteract = true;
     }
 
 
@@ -73,7 +76,7 @@ public class CardPartHolder : MonoBehaviour
     {
         card.StandardState();
 
-        CardPart.OnCardHovered += SetHoveredCard;
+        if (canInteract) CardPart.OnCardHovered += SetHoveredCard;
         CardPart.OnCardUnhovered -= SetStandardCard;
         CardPart.OnCardSelected -= SetSelectedCard;
     }
@@ -91,11 +94,17 @@ public class CardPartHolder : MonoBehaviour
     }
 
 
-    private void RetrieveCard(CardPart card)
+    public void RetrieveCard(CardPart card)
     {
         selectedCardPart.OnCardSelectedNotHovered -= RetrieveCard;
         SetStandardCard(card);
 
         selectedCardPart = null;
     }
+
+    public void StopInteractions()
+    {
+        canInteract = false;
+    }
+
 }
