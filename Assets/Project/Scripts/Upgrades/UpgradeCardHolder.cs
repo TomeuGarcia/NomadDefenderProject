@@ -31,6 +31,7 @@ public class UpgradeCardHolder : MonoBehaviour
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnCardSelected;
     public event CardPartHolderAction OnCardUnselected;
+    public event CardPartHolderAction OnFinalRetrieve;
 
 
 
@@ -97,12 +98,6 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        //if (!isHidden)
-        //{
-        //    StartCoroutine("WaitToHideHand");
-        //}
-
-        //hoveredCard = null;
         card.StandardState();
   
         if (canInteract) BuildingCard.OnCardHovered += SetHoveredCard;
@@ -167,6 +162,10 @@ public class UpgradeCardHolder : MonoBehaviour
         yield return new WaitForSeconds(startDelay);
 
         Hide(duration, delayBetweenCards);
+
+        yield return new WaitForSeconds(duration * cards.Length + delayBetweenCards * cards.Length);
+
+        if (OnFinalRetrieve != null) OnFinalRetrieve();
     }
 
 

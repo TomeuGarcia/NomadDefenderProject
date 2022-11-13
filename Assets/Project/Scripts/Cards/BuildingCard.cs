@@ -58,8 +58,12 @@ public class BuildingCard : MonoBehaviour
         InitTexts();
     }
 
-    private void Awake()
+    public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
     {
+        this.turretPartAttack = turretPartAttack;
+        this.turretPartBody = turretPartBody;
+        this.turretPartBase = turretPartBase;
+
         Init();
     }
 
