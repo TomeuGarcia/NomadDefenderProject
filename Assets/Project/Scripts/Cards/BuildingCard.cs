@@ -48,7 +48,24 @@ public class BuildingCard : MonoBehaviour
     public static event BuildingCardAction OnCardSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
+    public event BuildingCardAction OnDestroyed;
 
+
+
+    [System.Serializable]
+    public struct CardComponents
+    {
+        public CardComponents(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
+        {
+            this.turretPartAttack = turretPartAttack;
+            this.turretPartBody = turretPartBody;
+            this.turretPartBase = turretPartBase;
+        }
+
+        public TurretPartAttack turretPartAttack;
+        public TurretPartBody turretPartBody;
+        public TurretPartBase turretPartBase;
+    }
 
 
 
@@ -56,6 +73,11 @@ public class BuildingCard : MonoBehaviour
     {
         //InitStatsFromTurretParts();
         InitTexts();
+    }
+
+    private void OnDisable()
+    {
+        if (OnDestroyed != null) OnDestroyed(this);
     }
 
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
@@ -168,6 +190,19 @@ public class BuildingCard : MonoBehaviour
     {
         turretPartBase = newTurretPartBase;
         Init();
+    }
+
+    public TurretPartAttack GetTurretPartAttack()
+    {
+        return turretPartAttack;
+    }
+    public TurretPartBody GetTurretPartBody()
+    {
+        return turretPartBody;
+    }
+    public TurretPartBase GetTurretPartBase()
+    {
+        return turretPartBase;
     }
 
 

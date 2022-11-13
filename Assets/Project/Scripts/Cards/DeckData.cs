@@ -8,6 +8,10 @@ public class DeckData : ScriptableObject
 {
     private List<BuildingCard> cards;
 
+    [SerializeField] public List<BuildingCard.CardComponents> starterCardsComponents;
+
+
+
     public void Init(BuildingCard[] starterCards)
     {
         cards = new List<BuildingCard>(starterCards);
@@ -28,10 +32,16 @@ public class DeckData : ScriptableObject
         cards.Add(card);
     }
 
-    public void RemoveCard(BuildingCard card)
+    public void RemoveCard(int index)
     {
-        cards.Remove(card);
+        cards.RemoveAt(index);
+        starterCardsComponents.RemoveAt(index);
     }
 
+
+    public void ResetComponents(List<BuildingCard.CardComponents> cardsComponentsTemp)
+    {
+        starterCardsComponents = new List<BuildingCard.CardComponents>(cardsComponentsTemp);
+    }
 
 }
