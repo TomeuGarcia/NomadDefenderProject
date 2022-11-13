@@ -47,6 +47,8 @@ public class BuildingCard : MonoBehaviour
     public static event BuildingCardAction OnCardUnhovered;
     public static event BuildingCardAction OnCardSelected;
 
+    public event BuildingCardAction OnCardSelectedNotHovered;
+
 
 
 
@@ -57,6 +59,11 @@ public class BuildingCard : MonoBehaviour
     }
 
     private void Awake()
+    {
+        Init();
+    }
+
+    private void Init()
     {
         InitStatsFromTurretParts();
         InitTexts();
@@ -87,9 +94,15 @@ public class BuildingCard : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (cardState != CardStates.HOVERED) return;
-
-        if (OnCardSelected != null) OnCardSelected(this);
+        if (cardState == CardStates.HOVERED)
+        {
+            if (OnCardSelected != null) OnCardSelected(this);
+        }
+        else 
+        {
+            if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
+        }
+        
     }
 
     private void InitTexts()
@@ -133,5 +146,25 @@ public class BuildingCard : MonoBehaviour
         cardState = CardStates.SELECTED;
         lerp.SpeedLerpPosition(selectedPosition, selectedSpeed);
     }
+
+
+    public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
+    {
+        turretPartAttack = newTurretPartAttack;
+        Init();
+    }
+
+    public void SetNewPartBody(TurretPartBody newTurretPartBody)
+    {
+        turretPartBody = newTurretPartBody;
+        Init();
+    }
+
+    public void SetNewPartBase(TurretPartBase newTurretPartBase)
+    {
+        turretPartBase = newTurretPartBase;
+        Init();
+    }
+
 
 }
