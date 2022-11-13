@@ -17,6 +17,11 @@ public class CardPartAttack : CardPart
         InitTexts();
     }
 
+    public override void Init()
+    {
+        InitTexts();
+    }
+
     private void InitTexts()
     {
         playCostText.text = turretPartAttack.cost.ToString();

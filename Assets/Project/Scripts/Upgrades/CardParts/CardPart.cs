@@ -59,6 +59,11 @@ public class CardPart : MonoBehaviour
         
     }
 
+    public virtual void Init()
+    {
+
+    }
+
     public void InitPositions(Vector3 selectedPosition)
     {
         standardPosition = transform.position;

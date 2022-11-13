@@ -16,20 +16,36 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public BuildingCard selectedCard { get; private set; }
 
+    [Header("Materials")]
+    [SerializeField] private MeshRenderer placerMeshRenderer;
+    private Material placerMaterial;
+
     public bool AlreadyHasSelectedCard => selectedCard != null;
 
     private bool canInteract;
 
+    private float startDelay, duration, delayBetweenCards; // Animation variables
+
+
+
+    public delegate void CardPartHolderAction();
+    public event CardPartHolderAction OnCardSelected;
+    public event CardPartHolderAction OnCardUnselected;
+
+
 
     private void OnValidate()
     {
-        Init(cards);
+        //Init(cards);
     }
     private void Awake()
     {
-        Init(cards);
+        //Init(cards);
         BuildingCard.OnCardHovered += SetHoveredCard;
         canInteract = true;
+
+        placerMaterial = placerMeshRenderer.material;
+        placerMaterial.SetFloat("_IsOn", 1f);
     }
 
 
@@ -105,6 +121,7 @@ public class UpgradeCardHolder : MonoBehaviour
         BuildingCard.OnCardSelected -= SetSelectedCard;
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
+        if (OnCardSelected != null) OnCardSelected();
     }
 
 
@@ -114,11 +131,72 @@ public class UpgradeCardHolder : MonoBehaviour
         SetStandardCard(card);
 
         selectedCard = null;
+
+        if (OnCardUnselected != null) OnCardUnselected();
     }
 
     public void StopInteractions()
     {
         canInteract = false;
+
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+    }
+
+
+    public void EnableFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    {
+        selectedCard.OnCardSelectedNotHovered += FinalRetrieveCard;
+
+        this.startDelay = startDelay;
+        this.duration = duration;
+        this.delayBetweenCards = delayBetweenCards;
+    }
+
+    public void FinalRetrieveCard(BuildingCard card)
+    {
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+        SetStandardCard(card);
+
+        selectedCard = null;
+
+        StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards));
+    }
+
+    private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    {
+        yield return new WaitForSeconds(startDelay);
+
+        Hide(duration, delayBetweenCards);
+    }
+
+
+    public void Hide(float duration, float delayBetweenCards)
+    {
+        StartCoroutine(DoHide(duration, delayBetweenCards));
+    }
+
+    private IEnumerator DoHide(float duration, float delayBetweenCards)
+    {
+        for (int i = 0; i < cards.Length; ++i)
+        {
+            if (cards[i] == selectedCard) continue;
+
+            Transform cardPartTransform = cards[i].transform;
+            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.5f), duration);
+
+            yield return new WaitForSeconds(delayBetweenCards);
+        }
+    }
+
+
+    public void StartAnimation()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+    }
+
+    public void FinishAnimation()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
 }

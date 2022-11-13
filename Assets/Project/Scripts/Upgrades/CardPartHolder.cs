@@ -1,15 +1,22 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 public class CardPartHolder : MonoBehaviour
 {
+    [HideInInspector] public Transform cardsHolderTransform;
     [SerializeField] private Transform selectedTransform;
     [SerializeField, Min(0f)] private float distanceBetweenCards = 0.8f;
 
     // Serialize for now
     [SerializeField] private CardPart[] cardParts;
+
+    [Header("Materials")]
+    [SerializeField] private MeshRenderer placerMeshRenderer;
+    private Material placerMaterial;
+
 
     public CardPart selectedCardPart { get; private set; }
 
@@ -17,16 +24,28 @@ public class CardPartHolder : MonoBehaviour
 
     private bool canInteract;
 
+
+    public delegate void CardPartHolderAction();
+    public event CardPartHolderAction OnPartSelected;
+    public event CardPartHolderAction OnPartUnselected;
+
+
+
+
     private void OnValidate()
     {
-        Init(cardParts);
+        //Init(cardParts);
     }
     private void Awake()
     {
-        Init(cardParts);
+        cardsHolderTransform = transform;
+        //Init(cardParts);
         CardPart.OnCardHovered += SetHoveredCard;
 
         canInteract = true;
+
+        placerMaterial = placerMeshRenderer.material;
+        placerMaterial.SetFloat("_IsOn", 1f);
     }
 
 
@@ -59,6 +78,8 @@ public class CardPartHolder : MonoBehaviour
             cardParts[i].transform.position += startDisplacement + widthDisplacement;
 
             cardParts[i].InitPositions(selectedTransform.position);
+
+            cardParts[i].Init();
         }
     }
 
@@ -91,6 +112,8 @@ public class CardPartHolder : MonoBehaviour
         CardPart.OnCardHovered -= SetHoveredCard;
         CardPart.OnCardSelected -= SetSelectedCard;
         selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
+
+        if (OnPartSelected != null) OnPartSelected();
     }
 
 
@@ -100,11 +123,46 @@ public class CardPartHolder : MonoBehaviour
         SetStandardCard(card);
 
         selectedCardPart = null;
+
+        if (OnPartUnselected != null) OnPartUnselected();
     }
 
     public void StopInteractions()
     {
         canInteract = false;
+
+        selectedCardPart.OnCardSelectedNotHovered -= RetrieveCard;
+    }
+
+
+
+    public void Hide(float duration, float delayBetweenCards)
+    {
+        StartCoroutine(DoHide(duration, delayBetweenCards));
+    }
+
+    private IEnumerator DoHide(float duration, float delayBetweenCards)
+    {
+        for (int i = 0; i < cardParts.Length; ++i)
+        {
+            if (cardParts[i] == selectedCardPart) continue;
+
+            Transform cardPartTransform = cardParts[i].transform;
+            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.5f), duration);
+
+            yield return new WaitForSeconds(delayBetweenCards);
+        }
+    }
+
+
+    public void StartAnimation()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+    }
+
+    public void FinishAnimation()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
 }
