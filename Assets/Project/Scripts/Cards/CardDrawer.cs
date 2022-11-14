@@ -7,6 +7,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] private DeckBuildingCards deck;
 
+    [SerializeField, Min(0)] private int numCardsHandStart = 2;
+
 
     private void OnEnable()
     {
@@ -18,13 +20,15 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard -= TryDrawCard;
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(DrawWithTime());
-        }
+        deck.Init();      
+        DrawStartHand();
+        hand.Init();
+
+        deck.GetDeckData().SetSavedCardsToStarterCards();
     }
+
 
     private void TryDrawCard()
     {
@@ -32,7 +36,7 @@ public class CardDrawer : MonoBehaviour
             DrawCard();
     }
 
-    public void DrawCard()
+    private void DrawCard()
     {
         hand.AddCard(deck.GetTopCard());
     }
@@ -41,8 +45,6 @@ public class CardDrawer : MonoBehaviour
     {
         yield return new WaitForSeconds(15);
 
-        if (deck.HasCardsLeft())
-            DrawCard();
 
         StartCoroutine(DrawWithTime());
     }
