@@ -31,6 +31,7 @@ public class UpgradeCardHolder : MonoBehaviour
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnCardSelected;
     public event CardPartHolderAction OnCardUnselected;
+    public event CardPartHolderAction OnFinalRetrieve;
 
 
 
@@ -47,6 +48,17 @@ public class UpgradeCardHolder : MonoBehaviour
         placerMaterial = placerMeshRenderer.material;
         placerMaterial.SetFloat("_IsOn", 1f);
     }
+
+    private void OnEnable()
+    {
+        CardPartReplaceManager.OnReplacementDone += StopAnimationCompletely;
+    }
+
+    private void OnDisable()
+    {
+        CardPartReplaceManager.OnReplacementDone -= StopAnimationCompletely;
+    }
+
 
 
     public void Init(BuildingCard[] cards)
@@ -97,12 +109,6 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        //if (!isHidden)
-        //{
-        //    StartCoroutine("WaitToHideHand");
-        //}
-
-        //hoveredCard = null;
         card.StandardState();
   
         if (canInteract) BuildingCard.OnCardHovered += SetHoveredCard;
@@ -150,6 +156,9 @@ public class UpgradeCardHolder : MonoBehaviour
         this.startDelay = startDelay;
         this.duration = duration;
         this.delayBetweenCards = delayBetweenCards;
+
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 1f);
     }
 
     public void FinalRetrieveCard(BuildingCard card)
@@ -167,6 +176,10 @@ public class UpgradeCardHolder : MonoBehaviour
         yield return new WaitForSeconds(startDelay);
 
         Hide(duration, delayBetweenCards);
+
+        yield return new WaitForSeconds(duration * cards.Length + delayBetweenCards * cards.Length);
+
+        if (OnFinalRetrieve != null) OnFinalRetrieve();
     }
 
 
@@ -198,5 +211,12 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         placerMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
+
+    public void StopAnimationCompletely()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 0f);
+    }
+
 
 }

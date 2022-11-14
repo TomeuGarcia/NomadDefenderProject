@@ -6,6 +6,11 @@ using TMPro;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("DeckData")]
+    [SerializeField] private DeckData deckData;
+    private List<BuildingCard> deckCards;
+
+    [Header("Holders")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
 
@@ -40,13 +45,19 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
-    [Header("TESTING")]
-    [SerializeField] private BuildingCard[] deckCards;
+    
 
 
+    public delegate void CarPartReplaceManagerAction();
+    public static event CarPartReplaceManagerAction OnReplacementStart;
+    public static event CarPartReplaceManagerAction OnReplacementDone;
+
+    
 
     private void Start()
     {
+        deckCards = deckData.GetCardsReference();
+
         buttonMaterial = buttonMeshRenderer.material;
 
         SetButtonNotReady();
@@ -81,24 +92,7 @@ public class CardPartReplaceManager : MonoBehaviour
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
 
-
-
-        HashSet<int> randomIndices = new HashSet<int>();
-        while (randomIndices.Count < numCards)
-        {
-            randomIndices.Add(Random.Range(0, deckCards.Length));
-        }
-
-        BuildingCard[] chosenCards = new BuildingCard[numCards];
-        int i = 0;
-        foreach(int index in randomIndices)
-        {
-            chosenCards[i] = deckCards[index];
-            chosenCards[i].transform.SetParent(upgradeCardHolder.transform, false);
-            ++i;
-        }
-
-        upgradeCardHolder.Init(deckCards);
+        upgradeCardHolder.Init(GetRandomDeckCards());
     }
 
     private void InitAttacks()
@@ -152,6 +146,26 @@ public class CardPartReplaceManager : MonoBehaviour
     private TurretPartBase GetRandomTurretPartBase()
     {
         return bases[Random.Range(0, bases.Length)];
+    }
+
+    private BuildingCard[] GetRandomDeckCards()
+    {
+        HashSet<int> randomIndices = new HashSet<int>();
+        while (randomIndices.Count < numCards)
+        {
+            randomIndices.Add(Random.Range(0, deckCards.Count));
+        }
+
+        BuildingCard[] chosenCards = new BuildingCard[numCards];
+        int i = 0;
+        foreach (int index in randomIndices)
+        {
+            chosenCards[i] = deckCards[index];
+            chosenCards[i].transform.SetParent(upgradeCardHolder.transform, false);
+            ++i;
+        }
+
+        return chosenCards;
     }
 
 
@@ -233,7 +247,7 @@ public class CardPartReplaceManager : MonoBehaviour
         
         // EXECUTE REPLACEMENT
         ReplacePartInCard();
-
+        InvokeReplacementStart();
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
@@ -249,6 +263,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
         // Enable FINAL retreieve card
         upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+
+        upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
     
 
@@ -298,5 +314,21 @@ public class CardPartReplaceManager : MonoBehaviour
 
         buttonMaterial.SetFloat("_IsOn", 0f);
     }
+
+    private void InvokeReplacementDone()
+    {
+        upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
+
+        if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
+    }
+
+    private void InvokeReplacementStart()
+    {
+        if (OnReplacementStart != null) OnReplacementStart();
+
+        SetButtonNotReady();
+        buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
+    }
+
 
 }

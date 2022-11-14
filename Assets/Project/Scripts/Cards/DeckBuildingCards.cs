@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class DeckBuildingCards : MonoBehaviour
 {
-    [SerializeField] private List<BuildingCard> cards;
+    [SerializeField] private DeckData deckData;
+    
+    private List<BuildingCard> cards;
 
 
-    private void Awake()
+    private void Awake() // Might need to make this Start()
     {
+        cards = new List<BuildingCard>(deckData.GetCards());
         InitCardsInDeck();
     }
 
