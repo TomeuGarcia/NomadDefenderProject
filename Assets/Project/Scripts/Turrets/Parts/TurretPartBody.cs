@@ -11,4 +11,7 @@ public class TurretPartBody : ScriptableObject
     [SerializeField] public int damage;
     [SerializeField] public float attackSpeed;
     [SerializeField] public GameObject prefab;
+
+    [Header("VISUALS")]
+    [SerializeField] public Texture2D materialTextureMap;
 }

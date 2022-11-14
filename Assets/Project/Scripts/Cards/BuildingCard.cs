@@ -39,8 +39,16 @@ public class BuildingCard : MonoBehaviour
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
+    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.14f;
     public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
+
+
+    [Header("VISUALS")]
+    [SerializeField] private MeshRenderer attackMeshRenderer;
+    [SerializeField] private MeshRenderer bodyMeshRenderer;
+    [SerializeField] private MeshRenderer baseMeshRenderer;
+    private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
@@ -86,6 +94,13 @@ public class BuildingCard : MonoBehaviour
         CardPartReplaceManager.OnReplacementDone -= InvokeGetSaved;
     }
 
+    private void Awake()
+    {
+        cardAttackMaterial = attackMeshRenderer.material;
+        cardBodyMaterial = bodyMeshRenderer.material;
+        cardBaseMaterial = baseMeshRenderer.material;
+    }
+
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
     {
         this.turretPartAttack = turretPartAttack;
@@ -101,6 +116,8 @@ public class BuildingCard : MonoBehaviour
 
         InitStatsFromTurretParts();
         InitTexts();
+
+        InitVisuals();
     }
 
     private void InitStatsFromTurretParts()
@@ -217,6 +234,26 @@ public class BuildingCard : MonoBehaviour
     private void InvokeGetSaved()
     {
         if (OnGetSaved != null) OnGetSaved(this);
+
+    }
+
+
+    private void InitVisuals()
+    {
+        cardAttackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
+        cardAttackMaterial.SetColor("_Color", turretPartAttack.materialColor);
+
+        cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
+        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color
+
+        cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
+        cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
+    }
+
+    private void CardBigToSmallAnimation()
+    {
+        
+
 
     }
 

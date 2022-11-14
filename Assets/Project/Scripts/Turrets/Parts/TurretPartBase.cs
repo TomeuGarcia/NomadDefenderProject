@@ -11,4 +11,8 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, Min(0)] public int cost;
     [SerializeField, Min(1)] public int attackRange;
     [SerializeField] public GameObject prefab;
+
+    [Header("VISUALS")]
+    [SerializeField] public Texture2D materialTexture;
+    [SerializeField] public Color materialColor;
 }
