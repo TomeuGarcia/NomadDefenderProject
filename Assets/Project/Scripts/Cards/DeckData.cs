@@ -47,6 +47,11 @@ public class DeckData : ScriptableObject
     }
 
 
+    public void SetSavedCardsToStarterCards()
+    {
+        savedCardsComponents = starterCardsComponents;
+    }
+
     public void Save()
     {
         starterCardsComponents = new List<BuildingCard.CardComponents>(savedCardsComponents);
