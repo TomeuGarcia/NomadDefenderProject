@@ -49,6 +49,7 @@ public class HandBuildingCards : MonoBehaviour
 
     public void Init()
     {
+        SetInitHandPosition();
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
