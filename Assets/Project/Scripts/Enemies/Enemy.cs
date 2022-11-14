@@ -72,7 +72,7 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
 
-        meshRenderer.material = baseMaterial;
+        //ChangeToBaseMat();
         healthSystem.HealToMax();
 
         queuedDamage = 0;
@@ -136,11 +136,11 @@ public class Enemy : MonoBehaviour
 
     public void ChangeMat()
     {
-        meshRenderer.material = selectedMaterial;
+        //meshRenderer.material = selectedMaterial;
     }
     public void ChangeToBaseMat()
     {
-        meshRenderer.material = baseMaterial;
+        //meshRenderer.material = baseMaterial;
     }
 
 
