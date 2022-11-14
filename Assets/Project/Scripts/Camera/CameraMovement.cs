@@ -30,7 +30,7 @@ public class CameraMovement : MonoBehaviour
         moveZ = (Quaternion.AngleAxis(transform.rotation.x, Vector3.right) * transform.up).normalized;
         zoomAxis = (Quaternion.AngleAxis(transform.rotation.x, Vector3.right) * transform.forward).normalized;
 
-        maxZoomIn = 20.0f;
+        maxZoomIn = 50.0f;
         maxZoomOut = -20.0f;
         acumulatedZoom = 0.0f;
         zoomStep = 2.0f;

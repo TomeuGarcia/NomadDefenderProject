@@ -18,7 +18,13 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard -= TryDrawCard;
     }
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(DrawWithTime());
+        }
+    }
 
     private void TryDrawCard()
     {
@@ -31,6 +37,14 @@ public class CardDrawer : MonoBehaviour
         hand.AddCard(deck.GetTopCard());
     }
 
+    private IEnumerator DrawWithTime()
+    {
+        yield return new WaitForSeconds(15);
 
+        if (deck.HasCardsLeft())
+            DrawCard();
+
+        StartCoroutine(DrawWithTime());
+    }
 
 }

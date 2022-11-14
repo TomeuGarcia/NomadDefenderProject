@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
 public class EnemyWaveSpawner : ScriptableObject
 {
+    [SerializeField, Tooltip("Enemy stats will increase each round ddepending on this coef")]
+    private float waveMultiplierCoef = 0.1f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
@@ -70,17 +74,23 @@ public class EnemyWaveSpawner : ScriptableObject
         }
 
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
+        spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
         Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.2f, 0.2f)) + 
                                (spawnedEnemy.transformToMove.forward * Random.Range(-0.2f, 0.2f));
         spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
         /////////////
 
-        spawnedEnemy.OnEnemyDeath += SubtractActiveEnemy;
+        spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;
+    }
+
+    private float CalcWaveMultiplier()
+    {
+        return (1.0f + (currentWave * waveMultiplierCoef));
     }
 
     private void SubtractActiveEnemy(Enemy enemy)
     {
-        enemy.OnEnemyDeath -= SubtractActiveEnemy;
+        enemy.OnEnemyDeactivated -= SubtractActiveEnemy;
 
         if (--activeEnemies == 0)
         {

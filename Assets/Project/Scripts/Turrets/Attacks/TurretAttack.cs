@@ -7,7 +7,7 @@ public class TurretAttack : MonoBehaviour
     protected Enemy targetEnemy;
     protected int damage;
     protected Vector3 moveDirection;
-    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float moveSpeed = 5f;
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected float lifetime = 1f;
 

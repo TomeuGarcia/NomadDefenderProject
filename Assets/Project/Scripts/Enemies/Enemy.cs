@@ -23,8 +23,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
-    [SerializeField] private int damage = 1;
-    [SerializeField] private int health = 2;
+    [SerializeField] private int baseDamage = 1;
+    [SerializeField] private int baseHealth = 2;
+    private float damage;
+    private float health;
     [SerializeField] public int currencyDrop;
 
     // Queued damage
@@ -36,14 +38,15 @@ public class Enemy : MonoBehaviour
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
-    public EnemyAction OnEnemyDeath;
+    public EnemyAction OnEnemyDeactivated;
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
+        ResetStats();
+        healthSystem = new HealthSystem((int)health);
         healthHUD.Init(healthSystem);
     }
 
@@ -69,10 +72,18 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
 
-        meshRenderer.material = baseMaterial;
+        //ChangeToBaseMat();
         healthSystem.HealToMax();
 
         queuedDamage = 0;
+
+        ResetStats();
+    }
+
+    private void ResetStats()
+    {
+        damage = baseDamage;
+        health = baseHealth;
     }
 
 
@@ -80,7 +91,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
+            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
             Suicide();
         }
     }
@@ -100,7 +111,7 @@ public class Enemy : MonoBehaviour
 
         if (healthSystem.IsDead())
         {
-            Death();
+            Die();
         }
     }
 
@@ -109,7 +120,7 @@ public class Enemy : MonoBehaviour
         Deactivation();
     }
 
-    private void Death()
+    private void Die()
     {
         if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
         Deactivation();
@@ -117,7 +128,7 @@ public class Enemy : MonoBehaviour
 
     private void Deactivation()
     {
-        if (OnEnemyDeath != null) OnEnemyDeath(this);
+        if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
@@ -125,11 +136,11 @@ public class Enemy : MonoBehaviour
 
     public void ChangeMat()
     {
-        meshRenderer.material = selectedMaterial;
+        //meshRenderer.material = selectedMaterial;
     }
     public void ChangeToBaseMat()
     {
-        meshRenderer.material = baseMaterial;
+        //meshRenderer.material = baseMaterial;
     }
 
 
@@ -151,5 +162,13 @@ public class Enemy : MonoBehaviour
     public void SetMoveSpeed(float speedCoef)
     {
         pathFollower.SetMoveSpeed(speedCoef);
+    }
+
+    public void ApplyWaveStatMultiplier(float multiplier)
+    {
+        damage = (float)baseDamage * multiplier;
+        health = (float)baseHealth * multiplier;
+
+        healthSystem.UpdateHealth((int)health);
     }
 }
