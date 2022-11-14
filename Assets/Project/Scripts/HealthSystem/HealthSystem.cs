@@ -56,4 +56,9 @@ public class HealthSystem
         if (OnHealthUpdated != null) OnHealthUpdated();
     }
 
+    public void UpdateHealth(int newHealth)
+    {
+        health = newHealth;
+        maxHealth = newHealth;
+    }
 }

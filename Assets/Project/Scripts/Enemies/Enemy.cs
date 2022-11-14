@@ -23,8 +23,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
-    [SerializeField] private int damage = 1;
-    [SerializeField] private int health = 2;
+    [SerializeField] private int baseDamage = 1;
+    [SerializeField] private int baseHealth = 2;
+    private float damage;
+    private float health;
     [SerializeField] public int currencyDrop;
 
     // Queued damage
@@ -43,7 +45,8 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
+        ResetStats();
+        healthSystem = new HealthSystem((int)health);
         healthHUD.Init(healthSystem);
     }
 
@@ -73,6 +76,14 @@ public class Enemy : MonoBehaviour
         healthSystem.HealToMax();
 
         queuedDamage = 0;
+
+        ResetStats();
+    }
+
+    private void ResetStats()
+    {
+        damage = baseDamage;
+        health = baseHealth;
     }
 
 
@@ -80,7 +91,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
+            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
             Suicide();
         }
     }
@@ -151,5 +162,13 @@ public class Enemy : MonoBehaviour
     public void SetMoveSpeed(float speedCoef)
     {
         pathFollower.SetMoveSpeed(speedCoef);
+    }
+
+    public void ApplyWaveStatMultiplier(float multiplier)
+    {
+        damage = (float)baseDamage * multiplier;
+        health = (float)baseHealth * multiplier;
+
+        healthSystem.UpdateHealth((int)health);
     }
 }
