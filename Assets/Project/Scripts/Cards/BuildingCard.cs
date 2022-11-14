@@ -35,6 +35,7 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private Lerp lerp;
 
 
+    private Vector3 initialPosition;
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
@@ -96,6 +97,8 @@ public class BuildingCard : MonoBehaviour
 
     private void Init()
     {
+        initialPosition = transform.position;
+
         InitStatsFromTurretParts();
         InitTexts();
     }

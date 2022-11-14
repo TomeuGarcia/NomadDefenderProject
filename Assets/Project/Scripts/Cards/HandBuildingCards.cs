@@ -18,6 +18,7 @@ public class HandBuildingCards : MonoBehaviour
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
 
+    private Vector3 initHandPosition;
     private Vector3 defaultHandPosition;
     private Vector3 hiddenHandPosition;
     private bool isHidden;
@@ -36,6 +37,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void OnValidate()
     {
+        SetInitHandPosition();
         ComputeSelectedPosition();
         ComputeHiddenPosition();
     }
@@ -47,6 +49,7 @@ public class HandBuildingCards : MonoBehaviour
 
     public void Init()
     {
+        SetInitHandPosition();
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
@@ -119,7 +122,7 @@ public class HandBuildingCards : MonoBehaviour
 
             cards[i].transform.SetParent(transform);
             cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
+            cards[i].transform.position = initHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
@@ -138,6 +141,7 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab();
         }
 
+        StartCoroutine(WaitToHideHand());
     }
 
 
@@ -170,6 +174,8 @@ public class HandBuildingCards : MonoBehaviour
         SetStandardCard(card);
 
         buildingPlacer.DisablePlacing();
+
+        ShowHand();
     }
 
 
@@ -191,6 +197,9 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.SelectedState();
 
         buildingPlacer.EnablePlacing(card);
+
+        //hide hand
+        HideHand();
     }
 
 
@@ -207,6 +216,11 @@ public class HandBuildingCards : MonoBehaviour
         ResetAndSetStandardCard(selectedCard);
 
         InitCardsInHand();
+    }
+
+    void SetInitHandPosition()
+    {
+        initHandPosition = gameObject.transform.position;
     }
 
     private void ComputeSelectedPosition()

@@ -41,13 +41,20 @@ public class CardDrawer : MonoBehaviour
         hand.AddCard(deck.GetTopCard());
     }
 
-
     private void DrawStartHand()
     {
-        for (int i = 0; i < numCardsHandStart; ++i)
+        for(int i = 0; i < numCardsHandStart; i++)
         {
             TryDrawCard();
         }
+    }
+
+    private IEnumerator DrawWithTime()
+    {
+        yield return new WaitForSeconds(15);
+
+
+        StartCoroutine(DrawWithTime());
     }
 
 }
