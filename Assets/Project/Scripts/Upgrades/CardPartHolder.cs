@@ -48,6 +48,16 @@ public class CardPartHolder : MonoBehaviour
         placerMaterial.SetFloat("_IsOn", 1f);
     }
 
+    private void OnEnable()
+    {
+        CardPartReplaceManager.OnReplacementStart += StopAnimationCompletely;
+    }
+
+    private void OnDisable()
+    {
+        CardPartReplaceManager.OnReplacementStart -= StopAnimationCompletely;
+    }
+
 
     public void Init(CardPart[] cardsParts)
     {
@@ -163,6 +173,12 @@ public class CardPartHolder : MonoBehaviour
     public void FinishAnimation()
     {
         placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+    }
+
+    private void StopAnimationCompletely()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 0f);
     }
 
 }

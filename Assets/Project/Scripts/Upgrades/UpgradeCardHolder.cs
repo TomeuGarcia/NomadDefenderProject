@@ -49,6 +49,17 @@ public class UpgradeCardHolder : MonoBehaviour
         placerMaterial.SetFloat("_IsOn", 1f);
     }
 
+    private void OnEnable()
+    {
+        CardPartReplaceManager.OnReplacementDone += StopAnimationCompletely;
+    }
+
+    private void OnDisable()
+    {
+        CardPartReplaceManager.OnReplacementDone -= StopAnimationCompletely;
+    }
+
+
 
     public void Init(BuildingCard[] cards)
     {
@@ -145,6 +156,9 @@ public class UpgradeCardHolder : MonoBehaviour
         this.startDelay = startDelay;
         this.duration = duration;
         this.delayBetweenCards = delayBetweenCards;
+
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 1f);
     }
 
     public void FinalRetrieveCard(BuildingCard card)
@@ -197,5 +211,12 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         placerMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
+
+    public void StopAnimationCompletely()
+    {
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 0f);
+    }
+
 
 }

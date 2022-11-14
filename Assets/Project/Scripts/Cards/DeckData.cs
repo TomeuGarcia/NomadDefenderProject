@@ -9,12 +9,20 @@ public class DeckData : ScriptableObject
     private List<BuildingCard> cards;
 
     [SerializeField] public List<BuildingCard.CardComponents> starterCardsComponents;
+    private List<BuildingCard.CardComponents> savedCardsComponents;
 
 
 
     public void Init(BuildingCard[] starterCards)
     {
         cards = new List<BuildingCard>(starterCards);
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            cards[i].OnGetSaved += AddToSavedCardsComponents;
+        }
+
+        savedCardsComponents = new List<BuildingCard.CardComponents>();
     }
 
     public BuildingCard[] GetCards()
@@ -39,9 +47,15 @@ public class DeckData : ScriptableObject
     }
 
 
-    public void ResetComponents(List<BuildingCard.CardComponents> cardsComponentsTemp)
+    public void Save()
     {
-        starterCardsComponents = new List<BuildingCard.CardComponents>(cardsComponentsTemp);
+        starterCardsComponents = new List<BuildingCard.CardComponents>(savedCardsComponents);
+    }
+
+
+    private void AddToSavedCardsComponents(BuildingCard card)
+    {
+        savedCardsComponents.Add(new BuildingCard.CardComponents(card.GetTurretPartAttack(), card.GetTurretPartBody(), card.GetTurretPartBase()));
     }
 
 }

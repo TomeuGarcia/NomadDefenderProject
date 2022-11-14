@@ -49,6 +49,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     public delegate void CarPartReplaceManagerAction();
+    public static event CarPartReplaceManagerAction OnReplacementStart;
     public static event CarPartReplaceManagerAction OnReplacementDone;
 
     
@@ -246,7 +247,7 @@ public class CardPartReplaceManager : MonoBehaviour
         
         // EXECUTE REPLACEMENT
         ReplacePartInCard();
-
+        InvokeReplacementStart();
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
@@ -319,6 +320,14 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
 
         if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
+    }
+
+    private void InvokeReplacementStart()
+    {
+        if (OnReplacementStart != null) OnReplacementStart();
+
+        SetButtonNotReady();
+        buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
 

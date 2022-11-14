@@ -25,8 +25,6 @@ public class DeckCreator : MonoBehaviour
                             deckData.starterCardsComponents[i].turretPartBase);
 
             starterCards[i] = card;
-
-            card.OnDestroyed += AddComponentsToTemp;
         }
 
         deckData.Init(starterCards);
@@ -34,23 +32,9 @@ public class DeckCreator : MonoBehaviour
         cardsComponentsTemp = new List<BuildingCard.CardComponents>();
     }
 
-
     private void OnDisable()
     {
-        StartCoroutine(LateDestroy());
-    }
-
-    private IEnumerator LateDestroy()
-    {
-        yield return new WaitForSeconds(0.5f);
-        deckData.ResetComponents(cardsComponentsTemp);
-    }
-
-    private void AddComponentsToTemp(BuildingCard card)
-    {
-        card.OnDestroyed -= AddComponentsToTemp;
-
-        cardsComponentsTemp.Add(new BuildingCard.CardComponents(card.GetTurretPartAttack(), card.GetTurretPartBody(), card.GetTurretPartBase()));
+        deckData.Save();
     }
 
 }

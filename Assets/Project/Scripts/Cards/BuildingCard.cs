@@ -48,7 +48,7 @@ public class BuildingCard : MonoBehaviour
     public static event BuildingCardAction OnCardSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
-    public event BuildingCardAction OnDestroyed;
+    public event BuildingCardAction OnGetSaved;
 
 
 
@@ -75,9 +75,14 @@ public class BuildingCard : MonoBehaviour
         InitTexts();
     }
 
+    private void OnEnable()
+    {
+        CardPartReplaceManager.OnReplacementDone += InvokeGetSaved;
+    }
+
     private void OnDisable()
     {
-        if (OnDestroyed != null) OnDestroyed(this);
+        CardPartReplaceManager.OnReplacementDone -= InvokeGetSaved;
     }
 
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
@@ -203,6 +208,13 @@ public class BuildingCard : MonoBehaviour
     public TurretPartBase GetTurretPartBase()
     {
         return turretPartBase;
+    }
+
+
+    private void InvokeGetSaved()
+    {
+        if (OnGetSaved != null) OnGetSaved(this);
+
     }
 
 
