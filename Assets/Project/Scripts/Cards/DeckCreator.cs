@@ -10,9 +10,6 @@ public class DeckCreator : MonoBehaviour
     private BuildingCard[] starterCards;
 
 
-    private List<BuildingCard.CardComponents> cardsComponentsTemp;
-
-
     private void Awake()
     {
         starterCards = new BuildingCard[deckData.starterCardsComponents.Count];
@@ -28,8 +25,6 @@ public class DeckCreator : MonoBehaviour
         }
 
         deckData.Init(starterCards);
-
-        cardsComponentsTemp = new List<BuildingCard.CardComponents>();
     }
 
     private void OnDisable()

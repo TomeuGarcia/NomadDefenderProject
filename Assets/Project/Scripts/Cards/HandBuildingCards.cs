@@ -11,7 +11,7 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private BuildingPlacer buildingPlacer;
     [SerializeField] private Lerp lerp;
 
-    [SerializeField] private List<BuildingCard> cards;
+    private List<BuildingCard> cards;
 
     [SerializeField] private float lerpSpeed;
 
@@ -42,12 +42,14 @@ public class HandBuildingCards : MonoBehaviour
 
     private void Awake()
     {
-        ComputeSelectedPosition();
-        ComputeHiddenPosition();
+        cards = new List<BuildingCard>();
     }
 
-    private void Start()
+    public void Init()
     {
+        ComputeSelectedPosition();
+        ComputeHiddenPosition();
+
         InitCardsInHand();
 
         for (int i = 0; i < cards.Count; ++i)
@@ -111,7 +113,7 @@ public class HandBuildingCards : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = transform.right * displacementStep * i;
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
+            Vector3 depthDisplacement = transform.forward * (-0.2f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
 
