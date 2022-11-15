@@ -55,7 +55,6 @@ MonoBehaviour:
   pathFollower: {fileID: 3098590598275643451}
   transformToMove: {fileID: 4599594694859222351}
   rb: {fileID: 9014563427558016540}
-  boxCollider: {fileID: 7219295044337878100}
   healthHUD: {fileID: 2169224201410473106}
   baseDamage: 1
   baseHealth: 20
@@ -85,8 +84,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.135, z: 0}
+  m_Size: {x: 0.3, y: 0.3, z: 0.3}
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!54 &9014563427558016540
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -305,6 +304,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358466900312975502, guid: 9ec60fbdf4c5f1b4da0aa64f2b1db32c,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ec60fbdf4c5f1b4da0aa64f2b1db32c, type: 3}
