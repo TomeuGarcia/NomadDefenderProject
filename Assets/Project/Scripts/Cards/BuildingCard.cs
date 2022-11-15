@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using static Building;
+using UnityEngine.UI;
 
 public class BuildingCard : MonoBehaviour
 {
@@ -48,6 +49,11 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private MeshRenderer bodyMeshRenderer;
     [SerializeField] private MeshRenderer baseMeshRenderer;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+
+    [SerializeField] private Image damageFillImage;
+    [SerializeField] private Image cadenceFillImage;
+    [SerializeField] private Image rangeFillImage;
+    [SerializeField] private Image baseAbilityImage;
 
 
 
@@ -123,10 +129,10 @@ public class BuildingCard : MonoBehaviour
     private void InitStatsFromTurretParts()
     {
         turretStats.playCost = turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
-        turretStats.damage = turretPartBody.damage;
-        turretStats.range = turretPartBase.attackRange;
+        turretStats.damage = turretPartBody.Damage;
+        turretStats.range = turretPartBase.Range;
         turretStats.targetAmount = turretPartAttack.targetAmount;
-        turretStats.cadence = turretPartBody.attackSpeed;
+        turretStats.cadence = turretPartBody.Cadence;
     }
 
     private void OnMouseEnter()
@@ -240,6 +246,7 @@ public class BuildingCard : MonoBehaviour
 
     private void InitVisuals()
     {
+        // Mesh Materials
         cardAttackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
         cardAttackMaterial.SetColor("_Color", turretPartAttack.materialColor);
 
@@ -248,6 +255,21 @@ public class BuildingCard : MonoBehaviour
 
         cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
+
+
+        // Canvas
+        damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
+        cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
+        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
+
+        bool hasAbility = turretPartBase.HasAbilitySprite();
+        baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
+        if (hasAbility)
+        {
+            baseAbilityImage.sprite = turretPartBase.abilitySprite;
+            baseAbilityImage.color = turretPartBase.spriteColor;
+        }
+
     }
 
     private void CardBigToSmallAnimation()
