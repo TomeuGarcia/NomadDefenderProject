@@ -46,10 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862745f8631a89a448c91b64d9900dba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 30
   rotationSpeed: 1
   lifetime: 10
   materialForTurret: {fileID: 2100000, guid: ed1b3ee6878fb8a419814854c3a263d3, type: 2}
+  attackCollider: {fileID: 2080374624328513539}
   maxTargetAmount: 2
   range: 2
 --- !u!96 &2080374624328513536
@@ -94,7 +95,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.15
+  m_Time: 0.06
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

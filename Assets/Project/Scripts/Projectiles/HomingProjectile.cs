@@ -6,7 +6,7 @@ using UnityEngine;
 public class HomingProjectile : TurretAttack
 {
 
-    private void Update()
+    protected override void DoUpdate()
     {
         MoveTowardsEnemyTarget();
 

@@ -10,11 +10,11 @@ public class TeslaProjectile : TurretAttack
     private Enemy[] targetedEnemies;
 
 
-    private void Update()
+    protected override void DoUpdate()
     {
         MoveTowardsEnemyTarget();
 
-        if(Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
+        if (Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
         {
             OnEnemyTriggerEnter(targetEnemy);
         }

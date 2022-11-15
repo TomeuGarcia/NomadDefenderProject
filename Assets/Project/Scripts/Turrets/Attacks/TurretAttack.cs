@@ -12,13 +12,28 @@ public class TurretAttack : MonoBehaviour
     [SerializeField] protected float lifetime = 1f;
 
     [SerializeField] public Material materialForTurret;
+    [SerializeField] public Collider attackCollider;
+
+    protected bool disappearing = false;
 
     public virtual void Init(Enemy targetEnemy, Turret owner) 
     {
     }
 
+    protected virtual void DoUpdate() 
+    {
+    }
+
     protected virtual void OnEnemyTriggerEnter(Enemy enemy)
     {
+    }
+
+    void Update()
+    {
+        if (!disappearing)
+        {
+            DoUpdate();
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -38,9 +53,22 @@ public class TurretAttack : MonoBehaviour
     protected virtual void Disappear()
     {
         //PARTICLES
-        gameObject.SetActive(false);
+
+
+        StartCoroutine(WaitToDisable());
     }
 
+    private IEnumerator WaitToDisable()
+    {
+        disappearing = true;
+        attackCollider.enabled = false;
+
+        yield return new WaitForSeconds(0.5f);
+        gameObject.SetActive(false);
+
+        disappearing = false;
+        attackCollider.enabled = true;
+    }
 
     protected void MoveTowardsEnemyTarget()
     {
