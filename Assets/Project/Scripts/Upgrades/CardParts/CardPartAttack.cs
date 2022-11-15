@@ -12,14 +12,27 @@ public class CardPartAttack : CardPart
     [Header("PART")]
     [SerializeField] public TurretPartAttack turretPartAttack;
 
+    [Header("VISUALS")]
+    [SerializeField] private MeshRenderer attackMeshRenderer;
+    private Material attackMaterial;
+
+
     private void OnValidate()
     {
         InitTexts();
     }
 
+    private void Awake()
+    {
+        attackMaterial = attackMeshRenderer.material;
+    }
+
     public override void Init()
     {
         InitTexts();
+
+        attackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
+        attackMaterial.SetColor("_Color", turretPartAttack.materialColor);
     }
 
     private void InitTexts()
