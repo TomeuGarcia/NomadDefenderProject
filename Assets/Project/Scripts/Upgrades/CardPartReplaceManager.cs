@@ -20,15 +20,14 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private int numParts = 3;
     [SerializeField] private PartType partType;
 
+    [Header("PARTS")]
+    [SerializeField] private PartsLibrary partsLibrary;
     [Header("ATTACK")]
     [SerializeField] private GameObject cardPartAttackPrefab;
-    [SerializeField] private TurretPartAttack[] attacks;
     [Header("BODY")]
     [SerializeField] private GameObject cardPartBodyPrefab;
-    [SerializeField] private TurretPartBody[] bodies;
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
-    [SerializeField] private TurretPartBase[] bases;
 
     [Header("COMPONENTS")]
     [SerializeField] private TextMeshProUGUI uiDescriptionText;
@@ -97,11 +96,12 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitAttacks()
     {
+        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts);
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].turretPartAttack = GetRandomTurretPartAttack();
+            parts[i].turretPartAttack = randomAttacks[i];
         }
         cardPartHolder.Init(parts);
 
@@ -110,11 +110,12 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBodies()
     {
+        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts);
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBodyPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBody>();
-            parts[i].turretPartBody = GetRandomTurretPartBody();
+            parts[i].turretPartBody = randomBodies[i];
         }
         cardPartHolder.Init(parts);
 
@@ -123,30 +124,19 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBases()
     {
+        TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = GetRandomTurretPartBase();
+            parts[i].turretPartBase = randomBases[i];
         }
         cardPartHolder.Init(parts);
 
         uiDescriptionText.text = "Replace a turret's BASE with a new one";
     }
 
-    // TODO make this give sets so no parts are repeated!!!!!!!!!
-    private TurretPartAttack GetRandomTurretPartAttack()
-    {
-        return attacks[Random.Range(0, attacks.Length)];
-    }
-    private TurretPartBody GetRandomTurretPartBody()
-    {
-        return bodies[Random.Range(0, bodies.Length)];
-    }
-    private TurretPartBase GetRandomTurretPartBase()
-    {
-        return bases[Random.Range(0, bases.Length)];
-    }
+
 
     private BuildingCard[] GetRandomDeckCards()
     {
