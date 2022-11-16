@@ -16,7 +16,7 @@ public class DeckCreator : MonoBehaviour
 
         for (int i = 0; i < starterCards.Length; ++i)
         {
-            BuildingCard card = Instantiate(cardPrefab).GetComponent<BuildingCard>();
+            BuildingCard card = GetUninitializedNewCard();
             card.ResetParts(deckData.starterCardsComponents[i].turretPartAttack, 
                             deckData.starterCardsComponents[i].turretPartBody, 
                             deckData.starterCardsComponents[i].turretPartBase);
@@ -30,6 +30,11 @@ public class DeckCreator : MonoBehaviour
     private void OnDisable()
     {
         deckData.Save();
+    }
+
+    public BuildingCard GetUninitializedNewCard()
+    {
+        return Instantiate(cardPrefab).GetComponent<BuildingCard>();
     }
 
 }
