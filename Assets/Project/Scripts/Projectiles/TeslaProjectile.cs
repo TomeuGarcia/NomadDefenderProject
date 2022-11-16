@@ -43,6 +43,9 @@ public class TeslaProjectile : TurretAttack
     {
         if (enemy == targetEnemy)
         {
+            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
+            temp.SetActive(true);
+
             enemy.TakeDamage(damage);
 
             if (++currentTarget < targetedEnemies.Length)
@@ -55,12 +58,5 @@ public class TeslaProjectile : TurretAttack
                 Disappear();
             }
         }
-    }
-
-    protected override void ActivateParticles()
-    {
-        hitParticles.transform.position = lastHit.transform.GetChild(0).position;
-
-        hitParticles.Play();
     }
 }

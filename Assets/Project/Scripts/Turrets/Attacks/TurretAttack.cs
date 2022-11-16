@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class TurretAttack : MonoBehaviour
 {
+    public enum AttackType { BASIC, TESLA }
+
     protected Enemy targetEnemy;
     protected int damage;
     protected Vector3 moveDirection;
     protected Collider lastHit;
+    [SerializeField] protected AttackType attackType;
     [SerializeField] protected float moveSpeed = 5f;
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected float lifetime = 1f;
 
     [SerializeField] public Material materialForTurret;
     [SerializeField] public Collider attackCollider;
-    [SerializeField] public ParticleSystem hitParticles;
 
     protected bool disappearing = false;
 
@@ -23,10 +25,6 @@ public class TurretAttack : MonoBehaviour
     }
 
     protected virtual void DoUpdate() 
-    {
-    }
-
-    protected virtual void ActivateParticles() 
     {
     }
 
@@ -60,8 +58,6 @@ public class TurretAttack : MonoBehaviour
 
     protected virtual void Disappear()
     {
-        ActivateParticles();
-
         StartCoroutine(WaitToDisable());
     }
 

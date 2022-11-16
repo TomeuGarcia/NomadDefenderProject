@@ -32,7 +32,6 @@ Transform:
   - {fileID: 7417545680412858280}
   - {fileID: 3199584504370394203}
   - {fileID: 2389504214443094639}
-  - {fileID: 4803129071369657736}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -146,67 +145,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!1 &6520779447803310018
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4803129071369657736}
-  - component: {fileID: 1491387292485156988}
-  - component: {fileID: 4329120610608926997}
-  m_Layer: 0
-  m_Name: CurrencySpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4803129071369657736
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6520779447803310018}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2287175830089958520}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1491387292485156988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6520779447803310018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a414250363b8ca343a00b3d2558e0a29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currencyPool: {fileID: 4329120610608926997}
-  currencyCounter: {fileID: 826253346569353975}
---- !u!114 &4329120610608926997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6520779447803310018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pooledObject: {fileID: 6976005166186317494, guid: f1e2dd4225dfe154faee8a8d1eb367b6,
-    type: 3}
 --- !u!1001 &4885359580172842444
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -603,18 +541,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 579f3ac685ce43247be2a1d33201a582, type: 3}
---- !u!114 &826253346569353975 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5768655276380095258, guid: 579f3ac685ce43247be2a1d33201a582,
-    type: 3}
-  m_PrefabInstance: {fileID: 6591317549251557869}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd90c20383400b844aec752b344e52d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &4885359580415880068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1780426826839134825, guid: 579f3ac685ce43247be2a1d33201a582,

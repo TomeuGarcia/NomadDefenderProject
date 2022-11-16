@@ -28,17 +28,12 @@ public class HomingProjectile : TurretAttack
     {
         if (enemy == targetEnemy)
         {
+            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
+            temp.gameObject.SetActive(true);
+
             enemy.TakeDamage(damage);
             StopAllCoroutines();
             Disappear();
         }
-    }
-
-    protected override void ActivateParticles()
-    {
-        hitParticles.transform.position = lastHit.ClosestPointOnBounds(gameObject.transform.position);
-        hitParticles.transform.forward = hitParticles.transform.position - lastHit.transform.position;
-
-        hitParticles.Play();
     }
 }
