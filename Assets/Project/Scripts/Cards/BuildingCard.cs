@@ -207,19 +207,25 @@ public class BuildingCard : MonoBehaviour
 
     public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
     {
+        int costHolder = turretPartAttack.cost;
         turretPartAttack = newTurretPartAttack;
+        turretPartAttack.cost = costHolder;
         Init();
     }
 
     public void SetNewPartBody(TurretPartBody newTurretPartBody)
     {
+        int costHolder = turretPartBody.cost;
         turretPartBody = newTurretPartBody;
+        turretPartBody.cost = costHolder;
         Init();
     }
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase)
     {
+        int costHolder = turretPartBase.cost;
         turretPartBase = newTurretPartBase;
+        turretPartBase.cost = costHolder;
         Init();
     }
 
