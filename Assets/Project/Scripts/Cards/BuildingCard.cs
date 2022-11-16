@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using static Building;
+using UnityEngine.UI;
 
 public class BuildingCard : MonoBehaviour
 {
@@ -35,11 +36,25 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private Lerp lerp;
 
 
+    private Vector3 initialPosition;
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
+    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.14f;
     public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
+
+
+    [Header("VISUALS")]
+    [SerializeField] private MeshRenderer attackMeshRenderer;
+    [SerializeField] private MeshRenderer bodyMeshRenderer;
+    [SerializeField] private MeshRenderer baseMeshRenderer;
+    private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+
+    [SerializeField] private Image damageFillImage;
+    [SerializeField] private Image cadenceFillImage;
+    [SerializeField] private Image rangeFillImage;
+    [SerializeField] private Image baseAbilityImage;
+
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
@@ -85,6 +100,13 @@ public class BuildingCard : MonoBehaviour
         CardPartReplaceManager.OnReplacementDone -= InvokeGetSaved;
     }
 
+    private void Awake()
+    {
+        cardAttackMaterial = attackMeshRenderer.material;
+        cardBodyMaterial = bodyMeshRenderer.material;
+        cardBaseMaterial = baseMeshRenderer.material;
+    }
+
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
     {
         this.turretPartAttack = turretPartAttack;
@@ -96,17 +118,21 @@ public class BuildingCard : MonoBehaviour
 
     private void Init()
     {
+        initialPosition = transform.position;
+
         InitStatsFromTurretParts();
         InitTexts();
+
+        InitVisuals();
     }
 
     private void InitStatsFromTurretParts()
     {
         turretStats.playCost = turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
-        turretStats.damage = turretPartBody.damage;
-        turretStats.range = turretPartBase.attackRange;
+        turretStats.damage = turretPartBody.Damage;
+        turretStats.range = turretPartBase.Range;
         turretStats.targetAmount = turretPartAttack.targetAmount;
-        turretStats.cadence = turretPartBody.attackSpeed;
+        turretStats.cadence = turretPartBody.Cadence;
     }
 
     private void OnMouseEnter()
@@ -181,19 +207,25 @@ public class BuildingCard : MonoBehaviour
 
     public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
     {
+        int costHolder = turretPartAttack.cost;
         turretPartAttack = newTurretPartAttack;
+        turretPartAttack.cost = costHolder;
         Init();
     }
 
     public void SetNewPartBody(TurretPartBody newTurretPartBody)
     {
+        int costHolder = turretPartBody.cost;
         turretPartBody = newTurretPartBody;
+        turretPartBody.cost = costHolder;
         Init();
     }
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase)
     {
+        int costHolder = turretPartBase.cost;
         turretPartBase = newTurretPartBase;
+        turretPartBase.cost = costHolder;
         Init();
     }
 
@@ -214,6 +246,42 @@ public class BuildingCard : MonoBehaviour
     private void InvokeGetSaved()
     {
         if (OnGetSaved != null) OnGetSaved(this);
+
+    }
+
+
+    private void InitVisuals()
+    {
+        // Mesh Materials
+        cardAttackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
+        cardAttackMaterial.SetColor("_Color", turretPartAttack.materialColor);
+
+        cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
+        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color
+
+        cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
+        cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
+
+
+        // Canvas
+        damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
+        cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
+        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
+
+        bool hasAbility = turretPartBase.HasAbilitySprite();
+        baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
+        if (hasAbility)
+        {
+            baseAbilityImage.sprite = turretPartBase.abilitySprite;
+            baseAbilityImage.color = turretPartBase.spriteColor;
+        }
+
+    }
+
+    private void CardBigToSmallAnimation()
+    {
+        
+
 
     }
 

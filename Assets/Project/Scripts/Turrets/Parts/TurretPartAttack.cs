@@ -7,7 +7,14 @@ using UnityEngine;
 public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
-    [SerializeField] public int cost;
+    [SerializeField, Min(0)] public int cost;
     [SerializeField] public int targetAmount;
+
+    [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
+
+    [Header("VISUALS")]
+    [SerializeField] public Texture2D materialTexture;
+    [SerializeField] public Color materialColor;
+
 }

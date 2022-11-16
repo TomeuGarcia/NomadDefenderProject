@@ -57,8 +57,8 @@ MonoBehaviour:
   rb: {fileID: 4650990172065204862}
   boxCollider: {fileID: 6458616864240699446}
   healthHUD: {fileID: 9085599442052968132}
-  damage: 2
-  health: 10
+  baseDamage: 1
+  baseHealth: 70
   currencyDrop: 3
 --- !u!114 &1626341512122004569
 MonoBehaviour:
@@ -143,7 +143,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6973226056397854212}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -3883144673963555868, guid: 4502e34154c39fa45b76f59ff30663c1, type: 3}
 --- !u!23 &6812658115689956593
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -164,7 +164,10 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 9ef2b62413952b94aa62a44947ea37f8, type: 2}
+  - {fileID: 2100000, guid: 18c37bd50c19eed47856dc7a204fd438, type: 2}
+  - {fileID: 2100000, guid: b5e96d84e0cd7384eac3c7723eb3dea8, type: 2}
+  - {fileID: 2100000, guid: d45d42616907b7c42a43c7acf689c336, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

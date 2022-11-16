@@ -11,13 +11,14 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private BuildingPlacer buildingPlacer;
     [SerializeField] private Lerp lerp;
 
-    [SerializeField] private List<BuildingCard> cards;
+    private List<BuildingCard> cards;
 
     [SerializeField] private float lerpSpeed;
 
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
 
+    private Vector3 initHandPosition;
     private Vector3 defaultHandPosition;
     private Vector3 hiddenHandPosition;
     private bool isHidden;
@@ -36,18 +37,22 @@ public class HandBuildingCards : MonoBehaviour
 
     private void OnValidate()
     {
+        SetInitHandPosition();
         ComputeSelectedPosition();
         ComputeHiddenPosition();
     }
 
     private void Awake()
     {
-        ComputeSelectedPosition();
-        ComputeHiddenPosition();
+        cards = new List<BuildingCard>();
     }
 
-    private void Start()
+    public void Init()
     {
+        SetInitHandPosition();
+        ComputeSelectedPosition();
+        ComputeHiddenPosition();
+
         InitCardsInHand();
 
         for (int i = 0; i < cards.Count; ++i)
@@ -111,13 +116,13 @@ public class HandBuildingCards : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = transform.right * displacementStep * i;
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
+            Vector3 depthDisplacement = transform.forward * (-0.2f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
 
             cards[i].transform.SetParent(transform);
             cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
+            cards[i].transform.position = initHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedPosition);
@@ -136,6 +141,7 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab();
         }
 
+        StartCoroutine(WaitToHideHand());
     }
 
 
@@ -168,6 +174,8 @@ public class HandBuildingCards : MonoBehaviour
         SetStandardCard(card);
 
         buildingPlacer.DisablePlacing();
+
+        ShowHand();
     }
 
 
@@ -189,6 +197,9 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.SelectedState();
 
         buildingPlacer.EnablePlacing(card);
+
+        //hide hand
+        HideHand();
     }
 
 
@@ -205,6 +216,11 @@ public class HandBuildingCards : MonoBehaviour
         ResetAndSetStandardCard(selectedCard);
 
         InitCardsInHand();
+    }
+
+    void SetInitHandPosition()
+    {
+        initHandPosition = gameObject.transform.position;
     }
 
     private void ComputeSelectedPosition()

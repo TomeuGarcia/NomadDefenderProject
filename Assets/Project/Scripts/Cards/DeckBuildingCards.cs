@@ -9,15 +9,9 @@ public class DeckBuildingCards : MonoBehaviour
     private List<BuildingCard> cards;
 
 
-    private void Awake() // Might need to make this Start()
+    public void Init()
     {
         cards = new List<BuildingCard>(deckData.GetCards());
-        InitCardsInDeck();
-    }
-
-
-    private void InitCardsInDeck()
-    {
 
         float upStep = 0.1f;
         float numCards = cards.Count;
@@ -51,6 +45,9 @@ public class DeckBuildingCards : MonoBehaviour
 
 
 
-
+    public DeckData GetDeckData()
+    {
+        return deckData;
+    }
 
 }

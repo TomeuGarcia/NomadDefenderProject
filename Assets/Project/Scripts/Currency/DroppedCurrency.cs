@@ -29,8 +29,8 @@ public class DroppedCurrency : MonoBehaviour
 
     private void OnEnable()
     {
-        mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
-
+        //mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
+        StartGotPickedUp();
 
         beeingPickedUp = false;
         text.gameObject.SetActive(false);
