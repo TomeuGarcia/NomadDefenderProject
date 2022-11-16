@@ -56,4 +56,11 @@ public class TeslaProjectile : TurretAttack
             }
         }
     }
+
+    protected override void ActivateParticles()
+    {
+        hitParticles.transform.position = lastHit.transform.GetChild(0).position;
+
+        hitParticles.Play();
+    }
 }

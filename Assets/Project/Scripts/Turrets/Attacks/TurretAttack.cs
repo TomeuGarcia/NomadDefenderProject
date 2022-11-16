@@ -7,12 +7,14 @@ public class TurretAttack : MonoBehaviour
     protected Enemy targetEnemy;
     protected int damage;
     protected Vector3 moveDirection;
+    protected Collider lastHit;
     [SerializeField] protected float moveSpeed = 5f;
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected float lifetime = 1f;
 
     [SerializeField] public Material materialForTurret;
     [SerializeField] public Collider attackCollider;
+    [SerializeField] public ParticleSystem hitParticles;
 
     protected bool disappearing = false;
 
@@ -21,6 +23,10 @@ public class TurretAttack : MonoBehaviour
     }
 
     protected virtual void DoUpdate() 
+    {
+    }
+
+    protected virtual void ActivateParticles() 
     {
     }
 
@@ -40,6 +46,7 @@ public class TurretAttack : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            lastHit = other;
             OnEnemyTriggerEnter(other.GetComponent<Enemy>());
         }
     }
@@ -47,13 +54,13 @@ public class TurretAttack : MonoBehaviour
     protected IEnumerator Lifetime()
     {
         yield return new WaitForSeconds(lifetime);
-        Disappear();
+        Debug.Log("PROJECTILE DISABLED");
+        Disable();
     }
 
     protected virtual void Disappear()
     {
-        //PARTICLES
-
+        ActivateParticles();
 
         StartCoroutine(WaitToDisable());
     }
@@ -64,6 +71,11 @@ public class TurretAttack : MonoBehaviour
         attackCollider.enabled = false;
 
         yield return new WaitForSeconds(0.5f);
+        Disable();
+    }
+
+    private void Disable()
+    {
         gameObject.SetActive(false);
 
         disappearing = false;
@@ -81,6 +93,4 @@ public class TurretAttack : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(moveDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
-
-
 }

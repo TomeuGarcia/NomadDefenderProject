@@ -34,5 +34,11 @@ public class HomingProjectile : TurretAttack
         }
     }
 
+    protected override void ActivateParticles()
+    {
+        hitParticles.transform.position = lastHit.ClosestPointOnBounds(gameObject.transform.position);
+        hitParticles.transform.forward = hitParticles.transform.position - lastHit.transform.position;
 
+        hitParticles.Play();
+    }
 }
