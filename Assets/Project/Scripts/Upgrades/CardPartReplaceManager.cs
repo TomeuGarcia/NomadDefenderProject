@@ -6,31 +6,31 @@ using TMPro;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
-    [Header("DeckData")]
+    [Header("DECK DATA")]
     [SerializeField] private DeckData deckData;
     private List<BuildingCard> deckCards;
 
-    [Header("Holders")]
+    [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
 
     private enum PartType { ATTACK, BODY, BASE }
-    [Header("Type")]
+    [Header("TYPE")]
     [SerializeField] private int numCards = 3;
     [SerializeField] private int numParts = 3;
     [SerializeField] private PartType partType;
 
-    [Header("Attack")]
+    [Header("ATTACK")]
     [SerializeField] private GameObject cardPartAttackPrefab;
     [SerializeField] private TurretPartAttack[] attacks;
-    [Header("Body")]
+    [Header("BODY")]
     [SerializeField] private GameObject cardPartBodyPrefab;
     [SerializeField] private TurretPartBody[] bodies;
-    [Header("Base")]
+    [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
     [SerializeField] private TurretPartBase[] bases;
 
-    [Header("Components")]
+    [Header("COMPONENTS")]
     [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
     [SerializeField] private Animator buttonAnimator;
@@ -41,7 +41,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private bool cardIsReady = false;
     private bool partIsReady = false;
 
-    [Header("Materials")]
+    [Header("MATERIALS")]
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
