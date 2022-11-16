@@ -10,7 +10,7 @@ public class CurrencyCounter : MonoBehaviour
     [SerializeField, Min(0)] private int currencyCount;
 
     [Header("Components")]
-    [SerializeField] private TextMeshProUGUI currencyCountText;
+    [SerializeField] public TextMeshProUGUI currencyCountText;
     [SerializeField] private TextMeshProUGUI addedCurrencyText;
 
     private void OnValidate()

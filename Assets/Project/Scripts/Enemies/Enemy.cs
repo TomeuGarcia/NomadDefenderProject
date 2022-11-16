@@ -14,12 +14,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;
     [SerializeField] private Material selectedMaterial;
+    public Transform MeshTransform => meshRenderer.transform;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private BoxCollider boxCollider;
+    //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
@@ -52,8 +53,8 @@ public class Enemy : MonoBehaviour
 
     private void OnValidate()
     {
-        boxCollider.center = meshRenderer.gameObject.transform.localPosition;
-        boxCollider.size = meshRenderer.gameObject.transform.localScale;
+        //boxCollider.center = meshRenderer.gameObject.transform.localPosition;
+        //boxCollider.size = meshRenderer.gameObject.transform.localScale;
     }
 
     private void OnEnable()

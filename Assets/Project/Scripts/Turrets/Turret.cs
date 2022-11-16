@@ -50,7 +50,7 @@ public class Turret : Building
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((enemies[0].transform.position - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 300.0f * Time.deltaTime);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
