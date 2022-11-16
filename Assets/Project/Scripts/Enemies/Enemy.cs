@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;
     [SerializeField] private Material selectedMaterial;
+    public Transform MeshTransform => meshRenderer.transform;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;

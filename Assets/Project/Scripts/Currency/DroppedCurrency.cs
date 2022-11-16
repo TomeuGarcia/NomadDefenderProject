@@ -25,6 +25,10 @@ public class DroppedCurrency : MonoBehaviour
     public delegate void CurrencyAction(int value);
     public static event CurrencyAction OnCurrencyGathered;
 
+    private Vector3 targetPosition;
+    private float timeChasingTarget = 0.0f;
+    private float chaseSpeed = 1.0f;
+
 
 
     private void OnEnable()
@@ -60,6 +64,12 @@ public class DroppedCurrency : MonoBehaviour
         Vector3 cameraDirection = Camera.main.transform.forward;
 
         canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
+
+        if(gameObject.activeInHierarchy)
+        {
+            timeChasingTarget += Time.deltaTime * chaseSpeed;
+            rb.AddForce((targetPosition - transform.position).normalized * timeChasingTarget, ForceMode.Force);
+        }
     }
 
     private void StartGotPickedUp()
@@ -75,8 +85,13 @@ public class DroppedCurrency : MonoBehaviour
         value = newValue;
 
         //value = Random.Range(1, 4); // Just for testing
-        Vector3 minScale = Vector3.one * 0.25f;
+        Vector3 minScale = Vector3.one * 0.1f;
         meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
+    }
+
+    public void SetTarget(Vector3 newTargetPosition)
+    {
+        targetPosition = newTargetPosition;
     }
 
     private IEnumerator GotPickedUp()
@@ -95,6 +110,7 @@ public class DroppedCurrency : MonoBehaviour
 
         yield return new WaitForSeconds(indicatorTime);
         gameObject.SetActive(false);
+        timeChasingTarget = 0.0f;
     }
 
 
