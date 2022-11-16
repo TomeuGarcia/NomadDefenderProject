@@ -14,6 +14,12 @@ public class TDGameManager : MonoBehaviour
     [SerializeField] private Transform defeatTextTransform;
 
 
+    public delegate void TDGameManagerAction();
+    public static event TDGameManagerAction OnVictoryComplete;
+    public static event TDGameManagerAction OnGameOverComplete;
+
+
+
     private void Awake()
     {
         victoryHolder.SetActive(false);
@@ -56,13 +62,17 @@ public class TDGameManager : MonoBehaviour
     private IEnumerator GameOverAnimation()
     {
         defeatHolder.SetActive(true);
-        yield return null;
+        yield return new WaitForSeconds(5f);
+
+        if (OnVictoryComplete != null) OnVictoryComplete();
     }
 
     private IEnumerator VictoryAnimation()
     {
         victoryHolder.SetActive(true);
-        yield return null;
+        yield return new WaitForSeconds(5f);
+
+        if (OnGameOverComplete != null) OnGameOverComplete();
     }
 
 }

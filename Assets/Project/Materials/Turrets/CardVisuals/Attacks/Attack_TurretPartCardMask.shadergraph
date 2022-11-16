@@ -47,6 +47,9 @@
         },
         {
             "m_Id": "3e8d26c494db4ab98668517bd185d452"
+        },
+        {
+            "m_Id": "123cc72ec5374c25b71f431e560280bb"
         }
     ],
     "m_GroupDatas": [],
@@ -55,7 +58,7 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "3e8d26c494db4ab98668517bd185d452"
+                    "m_Id": "123cc72ec5374c25b71f431e560280bb"
                 },
                 "m_SlotId": 1
             },
@@ -64,6 +67,20 @@
                     "m_Id": "a10609c1baf24b31a181a11b3088b23c"
                 },
                 "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "48d09b4a24e149ed82712a4070d875e1"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "123cc72ec5374c25b71f431e560280bb"
+                },
+                "m_SlotId": 0
             }
         },
         {
@@ -156,8 +173,8 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 0.0,
-            "y": 200.0
+            "x": 0.00000286102294921875,
+            "y": 187.00003051757813
         },
         "m_Blocks": [
             {
@@ -170,7 +187,7 @@
     },
     "m_PreviewData": {
         "serializedMesh": {
-            "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
+            "m_SerializedMesh": "{\"mesh\":{\"fileID\":10210,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
             "m_Guid": ""
         },
         "preventRotation": false
@@ -328,6 +345,43 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CeilingNode",
+    "m_ObjectId": "123cc72ec5374c25b71f431e560280bb",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Ceiling",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -393.0,
+            "y": 128.00001525878907,
+            "width": 132.0,
+            "height": 93.99998474121094
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "1d5ca27a2c0b47a9a0420b29b178f87d"
+        },
+        {
+            "m_Id": "813e1d2adfff48bd8332e1c26c61cd5e"
+        }
+    ],
+    "synonyms": [
+        "up"
+    ],
+    "m_Precision": 0,
+    "m_PreviewExpanded": false,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.PositionMaterialSlot",
     "m_ObjectId": "1c25bc992de84be391fbf7312e17f07e",
     "m_Id": 0,
@@ -348,6 +402,30 @@
     },
     "m_Labels": [],
     "m_Space": 0
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
+    "m_ObjectId": "1d5ca27a2c0b47a9a0420b29b178f87d",
+    "m_Id": 0,
+    "m_DisplayName": "In",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "In",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
 }
 
 {
@@ -525,10 +603,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -510.00006103515627,
-            "y": 128.0,
-            "width": 132.00006103515626,
-            "height": 93.99998474121094
+            "x": -458.99993896484377,
+            "y": 282.9999694824219,
+            "width": 132.0,
+            "height": 94.00003051757813
         }
     },
     "m_Slots": [
@@ -747,7 +825,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "646f0823dd7b4e97a0a338fef4500837",
     "m_Id": 0,
-    "m_DisplayName": "TurretBodyTexture",
+    "m_DisplayName": "Texture",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -816,6 +894,30 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
+    "m_ObjectId": "813e1d2adfff48bd8332e1c26c61cd5e",
+    "m_Id": 1,
+    "m_DisplayName": "Out",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.NormalMaterialSlot",
     "m_ObjectId": "8a513cb126a84087bd84ab38dedeccde",
     "m_Id": 0,
@@ -850,9 +952,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -353.0,
-            "y": 69.0,
-            "width": 130.0,
+            "x": -246.00003051757813,
+            "y": 52.999996185302737,
+            "width": 129.99996948242188,
             "height": 118.0
         }
     },
@@ -973,10 +1075,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -934.9999389648438,
-            "y": 127.99999237060547,
-            "width": 183.0,
-            "height": 33.99999237060547
+            "x": -934.0,
+            "y": 94.0,
+            "width": 183.00006103515626,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -1003,10 +1105,10 @@
     "m_Guid": {
         "m_GuidSerialized": "05e244b1-23cd-4970-9040-b75463c17315"
     },
-    "m_Name": "TurretBodyTexture",
+    "m_Name": "Texture",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "TurretBodyTexture",
-    "m_DefaultReferenceName": "_TurretBodyTexture",
+    "m_RefNameGeneratedByDisplayName": "Texture",
+    "m_DefaultReferenceName": "_Texture",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1016,7 +1118,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"feeb98929baf5c54782d9f078de656da\",\"type\":3}}",
         "m_Guid": ""
     },
     "isMainTexture": false,
