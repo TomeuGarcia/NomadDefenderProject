@@ -26,7 +26,7 @@ public class CardDrawer : MonoBehaviour
         DrawStartHand();
         hand.Init();
 
-        deck.GetDeckData().SetSavedCardsToStarterCards();
+        deck.GetDeckData().SetStarterCardComponentsAsSaved();
     }
 
 

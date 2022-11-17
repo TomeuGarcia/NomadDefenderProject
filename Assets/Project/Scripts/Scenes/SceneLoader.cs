@@ -39,6 +39,8 @@ public class SceneLoader : MonoBehaviour
         TDGameManager.OnGameOverComplete += StartReloadCurrentScene;
 
         CardPartReplaceManager.OnReplacementDone += StartLoadNextScene;
+
+        GatherNewCardManager.OnCardGatherDone += StartLoadNextScene;
     }
 
     private void OnDisable()
@@ -47,6 +49,8 @@ public class SceneLoader : MonoBehaviour
         TDGameManager.OnGameOverComplete -= StartReloadCurrentScene;
 
         CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene;
+
+        GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene;
     }
 
     private void Update()
