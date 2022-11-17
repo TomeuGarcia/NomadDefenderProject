@@ -10,11 +10,11 @@ public class TeslaProjectile : TurretAttack
     private Enemy[] targetedEnemies;
 
 
-    private void Update()
+    protected override void DoUpdate()
     {
         MoveTowardsEnemyTarget();
 
-        if(Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
+        if (Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
         {
             OnEnemyTriggerEnter(targetEnemy);
         }
@@ -43,6 +43,9 @@ public class TeslaProjectile : TurretAttack
     {
         if (enemy == targetEnemy)
         {
+            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
+            temp.SetActive(true);
+
             enemy.TakeDamage(damage);
 
             if (++currentTarget < targetedEnemies.Length)
