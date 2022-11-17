@@ -37,4 +37,10 @@ public class DeckCreator : MonoBehaviour
         return Instantiate(cardPrefab).GetComponent<BuildingCard>();
     }
 
+    public void AddNewCardToDeck(BuildingCard card)
+    {
+        deckData.AddCard(card);
+        deckData.SetStarterCardComponentsAsSaved();
+    }
+
 }
