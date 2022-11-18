@@ -89,14 +89,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ShowHand();
-
-            //// please make this better in the future
-            if (isHidden)
-                StartCoroutine(InvokeDrawCardAfterDelay(lerpSpeed));
-            else
-                if (OnQueryDrawCard != null) OnQueryDrawCard();
-            ////
+            if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
     }
 
@@ -134,14 +127,14 @@ public class HandBuildingCards : MonoBehaviour
     public void AddCard(BuildingCard card)
     {
         cards.Add(card);
+
+        if (isHidden) transform.position = defaultHandPosition;
         InitCardsInHand();
 
         if (!card.AlreadySpawnedCopyBuildingPrefab)
         {
             card.CreateCopyBuildingPrefab();
         }
-
-        StartCoroutine(WaitToHideHand());
     }
 
 
@@ -170,20 +163,20 @@ public class HandBuildingCards : MonoBehaviour
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
+        transform.position = defaultHandPosition;
+        SetStandardCard(selectedCard);
         selectedCard = null;
-        SetStandardCard(card);
 
         buildingPlacer.DisablePlacing();
 
         ShowHand();
     }
 
-
     private void CheckSelectCard(BuildingCard card)
     {
         int cardCost = card.turretStats.playCost;
 
-        if (currencyCounter.HasEnoughCurrency(cardCost)) // Check card's playCost !!!!!!
+        if (currencyCounter.HasEnoughCurrency(cardCost))
         {
             SetSelectedCard(card);            
         }
@@ -203,18 +196,25 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
-    private void SubtractCurrencyAndRemoveCard() // TODO
+    private void SubtractCurrencyAndRemoveCard()
     {
         int cardCost = selectedCard.turretStats.playCost;
         currencyCounter.SubtractCurrency(cardCost);
 
-        // TODO
-        // for now reset
-        //selectedCard.DoOnCardIsDrawn();
         selectedCard.gameObject.SetActive(false);
         cards.Remove(selectedCard);
-        ResetAndSetStandardCard(selectedCard);
 
+
+        //ResetAndSetStandardCard(selectedCard);
+        ///////////
+        //SetStandardCard(selectedCard);
+        BuildingCard.OnCardHovered += SetHoveredCard;
+        selectedCard = null;
+        buildingPlacer.DisablePlacing();
+        transform.position = defaultHandPosition;
+        //ShowHand();
+        ///////////
+        
         InitCardsInHand();
     }
 
