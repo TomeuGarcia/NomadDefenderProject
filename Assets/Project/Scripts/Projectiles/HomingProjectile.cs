@@ -6,7 +6,7 @@ using UnityEngine;
 public class HomingProjectile : TurretAttack
 {
 
-    private void Update()
+    protected override void DoUpdate()
     {
         MoveTowardsEnemyTarget();
 
@@ -28,11 +28,12 @@ public class HomingProjectile : TurretAttack
     {
         if (enemy == targetEnemy)
         {
+            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
+            temp.gameObject.SetActive(true);
+
             enemy.TakeDamage(damage);
             StopAllCoroutines();
             Disappear();
         }
     }
-
-
 }

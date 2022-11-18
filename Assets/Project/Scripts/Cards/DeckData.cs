@@ -38,6 +38,7 @@ public class DeckData : ScriptableObject
     public void AddCard(BuildingCard card)
     {
         cards.Add(card);
+        starterCardsComponents.Add(new BuildingCard.CardComponents(card.GetTurretPartAttack(), card.GetTurretPartBody(), card.GetTurretPartBase()));
     }
 
     public void RemoveCard(int index)
@@ -47,7 +48,7 @@ public class DeckData : ScriptableObject
     }
 
 
-    public void SetSavedCardsToStarterCards()
+    public void SetStarterCardComponentsAsSaved()
     {
         savedCardsComponents = starterCardsComponents;
     }
