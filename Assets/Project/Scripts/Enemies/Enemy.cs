@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,39 +14,47 @@ public class Enemy : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;
     [SerializeField] private Material selectedMaterial;
+    public Transform MeshTransform => meshRenderer.transform;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Image healthImage;
-    [SerializeField] private BoxCollider boxCollider;
+    //[SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
-    [SerializeField] private int damage = 1;
-    [SerializeField] private int health = 2;
+    [SerializeField] private int baseDamage = 1;
+    [SerializeField] private int baseHealth = 2;
+    private float damage;
+    private float health;
     [SerializeField] public int currencyDrop;
+
+    // Queued damage
+    private int queuedDamage = 0;   
+
 
 
     private HealthSystem healthSystem;
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
-    public EnemyAction OnEnemyDeath;
+    public EnemyAction OnEnemyDeactivated;
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
+        ResetStats();
+        healthSystem = new HealthSystem((int)health);
+        healthHUD.Init(healthSystem);
     }
 
     private void OnValidate()
     {
-        boxCollider.center = meshRenderer.gameObject.transform.localPosition;
-        boxCollider.size = meshRenderer.gameObject.transform.localScale;
+        //boxCollider.center = meshRenderer.gameObject.transform.localPosition;
+        //boxCollider.size = meshRenderer.gameObject.transform.localScale;
     }
 
     private void OnEnable()
@@ -64,26 +73,29 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
 
-        meshRenderer.material = baseMaterial;
+        //ChangeToBaseMat();
         healthSystem.HealToMax();
-        healthImage.fillAmount = healthSystem.healthRatio;
+
+        queuedDamage = 0;
+
+        ResetStats();
+
+        healthHUD.Hide();
     }
 
-    private void Update()
+    private void ResetStats()
     {
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        //cameraDirection.y = 0;
-
-        canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
+        damage = baseDamage;
+        health = baseHealth;
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
+            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
             Suicide();
-            //Destroy(gameObject);//////////////////////////
         }
     }
 
@@ -97,13 +109,13 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
+        healthHUD.Show();
         healthSystem.TakeDamage(damageAmount);
-
-        healthImage.fillAmount = healthSystem.healthRatio;
+        RemoveQueuedDamage(damageAmount);
 
         if (healthSystem.IsDead())
         {
-            Death();
+            Die();
         }
     }
 
@@ -112,7 +124,7 @@ public class Enemy : MonoBehaviour
         Deactivation();
     }
 
-    private void Death()
+    private void Die()
     {
         if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
         Deactivation();
@@ -120,7 +132,7 @@ public class Enemy : MonoBehaviour
 
     private void Deactivation()
     {
-        if (OnEnemyDeath != null) OnEnemyDeath(this);
+        if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
@@ -128,10 +140,39 @@ public class Enemy : MonoBehaviour
 
     public void ChangeMat()
     {
-        meshRenderer.material = selectedMaterial;
+        //meshRenderer.material = selectedMaterial;
     }
     public void ChangeToBaseMat()
     {
-        meshRenderer.material = baseMaterial;
+        //meshRenderer.material = baseMaterial;
+    }
+
+
+    public void QueueDamage(int amount)
+    {
+        queuedDamage += amount;
+    }
+
+    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    {
+        queuedDamage -= amount;
+    }
+
+    public bool DiesFromQueuedDamage()
+    {
+        return queuedDamage >= healthSystem.health;
+    }
+
+    public void SetMoveSpeed(float speedCoef)
+    {
+        pathFollower.SetMoveSpeed(speedCoef);
+    }
+
+    public void ApplyWaveStatMultiplier(float multiplier)
+    {
+        damage = (float)baseDamage * multiplier;
+        health = (float)baseHealth * multiplier;
+
+        healthSystem.UpdateHealth((int)health);
     }
 }

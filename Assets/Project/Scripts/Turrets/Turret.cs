@@ -1,8 +1,7 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Turret : Building
 {
@@ -13,56 +12,45 @@ public class Turret : Building
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private Pool attackPool;
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
+    private TurretPartBody_Prefab bodyPart;
+    private TurretPartBase_Prefab basePart;
 
-    [Header("STATS")]
-    private TurretStats stats;
+    [HideInInspector] public TurretStats stats;
     private float currentShootTimer;
-
-    [Header("OTHERS")]
-    [SerializeField] private Transform shootingPoint;
 
     private List<Enemy> enemies = new List<Enemy>();
 
     private bool isFunctional = false;
 
-
-
-    private void OnValidate()
-    {
-        boxCollider.size = new Vector3(stats.range, 1.0f, stats.range);
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (stats.range / 10f);
-    }
+    public delegate void TurretAction(Enemy enemy);
+    public TurretAction OnEnemyEnterRange;
+    public TurretAction OnEnemyExitRange;
+    //public TurretAction OnEnemyShot;
 
     private void Awake()
     {
         currentShootTimer = 0.0f;
-        DisableFunctionality();
+        //DisableFunctionality();
         HideRangePlane();
     }
 
     private void Update()
     {
-        if (!isFunctional) return;
-
-        if(currentShootTimer < stats.cadence)
+        if (isFunctional)
         {
-            currentShootTimer += Time.deltaTime;
-        }
-        else
-        {
-            if (enemies.Count > 0)
+            UpdateShoot();
+            
+            if (bodyPart.lookAtTarget && enemies.Count > 0)
             {
-                currentShootTimer = 0.0f;
-
-                for (int i = 0; i < stats.targetAmount; i++)
-                {
-                    if(i <= enemies.Count - 1)
-                    {
-                        Shoot(enemies[i]);
-                    }
-                }
+                LookAtTarget();
             }
         }
+    }
+
+    private void LookAtTarget()
+    {
+        Quaternion targetRot = Quaternion.LookRotation((enemies[0].transform.position - bodyPart.transform.position).normalized, bodyPart.transform.up);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -70,9 +58,10 @@ public class Turret : Building
         if (other.tag == "Enemy")
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.OnEnemyDeath += DeleteEnemyFromList;
-            enemies.Add(enemy);
-            enemies.Sort(mySort);
+            if (!enemy.DiesFromQueuedDamage())
+            {
+                AddEnemy(enemy);
+            }  
         }
     }
 
@@ -80,40 +69,91 @@ public class Turret : Building
     {
         if (other.tag == "Enemy")
         {
-            other.gameObject.GetComponent<Enemy>().OnEnemyDeath -= DeleteEnemyFromList;
-            DeleteEnemyFromList(other.gameObject.GetComponent<Enemy>());
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+
+            if (enemies.Contains(enemy))
+                RemoveEnemy(enemy);
         }
     }
 
 
-    public override void Init(TurretStats turretStats)
+    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
     {
         InitStats(turretStats);
 
-        boxCollider.size = new Vector3(stats.range, 1.0f, stats.range);
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (stats.range / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", (float)stats.range);
-        rangePlaneMaterial.SetColor("_Color", Color.cyan);
+        int range = stats.range * 2 + 1;
 
-        //Color[] colors = new Color[] { Color.cyan, Color.yellow, Color.green, Color.red, Color.blue }; // Debug purposes
-        //rangePlaneMaterial.SetColor("_Color", colors[Random.Range(0, colors.Length)]);
+        boxCollider.size = new Vector3(range, 1.0f, range);
+        rangePlaneMeshObject.transform.localScale = Vector3.one * (range / 10f);
+        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
+        rangePlaneMaterial.SetFloat("_TileNum", (float)range);
+
+
+        TurretAttack _turretAttack = turretAttack.GetComponent<TurretAttack>();
+        attackPool.SetPooledObject(turretAttack);
+
+        bodyPart = Instantiate(turretPartBody, bodyHolder).GetComponent<TurretPartBody_Prefab>();
+        bodyPart.Init(_turretAttack.materialForTurret);
+
+        basePart = Instantiate(turretPartBase, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart.Init(this, range);
+
+
+        DisableFunctionality();
     }
     public void InitStats(TurretStats stats)
     {
         this.stats = stats;
     }
 
+    private void UpdateShoot()
+    {
+        if (currentShootTimer < stats.cadence)
+        {
+            currentShootTimer += Time.deltaTime;
+            return;
+        }
+
+        if (enemies.Count <= 0) return;
+
+
+        currentShootTimer = 0.0f;
+
+        for (int i = 0; i < stats.targetAmount; i++)
+        {
+            if (i <= enemies.Count - 1)
+            {
+                if (enemies[i].DiesFromQueuedDamage())
+                {
+                    RemoveEnemy(enemies[i]);
+                    --i;
+                }
+                else
+                {
+                    bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
+                    Shoot(enemies[i]);
+                }
+            }
+        }
+
+    }
+
     protected override void DisableFunctionality()
     {
-        base.DisableFunctionality();
+        bodyPart.SetPreviewMaterial();
+        basePart.SetPreviewMaterial();
+
+        meshMouseNotifier.gameObject.SetActive(false);
         boxCollider.enabled = false;
-        isFunctional = false;        
+        isFunctional = false;
     }
 
     protected override void EnableFunctionality()
     {
-        base.EnableFunctionality();
+        bodyPart.SetDefaultMaterial();
+        basePart.SetDefaultMaterial();
+        
+        meshMouseNotifier.gameObject.SetActive(true);
         boxCollider.enabled = true;
         isFunctional = true;
     }
@@ -137,7 +177,7 @@ public class Turret : Building
     public override void EnablePlayerInteraction()
     {
         meshMouseNotifier.OnMouseEntered += ShowRangePlane;
-        meshMouseNotifier.OnMouseExited += HideRangePlane; 
+        meshMouseNotifier.OnMouseExited += HideRangePlane;
     }
 
     public override void DisablePlayerInteraction()
@@ -151,18 +191,32 @@ public class Turret : Building
     private void Shoot(Enemy enemyTarget)
     {
         TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
-        currentAttack.transform.position = shootingPoint.position;
+        currentAttack.transform.position = bodyPart.GetNextShootingPoint();
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, stats.damage);
+        currentAttack.Init(enemyTarget, this);
 
         enemyTarget.ChangeMat();
     }
 
 
+    private void AddEnemy(Enemy enemy)
+    {
+        if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
+        enemy.OnEnemyDeactivated += DeleteEnemyFromList;
+        enemies.Add(enemy);
+        enemies.Sort(mySort);
+    }
+
+    private void RemoveEnemy(Enemy enemy)
+    {
+        enemy.OnEnemyDeactivated -= DeleteEnemyFromList;
+        DeleteEnemyFromList(enemy);
+    }
 
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
+        if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
         enemyToDelete.ChangeToBaseMat();
         enemies.Remove(enemyToDelete);
 
@@ -173,4 +227,38 @@ public class Turret : Building
     {
         return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }
+
+
+
+    /// <summary>
+    /// Returns a List with size up to "amount", assumes there is at least 1 enemy in the turret's queue
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public Enemy[] GetNearestEnemies(int amount, float thresholdDistance)
+    { 
+        List<Enemy> enemyList = new List<Enemy>();
+
+        enemyList.Add(enemies[0]);
+        
+        int currentEnemyI = 1;
+        while (currentEnemyI < enemies.Count && enemyList.Count < amount)
+        {
+            if (!enemyList.Contains(enemies[currentEnemyI]) && !enemies[currentEnemyI].DiesFromQueuedDamage())
+            {
+                float distance = Vector3.Distance(enemyList[enemyList.Count - 1].transformToMove.position, enemies[currentEnemyI].transformToMove.position);
+                if (distance < thresholdDistance)
+                {
+                    enemyList.Add(enemies[currentEnemyI]);
+                    currentEnemyI = 0;
+                }
+            }
+
+            ++currentEnemyI;
+        }
+
+        return enemyList.ToArray();
+    }
+
+
 }

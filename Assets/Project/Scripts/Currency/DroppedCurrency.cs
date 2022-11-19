@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
@@ -30,8 +29,8 @@ public class DroppedCurrency : MonoBehaviour
 
     private void OnEnable()
     {
-        mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
-
+        //mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
+        StartGotPickedUp();
 
         beeingPickedUp = false;
         text.gameObject.SetActive(false);
@@ -76,7 +75,7 @@ public class DroppedCurrency : MonoBehaviour
         value = newValue;
 
         //value = Random.Range(1, 4); // Just for testing
-        Vector3 minScale = Vector3.one * 0.25f;
+        Vector3 minScale = Vector3.one * 0.1f;
         meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1780426826839134825}
   - component: {fileID: 1780426826839134824}
   - component: {fileID: 2295662163248124178}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,15 +53,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.4
-      outSlope: 0.4
+      inSlope: 0.3
+      outSlope: 0.3
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.5
-      value: 0.2
+      value: 0.15
       inSlope: 0
       outSlope: 0
       tangentMode: 34
@@ -71,8 +71,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -0.4
-      outSlope: -0.4
+      inSlope: -0.3
+      outSlope: -0.3
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -85,7 +85,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -20
+      value: -15
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -94,7 +94,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 20
+      value: 15
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -170,7 +170,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1780426827148450132}
   - component: {fileID: 1780426827148450131}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BuildingPlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,6 +215,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CurrencyCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187565362742360348, guid: dc975b7aac447ec4ca28d07bcaa82e31,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2712414808001822513, guid: dc975b7aac447ec4ca28d07bcaa82e31,
         type: 3}
@@ -270,6 +275,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282767986782233168, guid: dc975b7aac447ec4ca28d07bcaa82e31,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549271550673234067, guid: dc975b7aac447ec4ca28d07bcaa82e31,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230690982298701266, guid: dc975b7aac447ec4ca28d07bcaa82e31,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc975b7aac447ec4ca28d07bcaa82e31, type: 3}

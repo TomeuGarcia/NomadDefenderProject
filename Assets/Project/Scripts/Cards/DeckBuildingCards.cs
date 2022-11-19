@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class DeckBuildingCards : MonoBehaviour
 {
-    [SerializeField] private List<BuildingCard> cards;
+    [SerializeField] private DeckData deckData;
+    
+    private List<BuildingCard> cards;
 
 
-    private void Awake()
+    public void Init()
     {
-        InitCardsInDeck();
-    }
-
-
-    private void InitCardsInDeck()
-    {
+        cards = new List<BuildingCard>(deckData.GetCards());
 
         float upStep = 0.1f;
         float numCards = cards.Count;
@@ -48,6 +45,9 @@ public class DeckBuildingCards : MonoBehaviour
 
 
 
-
+    public DeckData GetDeckData()
+    {
+        return deckData;
+    }
 
 }
