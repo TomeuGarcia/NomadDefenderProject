@@ -8,15 +8,18 @@ public class DamageRangeProjectile : HomingProjectile
     {
         float distance = Vector3.Distance(targetEnemy.Position, transform.position);
 
-        int halfDamage = owner.stats.damage / 2;
-        int bonus = (int)(halfDamage * distance);
+        int baseDamage = (int)(owner.stats.damage * 0.75f);
+        int bonusDamage = owner.stats.damage - baseDamage;
+        int bonus = (int)(bonusDamage * distance);
 
         this.targetEnemy = targetEnemy;
-        this.damage = halfDamage + bonus;
+        this.damage = baseDamage + bonus;
 
         targetEnemy.QueueDamage(damage);
 
         StartCoroutine(Lifetime());
+
+        Debug.Log(owner.stats.damage + " -> " + this.damage);
     }
 
 }

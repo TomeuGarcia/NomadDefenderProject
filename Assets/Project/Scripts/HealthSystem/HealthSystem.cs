@@ -61,4 +61,10 @@ public class HealthSystem
         health = newHealth;
         maxHealth = newHealth;
     }
+
+    public int GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }

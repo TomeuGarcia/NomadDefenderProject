@@ -30,14 +30,17 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
 
-        debugText.text = "Press Q to start Enemy Wave";
+        debugText.text = "Play a card to start Enemy Waves";
         StartCoroutine(WaitForStart());
+
+        HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
     }
 
-    private void Update()
+
+    private void StartAfterFirstCardPlayed()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            started = true;
+        HandBuildingCards.OnCardPlayed -= StartAfterFirstCardPlayed;
+        started = true;
     }
 
 
@@ -58,8 +61,8 @@ public class EnemyWaveManager : MonoBehaviour
         ++currentWaves;
         StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies());
         
-        debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves + 
-            " (Enemies: " + enemyWaveSpawner.activeEnemies + ")";
+        debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves;/* + 
+            " (Enemies: " + enemyWaveSpawner.activeEnemies + ")";*/
     }
 
 
