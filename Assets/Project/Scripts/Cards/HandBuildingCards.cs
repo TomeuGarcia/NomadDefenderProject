@@ -31,6 +31,7 @@ public class HandBuildingCards : MonoBehaviour
 
     public delegate void HandAction();
     public static event HandAction OnQueryDrawCard;
+    public static event HandAction OnCardPlayed;
 
 
 
@@ -61,6 +62,8 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         HideHand();
+
+        CheckCardsCost();
     }
 
     private void OnEnable()
@@ -69,7 +72,10 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered += SetStandardCard;
         BuildingCard.OnCardSelected += CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced += SubtractCurrencyAndRemoveCard;
+        buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
+
+        currencyCounter.OnCurrencyAdded += CheckCardsCost;
+        currencyCounter.OnCurrencySpent += CheckCardsCost;
     }
 
     private void OnDisable()
@@ -78,7 +84,10 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered -= SetStandardCard;
         BuildingCard.OnCardSelected -= CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced -= SubtractCurrencyAndRemoveCard;
+        buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
+
+        currencyCounter.OnCurrencyAdded -= CheckCardsCost;
+        currencyCounter.OnCurrencySpent -= CheckCardsCost;
     }
 
     private void Update()
@@ -135,6 +144,8 @@ public class HandBuildingCards : MonoBehaviour
         {
             card.CreateCopyBuildingPrefab();
         }
+
+        CheckCardsCost();
     }
 
 
@@ -195,6 +206,12 @@ public class HandBuildingCards : MonoBehaviour
         HideHand();
     }
 
+    private void OnSelectedCardPlayed()
+    {
+        SubtractCurrencyAndRemoveCard();
+
+        if (OnCardPlayed != null) OnCardPlayed();
+    }
 
     private void SubtractCurrencyAndRemoveCard()
     {
@@ -263,6 +280,24 @@ public class HandBuildingCards : MonoBehaviour
         yield return null;
 
         if (OnQueryDrawCard != null) OnQueryDrawCard();
+    }
+
+
+    private void CheckCardsCost()
+    {
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            int cardCost = cards[i].turretStats.playCost;
+
+            if (currencyCounter.HasEnoughCurrency(cardCost))
+            {
+                cards[i].SetCanBePlayedAnimation();
+            }
+            else
+            {
+                cards[i].SetCannotBePlayedAnimation();
+            }
+        }
     }
 
 }
