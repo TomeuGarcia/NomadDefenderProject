@@ -8,7 +8,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] private DeckBuildingCards deck;
 
-    [SerializeField, Min(0)] private int numCardsHandStart = 2;
+    [SerializeField, Min(1)] private int numCardsHandStart = 2;
 
     [SerializeField] private Image drawCooldownImage;
     [SerializeField, Range(10, 60)] private float drawTimeCooldown;
@@ -59,7 +59,9 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawStartHand()
     {
-        for (int i = 0; i < numCardsHandStart; i++)
+        DrawTopCard();
+
+        for (int i = 1; i < numCardsHandStart; i++)
         {
             TryDrawCard();
         }
