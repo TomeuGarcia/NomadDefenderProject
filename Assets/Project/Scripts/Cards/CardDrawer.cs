@@ -44,17 +44,22 @@ public class CardDrawer : MonoBehaviour
     private void TryDrawCard()
     {
         if (deck.HasCardsLeft())
-            DrawCard();
+            DrawRandomCard();
     }
 
-    private void DrawCard()
+    private void DrawTopCard()
     {
         hand.AddCard(deck.GetTopCard());
     }
+    private void DrawRandomCard()
+    {
+        hand.AddCard(deck.GetRandomCard());
+    }
+
 
     private void DrawStartHand()
     {
-        for(int i = 0; i < numCardsHandStart; i++)
+        for (int i = 0; i < numCardsHandStart; i++)
         {
             TryDrawCard();
         }

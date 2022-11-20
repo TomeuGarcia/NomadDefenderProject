@@ -16,6 +16,7 @@ public class TDGameManager : MonoBehaviour
 
     public delegate void TDGameManagerAction();
     public static event TDGameManagerAction OnVictoryComplete;
+    public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
     public static event TDGameManagerAction OnEndGameResetPools;
 
@@ -44,6 +45,8 @@ public class TDGameManager : MonoBehaviour
     {
         Debug.Log("GameOver");
         StartCoroutine(GameOverAnimation());
+
+        if (OnGameOverStart != null) OnGameOverStart();
     }
 
     private void CheckVictory()
