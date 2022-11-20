@@ -79,6 +79,8 @@ public class Enemy : MonoBehaviour
         queuedDamage = 0;
 
         ResetStats();
+
+        healthHUD.Hide();
     }
 
     private void ResetStats()
@@ -107,6 +109,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
+        healthHUD.Show();
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
 

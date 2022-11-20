@@ -34,12 +34,14 @@ public class GatherNewCardManager : MonoBehaviour
     {
         cards = new BuildingCard[numCards];
 
+        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numCards);
+        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numCards);
+        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numCards);
+
         for (int i = 0; i < numCards; i++)
         {
             cards[i] = deckCreator.GetUninitializedNewCard();
-            cards[i].ResetParts(partsLibrary.GetRandomTurretPartAttack(),
-                                partsLibrary.GetRandomTurretPartBody(),
-                                partsLibrary.GetRandomTurretPartBase());
+            cards[i].ResetParts(attacks[i], bodies[i], bases[i]);
         }
         InitCardsPlacement();
 
@@ -141,7 +143,7 @@ public class GatherNewCardManager : MonoBehaviour
     private IEnumerator SelectCardAnimation()
     {
         float shakeDuration = 0.5f;
-        selectedCard.transform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 8);
+        selectedCard.transform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 6);
 
         yield return new WaitForSeconds(shakeDuration);
 
@@ -161,11 +163,17 @@ public class GatherNewCardManager : MonoBehaviour
         float centerMoveDuration = 0.15f;
         Vector3 centerPos = cardHolder.transform.position;
         centerPos.y += 1f;
-        centerPos += selectedCard.transform.up * 0.5f;
+        centerPos += selectedCard.transform.up * 0.4f;
 
         selectedCard.transform.DOMove(centerPos, centerMoveDuration);
-        yield return new WaitForSeconds(1f);        
-        
+        yield return new WaitForSeconds(centerMoveDuration);
+
+        // smooth move up
+        centerMoveDuration = 1f - centerMoveDuration;
+        centerPos += selectedCard.transform.up * 0.05f;
+        selectedCard.transform.DOMove(centerPos, centerMoveDuration);
+        yield return new WaitForSeconds(centerMoveDuration);
+
 
         Vector3 endPos = selectedCard.transform.localPosition + (selectedCard.transform.forward * 3f);
         selectedCard.transform.DOLocalMove(endPos, moveDuration);

@@ -31,6 +31,7 @@ public class HandBuildingCards : MonoBehaviour
 
     public delegate void HandAction();
     public static event HandAction OnQueryDrawCard;
+    public static event HandAction OnCardPlayed;
 
 
 
@@ -61,6 +62,8 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         HideHand();
+
+        CheckCardsCost();
     }
 
     private void OnEnable()
@@ -69,7 +72,10 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered += SetStandardCard;
         BuildingCard.OnCardSelected += CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced += SubtractCurrencyAndRemoveCard;
+        buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
+
+        currencyCounter.OnCurrencyAdded += CheckCardsCost;
+        currencyCounter.OnCurrencySpent += CheckCardsCost;
     }
 
     private void OnDisable()
@@ -78,7 +84,10 @@ public class HandBuildingCards : MonoBehaviour
         BuildingCard.OnCardUnhovered -= SetStandardCard;
         BuildingCard.OnCardSelected -= CheckSelectCard;
 
-        buildingPlacer.OnBuildingPlaced -= SubtractCurrencyAndRemoveCard;
+        buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
+
+        currencyCounter.OnCurrencyAdded -= CheckCardsCost;
+        currencyCounter.OnCurrencySpent -= CheckCardsCost;
     }
 
     private void Update()
@@ -89,14 +98,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ShowHand();
-
-            //// please make this better in the future
-            if (isHidden)
-                StartCoroutine(InvokeDrawCardAfterDelay(lerpSpeed));
-            else
-                if (OnQueryDrawCard != null) OnQueryDrawCard();
-            ////
+            if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
     }
 
@@ -134,6 +136,8 @@ public class HandBuildingCards : MonoBehaviour
     public void AddCard(BuildingCard card)
     {
         cards.Add(card);
+
+        if (isHidden) transform.position = defaultHandPosition;
         InitCardsInHand();
 
         if (!card.AlreadySpawnedCopyBuildingPrefab)
@@ -141,7 +145,7 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab();
         }
 
-        StartCoroutine(WaitToHideHand());
+        CheckCardsCost();
     }
 
 
@@ -170,20 +174,20 @@ public class HandBuildingCards : MonoBehaviour
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
+        transform.position = defaultHandPosition;
+        SetStandardCard(selectedCard);
         selectedCard = null;
-        SetStandardCard(card);
 
         buildingPlacer.DisablePlacing();
 
         ShowHand();
     }
 
-
     private void CheckSelectCard(BuildingCard card)
     {
         int cardCost = card.turretStats.playCost;
 
-        if (currencyCounter.HasEnoughCurrency(cardCost)) // Check card's playCost !!!!!!
+        if (currencyCounter.HasEnoughCurrency(cardCost))
         {
             SetSelectedCard(card);            
         }
@@ -202,19 +206,32 @@ public class HandBuildingCards : MonoBehaviour
         HideHand();
     }
 
+    private void OnSelectedCardPlayed()
+    {
+        SubtractCurrencyAndRemoveCard();
 
-    private void SubtractCurrencyAndRemoveCard() // TODO
+        if (OnCardPlayed != null) OnCardPlayed();
+    }
+
+    private void SubtractCurrencyAndRemoveCard()
     {
         int cardCost = selectedCard.turretStats.playCost;
         currencyCounter.SubtractCurrency(cardCost);
 
-        // TODO
-        // for now reset
-        //selectedCard.DoOnCardIsDrawn();
         selectedCard.gameObject.SetActive(false);
         cards.Remove(selectedCard);
-        ResetAndSetStandardCard(selectedCard);
 
+
+        //ResetAndSetStandardCard(selectedCard);
+        ///////////
+        //SetStandardCard(selectedCard);
+        BuildingCard.OnCardHovered += SetHoveredCard;
+        selectedCard = null;
+        buildingPlacer.DisablePlacing();
+        transform.position = defaultHandPosition;
+        //ShowHand();
+        ///////////
+        
         InitCardsInHand();
     }
 
@@ -263,6 +280,24 @@ public class HandBuildingCards : MonoBehaviour
         yield return null;
 
         if (OnQueryDrawCard != null) OnQueryDrawCard();
+    }
+
+
+    private void CheckCardsCost()
+    {
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            int cardCost = cards[i].turretStats.playCost;
+
+            if (currencyCounter.HasEnoughCurrency(cardCost))
+            {
+                cards[i].SetCanBePlayedAnimation();
+            }
+            else
+            {
+                cards[i].SetCannotBePlayedAnimation();
+            }
+        }
     }
 
 }
