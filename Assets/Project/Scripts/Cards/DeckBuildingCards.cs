@@ -57,9 +57,17 @@ public class DeckBuildingCards : MonoBehaviour
 
     public BuildingCard GetTopCard()
     {
-        BuildingCard topCard = cards[0];
+        return GetCard(0);
+    }
+    public BuildingCard GetRandomCard()
+    {
+        return GetCard(Random.Range(0, cards.Count));
+    }
+    public BuildingCard GetCard(int cardI)
+    {
+        BuildingCard topCard = cards[cardI];
 
-        cards.RemoveAt(0);
+        cards.RemoveAt(cardI);
 
         fakeCards[lastFakeCardI--].SetActive(false);
         cardCountText.text = cards.Count.ToString();

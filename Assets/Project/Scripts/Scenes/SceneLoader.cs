@@ -23,6 +23,10 @@ public class SceneLoader : MonoBehaviour
 
     delegate void LoadSceneFunction();
 
+    private int mainMenuSceneIndex = 1;
+    private bool alreadyLoadingNextScene;    
+
+
 
     private void Awake()
     {
@@ -31,6 +35,8 @@ public class SceneLoader : MonoBehaviour
         topOpenPosition = topBlackScreen.localPosition;
         bottomOpenPosition = bottomBlackScreen.localPosition;
         backgroundImage.color = openColor;
+
+        alreadyLoadingNextScene = false;
     }
 
     private void OnEnable()
@@ -41,6 +47,9 @@ public class SceneLoader : MonoBehaviour
         CardPartReplaceManager.OnReplacementDone += StartLoadNextScene;
 
         GatherNewCardManager.OnCardGatherDone += StartLoadNextScene;
+
+        InitScene.OnStart += StartLoadMainMenu;
+        MainMenu.OnPlayStart += StartLoadNextScene;
     }
 
     private void OnDisable()
@@ -51,12 +60,22 @@ public class SceneLoader : MonoBehaviour
         CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene;
 
         GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene;
+
+        InitScene.OnStart -= StartLoadMainMenu;
+        MainMenu.OnPlayStart -= StartLoadNextScene;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O)) OpenAnimation(openAnimDuration);
-        else if (Input.GetKeyDown(KeyCode.P)) ShutAnimation(shutAnimDuration);
+        if (alreadyLoadingNextScene) return;
+
+        //if (Input.GetKeyDown(KeyCode.O)) OpenAnimation(openAnimDuration);
+        //else if (Input.GetKeyDown(KeyCode.P)) ShutAnimation(shutAnimDuration);
+
+        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
+        {
+            StartLoadMainMenu();
+        }
     }
 
 
@@ -74,8 +93,14 @@ public class SceneLoader : MonoBehaviour
         backgroundImage.DOColor(openColor, duration * 1.2f);
     }
 
+    private void StartLoadNextScene()
+    {
+        StartCoroutine(DoLoadScene(LoadNextScene));
+    }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
     {
+        alreadyLoadingNextScene = true;
+
         ShutAnimation(shutAnimDuration);
         yield return new WaitForSeconds(1f);
 
@@ -83,25 +108,32 @@ public class SceneLoader : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         OpenAnimation(openAnimDuration);
-    }
+        yield return new WaitForSeconds(openAnimDuration);
 
-
-    private void StartLoadNextScene()
-    {
-        StartCoroutine(DoLoadScene(LoadNextScene));
+        alreadyLoadingNextScene = false;
     }
     private void LoadNextScene()
     {
         int nextSceneI = SceneManager.GetActiveScene().buildIndex + 1;
+
         if (nextSceneI < SceneManager.sceneCountInBuildSettings)
         {
             SceneManager.LoadScene(nextSceneI);
         }
         else
         {
-            SceneManager.LoadScene(0); // Main menu
+            LoadMainMenu();
         }
         
+    }
+
+    private void StartLoadMainMenu()
+    {
+        StartCoroutine(DoLoadScene(LoadMainMenu));
+    }
+    private void LoadMainMenu()
+    {
+        SceneManager.LoadScene(mainMenuSceneIndex); // Main menu
     }
 
 

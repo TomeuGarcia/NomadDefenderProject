@@ -9,6 +9,13 @@ public class CurrencySpawner : MonoBehaviour
     private void OnEnable()
     {
          Enemy.OnEnemyDeathDropCurrency += SpawnCurrency;
+         TDGameManager.OnEndGameResetPools += ResetPool;
+    }
+
+    private void OnDisable()
+    {
+        Enemy.OnEnemyDeathDropCurrency -= SpawnCurrency;
+        TDGameManager.OnEndGameResetPools -= ResetPool;
     }
 
     private void SpawnCurrency(Enemy enemy)
@@ -16,5 +23,10 @@ public class CurrencySpawner : MonoBehaviour
         GameObject currency = currencyPool.GetObject(enemy.Position + Vector3.up * 0.2f, Quaternion.identity);
         currency.SetActive(true);
         currency.gameObject.GetComponent<DroppedCurrency>().SetValue(enemy.currencyDrop);
+    }
+
+    private void ResetPool()
+    {
+        currencyPool.ResetObjectsList();
     }
 }

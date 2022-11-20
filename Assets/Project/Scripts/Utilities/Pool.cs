@@ -13,6 +13,11 @@ public class Pool : MonoBehaviour
 
     void Awake()
     {
+        ResetObjectsList();
+    }
+
+    public void ResetObjectsList()
+    {
         objects = new List<GameObject>();
     }
 

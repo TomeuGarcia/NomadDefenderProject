@@ -12,6 +12,24 @@ public class DeckData : ScriptableObject
     private List<BuildingCard.CardComponents> savedCardsComponents;
 
 
+    public void ReplaceFor(DeckData other)
+    {
+        starterCardsComponents = new List<BuildingCard.CardComponents>();
+        for (int i = 0; i < other.starterCardsComponents.Count; ++i)
+        {
+            BuildingCard.CardComponents otherComponents = other.starterCardsComponents[i];
+            TurretPartAttack turretPartAttack = ScriptableObject.CreateInstance("TurretPartAttack") as TurretPartAttack;
+            turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
+
+            TurretPartBody turretPartBody = ScriptableObject.CreateInstance("TurretPartBody") as TurretPartBody;
+            turretPartBody.InitAsCopy(otherComponents.turretPartBody);
+
+            TurretPartBase turretPartBase = ScriptableObject.CreateInstance("TurretPartBase") as TurretPartBase;
+            turretPartBase.InitAsCopy(otherComponents.turretPartBase);
+
+            starterCardsComponents.Add(new BuildingCard.CardComponents(turretPartAttack, turretPartBody, turretPartBase));
+        }
+    }
 
     public void Init(BuildingCard[] starterCards)
     {
@@ -62,6 +80,23 @@ public class DeckData : ScriptableObject
     private void AddToSavedCardsComponents(BuildingCard card)
     {
         savedCardsComponents.Add(new BuildingCard.CardComponents(card.GetTurretPartAttack(), card.GetTurretPartBody(), card.GetTurretPartBase()));
+    }
+
+
+    public void ShuffleCards()
+    {
+        List<BuildingCard> cardsCopy = new List<BuildingCard>();
+
+        while (cards.Count > 0)
+        {
+            int randomI = Random.Range(0, cards.Count);
+            cardsCopy.Add(cards[randomI]);
+
+            cards.RemoveAt(randomI);
+            Debug.Log(randomI);
+        }
+
+        cards = cardsCopy;
     }
 
 }

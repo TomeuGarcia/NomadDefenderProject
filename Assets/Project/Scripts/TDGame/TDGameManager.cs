@@ -16,7 +16,9 @@ public class TDGameManager : MonoBehaviour
 
     public delegate void TDGameManagerAction();
     public static event TDGameManagerAction OnVictoryComplete;
+    public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
+    public static event TDGameManagerAction OnEndGameResetPools;
 
 
 
@@ -43,6 +45,8 @@ public class TDGameManager : MonoBehaviour
     {
         Debug.Log("GameOver");
         StartCoroutine(GameOverAnimation());
+
+        if (OnGameOverStart != null) OnGameOverStart();
     }
 
     private void CheckVictory()
@@ -64,7 +68,8 @@ public class TDGameManager : MonoBehaviour
         defeatHolder.SetActive(true);
         yield return new WaitForSeconds(5f);
 
-        if (OnVictoryComplete != null) OnVictoryComplete();
+        if (OnEndGameResetPools != null) OnEndGameResetPools();
+        if (OnGameOverComplete != null) OnGameOverComplete();
     }
 
     private IEnumerator VictoryAnimation()
@@ -72,7 +77,8 @@ public class TDGameManager : MonoBehaviour
         victoryHolder.SetActive(true);
         yield return new WaitForSeconds(5f);
 
-        if (OnGameOverComplete != null) OnGameOverComplete();
+        if (OnEndGameResetPools != null) OnEndGameResetPools();
+        if (OnVictoryComplete != null) OnVictoryComplete();
     }
 
 }

@@ -35,6 +35,15 @@ public class EnemyWaveManager : MonoBehaviour
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
     }
+    private void OnEnable()
+    {
+        TDGameManager.OnGameOverStart += ForceStopWaves;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnGameOverStart -= ForceStopWaves;
+    }
+
 
 
     private void StartAfterFirstCardPlayed()
@@ -100,4 +109,11 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
 
+    private void ForceStopWaves()
+    {
+        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        {
+            enemyWaveSpawners[i].ForceStopWave();
+        }
+    }
 }

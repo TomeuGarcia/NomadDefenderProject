@@ -35,4 +35,14 @@ public class TurretPartBody : ScriptableObject
     {
         return (float)cadenceLvl / (float)5;
     }
+
+    public void InitAsCopy(TurretPartBody other)
+    {
+        this.cost = other.cost;
+        this.damageLvl = other.damageLvl;
+        this.cadenceLvl = other.cadenceLvl;
+        this.prefab = other.prefab;
+        this.materialTextureMap = other.materialTextureMap;
+    }
+
 }
