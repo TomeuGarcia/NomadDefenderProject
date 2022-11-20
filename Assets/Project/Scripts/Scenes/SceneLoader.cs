@@ -20,6 +20,7 @@ public class SceneLoader : MonoBehaviour
 
     [SerializeField, Min(0f)] private float openAnimDuration = 0.2f;
     [SerializeField, Min(0f)] private float shutAnimDuration = 0.1f;
+    [SerializeField, Min(0f)] private float loadSceneDuration = 0.7f;
 
     delegate void LoadSceneFunction();
 
@@ -102,10 +103,10 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = true;
 
         ShutAnimation(shutAnimDuration);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(shutAnimDuration);
 
         loadSceneFunction();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(loadSceneDuration);
 
         OpenAnimation(openAnimDuration);
         yield return new WaitForSeconds(openAnimDuration);

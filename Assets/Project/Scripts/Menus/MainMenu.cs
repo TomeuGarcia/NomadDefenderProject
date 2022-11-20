@@ -7,13 +7,22 @@ public class MainMenu : MonoBehaviour
     [SerializeField] DeckData originalStartDeck;
     [SerializeField] DeckData gameStartDeck;
 
+    private bool canInteract = true;
+
 
     public delegate void MainMenuAction();
     public static event MainMenuAction OnPlayStart;
 
+    private void Awake()
+    {
+        canInteract = true;
+    }
 
     public void Play()
     {
+        if (!canInteract) return;
+
+        canInteract = false;
         gameStartDeck.ReplaceFor(originalStartDeck);
 
         StartCoroutine(DoPlay());
@@ -28,6 +37,8 @@ public class MainMenu : MonoBehaviour
 
     public void Quit()
     {
+        if (!canInteract) return;
+
         Application.Quit();
     }
 
