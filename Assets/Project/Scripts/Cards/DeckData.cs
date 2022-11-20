@@ -12,6 +12,14 @@ public class DeckData : ScriptableObject
     private List<BuildingCard.CardComponents> savedCardsComponents;
 
 
+    public void ReplaceFor(DeckData other)
+    {
+        starterCardsComponents = new List<BuildingCard.CardComponents>();
+        for (int i = 0; i < other.starterCardsComponents.Count; ++i)
+        {
+            starterCardsComponents.Add(new BuildingCard.CardComponents(other.starterCardsComponents[i]));
+        }
+    }
 
     public void Init(BuildingCard[] starterCards)
     {

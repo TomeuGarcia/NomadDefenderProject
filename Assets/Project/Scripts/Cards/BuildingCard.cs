@@ -79,6 +79,13 @@ public class BuildingCard : MonoBehaviour
             this.turretPartBase = turretPartBase;
         }
 
+        public CardComponents(CardComponents other)
+        {
+            this.turretPartAttack = other.turretPartAttack;
+            this.turretPartBody = other.turretPartBody;
+            this.turretPartBase = other.turretPartBase;
+        }
+
         public TurretPartAttack turretPartAttack;
         public TurretPartBody turretPartBody;
         public TurretPartBase turretPartBase;
@@ -110,6 +117,7 @@ public class BuildingCard : MonoBehaviour
 
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
+        cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
     }
 
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
