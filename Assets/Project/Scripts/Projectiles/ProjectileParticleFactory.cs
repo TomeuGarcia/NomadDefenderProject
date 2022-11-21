@@ -34,6 +34,16 @@ public class ProjectileParticleFactory : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        TDGameManager.OnEndGameResetPools += ResetPools;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnEndGameResetPools -= ResetPools;
+    }
+
+
     public static ProjectileParticleFactory GetInstance()
     {
         return instance;
@@ -51,5 +61,13 @@ public class ProjectileParticleFactory : MonoBehaviour
     public GameObject GetAttackParticlesGameObject(TurretAttack.AttackType attackType, Vector3 position, Quaternion rotation)
     {
         return sortedAttacks[attackType].GetObject(position, rotation);
+    }
+
+    private void ResetPools()
+    {
+        foreach (AttackTypeParticleToPool attackTypeParticleToPool in particleToPool)
+        {
+            attackTypeParticleToPool.pool.ResetObjectsList();
+        }
     }
 }

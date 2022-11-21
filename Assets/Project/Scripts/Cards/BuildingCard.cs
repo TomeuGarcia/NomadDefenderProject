@@ -49,6 +49,8 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private MeshRenderer bodyMeshRenderer;
     [SerializeField] private MeshRenderer baseMeshRenderer;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+    [SerializeField] private MeshRenderer cardMeshRenderer;
+    private Material cardMaterial;
 
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
@@ -75,6 +77,13 @@ public class BuildingCard : MonoBehaviour
             this.turretPartAttack = turretPartAttack;
             this.turretPartBody = turretPartBody;
             this.turretPartBase = turretPartBase;
+        }
+
+        public CardComponents(CardComponents other)
+        {
+            this.turretPartAttack = other.turretPartAttack;
+            this.turretPartBody = other.turretPartBody;
+            this.turretPartBase = other.turretPartBase;
         }
 
         public TurretPartAttack turretPartAttack;
@@ -105,6 +114,10 @@ public class BuildingCard : MonoBehaviour
         cardAttackMaterial = attackMeshRenderer.material;
         cardBodyMaterial = bodyMeshRenderer.material;
         cardBaseMaterial = baseMeshRenderer.material;
+
+        cardMaterial = cardMeshRenderer.material;
+        SetCannotBePlayedAnimation();
+        cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
     }
 
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
@@ -278,11 +291,15 @@ public class BuildingCard : MonoBehaviour
 
     }
 
-    private void CardBigToSmallAnimation()
+    public void SetCanBePlayedAnimation()
     {
-        
+        cardMaterial.SetFloat("_CanBePlayed", 1f);
 
+    }
 
+    public void SetCannotBePlayedAnimation()
+    {
+        cardMaterial.SetFloat("_CanBePlayed", 0f);
     }
 
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DeckBuildingCards : MonoBehaviour
@@ -7,6 +8,14 @@ public class DeckBuildingCards : MonoBehaviour
     [SerializeField] private DeckData deckData;
     
     private List<BuildingCard> cards;
+
+
+    [Header("Fake Deck")]
+    [SerializeField] private Transform fakeDeck;
+    [SerializeField] private GameObject fakeCardPrefab;
+    private GameObject[] fakeCards;
+    private int lastFakeCardI;
+    [SerializeField] private TextMeshPro cardCountText;
 
 
     public void Init()
@@ -26,6 +35,18 @@ public class DeckBuildingCards : MonoBehaviour
             cards[i].transform.position += transform.up * (upStep * (numCards - (i+1)));
         }
 
+
+        fakeCards = new GameObject[cards.Count];
+        for (int i = 0; i < fakeCards.Length; i++)
+        {
+            Vector3 offset = -fakeDeck.forward * (i * 0.15f);
+
+            fakeCards[i] = Instantiate(fakeCardPrefab, fakeDeck);
+            fakeCards[i].transform.localPosition = offset;
+        }
+        lastFakeCardI = fakeCards.Length - 1;
+
+        cardCountText.text = cards.Count.ToString();
     }
 
 
@@ -36,9 +57,21 @@ public class DeckBuildingCards : MonoBehaviour
 
     public BuildingCard GetTopCard()
     {
-        BuildingCard topCard = cards[0];
+        return GetCard(0);
+    }
+    public BuildingCard GetRandomCard()
+    {
+        return GetCard(Random.Range(0, cards.Count));
+    }
+    public BuildingCard GetCard(int cardI)
+    {
+        BuildingCard topCard = cards[cardI];
 
-        cards.RemoveAt(0);
+        cards.RemoveAt(cardI);
+
+        fakeCards[lastFakeCardI--].SetActive(false);
+        cardCountText.text = cards.Count.ToString();
+        if (cards.Count == 0) cardCountText.gameObject.SetActive(false);
 
         return topCard;
     }

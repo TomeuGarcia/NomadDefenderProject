@@ -36,4 +36,16 @@ public class TurretPartBase : ScriptableObject
         return abilitySprite != null;
     }
 
+
+    public void InitAsCopy(TurretPartBase other)
+    {
+        this.cost = other.cost;
+        this.rangeLvl = other.rangeLvl;
+        this.prefab = other.prefab;
+        this.materialTexture = other.materialTexture;
+        this.materialColor = other.materialColor;
+        this.abilitySprite = other.abilitySprite;
+        this.spriteColor = other.spriteColor;
+    }
+
 }

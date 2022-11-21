@@ -26,6 +26,7 @@ public class EnemyWaveSpawner : ScriptableObject
     public event EnemyWaveSpawnerAction OnWaveFinished;
     public event EnemyWaveSpawnerAction OnLastWaveFinished;
 
+    bool stopForced;
 
 
     public void Init(PathNode startNode)
@@ -33,6 +34,7 @@ public class EnemyWaveSpawner : ScriptableObject
         currentWave = 0;
         activeEnemies = 0;
         this.startNode = startNode;
+        stopForced = false;
     }
 
 
@@ -50,6 +52,8 @@ public class EnemyWaveSpawner : ScriptableObject
         {
             foreach (Enemy.EnemyType enemyType in enemyWaves[currentWave].enemies)
             {
+                if (stopForced) break;
+
                 SpawnEnemy(enemyType);
 
                 yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
@@ -108,6 +112,11 @@ public class EnemyWaveSpawner : ScriptableObject
         {
             if (OnLastWaveFinished != null) OnLastWaveFinished(this);
         }
+    }
+
+    public void ForceStopWave()
+    {
+
     }
 
 }

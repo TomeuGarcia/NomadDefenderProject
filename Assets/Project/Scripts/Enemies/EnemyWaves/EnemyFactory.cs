@@ -33,6 +33,15 @@ public class EnemyFactory : MonoBehaviour
             Destroy(this);
         }
     }
+    private void OnEnable()
+    {
+        TDGameManager.OnEndGameResetPools += ResetPools;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnEndGameResetPools -= ResetPools;
+    }
+
 
     public static EnemyFactory GetInstance()
     {
@@ -55,6 +64,13 @@ public class EnemyFactory : MonoBehaviour
         return sortedEnemies[enemyType].GetObject(position, rotation);
     }
 
+    private void ResetPools()
+    {
+        foreach (EnemyTypeToPool enemyTypeToPool in enemiesToPool)
+        {
+            enemyTypeToPool.pool.ResetObjectsList();
+        }
+    }
 
 
 }

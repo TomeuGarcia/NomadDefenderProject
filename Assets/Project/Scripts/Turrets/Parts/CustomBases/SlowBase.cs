@@ -33,11 +33,14 @@ public class SlowBase : TurretPartBase_Prefab
 
     private void StopEnemySlow(Enemy enemy)
     {
+        if (!slowedEnemies.ContainsKey(enemy)) return;
+
         slowedEnemies[enemy] -= 1;
         
         if(slowedEnemies[enemy] == 0)
         {
-            //slowedEnemies.Remove(enemy);
+            slowedEnemies.Remove(enemy);
+
             enemy.SetMoveSpeed(1.0f);
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretAttack : MonoBehaviour
 {
-    public enum AttackType { BASIC, TESLA }
+    public enum AttackType { BASIC, TESLA, LONG_RANGE }
 
     protected Enemy targetEnemy;
     protected int damage;

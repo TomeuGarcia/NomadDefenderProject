@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Material baseMaterial;
     [SerializeField] private Material selectedMaterial;
     public Transform MeshTransform => meshRenderer.transform;
+    private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
@@ -49,6 +51,8 @@ public class Enemy : MonoBehaviour
         ResetStats();
         healthSystem = new HealthSystem((int)health);
         healthHUD.Init(healthSystem);
+
+        originalMeshLocalScale = MeshTransform.localScale;
     }
 
     private void OnValidate()
@@ -79,6 +83,8 @@ public class Enemy : MonoBehaviour
         queuedDamage = 0;
 
         ResetStats();
+
+        healthHUD.Hide();
     }
 
     private void ResetStats()
@@ -107,8 +113,13 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
+        healthHUD.Show();
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
+
+        MeshTransform.localScale = originalMeshLocalScale;
+        MeshTransform.DOKill(true);
+        MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
         if (healthSystem.IsDead())
         {
