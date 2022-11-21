@@ -38,10 +38,12 @@ public class EnemyWaveManager : MonoBehaviour
     private void OnEnable()
     {
         TDGameManager.OnGameOverStart += ForceStopWaves;
+        SceneLoader.OnSceneForceQuit += ForceStopWaves;
     }
     private void OnDisable()
     {
         TDGameManager.OnGameOverStart -= ForceStopWaves;
+        SceneLoader.OnSceneForceQuit -= ForceStopWaves;
     }
 
 
