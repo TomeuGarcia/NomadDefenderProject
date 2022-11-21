@@ -25,7 +25,12 @@ public class SceneLoader : MonoBehaviour
     delegate void LoadSceneFunction();
 
     private int mainMenuSceneIndex = 1;
-    private bool alreadyLoadingNextScene;    
+    private bool alreadyLoadingNextScene;
+
+
+    public delegate void SceneLoaderAction();
+    public static event SceneLoaderAction OnSceneForceQuit;
+
 
 
 
@@ -75,6 +80,7 @@ public class SceneLoader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
         {
+            if (OnSceneForceQuit != null) OnSceneForceQuit();
             StartLoadMainMenu();
         }
     }
