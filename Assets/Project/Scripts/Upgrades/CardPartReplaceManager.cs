@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
@@ -91,7 +92,16 @@ public class CardPartReplaceManager : MonoBehaviour
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
 
-        upgradeCardHolder.Init(GetRandomDeckCards());
+        List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
+        for (int i = 0; i < deckCards.Count; ++i)
+        {
+            if (!randomCards.Contains(deckCards[i]))
+            {
+                deckCards[i].DisableMouseInteraction();
+            }            
+        }
+
+        upgradeCardHolder.Init(randomCards.ToArray());
     }
 
     private void InitAttacks()

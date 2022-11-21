@@ -35,7 +35,7 @@ public class Building : MonoBehaviour
     {
     }
 
-    public virtual void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
+    public virtual void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase, TurretPartBody.BodyType bodyType)
     {
     }
 

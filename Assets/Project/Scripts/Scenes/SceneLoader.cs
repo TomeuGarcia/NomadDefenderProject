@@ -109,12 +109,14 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = true;
 
         ShutAnimation(shutAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenShut();
         yield return new WaitForSeconds(shutAnimDuration);
 
         loadSceneFunction();
         yield return new WaitForSeconds(loadSceneDuration);
 
         OpenAnimation(openAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenOpen();
         yield return new WaitForSeconds(openAnimDuration);
 
         alreadyLoadingNextScene = false;

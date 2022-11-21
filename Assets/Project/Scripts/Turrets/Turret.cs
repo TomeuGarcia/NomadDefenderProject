@@ -27,6 +27,11 @@ public class Turret : Building
     public TurretAction OnEnemyExitRange;
     //public TurretAction OnEnemyShot;
 
+    private TurretPartBody.BodyType bodyType;
+
+
+
+
     private void Awake()
     {
         currentShootTimer = 0.0f;
@@ -77,9 +82,10 @@ public class Turret : Building
     }
 
 
-    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
+    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase, TurretPartBody.BodyType bodyType)
     {
         InitStats(turretStats);
+        this.bodyType = bodyType;
 
         int range = stats.range * 2 + 1;
 
@@ -197,6 +203,9 @@ public class Turret : Building
         currentAttack.Init(enemyTarget, this);
 
         enemyTarget.ChangeMat();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
     }
 
 

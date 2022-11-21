@@ -61,7 +61,7 @@ public class HandBuildingCards : MonoBehaviour
             cards[i].CreateCopyBuildingPrefab();
         }
 
-        HideHand();
+        HideHand(false);
 
         CheckCardsCost();
     }
@@ -156,6 +156,9 @@ public class HandBuildingCards : MonoBehaviour
         hoveredCard = card;
         card.HoveredState();
         BuildingCard.OnCardHovered -= SetHoveredCard;
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void SetStandardCard(BuildingCard card)
@@ -167,6 +170,7 @@ public class HandBuildingCards : MonoBehaviour
 
         hoveredCard = null;
         card.StandardState();
+
         BuildingCard.OnCardHovered += SetHoveredCard;
     }
 
@@ -203,7 +207,10 @@ public class HandBuildingCards : MonoBehaviour
         buildingPlacer.EnablePlacing(card);
 
         //hide hand
-        HideHand();
+        HideHand(false);
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
     private void OnSelectedCardPlayed()
@@ -211,6 +218,9 @@ public class HandBuildingCards : MonoBehaviour
         SubtractCurrencyAndRemoveCard();
 
         if (OnCardPlayed != null) OnCardPlayed();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCurrencySpent();
     }
 
     private void SubtractCurrencyAndRemoveCard()
@@ -251,10 +261,13 @@ public class HandBuildingCards : MonoBehaviour
         hiddenHandPosition = transform.position + (-1.15f * transform.up);
     }
 
-    private void HideHand()
+    private void HideHand(bool playSound)
     {
         isHidden = true;
         lerp.SpeedLerpPosition(hiddenHandPosition, lerpSpeed);
+
+        // Audio
+        if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
     private void ShowHand()
@@ -270,7 +283,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (!IsHoveringCard)
         {
-            HideHand();
+            HideHand(true);
         }
     }
 

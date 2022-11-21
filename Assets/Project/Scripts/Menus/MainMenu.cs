@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator DoPlay()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
 
         if (OnPlayStart != null) OnPlayStart();
     }
