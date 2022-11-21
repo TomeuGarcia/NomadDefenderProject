@@ -75,6 +75,9 @@ public class GatherNewCardManager : MonoBehaviour
         BuildingCard.OnCardHovered -= SetHoveredCard;
         BuildingCard.OnCardUnhovered += SetStandardCard;
         BuildingCard.OnCardSelected += SelectCard;
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void SetStandardCard(BuildingCard card)
@@ -96,6 +99,9 @@ public class GatherNewCardManager : MonoBehaviour
         deckCreator.AddNewCardToDeck(selectedCard);
 
         StartCoroutine(SelectCardAnimation());
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
 
