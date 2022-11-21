@@ -100,6 +100,9 @@ public class CardPartHolder : MonoBehaviour
         CardPart.OnCardHovered -= SetHoveredCard;
         CardPart.OnCardUnhovered += SetStandardCard;
         CardPart.OnCardSelected += SetSelectedCard;
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void SetStandardCard(CardPart card)
@@ -123,6 +126,9 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
 
         if (OnPartSelected != null) OnPartSelected();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
 
@@ -134,6 +140,9 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart = null;
 
         if (OnPartUnselected != null) OnPartUnselected();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
     public void StopInteractions()

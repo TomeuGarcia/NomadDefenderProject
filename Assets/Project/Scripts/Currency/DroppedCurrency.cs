@@ -68,6 +68,8 @@ public class DroppedCurrency : MonoBehaviour
 
         if (OnCurrencyGathered != null) OnCurrencyGathered(value);
         StartCoroutine(GotPickedUp());
+
+        GameAudioManager.GetInstance().PlayCurrencyDropped();
     }
 
     public void SetValue(int newValue)
