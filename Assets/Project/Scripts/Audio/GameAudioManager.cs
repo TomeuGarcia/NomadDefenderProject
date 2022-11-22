@@ -25,6 +25,13 @@ public class GameAudioManager : MonoBehaviour
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
 
+    [Header("UPGRADES")]
+    [SerializeField] private AudioSource upgradesAudioSource;
+    [SerializeField] private AudioSource upgradesAudioSource2;
+    [SerializeField] private AudioClip upgradeButtonPressed;
+    [SerializeField] private AudioClip upgradeButtonCantBePressed;
+    [SerializeField] private AudioClip cardPartSwap;
+
     [Header("ENEMIES")]
     [SerializeField] private AudioSource[] enemiesAudioSources;
     [SerializeField] private AudioClip enemyTakeDamage;
@@ -41,6 +48,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource[] projectilesAudioSources;
     [SerializeField] private AudioClip[] projectileShots;
     [SerializeField] private AudioClip zapProjectileShot;
+
 
 
 
@@ -143,7 +151,7 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardSelected()
     {
-        if (!canPlayCardAudio) return;
+        //if (!canPlayCardAudio) return;
 
         cardsAudioSource.clip = cardHovered;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
@@ -170,6 +178,33 @@ public class GameAudioManager : MonoBehaviour
 
         cardsAudioSource.Play();
     }
+
+
+    // Upgrades
+    public void PlayCardPartSwap()
+    {
+        upgradesAudioSource.clip = cardPartSwap;
+        upgradesAudioSource.pitch = Random.Range(0.95f, 1.05f);
+
+        upgradesAudioSource.Play();
+    }
+
+    public void PlayUpgradeButtonPressed()
+    {
+        upgradesAudioSource2.clip = upgradeButtonPressed;
+        upgradesAudioSource2.pitch = Random.Range(0.95f, 1.05f);
+
+        upgradesAudioSource2.Play();
+    }
+
+    public void PlayUpgradeButtonCantBePressed()
+    {
+        upgradesAudioSource2.clip = upgradeButtonCantBePressed;
+        upgradesAudioSource2.pitch = Random.Range(0.95f, 1.05f);
+
+        upgradesAudioSource2.Play();
+    }
+
 
 
     // Enemies
@@ -214,6 +249,7 @@ public class GameAudioManager : MonoBehaviour
     {
         LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.85f, 1.15f));
     }
+
 
 
 
