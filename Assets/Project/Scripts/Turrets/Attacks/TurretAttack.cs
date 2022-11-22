@@ -13,7 +13,7 @@ public class TurretAttack : MonoBehaviour
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected float moveSpeed = 5f;
     [SerializeField] protected float rotationSpeed;
-    [SerializeField] protected float lifetime = 1f;
+    protected float lifetime = 0.5f;
 
     [SerializeField] public Material materialForTurret;
     [SerializeField] public Collider attackCollider;
@@ -41,6 +41,24 @@ public class TurretAttack : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Enemy") && !disappearing)
+        {
+            lastHit = other;
+            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
+        }
+    }
+
+    protected void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && !disappearing)
+        {
+            lastHit = other;
+            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
+        }
+    }
+
+    private void Ontr(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
