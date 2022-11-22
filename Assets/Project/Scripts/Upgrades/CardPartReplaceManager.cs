@@ -181,6 +181,14 @@ public class CardPartReplaceManager : MonoBehaviour
             replacementDone = true;
 
             StartCoroutine(ReplecementAnimation());
+
+            // Audio
+            GameAudioManager.GetInstance().PlayUpgradeButtonPressed();
+        }
+        else
+        {
+            // Audio
+            GameAudioManager.GetInstance().PlayUpgradeButtonCantBePressed();
         }
     }
 
@@ -229,7 +237,11 @@ public class CardPartReplaceManager : MonoBehaviour
         Transform partTransform = cardPartHolder.selectedCardPart.transform;
 
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardPartSwap();
+        yield return new WaitForSeconds(0.2f);
 
         // Move part towards card
         partTransform.DOMove(upgradedCardStartPos, partMoveDuration);
