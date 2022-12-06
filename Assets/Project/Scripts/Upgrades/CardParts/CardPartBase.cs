@@ -38,6 +38,7 @@ public class CardPartBase : CardPart
 
         bool hasAbility = turretPartBase.HasAbilitySprite();
         baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
+        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
         if (hasAbility)
         {
             baseAbilityImage.sprite = turretPartBase.abilitySprite;

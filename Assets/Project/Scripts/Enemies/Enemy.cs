@@ -159,6 +159,17 @@ public class Enemy : MonoBehaviour
     public void QueueDamage(int amount)
     {
         queuedDamage += amount;
+
+        if(queuedDamage >= healthSystem.health)
+        {
+            StartCoroutine(TimedDeath());
+        }
+    }
+
+    IEnumerator TimedDeath()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Die();
     }
 
     private void RemoveQueuedDamage(int amount) // use if enemy is ever healed

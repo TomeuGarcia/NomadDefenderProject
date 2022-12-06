@@ -10,6 +10,7 @@ public class CurrencyCounter : MonoBehaviour
     [SerializeField, Min(0)] private int currencyCount;
 
     [Header("Components")]
+    [SerializeField] private Transform currencyCountTextHolder;
     [SerializeField] public TextMeshProUGUI currencyCountText;
     [SerializeField] private TextMeshProUGUI addedCurrencyText;
 
@@ -116,8 +117,8 @@ public class CurrencyCounter : MonoBehaviour
         addedCurrencyText.DOKill();
         addedCurrencyText.transform.rotation = Quaternion.identity;
         //addedCurrencyText.transform.localPosition = Vector3.zero;
-        currencyCountText.transform.DOKill();
-        currencyCountText.transform.localScale = Vector3.one;
+        currencyCountTextHolder.DOKill();
+        currencyCountTextHolder.localScale = Vector3.one;
 
 
         // Animations
@@ -125,7 +126,7 @@ public class CurrencyCounter : MonoBehaviour
         addedCurrencyText.transform.DOPunchRotation(Vector3.forward * 25f, 0.5f);
         //addedCurrencyText.transform.DOLocalMove(Vector3.up, 1.5f);
 
-        currencyCountText.transform.DOPunchScale(Vector3.one * 0.8f, 1f, 4);
+        currencyCountTextHolder.DOPunchScale(Vector3.one * 0.8f, 1f, 4);
         yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.DOColor(endColorAddedCurrencyText, 1f);
