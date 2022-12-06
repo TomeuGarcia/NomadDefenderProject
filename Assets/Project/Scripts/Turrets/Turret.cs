@@ -9,7 +9,7 @@ public class Turret : Building
     private Material rangePlaneMaterial;
 
     [Header("COMPONENTS")]
-    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private BoxCollider attackRangeCollider;
     [SerializeField] private Pool attackPool;
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
     private TurretPartBody_Prefab bodyPart;
@@ -89,7 +89,7 @@ public class Turret : Building
 
         int range = stats.range * 2 + 1;
 
-        boxCollider.size = new Vector3(range, 1.0f, range);
+        attackRangeCollider.size = new Vector3(range, 1.0f, range);
         rangePlaneMeshObject.transform.localScale = Vector3.one * (range / 10f);
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
         rangePlaneMaterial.SetFloat("_TileNum", (float)range);
@@ -150,7 +150,7 @@ public class Turret : Building
         basePart.SetPreviewMaterial();
 
         meshMouseNotifier.gameObject.SetActive(false);
-        boxCollider.enabled = false;
+        attackRangeCollider.enabled = false;
         isFunctional = false;
     }
 
@@ -160,7 +160,7 @@ public class Turret : Building
         basePart.SetDefaultMaterial();
         
         meshMouseNotifier.gameObject.SetActive(true);
-        boxCollider.enabled = true;
+        attackRangeCollider.enabled = true;
         isFunctional = true;
     }
 
