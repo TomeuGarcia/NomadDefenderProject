@@ -20,6 +20,7 @@ public class EnemyWaveManager : MonoBehaviour
 
 
 
+
     private void Awake()
     {
         activeWaves = enemyWaveSpawners.Length;
@@ -90,6 +91,10 @@ public class EnemyWaveManager : MonoBehaviour
     {        
         if (--currentWaves == 0)
         {
+            ////////
+            /// Invoke event  Start new waves here 
+            ////////
+
             foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)
             {
                 StartCoroutine(StartNextWave(enemyWaveSpawnerI));
