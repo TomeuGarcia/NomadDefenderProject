@@ -17,7 +17,7 @@ public class Building : MonoBehaviour
     {
         public int playCost;
         public int damage;
-        [SerializeField, Min(1)] public int range;
+        [SerializeField, Min(1)] public float range;
         public int targetAmount;
         public float cadence;
     }
