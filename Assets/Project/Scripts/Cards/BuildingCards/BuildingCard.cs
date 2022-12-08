@@ -11,13 +11,12 @@ public class BuildingCard : MonoBehaviour
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
 
-
-    [Header("STATS")]
-    [HideInInspector] public Turret.TurretStats turretStats;
+    [Header("LERP")]
     [SerializeField] private float hoverSpeed;
     [SerializeField] private float selectedSpeed;
 
     [Header("BUILDING PARTS")]
+    [HideInInspector] public Turret.TurretStats turretStats;
     [SerializeField] private TurretPartAttack turretPartAttack;
     [SerializeField] private TurretPartBody turretPartBody;
     [SerializeField] private TurretPartBase turretPartBase;
@@ -183,7 +182,6 @@ public class BuildingCard : MonoBehaviour
         rangeText.text = turretStats.range.ToString();
         targetAmountText.text = turretStats.targetAmount.ToString();
         cadenceText.text = turretStats.cadence.ToString() + "s";
-
     }
 
     public void InitPositions(Vector3 selectedPosition)
@@ -196,7 +194,7 @@ public class BuildingCard : MonoBehaviour
     public void CreateCopyBuildingPrefab()
     {
         copyTurretPrefab = Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
-        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack.prefab, turretPartBody.prefab, turretPartBase.prefab, turretPartBody.bodyType);
+        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack, turretPartBody, turretPartBase);
         copyTurretPrefab.SetActive(false);
     }
 
