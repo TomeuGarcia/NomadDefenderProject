@@ -12,7 +12,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
 
 
-    virtual public void Init(Turret turretOwner, int turretRange)
+    virtual public void Init(Turret turretOwner, float turretRange)
     {
         InitMaterials();
     }
