@@ -189,7 +189,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void CheckSelectCard(BuildingCard card)
     {
-        int cardCost = card.turretStats.playCost;
+        int cardCost = card.PlayCost;
 
         if (currencyCounter.HasEnoughCurrency(cardCost))
         {
@@ -225,7 +225,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SubtractCurrencyAndRemoveCard()
     {
-        int cardCost = selectedCard.turretStats.playCost;
+        int cardCost = selectedCard.PlayCost;
         currencyCounter.SubtractCurrency(cardCost);
 
         selectedCard.gameObject.SetActive(false);
@@ -300,7 +300,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; ++i)
         {
-            int cardCost = cards[i].turretStats.playCost;
+            int cardCost = cards[i].PlayCost;
 
             if (currencyCounter.HasEnoughCurrency(cardCost))
             {

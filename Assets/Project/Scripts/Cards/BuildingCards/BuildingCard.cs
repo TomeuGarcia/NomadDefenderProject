@@ -15,14 +15,19 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private float hoverSpeed;
     [SerializeField] private float selectedSpeed;
 
-    [Header("BUILDING PARTS")]
-    [HideInInspector] public Turret.TurretStats turretStats;
-    [SerializeField] private TurretPartAttack turretPartAttack;
-    [SerializeField] private TurretPartBody turretPartBody;
-    [SerializeField] private TurretPartBase turretPartBase;
+    // BUILDING PARTS
+    protected Turret.TurretStats turretStats;
+    protected TurretPartAttack turretPartAttack;
+    protected TurretPartBody turretPartBody;
+    protected TurretPartBase turretPartBase;
+
+    [Header("BUILDING PREFAB")]
     [SerializeField] public GameObject turretPrefab;
     [HideInInspector] public GameObject copyTurretPrefab;
     public bool AlreadySpawnedCopyBuildingPrefab => copyTurretPrefab != null;
+
+    public int PlayCost => turretStats.playCost;
+
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
@@ -45,18 +50,8 @@ public class BuildingCard : MonoBehaviour
 
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer attackMeshRenderer;
-    [SerializeField] private MeshRenderer bodyMeshRenderer;
-    [SerializeField] private MeshRenderer baseMeshRenderer;
-    private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
     [SerializeField] private MeshRenderer cardMeshRenderer;
     private Material cardMaterial;
-
-    [SerializeField] private Image damageFillImage;
-    [SerializeField] private Image cadenceFillImage;
-    [SerializeField] private Image rangeFillImage;
-    [SerializeField] private Image baseAbilityImage;
-
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
@@ -95,12 +90,11 @@ public class BuildingCard : MonoBehaviour
 
     private void OnValidate()
     {
-        //InitStatsFromTurretParts();
         InitTexts();
     }
 
     private void OnEnable()
-    {
+    {        
         CardPartReplaceManager.OnReplacementDone += InvokeGetSaved;
     }
 
@@ -111,14 +105,13 @@ public class BuildingCard : MonoBehaviour
 
     private void Awake()
     {
-        cardAttackMaterial = attackMeshRenderer.material;
-        cardBodyMaterial = bodyMeshRenderer.material;
-        cardBaseMaterial = baseMeshRenderer.material;
+        GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
     }
+
 
     public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
     {
@@ -261,34 +254,8 @@ public class BuildingCard : MonoBehaviour
 
     }
 
-
-    private void InitVisuals()
-    {
-        // Mesh Materials
-        cardAttackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
-        cardAttackMaterial.SetColor("_Color", turretPartAttack.materialColor);
-
-        cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
-        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color
-
-        cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
-        cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
-
-
-        // Canvas
-        damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
-        cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
-        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
-
-        bool hasAbility = turretPartBase.HasAbilitySprite();
-        baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
-        if (hasAbility)
-        {
-            baseAbilityImage.sprite = turretPartBase.abilitySprite;
-            baseAbilityImage.color = turretPartBase.spriteColor;
-        }
-
-    }
+    protected virtual void GetMaterialsRefs() { }
+    protected virtual void InitVisuals() {}
 
     public void SetCanBePlayedAnimation()
     {

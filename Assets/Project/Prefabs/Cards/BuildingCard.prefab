@@ -1489,7 +1489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8436797292709200460}
-  - component: {fileID: 8436797292709200461}
+  - component: {fileID: 5042216454845943126}
   - component: {fileID: 8436797292709200466}
   - component: {fileID: 5941530257423453591}
   m_Layer: 10
@@ -1517,7 +1517,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8436797292709200461
+--- !u!114 &5042216454845943126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1526,15 +1526,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8436797292709200463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a60e31a780eef934d8f9ffa2cb77cd13, type: 3}
+  m_Script: {fileID: 11500000, guid: 843f7b7d7a786eb4c88e34f78a561211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardState: 0
   hoverSpeed: 1
   selectedSpeed: 3
-  turretPartAttack: {fileID: 0}
-  turretPartBody: {fileID: 0}
-  turretPartBase: {fileID: 0}
   turretPrefab: {fileID: 5698239489495674828, guid: da7a74ed2ca99ab4b9118acd96a8f3ba,
     type: 3}
   copyTurretPrefab: {fileID: 0}
@@ -1545,10 +1542,10 @@ MonoBehaviour:
   cadenceText: {fileID: 8436797293687129635}
   lerp: {fileID: 5941530257423453591}
   cardCollider: {fileID: 8436797292709200466}
+  cardMeshRenderer: {fileID: 978676909305521760}
   attackMeshRenderer: {fileID: 963028538919964073}
   bodyMeshRenderer: {fileID: 7899538887822112688}
   baseMeshRenderer: {fileID: 346768433432306572}
-  cardMeshRenderer: {fileID: 978676909305521760}
   damageFillImage: {fileID: 3277717388054813756}
   cadenceFillImage: {fileID: 1781939022042817470}
   rangeFillImage: {fileID: 9002103793831574886}
