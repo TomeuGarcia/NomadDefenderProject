@@ -82,11 +82,15 @@ public class Turret : Building
     }
 
 
-    public override void Init(TurretStats turretStats,
-        TurretPartAttack turretAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
+    public void Init(TurretStats turretStats, TurretCard.TurretCardParts buildingCardParts)
     {
+        TurretPartAttack turretPartAttack = buildingCardParts.turretPartAttack;
+        TurretPartBody turretPartBody = buildingCardParts.turretPartBody;
+        TurretPartBase turretPartBase = buildingCardParts.turretPartBase;
+
+
         InitStats(turretStats);
-        this.bodyType = turretPartBody.bodyType;
+        this.bodyType = buildingCardParts.turretPartBody.bodyType;
 
         float planeRange = stats.range * 2 + 1; //only for square
         float range = stats.range;
@@ -97,11 +101,11 @@ public class Turret : Building
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
 
 
-        TurretAttack _turretAttack = turretAttack.prefab.GetComponent<TurretAttack>();
-        attackPool.SetPooledObject(turretAttack.prefab);
+        TurretAttack turretAttack = turretPartAttack.prefab.GetComponent<TurretAttack>();
+        attackPool.SetPooledObject(turretPartAttack.prefab);
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
-        bodyPart.Init(_turretAttack.materialForTurret);
+        bodyPart.Init(turretAttack.materialForTurret);
 
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, range);

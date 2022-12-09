@@ -36,10 +36,9 @@ public class Building : MonoBehaviour
     {
     }
 
-    public virtual void Init(TurretStats turretStats, 
-        TurretPartAttack turretAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
-    {
-    }
+    //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
+    //{
+    //}
 
     public virtual void ShowRangePlane()
     {

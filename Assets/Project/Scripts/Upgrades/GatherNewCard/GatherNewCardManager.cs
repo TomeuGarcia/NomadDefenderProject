@@ -34,19 +34,37 @@ public class GatherNewCardManager : MonoBehaviour
     {
         cards = new BuildingCard[numCards];
 
-        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numCards);
-        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numCards);
-        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numCards);
+        // In the future (when Support buildins are added) might want to randomize "numTurretCards"
+        int numTurretCards = numCards;
+        CreateNTurretCards(numTurretCards); // Get Random Turrets
 
-        for (int i = 0; i < numCards; i++)
-        {
-            cards[i] = deckCreator.GetUninitializedNewCard();
-            cards[i].ResetParts(attacks[i], bodies[i], bases[i]);
-        }
+        // if (numTurretCards < numCards) { CreateNSupportCards(numCards - numTurretCards); }
+
+
         InitCardsPlacement();
 
         StartCoroutine(InitCardsAnimation());
     }
+
+    private void CreateNTurretCards(int numTurretCards)
+    {
+        // Get Random Turrets
+        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numTurretCards);
+        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numTurretCards);
+        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numTurretCards);
+
+
+        for (int i = 0; i < numTurretCards; i++)
+        {
+            TurretCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+
+            TurretCard.TurretCardParts cardParts = new TurretCard.TurretCardParts(attacks[i], bodies[i], bases[i]);
+            turretCard.ResetParts(cardParts);
+
+            cards[i] = turretCard;
+        }
+    }
+
 
     private void InitCardsPlacement()
     {
@@ -96,7 +114,15 @@ public class GatherNewCardManager : MonoBehaviour
 
         selectedCard = card;
 
-        deckCreator.AddNewCardToDeck(selectedCard);
+        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
+        {
+            deckCreator.AddNewTurretCardToDeck(selectedCard as TurretCard);
+        }
+        else
+        {
+            Debug.Log("!!!  CAN'T ADD CARD OF THIS TYPE !!!");
+        }
+        
 
         StartCoroutine(SelectCardAnimation());
 

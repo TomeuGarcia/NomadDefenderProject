@@ -1,12 +1,16 @@
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
-using static Building;
-using UnityEngine.UI;
+using static BuildingCard;
 
 public class BuildingCard : MonoBehaviour
 {
     public static float halfWidth = 0.7f;
+
+
+    public enum CardBuildingType { NONE, TURRET }
+    public CardBuildingType cardBuildingType { get; protected set; }
+
+
 
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
@@ -15,26 +19,22 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] private float hoverSpeed;
     [SerializeField] private float selectedSpeed;
 
+
     // BUILDING PARTS
     protected Turret.TurretStats turretStats;
-    protected TurretPartAttack turretPartAttack;
-    protected TurretPartBody turretPartBody;
-    protected TurretPartBase turretPartBase;
+
+
 
     [Header("BUILDING PREFAB")]
-    [SerializeField] public GameObject turretPrefab;
-    [HideInInspector] public GameObject copyTurretPrefab;
-    public bool AlreadySpawnedCopyBuildingPrefab => copyTurretPrefab != null;
+    [SerializeField] public GameObject buildingPrefab;
+    [HideInInspector] public GameObject copyBuildingPrefab;
+    public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;
 
     public int PlayCost => turretStats.playCost;
 
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private TextMeshProUGUI rangeText;
-    [SerializeField] private TextMeshProUGUI targetAmountText;
-    [SerializeField] private TextMeshProUGUI cadenceText;
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private Lerp lerp;
@@ -65,32 +65,26 @@ public class BuildingCard : MonoBehaviour
 
 
     [System.Serializable]
-    public struct CardComponents
+    public class BuildingCardParts
     {
-        public CardComponents(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
+        public BuildingCardParts()
         {
-            this.turretPartAttack = turretPartAttack;
-            this.turretPartBody = turretPartBody;
-            this.turretPartBase = turretPartBase;
+        }
+        public BuildingCardParts(BuildingCardParts other)
+        {
+            //this.turretPartAttack = other.turretPartAttack;
+            //this.turretPartBody = other.turretPartBody;
+            //this.turretPartBase = other.turretPartBase;
         }
 
-        public CardComponents(CardComponents other)
+        //public TurretPartAttack turretPartAttack;
+        //public TurretPartBody turretPartBody;
+        //public TurretPartBase turretPartBase;
+
+        public virtual int GetCostCombinedParts()
         {
-            this.turretPartAttack = other.turretPartAttack;
-            this.turretPartBody = other.turretPartBody;
-            this.turretPartBase = other.turretPartBase;
+            return 0;
         }
-
-        public TurretPartAttack turretPartAttack;
-        public TurretPartBody turretPartBody;
-        public TurretPartBase turretPartBase;
-    }
-
-
-
-    private void OnValidate()
-    {
-        InitTexts();
     }
 
     private void OnEnable()
@@ -105,6 +99,12 @@ public class BuildingCard : MonoBehaviour
 
     private void Awake()
     {
+        AwakeInit(CardBuildingType.NONE);
+    }
+
+    protected virtual void AwakeInit(CardBuildingType cardBuildingType)
+    {
+        this.cardBuildingType = cardBuildingType;
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
@@ -112,33 +112,18 @@ public class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
     }
 
-
-    public void ResetParts(TurretPartAttack turretPartAttack,TurretPartBody turretPartBody, TurretPartBase turretPartBase)
-    {
-        this.turretPartAttack = turretPartAttack;
-        this.turretPartBody = turretPartBody;
-        this.turretPartBase = turretPartBase;
-
-        Init();
-    }
-
-    private void Init()
+    protected void Init()
     {
         initialPosition = transform.position;
 
         InitStatsFromTurretParts();
-        InitTexts();
+        InitCostText();
 
         InitVisuals();
     }
 
-    private void InitStatsFromTurretParts()
+    protected virtual void InitStatsFromTurretParts()
     {
-        turretStats.playCost = turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
-        turretStats.damage = turretPartBody.Damage;
-        turretStats.range = turretPartBase.Range;
-        turretStats.targetAmount = turretPartAttack.targetAmount;
-        turretStats.cadence = turretPartBody.Cadence;
     }
 
     private void OnMouseEnter()
@@ -168,13 +153,9 @@ public class BuildingCard : MonoBehaviour
         
     }
 
-    private void InitTexts()
+    private void InitCostText()
     {
         playCostText.text = turretStats.playCost.ToString();
-        damageText.text = turretStats.damage.ToString();
-        rangeText.text = turretStats.range.ToString();
-        targetAmountText.text = turretStats.targetAmount.ToString();
-        cadenceText.text = turretStats.cadence.ToString() + "s";
     }
 
     public void InitPositions(Vector3 selectedPosition)
@@ -184,11 +165,8 @@ public class BuildingCard : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    public void CreateCopyBuildingPrefab()
+    public virtual void CreateCopyBuildingPrefab()
     {
-        copyTurretPrefab = Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
-        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack, turretPartBody, turretPartBase);
-        copyTurretPrefab.SetActive(false);
     }
 
     public void StandardState()
@@ -210,48 +188,10 @@ public class BuildingCard : MonoBehaviour
     }
 
 
-    public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
-    {
-        int costHolder = turretPartAttack.cost;
-        turretPartAttack = newTurretPartAttack;
-        turretPartAttack.cost = costHolder;
-        Init();
-    }
-
-    public void SetNewPartBody(TurretPartBody newTurretPartBody)
-    {
-        int costHolder = turretPartBody.cost;
-        turretPartBody = newTurretPartBody;
-        turretPartBody.cost = costHolder;
-        Init();
-    }
-
-    public void SetNewPartBase(TurretPartBase newTurretPartBase)
-    {
-        int costHolder = turretPartBase.cost;
-        turretPartBase = newTurretPartBase;
-        turretPartBase.cost = costHolder;
-        Init();
-    }
-
-    public TurretPartAttack GetTurretPartAttack()
-    {
-        return turretPartAttack;
-    }
-    public TurretPartBody GetTurretPartBody()
-    {
-        return turretPartBody;
-    }
-    public TurretPartBase GetTurretPartBase()
-    {
-        return turretPartBase;
-    }
-
 
     private void InvokeGetSaved()
     {
         if (OnGetSaved != null) OnGetSaved(this);
-
     }
 
     protected virtual void GetMaterialsRefs() { }

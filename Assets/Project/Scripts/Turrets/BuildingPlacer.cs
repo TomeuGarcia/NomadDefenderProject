@@ -20,7 +20,7 @@ public class BuildingPlacer : MonoBehaviour
     public void EnablePlacing(BuildingCard selectedBuildingCard)
     {
         this.selectedBuildingCard = selectedBuildingCard;
-        selectedBuilding = selectedBuildingCard.copyTurretPrefab.GetComponent<Building>();
+        selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
 
         Tile.OnTileUnhovered += HideBuildingPreview;
         Tile.OnTileHovered += ShowBuildingOnTilePreview;
@@ -85,14 +85,14 @@ public class BuildingPlacer : MonoBehaviour
 
     private void ShowAndPositionSelectedBuilding(Tile tile)
     {
-        selectedBuildingCard.copyTurretPrefab.SetActive(true);
-        selectedBuildingCard.copyTurretPrefab.transform.position = tile.buildingPlacePosition;
+        selectedBuildingCard.copyBuildingPrefab.SetActive(true);
+        selectedBuildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
         selectedBuilding.ShowRangePlane();
     }
 
     private void HideSelectedBuilding()
     {
-        selectedBuildingCard.copyTurretPrefab.SetActive(false);
+        selectedBuildingCard.copyBuildingPrefab.SetActive(false);
         selectedBuilding.HideRangePlane();
 
     }
