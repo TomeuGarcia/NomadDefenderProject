@@ -101,7 +101,7 @@ public class Turret : Building
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
 
 
-        TurretAttack turretAttack = turretPartAttack.prefab.GetComponent<TurretAttack>();
+        TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         attackPool.SetPooledObject(turretPartAttack.prefab);
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
@@ -131,23 +131,18 @@ public class Turret : Building
 
         currentShootTimer = 0.0f;
 
+
+        DoShootEnemyLogic(enemies[0]);
+
+        /*
         for (int i = 0; i < stats.targetAmount; i++)
         {
             if (i <= enemies.Count - 1)
             {
-                if (enemies[i].DiesFromQueuedDamage())
-                {
-                    RemoveEnemy(enemies[i]);
-                    --i;
-                }
-                else
-                {
-                    bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
-                    Shoot(enemies[i]);
-                }
+                DoShootEnemyLogic(enemies[i]);
             }
         }
-
+        */
     }
 
     protected override void DisableFunctionality()
@@ -199,10 +194,22 @@ public class Turret : Building
     }
 
 
+    private void DoShootEnemyLogic(Enemy enemyTarget)
+    {
+        if (enemyTarget.DiesFromQueuedDamage())
+        {
+            RemoveEnemy(enemyTarget);
+        }
+        else
+        {
+            Shoot(enemyTarget);
+            bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
+        }
+    }
 
     private void Shoot(Enemy enemyTarget)
     {
-        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
+        TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
         currentAttack.transform.position = bodyPart.GetNextShootingPoint();
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);

@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using static BuildingCard;
 
-public class BuildingCard : MonoBehaviour
+public abstract class BuildingCard : MonoBehaviour
 {
     public static float halfWidth = 0.7f;
 
@@ -21,7 +21,7 @@ public class BuildingCard : MonoBehaviour
 
 
     // BUILDING PARTS
-    protected Turret.TurretStats turretStats;
+    //protected Turret.TurretStats turretStats;
 
 
 
@@ -29,8 +29,6 @@ public class BuildingCard : MonoBehaviour
     [SerializeField] public GameObject buildingPrefab;
     [HideInInspector] public GameObject copyBuildingPrefab;
     public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;
-
-    public int PlayCost => turretStats.playCost;
 
 
     [Header("CANVAS COMPONENTS")]
@@ -81,10 +79,7 @@ public class BuildingCard : MonoBehaviour
         //public TurretPartBody turretPartBody;
         //public TurretPartBase turretPartBase;
 
-        public virtual int GetCostCombinedParts()
-        {
-            return 0;
-        }
+        public virtual int GetCostCombinedParts() { return 0; }
     }
 
     private void OnEnable()
@@ -100,30 +95,6 @@ public class BuildingCard : MonoBehaviour
     private void Awake()
     {
         AwakeInit(CardBuildingType.NONE);
-    }
-
-    protected virtual void AwakeInit(CardBuildingType cardBuildingType)
-    {
-        this.cardBuildingType = cardBuildingType;
-        GetMaterialsRefs();
-
-        cardMaterial = cardMeshRenderer.material;
-        SetCannotBePlayedAnimation();
-        cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
-    }
-
-    protected void Init()
-    {
-        initialPosition = transform.position;
-
-        InitStatsFromTurretParts();
-        InitCostText();
-
-        InitVisuals();
-    }
-
-    protected virtual void InitStatsFromTurretParts()
-    {
     }
 
     private void OnMouseEnter()
@@ -146,17 +117,44 @@ public class BuildingCard : MonoBehaviour
         {
             if (OnCardSelected != null) OnCardSelected(this);
         }
-        else 
+        else
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
-        
     }
 
+
+
+    protected virtual void AwakeInit(CardBuildingType cardBuildingType)
+    {
+        this.cardBuildingType = cardBuildingType;
+        GetMaterialsRefs();
+
+        cardMaterial = cardMeshRenderer.material;
+        SetCannotBePlayedAnimation();
+        cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
+    }
+
+
+    protected void Init()
+    {
+        initialPosition = transform.position;
+
+        InitStatsFromTurretParts();
+        InitCostText();
+
+        InitVisuals();
+    }
+
+    protected virtual void InitStatsFromTurretParts() {}
     private void InitCostText()
     {
-        playCostText.text = turretStats.playCost.ToString();
+        playCostText.text = GetCardPlayCost().ToString();
     }
+
+
+
+
 
     public void InitPositions(Vector3 selectedPosition)
     {
@@ -165,9 +163,7 @@ public class BuildingCard : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    public virtual void CreateCopyBuildingPrefab()
-    {
-    }
+
 
     public void StandardState()
     {
@@ -194,13 +190,15 @@ public class BuildingCard : MonoBehaviour
         if (OnGetSaved != null) OnGetSaved(this);
     }
 
-    protected virtual void GetMaterialsRefs() { }
+    public virtual void CreateCopyBuildingPrefab() {}
+    public virtual int GetCardPlayCost() { return 0; }
+    protected virtual void GetMaterialsRefs() {}
     protected virtual void InitVisuals() {}
+
 
     public void SetCanBePlayedAnimation()
     {
         cardMaterial.SetFloat("_CanBePlayed", 1f);
-
     }
 
     public void SetCannotBePlayedAnimation()

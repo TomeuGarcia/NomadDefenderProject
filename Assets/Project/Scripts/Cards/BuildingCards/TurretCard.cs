@@ -35,7 +35,8 @@ public class TurretCard : BuildingCard
 
 
     public TurretCardParts turretCardParts { get; private set; }
-    
+
+    private Turret.TurretStats turretStats;
 
 
     [Header("VISUALS")]
@@ -99,7 +100,6 @@ public class TurretCard : BuildingCard
         turretStats.playCost = turretCardParts.GetCostCombinedParts();
         turretStats.damage = turretCardParts.turretPartBody.Damage;
         turretStats.range = turretCardParts.turretPartBase.Range;
-        turretStats.targetAmount = turretCardParts.turretPartAttack.targetAmount;
         turretStats.cadence = turretCardParts.turretPartBody.Cadence;
     }
 
@@ -108,6 +108,11 @@ public class TurretCard : BuildingCard
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.GetComponent<Turret>().Init(turretStats, turretCardParts);
         copyBuildingPrefab.SetActive(false);
+    }
+
+    public override int GetCardPlayCost()
+    {
+        return turretStats.playCost;
     }
 
 

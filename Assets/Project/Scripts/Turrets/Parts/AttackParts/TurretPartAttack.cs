@@ -8,7 +8,6 @@ public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
-    [SerializeField] public int targetAmount;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -21,7 +20,6 @@ public class TurretPartAttack : ScriptableObject
     public void InitAsCopy(TurretPartAttack other)
     {
         this.cost = other.cost;
-        this.targetAmount = other.targetAmount;
         this.prefab = other.prefab;
         this.materialTexture = other.materialTexture;
         this.materialColor = other.materialColor;

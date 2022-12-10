@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static Turret;
 
-public class Building : MonoBehaviour
+public abstract class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
 
@@ -19,7 +19,6 @@ public class Building : MonoBehaviour
         public int playCost;
         public int damage;
         [SerializeField, Min(1)] public float range;
-        public int targetAmount;
         public float cadence;
     }
 

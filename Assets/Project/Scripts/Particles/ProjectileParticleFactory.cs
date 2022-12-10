@@ -7,7 +7,7 @@ public class ProjectileParticleFactory : MonoBehaviour
     [System.Serializable]
     private struct AttackTypeParticleToPool
     {
-        public TurretAttack.AttackType type;
+        public TurretPartAttack_Prefab.AttackType type;
         public Pool pool;
     }
 
@@ -16,7 +16,7 @@ public class ProjectileParticleFactory : MonoBehaviour
     private static ProjectileParticleFactory instance;
 
     [SerializeField] private AttackTypeParticleToPool[] particleToPool;
-    private Dictionary<TurretAttack.AttackType, Pool> sortedAttacks;
+    private Dictionary<TurretPartAttack_Prefab.AttackType, Pool> sortedAttacks;
 
 
 
@@ -51,14 +51,14 @@ public class ProjectileParticleFactory : MonoBehaviour
 
     private void Init()
     {
-        sortedAttacks = new Dictionary<TurretAttack.AttackType, Pool>();
+        sortedAttacks = new Dictionary<TurretPartAttack_Prefab.AttackType, Pool>();
         foreach (AttackTypeParticleToPool attackTypeToPool in particleToPool)
         {
             sortedAttacks[attackTypeToPool.type] = attackTypeToPool.pool;
         }
     }
 
-    public GameObject GetAttackParticlesGameObject(TurretAttack.AttackType attackType, Vector3 position, Quaternion rotation)
+    public GameObject GetAttackParticlesGameObject(TurretPartAttack_Prefab.AttackType attackType, Vector3 position, Quaternion rotation)
     {
         return sortedAttacks[attackType].GetObject(position, rotation);
     }

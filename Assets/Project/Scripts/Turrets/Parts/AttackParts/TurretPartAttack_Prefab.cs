@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretAttack : MonoBehaviour
+public class TurretPartAttack_Prefab : MonoBehaviour
 {
     public enum AttackType { BASIC, TESLA, LONG_RANGE }
 
@@ -52,15 +52,6 @@ public class TurretAttack : MonoBehaviour
     protected void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy") && !disappearing)
-        {
-            lastHit = other;
-            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
-        }
-    }
-
-    private void Ontr(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
         {
             lastHit = other;
             OnEnemyTriggerEnter(other.GetComponent<Enemy>());

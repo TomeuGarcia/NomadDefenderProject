@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class HomingProjectile : TurretAttack
+public class HomingProjectile : TurretPartAttack_Prefab
 {
 
     protected override void DoUpdate()

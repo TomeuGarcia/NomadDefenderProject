@@ -189,7 +189,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void CheckSelectCard(BuildingCard card)
     {
-        int cardCost = card.PlayCost;
+        int cardCost = card.GetCardPlayCost();
 
         if (currencyCounter.HasEnoughCurrency(cardCost))
         {
@@ -225,7 +225,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SubtractCurrencyAndRemoveCard()
     {
-        int cardCost = selectedCard.PlayCost;
+        int cardCost = selectedCard.GetCardPlayCost();
         currencyCounter.SubtractCurrency(cardCost);
 
         selectedCard.gameObject.SetActive(false);
@@ -300,7 +300,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; ++i)
         {
-            int cardCost = cards[i].PlayCost;
+            int cardCost = cards[i].GetCardPlayCost();
 
             if (currencyCounter.HasEnoughCurrency(cardCost))
             {
