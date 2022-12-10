@@ -20,6 +20,8 @@ public class Turret : Building
 
     private List<Enemy> enemies = new List<Enemy>();
 
+    private Vector3 lastTargetedPosition;
+
     private bool isFunctional = false;
 
     public delegate void TurretAction(Enemy enemy);
@@ -45,8 +47,13 @@ public class Turret : Building
         {
             UpdateShoot();
             
-            if (bodyPart.lookAtTarget && enemies.Count > 0)
+            if (bodyPart.lookAtTarget)
             {
+                if (enemies.Count > 0)
+                {
+                    lastTargetedPosition = enemies[0].transform.position;
+                }
+
                 LookAtTarget();
             }
         }
@@ -54,7 +61,7 @@ public class Turret : Building
 
     private void LookAtTarget()
     {
-        Quaternion targetRot = Quaternion.LookRotation((enemies[0].transform.position - bodyPart.transform.position).normalized, bodyPart.transform.up);
+        Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 

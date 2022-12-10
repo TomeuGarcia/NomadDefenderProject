@@ -28,7 +28,7 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
     [SerializeField] private Transform cardHolder;
-    public Transform CardTransform => cardHolder;
+    public Transform CardTransform => transform;
 
     private const float unhoverTime = 0.05f;
     private const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
@@ -44,9 +44,11 @@ public abstract class BuildingCard : MonoBehaviour
     private Vector3 local_hoveredPosition;
     private Vector3 local_selectedPosition;
     private Vector3 hiddenDisplacement;
+    private Vector3 startRotation_euler;
     private Vector3 local_standardRotation_euler;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
+    private Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
@@ -151,12 +153,13 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement)
     {
-        ResetCardPosition();
+        //ResetCardPosition();
 
         local_standardPosition = CardTransform.localPosition;
         local_hoveredPosition = CardTransform.localPosition + HoveredTranslation;
         //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
-        local_standardRotation_euler = transform.localRotation.eulerAngles;
+        startRotation_euler = transform.rotation.eulerAngles;
+        local_standardRotation_euler = transform.rotation.eulerAngles;
         this.hiddenDisplacement = hiddenDisplacement;
 
         standardPosition = CardTransform.position;
@@ -178,7 +181,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardState = CardStates.HOVERED;
 
-        CardTransform.DOBlendableLocalMoveBy(local_hoveredPosition - CardTransform.localPosition, hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
     public void SelectedState()
@@ -187,7 +190,7 @@ public abstract class BuildingCard : MonoBehaviour
 
         DisableMouseInteraction();
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
-        CardTransform.DOBlendableLocalRotateBy(Vector3.zero - CardTransform.rotation.eulerAngles, selectedTime)
+        CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
             .OnComplete(() => EnableMouseInteraction());
     }
 

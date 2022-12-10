@@ -2,29 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TurretPartAttack_Prefab : MonoBehaviour
 {
     public enum AttackType { BASIC, TESLA, LONG_RANGE }
 
     protected Enemy targetEnemy;
     protected int damage;
-    protected Vector3 moveDirection;
-    protected Collider lastHit;
     [SerializeField] protected AttackType attackType;
-    [SerializeField] protected float moveSpeed = 5f;
-    [SerializeField] protected float rotationSpeed;
-    protected float lifetime = 0.5f;
+    [SerializeField] protected float bulletSpeed = 2.0f;
 
     [SerializeField] public Material materialForTurret;
-    [SerializeField] public Collider attackCollider;
 
     protected bool disappearing = false;
 
-    public virtual void Init(Enemy targetEnemy, Turret owner) 
+    public virtual void Init(Enemy targetEnemy, Turret owner)
     {
     }
 
-    protected virtual void DoUpdate() 
+    protected virtual void DoUpdate()
     {
     }
 
@@ -40,31 +36,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Enemy") && !disappearing)
-        {
-            lastHit = other;
-            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
-        }
-    }
-
-    protected void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy") && !disappearing)
-        {
-            lastHit = other;
-            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
-        }
-    }
-
-    protected IEnumerator Lifetime()
-    {
-        yield return new WaitForSeconds(lifetime);
-        Debug.Log("PROJECTILE DISABLED");
-        Disable();
-    }
-
     protected virtual void Disappear()
     {
         StartCoroutine(WaitToDisable());
@@ -73,7 +44,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     private IEnumerator WaitToDisable()
     {
         disappearing = true;
-        attackCollider.enabled = false;
 
         yield return new WaitForSeconds(0.5f);
         Disable();
@@ -84,18 +54,5 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         gameObject.SetActive(false);
 
         disappearing = false;
-        attackCollider.enabled = true;
-    }
-
-    protected void MoveTowardsEnemyTarget()
-    {
-        moveDirection = targetEnemy.Position - transform.position;
-        transform.position = transform.position + (moveDirection.normalized * (moveSpeed * Time.deltaTime));
-    }
-    
-    protected void RotateTowardsEnemyTarget()
-    {
-        Quaternion lookRotation = Quaternion.LookRotation(moveDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 }
