@@ -5,13 +5,10 @@ using UnityEngine;
 
 public class HomingProjectile : TurretPartAttack_Prefab
 {
+    [SerializeField] protected Lerp lerp;
 
     protected override void DoUpdate()
     {
-        MoveTowardsEnemyTarget();
-
-        //IF ROTATION IS NEEDED
-        //RotateTowardsEnemyTarget();
     }
 
     public override void Init(Enemy targetEnemy, Turret owner)
@@ -21,19 +18,23 @@ public class HomingProjectile : TurretPartAttack_Prefab
 
         targetEnemy.QueueDamage(damage);
 
-        StartCoroutine(Lifetime());
+        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        StartCoroutine(WaitForLerpFinish());
     }
 
-    protected override void OnEnemyTriggerEnter(Enemy enemy)
+    protected IEnumerator WaitForLerpFinish()
     {
-        if (enemy == targetEnemy)
-        {
-            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
-            temp.gameObject.SetActive(true);
+        yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
+        EnemyHit();
+    }
 
-            enemy.TakeDamage(damage);
-            StopAllCoroutines();
-            Disappear();
-        }
+    protected void EnemyHit()
+    {
+        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+        temp.gameObject.SetActive(true);
+
+        targetEnemy.TakeDamage(damage);
+        //StopAllCoroutines();
+        Disappear();
     }
 }
