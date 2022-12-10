@@ -20,6 +20,8 @@ public class Turret : Building
 
     private List<Enemy> enemies = new List<Enemy>();
 
+    private Vector3 lastTargetedPosition;
+
     private bool isFunctional = false;
 
     public delegate void TurretAction(Enemy enemy);
@@ -45,8 +47,13 @@ public class Turret : Building
         {
             UpdateShoot();
             
-            if (bodyPart.lookAtTarget && enemies.Count > 0)
+            if (bodyPart.lookAtTarget)
             {
+                if (enemies.Count > 0)
+                {
+                    lastTargetedPosition = enemies[0].transform.position;
+                }
+
                 LookAtTarget();
             }
         }
@@ -54,7 +61,7 @@ public class Turret : Building
 
     private void LookAtTarget()
     {
-        Quaternion targetRot = Quaternion.LookRotation((enemies[0].transform.position - bodyPart.transform.position).normalized, bodyPart.transform.up);
+        Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
@@ -82,10 +89,15 @@ public class Turret : Building
     }
 
 
-    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase, TurretPartBody.BodyType bodyType)
+    public void Init(TurretStats turretStats, TurretCard.TurretCardParts turretCardParts)
     {
+        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
+        TurretPartBody turretPartBody = turretCardParts.turretPartBody;
+        TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+
+
         InitStats(turretStats);
-        this.bodyType = bodyType;
+        this.bodyType = turretCardParts.turretPartBody.bodyType;
 
         float planeRange = stats.range * 2 + 1; //only for square
         float range = stats.range;
@@ -96,13 +108,13 @@ public class Turret : Building
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
 
 
-        TurretAttack _turretAttack = turretAttack.GetComponent<TurretAttack>();
-        attackPool.SetPooledObject(turretAttack);
+        TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        attackPool.SetPooledObject(turretPartAttack.prefab);
 
-        bodyPart = Instantiate(turretPartBody, bodyHolder).GetComponent<TurretPartBody_Prefab>();
-        bodyPart.Init(_turretAttack.materialForTurret);
+        bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
+        bodyPart.Init(turretAttack.materialForTurret);
 
-        basePart = Instantiate(turretPartBase, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, range);
 
 
@@ -126,23 +138,18 @@ public class Turret : Building
 
         currentShootTimer = 0.0f;
 
+
+        DoShootEnemyLogic(enemies[0]);
+
+        /*
         for (int i = 0; i < stats.targetAmount; i++)
         {
             if (i <= enemies.Count - 1)
             {
-                if (enemies[i].DiesFromQueuedDamage())
-                {
-                    RemoveEnemy(enemies[i]);
-                    --i;
-                }
-                else
-                {
-                    bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
-                    Shoot(enemies[i]);
-                }
+                DoShootEnemyLogic(enemies[i]);
             }
         }
-
+        */
     }
 
     protected override void DisableFunctionality()
@@ -194,10 +201,22 @@ public class Turret : Building
     }
 
 
+    private void DoShootEnemyLogic(Enemy enemyTarget)
+    {
+        if (enemyTarget.DiesFromQueuedDamage())
+        {
+            RemoveEnemy(enemyTarget);
+        }
+        else
+        {
+            Shoot(enemyTarget);
+            bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
+        }
+    }
 
     private void Shoot(Enemy enemyTarget)
     {
-        TurretAttack currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretAttack>();
+        TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
         currentAttack.transform.position = bodyPart.GetNextShootingPoint();
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);

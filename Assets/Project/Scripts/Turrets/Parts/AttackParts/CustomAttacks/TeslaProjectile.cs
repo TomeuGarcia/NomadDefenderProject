@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeslaProjectile : TurretAttack
+public class TeslaProjectile : TurretPartAttack_Prefab
 {
     [SerializeField] private Lerp lerp;
 

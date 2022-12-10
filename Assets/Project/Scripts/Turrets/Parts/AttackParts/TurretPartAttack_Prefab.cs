@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretAttack : MonoBehaviour
+
+public class TurretPartAttack_Prefab : MonoBehaviour
 {
     public enum AttackType { BASIC, TESLA, LONG_RANGE }
 
@@ -15,11 +16,11 @@ public class TurretAttack : MonoBehaviour
 
     protected bool disappearing = false;
 
-    public virtual void Init(Enemy targetEnemy, Turret owner) 
+    public virtual void Init(Enemy targetEnemy, Turret owner)
     {
     }
 
-    protected virtual void DoUpdate() 
+    protected virtual void DoUpdate()
     {
     }
 
