@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1734754936926627456}
   - component: {fileID: 1490798308166202781}
   - component: {fileID: 3554703594630509070}
+  - component: {fileID: 3595578177207315518}
   m_Layer: 0
   m_Name: DistanceProjectile
   m_TagString: Untagged
@@ -48,11 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 2
-  moveSpeed: 20
-  rotationSpeed: 0
-  lifetime: 1
+  bulletSpeed: 2
   materialForTurret: {fileID: 2100000, guid: 6850cf2619cd63545a6ec00c9af1d96c, type: 2}
-  attackCollider: {fileID: 1490798308166202781}
+  lerp: {fileID: 3595578177207315518}
 --- !u!65 &1490798308166202781
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -192,6 +191,57 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &3595578177207315518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490798308166202780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c673a9b2aaafb4580791540711ee64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  positionLerpFunction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  finishedColorLerp: 0
+  finishedPositionLerp: 0
+  finishedScaleLerp: 0
 --- !u!1 &1565416010672046314
 GameObject:
   m_ObjectHideFlags: 0
