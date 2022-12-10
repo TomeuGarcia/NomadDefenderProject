@@ -7,7 +7,7 @@ using static BuildingCard;
 public class TurretCard : BuildingCard
 {
     [System.Serializable]
-    public class TurretCardParts : BuildingCardParts
+    public class TurretCardParts
     {
         public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
         {
@@ -27,7 +27,7 @@ public class TurretCard : BuildingCard
         public TurretPartBody turretPartBody;
         public TurretPartBase turretPartBase;
 
-        public override int GetCostCombinedParts()
+        public int GetCostCombinedParts()
         {
             return turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
         }

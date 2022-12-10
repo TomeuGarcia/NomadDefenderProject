@@ -82,15 +82,15 @@ public class Turret : Building
     }
 
 
-    public void Init(TurretStats turretStats, TurretCard.TurretCardParts buildingCardParts)
+    public void Init(TurretStats turretStats, TurretCard.TurretCardParts turretCardParts)
     {
-        TurretPartAttack turretPartAttack = buildingCardParts.turretPartAttack;
-        TurretPartBody turretPartBody = buildingCardParts.turretPartBody;
-        TurretPartBase turretPartBase = buildingCardParts.turretPartBase;
+        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
+        TurretPartBody turretPartBody = turretCardParts.turretPartBody;
+        TurretPartBase turretPartBase = turretCardParts.turretPartBase;
 
 
         InitStats(turretStats);
-        this.bodyType = buildingCardParts.turretPartBody.bodyType;
+        this.bodyType = turretCardParts.turretPartBody.bodyType;
 
         float planeRange = stats.range * 2 + 1; //only for square
         float range = stats.range;

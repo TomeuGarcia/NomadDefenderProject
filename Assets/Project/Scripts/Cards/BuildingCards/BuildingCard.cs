@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using static BuildingCard;
+using DG.Tweening;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -11,18 +12,8 @@ public abstract class BuildingCard : MonoBehaviour
     public CardBuildingType cardBuildingType { get; protected set; }
 
 
-
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
-
-    [Header("LERP")]
-    [SerializeField] private float hoverSpeed;
-    [SerializeField] private float selectedSpeed;
-
-
-    // BUILDING PARTS
-    //protected Turret.TurretStats turretStats;
-
 
 
     [Header("BUILDING PREFAB")]
@@ -35,16 +26,28 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playCostText;
 
     [Header("OTHER COMPONENTS")]
-    [SerializeField] private Lerp lerp;
-    [SerializeField] private Collider cardCollider;
+    [SerializeField] private BoxCollider cardCollider;
+    [SerializeField] private Transform cardHolder;
+    public Transform CardTransform => cardHolder;
+
+    private const float unhoverTime = 0.05f;
+    private const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
+    private const float selectedTime = 0.3f;
 
 
     private Vector3 initialPosition;
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.14f;
-    public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
+
+    private Vector3 local_standardPosition;
+    private Vector3 local_hoveredPosition;
+    private Vector3 local_selectedPosition;
+    private Vector3 hiddenDisplacement;
+    private Vector3 local_standardRotation_euler;
+
+    private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
+    public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
     [Header("VISUALS")]
@@ -61,27 +64,7 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnGetSaved;
 
 
-
-    [System.Serializable]
-    public class BuildingCardParts
-    {
-        public BuildingCardParts()
-        {
-        }
-        public BuildingCardParts(BuildingCardParts other)
-        {
-            //this.turretPartAttack = other.turretPartAttack;
-            //this.turretPartBody = other.turretPartBody;
-            //this.turretPartBase = other.turretPartBase;
-        }
-
-        //public TurretPartAttack turretPartAttack;
-        //public TurretPartBody turretPartBody;
-        //public TurretPartBase turretPartBase;
-
-        public virtual int GetCostCombinedParts() { return 0; }
-    }
-
+    // MonoBehaviour methods
     private void OnEnable()
     {        
         CardPartReplaceManager.OnReplacementDone += InvokeGetSaved;
@@ -124,6 +107,14 @@ public abstract class BuildingCard : MonoBehaviour
     }
 
 
+    // ABSTRACT METHODS to implement
+    protected abstract void InitStatsFromTurretParts();
+    public abstract void CreateCopyBuildingPrefab();
+    public abstract int GetCardPlayCost();
+    protected abstract void GetMaterialsRefs();
+    protected abstract void InitVisuals();
+
+
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
@@ -138,7 +129,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected void Init()
     {
-        initialPosition = transform.position;
+        initialPosition = CardTransform.position;
 
         InitStatsFromTurretParts();
         InitCostText();
@@ -146,54 +137,76 @@ public abstract class BuildingCard : MonoBehaviour
         InitVisuals();
     }
 
-    protected virtual void InitStatsFromTurretParts() {}
     private void InitCostText()
     {
         playCostText.text = GetCardPlayCost().ToString();
     }
 
 
-
-
-
-    public void InitPositions(Vector3 selectedPosition)
+    // CARD MOVEMENT
+    public void ResetCardPosition()
     {
-        standardPosition = transform.position;
-        hoveredPosition = transform.position + HoveredTranslation;
-        this.selectedPosition = selectedPosition;
+        CardTransform.localPosition = Vector3.zero;
     }
 
+    public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement)
+    {
+        ResetCardPosition();
 
+        local_standardPosition = CardTransform.localPosition;
+        local_hoveredPosition = CardTransform.localPosition + HoveredTranslation;
+        //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
+        local_standardRotation_euler = transform.localRotation.eulerAngles;
+        this.hiddenDisplacement = hiddenDisplacement;
+
+        standardPosition = CardTransform.position;
+        hoveredPosition = CardTransform.position + HoveredTranslation;
+        this.selectedPosition = selectedPosition;
+    }
 
     public void StandardState()
     {
         cardState = CardStates.STANDARD;
-        transform.position = standardPosition;
+
+        DisableMouseInteraction();
+        CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
+        CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
+            .OnComplete(() => EnableMouseInteraction());
     }
 
     public void HoveredState()
     {
         cardState = CardStates.HOVERED;
-        lerp.SpeedLerpPosition(hoveredPosition, hoverSpeed);
+
+        CardTransform.DOBlendableLocalMoveBy(local_hoveredPosition - CardTransform.localPosition, hoverTime);
     }
 
     public void SelectedState()
     {
         cardState = CardStates.SELECTED;
-        lerp.SpeedLerpPosition(selectedPosition, selectedSpeed);
+
+        DisableMouseInteraction();
+        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
+        CardTransform.DOBlendableLocalRotateBy(Vector3.zero - CardTransform.rotation.eulerAngles, selectedTime)
+            .OnComplete(() => EnableMouseInteraction());
     }
 
+    // CARD MOVEMENT end
+
+    public void normalCollider()
+    {
+        cardCollider.size = new Vector3(1f, 2f, 0.2f);
+    }
+    public void bigCollider()
+    {
+        cardCollider.size = new Vector3(1.3f, 2f, 0.2f);
+    }
 
 
     private void InvokeGetSaved()
     {
         if (OnGetSaved != null) OnGetSaved(this);
     }
-
-    public virtual void CreateCopyBuildingPrefab() {}
-    public virtual int GetCardPlayCost() { return 0; }
-    protected virtual void GetMaterialsRefs() {}
-    protected virtual void InitVisuals() {}
 
 
     public void SetCanBePlayedAnimation()
@@ -214,6 +227,5 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardCollider.enabled = false;
     }
-
 
 }
