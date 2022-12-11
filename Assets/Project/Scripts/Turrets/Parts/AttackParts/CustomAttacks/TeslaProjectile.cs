@@ -16,7 +16,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
     {
     }
 
-    public override void Init(Enemy targetEnemy, Turret owner)
+    public override void Init(Enemy targetEnemy, TurretBuilding owner)
     {      
         this.damage = owner.stats.damage;
 

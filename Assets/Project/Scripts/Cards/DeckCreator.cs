@@ -17,7 +17,7 @@ public class DeckCreator : MonoBehaviour
         for (int i = 0; i < starterCards.Length; ++i)
         {
             //BuildingCard card = GetUninitializedNewBuildingCard();
-            TurretCard card = GetUninitializedNewTurretCard();
+            TurretBuildingCard card = GetUninitializedNewTurretCard();
             card.ResetParts(deckData.starterTurretCardsComponents[i]);
 
             starterCards[i] = card;
@@ -36,12 +36,12 @@ public class DeckCreator : MonoBehaviour
         return Instantiate(cardPrefab).GetComponent<BuildingCard>();
     }
 
-    public TurretCard GetUninitializedNewTurretCard()
+    public TurretBuildingCard GetUninitializedNewTurretCard()
     {
-        return Instantiate(cardPrefab).GetComponent<TurretCard>();
+        return Instantiate(cardPrefab).GetComponent<TurretBuildingCard>();
     }
 
-    public void AddNewTurretCardToDeck(TurretCard turretCard)
+    public void AddNewTurretCardToDeck(TurretBuildingCard turretCard)
     {
         deckData.AddTurretCard(turretCard);
         deckData.SetStarterCardComponentsAsSaved();

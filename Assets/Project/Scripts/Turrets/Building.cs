@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static Turret;
+using static TurretBuilding;
 
 public abstract class Building : MonoBehaviour
 {
@@ -13,46 +13,33 @@ public abstract class Building : MonoBehaviour
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+    protected bool isFunctional = false;
 
-    public struct TurretStats
-    {
-        public int playCost;
-        public int damage;
-        [SerializeField, Min(1)] public float range;
-        public float cadence;
-    }
 
 
     protected virtual void DisableFunctionality()
     {
+        isFunctional = false;
     }
 
     protected virtual void EnableFunctionality()
     {
+        isFunctional = true;
     }
 
-    public virtual void GotPlaced()
-    {
-    }
+    protected abstract void AwakeInit();
+    public abstract void GotPlaced();
 
     //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
     //{
     //}
 
-    public virtual void ShowRangePlane()
-    {
-    }
+    public abstract void ShowRangePlane();
 
-    public virtual void HideRangePlane()
-    {
-    }
+    public abstract void HideRangePlane();
 
-    public virtual void EnablePlayerInteraction()
-    {
-    }
+    public abstract void EnablePlayerInteraction();
 
-    public virtual void DisablePlayerInteraction()
-    {
-    }
+    public abstract void DisablePlayerInteraction();
 
 }

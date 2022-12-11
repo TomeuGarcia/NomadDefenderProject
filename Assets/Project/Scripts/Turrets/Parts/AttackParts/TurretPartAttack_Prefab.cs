@@ -16,7 +16,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     protected bool disappearing = false;
 
-    public virtual void Init(Enemy targetEnemy, Turret owner)
+    public virtual void Init(Enemy targetEnemy, TurretBuilding owner)
     {
     }
 

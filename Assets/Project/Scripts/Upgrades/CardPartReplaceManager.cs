@@ -201,7 +201,7 @@ public class CardPartReplaceManager : MonoBehaviour
     
     private void ReplacePartInCard()
     {
-        TurretCard selectedCard = upgradeCardHolder.selectedCard as TurretCard;
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
 
         switch (partType)
         {

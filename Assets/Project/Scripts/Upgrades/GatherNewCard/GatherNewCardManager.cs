@@ -56,9 +56,9 @@ public class GatherNewCardManager : MonoBehaviour
 
         for (int i = 0; i < numTurretCards; i++)
         {
-            TurretCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            TurretCard.TurretCardParts cardParts = new TurretCard.TurretCardParts(attacks[i], bodies[i], bases[i]);
+            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(attacks[i], bodies[i], bases[i]);
             turretCard.ResetParts(cardParts);
 
             cards[i] = turretCard;
@@ -116,7 +116,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
         {
-            deckCreator.AddNewTurretCardToDeck(selectedCard as TurretCard);
+            deckCreator.AddNewTurretCardToDeck(selectedCard as TurretBuildingCard);
         }
         else
         {
