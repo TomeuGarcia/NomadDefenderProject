@@ -10,57 +10,35 @@ public class SupportBuilding : RangeBuilding
         [SerializeField, Min(1)] public float range;
     }
 
+    [HideInInspector] public SupportBuildingStats stats;
 
 
-    [SerializeField] private GameObject rangePlaneMeshObject;
-    private Material rangePlaneMaterial;
-
-    [Header("COMPONENTS")]
+    [Header("COLLIDER")]
     [SerializeField] private CapsuleCollider rangeCollider;
-    [SerializeField] private MouseOverNotifier meshMouseNotifier;
+
+    
     //private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
-    [HideInInspector] public SupportBuildingStats stats;
 
-    private bool isFunctional = false;
 
 
 
     void Awake()
     {
-        HideRangePlane();
+        AwakeInit();
     }
+    protected override void AwakeInit()
+    {
+        base.AwakeInit();
+    }
+
 
     void Update()
     {
 
     }
 
-    public override void DisablePlayerInteraction()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void EnablePlayerInteraction()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void GotPlaced()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void HideRangePlane()
-    {
-        rangePlaneMeshObject.SetActive(false);
-    }
-
-    public override void ShowRangePlane()
-    {
-        throw new System.NotImplementedException();
-    }
 
     protected override void DisableFunctionality()
     {
@@ -71,4 +49,10 @@ public class SupportBuilding : RangeBuilding
     {
         throw new System.NotImplementedException();
     }
+
+    public override void GotPlaced()
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

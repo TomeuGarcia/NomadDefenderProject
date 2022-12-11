@@ -13,53 +13,46 @@ public class TurretBuilding : RangeBuilding
         public float cadence;
     }
 
+    [HideInInspector] public TurretBuildingStats stats;
 
+    [Header("COLLIDER")]
+    [SerializeField] private CapsuleCollider rangeCollider; // Might want to make this depend on BasePart in the future
 
-    [SerializeField] private GameObject rangePlaneMeshObject;
-    private Material rangePlaneMaterial;
-
-    [Header("COMPONENTS")]
-    [SerializeField] private CapsuleCollider attackRangeCollider;
+    [Header("ATTACK POOL")]
     [SerializeField] private Pool attackPool;
-    [SerializeField] private MouseOverNotifier meshMouseNotifier;
+
     private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
-    [HideInInspector] public TurretBuildingStats stats;
     private float currentShootTimer;
-
     private Vector3 lastTargetedPosition;
 
-    private bool isFunctional = false;
-
-
-    private TurretPartBody.BodyType bodyType;
+    private TurretPartBody.BodyType bodyType; // Used to play sound
 
 
 
-
-    private void Awake()
+    void Awake()
     {
-        currentShootTimer = 0.0f;
-        //DisableFunctionality();
-        HideRangePlane();
+        AwakeInit();
+    }
+    protected override void AwakeInit()
+    {
+        base.AwakeInit();
+        currentShootTimer = 0.0f;        
     }
 
     private void Update()
     {
-        if (isFunctional)
-        {
-            UpdateShoot();
-            
-            if (bodyPart.lookAtTarget)
-            {
-                if (enemies.Count > 0)
-                {
-                    lastTargetedPosition = enemies[0].transform.position;
-                }
+        if (!isFunctional) return;
 
-                LookAtTarget();
+        UpdateShoot();
+        if (bodyPart.lookAtTarget)
+        {
+            if (enemies.Count > 0)
+            {
+                lastTargetedPosition = enemies[0].transform.position;
             }
+            LookAtTarget();
         }
     }
 
@@ -76,14 +69,14 @@ public class TurretBuilding : RangeBuilding
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
 
-
         InitStats(turretStats);
-        this.bodyType = turretCardParts.turretPartBody.bodyType;
+        bodyType = turretCardParts.turretPartBody.bodyType;
+
 
         float planeRange = stats.range * 2 + 1; //only for square
         float range = stats.range;
 
-        attackRangeCollider.radius = range+ 0.5f;
+        rangeCollider.radius = range+ 0.5f;
         rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
@@ -101,6 +94,7 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
     }
+
     public void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
@@ -116,12 +110,12 @@ public class TurretBuilding : RangeBuilding
 
         if (enemies.Count <= 0) return;
 
-
         currentShootTimer = 0.0f;
-
 
         DoShootEnemyLogic(enemies[0]);
 
+
+        //// Code used when turrets used to have targetAmount stat:
         /*
         for (int i = 0; i < stats.targetAmount; i++)
         {
@@ -132,55 +126,6 @@ public class TurretBuilding : RangeBuilding
         }
         */
     }
-
-    protected override void DisableFunctionality()
-    {
-        bodyPart.SetPreviewMaterial();
-        basePart.SetPreviewMaterial();
-
-        meshMouseNotifier.gameObject.SetActive(false);
-        attackRangeCollider.enabled = false;
-        isFunctional = false;
-    }
-
-    protected override void EnableFunctionality()
-    {
-        bodyPart.SetDefaultMaterial();
-        basePart.SetDefaultMaterial();
-        
-        meshMouseNotifier.gameObject.SetActive(true);
-        attackRangeCollider.enabled = true;
-        isFunctional = true;
-    }
-
-    public override void GotPlaced()
-    {
-        HideRangePlane();
-        EnableFunctionality();
-    }
-
-    public override void ShowRangePlane()
-    {
-        rangePlaneMeshObject.SetActive(true);
-    }
-
-    public override void HideRangePlane()
-    {
-        rangePlaneMeshObject.SetActive(false);
-    }
-
-    public override void EnablePlayerInteraction()
-    {
-        meshMouseNotifier.OnMouseEntered += ShowRangePlane;
-        meshMouseNotifier.OnMouseExited += HideRangePlane;
-    }
-
-    public override void DisablePlayerInteraction()
-    {
-        meshMouseNotifier.OnMouseEntered -= ShowRangePlane;
-        meshMouseNotifier.OnMouseExited -= HideRangePlane;
-    }
-
 
     private void DoShootEnemyLogic(Enemy enemyTarget)
     {
@@ -207,6 +152,34 @@ public class TurretBuilding : RangeBuilding
 
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
+    }
+
+
+
+    protected override void DisableFunctionality()
+    {
+        base.DisableFunctionality();
+
+        rangeCollider.enabled = false;
+
+        bodyPart.SetPreviewMaterial();
+        basePart.SetPreviewMaterial();
+    }
+
+    protected override void EnableFunctionality()
+    {
+        base.EnableFunctionality();
+
+        rangeCollider.enabled = true;
+
+        bodyPart.SetDefaultMaterial();
+        basePart.SetDefaultMaterial();
+    }
+
+    public override void GotPlaced()
+    {
+        HideRangePlane();
+        EnableFunctionality();
     }
 
 }

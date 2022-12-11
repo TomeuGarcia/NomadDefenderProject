@@ -13,10 +13,21 @@ public abstract class Building : MonoBehaviour
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
-    protected abstract void DisableFunctionality();
+    protected bool isFunctional = false;
 
-    protected abstract void EnableFunctionality();
 
+
+    protected virtual void DisableFunctionality()
+    {
+        isFunctional = false;
+    }
+
+    protected virtual void EnableFunctionality()
+    {
+        isFunctional = true;
+    }
+
+    protected abstract void AwakeInit();
     public abstract void GotPlaced();
 
     //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
