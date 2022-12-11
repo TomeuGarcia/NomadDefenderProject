@@ -8,16 +8,16 @@ public class DeckData : ScriptableObject
 {
     private List<BuildingCard> cards;
 
-    [SerializeField] public List<TurretCard.TurretCardParts> starterTurretCardsComponents;
-    private List<TurretCard.TurretCardParts> savedTurretCardsComponents;
+    [SerializeField] public List<TurretBuildingCard.TurretCardParts> starterTurretCardsComponents;
+    private List<TurretBuildingCard.TurretCardParts> savedTurretCardsComponents;
 
 
     public void ReplaceFor(DeckData other)
     {
-        starterTurretCardsComponents = new List<TurretCard.TurretCardParts>();
+        starterTurretCardsComponents = new List<TurretBuildingCard.TurretCardParts>();
         for (int i = 0; i < other.starterTurretCardsComponents.Count; ++i)
         {
-            TurretCard.TurretCardParts otherComponents = other.starterTurretCardsComponents[i];
+            TurretBuildingCard.TurretCardParts otherComponents = other.starterTurretCardsComponents[i];
 
             TurretPartAttack turretPartAttack = ScriptableObject.CreateInstance("TurretPartAttack") as TurretPartAttack;
             turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
@@ -28,7 +28,7 @@ public class DeckData : ScriptableObject
             TurretPartBase turretPartBase = ScriptableObject.CreateInstance("TurretPartBase") as TurretPartBase;
             turretPartBase.InitAsCopy(otherComponents.turretPartBase);
 
-            starterTurretCardsComponents.Add(new TurretCard.TurretCardParts(turretPartAttack, turretPartBody, turretPartBase));
+            starterTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(turretPartAttack, turretPartBody, turretPartBase));
         }
     }
 
@@ -41,7 +41,7 @@ public class DeckData : ScriptableObject
             cards[i].OnGetSaved += SaveCardComponents;
         }
 
-        savedTurretCardsComponents = new List<TurretCard.TurretCardParts>();
+        savedTurretCardsComponents = new List<TurretBuildingCard.TurretCardParts>();
     }
 
     public BuildingCard[] GetCards()
@@ -55,10 +55,10 @@ public class DeckData : ScriptableObject
     }
 
 
-    public void AddTurretCard(TurretCard turretCard)
+    public void AddTurretCard(TurretBuildingCard turretCard)
     {
         cards.Add(turretCard);
-        starterTurretCardsComponents.Add(new TurretCard.TurretCardParts(turretCard.turretCardParts));
+        starterTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(turretCard.turretCardParts));
     }
 
     public void RemoveCard(int index)
@@ -75,7 +75,7 @@ public class DeckData : ScriptableObject
 
     public void Save()
     {
-        starterTurretCardsComponents = new List<TurretCard.TurretCardParts>(savedTurretCardsComponents);
+        starterTurretCardsComponents = new List<TurretBuildingCard.TurretCardParts>(savedTurretCardsComponents);
     }
 
 
@@ -83,7 +83,7 @@ public class DeckData : ScriptableObject
     {
         if (card.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            TurretCard turretCard = card as TurretCard;
+            TurretBuildingCard turretCard = card as TurretBuildingCard;
             AddToSavedTurretCardsComponents(turretCard);
         }
         else
@@ -92,9 +92,9 @@ public class DeckData : ScriptableObject
         }
 
     }
-    private void AddToSavedTurretCardsComponents(TurretCard turretCard)
+    private void AddToSavedTurretCardsComponents(TurretBuildingCard turretCard)
     {
-        savedTurretCardsComponents.Add(new TurretCard.TurretCardParts(turretCard.turretCardParts));
+        savedTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(turretCard.turretCardParts));
     }
 
 

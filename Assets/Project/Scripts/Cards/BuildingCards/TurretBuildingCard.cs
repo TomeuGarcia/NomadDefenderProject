@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static BuildingCard;
 
-public class TurretCard : BuildingCard
+public class TurretBuildingCard : BuildingCard
 {
     [System.Serializable]
     public class TurretCardParts
@@ -36,7 +36,7 @@ public class TurretCard : BuildingCard
 
     public TurretCardParts turretCardParts { get; private set; }
 
-    private Turret.TurretStats turretStats;
+    private TurretBuilding.TurretBuildingStats turretStats;
 
 
     [Header("VISUALS")]
@@ -106,7 +106,7 @@ public class TurretCard : BuildingCard
     public override void CreateCopyBuildingPrefab()
     {
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
-        copyBuildingPrefab.GetComponent<Turret>().Init(turretStats, turretCardParts);
+        copyBuildingPrefab.GetComponent<TurretBuilding>().Init(turretStats, turretCardParts);
         copyBuildingPrefab.SetActive(false);
     }
 

@@ -11,7 +11,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
     {
     }
 
-    public override void Init(Enemy targetEnemy, Turret owner)
+    public override void Init(Enemy targetEnemy, TurretBuilding owner)
     {
         this.targetEnemy = targetEnemy;
         this.damage = owner.stats.damage;

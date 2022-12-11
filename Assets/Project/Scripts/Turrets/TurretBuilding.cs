@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Turret : Building
+public class TurretBuilding : RangeBuilding
 {
+    public struct TurretBuildingStats
+    {
+        public int playCost;
+        public int damage;
+        [SerializeField, Min(1)] public float range;
+        public float cadence;
+    }
+
+
+
     [SerializeField] private GameObject rangePlaneMeshObject;
     private Material rangePlaneMaterial;
 
@@ -15,19 +25,13 @@ public class Turret : Building
     private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
-    [HideInInspector] public TurretStats stats;
+    [HideInInspector] public TurretBuildingStats stats;
     private float currentShootTimer;
-
-    private List<Enemy> enemies = new List<Enemy>();
 
     private Vector3 lastTargetedPosition;
 
     private bool isFunctional = false;
 
-    public delegate void TurretAction(Enemy enemy);
-    public TurretAction OnEnemyEnterRange;
-    public TurretAction OnEnemyExitRange;
-    //public TurretAction OnEnemyShot;
 
     private TurretPartBody.BodyType bodyType;
 
@@ -59,37 +63,14 @@ public class Turret : Building
         }
     }
 
+
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Enemy")
-        {
-            Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            if (!enemy.DiesFromQueuedDamage())
-            {
-                AddEnemy(enemy);
-            }  
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Enemy")
-        {
-            Enemy enemy = other.gameObject.GetComponent<Enemy>();
-
-            if (enemies.Contains(enemy))
-                RemoveEnemy(enemy);
-        }
-    }
-
-
-    public void Init(TurretStats turretStats, TurretCard.TurretCardParts turretCardParts)
+    public void Init(TurretBuildingStats turretStats, TurretBuildingCard.TurretCardParts turretCardParts)
     {
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
@@ -120,7 +101,7 @@ public class Turret : Building
 
         DisableFunctionality();
     }
-    public void InitStats(TurretStats stats)
+    public void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
     }
@@ -227,67 +208,5 @@ public class Turret : Building
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
     }
-
-
-    private void AddEnemy(Enemy enemy)
-    {
-        if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
-        enemy.OnEnemyDeactivated += DeleteEnemyFromList;
-        enemies.Add(enemy);
-        enemies.Sort(mySort);
-    }
-
-    private void RemoveEnemy(Enemy enemy)
-    {
-        enemy.OnEnemyDeactivated -= DeleteEnemyFromList;
-        DeleteEnemyFromList(enemy);
-    }
-
-    private void DeleteEnemyFromList(Enemy enemyToDelete)
-    {
-        if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
-        enemyToDelete.ChangeToBaseMat();
-        enemies.Remove(enemyToDelete);
-
-        enemies.Sort(mySort);
-    }
-
-    int mySort(Enemy e1, Enemy e2)
-    {
-        return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
-    }
-
-
-
-    /// <summary>
-    /// Returns a List with size up to "amount", assumes there is at least 1 enemy in the turret's queue
-    /// </summary>
-    /// <param name="amount"></param>
-    /// <returns></returns>
-    public Enemy[] GetNearestEnemies(int amount, float thresholdDistance)
-    { 
-        List<Enemy> enemyList = new List<Enemy>();
-
-        enemyList.Add(enemies[0]);
-        
-        int currentEnemyI = 1;
-        while (currentEnemyI < enemies.Count && enemyList.Count < amount)
-        {
-            if (!enemyList.Contains(enemies[currentEnemyI]) && !enemies[currentEnemyI].DiesFromQueuedDamage())
-            {
-                float distance = Vector3.Distance(enemyList[enemyList.Count - 1].transformToMove.position, enemies[currentEnemyI].transformToMove.position);
-                if (distance < thresholdDistance)
-                {
-                    enemyList.Add(enemies[currentEnemyI]);
-                    currentEnemyI = 0;
-                }
-            }
-
-            ++currentEnemyI;
-        }
-
-        return enemyList.ToArray();
-    }
-
 
 }
