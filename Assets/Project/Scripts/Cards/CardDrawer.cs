@@ -14,16 +14,20 @@ public class CardDrawer : MonoBehaviour
     [SerializeField, Range(10, 60)] private float drawTimeCooldown;
     private float drawCountdown;
 
+    [SerializeField] private int cardsToDrawPerWave;
 
 
     private void OnEnable()
     {
         HandBuildingCards.OnQueryDrawCard += TryDrawCard;
+        EnemyWaveManager.OnWaveFinished += DrawCardAfterWave;
+
     }
 
     private void OnDisable()
     {
         HandBuildingCards.OnQueryDrawCard -= TryDrawCard;
+        EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
     }
 
     private void Start()
@@ -37,7 +41,7 @@ public class CardDrawer : MonoBehaviour
         drawCountdown = drawTimeCooldown;
 
         drawCooldownImage.gameObject.SetActive(false);
-        HandBuildingCards.OnCardPlayed += StartDrawOverTime;
+        //HandBuildingCards.OnCardPlayed += StartDrawOverTime;
     }
 
 
@@ -56,6 +60,12 @@ public class CardDrawer : MonoBehaviour
         hand.AddCard(deck.GetRandomCard());
     }
 
+    private void DrawCardAfterWave()
+    {
+        for (int i = 0; i < cardsToDrawPerWave; i++)
+            TryDrawCard();
+    }
+
 
     private void DrawStartHand()
     {
@@ -67,7 +77,7 @@ public class CardDrawer : MonoBehaviour
         }
     }
 
-    private void StartDrawOverTime()
+    /*private void StartDrawOverTime()
     {
         HandBuildingCards.OnCardPlayed -= StartDrawOverTime;
         StartCoroutine(DrawOverTime());
@@ -92,6 +102,6 @@ public class CardDrawer : MonoBehaviour
             TryDrawCard();
         }
         drawCooldownImage.gameObject.SetActive(false);
-    }
+    }*/
 
 }
