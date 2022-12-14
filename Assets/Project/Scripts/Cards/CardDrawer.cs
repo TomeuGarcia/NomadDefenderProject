@@ -45,7 +45,7 @@ public class CardDrawer : MonoBehaviour
     }
 
 
-    private void TryDrawCard()
+    public void TryDrawCard()
     {
         if (deck.HasCardsLeft())
             DrawRandomCard();

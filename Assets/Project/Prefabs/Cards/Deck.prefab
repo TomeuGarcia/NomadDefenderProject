@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938613622815581334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -270,6 +270,9 @@ MonoBehaviour:
   costText: {fileID: 7719475709649742}
   drawCost: 10
   costIncrement: 5
+  deckBuildingCards: {fileID: 7126227104347597876}
+  currencyCounter: {fileID: 0}
+  cardDrawer: {fileID: 0}
 --- !u!1 &7126227104347597867
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +322,6 @@ MonoBehaviour:
   fakeDeck: {fileID: 7824509788272755731}
   fakeCardPrefab: {fileID: 4974797417952414991, guid: a8cf71ab9a4de2f4684bd43872c020f8,
     type: 3}
-  cardCountText: {fileID: 7719475709649742}
 --- !u!1 &7414014240276470643
 GameObject:
   m_ObjectHideFlags: 0
