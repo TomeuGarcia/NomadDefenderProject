@@ -15,7 +15,7 @@ public class DeckBuildingCards : MonoBehaviour
     [SerializeField] private GameObject fakeCardPrefab;
     private GameObject[] fakeCards;
     private int lastFakeCardI;
-    [SerializeField] private TextMeshPro cardCountText;
+    //[SerializeField] private TextMeshPro cardCountText;
 
 
     public void Init()
@@ -46,7 +46,7 @@ public class DeckBuildingCards : MonoBehaviour
         }
         lastFakeCardI = fakeCards.Length - 1;
 
-        cardCountText.text = cards.Count.ToString();
+        //cardCountText.text = cards.Count.ToString();
     }
 
 
@@ -70,8 +70,8 @@ public class DeckBuildingCards : MonoBehaviour
         cards.RemoveAt(cardI);
 
         fakeCards[lastFakeCardI--].SetActive(false);
-        cardCountText.text = cards.Count.ToString();
-        if (cards.Count == 0) cardCountText.gameObject.SetActive(false);
+        //cardCountText.text = cards.Count.ToString();
+        //if (cards.Count == 0) cardCountText.gameObject.SetActive(false);
 
         return topCard;
     }
