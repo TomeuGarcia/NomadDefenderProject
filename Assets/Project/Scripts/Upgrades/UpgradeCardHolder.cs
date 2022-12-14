@@ -42,7 +42,11 @@ public class UpgradeCardHolder : MonoBehaviour
     private void Awake()
     {
         //Init(cards);
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
         canInteract = true;
 
         placerMaterial = placerMeshRenderer.material;
@@ -66,6 +70,11 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = null;
         this.cards = cards;
         InitCardsInHand();
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
     }
 
 
@@ -101,9 +110,12 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         card.HoveredState();
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardUnhovered += SetStandardCard;
-        BuildingCard.OnCardSelected += SetSelectedCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered += SetStandardCard;
+            itCard.OnCardSelected += SetSelectedCard;
+        }
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -112,10 +124,20 @@ public class UpgradeCardHolder : MonoBehaviour
     private void SetStandardCard(BuildingCard card)
     {
         card.StandardState();
-  
-        if (canInteract) BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SetSelectedCard;
+
+        if (canInteract)
+        {
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.OnCardHovered += SetHoveredCard;
+            }
+        }
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SetSelectedCard;
+        }
     }
 
     private void SetSelectedCard(BuildingCard card)
@@ -125,8 +147,11 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = card;
         selectedCard.SelectedState();
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardSelected -= SetSelectedCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardSelected -= SetSelectedCard;
+        }
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
         if (OnCardSelected != null) OnCardSelected();

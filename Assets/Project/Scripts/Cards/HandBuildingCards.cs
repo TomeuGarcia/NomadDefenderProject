@@ -70,9 +70,13 @@ public class HandBuildingCards : MonoBehaviour
 
     private void OnEnable()
     {
-        BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardUnhovered += SetStandardCard;
-        BuildingCard.OnCardSelected += CheckSelectCard;
+        foreach(BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+            itCard.OnCardUnhovered += SetStandardCard;
+            itCard.OnCardSelected += CheckSelectCard;
+        }
+        
 
         buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
 
@@ -82,9 +86,12 @@ public class HandBuildingCards : MonoBehaviour
 
     private void OnDisable()
     {
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= CheckSelectCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= CheckSelectCard;
+        }
 
         buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
 
@@ -153,6 +160,10 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         CheckCardsCost();
+
+        card.OnCardHovered += SetHoveredCard;
+        card.OnCardUnhovered += SetStandardCard;
+        card.OnCardSelected += CheckSelectCard;
     }
 
 
@@ -162,7 +173,12 @@ public class HandBuildingCards : MonoBehaviour
 
         hoveredCard = card;
         card.HoveredState();
-        BuildingCard.OnCardHovered -= SetHoveredCard;
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+        }
+
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -179,7 +195,10 @@ public class HandBuildingCards : MonoBehaviour
         hoveredCard = null;
         card.StandardState();
 
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;            
+        }
     }
 
     private void ResetAndSetStandardCard(BuildingCard card)
@@ -241,7 +260,11 @@ public class HandBuildingCards : MonoBehaviour
         //ResetAndSetStandardCard(selectedCard);
         ///////////
         //SetStandardCard(selectedCard);
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
         selectedCard = null;
         buildingPlacer.DisablePlacing();
         transform.position = defaultHandPosition;

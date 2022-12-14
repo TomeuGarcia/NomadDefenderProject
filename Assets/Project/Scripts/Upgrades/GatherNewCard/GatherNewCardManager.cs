@@ -90,9 +90,12 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.HoveredState();
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardUnhovered += SetStandardCard;
-        BuildingCard.OnCardSelected += SelectCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered += SetStandardCard;
+            itCard.OnCardSelected += SelectCard;
+        }
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -102,15 +105,21 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.StandardState();
 
-        BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SelectCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SelectCard;
+        }
     }
 
     private void SelectCard(BuildingCard card)
     {
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SelectCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SelectCard;
+        }
 
         selectedCard = card;
 
@@ -169,7 +178,11 @@ public class GatherNewCardManager : MonoBehaviour
         yield return new WaitForSeconds(rotationDuration);
 
 
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
     }
 
     private IEnumerator SelectCardAnimation()

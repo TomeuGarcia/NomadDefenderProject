@@ -30,9 +30,9 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private Transform cardHolder;
     public Transform CardTransform => transform;
 
-    private const float unhoverTime = 0.05f;
-    private const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
-    private const float selectedTime = 0.3f;
+    public const float unhoverTime = 0.05f;
+    public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
+    public const float selectedTime = 0.3f;
 
 
     private Vector3 initialPosition;
@@ -58,9 +58,9 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
-    public static event BuildingCardAction OnCardHovered;
-    public static event BuildingCardAction OnCardUnhovered;
-    public static event BuildingCardAction OnCardSelected;
+    public event BuildingCardAction OnCardHovered;
+    public event BuildingCardAction OnCardUnhovered;
+    public event BuildingCardAction OnCardSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;

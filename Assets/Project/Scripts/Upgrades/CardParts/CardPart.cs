@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using static Building;
+using DG.Tweening;
 
 public class CardPart : MonoBehaviour
 {
@@ -13,14 +14,16 @@ public class CardPart : MonoBehaviour
     [Header("OTHER COMPONENTS")]
     [SerializeField] private float hoverSpeed;
     [SerializeField] private float selectedSpeed; 
-    [SerializeField] private Lerp lerp;
 
 
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
-    private Vector3 HoveredTranslation => transform.up * 0.2f + transform.forward * -0.04f;
-    public Vector3 SelectedPosition => transform.position + (transform.up * 1.3f) + (-transform.right * 1.3f);
+
+    public Transform CardTransform => transform;
+
+    private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.04f;
+    public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
     public delegate void BuildingCardPartAction(CardPart cardPart);
@@ -74,19 +77,22 @@ public class CardPart : MonoBehaviour
     public void StandardState()
     {
         cardState = CardPartStates.STANDARD;
-        transform.position = standardPosition;
+
+        CardTransform.DOMove(standardPosition, BuildingCard.unhoverTime);
     }
 
     public void HoveredState()
     {
         cardState = CardPartStates.HOVERED;
-        lerp.SpeedLerpPosition(hoveredPosition, hoverSpeed);
+
+        CardTransform.DOMove(hoveredPosition, BuildingCard.hoverTime);
     }
 
     public void SelectedState()
     {
         cardState = CardPartStates.SELECTED;
-        lerp.SpeedLerpPosition(selectedPosition, selectedSpeed);
+
+        CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime);
     }
 
 }
