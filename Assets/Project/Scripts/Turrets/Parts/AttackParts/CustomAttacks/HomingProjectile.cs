@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class HomingProjectile : TurretAttack
+public class HomingProjectile : TurretPartAttack_Prefab
 {
     [SerializeField] protected Lerp lerp;
 
@@ -11,7 +11,7 @@ public class HomingProjectile : TurretAttack
     {
     }
 
-    public override void Init(Enemy targetEnemy, Turret owner)
+    public override void Init(Enemy targetEnemy, TurretBuilding owner)
     {
         this.targetEnemy = targetEnemy;
         this.damage = owner.stats.damage;

@@ -7,7 +7,6 @@ public class CardPartAttack : CardPart
 {
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private TextMeshProUGUI playCostText;
-    [SerializeField] private TextMeshProUGUI targetAmountText;
 
     [Header("PART")]
     [SerializeField] public TurretPartAttack turretPartAttack;
@@ -38,7 +37,6 @@ public class CardPartAttack : CardPart
     private void InitTexts()
     {
         playCostText.text = turretPartAttack.cost.ToString();
-        targetAmountText.text = turretPartAttack.targetAmount.ToString();
     }
 
 }

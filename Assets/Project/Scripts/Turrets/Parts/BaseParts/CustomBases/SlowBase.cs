@@ -8,7 +8,7 @@ public class SlowBase : TurretPartBase_Prefab
     [SerializeField] private GameObject slowPlane;
     private static Dictionary<Enemy, int> slowedEnemies = new Dictionary<Enemy, int>();
 
-    override public void Init(Turret turretOwner, float turretRange) 
+    override public void Init(TurretBuilding turretOwner, float turretRange) 
     {
         base.Init(turretOwner, turretRange);
 

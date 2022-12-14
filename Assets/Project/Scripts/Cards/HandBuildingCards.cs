@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class HandBuildingCards : MonoBehaviour
 {
@@ -9,11 +11,8 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
-    [SerializeField] private Lerp lerp;
 
     private List<BuildingCard> cards;
-
-    [SerializeField] private float lerpSpeed;
 
     private BuildingCard selectedCard;
     private Vector3 selectedPosition;
@@ -27,6 +26,9 @@ public class HandBuildingCards : MonoBehaviour
 
     private BuildingCard hoveredCard;
     private bool IsHoveringCard => hoveredCard != null;
+
+    public Transform HandTransform => transform;
+
 
 
     public delegate void HandAction();
@@ -105,6 +107,8 @@ public class HandBuildingCards : MonoBehaviour
     
     private void InitCardsInHand()
     {
+        Vector3 hiddenDisplacement = hiddenHandPosition - defaultHandPosition;
+
         float cardCount = cards.Count;
         float displacementStep = Mathf.Min(0.6f / (cardCount * 0.2f), 0.6f);
         float halfCardCount = cards.Count / 2f;
@@ -127,7 +131,7 @@ public class HandBuildingCards : MonoBehaviour
             cards[i].transform.position = initHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
             cards[i].transform.localRotation = rotation;
 
-            cards[i].InitPositions(selectedPosition);
+            cards[i].InitPositions(selectedPosition, hiddenDisplacement);
         }
     }
 
@@ -138,7 +142,10 @@ public class HandBuildingCards : MonoBehaviour
         cards.Add(card);
 
         if (isHidden) transform.position = defaultHandPosition;
+
         InitCardsInHand();
+
+        if (AlreadyHasSelectedCard) ResetAndSetStandardCard(selectedCard);
 
         if (!card.AlreadySpawnedCopyBuildingPrefab)
         {
@@ -161,6 +168,7 @@ public class HandBuildingCards : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardHovered();
     }
 
+
     private void SetStandardCard(BuildingCard card)
     {
         if (!isHidden)
@@ -173,8 +181,6 @@ public class HandBuildingCards : MonoBehaviour
 
         BuildingCard.OnCardHovered += SetHoveredCard;
     }
-
-
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
@@ -189,7 +195,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void CheckSelectCard(BuildingCard card)
     {
-        int cardCost = card.turretStats.playCost;
+        int cardCost = card.GetCardPlayCost();
 
         if (currencyCounter.HasEnoughCurrency(cardCost))
         {
@@ -225,7 +231,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SubtractCurrencyAndRemoveCard()
     {
-        int cardCost = selectedCard.turretStats.playCost;
+        int cardCost = selectedCard.GetCardPlayCost();
         currencyCounter.SubtractCurrency(cardCost);
 
         selectedCard.gameObject.SetActive(false);
@@ -264,7 +270,12 @@ public class HandBuildingCards : MonoBehaviour
     private void HideHand(bool playSound)
     {
         isHidden = true;
-        lerp.SpeedLerpPosition(hiddenHandPosition, lerpSpeed);
+
+        HandTransform.DOKill();
+        HandTransform.DOMove(hiddenHandPosition, 0.1f);
+
+        foreach(BuildingCard card in cards)
+            card.normalCollider();
 
         // Audio
         if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
@@ -273,7 +284,12 @@ public class HandBuildingCards : MonoBehaviour
     private void ShowHand()
     {
         isHidden = false;
-        lerp.SpeedLerpPosition(defaultHandPosition, lerpSpeed);
+
+        HandTransform.DOKill();
+        HandTransform.DOMove(defaultHandPosition, 0.1f);
+
+        foreach (BuildingCard card in cards)
+            card.bigCollider();
     }
 
 
@@ -300,7 +316,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; ++i)
         {
-            int cardCost = cards[i].turretStats.playCost;
+            int cardCost = cards[i].GetCardPlayCost();
 
             if (currencyCounter.HasEnoughCurrency(cardCost))
             {

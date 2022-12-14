@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static Turret;
+using static TurretBuilding;
 
-public class Building : MonoBehaviour
+public abstract class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
 
@@ -13,46 +13,33 @@ public class Building : MonoBehaviour
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
-    public struct TurretStats
-    {
-        public int playCost;
-        public int damage;
-        [SerializeField, Min(1)] public float range;
-        public int targetAmount;
-        public float cadence;
-    }
+    protected bool isFunctional = false;
+
 
 
     protected virtual void DisableFunctionality()
     {
+        isFunctional = false;
     }
 
     protected virtual void EnableFunctionality()
     {
+        isFunctional = true;
     }
 
-    public virtual void GotPlaced()
-    {
-    }
+    protected abstract void AwakeInit();
+    public abstract void GotPlaced();
 
-    public virtual void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase, TurretPartBody.BodyType bodyType)
-    {
-    }
+    //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
+    //{
+    //}
 
-    public virtual void ShowRangePlane()
-    {
-    }
+    public abstract void ShowRangePlane();
 
-    public virtual void HideRangePlane()
-    {
-    }
+    public abstract void HideRangePlane();
 
-    public virtual void EnablePlayerInteraction()
-    {
-    }
+    public abstract void EnablePlayerInteraction();
 
-    public virtual void DisablePlayerInteraction()
-    {
-    }
+    public abstract void DisablePlayerInteraction();
 
 }

@@ -201,24 +201,27 @@ public class CardPartReplaceManager : MonoBehaviour
     
     private void ReplacePartInCard()
     {
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+
         switch (partType)
         {
             case PartType.ATTACK:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
+                    selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
                 }
                 break;
             case PartType.BODY:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
+                    selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
                 }
                 break;
             case PartType.BASE:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase);
+                    selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase);
                 }
                 break;
-            default: break;
+            default: 
+                break;
         }
     }
 

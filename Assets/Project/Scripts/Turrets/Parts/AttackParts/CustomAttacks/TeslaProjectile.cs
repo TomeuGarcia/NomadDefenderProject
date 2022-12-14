@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeslaProjectile : TurretAttack
+public class TeslaProjectile : TurretPartAttack_Prefab
 {
     [SerializeField] private Lerp lerp;
 
@@ -16,7 +16,7 @@ public class TeslaProjectile : TurretAttack
     {
     }
 
-    public override void Init(Enemy targetEnemy, Turret owner)
+    public override void Init(Enemy targetEnemy, TurretBuilding owner)
     {      
         this.damage = owner.stats.damage;
 
