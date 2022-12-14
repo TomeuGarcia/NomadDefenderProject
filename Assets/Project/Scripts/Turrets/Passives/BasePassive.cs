@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PassiveType { TARGETING, DAMAGE }
+
 public class BasePassive : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] protected PassiveType passiveType;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    protected virtual void ApllyEffects() { }
 }
