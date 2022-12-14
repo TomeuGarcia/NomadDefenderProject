@@ -55,6 +55,11 @@ public class DeckBuildingCards : MonoBehaviour
         return cards.Count > 0;
     }
 
+    public GameObject GetTopFakeCard()
+    {
+        return fakeCards[0];
+    }
+
     public BuildingCard GetTopCard()
     {
         return GetCard(0);

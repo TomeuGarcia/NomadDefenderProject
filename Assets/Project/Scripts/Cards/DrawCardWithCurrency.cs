@@ -10,8 +10,10 @@ public class DrawCardWithCurrency : MonoBehaviour
     [SerializeField] private TextMeshPro costText;
     [SerializeField] private int drawCost;
     [SerializeField] private int costIncrement;
+    [SerializeField] private DeckBuildingCards deckBuildingCards;
 
     private int cardsDrawnWithCurrency = 0;
+    private Transform defaultCardPosition;
 
 
     private void OnMouseEnter()
@@ -41,7 +43,7 @@ public class DrawCardWithCurrency : MonoBehaviour
     private void Awake()
     {
         DrawUI.SetActive(false);
-        
+        defaultCardPosition = deckBuildingCards.GetTopFakeCard().transform;
     }
 
     void Start()
@@ -53,5 +55,16 @@ public class DrawCardWithCurrency : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void TiltCard()
+    {
+        //GameObject topFakeCard 
+        //defaultCardPosition.rotation = Quaternion.Lerp()
+    }
+
+    private void UntiltCard()
+    {
+
     }
 }
