@@ -8,15 +8,10 @@ public class TurretAttack : MonoBehaviour
 
     protected Enemy targetEnemy;
     protected int damage;
-    protected Vector3 moveDirection;
-    protected Collider lastHit;
     [SerializeField] protected AttackType attackType;
-    [SerializeField] protected float moveSpeed = 5f;
-    [SerializeField] protected float rotationSpeed;
-    [SerializeField] protected float lifetime = 1f;
+    [SerializeField] protected float bulletSpeed = 2.0f;
 
     [SerializeField] public Material materialForTurret;
-    [SerializeField] public Collider attackCollider;
 
     protected bool disappearing = false;
 
@@ -40,22 +35,6 @@ public class TurretAttack : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            lastHit = other;
-            OnEnemyTriggerEnter(other.GetComponent<Enemy>());
-        }
-    }
-
-    protected IEnumerator Lifetime()
-    {
-        yield return new WaitForSeconds(lifetime);
-        Debug.Log("PROJECTILE DISABLED");
-        Disable();
-    }
-
     protected virtual void Disappear()
     {
         StartCoroutine(WaitToDisable());
@@ -64,7 +43,6 @@ public class TurretAttack : MonoBehaviour
     private IEnumerator WaitToDisable()
     {
         disappearing = true;
-        attackCollider.enabled = false;
 
         yield return new WaitForSeconds(0.5f);
         Disable();
@@ -75,18 +53,5 @@ public class TurretAttack : MonoBehaviour
         gameObject.SetActive(false);
 
         disappearing = false;
-        attackCollider.enabled = true;
-    }
-
-    protected void MoveTowardsEnemyTarget()
-    {
-        moveDirection = targetEnemy.Position - transform.position;
-        transform.position = transform.position + (moveDirection.normalized * (moveSpeed * Time.deltaTime));
-    }
-    
-    protected void RotateTowardsEnemyTarget()
-    {
-        Quaternion lookRotation = Quaternion.LookRotation(moveDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 }

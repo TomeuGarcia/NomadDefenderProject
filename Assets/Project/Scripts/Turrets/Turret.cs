@@ -9,7 +9,7 @@ public class Turret : Building
     private Material rangePlaneMaterial;
 
     [Header("COMPONENTS")]
-    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private CapsuleCollider attackRangeCollider;
     [SerializeField] private Pool attackPool;
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
     private TurretPartBody_Prefab bodyPart;
@@ -26,6 +26,11 @@ public class Turret : Building
     public TurretAction OnEnemyEnterRange;
     public TurretAction OnEnemyExitRange;
     //public TurretAction OnEnemyShot;
+
+    private TurretPartBody.BodyType bodyType;
+
+
+
 
     private void Awake()
     {
@@ -77,16 +82,18 @@ public class Turret : Building
     }
 
 
-    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase)
+    public override void Init(TurretStats turretStats, GameObject turretAttack, GameObject turretPartBody, GameObject turretPartBase, TurretPartBody.BodyType bodyType)
     {
         InitStats(turretStats);
+        this.bodyType = bodyType;
 
-        int range = stats.range * 2 + 1;
+        float planeRange = stats.range * 2 + 1; //only for square
+        float range = stats.range;
 
-        boxCollider.size = new Vector3(range, 1.0f, range);
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (range / 10f);
+        attackRangeCollider.radius = range+ 0.5f;
+        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
         rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", (float)range);
+        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
 
 
         TurretAttack _turretAttack = turretAttack.GetComponent<TurretAttack>();
@@ -144,7 +151,7 @@ public class Turret : Building
         basePart.SetPreviewMaterial();
 
         meshMouseNotifier.gameObject.SetActive(false);
-        boxCollider.enabled = false;
+        attackRangeCollider.enabled = false;
         isFunctional = false;
     }
 
@@ -154,7 +161,7 @@ public class Turret : Building
         basePart.SetDefaultMaterial();
         
         meshMouseNotifier.gameObject.SetActive(true);
-        boxCollider.enabled = true;
+        attackRangeCollider.enabled = true;
         isFunctional = true;
     }
 
@@ -197,6 +204,9 @@ public class Turret : Building
         currentAttack.Init(enemyTarget, this);
 
         enemyTarget.ChangeMat();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
     }
 
 

@@ -22,6 +22,7 @@ public class CurrencySpawner : MonoBehaviour
     {
         GameObject currency = currencyPool.GetObject(enemy.Position + Vector3.up * 0.2f, Quaternion.identity);
         currency.SetActive(true);
+        Debug.Log(enemy.currencyDrop);
         currency.gameObject.GetComponent<DroppedCurrency>().SetValue(enemy.currencyDrop);
     }
 

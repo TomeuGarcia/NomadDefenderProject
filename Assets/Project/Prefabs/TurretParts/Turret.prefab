@@ -175,8 +175,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5698239489495674825}
   - component: {fileID: 5698239489495674830}
-  - component: {fileID: 5698239489495674831}
-  m_Layer: 0
+  - component: {fileID: 6802527228143950705}
+  m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,11 +219,11 @@ MonoBehaviour:
   bodyHolder: {fileID: 3377734192195378721}
   baseHolder: {fileID: 40166544886556335}
   rangePlaneMeshObject: {fileID: 7474589781879230955}
-  boxCollider: {fileID: 5698239489495674831}
+  attackRangeCollider: {fileID: 6802527228143950705}
   attackPool: {fileID: 545322700181983757}
   meshMouseNotifier: {fileID: 3211515142764232979}
---- !u!65 &5698239489495674831
-BoxCollider:
+--- !u!136 &6802527228143950705
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -232,9 +232,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0, y: 1, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5
+  m_Height: 20
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &7474589781879230955
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,8 +262,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7474589781879230955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.205, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.008, y: 0.205, z: -0.007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5698239489495674825}

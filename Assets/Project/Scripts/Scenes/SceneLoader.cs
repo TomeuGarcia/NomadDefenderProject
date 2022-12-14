@@ -25,8 +25,24 @@ public class SceneLoader : MonoBehaviour
     delegate void LoadSceneFunction();
 
     private int mainMenuSceneIndex = 1;
-    private bool alreadyLoadingNextScene;    
+    private bool alreadyLoadingNextScene;
 
+
+    public delegate void SceneLoaderAction();
+    public static event SceneLoaderAction OnSceneForceQuit;
+
+
+
+    int init = 0;
+    int menu = 1;
+    int td1 = 2;
+    int td2 = 3;
+    int newCard = 4;
+    int upgrade1 = 5;
+    int upgrade2 = 6;
+    int upgrade3 = 7;
+
+    bool lastWasTD2 = false;
 
 
     private void Awake()
@@ -75,7 +91,13 @@ public class SceneLoader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
         {
+            if (OnSceneForceQuit != null) OnSceneForceQuit();
             StartLoadMainMenu();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(Random.Range(0, 3) + upgrade1);
         }
     }
 
@@ -103,29 +125,45 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = true;
 
         ShutAnimation(shutAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenShut();
         yield return new WaitForSeconds(shutAnimDuration);
 
         loadSceneFunction();
         yield return new WaitForSeconds(loadSceneDuration);
 
         OpenAnimation(openAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenOpen();
         yield return new WaitForSeconds(openAnimDuration);
 
         alreadyLoadingNextScene = false;
     }
     private void LoadNextScene()
     {
-        int nextSceneI = SceneManager.GetActiveScene().buildIndex + 1;
+        int nextSceneI = SceneManager.GetActiveScene().buildIndex;
+        int current = SceneManager.GetActiveScene().buildIndex;
 
-        if (nextSceneI < SceneManager.sceneCountInBuildSettings)
+        
+
+        if (current <= menu)
         {
-            SceneManager.LoadScene(nextSceneI);
+            nextSceneI++;
+        }
+        else if(current <= td2)
+        {
+            nextSceneI = Random.Range(0, 3) + upgrade1;
+
+            lastWasTD2 = (current == td2);
+        }
+        else if(current == newCard)
+        {
+            nextSceneI = (lastWasTD2) ? td1 : td2;
         }
         else
         {
-            LoadMainMenu();
+            nextSceneI = newCard;
         }
-        
+
+        SceneManager.LoadScene(nextSceneI);        
     }
 
     private void StartLoadMainMenu()

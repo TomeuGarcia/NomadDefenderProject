@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TeslaProjectile : TurretAttack
 {
+    [SerializeField] private Lerp lerp;
+
     [SerializeField] private int maxTargetAmount = 3;
     [SerializeField] private float range;
     private int currentTarget;
@@ -12,15 +14,6 @@ public class TeslaProjectile : TurretAttack
 
     protected override void DoUpdate()
     {
-        MoveTowardsEnemyTarget();
-
-        if (Vector3.Distance(transform.position, targetEnemy.transform.position) < 0.25f)
-        {
-            OnEnemyTriggerEnter(targetEnemy);
-        }
-
-        //IF ROTATION IS NEEDED
-        //RotateTowardsEnemyTarget();
     }
 
     public override void Init(Enemy targetEnemy, Turret owner)
@@ -35,28 +28,34 @@ public class TeslaProjectile : TurretAttack
         currentTarget = 0;
         this.targetEnemy = targetedEnemies[currentTarget];
 
-
-        StartCoroutine(Lifetime());
+        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        StartCoroutine(WaitForLerpFinish());
     }
 
-    protected override void OnEnemyTriggerEnter(Enemy enemy)
+    IEnumerator WaitForLerpFinish()
     {
-        if (enemy == targetEnemy)
+        yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
+        EnemyHit();
+    }
+
+    void EnemyHit()
+    {
+        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+        temp.gameObject.SetActive(true);
+
+        targetEnemy.TakeDamage(damage);
+
+        if (++currentTarget < targetedEnemies.Length)
         {
-            GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
-            temp.SetActive(true);
+            targetEnemy = targetedEnemies[currentTarget];
 
-            enemy.TakeDamage(damage);
-
-            if (++currentTarget < targetedEnemies.Length)
-            {
-                targetEnemy = targetedEnemies[currentTarget];
-            }
-            else
-            {
-                StopAllCoroutines();
-                Disappear();
-            }
+            lerp.LerpPosition(targetEnemy.Position, bulletSpeed);
+            StartCoroutine(WaitForLerpFinish());
+        }
+        else
+        {
+            //StopAllCoroutines();
+            Disappear();
         }
     }
 }

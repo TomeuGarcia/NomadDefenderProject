@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageRangeProjectile : HomingProjectile
@@ -17,9 +18,10 @@ public class DamageRangeProjectile : HomingProjectile
 
         targetEnemy.QueueDamage(damage);
 
-        StartCoroutine(Lifetime());
+        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        StartCoroutine(WaitForLerpFinish());
 
-        Debug.Log(owner.stats.damage + " -> " + this.damage);
+        //Debug.Log(owner.stats.damage + " -> " + this.damage);
     }
 
 }

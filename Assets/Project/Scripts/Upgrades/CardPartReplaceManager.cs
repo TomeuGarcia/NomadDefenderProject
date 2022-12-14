@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
@@ -91,7 +92,16 @@ public class CardPartReplaceManager : MonoBehaviour
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
 
-        upgradeCardHolder.Init(GetRandomDeckCards());
+        List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
+        for (int i = 0; i < deckCards.Count; ++i)
+        {
+            if (!randomCards.Contains(deckCards[i]))
+            {
+                deckCards[i].DisableMouseInteraction();
+            }            
+        }
+
+        upgradeCardHolder.Init(randomCards.ToArray());
     }
 
     private void InitAttacks()
@@ -171,6 +181,14 @@ public class CardPartReplaceManager : MonoBehaviour
             replacementDone = true;
 
             StartCoroutine(ReplecementAnimation());
+
+            // Audio
+            GameAudioManager.GetInstance().PlayUpgradeButtonPressed();
+        }
+        else
+        {
+            // Audio
+            GameAudioManager.GetInstance().PlayUpgradeButtonCantBePressed();
         }
     }
 
@@ -219,7 +237,11 @@ public class CardPartReplaceManager : MonoBehaviour
         Transform partTransform = cardPartHolder.selectedCardPart.transform;
 
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardPartSwap();
+        yield return new WaitForSeconds(0.2f);
 
         // Move part towards card
         partTransform.DOMove(upgradedCardStartPos, partMoveDuration);

@@ -84,7 +84,6 @@ public class UpgradeCardHolder : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = transform.right * displacementStep * i;
             Vector3 heightDisplacement = transform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = transform.forward * (-0.1f * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
 
@@ -105,6 +104,9 @@ public class UpgradeCardHolder : MonoBehaviour
         BuildingCard.OnCardHovered -= SetHoveredCard;
         BuildingCard.OnCardUnhovered += SetStandardCard;
         BuildingCard.OnCardSelected += SetSelectedCard;
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void SetStandardCard(BuildingCard card)
@@ -128,6 +130,9 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
         if (OnCardSelected != null) OnCardSelected();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
 
@@ -139,6 +144,9 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = null;
 
         if (OnCardUnselected != null) OnCardUnselected();
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
     public void StopInteractions()
@@ -169,6 +177,9 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = null;
 
         StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards));
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
     private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards)

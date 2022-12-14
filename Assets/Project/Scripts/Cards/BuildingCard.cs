@@ -34,6 +34,7 @@ public class BuildingCard : MonoBehaviour
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private Lerp lerp;
+    [SerializeField] private Collider cardCollider;
 
 
     private Vector3 initialPosition;
@@ -195,7 +196,7 @@ public class BuildingCard : MonoBehaviour
     public void CreateCopyBuildingPrefab()
     {
         copyTurretPrefab = Instantiate(turretPrefab, Vector3.zero, Quaternion.identity);
-        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack.prefab, turretPartBody.prefab, turretPartBase.prefab);
+        copyTurretPrefab.GetComponent<Building>().Init(turretStats, turretPartAttack.prefab, turretPartBody.prefab, turretPartBase.prefab, turretPartBody.bodyType);
         copyTurretPrefab.SetActive(false);
     }
 
@@ -300,6 +301,15 @@ public class BuildingCard : MonoBehaviour
     public void SetCannotBePlayedAnimation()
     {
         cardMaterial.SetFloat("_CanBePlayed", 0f);
+    }
+
+    public void EnableMouseInteraction()
+    {
+        cardCollider.enabled = true;
+    }
+    public void DisableMouseInteraction()
+    {
+        cardCollider.enabled = false;
     }
 
 
