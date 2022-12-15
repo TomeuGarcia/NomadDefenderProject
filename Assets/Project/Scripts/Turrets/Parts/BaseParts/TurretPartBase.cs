@@ -18,7 +18,7 @@ public class TurretPartBase : ScriptableObject
 
     [Header("PASSIVES")]
     [SerializeField] public BasePassive passive;
-    [SerializeField] public GameObject supportPassive;
+    //[SerializeField] public GameObject supportPassive; //passive of a combined support building??
 
     [Header("VISUALS")]
     [SerializeField] public Texture2D materialTexture;
