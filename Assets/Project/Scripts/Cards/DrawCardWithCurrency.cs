@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
@@ -11,7 +12,7 @@ public class DrawCardWithCurrency : MonoBehaviour
     [SerializeField] private GameObject DrawUI;
     [SerializeField] private TextMeshPro tittleText;
     [SerializeField] private TextMeshPro costText;
-    [SerializeField] private SpriteRenderer currencySprite;
+    [SerializeField] private Image currencySprite;
 
     [SerializeField] private Color defualtTextColor;
     [SerializeField] private Color cantDrawColor;
@@ -137,9 +138,9 @@ public class DrawCardWithCurrency : MonoBehaviour
         costText.color = cantDrawColor;
         costText.DOColor(defualtTextColor, 0.5f);
 
-        /*currencySprite.DOPunch();
+        //currencySprite.DOPunch();
         currencySprite.color = cantDrawColor;
-        currencySprite.DOColor(defualtTextColor, 0.5f);*/
+        currencySprite.DOColor(defualtTextColor, 0.5f);
 
     }
 }
