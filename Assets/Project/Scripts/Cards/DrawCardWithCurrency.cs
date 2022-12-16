@@ -41,7 +41,7 @@ public class DrawCardWithCurrency : MonoBehaviour
 
         DrawUI.SetActive(true);
         TiltCard();
-        //Tilt first FakeCard
+        GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void OnMouseExit()
@@ -50,7 +50,7 @@ public class DrawCardWithCurrency : MonoBehaviour
 
         DrawUI.SetActive(false);
         UntiltCard();
-        //Untilt first FakeCard
+        GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
     private void OnMouseDown()
@@ -62,6 +62,7 @@ public class DrawCardWithCurrency : MonoBehaviour
             //TODO Play Sound
             CantAffordDraw();
             UntiltCard();
+            GameAudioManager.GetInstance().PlayCardHoverExit();
             return;
         }
         //Draw Card
@@ -73,6 +74,7 @@ public class DrawCardWithCurrency : MonoBehaviour
         drawCost += costIncrement;
         costText.text = drawCost.ToString();
         UntiltCard();
+        GameAudioManager.GetInstance().PlayCurrencySpent();
     }
 
 
@@ -130,11 +132,11 @@ public class DrawCardWithCurrency : MonoBehaviour
         costText.DOKill();
         currencySprite.DOKill();
 
-        //tittleText.DOPunchPosition(Vector3.zero, 0.5f, 2, 0.25f, false);
+        tittleText.transform.DOPunchPosition(Vector3.forward * 0.1f, 0.25f, 1, 0.25f, false);
         tittleText.color = cantDrawColor;
         tittleText.DOColor(defualtTextColor, 0.5f);
 
-        //costText.DOPunchPosition(Vector3.zero, 0.5f, 2, 0.25f, false);
+        costText.transform.DOPunchPosition(Vector3.forward * 0.11f, 0.25f, 1, 0.25f, false);
         costText.color = cantDrawColor;
         costText.DOColor(defualtTextColor, 0.5f);
 
