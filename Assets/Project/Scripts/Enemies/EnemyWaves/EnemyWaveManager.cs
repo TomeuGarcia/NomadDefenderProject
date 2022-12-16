@@ -17,7 +17,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
-
+    public static event EnemyWaveManagerAction OnWaveFinished;
 
 
 
@@ -81,6 +81,7 @@ public class EnemyWaveManager : MonoBehaviour
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner)
     {
         debugText.text = "Waiting for new wave...";
+        if(OnWaveFinished != null) OnWaveFinished();
 
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
