@@ -78,7 +78,6 @@ public class DrawCardWithCurrency : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
     private void Awake()
     {
         DrawUI.SetActive(false);
@@ -88,14 +87,11 @@ public class DrawCardWithCurrency : MonoBehaviour
     {
         yield return null;
         costText.text = drawCost.ToString();
-        defaultCardPosition = deckBuildingCards.GetTopFakeCard().transform.localPosition;
+        defaultCardPosition = deckBuildingCards.GetTopCardTransform().localPosition;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
 
     private void TiltCard()
     {
@@ -103,12 +99,12 @@ public class DrawCardWithCurrency : MonoBehaviour
         //defaultCardPosition.rotation = Quaternion.Lerp()
 
         //TODO Play Sound
-        GameObject topFakeCard = deckBuildingCards.GetTopFakeCard();
-        topFakeCard.transform.DOKill();
-        Vector3 endPos = new Vector3(-0.2f,0f,-0.07f);
-        topFakeCard.transform.DOLocalMove(endPos, 0.1f);
-        Vector3 endRotation = new Vector3(0f, -16.15f, 0f);
-        topFakeCard.transform.DOLocalRotate(endRotation, 0.1f);
+        Transform cardTransform = deckBuildingCards.GetTopCardTransform();
+        cardTransform.DOKill();
+        Vector3 endPos = new Vector3(0.2f, 0.1f, 0.0f);
+        cardTransform.DOLocalMove(endPos, 0.1f);
+        Vector3 endRotation = new Vector3(0f, 0.0f, -8.0f);
+        cardTransform.DOLocalRotate(endRotation, 0.1f);
 
     }
 
@@ -116,12 +112,12 @@ public class DrawCardWithCurrency : MonoBehaviour
     {
         //TODO Play Sound
 
-        GameObject topFakeCard = deckBuildingCards.GetTopFakeCard();
-        topFakeCard.transform.DOKill();
+        Transform cardTransform = deckBuildingCards.GetTopCardTransform();
+        cardTransform.transform.DOKill();
 
-        topFakeCard.transform.DOLocalMove(defaultCardPosition, 0.2f);
+        cardTransform.transform.DOLocalMove(defaultCardPosition, 0.2f);
 
-        topFakeCard.transform.DOLocalRotate(Vector3.zero, 0.2f);
+        cardTransform.transform.DOLocalRotate(Vector3.zero, 0.2f);
     }
 
     private void CantAffordDraw()
