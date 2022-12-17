@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class CardDrawer : MonoBehaviour
 {
@@ -53,12 +54,21 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawTopCard()
     {
-        hand.AddCard(deck.GetTopCard());
+        AddCardToHand(deck.GetTopCard());
     }
     private void DrawRandomCard()
     {
-        hand.AddCard(deck.GetRandomCard());
+        AddCardToHand(deck.GetRandomCard());
     }
+
+    private void AddCardToHand(BuildingCard card)
+    {
+        hand.HintedCardWillBeAdded();
+        hand.AddCard(card);
+    }
+
+
+
 
     private void DrawCardAfterWave()
     {

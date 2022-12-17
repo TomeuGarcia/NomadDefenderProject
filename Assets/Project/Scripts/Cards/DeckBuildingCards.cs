@@ -10,12 +10,9 @@ public class DeckBuildingCards : MonoBehaviour
     private List<BuildingCard> cards;
 
 
-    [Header("Fake Deck")]
+    [Header("DECK")]
+    [SerializeField] private Transform cardsHolder;
     [SerializeField] private Transform fakeDeck;
-    [SerializeField] private GameObject fakeCardPrefab;
-    private GameObject[] fakeCards;
-    private int lastFakeCardI;
-    //[SerializeField] private TextMeshPro cardCountText;
 
 
     public void Init()
@@ -25,28 +22,34 @@ public class DeckBuildingCards : MonoBehaviour
         float upStep = 0.1f;
         float numCards = cards.Count;
 
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < cards.Count; ++i)
         {
-            cards[i].transform.SetParent(transform);
+            cards[i].CardTransform.SetParent(transform);
 
-            Quaternion rotation = Quaternion.FromToRotation(cards[i].transform.forward, -transform.up);
-            cards[i].transform.rotation = rotation;      
-            cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += transform.up * (upStep * (numCards - (i+1)));
+            Quaternion rotation = Quaternion.FromToRotation(cards[i].CardTransform.forward, -transform.up);
+            cards[i].CardTransform.rotation = rotation;      
+            cards[i].CardTransform.localPosition = Vector3.zero;
+            cards[i].CardTransform.position += transform.up * (upStep * (numCards - (i+1)));
+
+            cards[i].cardLocation = BuildingCard.CardLocation.DECK;
+
+            cards[i].DisableMouseInteraction();
         }
 
 
-        fakeCards = new GameObject[cards.Count];
-        for (int i = 0; i < fakeCards.Length; i++)
+        ArrangeCards();
+    }
+
+    private void ArrangeCards()
+    {
+        for (int i = 0; i < cards.Count; ++i)
         {
-            Vector3 offset = -fakeDeck.forward * (i * 0.15f);
+            Vector3 offset = cardsHolder.forward * (i * 0.15f);
 
-            fakeCards[i] = Instantiate(fakeCardPrefab, fakeDeck);
-            fakeCards[i].transform.localPosition = offset;
+            cards[i].CardTransform.SetParent(cardsHolder);
+            cards[i].CardTransform.localPosition = offset;
+            cards[i].CardTransform.localRotation = Quaternion.identity;
         }
-        lastFakeCardI = fakeCards.Length - 1;
-
-        //cardCountText.text = cards.Count.ToString();
     }
 
 
@@ -55,9 +58,9 @@ public class DeckBuildingCards : MonoBehaviour
         return cards.Count > 0;
     }
 
-    public GameObject GetTopFakeCard()
+    public Transform GetTopCardTransform()
     {
-        return fakeCards[0];
+        return cards[0].CardTransform;
     }
 
     public BuildingCard GetTopCard()
@@ -74,9 +77,7 @@ public class DeckBuildingCards : MonoBehaviour
 
         cards.RemoveAt(cardI);
 
-        fakeCards[lastFakeCardI--].SetActive(false);
-        //cardCountText.text = cards.Count.ToString();
-        //if (cards.Count == 0) cardCountText.gameObject.SetActive(false);
+        ArrangeCards();
 
         return topCard;
     }
