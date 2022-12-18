@@ -16,7 +16,10 @@ public class HomingProjectile : TurretPartAttack_Prefab
         this.targetEnemy = targetEnemy;
         this.damage = owner.stats.damage;
 
-        targetEnemy.QueueDamage(damage);
+        targetEnemy.QueueDamage(damage, passiveDamageModifier);
+
+        if(owner.baseDamagePassive != null)
+            SetPassiveDamageModifier(owner.baseDamagePassive);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
@@ -33,7 +36,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
         GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
 
-        targetEnemy.TakeDamage(damage);
+        targetEnemy.TakeDamage(damage, passiveDamageModifier);
         //StopAllCoroutines();
         Disappear();
     }

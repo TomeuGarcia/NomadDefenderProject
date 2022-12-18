@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1170852919597488481}
   - component: {fileID: 198006566833586972}
   m_Layer: 10
-  m_Name: BaseAbility_Image
+  m_Name: BasePassive_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 199754705357595154}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6713492665992794844}
@@ -782,8 +782,9 @@ MonoBehaviour:
   playCostText: {fileID: 3900070928159254988}
   rangeText: {fileID: 3900070926336163630}
   rangeFillImage: {fileID: 3785943215656454329}
-  baseAbilityImage: {fileID: 198006566833586972}
+  basePassiveImage: {fileID: 198006566833586972}
   turretPartBase: {fileID: 11400000, guid: 63b0a314aadd34c47a16663127da0770, type: 2}
+  turretPassiveBase: {fileID: 0}
   baseMeshRenderer: {fileID: 278402827947782418}
 --- !u!1 &3900070927669277505
 GameObject:
@@ -1270,7 +1271,7 @@ GameObject:
   - component: {fileID: 4180439739036724238}
   - component: {fileID: 3993355058692308295}
   m_Layer: 10
-  m_Name: BaseAbility_Background
+  m_Name: BasePassive_Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1285,7 +1286,7 @@ RectTransform:
   m_GameObject: {fileID: 5700554897438513703}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1.600001}
-  m_LocalScale: {x: 0.19999999, y: 0.19999999, z: 0.19999999}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8174877371716551620}

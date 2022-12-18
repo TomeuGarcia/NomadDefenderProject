@@ -16,7 +16,10 @@ public class DamageRangeProjectile : HomingProjectile
         this.targetEnemy = targetEnemy;
         this.damage = baseDamage + bonus;
 
-        targetEnemy.QueueDamage(damage);
+        if (owner.baseDamagePassive != null)
+            SetPassiveDamageModifier(owner.baseDamagePassive);
+
+        targetEnemy.QueueDamage(damage, passiveDamageModifier);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());

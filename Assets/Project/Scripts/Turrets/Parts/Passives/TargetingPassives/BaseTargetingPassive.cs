@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseTargetingPassives : BasePassive
+public abstract class BaseTargetingPassive : BasePassive
 {
-    public override void Init(RangeBuilding owner)
+    protected TurretBuilding turretOwner;
+
+    public override void ApplyEffects(TurretBuilding owner)
     {
         owner.SetEnemySortFunction(SortingFunction);
-        passiveType = PassiveType.TARGETING;
+        turretOwner = owner;
     }
 
     protected abstract int SortingFunction(Enemy e1, Enemy e2);

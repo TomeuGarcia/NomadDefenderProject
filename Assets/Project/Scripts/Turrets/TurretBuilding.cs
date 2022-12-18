@@ -24,6 +24,8 @@ public class TurretBuilding : RangeBuilding
     private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
+    public PassiveDamageModifier baseDamagePassive;
+
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
 
@@ -91,6 +93,8 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, range);
 
+        //PASSIVE
+        turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
         DisableFunctionality();
     }
