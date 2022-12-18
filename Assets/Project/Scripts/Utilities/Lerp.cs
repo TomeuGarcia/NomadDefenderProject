@@ -175,7 +175,7 @@ public class Lerp : MonoBehaviour
     public void LerpPosition(Transform newTransformTarget, float lerpSpeed)
     {
         posLerpTime = ((newTransformTarget.position - transform.position).magnitude / 15.0f) / lerpSpeed;
-        Debug.Log(posLerpTime);
+
         invertPosFunction = false;
         transformTarget = newTransformTarget;
 

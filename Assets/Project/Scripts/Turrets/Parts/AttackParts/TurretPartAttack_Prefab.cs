@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TurretPartAttack_Prefab;
 
-
+public delegate int PassiveDamageModifier(int damage, HealthSystem healthSystem);
 public class TurretPartAttack_Prefab : MonoBehaviour
 {
     public enum AttackType { BASIC, TESLA, LONG_RANGE }
@@ -14,7 +15,25 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     [SerializeField] public Material materialForTurret;
 
+
+    protected PassiveDamageModifier passiveDamageModifier;
+
     protected bool disappearing = false;
+
+    protected void Awake()
+    {
+        SetPassiveDamageModifier(DefaultDamage);
+    }
+
+    public int DefaultDamage(int damage, HealthSystem healthSystem)
+    {
+        return damage;
+    }
+
+    protected void SetPassiveDamageModifier(PassiveDamageModifier newPassiveDamageModifier)
+    {
+        passiveDamageModifier = newPassiveDamageModifier;
+    }
 
     public virtual void Init(Enemy targetEnemy, TurretBuilding owner)
     {
@@ -51,6 +70,8 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     private void Disable()
     {
+        SetPassiveDamageModifier(DefaultDamage);
+
         gameObject.SetActive(false);
 
         disappearing = false;

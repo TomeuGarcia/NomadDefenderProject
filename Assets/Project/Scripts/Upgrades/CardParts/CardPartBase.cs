@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static TurretBuildingCard;
 
 public class CardPartBase : CardPart
 {
@@ -10,10 +11,11 @@ public class CardPartBase : CardPart
     [SerializeField] private TextMeshProUGUI playCostText;
     [SerializeField] private TextMeshProUGUI rangeText;
     [SerializeField] private Image rangeFillImage;
-    [SerializeField] private Image baseAbilityImage;
+    [SerializeField] private Image basePassiveImage;
 
     [Header("PART")]
     [SerializeField] public TurretPartBase turretPartBase;
+    [SerializeField] public TurretPassiveBase turretPassiveBase;
 
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer baseMeshRenderer;
@@ -36,13 +38,18 @@ public class CardPartBase : CardPart
         baseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         baseMaterial.SetColor("_Color", turretPartBase.materialColor);
 
-        bool hasAbility = turretPartBase.HasAbilitySprite();
-        baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
-        if (hasAbility)
+
+        if (turretPassiveBase.passive.GetType() != typeof(BaseNullPassive))
         {
-            baseAbilityImage.sprite = turretPartBase.abilitySprite;
-            baseAbilityImage.color = turretPartBase.spriteColor;
+            basePassiveImage.transform.parent.gameObject.SetActive(true);
+
+            basePassiveImage.sprite = turretPassiveBase.visualInformation.sprite;
+            basePassiveImage.color = turretPassiveBase.visualInformation.color;
+        }
+        else
+        {
+            basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -50,5 +57,7 @@ public class CardPartBase : CardPart
     {
         playCostText.text = turretPartBase.cost.ToString();
         rangeText.text = turretPartBase.Range.ToString();
+
+        //TODO : set passive texts
     }
 }

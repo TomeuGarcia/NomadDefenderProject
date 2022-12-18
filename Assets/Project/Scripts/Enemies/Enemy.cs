@@ -111,9 +111,11 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, PassiveDamageModifier modifier)
     {
         healthHUD.Show();
+
+        damageAmount = modifier(damageAmount, healthSystem);
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
 
@@ -156,8 +158,9 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void QueueDamage(int amount)
+    public void QueueDamage(int amount, PassiveDamageModifier modifier)
     {
+        amount = modifier(amount, healthSystem);
         queuedDamage += amount;
 
         if(queuedDamage >= healthSystem.health)

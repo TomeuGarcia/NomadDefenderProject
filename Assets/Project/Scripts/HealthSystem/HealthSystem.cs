@@ -24,6 +24,12 @@ public class HealthSystem
 
     public void TakeDamage(int damageAmount)
     {
+        //float damagedArmor = armor - damageAmount;
+        //damageAmount = damageAmount - armor;
+        //armor = damagedArmor;
+
+        //if(armor <= 0)
+        //visuallyDestroyArmor()
         health -= damageAmount;
         health = health > 0 ? health : 0;
 

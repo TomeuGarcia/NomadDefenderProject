@@ -23,10 +23,13 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         targetedEnemies = owner.GetNearestEnemies(maxTargetAmount, range);
         for (int i = 0; i < targetedEnemies.Length; i++)
         {
-            targetedEnemies[i].QueueDamage(damage);
+            targetedEnemies[i].QueueDamage(damage, passiveDamageModifier);
         }
         currentTarget = 0;
         this.targetEnemy = targetedEnemies[currentTarget];
+
+        if (owner.baseDamagePassive != null)
+            SetPassiveDamageModifier(owner.baseDamagePassive);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
@@ -43,7 +46,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
 
-        targetEnemy.TakeDamage(damage);
+        targetEnemy.TakeDamage(damage, passiveDamageModifier);
 
         if (++currentTarget < targetedEnemies.Length)
         {
