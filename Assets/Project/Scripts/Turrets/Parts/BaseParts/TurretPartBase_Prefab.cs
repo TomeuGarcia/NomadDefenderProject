@@ -16,6 +16,10 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
         InitMaterials();
     }
+    virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding)
+    {
+        InitMaterials();
+    }
 
     private void InitMaterials()
     {
