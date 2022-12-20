@@ -153,7 +153,11 @@ public class CardPartReplaceManager : MonoBehaviour
         HashSet<int> randomIndices = new HashSet<int>();
         while (randomIndices.Count < numCards)
         {
-            randomIndices.Add(Random.Range(0, deckCards.Count));
+            int randomIndex = Random.Range(0, deckCards.Count);
+            if (deckCards[randomIndex].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+            {
+                randomIndices.Add(randomIndex);
+            }
         }
 
         BuildingCard[] chosenCards = new BuildingCard[numCards];
