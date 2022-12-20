@@ -160,17 +160,22 @@ public class Enemy : MonoBehaviour
 
     public void QueueDamage(int amount, PassiveDamageModifier modifier)
     {
+        Debug.Log("E1:  " + amount);
         amount = modifier(amount, healthSystem);
+        Debug.Log("E2:  " + amount);
         queuedDamage += amount;
+        Debug.Log("E3:  " + queuedDamage);
+        Debug.Log("E4:  " + healthSystem.health);
 
-        if(queuedDamage >= healthSystem.health)
-        {
-            StartCoroutine(TimedDeath());
-        }
+        //if (queuedDamage >= healthSystem.health)
+        //{
+        //    StartCoroutine(TimedDeath());
+        //}
     }
 
     IEnumerator TimedDeath()
     {
+        Debug.LogWarning("Enemy Death for timer");
         yield return new WaitForSeconds(0.5f);
         Die();
     }

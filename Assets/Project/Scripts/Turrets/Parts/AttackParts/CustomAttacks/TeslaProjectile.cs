@@ -50,9 +50,10 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
         if (++currentTarget < targetedEnemies.Length)
         {
+            Debug.Log(currentTarget);
             targetEnemy = targetedEnemies[currentTarget];
 
-            lerp.LerpPosition(targetEnemy.Position, bulletSpeed);
+            lerp.LerpPosition(targetedEnemies[currentTarget].MeshTransform, bulletSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());
         }
         else
