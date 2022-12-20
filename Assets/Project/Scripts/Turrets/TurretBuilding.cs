@@ -29,7 +29,9 @@ public class TurretBuilding : RangeBuilding
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
 
-
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform bodyHolder;
+    [SerializeField] protected Transform baseHolder;
 
     void Awake()
     {

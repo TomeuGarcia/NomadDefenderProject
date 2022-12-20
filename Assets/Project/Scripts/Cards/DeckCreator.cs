@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DeckCreator : MonoBehaviour
 {
-    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject turretCardPrefab;
+    [SerializeField] private GameObject supportCardPrefab;
     [SerializeField] private DeckData deckData;
     
     private BuildingCard[] starterCards;
@@ -12,13 +13,23 @@ public class DeckCreator : MonoBehaviour
 
     private void Awake()
     {
-        starterCards = new BuildingCard[deckData.starterTurretCardsComponents.Count];
+        int turretCardNum = deckData.starterTurretCardsComponents.Count;
+        int supportCardNum = deckData.starterSupportCardsComponents.Count;
+        starterCards = new BuildingCard[ turretCardNum+supportCardNum];
 
-        for (int i = 0; i < starterCards.Length; ++i)
+        for (int i = 0; i < turretCardNum; ++i)
         {
             //BuildingCard card = GetUninitializedNewBuildingCard();
             TurretBuildingCard card = GetUninitializedNewTurretCard();
             card.ResetParts(deckData.starterTurretCardsComponents[i]);
+
+            starterCards[i] = card;
+        }
+        for (int i = turretCardNum; i < starterCards.Length; ++i)
+        {
+            //BuildingCard card = GetUninitializedNewBuildingCard();
+            SupportBuildingCard card = GetUninitializedNewSupportCard();
+            card.ResetParts(deckData.starterSupportCardsComponents[turretCardNum-i]);
 
             starterCards[i] = card;
         }
@@ -31,19 +42,25 @@ public class DeckCreator : MonoBehaviour
         deckData.Save();
     }
 
-    public BuildingCard GetUninitializedNewBuildingCard()
-    {
-        return Instantiate(cardPrefab).GetComponent<BuildingCard>();
-    }
-
     public TurretBuildingCard GetUninitializedNewTurretCard()
     {
-        return Instantiate(cardPrefab).GetComponent<TurretBuildingCard>();
+        return Instantiate(turretCardPrefab).GetComponent<TurretBuildingCard>();
     }
 
     public void AddNewTurretCardToDeck(TurretBuildingCard turretCard)
     {
         deckData.AddTurretCard(turretCard);
+        deckData.SetStarterCardComponentsAsSaved();
+    }
+
+    public SupportBuildingCard GetUninitializedNewSupportCard()
+    {
+        return Instantiate(supportCardPrefab).GetComponent<SupportBuildingCard>();
+    }
+
+    public void AddNewSupportCardToDeck(SupportBuildingCard supportCard)
+    {
+        deckData.AddSupportCard(supportCard);
         deckData.SetStarterCardComponentsAsSaved();
     }
 

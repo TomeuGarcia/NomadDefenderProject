@@ -17,9 +17,10 @@ public class SupportBuilding : RangeBuilding
     [SerializeField] private CapsuleCollider rangeCollider;
 
     
-    //private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform baseHolder;
 
 
 
@@ -34,10 +35,7 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    void Update()
-    {
 
-    }
     public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase)
     {
         InitStats(stats);
@@ -52,7 +50,7 @@ public class SupportBuilding : RangeBuilding
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
 
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.InitAsSupportBuilding(this);
+        basePart.InitAsSupportBuilding(this,stats.range);
 
         DisableFunctionality();
     }

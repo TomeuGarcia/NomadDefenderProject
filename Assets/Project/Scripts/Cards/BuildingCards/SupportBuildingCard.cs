@@ -35,7 +35,7 @@ public class SupportBuildingCard : BuildingCard
     private SupportBuilding.SupportBuildingStats supportBuildingStats;
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer MeshRenderer;
+    [SerializeField] private MeshRenderer baseMeshRenderer;
     private Material material;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image abilityImage;
@@ -44,7 +44,7 @@ public class SupportBuildingCard : BuildingCard
 
     public void Awake()
     {
-        AwakeInit(CardBuildingType.TURRET);
+        AwakeInit(CardBuildingType.SUPPORT);
     }
     public override void CreateCopyBuildingPrefab()
     {
@@ -64,7 +64,7 @@ public class SupportBuildingCard : BuildingCard
     }
     protected override void GetMaterialsRefs()
     {
-        material = MeshRenderer.material;
+        material = baseMeshRenderer.material;
     }
 
     protected override void InitStatsFromTurretParts()

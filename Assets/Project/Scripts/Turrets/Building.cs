@@ -9,9 +9,7 @@ public abstract class Building : MonoBehaviour
 {
     [SerializeField] public Tile.TileType validTileType;
 
-    [Header("HOLDERS")]
-    [SerializeField] protected Transform bodyHolder;
-    [SerializeField] protected Transform baseHolder;
+
 
     protected bool isFunctional = false;
 
