@@ -9,11 +9,13 @@ public class TurretBuildingCard : BuildingCard
     [System.Serializable]
     public class TurretCardParts
     {
-        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody, TurretPartBase turretPartBase)
+        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+               TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
         {
             this.turretPartAttack = turretPartAttack;
             this.turretPartBody = turretPartBody;
             this.turretPartBase = turretPartBase;
+            this.turretPassiveBase = turretPassiveBase;
         }
 
         public TurretCardParts(TurretCardParts other)
@@ -21,15 +23,17 @@ public class TurretBuildingCard : BuildingCard
             this.turretPartAttack = other.turretPartAttack;
             this.turretPartBody = other.turretPartBody;
             this.turretPartBase = other.turretPartBase;
+            this.turretPassiveBase = other.turretPassiveBase;
         }
 
         public TurretPartAttack turretPartAttack;
         public TurretPartBody turretPartBody;
         public TurretPartBase turretPartBase;
+        public TurretPassiveBase turretPassiveBase;
 
         public int GetCostCombinedParts()
         {
-            return turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost;
+            return turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost + turretPassiveBase.cost;
         }
     }
 
@@ -48,7 +52,7 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
     [SerializeField] private Image rangeFillImage;
-    [SerializeField] private Image baseAbilityImage;
+    [SerializeField] private Image basePassiveImage;
 
 
     private void Awake()
@@ -85,14 +89,16 @@ public class TurretBuildingCard : BuildingCard
         cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
 
-        bool hasAbility = turretPartBase.HasAbilitySprite();
-        baseAbilityImage.transform.parent.gameObject.SetActive(hasAbility);
-        if (hasAbility)
+        if (turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive))
         {
-            baseAbilityImage.sprite = turretPartBase.abilitySprite;
-            baseAbilityImage.color = turretPartBase.spriteColor;
-        }
+            basePassiveImage.transform.parent.gameObject.SetActive(true);
 
+            basePassiveImage.sprite = turretCardParts.turretPassiveBase.visualInformation.sprite;
+            basePassiveImage.color = turretCardParts.turretPassiveBase.visualInformation.color;
+        }
+        else {
+            basePassiveImage.transform.parent.gameObject.SetActive(false);
+        }
     }
 
     protected override void InitStatsFromTurretParts()
@@ -139,11 +145,17 @@ public class TurretBuildingCard : BuildingCard
         Init();
     }
 
-    public void SetNewPartBase(TurretPartBase newTurretPartBase)
+    public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
     {
-        int costHolder = turretCardParts.turretPartBase.cost;
+        //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
+        int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
+
         turretCardParts.turretPartBase = newTurretPartBase;
         turretCardParts.turretPartBase.cost = costHolder;
+
+        turretCardParts.turretPassiveBase = newTurretPassiveBase;
+        turretCardParts.turretPassiveBase.cost = 0;
+
         Init();
     }
 

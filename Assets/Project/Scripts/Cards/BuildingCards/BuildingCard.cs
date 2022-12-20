@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using static BuildingCard;
 using DG.Tweening;
+using System.Collections;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public abstract class BuildingCard : MonoBehaviour
     public enum CardBuildingType { NONE, TURRET, SUPPORT }
     public CardBuildingType cardBuildingType { get; protected set; }
 
+
+    public enum CardLocation { NONE, DECK, HAND }
+    [HideInInspector] public CardLocation cardLocation = CardLocation.NONE;
+    private bool isRepositioning = false;
 
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
@@ -30,9 +35,9 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private Transform cardHolder;
     public Transform CardTransform => transform;
 
-    private const float unhoverTime = 0.05f;
-    private const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
-    private const float selectedTime = 0.3f;
+    public const float unhoverTime = 0.05f;
+    public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
+    public const float selectedTime = 0.3f;
 
 
     private Vector3 initialPosition;
@@ -58,9 +63,9 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
-    public static event BuildingCardAction OnCardHovered;
-    public static event BuildingCardAction OnCardUnhovered;
-    public static event BuildingCardAction OnCardSelected;
+    public event BuildingCardAction OnCardHovered;
+    public event BuildingCardAction OnCardUnhovered;
+    public event BuildingCardAction OnCardSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
@@ -84,6 +89,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (isRepositioning) return;
+
         if (cardState != CardStates.STANDARD) return;
 
         if (OnCardHovered != null) OnCardHovered(this);
@@ -91,6 +98,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (isRepositioning) return;
+
         if (cardState != CardStates.HOVERED) return;
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
@@ -98,6 +107,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (isRepositioning) return;
+
         if (cardState == CardStates.HOVERED)
         {
             if (OnCardSelected != null) OnCardSelected(this);
@@ -146,6 +157,18 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     // CARD MOVEMENT
+    public void StartRepositioning(Vector3 finalPosition, float duration)
+    {
+        isRepositioning = true;
+        CardTransform.DOMove(finalPosition, duration)
+            .OnComplete(EndRepositioning);
+    }
+    private void EndRepositioning()
+    {
+        StartCoroutine(ScuffedreinableMouseInteraction()); // not working 
+        isRepositioning = false;
+    }
+
     public void ResetCardPosition()
     {
         CardTransform.localPosition = Vector3.zero;
@@ -167,11 +190,19 @@ public abstract class BuildingCard : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
+    public void ImmediateStandardState()
+    {
+        cardState = CardStates.STANDARD;
+        CardTransform.localPosition = local_standardPosition;
+        CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
+    }
     public void StandardState()
     {
         cardState = CardStates.STANDARD;
 
         DisableMouseInteraction();
+
+        CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
             .OnComplete(() => EnableMouseInteraction());
@@ -181,6 +212,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardState = CardStates.HOVERED;
 
+        CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
@@ -189,6 +221,8 @@ public abstract class BuildingCard : MonoBehaviour
         cardState = CardStates.SELECTED;
 
         DisableMouseInteraction();
+
+        CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
             .OnComplete(() => EnableMouseInteraction());
@@ -229,6 +263,16 @@ public abstract class BuildingCard : MonoBehaviour
     public void DisableMouseInteraction()
     {
         cardCollider.enabled = false;
+    }
+
+    private IEnumerator ScuffedreinableMouseInteraction()
+    {
+        DisableMouseInteraction();
+        yield return null;
+        EnableMouseInteraction();
+
+        if (cardState == CardStates.HOVERED) 
+            if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
 }

@@ -9,6 +9,7 @@ public class PartsLibrary : ScriptableObject
     public TurretPartAttack[] attackParts;
     public TurretPartBody[] bodyParts;
     public TurretPartBase[] baseParts;
+    public TurretPassiveBase[] basePassive;
 
 
     public TurretPartAttack GetRandomTurretPartAttack()
@@ -22,6 +23,10 @@ public class PartsLibrary : ScriptableObject
     public TurretPartBase GetRandomTurretPartBase()
     {
         return baseParts[Random.Range(0, baseParts.Length)];
+    }
+    public TurretPassiveBase GetRandomTurretPassiveBase()
+    {
+        return basePassive[Random.Range(0, basePassive.Length)];
     }
 
     public TurretPartAttack[] GetRandomTurretPartAttacks(int amount)
@@ -61,6 +66,19 @@ public class PartsLibrary : ScriptableObject
         }
 
         return partsSet.ToArray();
+    }
+
+    public TurretPassiveBase[] GetRandomTurretPassiveBases(int amount)
+    {
+        if (amount > basePassive.Length) amount = basePassive.Length;
+
+        HashSet<TurretPassiveBase> passiveSet = new HashSet<TurretPassiveBase>();
+        while (passiveSet.Count < amount)
+        {
+            passiveSet.Add(GetRandomTurretPassiveBase());
+        }
+
+        return passiveSet.ToArray();
     }
 
 }

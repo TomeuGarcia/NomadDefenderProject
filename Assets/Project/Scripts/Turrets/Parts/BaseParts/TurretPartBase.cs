@@ -41,7 +41,9 @@ public class TurretPartBase : ScriptableObject
     {
         this.cost = other.cost;
         this.rangeLvl = other.rangeLvl;
+
         this.prefab = other.prefab;
+
         this.materialTexture = other.materialTexture;
         this.materialColor = other.materialColor;
         this.abilitySprite = other.abilitySprite;
