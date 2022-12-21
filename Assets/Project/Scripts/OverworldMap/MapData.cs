@@ -4,16 +4,13 @@ using UnityEngine;
 
 
 
-
-
-
-[CreateAssetMenu(fileName = "OverworldMap", menuName = "Map/OverworldMap")]
-public class OverworldMap : ScriptableObject
+[CreateAssetMenu(fileName = "NewMapData", menuName = "Map/MapData")]
+public class MapData : ScriptableObject
 {
     [System.Serializable]
     public class MapNode
     {
-        public int[] connecionsNextLevel;
+        public int[] connectionsNextLevel;
     }
 
     [System.Serializable]
@@ -25,15 +22,6 @@ public class OverworldMap : ScriptableObject
 
     [SerializeField] public MapLevel[] levels;
 
-
-
-
-    public void PrintResult()
-    {
-
-
-
-    }
 
 
 }
