@@ -6,10 +6,12 @@ public class CurrencyBase : TurretPartBase_Prefab
 {
 
     [SerializeField] private int quantityToIncreaseCurrencyDrop;
+    [SerializeField] private Transform topCube;
+    private float rot = 0;
     public override void Init(TurretBuilding turretOwner, float turretRange)
     {
         base.Init(turretOwner, turretRange);
-
+        //owner = turretOwner;
         turretOwner.OnEnemyEnterRange += increaseCurrencyDrop;
         turretOwner.OnEnemyExitRange += decreaseCurrencyDrop;
     }
@@ -17,7 +19,7 @@ public class CurrencyBase : TurretPartBase_Prefab
     public override void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
     {
         base.InitAsSupportBuilding(supportBuilding, supportRange);
-        supportBuilding.OnEnemyEnterRange += increaseCurrencyDrop;
+        supportBuilding.OnEnemyEnterRange += increaseCurrencyDrop;   
         supportBuilding.OnEnemyExitRange += decreaseCurrencyDrop;
     }
 
@@ -31,15 +33,23 @@ public class CurrencyBase : TurretPartBase_Prefab
         enemy.currencyDrop -= quantityToIncreaseCurrencyDrop;
     }
 
+    private void onEnemyDead()
+    {
+        //Change emissiveness of topObject
+        //PlaySound(?)
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        rot = topCube.localRotation.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        rot += 0.1f;
+        topCube.localRotation.Set(topCube.localRotation.x, rot, topCube.localRotation.z, topCube.localRotation.w);
+        //Do animation up-down
     }
 }
