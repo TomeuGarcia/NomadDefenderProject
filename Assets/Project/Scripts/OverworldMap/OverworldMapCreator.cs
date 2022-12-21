@@ -18,10 +18,10 @@ public class OverworldMapCreator : MonoBehaviour
     [SerializeField] private Transform holder;
 
 
-    private Vector3 mapForwardDir = Vector3.forward;
-    private Vector3 mapRightDir = Vector3.right;
+    private Vector3 MapForwardDir => holder.forward;
+    private Vector3 MapRightDir => holder.right;
 
-    private Vector3 DisplacementBetweenLevels => mapForwardDir * 2f;
+    private Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
 
     private const float NodeGapWidth = 2.0f;
 
@@ -74,12 +74,12 @@ public class OverworldMapCreator : MonoBehaviour
                 float xDisplacement = (1f - mapLevel.nodes.Length) / 2.0f;
 
                 Transform nodeTransform = Instantiate(nodePrefab, nodesHolder).transform;
-                nodeTransform.localPosition = mapRightDir * (nodeI + xDisplacement) * NodeGapWidth;
+                nodeTransform.localPosition = MapRightDir * (nodeI + xDisplacement) * NodeGapWidth;
             }
 
             Transform textTransform = Instantiate(mapTextPrefab, otherHolder).transform;
             textTransform.GetChild(0).GetComponent<TextMeshPro>().text = levelI.ToString();
-            textTransform.localPosition = mapRightDir * -3f;
+            textTransform.localPosition = MapRightDir * -3f;
         }
 
     }
@@ -117,12 +117,12 @@ public class OverworldMapCreator : MonoBehaviour
                     Vector3 currentToNext = nPos - cPos;
                     Vector3 dirCurrentToNext = currentToNext.normalized;
                     Vector3 currentToNextMidPoint = cPos + (dirCurrentToNext * (currentToNext.magnitude / 2.0f));
-                    Quaternion connectionRotation = Quaternion.FromToRotation(mapForwardDir, dirCurrentToNext);
+                    Quaternion connectionRotation = Quaternion.FromToRotation(MapForwardDir, dirCurrentToNext);
                     
                     Transform connectionTransform = Instantiate(nodeConnectionPrefab, cConnectionsHolder).transform;
 
                     connectionTransform.localPosition = currentToNextMidPoint;
-                    connectionTransform.localRotation = connectionRotation;
+                    connectionTransform.rotation = connectionRotation;
                 }
             }
         }
