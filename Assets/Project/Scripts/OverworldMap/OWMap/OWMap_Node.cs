@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MapData;
 
 public class OWMap_Node : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform nodeTransform;
+
+    public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
     {
-        
+        float centerDisplacement = (1f - numLevelNodes) / 2.0f;
+        nodeTransform.localPosition = mapRightDir * (nodeI + centerDisplacement) * nodeGapWidth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

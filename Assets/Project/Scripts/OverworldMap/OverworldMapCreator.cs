@@ -18,8 +18,8 @@ public class OverworldMapCreator : MonoBehaviour
     [SerializeField] private Transform holder;
 
 
-    private Vector3 MapForwardDir => holder.forward;
-    private Vector3 MapRightDir => holder.right;
+    private Vector3 MapForwardDir => Vector3.forward;
+    private Vector3 MapRightDir => Vector3.right;
 
     private Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
 
@@ -71,12 +71,11 @@ public class OverworldMapCreator : MonoBehaviour
 
             for (int nodeI = 0; nodeI < mapLevel.nodes.Length; ++nodeI)
             {
-                float xDisplacement = (1f - mapLevel.nodes.Length) / 2.0f;
-
-                Transform nodeTransform = Instantiate(nodePrefab, nodesHolder).transform;
-                nodeTransform.localPosition = MapRightDir * (nodeI + xDisplacement) * NodeGapWidth;
+                OWMap_Node owMapNode = Instantiate(nodePrefab, nodesHolder).GetComponent<OWMap_Node>();
+                owMapNode.InitTransform(nodeI, mapLevel.nodes.Length, MapRightDir, NodeGapWidth);
             }
 
+            // For easier development purposes:
             Transform textTransform = Instantiate(mapTextPrefab, otherHolder).transform;
             textTransform.GetChild(0).GetComponent<TextMeshPro>().text = levelI.ToString();
             textTransform.localPosition = MapRightDir * -3f;
@@ -114,15 +113,8 @@ public class OverworldMapCreator : MonoBehaviour
                     Vector3 cPos = currentNodeTransform.localPosition;
                     Vector3 nPos = nextNodeTransform.localPosition + DisplacementBetweenLevels;
 
-                    Vector3 currentToNext = nPos - cPos;
-                    Vector3 dirCurrentToNext = currentToNext.normalized;
-                    Vector3 currentToNextMidPoint = cPos + (dirCurrentToNext * (currentToNext.magnitude / 2.0f));
-                    Quaternion connectionRotation = Quaternion.FromToRotation(MapForwardDir, dirCurrentToNext);
-                    
-                    Transform connectionTransform = Instantiate(nodeConnectionPrefab, cConnectionsHolder).transform;
-
-                    connectionTransform.localPosition = currentToNextMidPoint;
-                    connectionTransform.rotation = connectionRotation;
+                    OWMap_Connection owMapConnection = Instantiate(nodeConnectionPrefab, cConnectionsHolder).GetComponent<OWMap_Connection>();
+                    owMapConnection.InitTransform(cPos, nPos, MapForwardDir);
                 }
             }
         }
