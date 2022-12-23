@@ -8,7 +8,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material previewMaterial;
     private Material[] defaultMaterials;
-    private Material[] previewMaterials;
+    protected Material[] previewMaterials;
 
 
 
@@ -33,12 +33,12 @@ public class TurretPartBase_Prefab : MonoBehaviour
         }
     }
 
-    public void SetDefaultMaterial()
+    public virtual void SetDefaultMaterial()
     {
         meshRenderer.materials = defaultMaterials;
     }
 
-    public void SetPreviewMaterial()
+    public virtual void SetPreviewMaterial()
     {
         meshRenderer.materials = previewMaterials;
     }
