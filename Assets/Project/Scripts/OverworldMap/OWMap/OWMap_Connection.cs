@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class OWMap_Connection : MonoBehaviour
 {
-    [SerializeField] private static Color defaultColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    [SerializeField] private static Color selectedColor = new Color(38f / 255f, 142f / 255f, 138f / 255f);
-    [SerializeField] private static Color unavailableColor = new Color(140f / 255f, 7f / 255f, 36f / 255f);
-
     [SerializeField] private Transform connectionTransform;
 
 
