@@ -17,6 +17,15 @@ public class SlowBase : TurretPartBase_Prefab
 
         slowPlane.transform.localScale = Vector3.one * ((float)turretRange / 10.0f);
     }
+    override public void InitAsSupportBuilding(SupportBuilding turretOwner, float supportRange)
+    {
+        base.InitAsSupportBuilding(turretOwner, supportRange);
+
+        turretOwner.OnEnemyEnterRange += SlowEnemy;
+        turretOwner.OnEnemyExitRange += StopEnemySlow;
+
+        slowPlane.transform.localScale = Vector3.one * ((float)supportRange / 10.0f);
+    }
 
     private void SlowEnemy(Enemy enemy)
     {

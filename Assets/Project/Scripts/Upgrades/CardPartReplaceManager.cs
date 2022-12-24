@@ -135,11 +135,13 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InitBases()
     {
         TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
+        TurretPassiveBase[] randomPassives = partsLibrary.GetRandomTurretPassiveBases(numParts);
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
             parts[i].turretPartBase = randomBases[i];
+            parts[i].turretPassiveBase = randomPassives[i];
         }
         cardPartHolder.Init(parts);
 
@@ -153,7 +155,11 @@ public class CardPartReplaceManager : MonoBehaviour
         HashSet<int> randomIndices = new HashSet<int>();
         while (randomIndices.Count < numCards)
         {
-            randomIndices.Add(Random.Range(0, deckCards.Count));
+            int randomIndex = Random.Range(0, deckCards.Count);
+            if (deckCards[randomIndex].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+            {
+                randomIndices.Add(randomIndex);
+            }
         }
 
         BuildingCard[] chosenCards = new BuildingCard[numCards];
@@ -217,7 +223,8 @@ public class CardPartReplaceManager : MonoBehaviour
                 break;
             case PartType.BASE:
                 {
-                    selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase);
+                    selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase,
+                                                cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase);
                 }
                 break;
             default: 

@@ -9,7 +9,7 @@ public abstract class BuildingCard : MonoBehaviour
     public static float halfWidth = 0.7f;
 
 
-    public enum CardBuildingType { NONE, TURRET }
+    public enum CardBuildingType { NONE, TURRET, SUPPORT }
     public CardBuildingType cardBuildingType { get; protected set; }
 
 

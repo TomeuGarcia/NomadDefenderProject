@@ -24,12 +24,16 @@ public class TurretBuilding : RangeBuilding
     private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
+    public PassiveDamageModifier baseDamagePassive;
+
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
 
-
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform bodyHolder;
+    [SerializeField] protected Transform baseHolder;
 
     void Awake()
     {
@@ -91,6 +95,8 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, range);
 
+        //PASSIVE
+        turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
         DisableFunctionality();
     }

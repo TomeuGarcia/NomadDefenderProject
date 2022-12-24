@@ -16,10 +16,6 @@ public class TurretPartBase : ScriptableObject
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
 
-    [Header("PASSIVES")]
-    [SerializeField] public BasePassive passive;
-    [SerializeField] public GameObject supportPassive;
-
     [Header("VISUALS")]
     [SerializeField] public Texture2D materialTexture;
     [SerializeField] public Color materialColor;
@@ -47,8 +43,6 @@ public class TurretPartBase : ScriptableObject
         this.rangeLvl = other.rangeLvl;
 
         this.prefab = other.prefab;
-
-        this.passive = other.passive;
 
         this.materialTexture = other.materialTexture;
         this.materialColor = other.materialColor;

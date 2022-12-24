@@ -94,7 +94,7 @@ public abstract class RangeBuilding : Building
         return enemySortFunction(e1, e2);
     }
 
-    private static int SortByDistanceLeftToEnd(Enemy e1, Enemy e2)
+    public static int SortByDistanceLeftToEnd(Enemy e1, Enemy e2)
     {
         return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
     }

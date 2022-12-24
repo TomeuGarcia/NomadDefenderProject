@@ -52,13 +52,14 @@ public class GatherNewCardManager : MonoBehaviour
         TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numTurretCards);
         TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numTurretCards);
         TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numTurretCards);
+        TurretPassiveBase[] passives = partsLibrary.GetRandomTurretPassiveBases(numTurretCards);
 
 
         for (int i = 0; i < numTurretCards; i++)
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(attacks[i], bodies[i], bases[i]);
+            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(attacks[i], bodies[i], bases[i], passives[i]);
             turretCard.ResetParts(cardParts);
 
             cards[i] = turretCard;

@@ -17,9 +17,10 @@ public class SupportBuilding : RangeBuilding
     [SerializeField] private CapsuleCollider rangeCollider;
 
     
-    //private TurretPartBody_Prefab bodyPart;
     private TurretPartBase_Prefab basePart;
 
+    [Header("HOLDERS")]
+    [SerializeField] protected Transform baseHolder;
 
 
 
@@ -34,25 +35,49 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    void Update()
-    {
 
+    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase)
+    {
+        InitStats(stats);
+
+        //area effect visual feedback
+        float planeRange = stats.range * 2 + 1; //only for square
+        float range = stats.range;
+
+        rangeCollider.radius = range + 0.5f;
+        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
+        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
+        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
+
+        basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart.InitAsSupportBuilding(this,stats.range);
+
+        DisableFunctionality();
     }
 
+    public void InitStats(SupportBuildingStats stats)
+    {
+        this.stats = stats;
+    }
 
     protected override void DisableFunctionality()
     {
-        throw new System.NotImplementedException();
+        base.DisableFunctionality();
+        rangeCollider.enabled = false;
+        basePart.SetPreviewMaterial();
     }
 
     protected override void EnableFunctionality()
     {
-        throw new System.NotImplementedException();
+        base.EnableFunctionality();
+        rangeCollider.enabled = true;
+        basePart.SetDefaultMaterial();
     }
 
     public override void GotPlaced()
     {
-        throw new System.NotImplementedException();
+        HideRangePlane();
+        EnableFunctionality();
     }
 
 }
