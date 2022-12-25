@@ -9,7 +9,7 @@ using UnityEngine;
 public class EnemyWaveSpawner : ScriptableObject
 {
     [SerializeField, Tooltip("Enemy stats will increase each round ddepending on this coef")]
-    private float waveMultiplierCoef = 0.1f;
+    private float waveMultiplierCoef = 0.0f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
@@ -79,8 +79,8 @@ public class EnemyWaveSpawner : ScriptableObject
 
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
-        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.2f, 0.2f)) + 
-                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.2f, 0.2f));
+        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.3f, 0.3f)) + 
+                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.3f, 0.3f));
         spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
         /////////////
 
