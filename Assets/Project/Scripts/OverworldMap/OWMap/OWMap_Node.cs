@@ -11,6 +11,10 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private static Color destroyedColor = new Color(140f / 255f, 7f / 255f, 36f / 255f);
     [SerializeField] private static Color unavailableColor = new Color(40f / 255f, 7f / 255f, 36f / 255f);
 
+    public enum NodeState { AVAILABLE, UNREACHABLE, DESTROYED }
+    private NodeState nodeState = NodeState.UNREACHABLE;
+
+
     [SerializeField] private Transform nodeTransform;
     [SerializeField] private BoxCollider interactionCollider;
     [SerializeField] private MeshRenderer meshRenderer;
