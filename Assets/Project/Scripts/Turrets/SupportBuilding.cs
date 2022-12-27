@@ -78,6 +78,7 @@ public class SupportBuilding : RangeBuilding
     {
         HideRangePlane();
         EnableFunctionality();
+        basePart.OnGetPlaced();
     }
 
 }

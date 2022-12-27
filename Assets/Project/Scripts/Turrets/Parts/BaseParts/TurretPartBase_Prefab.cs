@@ -42,4 +42,9 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
         meshRenderer.materials = previewMaterials;
     }
+
+    public virtual void OnGetPlaced()
+    {
+
+    }
 }

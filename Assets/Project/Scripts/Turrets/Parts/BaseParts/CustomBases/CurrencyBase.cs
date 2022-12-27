@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static SupportBuilding;
 
 public class CurrencyBase : TurretPartBase_Prefab
 {
@@ -9,7 +11,15 @@ public class CurrencyBase : TurretPartBase_Prefab
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
     [SerializeField] private Material topCubeMaterial;
+    [SerializeField] private GameObject currencyPlane;
+    private Material currencyPlaneMaterial;
+
     private float positionMovement = 0;
+
+    private void Awake()
+    {
+        currencyPlane.SetActive(false);
+    }
     public override void Init(TurretBuilding turretOwner, float turretRange)
     {
         base.Init(turretOwner, turretRange);
@@ -23,6 +33,19 @@ public class CurrencyBase : TurretPartBase_Prefab
         base.InitAsSupportBuilding(supportBuilding, supportRange);
         supportBuilding.OnEnemyEnterRange += increaseCurrencyDrop;   
         supportBuilding.OnEnemyExitRange += decreaseCurrencyDrop;
+
+        float planeRange = supportBuilding.stats.range * 2 + 1; //only for square
+        float range = supportBuilding.stats.range;
+
+
+        currencyPlane.transform.localScale = Vector3.one * (planeRange / 10f);
+        currencyPlaneMaterial = currencyPlane.GetComponent<MeshRenderer>().materials[0];
+        currencyPlaneMaterial.SetFloat("_TileNum", planeRange);
+    }
+
+    public override void OnGetPlaced()
+    {
+        currencyPlane.SetActive(true);
     }
 
     private void increaseCurrencyDrop(Enemy enemy)
