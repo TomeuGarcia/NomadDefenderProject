@@ -36,7 +36,7 @@ public class SupportBuilding : RangeBuilding
 
 
 
-    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase)
+    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter)
     {
         InitStats(stats);
 
@@ -52,12 +52,19 @@ public class SupportBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this,stats.range);
 
+        upgrader.InitSupport(currencyCounter); //TODO: change range for the actual level
+
         DisableFunctionality();
     }
 
     public void InitStats(SupportBuildingStats stats)
     {
         this.stats = stats;
+    }
+
+    public override void Upgrade(int statIndex)
+    {
+        //upgradePassive
     }
 
     protected override void DisableFunctionality()

@@ -109,10 +109,10 @@ public class TurretBuildingCard : BuildingCard
         turretStats.cadence = turretCardParts.turretPartBody.Cadence;
     }
 
-    public override void CreateCopyBuildingPrefab()
+    public override void CreateCopyBuildingPrefab(CurrencyCounter currencyCounter)
     {
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
-        copyBuildingPrefab.GetComponent<TurretBuilding>().Init(turretStats, turretCardParts);
+        copyBuildingPrefab.GetComponent<TurretBuilding>().Init(turretStats, turretCardParts, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 

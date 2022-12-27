@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UIElements;
 
 public class TurretBuilding : RangeBuilding
@@ -67,7 +68,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
-    public void Init(TurretBuildingStats turretStats, TurretBuildingCard.TurretCardParts turretCardParts)
+    public void Init(TurretBuildingStats turretStats, TurretBuildingCard.TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
@@ -98,12 +99,30 @@ public class TurretBuilding : RangeBuilding
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+
         DisableFunctionality();
     }
 
     public void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
+    }
+
+    public override void Upgrade(int statIndex)
+    {
+        switch(statIndex)
+        {
+            case 0:
+                //upgrade attack
+                break;
+            case 1:
+                //upgrade cadence
+                break;
+            case 2:
+                //upgrade range
+                break;
+        }
     }
 
     private void UpdateShoot()
