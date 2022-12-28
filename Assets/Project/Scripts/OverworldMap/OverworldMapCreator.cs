@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
+using static MapData;
+using static OWMap_Node;
 
 public class OverworldMapCreator : MonoBehaviour
 {
@@ -18,6 +21,7 @@ public class OverworldMapCreator : MonoBehaviour
     [SerializeField] private Transform holder;
 
 
+
     private Vector3 MapForwardDir => Vector3.forward;
     private Vector3 MapRightDir => Vector3.right;
 
@@ -26,25 +30,15 @@ public class OverworldMapCreator : MonoBehaviour
     private const float NodeGapWidth = 2.0f;
 
 
-    private void OnValidate()
-    {
-        //CleanupMap();
-        //CreateMap();
-    }
 
-    private void Awake()
-    {
-        RegenerateMap();
-    }
-
-    public void RegenerateMap()
+    public void RegenerateMap(out OWMap_Node[][] mapNodes)
     {
         CleanupMap();
-        CreateMap();
+        CreateMap(out mapNodes);
     }
 
     private void CleanupMap()
-    {
+    {      
         while (holder.childCount > 0)
         {
             Destroy(holder.GetChild(0));
@@ -52,14 +46,17 @@ public class OverworldMapCreator : MonoBehaviour
     }
 
 
-    private void CreateMap()
+    private void CreateMap(out OWMap_Node[][] mapNodes)
     {
-        CreateNodes();
-        CreateConnections();
+        CreateNodes(out mapNodes);
+        CreateConnections(mapNodes);
+        SetNodeReferences(mapNodes);
     }
 
-    public void CreateNodes()
+    private void CreateNodes(out OWMap_Node[][] mapNodes)
     {
+        mapNodes = new OWMap_Node[mapData.levels.Length][];
+
         for (int levelI = 0; levelI < mapData.levels.Length; ++levelI)
         {
             MapData.MapLevel mapLevel = mapData.levels[levelI];
@@ -69,10 +66,12 @@ public class OverworldMapCreator : MonoBehaviour
             Transform nodesHolder = levelHolder.GetChild(0);
             Transform otherHolder = levelHolder.GetChild(2);
 
+            mapNodes[levelI] = new OWMap_Node[mapLevel.nodes.Length];
+
             for (int nodeI = 0; nodeI < mapLevel.nodes.Length; ++nodeI)
             {
-                OWMap_Node owMapNode = Instantiate(nodePrefab, nodesHolder).GetComponent<OWMap_Node>();
-                owMapNode.InitTransform(nodeI, mapLevel.nodes.Length, MapRightDir, NodeGapWidth);
+                mapNodes[levelI][nodeI] = Instantiate(nodePrefab, nodesHolder).GetComponent<OWMap_Node>();
+                mapNodes[levelI][nodeI].InitTransform(nodeI, mapLevel.nodes.Length, MapRightDir, NodeGapWidth);
             }
 
             // For easier development purposes:
@@ -83,9 +82,11 @@ public class OverworldMapCreator : MonoBehaviour
 
     }
 
-    public void CreateConnections()
+    private void CreateConnections(OWMap_Node[][] mapNodes)
     {
-        for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
+        int lastMapLevelIndex = mapData.levels.Length - 1;
+
+        for (int levelI = 0; levelI < lastMapLevelIndex; ++levelI)
         {
             MapData.MapLevel mapLevel = mapData.levels[levelI];
             MapData.MapLevel mapNextLevel = mapData.levels[levelI+1];
@@ -102,6 +103,8 @@ public class OverworldMapCreator : MonoBehaviour
                 MapData.MapNode currentNode = mapLevel.nodes[nodeI];
                 Transform currentNodeTransform = cNodesHolder.GetChild(nodeI);
 
+                List<OWMap_Connection> nextLevelConnections = new List<OWMap_Connection>(); // Connections Reference
+
                 int[] connectionsNextLevel = currentNode.connectionsNextLevel;
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI)
                 {
@@ -115,15 +118,61 @@ public class OverworldMapCreator : MonoBehaviour
 
                     OWMap_Connection owMapConnection = Instantiate(nodeConnectionPrefab, cConnectionsHolder).GetComponent<OWMap_Connection>();
                     owMapConnection.InitTransform(cPos, nPos, MapForwardDir);
+
+                    nextLevelConnections.Add(owMapConnection); // Connections Reference
                 }
+
+                // Set Connections Reference
+                mapNodes[levelI][nodeI].SetNextLevelConnections(nextLevelConnections.ToArray());
             }
         }
 
     }
 
-    
 
+    private void SetNodeReferences(OWMap_Node[][] mapNodes)
+    {
+        int lastMapLevelIndex = mapData.levels.Length - 1;
 
+        for (int levelI = 0; levelI < lastMapLevelIndex; ++levelI)
+        {
+            MapData.MapLevel mapLevel = mapData.levels[levelI];
+
+            for (int nodeI = 0; nodeI < mapLevel.nodes.Length; ++nodeI)
+            {
+                MapData.MapNode currentNode = mapLevel.nodes[nodeI];
+
+                List<OWMap_Node> nextLevelNodes = new List<OWMap_Node>(); // NodeReferences
+
+                int[] connectionsNextLevel = currentNode.connectionsNextLevel;
+                for (int conI = 0; conI < connectionsNextLevel.Length; ++conI)
+                {
+                    int connectedNextNodeI = connectionsNextLevel[conI];
+
+                    nextLevelNodes.Add(mapNodes[levelI + 1][connectedNextNodeI]); // NodeReferences
+                }
+
+                // NodeReferences
+                List<OWMap_Node> neighbourLevelNodes = new List<OWMap_Node>();
+                for (int nodeJ = 0; nodeJ < mapLevel.nodes.Length; ++nodeJ)
+                {
+                    if (nodeJ != nodeI)
+                        neighbourLevelNodes.Add(mapNodes[levelI][nodeJ]);
+                }
+
+                // Set NodeReferences
+                OWMap_Node.MapReferencesData mapReferencesData =
+                    new OWMap_Node.MapReferencesData(levelI, nodeI,
+                                                     nextLevelNodes.ToArray(), neighbourLevelNodes.ToArray());
+                mapNodes[levelI][nodeI].InitMapReferencesData(mapReferencesData);
+            }
+        }
+
+        // Set NodeReferences
+        OWMap_Node.MapReferencesData lastNode_mapReferencesData =
+            new OWMap_Node.MapReferencesData(lastMapLevelIndex, 0, true);
+        mapNodes[lastMapLevelIndex][0].InitMapReferencesData(lastNode_mapReferencesData);
+    }
 
 
 }

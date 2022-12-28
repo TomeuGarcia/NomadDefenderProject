@@ -40,9 +40,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4525846865304159890}
+  - component: {fileID: 481244355035842441}
   - component: {fileID: 4525846865304159891}
   m_Layer: 0
-  m_Name: OverworldMapCreator
+  m_Name: OverworldMap
   m_TagString: Untagged
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -64,6 +65,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &481244355035842441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4525846865304159892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0eced6126dc6c479a14080aa2f3c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owMapCreator: {fileID: 4525846865304159891}
 --- !u!114 &4525846865304159891
 MonoBehaviour:
   m_ObjectHideFlags: 0
