@@ -10,10 +10,11 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private static Color hoveredColor =            new Color(.9f, .9f, .9f);
     [SerializeField] private static Color selectedColor =           new Color(38f / 255f, 142f / 255f, 138f / 255f);
 
-    [SerializeField] private static Color slightlyDamagedColor =    new Color(229f / 255f, 200f / 255f, 46f / 255f);
+    [SerializeField] private static Color slightlyDamagedColor =    new Color(170f / 255f, 299f / 255f, 81f / 255f);
     [SerializeField] private static Color severelyDamagedColor =    new Color(190f / 255f, 80f / 255f, 0f / 255f);
     [SerializeField] private static Color destroyedColor =          new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
+    private Color colorInUse = noInteractionColor;
 
     // INTERACTAVILITY
     // is interactable      ->  player can interact and travel there
@@ -63,7 +64,7 @@ public class OWMap_Node : MonoBehaviour
         public OWMap_Node[] levelNeighbourNodes;
         public bool isLastLevelNode;
     }
-    private MapReferencesData mapReferencesData;
+    private MapReferencesData mapReferencesData;    
     private OWMap_Connection cameFromConnection;
     private OWMap_Connection[] nextLevelConnections;
     
@@ -72,8 +73,14 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private BoxCollider interactionCollider;
     [SerializeField] private MeshRenderer meshRenderer;
     private Material material;
-    
-    
+
+
+    public Vector3 Position => nodeTransform.position;
+    public Vector3 Up => nodeTransform.up;
+    public Vector3 Forward => nodeTransform.forward;
+
+
+    private OverworldMapGameManager owMapGameManager;
 
 
     private void Awake()
@@ -99,6 +106,15 @@ public class OWMap_Node : MonoBehaviour
     public void SetCameFromConnection(OWMap_Connection cameFromConnection)
     {
         this.cameFromConnection = cameFromConnection;
+    }
+    public void SetOwMapGameManagerRef(OverworldMapGameManager owMapGameManager) // To be called from OverworldMapGameManager itself
+    {
+        this.owMapGameManager = owMapGameManager;
+    }
+
+    public MapReferencesData GetMapReferencesData()
+    {
+        return mapReferencesData;
     }
 
 
@@ -143,14 +159,14 @@ public class OWMap_Node : MonoBehaviour
     {
         interactState = NodeInteractState.NONE;
 
-        SetColor(noInteractionColor);
+        SetColor(colorInUse, setCameFromConnectionNotInteracted: true);
     }
 
     public void SetHovered()
     {
         interactState = NodeInteractState.HOVERED;
 
-        SetColor(hoveredColor);
+        SetColor(hoveredColor, true);
     }
 
     public void SetSelected()
@@ -160,8 +176,16 @@ public class OWMap_Node : MonoBehaviour
         SetColor(selectedColor);
 
         DisableInteraction();
+        if (!mapReferencesData.isLastLevelNode)
+        {
+            DisableNextLevelNodesInteraction(); // Disable temporarely (to update mouse collisions)
+            DisableNeighborLevelNodesInteraction(); // Disable permanently        
+        }
 
-        OnNodeSceneExit(); // TODO Move this to corresponding place
+        if (owMapGameManager != null)
+        {
+            owMapGameManager.OnMapNodeSelected(this);
+        }        
     }
 
     public void SetDestroyed()
@@ -169,13 +193,27 @@ public class OWMap_Node : MonoBehaviour
         SetColor(destroyedColor);
     }
 
-    private void SetColor(Color color)
+    private void SetColor(Color color, bool mixWithColorInUse = false, bool setCameFromConnectionNotInteracted = false)
     {
-        material.color = color;
+        if (mixWithColorInUse)
+        {
+            material.color = Color.Lerp(color, colorInUse, 0.5f);
+        }
+        else
+        {
+            material.color = color;
+        }        
 
         if (cameFromConnection != null)
         {
-            cameFromConnection.SetColor(color);
+            if (setCameFromConnectionNotInteracted)
+            {
+                cameFromConnection.SetColor(noInteractionColor);
+            }
+            else
+            {
+                cameFromConnection.SetColor(color);
+            }            
         }
     }
 
@@ -191,16 +229,19 @@ public class OWMap_Node : MonoBehaviour
             case NodeGameState.SLIGHTLY_DAMAGED:
                 {
                     SetColor(slightlyDamagedColor);
+                    colorInUse = slightlyDamagedColor;
                 }
                 break;
             case NodeGameState.SEVERELY_DAMAGED:
                 {
                     SetColor(severelyDamagedColor);
+                    colorInUse = severelyDamagedColor;
                 }
                 break;
             case NodeGameState.DESTROYED:
                 {
                     SetColor(destroyedColor);
+                    colorInUse = destroyedColor;
                 }
                 break;
             default:
@@ -208,31 +249,31 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
-
-    private void OnNodeSceneExit()
+    private void DisableNextLevelNodesInteraction()
     {
-        if (mapReferencesData.isLastLevelNode)
+        for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
         {
-            Debug.Log("END OF MAP REACHED");
-            return; // TODO do something here (END GAME)
+            OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
+            nextLevelNode.DisableInteraction();
         }
+    }
 
+    public void EnableNextLevelNodesInteraction()
+    {
         for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
         {
             OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
             nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
             nextLevelNode.EnableInteraction();
-
-            nextLevelNode.SetGameState(NodeGameState.UNDAMAGED); // TODO State shouldn't be set here
         }
+    }
 
+    private void DisableNeighborLevelNodesInteraction()
+    {
         foreach (OWMap_Node node in mapReferencesData.levelNeighbourNodes)
         {
             node.DisableInteraction();
         }
-
-        //mapReferencesData.connectionFromLastNode.SetColor(selectedColor);
-
     }
 
 }
