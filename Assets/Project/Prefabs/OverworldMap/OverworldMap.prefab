@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 481244355035842441}
   - component: {fileID: 4525846865304159891}
   - component: {fileID: 8368974391344918974}
+  - component: {fileID: 5862159990863268369}
   m_Layer: 0
   m_Name: OverworldMap
   m_TagString: Untagged
@@ -81,6 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owMapCreator: {fileID: 4525846865304159891}
   owMapDecorator: {fileID: 8368974391344918974}
+  mapSceneLoader: {fileID: 5862159990863268369}
   owMapPawn: {fileID: 3159693065526322721}
 --- !u!114 &4525846865304159891
 MonoBehaviour:
@@ -117,6 +119,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dSettings: {fileID: 11400000, guid: 54fa6e541346171458ecc57650572d46, type: 2}
+--- !u!114 &5862159990863268369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4525846865304159892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e5d09b276e9b62438de867c34a0f880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeScenes:
+    names:
+    - DrawACard_Scene
+    - ReplaceCardPart_Scene
+  earlyBattleScenes:
+  - names:
+    - SingleEarly_1
+    - SingleEarly_2
+  - names:
+    - DoubleEarly_1
+    - DoubleEarly_2
+  lateBattleScenes:
+  - names:
+    - SingleLate_1
+    - SingleLate_2
+  - names:
+    - DoubleLate_1
+    - DoubleLate_2
+  bossBattleScenes:
+  - names:
+    - SingleBoss_1
+  - names:
+    - DoubleBoss_1
 --- !u!1001 &8070610358808748709
 PrefabInstance:
   m_ObjectHideFlags: 0

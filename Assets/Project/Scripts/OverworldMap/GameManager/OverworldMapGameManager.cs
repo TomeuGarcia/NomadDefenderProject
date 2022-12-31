@@ -10,6 +10,9 @@ public class OverworldMapGameManager : MonoBehaviour
     [SerializeField] private OverworldMapCreator owMapCreator;
     [SerializeField] private OverworldMapDecorator owMapDecorator;
 
+    [Header("MAP SCENE LOADER")]
+    [SerializeField] private MapSceneLoader mapSceneLoader;
+
     [Header("PAWN")]     
     [SerializeField] private OWMapPawn owMapPawn;
 
@@ -29,6 +32,8 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         owMapCreator.RegenerateMap(out mapNodes);
         owMapDecorator.DecorateMap(mapNodes);
+
+        mapSceneLoader.Init();
 
         StartAtFirstLevel();
     }
@@ -56,12 +61,9 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         this.currentNode = reachedNode;
 
-        // TODO: start node scene here
-        // TEST: for now proceed
-        if (IsCurrentNodeBattle() && !currentNode.GetMapReferencesData().isLastLevelNode) // TEST
-            CreateNewBattleStateResult(out currentBattleStateResult); // TEST
+        StartCurrentNodeScene();
 
-        ResumeMapAfterNodeScene();
+        ResumeMapAfterNodeScene(); // TEST (this should be called on scene finish)
     }
 
     private void ResumeMapAfterNodeScene()
@@ -135,5 +137,34 @@ public class OverworldMapGameManager : MonoBehaviour
     {        
         return currentNode.nodeType == NodeEnums.NodeType.BATTLE;
     }
+
+
+
+    // SCENES
+    private void StartCurrentNodeScene()
+    {
+        if (currentNode.nodeType == NodeEnums.NodeType.UPGRADE)
+        {
+            StartUpgradeScene(NodeEnums.UpgradeType.DRAW_A_CARD, NodeEnums.HealthState.UNDAMAGED); // TEST hardcoded
+        }
+        else if (currentNode.nodeType == NodeEnums.NodeType.BATTLE)
+        {
+            StartBattleScene(NodeEnums.BattleType.EARLY, 1); // TEST hardcoded
+
+            CreateNewBattleStateResult(out currentBattleStateResult); // TEST (remove this once scenes are working) !!!
+        }
+    }
+
+
+    private void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
+    {
+        mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
+    }
+
+    private void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
+    {
+        mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
+    }
+
 
 }
