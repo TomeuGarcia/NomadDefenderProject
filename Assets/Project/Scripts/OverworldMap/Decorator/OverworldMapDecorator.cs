@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class OverworldMapDecorator : MonoBehaviour
 {
@@ -25,10 +26,11 @@ public class OverworldMapDecorator : MonoBehaviour
 
 
         int lastIteratedLevel = mapNodes.Length;
-        if (dSettings.lastNodeIsBattle)
+        if (dSettings.battleBeforeLastNode)
         {
-            --lastIteratedLevel;
-            DecorateBattleLevel(mapNodes[mapNodes.Length - 1]);
+            lastIteratedLevel -= 2;
+            DecorateBattleLevel(mapNodes[mapNodes.Length - 2]); // Boss
+            DecorateUpgradeLevel(mapNodes[mapNodes.Length - 1]); // Finale
         }
 
 
@@ -74,6 +76,8 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private bool IsBattleLevel(int levelI)
     {
+        if (levelI > dSettings.lastLevelWithBattles) return false;
+
         return (levelI - firstBattleLevel) % dSettings.battleAfterNLevels == 0;
     }
 

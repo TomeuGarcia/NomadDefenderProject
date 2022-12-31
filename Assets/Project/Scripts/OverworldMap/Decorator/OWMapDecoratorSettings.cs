@@ -8,6 +8,7 @@ public class OWMapDecoratorSettings : ScriptableObject
     [SerializeField] public bool firstNodeIsEmpty = true;
     [SerializeField, Min(0)] public int numStartUpgradesLevels = 2;
     [SerializeField, Min(0)] public int battleAfterNLevels = 3;
-    [SerializeField] public bool lastNodeIsBattle = true;
+    [SerializeField, Min(0)] public int lastLevelWithBattles = 10;
+    [SerializeField] public bool battleBeforeLastNode = true;
 
 }
