@@ -20,13 +20,26 @@ public class TDGameManager : MonoBehaviour
     public static event TDGameManagerAction OnGameOverComplete;
     public static event TDGameManagerAction OnEndGameResetPools;
 
+    public delegate void TD_GM_BattleStateAction(out BattleStateResult battleStateResult);
+    public static event TD_GM_BattleStateAction OnQueryReferenceToBattleStateResult;
+
+
+    // BattleStateResult
+    private BattleStateResult battleStateResult;
+    [Header("PATH LOCATIONS")]
+    [SerializeField] private PathLocation[] pathLocations;
+
+
 
 
     private void Awake()
     {
         victoryHolder.SetActive(false);
         defeatHolder.SetActive(false);
-    }
+
+        if (OnQueryReferenceToBattleStateResult != null)
+            OnQueryReferenceToBattleStateResult(out battleStateResult);
+    }    
 
 
     private void OnEnable()
@@ -44,6 +57,8 @@ public class TDGameManager : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("GameOver");
+        SetBattleStateResult();
+
         StartCoroutine(GameOverAnimation());
 
         if (OnGameOverStart != null) OnGameOverStart();
@@ -59,6 +74,8 @@ public class TDGameManager : MonoBehaviour
     private void Victory()
     {
         Debug.Log("Victory");
+        SetBattleStateResult();
+
         StartCoroutine(VictoryAnimation());
     }
 
@@ -79,6 +96,31 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
         if (OnVictoryComplete != null) OnVictoryComplete();
+    }
+
+
+    private void SetBattleStateResult()
+    {
+        for (int i = 0; i < battleStateResult.nodeResults.Length; ++i)
+        {
+            battleStateResult.nodeResults[i].healthState = ComputeHealthState(pathLocations[i].healthSystem);
+        }
+    }
+
+    public NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
+    {
+        if (healthSystem.IsDead())
+            return NodeEnums.HealthState.DESTROYED;
+
+        if (healthSystem.IsFullHealth())
+            return NodeEnums.HealthState.UNDAMAGED;
+
+
+        float healthRatio = healthSystem.HealthRatio;
+        if (healthRatio > 0.5f)
+            return NodeEnums.HealthState.SLIGHTLY_DAMAGED;
+        else
+            return NodeEnums.HealthState.GREATLY_DAMAGED;
     }
 
 }

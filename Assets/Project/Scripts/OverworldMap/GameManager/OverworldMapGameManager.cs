@@ -16,6 +16,14 @@ public class OverworldMapGameManager : MonoBehaviour
     private OWMap_Node currentNode;
 
 
+    // BattleStateResult
+    private BattleStateResult currentBattleStateResult;
+
+
+    private void Awake()
+    {
+        TDGameManager.OnQueryReferenceToBattleStateResult += CreateNewBattleStateResult;
+    }
 
     private void Start()
     {
@@ -48,9 +56,22 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         this.currentNode = reachedNode;
 
-        StartCommunicationWithNextNodes(currentNode);
+        // TODO: start node scene here
+        // TEST: for now proceed
+        if (IsCurrentNodeBattle() && !currentNode.GetMapReferencesData().isLastLevelNode) // TEST
+            CreateNewBattleStateResult(out currentBattleStateResult); // TEST
 
+        ResumeMapAfterNodeScene();
+    }
+
+    private void ResumeMapAfterNodeScene()
+    {
+        StartCommunicationWithNextNodes(currentNode);
         UpdateNodesInteraction();
+
+        // If current node was BATTLE, apply BattleStateResult
+        if (IsCurrentNodeBattle())
+            ApplyBattleStateResult();
     }
 
     private void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
@@ -83,9 +104,36 @@ public class OverworldMapGameManager : MonoBehaviour
         for (int i = 0; i < nodeMapRefData.nextLevelNodes.Length; ++i)
         {
             OWMap_Node nextLevelNode = nodeMapRefData.nextLevelNodes[i];
-            nextLevelNode.SetGameState(NodeGameState.UNDAMAGED); // TODO State shouldn't be set here
+            nextLevelNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TODO State shouldn't be set here
         }
 
+    }
+
+
+
+    private void CreateNewBattleStateResult(out BattleStateResult battleStateResultRef)
+    {
+        OWMap_Node[] nextNodes = this.currentNode.GetMapReferencesData().nextLevelNodes;
+
+        currentBattleStateResult = new BattleStateResult(nextNodes);
+
+        battleStateResultRef = currentBattleStateResult;
+    }
+
+    private void ApplyBattleStateResult()
+    {
+        // TODO
+        BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
+
+        for (int i = 0; i < nodeResults.Length; ++i)
+        {
+            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
+        }
+    }
+
+    private bool IsCurrentNodeBattle()
+    {        
+        return currentNode.nodeType == NodeEnums.NodeType.BATTLE;
     }
 
 }

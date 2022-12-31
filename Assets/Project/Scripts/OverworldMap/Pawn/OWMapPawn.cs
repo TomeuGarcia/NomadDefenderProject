@@ -33,13 +33,18 @@ public class OWMapPawn : MonoBehaviour
         float duration = distance * 0.5f;
 
         moveTransform.DOMove(targetPos, duration)
-            .OnComplete(() => owMapGameManager.OnOwMapPawnReachedNode(currentNode) );
+            .OnComplete(NotifyNodeWasReached);
     }
 
 
     private Vector3 GetNodePos(OWMap_Node node)
     {
         return node.Position + (node.Up * 0.5f);
+    }
+
+    private void NotifyNodeWasReached()
+    {
+        owMapGameManager.OnOwMapPawnReachedNode(currentNode);
     }
 
 }

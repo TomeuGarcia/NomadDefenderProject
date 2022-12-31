@@ -11,7 +11,7 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private static Color selectedColor =           new Color(38f / 255f, 142f / 255f, 138f / 255f);
 
     [SerializeField] private static Color slightlyDamagedColor =    new Color(170f / 255f, 299f / 255f, 81f / 255f);
-    [SerializeField] private static Color severelyDamagedColor =    new Color(190f / 255f, 80f / 255f, 0f / 255f);
+    [SerializeField] private static Color greatlyDamagedColor =    new Color(190f / 255f, 80f / 255f, 0f / 255f);
     [SerializeField] private static Color destroyedColor =          new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
     private Color colorInUse = noInteractionColor;
@@ -28,10 +28,11 @@ public class OWMap_Node : MonoBehaviour
     [HideInInspector] public NodeInteractState interactState = NodeInteractState.NONE;
 
 
-    // NODE GAME STATE
-    // Undamaged, SlightlyDamaged, SeverelyDamaged, Destroyed
-    public enum NodeGameState { UNDAMAGED, SLIGHTLY_DAMAGED, SEVERELY_DAMAGED, DESTROYED }
-    [HideInInspector] public NodeGameState gameState = NodeGameState.UNDAMAGED;
+    // NODE HEALTH STATE
+    [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.UNDAMAGED;
+
+    // NODE TYPE ----- TODO move to NodeClass script
+    [HideInInspector] public NodeEnums.NodeType nodeType = NodeEnums.NodeType.NONE;
 
 
     // OW Node Data
@@ -81,6 +82,11 @@ public class OWMap_Node : MonoBehaviour
 
 
     private OverworldMapGameManager owMapGameManager;
+
+    public void Print()
+    {
+        Debug.Log("NODE: Lvl-" + mapReferencesData.ownerlevelIndex + ", Idx-" + mapReferencesData.nodeIndexInLevel);
+    }
 
 
     private void Awake()
@@ -218,27 +224,27 @@ public class OWMap_Node : MonoBehaviour
     }
 
 
-    public void SetGameState(NodeGameState nodeGameState)
+    public void SetHealthState(NodeEnums.HealthState nodeHealthState)
     {
-        switch (nodeGameState)
+        switch (nodeHealthState)
         {
-            case NodeGameState.UNDAMAGED:
+            case NodeEnums.HealthState.UNDAMAGED:
                 {
                 }
                 break;
-            case NodeGameState.SLIGHTLY_DAMAGED:
+            case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
                 {
                     SetColor(slightlyDamagedColor);
                     colorInUse = slightlyDamagedColor;
                 }
                 break;
-            case NodeGameState.SEVERELY_DAMAGED:
+            case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
-                    SetColor(severelyDamagedColor);
-                    colorInUse = severelyDamagedColor;
+                    SetColor(greatlyDamagedColor, setCameFromConnectionNotInteracted: true);
+                    colorInUse = greatlyDamagedColor;
                 }
                 break;
-            case NodeGameState.DESTROYED:
+            case NodeEnums.HealthState.DESTROYED:
                 {
                     SetColor(destroyedColor);
                     colorInUse = destroyedColor;
