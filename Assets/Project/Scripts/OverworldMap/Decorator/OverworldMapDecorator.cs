@@ -49,15 +49,16 @@ public class OverworldMapDecorator : MonoBehaviour
     private void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
     {
         // TODO firstLevel[0]
-        firstLevel[0].SetGameState(OWMap_Node.NodeGameState.UNDAMAGED); // TEST
+        firstLevel[0].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
     }
 
     private void DecorateBattleLevel(OWMap_Node[] battleLevel)
     {
         for (int nodeI = 0; nodeI < battleLevel.Length; ++nodeI)
         {
-            // TODO mapNodes[levelI][nodeI]
-            battleLevel[nodeI].SetGameState(OWMap_Node.NodeGameState.DESTROYED); // TEST
+            // TODO decorate properly
+            battleLevel[nodeI].SetHealthState(NodeEnums.HealthState.DESTROYED); // TEST
+            battleLevel[nodeI].nodeType = NodeEnums.NodeType.BATTLE;
         }
     }
 
@@ -65,8 +66,9 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
-            // TODO mapNodes[levelI][nodeI]
-            upgradeLevel[nodeI].SetGameState(OWMap_Node.NodeGameState.SLIGHTLY_DAMAGED); // TEST
+            // TODO decorate properly
+            upgradeLevel[nodeI].SetHealthState(NodeEnums.HealthState.SLIGHTLY_DAMAGED); // TEST
+            upgradeLevel[nodeI].nodeType = NodeEnums.NodeType.UPGRADE;
         }
     }
 
