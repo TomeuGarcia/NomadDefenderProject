@@ -168,7 +168,7 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         if (currentNode.nodeType == NodeEnums.NodeType.UPGRADE)
         {
-            StartUpgradeScene(NodeEnums.UpgradeType.DRAW_A_CARD, NodeEnums.HealthState.UNDAMAGED); // TEST hardcoded
+            StartUpgradeScene(NodeEnums.UpgradeType.NEW_TURRET_CARD, NodeEnums.HealthState.UNDAMAGED); // TEST hardcoded
         }
         else if (currentNode.nodeType == NodeEnums.NodeType.BATTLE)
         {
@@ -179,12 +179,12 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    private void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
+    public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
     {
         mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
     }
 
-    private void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
+    public void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
         mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
     }
