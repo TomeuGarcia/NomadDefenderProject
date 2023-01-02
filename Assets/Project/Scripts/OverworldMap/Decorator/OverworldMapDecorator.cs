@@ -21,10 +21,6 @@ public class OverworldMapDecorator : MonoBehaviour
             DecorateFirstLevelEmpty(mapNodes[0]);
         }
 
-
-        firstBattleLevel = firstDecoratedLevel + dSettings.battleAfterNLevels;
-
-
         int lastIteratedLevel = mapNodes.Length;
         if (dSettings.battleBeforeLastNode)
         {
@@ -33,8 +29,13 @@ public class OverworldMapDecorator : MonoBehaviour
             DecorateUpgradeLevel(mapNodes[mapNodes.Length - 1]); // Finale
         }
 
+        firstBattleLevel = firstDecoratedLevel + dSettings.numStartUpgradesLevels;
+        for (int levelI = firstDecoratedLevel; levelI < firstBattleLevel; ++levelI)
+        {
+            DecorateUpgradeLevel(mapNodes[levelI]);
+        }
 
-        for (int levelI = firstDecoratedLevel; levelI < lastIteratedLevel; ++levelI)
+        for (int levelI = firstBattleLevel; levelI < lastIteratedLevel; ++levelI)
         {
             if (IsBattleLevel(levelI))
             {
@@ -51,7 +52,11 @@ public class OverworldMapDecorator : MonoBehaviour
     private void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
     {
         // TODO firstLevel[0]
-        firstLevel[0].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
+        for (int nodeI = 0; nodeI < firstLevel.Length; ++nodeI)
+        {
+            firstLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
+            firstLevel[nodeI].nodeType = NodeEnums.NodeType.NONE;
+        }
     }
 
     private void DecorateBattleLevel(OWMap_Node[] battleLevel)
