@@ -28,6 +28,17 @@ public class OverworldMapGameManager : MonoBehaviour
         TDGameManager.OnQueryReferenceToBattleStateResult += CreateNewBattleStateResult;
     }
 
+    private void OnEnable()
+    {
+        MapSceneNotifier.OnMapSceneFinished += ResumeMapAfterNodeScene;
+    }
+
+    private void OnDisable()
+    {
+        MapSceneNotifier.OnMapSceneFinished -= ResumeMapAfterNodeScene;
+    }
+
+
     private void Start()
     {
         owMapCreator.RegenerateMap(out mapNodes);
@@ -61,12 +72,23 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         this.currentNode = reachedNode;
 
-        StartCurrentNodeScene();
-
-        ResumeMapAfterNodeScene(); // TEST (this should be called on scene finish)
+        if (currentNode.nodeType == NodeEnums.NodeType.NONE)
+        {
+            ResumeMap(); // Node is empty, so skip scene (example: first map node)
+        }
+        else
+        {
+            StartCurrentNodeScene();
+            //ResumeMapAfterNodeScene(); // TEST (this should be called on scene finish)
+        }
     }
 
-    private void ResumeMapAfterNodeScene()
+    private void ResumeMapAfterNodeScene() // called from event
+    {
+        FinishCurrentMapLevelScene();
+        ResumeMap();
+    }
+    private void ResumeMap()
     {
         StartCommunicationWithNextNodes(currentNode);
         UpdateNodesInteraction();
@@ -75,6 +97,7 @@ public class OverworldMapGameManager : MonoBehaviour
         if (IsCurrentNodeBattle())
             ApplyBattleStateResult();
     }
+
 
     private void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
@@ -164,6 +187,11 @@ public class OverworldMapGameManager : MonoBehaviour
     private void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
         mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
+    }
+
+    private void FinishCurrentMapLevelScene()
+    {
+        mapSceneLoader.FinishCurrentScene();
     }
 
 
