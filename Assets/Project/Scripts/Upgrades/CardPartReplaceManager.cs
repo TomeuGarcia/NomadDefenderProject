@@ -346,7 +346,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
         mapSceneNotifier.InvokeOnSceneFinished();
 
-//        if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
+        if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
     }
 
     private void InvokeReplacementStart()

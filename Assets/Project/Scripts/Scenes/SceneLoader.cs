@@ -72,10 +72,10 @@ public class SceneLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        TDGameManager.OnVictoryComplete += StartLoadNextScene; // not called, remove after check
-        TDGameManager.OnGameOverComplete += StartReloadCurrentScene; // not called, remove after check
+        //TDGameManager.OnVictoryComplete += StartLoadNextScene; // not called, remove after check
+        //TDGameManager.OnGameOverComplete += StartReloadCurrentScene; // not called, remove after check
 
-        CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
+        //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
 
         GatherNewCardManager.OnCardGatherDone += StartLoadNextScene; // not called, remove after check
 
@@ -85,10 +85,10 @@ public class SceneLoader : MonoBehaviour
 
     private void OnDisable()
     {
-        TDGameManager.OnVictoryComplete -= StartLoadNextScene; // not called, remove after check
-        TDGameManager.OnGameOverComplete -= StartReloadCurrentScene; // not called, remove after check
+        //TDGameManager.OnVictoryComplete -= StartLoadNextScene; // not called, remove after check
+        //TDGameManager.OnGameOverComplete -= StartReloadCurrentScene; // not called, remove after check
 
-        CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
+        //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
 
         GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene; // not called, remove after check
 
