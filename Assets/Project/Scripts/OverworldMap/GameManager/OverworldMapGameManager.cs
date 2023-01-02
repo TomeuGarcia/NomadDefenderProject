@@ -16,6 +16,9 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("PAWN")]     
     [SerializeField] private OWMapPawn owMapPawn;
 
+    [Header("CAMERA")]
+    [SerializeField] private GameObject mapCameraGO;
+
     private OWMap_Node currentNode;
 
 
@@ -31,11 +34,15 @@ public class OverworldMapGameManager : MonoBehaviour
     private void OnEnable()
     {
         MapSceneNotifier.OnMapSceneFinished += ResumeMapAfterNodeScene;
+        mapSceneLoader.OnMapSceneLoaded += DeactivateMapCamera;
+        mapSceneLoader.OnMapSceneUnloaded += ActivateMapCamera;
     }
 
     private void OnDisable()
     {
         MapSceneNotifier.OnMapSceneFinished -= ResumeMapAfterNodeScene;
+        mapSceneLoader.OnMapSceneLoaded -= DeactivateMapCamera;
+        mapSceneLoader.OnMapSceneUnloaded -= ActivateMapCamera;
     }
 
 
@@ -194,5 +201,14 @@ public class OverworldMapGameManager : MonoBehaviour
         mapSceneLoader.FinishCurrentScene();
     }
 
+
+    private void ActivateMapCamera()
+    {
+        mapCameraGO.SetActive(true);
+    }
+    private void DeactivateMapCamera()
+    {
+        mapCameraGO.SetActive(false);
+    }
 
 }

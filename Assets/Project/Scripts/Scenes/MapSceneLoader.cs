@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapSceneLoader : MonoBehaviour
 {
@@ -45,6 +46,10 @@ public class MapSceneLoader : MonoBehaviour
     private SceneNames[] availableBossBattleScenes;
 
     private string currentSceneName;
+
+    public delegate void MapSceneLoaderAction();
+    public event MapSceneLoaderAction OnMapSceneLoaded;
+    public event MapSceneLoaderAction OnMapSceneUnloaded;
 
 
 
@@ -133,11 +138,28 @@ public class MapSceneLoader : MonoBehaviour
     {
         currentSceneName = sceneName;
         SceneLoader.GetInstance().LoadMapScene(sceneName);
+
+        SceneManager.sceneLoaded += InvokeOnMapSceneLoaded;
     }
 
     public void FinishCurrentScene()
     {
         SceneLoader.GetInstance().UnloadMapScene(currentSceneName);
+
+        SceneManager.sceneUnloaded += InvokeOnMapSceneUnloaded;
+    }
+
+    private void InvokeOnMapSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (OnMapSceneLoaded != null) OnMapSceneLoaded();
+
+        SceneManager.sceneLoaded -= InvokeOnMapSceneLoaded;
+    }
+    private void InvokeOnMapSceneUnloaded(Scene scene)
+    {
+        if (OnMapSceneUnloaded != null) OnMapSceneUnloaded();
+
+        SceneManager.sceneUnloaded -= InvokeOnMapSceneUnloaded;
     }
 
 }
