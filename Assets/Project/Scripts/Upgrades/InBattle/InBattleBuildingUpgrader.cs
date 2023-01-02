@@ -1,31 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
+public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
+
 public class InBattleBuildingUpgrader : MonoBehaviour
 {
-    [SerializeField] private RangeBuilding building;
+    [SerializeField] private Transform building;
     [SerializeField] private RectTransform UIParent;
+    [SerializeField] private RectTransform mouseDetectionPanel;
     [SerializeField] private TMP_Text costText;
+    [SerializeField] private TMP_Text lvlText;
 
     [SerializeField] private List<int> upgradeCosts = new List<int>();
     [SerializeField] private List<Image> fillBars = new List<Image>();
+    
+    [SerializeField] private Color32 disalbedTextColor;
 
     private CurrencyCounter currencyCounter;
 
     private float xOffset;
     private const int maxStatLevel = 5;
+    private const int maxSupportStatLevel = 3;
     private const int maxUpgradeCount = 3;
     private int currentLevel = 0;
 
     private int attackLvl;
     private int cadenceLvl;
     private int rangeLvl;
-    private int passiveLvl;
+    private int supportLvl;
+
+    private float turretFillBarCoef;
+    private float supportFillBarCoef;
+
+    private bool visible;
 
     private void Awake()
     {
@@ -34,6 +47,21 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         UIParent.gameObject.SetActive(false);
 
         costText.text = upgradeCosts[0].ToString();
+
+        turretFillBarCoef = 100.0f / ((float)maxStatLevel * 100.0f);
+        supportFillBarCoef = 100.0f / ((float)maxSupportStatLevel * 100.0f);
+
+        visible = false;
+    }
+
+    private void Update()
+    {
+        bool outOfArea = !RectTransformUtility.RectangleContainsScreenPoint(mouseDetectionPanel, Input.mousePosition);
+
+        if (outOfArea && Input.GetMouseButtonDown(0) && visible || Input.GetMouseButtonDown(1))
+        {
+            Deactivate();
+        }
     }
 
     public void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter)
@@ -51,9 +79,9 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     public void InitSupport(CurrencyCounter newCurrencyCounter)
     {
-        passiveLvl = 0;
+        supportLvl = 0;
 
-        UpdatePassiveBar(); //TODO: OUT OF 3 NOT 5
+        UpdateSupportBar(); //TODO: OUT OF 3 NOT 5
 
         currencyCounter = newCurrencyCounter;
     }
@@ -62,119 +90,121 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     {
         UIParent.gameObject.SetActive(true);
 
-        UIParent.position = Camera.main.WorldToScreenPoint(building.transform.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
-
-        //coroutine to deactivate(maybe)
-        //waituntil click, move, zoom...?
+        UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
+        StartCoroutine(SetVisible());
     }
 
     public void Deactivate()
     {
         //click anywere else
+        visible = false;
         UIParent.gameObject.SetActive(false);
+    }
+
+    private IEnumerator SetVisible()
+    {
+        yield return null;
+        visible = true;
     }
 
     public void UpgradedAttack()
     {
-        Debug.Log("Upgraded Attack");
-
         if(CanUpgrade(attackLvl))
         {
             currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
 
             NextLevel();
-            UpdateCost();
 
             attackLvl++;
             UpdateAttackBar();
 
-            building.Upgrade(0);
+            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.ATTACK, attackLvl);
         }
     }
 
     public void UpgradedCadence()
     {
-        Debug.Log("Upgraded Cadence");
-
         if (CanUpgrade(cadenceLvl))
         {
             currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
 
             NextLevel();
-            UpdateCost();
 
             cadenceLvl++;
             UpdateCadenceBar();
 
-            building.Upgrade(1);
+            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
         }
     }
 
     public void UpgradedRange()
     {
-        Debug.Log("Upgraded Range");
-
         if (CanUpgrade(rangeLvl))
         {
             currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
 
             NextLevel();
-            UpdateCost();
 
             rangeLvl++;
             UpdateRangeBar();
 
-            building.Upgrade(2);
+            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.RANGE, rangeLvl);
         }
     }
 
     public void UpgradedSupport()
     {
-        Debug.Log("Upgraded Support");
-
-        if (CanUpgrade(passiveLvl))
+        if (CanUpgrade(supportLvl))
         {
             currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
 
             NextLevel();
-            UpdateCost();
 
-            passiveLvl++;
-            UpdatePassiveBar();
+            supportLvl++;
+            UpdateSupportBar();
 
-            building.Upgrade(0);
+            building.gameObject.GetComponent<SupportBuilding>().Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
         }
     }
 
     private bool CanUpgrade(int levelToCheck)
     {
-        return (currentLevel < (maxUpgradeCount - 1) && levelToCheck < maxStatLevel
+        return (currentLevel < maxUpgradeCount && levelToCheck < maxStatLevel
                 && currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]));
     }
 
     private void NextLevel()
     {
         currentLevel++;
-    }
-    private void UpdateCost()
-    {
-        costText.text = upgradeCosts[currentLevel].ToString();
+        
+        if(currentLevel < maxUpgradeCount)
+        {
+            lvlText.text = "LVL " + currentLevel.ToString();
+            costText.text = upgradeCosts[currentLevel].ToString();
+        }
+        else
+        {
+            lvlText.text = "LVL MAX";
+            //costText.text = "NULL";
+            costText.text = "0";
+            costText.color = disalbedTextColor;
+        }
     }
 
     private void UpdateAttackBar()
     {
-        fillBars[0].fillAmount = (float)attackLvl * 0.2f;
+        fillBars[(int)TurretUpgradeType.ATTACK].fillAmount = (float)attackLvl * turretFillBarCoef;
     }
     private void UpdateCadenceBar()
     {
-        fillBars[1].fillAmount = (float)cadenceLvl * 0.2f;
+        fillBars[(int)TurretUpgradeType.CADENCE].fillAmount = (float)cadenceLvl * turretFillBarCoef;
     }
     private void UpdateRangeBar()
     {
-        fillBars[2].fillAmount = (float)rangeLvl * 0.2f;
+        fillBars[(int)TurretUpgradeType.RANGE].fillAmount = (float)rangeLvl * turretFillBarCoef;
     }
-    private void UpdatePassiveBar()
+    private void UpdateSupportBar()
     {
-        fillBars[0].fillAmount = (float)passiveLvl * 0.33f;
+        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
     }
 }

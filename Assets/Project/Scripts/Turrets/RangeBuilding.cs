@@ -191,5 +191,5 @@ public abstract class RangeBuilding : Building
     }
 
 
-    public abstract void Upgrade(int statIndex);
+    public abstract void Upgrade(TurretUpgradeType upgradeType, int newStatLevel);
 }

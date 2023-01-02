@@ -62,7 +62,7 @@ public class SupportBuilding : RangeBuilding
         this.stats = stats;
     }
 
-    public override void Upgrade(int statIndex)
+    public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
         //upgradePassive
     }

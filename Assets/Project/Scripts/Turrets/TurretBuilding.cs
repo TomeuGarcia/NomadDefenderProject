@@ -77,15 +77,7 @@ public class TurretBuilding : RangeBuilding
         InitStats(turretStats);
         bodyType = turretCardParts.turretPartBody.bodyType;
 
-
-        float planeRange = stats.range * 2 + 1; //only for square
-        float range = stats.range;
-
-        rangeCollider.radius = range+ 0.5f;
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
-
+        UpdateRange();
 
         TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         attackPool.SetPooledObject(turretPartAttack.prefab);
@@ -94,7 +86,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart.Init(turretAttack.materialForTurret);
 
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.Init(this, range);
+        basePart.Init(this, stats.range);
 
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
@@ -104,23 +96,35 @@ public class TurretBuilding : RangeBuilding
         DisableFunctionality();
     }
 
+    private void UpdateRange()
+    {
+        float planeRange = stats.range * 2 + 1; //only for square
+        float range = stats.range;
+
+        rangeCollider.radius = range + 0.5f;
+        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
+        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
+        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
+    }
+
     public void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
     }
 
-    public override void Upgrade(int statIndex)
+    public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
-        switch(statIndex)
+        switch(upgradeType)
         {
-            case 0:
-                //upgrade attack
+            case TurretUpgradeType.ATTACK:
+                stats.damage = TurretPartBody.damagePerLvl[newStatLevel - 1];
                 break;
-            case 1:
-                //upgrade cadence
+            case TurretUpgradeType.CADENCE:
+                stats.cadence = TurretPartBody.cadencePerLvl[newStatLevel - 1];
                 break;
-            case 2:
-                //upgrade range
+            case TurretUpgradeType.RANGE:
+                stats.range = TurretPartBase.rangePerLvl[newStatLevel - 1];
+                UpdateRange();
                 break;
         }
     }
