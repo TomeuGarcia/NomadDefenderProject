@@ -21,6 +21,7 @@ public abstract class RangeBuilding : Building
     public RangeBuildingAction OnEnemyEnterRange;
     public RangeBuildingAction OnEnemyExitRange;
 
+    [SerializeField] protected InBattleBuildingUpgrader upgrader;
 
     private void Awake()
     {
@@ -150,6 +151,16 @@ public abstract class RangeBuilding : Building
     }
 
 
+    public void ShowUpgrades()
+    {
+        upgrader.OpenWindow();
+    }
+    public void HideUpgrades()
+    {
+        upgrader.CloseWindow();
+    }
+
+
     protected override void DisableFunctionality()
     {
         base.DisableFunctionality();
@@ -167,11 +178,18 @@ public abstract class RangeBuilding : Building
     {
         meshMouseNotifier.OnMouseEntered += ShowRangePlane;
         meshMouseNotifier.OnMouseExited += HideRangePlane;
+
+        meshMouseNotifier.OnMousePressed += ShowUpgrades;
+        //TODO : HideUpgrades
     }
     public override void DisablePlayerInteraction()
     {
         meshMouseNotifier.OnMouseEntered -= ShowRangePlane;
         meshMouseNotifier.OnMouseExited -= HideRangePlane;
+
+        meshMouseNotifier.OnMousePressed -= ShowUpgrades;
     }
 
+
+    public abstract void Upgrade(TurretUpgradeType upgradeType, int newStatLevel);
 }

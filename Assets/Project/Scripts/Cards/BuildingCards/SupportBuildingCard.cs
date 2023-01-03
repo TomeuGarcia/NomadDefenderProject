@@ -46,10 +46,10 @@ public class SupportBuildingCard : BuildingCard
     {
         AwakeInit(CardBuildingType.SUPPORT);
     }
-    public override void CreateCopyBuildingPrefab()
+    public override void CreateCopyBuildingPrefab(CurrencyCounter currencyCounter)
     {
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(supportBuildingStats, supportCardParts.turretPartBase);
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(supportBuildingStats, supportCardParts.turretPartBase, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 
