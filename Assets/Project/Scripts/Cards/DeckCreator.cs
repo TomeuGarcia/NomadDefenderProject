@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DeckCreator : MonoBehaviour
 {
+    [SerializeField] private Transform spawnTransform;
     [SerializeField] private GameObject turretCardPrefab;
     [SerializeField] private GameObject supportCardPrefab;
     [SerializeField] private DeckData deckData;
@@ -44,7 +45,7 @@ public class DeckCreator : MonoBehaviour
 
     public TurretBuildingCard GetUninitializedNewTurretCard()
     {
-        return Instantiate(turretCardPrefab).GetComponent<TurretBuildingCard>();
+        return Instantiate(turretCardPrefab, spawnTransform).GetComponent<TurretBuildingCard>();
     }
 
     public void AddNewTurretCardToDeck(TurretBuildingCard turretCard)
@@ -55,7 +56,7 @@ public class DeckCreator : MonoBehaviour
 
     public SupportBuildingCard GetUninitializedNewSupportCard()
     {
-        return Instantiate(supportCardPrefab).GetComponent<SupportBuildingCard>();
+        return Instantiate(supportCardPrefab, spawnTransform).GetComponent<SupportBuildingCard>();
     }
 
     public void AddNewSupportCardToDeck(SupportBuildingCard supportCard)

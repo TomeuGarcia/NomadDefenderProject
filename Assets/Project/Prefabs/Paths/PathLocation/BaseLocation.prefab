@@ -586,6 +586,7 @@ GameObject:
   - component: {fileID: 6195562928705511366}
   - component: {fileID: 6183369776943425441}
   - component: {fileID: 7673908309624845013}
+  - component: {fileID: 1843325350936860458}
   m_Layer: 7
   m_Name: BaseLocation
   m_TagString: PathLocation
@@ -639,11 +640,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c850a528120d59f4eb642ecf145bb7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapSceneNotifier: {fileID: 1843325350936860458}
   basePathLocation: {fileID: 6195562928705511366}
   victoryHolder: {fileID: 448126591770314068}
   victoryTextTransform: {fileID: 8734239497260064183}
   defeatHolder: {fileID: 2229208245415549911}
   defeatTextTransform: {fileID: 3342737415671485426}
+  pathLocations: []
 --- !u!65 &7673908309624845013
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -657,6 +660,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1843325350936860458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195562928705511364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 278fc1f929dcf7a48ab25a47c884c64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8287657810957576767
 GameObject:
   m_ObjectHideFlags: 0

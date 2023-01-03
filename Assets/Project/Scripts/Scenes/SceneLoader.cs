@@ -23,6 +23,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField, Min(0f)] private float loadSceneDuration = 0.7f;
 
     delegate void LoadSceneFunction();
+    delegate void LoadSceneByNameFunction(string sceneName);
 
     private int mainMenuSceneIndex = 1;
     private bool alreadyLoadingNextScene;
@@ -30,7 +31,6 @@ public class SceneLoader : MonoBehaviour
 
     public delegate void SceneLoaderAction();
     public static event SceneLoaderAction OnSceneForceQuit;
-
 
 
     int init = 0;
@@ -45,9 +45,23 @@ public class SceneLoader : MonoBehaviour
     bool lastWasTD2 = false;
 
 
+    private static SceneLoader instance;
+    public static SceneLoader GetInstance()
+    {
+        return instance;
+    }
+
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+        }
 
         topOpenPosition = topBlackScreen.localPosition;
         bottomOpenPosition = bottomBlackScreen.localPosition;
@@ -58,28 +72,28 @@ public class SceneLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        TDGameManager.OnVictoryComplete += StartLoadNextScene;
-        TDGameManager.OnGameOverComplete += StartReloadCurrentScene;
+        //TDGameManager.OnVictoryComplete += StartLoadNextScene; // not called, remove after check
+        //TDGameManager.OnGameOverComplete += StartReloadCurrentScene; // not called, remove after check
 
-        CardPartReplaceManager.OnReplacementDone += StartLoadNextScene;
+        //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone += StartLoadNextScene;
+        GatherNewCardManager.OnCardGatherDone += StartLoadNextScene; // not called, remove after check
 
         InitScene.OnStart += StartLoadMainMenu;
-        MainMenu.OnPlayStart += StartLoadNextScene;
+        MainMenu.OnPlayStart += StartLoadNextScene; // TODO change to load map scene
     }
 
     private void OnDisable()
     {
-        TDGameManager.OnVictoryComplete -= StartLoadNextScene;
-        TDGameManager.OnGameOverComplete -= StartReloadCurrentScene;
+        //TDGameManager.OnVictoryComplete -= StartLoadNextScene; // not called, remove after check
+        //TDGameManager.OnGameOverComplete -= StartReloadCurrentScene; // not called, remove after check
 
-        CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene;
+        //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene;
+        GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene; // not called, remove after check
 
         InitScene.OnStart -= StartLoadMainMenu;
-        MainMenu.OnPlayStart -= StartLoadNextScene;
+        MainMenu.OnPlayStart -= StartLoadNextScene; // TODO change to load map scene
     }
 
     private void Update()
@@ -137,6 +151,9 @@ public class SceneLoader : MonoBehaviour
 
         alreadyLoadingNextScene = false;
     }
+
+
+
     private void LoadNextScene()
     {
         int nextSceneI = SceneManager.GetActiveScene().buildIndex;
@@ -186,5 +203,41 @@ public class SceneLoader : MonoBehaviour
     }
 
 
+
+    public void LoadMapScene(string sceneName)
+    {
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
+    }
+    public void UnloadMapScene(string sceneName)
+    {
+        StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName));
+    }
+
+    private IEnumerator DoLoadSceneByName(LoadSceneByNameFunction loadSceneByNameFunction, string sceneName)
+    {
+        alreadyLoadingNextScene = true;
+
+        ShutAnimation(shutAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenShut();
+        yield return new WaitForSeconds(shutAnimDuration);
+
+        loadSceneByNameFunction(sceneName);
+        yield return new WaitForSeconds(loadSceneDuration);
+
+        OpenAnimation(openAnimDuration);
+        GameAudioManager.GetInstance().PlayScreenOpen();
+        yield return new WaitForSeconds(openAnimDuration);
+
+        alreadyLoadingNextScene = false;
+    }
+
+    private void LoadSceneAsyncByName(string sceneName)
+    {
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    }
+    private void UnloadSceneAsyncByName(string sceneName)
+    {
+        SceneManager.UnloadSceneAsync(sceneName);
+    }
 
 }

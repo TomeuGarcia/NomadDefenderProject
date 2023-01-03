@@ -38,7 +38,7 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    public IEnumerator SpawnCurrentWaveEnemies()
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
     {
         yield return new WaitForSeconds(delayWaveStart);
 
@@ -54,7 +54,7 @@ public class EnemyWaveSpawner : ScriptableObject
             {
                 if (stopForced) break;
 
-                SpawnEnemy(enemyType);
+                SpawnEnemy(enemyType, spawnTransform);
 
                 yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
             }
@@ -63,9 +63,10 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    private void SpawnEnemy(Enemy.EnemyType enemyType)
+    private void SpawnEnemy(Enemy.EnemyType enemyType, Transform spawnTransform)
     {
-        GameObject enemyGameObject = EnemyFactory.GetInstance().GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity);
+        GameObject enemyGameObject = EnemyFactory.GetInstance()
+            .GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity, spawnTransform);
         enemyGameObject.SetActive(true);
 
         /////////////
