@@ -6,8 +6,9 @@ public class OWMap_BattleNode : OWMap_NodeClass
 {
     public NodeEnums.BattleType battleType;
 
-    public override void StartLevel()
+    public OWMap_BattleNode(int _nextLevelNodes, ref NodeEnums.HealthState _healthState) : base(_nextLevelNodes, ref _healthState) { }
+    public override void StartLevel(OverworldMapGameManager overwolrdMapGameManager)
     {
-        //Load battle scene depending on type and nodes with async mode
+        overwolrdMapGameManager.StartBattleScene(battleType, nextLevelNodes);
     }
 }

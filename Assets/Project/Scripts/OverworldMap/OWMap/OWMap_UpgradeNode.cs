@@ -6,8 +6,9 @@ public class OWMap_UpgradeNode : OWMap_NodeClass
 {
     public NodeEnums.UpgradeType upgradeType;
 
-    public override void StartLevel()
+    public OWMap_UpgradeNode(int _nextLevelNodes, ref NodeEnums.HealthState _healthState) : base(_nextLevelNodes, ref _healthState) { }
+    public override void StartLevel(OverworldMapGameManager overwolrdMapGameManager)
     {
-        //Load upgrade scene type async
+        overwolrdMapGameManager.StartUpgradeScene(upgradeType, healthState);
     }
 }
