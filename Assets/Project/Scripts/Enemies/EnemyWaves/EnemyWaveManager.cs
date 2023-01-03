@@ -4,6 +4,8 @@ using TMPro;
 
 public class EnemyWaveManager : MonoBehaviour
 {
+    [SerializeField] private Transform enemySpawnTransform;
+
     [SerializeField] private TextMeshProUGUI debugText; // works for 1 waveSpawner
 
     [SerializeField] private EnemyWaveSpawner[] enemyWaveSpawners;
@@ -63,15 +65,15 @@ public class EnemyWaveManager : MonoBehaviour
         // Start all parallel waves at once
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
         {
-            StartWave(enemyWaveSpawners[i]);
+            StartWave(enemyWaveSpawners[i], enemySpawnTransform);
         }
     }
 
 
-    private void StartWave(EnemyWaveSpawner enemyWaveSpawner)
+    private void StartWave(EnemyWaveSpawner enemyWaveSpawner, Transform enemySpawnTransform)
     {
         ++currentWaves;
-        StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies());
+        StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform));
         
         debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves;/* + 
             " (Enemies: " + enemyWaveSpawner.activeEnemies + ")";*/
@@ -85,7 +87,7 @@ public class EnemyWaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
-        StartWave(enemyWaveSpawner);
+        StartWave(enemyWaveSpawner, enemySpawnTransform);
     }
 
     private void FinishWave(EnemyWaveSpawner enemyWaveSpawner)

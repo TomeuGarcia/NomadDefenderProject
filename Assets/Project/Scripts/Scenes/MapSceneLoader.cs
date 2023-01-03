@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapSceneLoader : MonoBehaviour
 {
@@ -44,6 +45,13 @@ public class MapSceneLoader : MonoBehaviour
     private SceneNames[] availableLateBattleScenes;
     private SceneNames[] availableBossBattleScenes;
 
+    private string currentSceneName;
+
+    public delegate void MapSceneLoaderAction();
+    public event MapSceneLoaderAction OnMapSceneLoaded;
+    public event MapSceneLoaderAction OnMapSceneUnloaded;
+
+
 
     public void Init()
     {
@@ -71,6 +79,7 @@ public class MapSceneLoader : MonoBehaviour
         string sceneName = upgradeScenes.Get((int)upgradeType);
 
         Debug.Log("Loading Upgrade scene: " + sceneName);
+        StartScene(sceneName);
     }
 
     public void LoadBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
@@ -116,10 +125,41 @@ public class MapSceneLoader : MonoBehaviour
             {
                 availableBattleScenes[locationsAmountIndex].Add(battleScenes[locationsAmountIndex].Get(i));
             }
+            Debug.Log("Refilling battle scenes");
         }
 
 
         Debug.Log("Loading Battle scene: " + sceneName);
+        StartScene(sceneName);
+    }
+
+
+    private void StartScene(string sceneName)
+    {
+        currentSceneName = sceneName;
+        SceneLoader.GetInstance().LoadMapScene(sceneName);
+
+        SceneManager.sceneLoaded += InvokeOnMapSceneLoaded;
+    }
+
+    public void FinishCurrentScene()
+    {
+        SceneLoader.GetInstance().UnloadMapScene(currentSceneName);
+
+        SceneManager.sceneUnloaded += InvokeOnMapSceneUnloaded;
+    }
+
+    private void InvokeOnMapSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (OnMapSceneLoaded != null) OnMapSceneLoaded();
+
+        SceneManager.sceneLoaded -= InvokeOnMapSceneLoaded;
+    }
+    private void InvokeOnMapSceneUnloaded(Scene scene)
+    {
+        if (OnMapSceneUnloaded != null) OnMapSceneUnloaded();
+
+        SceneManager.sceneUnloaded -= InvokeOnMapSceneUnloaded;
     }
 
 }

@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class TDGameManager : MonoBehaviour
 {
+    [Header("SCENE MANAGEMENT")]
+    [SerializeField] private MapSceneNotifier mapSceneNotifier;
+
+    [Header("Base Path Location")]
     [SerializeField] private PathLocation basePathLocation;
 
     [Header("Canvas")]
@@ -86,7 +90,9 @@ public class TDGameManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
-        if (OnGameOverComplete != null) OnGameOverComplete();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
+        //if (OnGameOverComplete != null) OnGameOverComplete();
     }
 
     private IEnumerator VictoryAnimation()
@@ -95,7 +101,9 @@ public class TDGameManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
-        if (OnVictoryComplete != null) OnVictoryComplete();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
+        //if (OnVictoryComplete != null) OnVictoryComplete(); // 
     }
 
 
