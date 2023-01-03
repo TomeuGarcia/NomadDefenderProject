@@ -10,5 +10,6 @@ public class OWMapDecoratorSettings : ScriptableObject
     [SerializeField, Min(1)] public int battleAfterNLevels = 3;
     [SerializeField, Min(0)] public int lastLevelWithBattles = 10;
     [SerializeField] public bool battleBeforeLastNode = true;
+    [SerializeField, Min(0)] public int lateBattleStartIndex = 8;
 
 }

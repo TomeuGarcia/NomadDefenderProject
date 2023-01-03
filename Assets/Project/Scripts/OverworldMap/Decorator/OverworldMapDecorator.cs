@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class OverworldMapDecorator : MonoBehaviour
 {
@@ -25,8 +23,8 @@ public class OverworldMapDecorator : MonoBehaviour
         if (dSettings.battleBeforeLastNode)
         {
             lastIteratedLevel -= 2;
-            DecorateBattleLevel(mapNodes[mapNodes.Length - 2]); // Boss
-            DecorateUpgradeLevel(mapNodes[mapNodes.Length - 1]); // Finale
+            DecorateBattleLevel(mapNodes[mapNodes.Length - 2], lastIteratedLevel); // Boss
+            DecorateLastLevelEmpty(mapNodes[mapNodes.Length - 1]); // Finale
         }
 
         firstBattleLevel = firstDecoratedLevel + dSettings.numStartUpgradesLevels;
@@ -39,7 +37,7 @@ public class OverworldMapDecorator : MonoBehaviour
         {
             if (IsBattleLevel(levelI))
             {
-                DecorateBattleLevel(mapNodes[levelI]);
+                DecorateBattleLevel(mapNodes[levelI], levelI);
             }
             else
             {
@@ -49,23 +47,52 @@ public class OverworldMapDecorator : MonoBehaviour
 
     }
 
+
+    private void DecorateLastLevelEmpty(OWMap_Node[] lastLevel)
+    {
+        // TODO firstLevel[0]
+        for (int nodeI = 0; nodeI < lastLevel.Length; ++nodeI)
+        {
+            lastLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
+
+            OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState);
+            lastLevel[nodeI].SetNodeClass(lastNode);
+        }
+    } 
     private void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
     {
         // TODO firstLevel[0]
         for (int nodeI = 0; nodeI < firstLevel.Length; ++nodeI)
         {
             firstLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
-            firstLevel[nodeI].nodeType = NodeEnums.NodeType.NONE;
+
+            int nextLevelNodes = firstLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
+
+            OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState);
+            firstLevel[nodeI].SetNodeClass(firstNode);
         }
     }
 
-    private void DecorateBattleLevel(OWMap_Node[] battleLevel)
+    private void DecorateBattleLevel(OWMap_Node[] battleLevel, int levelI)
     {
         for (int nodeI = 0; nodeI < battleLevel.Length; ++nodeI)
         {
             // TODO decorate properly
             battleLevel[nodeI].SetHealthState(NodeEnums.HealthState.DESTROYED); // TEST
-            battleLevel[nodeI].nodeType = NodeEnums.NodeType.BATTLE;
+
+            int nextLevelNodes = battleLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
+            NodeEnums.BattleType battleType;
+
+            if (levelI < dSettings.lateBattleStartIndex)
+            {
+                battleType = NodeEnums.BattleType.EARLY;
+            }
+            else
+            {
+                battleType = NodeEnums.BattleType.LATE;
+            }
+            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType);
+            battleLevel[nodeI].SetNodeClass(battleNode);
         }
     }
 
@@ -74,8 +101,13 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             // TODO decorate properly
-            upgradeLevel[nodeI].SetHealthState(NodeEnums.HealthState.SLIGHTLY_DAMAGED); // TEST
-            upgradeLevel[nodeI].nodeType = NodeEnums.NodeType.UPGRADE;
+            upgradeLevel[nodeI].SetHealthState(NodeEnums.HealthState.SLIGHTLY_DAMAGED); //TEST
+
+
+            int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
+            NodeEnums.UpgradeType upgradeType = (NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT);
+            OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType);
+            upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass);
         }
     }
 
