@@ -79,13 +79,14 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         this.currentNode = reachedNode;
 
-        if (currentNode.nodeType == NodeEnums.NodeType.NONE)
+        if (currentNode.GetNodeType() == NodeEnums.NodeType.NONE)
         {
             ResumeMap(); // Node is empty, so skip scene (example: first map node)
         }
         else
         {
-            StartCurrentNodeScene();
+            currentNode.nodeClass.StartLevel(this);
+            //StartCurrentNodeScene();
             //ResumeMapAfterNodeScene(); // TEST (this should be called on scene finish)
         }
     }
@@ -165,7 +166,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private bool IsCurrentNodeBattle()
     {        
-        return currentNode.nodeType == NodeEnums.NodeType.BATTLE;
+        return currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE;
     }
 
 
@@ -173,11 +174,11 @@ public class OverworldMapGameManager : MonoBehaviour
     // SCENES
     private void StartCurrentNodeScene()
     {
-        if (currentNode.nodeType == NodeEnums.NodeType.UPGRADE)
+        if (currentNode.GetNodeType() == NodeEnums.NodeType.UPGRADE)
         {
             StartUpgradeScene(NodeEnums.UpgradeType.NEW_TURRET_CARD, NodeEnums.HealthState.UNDAMAGED); // TEST hardcoded
         }
-        else if (currentNode.nodeType == NodeEnums.NodeType.BATTLE)
+        else if (currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE)
         {
             StartBattleScene(NodeEnums.BattleType.EARLY, 1); // TEST hardcoded
 
