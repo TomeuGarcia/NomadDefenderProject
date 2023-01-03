@@ -40,6 +40,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private bool visible;
 
+    private float lastScroll;
+
     private void Awake()
     {
         xOffset = UIParent.anchoredPosition.x;
@@ -58,10 +60,15 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     {
         bool outOfArea = !RectTransformUtility.RectangleContainsScreenPoint(mouseDetectionPanel, Input.mousePosition);
 
-        if (outOfArea && Input.GetMouseButtonDown(0) && visible || Input.GetMouseButtonDown(1))
+        if (outOfArea && Input.GetMouseButtonDown(0) && visible || Input.GetMouseButtonDown(1) || Input.mouseScrollDelta.y != lastScroll)
         {
-            Deactivate();
+            CloseWindow();
         }
+    }
+
+    private void LateUpdate()
+    {
+        lastScroll = Input.mouseScrollDelta.y;
     }
 
     public void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter)
@@ -81,22 +88,25 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     {
         supportLvl = 0;
 
-        UpdateSupportBar(); //TODO: OUT OF 3 NOT 5
+        UpdateSupportBar();
 
         currencyCounter = newCurrencyCounter;
     }
 
-    public void Activate()
+    public void OpenWindow()
     {
+        UIWindowManager.GetInstance().OpenedWindow(this);
+
         UIParent.gameObject.SetActive(true);
 
         UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
         StartCoroutine(SetVisible());
     }
 
-    public void Deactivate()
+    public void CloseWindow()
     {
-        //click anywere else
+        UIWindowManager.GetInstance().ClosedWindow(this);
+
         visible = false;
         UIParent.gameObject.SetActive(false);
     }

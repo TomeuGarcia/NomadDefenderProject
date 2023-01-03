@@ -64,7 +64,7 @@ public class SupportBuilding : RangeBuilding
 
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
-        //upgradePassive
+        basePart.Upgrade(newStatLevel);
     }
 
     protected override void DisableFunctionality()

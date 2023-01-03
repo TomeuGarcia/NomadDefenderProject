@@ -153,11 +153,11 @@ public abstract class RangeBuilding : Building
 
     public void ShowUpgrades()
     {
-        upgrader.Activate();
+        upgrader.OpenWindow();
     }
     public void HideUpgrades()
     {
-        upgrader.Deactivate();
+        upgrader.CloseWindow();
     }
 
 
