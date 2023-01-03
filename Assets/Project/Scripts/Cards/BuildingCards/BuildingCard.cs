@@ -122,7 +122,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     // ABSTRACT METHODS to implement
     protected abstract void InitStatsFromTurretParts();
-    public abstract void CreateCopyBuildingPrefab(CurrencyCounter currencyCounter);
+    public abstract void CreateCopyBuildingPrefab(Transform spawnTransform);
     public abstract int GetCardPlayCost();
     protected abstract void GetMaterialsRefs();
     protected abstract void InitVisuals();

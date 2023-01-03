@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
 {
+    [Header("SCENE MANAGEMENT")]
+    [SerializeField] private MapSceneNotifier mapSceneNotifier;
+
     [SerializeField] private PartsLibrary partsLibrary;
     [SerializeField] private DeckCreator deckCreator;
 
@@ -229,7 +232,9 @@ public class GatherNewCardManager : MonoBehaviour
 
         //Debug.Log("FINISH");
         yield return new WaitForSeconds(1f);
-        if (OnCardGatherDone != null) OnCardGatherDone();
+        //if (OnCardGatherDone != null) OnCardGatherDone();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
     }
 
 }

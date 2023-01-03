@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4295452663846789672}
   - component: {fileID: 4295452663846789673}
+  - component: {fileID: 470311337487129545}
   m_Layer: 0
   m_Name: PartReplaceManager
   m_TagString: Untagged
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91bf2d33813c2346be900dcd834c43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapSceneNotifier: {fileID: 470311337487129545}
   deckData: {fileID: 11400000, guid: 34287d5d7447ba8438b13f39557bad56, type: 2}
   upgradeCardHolder: {fileID: 0}
   cardPartHolder: {fileID: 0}
@@ -64,6 +66,18 @@ MonoBehaviour:
   buttonAnimator: {fileID: 0}
   buttonMouseOverNotifier: {fileID: 0}
   buttonMeshRenderer: {fileID: 0}
+--- !u!114 &470311337487129545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4295452663846789674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 278fc1f929dcf7a48ab25a47c884c64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4295452664023639164
 GameObject:
   m_ObjectHideFlags: 0

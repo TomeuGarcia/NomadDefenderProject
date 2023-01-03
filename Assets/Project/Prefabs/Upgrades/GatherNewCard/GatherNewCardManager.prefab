@@ -142,6 +142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1132811092675339963}
   - component: {fileID: 1132811092675339964}
+  - component: {fileID: 4427219724196405531}
   m_Layer: 0
   m_Name: GatherNewCardManager
   m_TagString: Untagged
@@ -178,11 +179,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d1b8ef1e7f98e45ab23870b6cc1a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapSceneNotifier: {fileID: 4427219724196405531}
   partsLibrary: {fileID: 11400000, guid: 2bd79358ac63bdb46b0839b5eb3da6a9, type: 2}
   deckCreator: {fileID: 0}
   numCards: 3
   distanceBetweenCards: 1.2
   cardHolder: {fileID: 1132811091435227507}
+--- !u!114 &4427219724196405531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132811092675339965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 278fc1f929dcf7a48ab25a47c884c64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1132811092744733144
 GameObject:
   m_ObjectHideFlags: 0

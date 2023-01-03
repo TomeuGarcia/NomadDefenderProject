@@ -32,7 +32,10 @@ public class OWMap_Node : MonoBehaviour
     [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.UNDAMAGED;
 
     // NODE TYPE ----- TODO move to NodeClass script
-    [HideInInspector] public NodeEnums.NodeType nodeType = NodeEnums.NodeType.NONE;
+    //[HideInInspector] public NodeEnums.NodeType nodeType = NodeEnums.NodeType.NONE;
+
+    //NODE CLASS
+    [HideInInspector] public OWMap_NodeClass nodeClass;
 
 
     // OW Node Data
@@ -280,6 +283,16 @@ public class OWMap_Node : MonoBehaviour
         {
             node.DisableInteraction();
         }
+    }
+
+    public void SetNodeClass(OWMap_NodeClass _nodeClass)
+    {
+        nodeClass = _nodeClass;
+    }
+
+    public NodeEnums.NodeType GetNodeType()
+    {
+        return nodeClass.nodeType;
     }
 
 }
