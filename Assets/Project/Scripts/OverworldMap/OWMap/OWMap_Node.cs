@@ -229,7 +229,9 @@ public class OWMap_Node : MonoBehaviour
 
     public void SetHealthState(NodeEnums.HealthState nodeHealthState)
     {
-        switch (nodeHealthState)
+        healthState = nodeHealthState;
+
+        switch (healthState)
         {
             case NodeEnums.HealthState.UNDAMAGED:
                 {
@@ -267,14 +269,24 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
-    public void EnableNextLevelNodesInteraction()
+    public OWMap_Node[] EnableNextLevelNodesInteraction()
     {
+        List<OWMap_Node> nextLevelEnabledNodes = new List<OWMap_Node>();
+
         for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
         {
             OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
-            nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
-            nextLevelNode.EnableInteraction();
+
+            if (!nextLevelNode.IsDestroyed())
+            {
+                nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
+                nextLevelNode.EnableInteraction();
+
+                nextLevelEnabledNodes.Add(nextLevelNode);
+            }            
         }
+
+        return nextLevelEnabledNodes.ToArray();
     }
 
     private void DisableNeighborLevelNodesInteraction()
@@ -297,6 +309,11 @@ public class OWMap_Node : MonoBehaviour
     public NodeEnums.NodeType GetNodeType()
     {
         return nodeClass.nodeType;
+    }
+
+    public bool IsDestroyed()
+    {
+        return healthState == NodeEnums.HealthState.DESTROYED;
     }
 
 }

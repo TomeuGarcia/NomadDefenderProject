@@ -54,7 +54,7 @@ public class OverworldMapDecorator : MonoBehaviour
         // TODO firstLevel[0]
         for (int nodeI = 0; nodeI < lastLevel.Length; ++nodeI)
         {
-            lastLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
+            lastLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED);
 
             OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState);
             lastLevel[nodeI].SetNodeClass(lastNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.LAST_LEVEL)); //Get Empty Node Texture
@@ -65,7 +65,7 @@ public class OverworldMapDecorator : MonoBehaviour
         // TODO firstLevel[0]
         for (int nodeI = 0; nodeI < firstLevel.Length; ++nodeI)
         {
-            firstLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
+            firstLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); 
 
             int nextLevelNodes = firstLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
 
@@ -79,7 +79,7 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < battleLevel.Length; ++nodeI)
         {
             // TODO decorate properly
-            battleLevel[nodeI].SetHealthState(NodeEnums.HealthState.DESTROYED); // TEST
+            battleLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED);
 
             int nextLevelNodes = battleLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.BattleType battleType;
@@ -102,8 +102,7 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             // TODO decorate properly
-            upgradeLevel[nodeI].SetHealthState(NodeEnums.HealthState.SLIGHTLY_DAMAGED); //TEST
-
+            upgradeLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED);
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.UpgradeType upgradeType = (NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT);
