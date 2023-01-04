@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class OWMap_NodeClass
 {
     public NodeEnums.NodeType nodeType;
-    public Sprite nodeSprite;
+    public Texture nodeSprite;
     protected int nextLevelNodes;
     protected NodeEnums.HealthState healthState; //Can create problems if its not saved as a reference
 
@@ -16,4 +16,8 @@ public abstract class OWMap_NodeClass
         nodeType = _nodeType;
     }
     public abstract void StartLevel(OverworldMapGameManager overwolrdMapGameManager);
+    public void SetIconTexture(Texture mapIconTexture)
+    {
+        nodeSprite= mapIconTexture;
+    }
 }

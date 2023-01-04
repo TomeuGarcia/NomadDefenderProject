@@ -31,12 +31,10 @@ public class OWMap_Node : MonoBehaviour
     // NODE HEALTH STATE
     [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.UNDAMAGED;
 
-    // NODE TYPE ----- TODO move to NodeClass script
-    //[HideInInspector] public NodeEnums.NodeType nodeType = NodeEnums.NodeType.NONE;
 
     //NODE CLASS
     [HideInInspector] public OWMap_NodeClass nodeClass;
-
+    
 
     // OW Node Data
     public struct MapReferencesData
@@ -78,6 +76,8 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     private Material material;
 
+    //NODE ICON
+    private Texture nodeIcon;
 
     public Vector3 Position => nodeTransform.position;
     public Vector3 Up => nodeTransform.up;
@@ -285,9 +285,13 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
-    public void SetNodeClass(OWMap_NodeClass _nodeClass)
+    public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
     {
         nodeClass = _nodeClass;
+        nodeClass.SetIconTexture(mapIconTexture);
+        nodeIcon = mapIconTexture;
+
+        material.SetTexture("_IconTexture", nodeIcon);
     }
 
     public NodeEnums.NodeType GetNodeType()

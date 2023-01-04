@@ -5,6 +5,7 @@ using UnityEngine;
 public class OverworldMapDecorator : MonoBehaviour
 {
     [SerializeField] OWMapDecoratorSettings dSettings;
+    [SerializeField] OWMapDecoratorUtils dUtils;
 
     private int firstDecoratedLevel;
     private int firstBattleLevel;
@@ -56,7 +57,7 @@ public class OverworldMapDecorator : MonoBehaviour
             lastLevel[nodeI].SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TEST
 
             OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState);
-            lastLevel[nodeI].SetNodeClass(lastNode);
+            lastLevel[nodeI].SetNodeClass(lastNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.LAST_LEVEL)); //Get Empty Node Texture
         }
     } 
     private void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
@@ -69,7 +70,7 @@ public class OverworldMapDecorator : MonoBehaviour
             int nextLevelNodes = firstLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
 
             OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState);
-            firstLevel[nodeI].SetNodeClass(firstNode);
+            firstLevel[nodeI].SetNodeClass(firstNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.FIRST_LEVEL)); //Get Empty Node Texture
         }
     }
 
@@ -92,7 +93,7 @@ public class OverworldMapDecorator : MonoBehaviour
                 battleType = NodeEnums.BattleType.LATE;
             }
             OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType);
-            battleLevel[nodeI].SetNodeClass(battleNode);
+            battleLevel[nodeI].SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
         }
     }
 
@@ -107,7 +108,7 @@ public class OverworldMapDecorator : MonoBehaviour
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.UpgradeType upgradeType = (NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT);
             OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType);
-            upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass);
+            upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
         }
     }
 
