@@ -44,4 +44,14 @@ public class UIWindowManager : MonoBehaviour
     {
         currentInBattleBuildingUpgrader = null;
     }
+
+    public bool IsWindowOpen(InBattleBuildingUpgrader newInBattleBuildingUpgrader)
+    {
+        return (currentInBattleBuildingUpgrader != null);
+    }
+
+    public bool IsHoveringOtherWindow(InBattleBuildingUpgrader newInBattleBuildingUpgrader)
+    {
+        return (currentInBattleBuildingUpgrader != null && currentInBattleBuildingUpgrader.IsHoveringWindow());
+    }
 }
