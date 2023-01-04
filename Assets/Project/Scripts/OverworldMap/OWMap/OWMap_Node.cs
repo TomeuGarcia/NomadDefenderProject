@@ -31,11 +31,12 @@ public class OWMap_Node : MonoBehaviour
     // NODE HEALTH STATE
     [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.UNDAMAGED;
 
-    // NODE TYPE ----- TODO move to NodeClass script
-    //[HideInInspector] public NodeEnums.NodeType nodeType = NodeEnums.NodeType.NONE;
 
     //NODE CLASS
     [HideInInspector] public OWMap_NodeClass nodeClass;
+    
+    //NODE ICON
+    [HideInInspector] public Texture nodeIcon;
 
 
     // OW Node Data
@@ -285,9 +286,11 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
-    public void SetNodeClass(OWMap_NodeClass _nodeClass)
+    public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
     {
         nodeClass = _nodeClass;
+        nodeClass.SetIconTexture(mapIconTexture);
+        nodeIcon = mapIconTexture;
     }
 
     public NodeEnums.NodeType GetNodeType()
