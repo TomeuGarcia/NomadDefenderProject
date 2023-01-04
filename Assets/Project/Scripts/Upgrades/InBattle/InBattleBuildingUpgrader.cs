@@ -58,7 +58,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private void Update()
     {
-        bool outOfArea = !RectTransformUtility.RectangleContainsScreenPoint(mouseDetectionPanel, Input.mousePosition);
+        bool outOfArea = !IsHoveringWindow();
 
         if (outOfArea && Input.GetMouseButtonDown(0) && visible || Input.GetMouseButtonDown(1) || Input.mouseScrollDelta.y != lastScroll)
         {
@@ -95,12 +95,15 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     public void OpenWindow()
     {
-        UIWindowManager.GetInstance().OpenedWindow(this);
+        if(!UIWindowManager.GetInstance().IsHoveringOtherWindow(this))
+        {
+            UIWindowManager.GetInstance().OpenedWindow(this);
 
-        UIParent.gameObject.SetActive(true);
+            UIParent.gameObject.SetActive(true);
 
-        UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
-        StartCoroutine(SetVisible());
+            UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
+            StartCoroutine(SetVisible());
+        }
     }
 
     public void CloseWindow()
@@ -109,6 +112,11 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
         visible = false;
         UIParent.gameObject.SetActive(false);
+    }
+
+    public bool IsHoveringWindow()
+    {
+        return RectTransformUtility.RectangleContainsScreenPoint(mouseDetectionPanel, Input.mousePosition);
     }
 
     private IEnumerator SetVisible()
