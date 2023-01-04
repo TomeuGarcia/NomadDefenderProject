@@ -35,9 +35,6 @@ public class OWMap_Node : MonoBehaviour
     //NODE CLASS
     [HideInInspector] public OWMap_NodeClass nodeClass;
     
-    //NODE ICON
-    [HideInInspector] public Texture nodeIcon;
-
 
     // OW Node Data
     public struct MapReferencesData
@@ -79,6 +76,8 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     private Material material;
 
+    //NODE ICON
+    private Texture nodeIcon;
 
     public Vector3 Position => nodeTransform.position;
     public Vector3 Up => nodeTransform.up;
@@ -291,6 +290,8 @@ public class OWMap_Node : MonoBehaviour
         nodeClass = _nodeClass;
         nodeClass.SetIconTexture(mapIconTexture);
         nodeIcon = mapIconTexture;
+
+        material.SetTexture("_IconTexture", nodeIcon);
     }
 
     public NodeEnums.NodeType GetNodeType()

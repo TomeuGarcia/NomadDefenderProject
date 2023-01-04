@@ -5,7 +5,7 @@ using UnityEngine;
 public class OverworldMapDecorator : MonoBehaviour
 {
     [SerializeField] OWMapDecoratorSettings dSettings;
-    [SerializeField] decoratorUtils dUtils;
+    [SerializeField] OWMapDecoratorUtils dUtils;
 
     private int firstDecoratedLevel;
     private int firstBattleLevel;

@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Decorator Utils")]
-public class decoratorUtils : ScriptableObject
+[CreateAssetMenu(fileName = "NewOWMapDecoratorUtils", menuName = "Map/OWMapDecoratorUtils")]
+public class OWMapDecoratorUtils : ScriptableObject
 {
 
     public List<Texture> upgradeNodeTextures;
