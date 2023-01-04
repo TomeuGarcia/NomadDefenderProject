@@ -65,7 +65,7 @@ public class HandBuildingCards : MonoBehaviour
 
         for (int i = 0; i < cards.Count; ++i)
         {
-            cards[i].CreateCopyBuildingPrefab(buildingsHolder);
+            cards[i].CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         //HideHand(false);
@@ -199,7 +199,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (!card.AlreadySpawnedCopyBuildingPrefab)
         {
-            card.CreateCopyBuildingPrefab(buildingsHolder);
+            card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         CheckCardsCost();
