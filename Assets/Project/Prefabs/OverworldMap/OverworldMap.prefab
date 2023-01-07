@@ -84,7 +84,7 @@ MonoBehaviour:
   owMapDecorator: {fileID: 8368974391344918974}
   mapSceneLoader: {fileID: 5862159990863268369}
   owMapPawn: {fileID: 3159693065526322721}
-  mapCameraGO: {fileID: 0}
+  mapCameraGO: {fileID: 5750667213190007970}
 --- !u!114 &4525846865304159891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,23 +141,19 @@ MonoBehaviour:
     - BodyReplaceScene
   earlyBattleScenes:
   - names:
-    - Clone1_VisualsScene
-    - Clone1_VisualsScene
+    - MapTest_1Location
   - names:
-    - Clone1_VisualsScene
-    - Clone1_VisualsScene
+    - MapTest_2Locations
   lateBattleScenes:
   - names:
-    - Clone1_VisualsScene
-    - Clone1_VisualsScene
+    - MapTest_1Location
   - names:
-    - Clone1_VisualsScene
-    - Clone1_VisualsScene
+    - MapTest_2Locations
   bossBattleScenes:
   - names:
-    - Clone1_VisualsScene
+    - MapTest_1Location
   - names:
-    - Clone1_VisualsScene
+    - MapTest_2Locations
 --- !u!1001 &8070610358808748709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -242,6 +238,12 @@ MonoBehaviour:
 --- !u!4 &5197006574378499511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4044206821409365778, guid: 901a9620af63dec48933fef0c2a10f6a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8070610358808748709}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5750667213190007970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4597867357007719943, guid: 901a9620af63dec48933fef0c2a10f6a,
     type: 3}
   m_PrefabInstance: {fileID: 8070610358808748709}
   m_PrefabAsset: {fileID: 0}

@@ -1,20 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static MapData;
 
 public class OWMap_Node : MonoBehaviour
 {
-    [SerializeField] private static Color noInteractionColor =      new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    [SerializeField] private static Color hoveredColor =            new Color(.9f, .9f, .9f);
-    [SerializeField] private static Color selectedColor =           new Color(38f / 255f, 142f / 255f, 138f / 255f);
+    [SerializeField] public static Color darkGreyColor =   new Color(106f / 255f, 106f / 255f, 106f / 255f);
+    [SerializeField] public static Color lightGreyColor =  new Color(.9f, .9f, .9f);
+    [SerializeField] public static Color blueColor =       new Color(38f / 255f, 142f / 255f, 138f / 255f);
 
-    [SerializeField] private static Color slightlyDamagedColor =    new Color(170f / 255f, 299f / 255f, 81f / 255f);
-    [SerializeField] private static Color greatlyDamagedColor =    new Color(190f / 255f, 80f / 255f, 0f / 255f);
-    [SerializeField] private static Color destroyedColor =          new Color(140f / 255f, 7f / 255f, 36f / 255f);
+    [SerializeField] public static Color yellowColor =     new Color(190f / 255f, 190f / 255f, 50f / 255f);
+    [SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
+    [SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
-    private Color colorInUse = noInteractionColor;
+    private Color colorInUse = darkGreyColor;
 
     // INTERACTAVILITY
     // is interactable      ->  player can interact and travel there
@@ -94,7 +92,17 @@ public class OWMap_Node : MonoBehaviour
 
     private void Awake()
     {
+        healthState = NodeEnums.HealthState.UNDAMAGED;
+
         material = meshRenderer.material;
+
+        colorInUse = darkGreyColor;
+        material.SetFloat("_TimeOffset", Random.Range(0f, 1f));
+        material.SetColor("_BorderColor", darkGreyColor);
+        material.SetColor("_IconColor", darkGreyColor);
+        material.SetFloat("_IsInteractable", 0f);
+        material.SetFloat("_NoiseTwitchingEnabled", 0f);
+        material.SetFloat("_IsDestroyed", 0f);
     }
 
 
@@ -155,12 +163,18 @@ public class OWMap_Node : MonoBehaviour
     {
         isInteractable = true;
         interactionCollider.enabled = true;
+
+        material.SetFloat("_IsInteractable", 1f);
+        material.SetFloat("_NoiseTwitchingEnabled", 1f);
     }
 
     public void DisableInteraction()
     {
         isInteractable = false;
         interactionCollider.enabled = false;
+
+        material.SetFloat("_IsInteractable", 0f);
+        material.SetFloat("_NoiseTwitchingEnabled", 0f);
     }
 
 
@@ -168,21 +182,25 @@ public class OWMap_Node : MonoBehaviour
     {
         interactState = NodeInteractState.NONE;
 
-        SetColor(colorInUse, setCameFromConnectionNotInteracted: true);
+        //SetColor(colorInUse, setCameFromConnectionNotInteracted: true);
+        SetIconColor(colorInUse);
+        SetCameFromColor(colorInUse, setCameFromConnectionNotInteracted: true);
     }
 
     public void SetHovered()
     {
         interactState = NodeInteractState.HOVERED;
 
-        SetColor(hoveredColor, true);
+        SetIconColor(lightGreyColor, true);
+        SetCameFromColor(lightGreyColor);
     }
 
     public void SetSelected()
     {
         interactState = NodeInteractState.SELECTED;
 
-        SetColor(selectedColor);
+        //SetColor(blueColor);
+        SetCameFromColor(blueColor);
 
         DisableInteraction();
         if (!mapReferencesData.isLastLevelNode)
@@ -197,60 +215,67 @@ public class OWMap_Node : MonoBehaviour
         }        
     }
 
-    public void SetDestroyed()
-    {
-        SetColor(destroyedColor);
-    }
-
-    private void SetColor(Color color, bool mixWithColorInUse = false, bool setCameFromConnectionNotInteracted = false)
+    private void SetIconColor(Color color, bool mixWithColorInUse = false)
     {
         if (mixWithColorInUse)
         {
-            material.color = Color.Lerp(color, colorInUse, 0.5f);
+            color = Color.Lerp(color, colorInUse, 0.5f);
         }
-        else
+        material.SetColor("_IconColor", color);
+    }
+    public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
+    {
+        if (mixWithDarkGrey)
         {
-            material.color = color;
-        }        
+            color = Color.Lerp(color, darkGreyColor, 0.5f);
+        }
 
         if (cameFromConnection != null)
         {
             if (setCameFromConnectionNotInteracted)
             {
-                cameFromConnection.SetColor(noInteractionColor);
+                cameFromConnection.SetColor(darkGreyColor);
             }
             else
             {
                 cameFromConnection.SetColor(color);
-            }            
+            }
         }
+    }
+    public void SetBorderColor(Color color)
+    {
+        material.SetColor("_BorderColor", color);
     }
 
 
     public void SetHealthState(NodeEnums.HealthState nodeHealthState)
     {
-        switch (nodeHealthState)
+        healthState = nodeHealthState;
+
+        switch (healthState)
         {
             case NodeEnums.HealthState.UNDAMAGED:
                 {
+                    SetIconColor(blueColor);
+                    colorInUse = blueColor;
                 }
                 break;
             case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
                 {
-                    SetColor(slightlyDamagedColor);
-                    colorInUse = slightlyDamagedColor;
+                    SetIconColor(yellowColor);
+                    colorInUse = yellowColor;
                 }
                 break;
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
-                    SetColor(greatlyDamagedColor, setCameFromConnectionNotInteracted: true);
-                    colorInUse = greatlyDamagedColor;
+                    SetIconColor(orangeColor);
+                    colorInUse = orangeColor;
                 }
                 break;
             case NodeEnums.HealthState.DESTROYED:
                 {
-                    SetColor(destroyedColor);
-                    colorInUse = destroyedColor;
+                    SetIconColor(redColor);
+                    colorInUse = redColor;
                 }
                 break;
             default:
@@ -267,14 +292,28 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
-    public void EnableNextLevelNodesInteraction()
+    public OWMap_Node[] EnableNextLevelNodesInteraction()
     {
+        List<OWMap_Node> nextLevelEnabledNodes = new List<OWMap_Node>();
+
         for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
         {
             OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
             nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
-            nextLevelNode.EnableInteraction();
+
+            if (nextLevelNode.IsDestroyed())
+            {
+                nextLevelNode.SetDestroyedVisuals();
+            }
+            else
+            {                
+                nextLevelNode.EnableInteraction();
+
+                nextLevelEnabledNodes.Add(nextLevelNode);
+            }            
         }
+
+        return nextLevelEnabledNodes.ToArray();
     }
 
     private void DisableNeighborLevelNodesInteraction()
@@ -299,4 +338,15 @@ public class OWMap_Node : MonoBehaviour
         return nodeClass.nodeType;
     }
 
+    public bool IsDestroyed()
+    {
+        return healthState == NodeEnums.HealthState.DESTROYED;
+    }
+    public void SetDestroyedVisuals()
+    {
+        SetIconColor(redColor);
+        SetCameFromColor(redColor);
+        material.SetFloat("_IsDestroyed", 1f);
+        material.SetFloat("_NoiseTwitchingEnabled", 1f);
+    }
 }
