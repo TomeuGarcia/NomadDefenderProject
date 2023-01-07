@@ -16,9 +16,6 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("PAWN")]     
     [SerializeField] private OWMapPawn owMapPawn;
 
-    [Header("CAMERA")]
-    [SerializeField] private GameObject mapCameraGO;
-
     private OWMap_Node currentNode;
 
 
@@ -62,9 +59,9 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode = mapNodes[0][0];
 
         currentNode.SetOwMapGameManagerRef(this);
-        currentNode.SetSelected();
+        currentNode.SetSelected(); // Simulate node is clicked
 
-        owMapPawn.Init(this, currentNode);        
+        owMapPawn.Init(this, currentNode, owMapCreator.DisplacementBetweenLevels);        
 
         StartCommunicationWithNextNodes(currentNode);
     }
@@ -86,19 +83,20 @@ public class OverworldMapGameManager : MonoBehaviour
         else
         {
             currentNode.nodeClass.StartLevel(this);
-        }
+        }        
     }
 
     private void ResumeMapAfterNodeScene() // called from event
     {
         FinishCurrentMapLevelScene();
         ResumeMap();
+        owMapPawn.MoveCameraToNextLevel();
     }
     private void ResumeMap()
     {
         // If current node was BATTLE, apply BattleStateResult
         if (IsCurrentNodeBattle())
-            ApplyBattleStateResult();
+            ApplyBattleStateResult();        
 
         StartCommunicationWithNextNodes(currentNode);
     }
@@ -177,11 +175,11 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ActivateMapCamera()
     {
-        mapCameraGO.SetActive(true);
+        owMapPawn.ActivateCamera();        
     }
     private void DeactivateMapCamera()
     {
-        mapCameraGO.SetActive(false);
+        owMapPawn.DeactivateCamera();
     }
 
 }
