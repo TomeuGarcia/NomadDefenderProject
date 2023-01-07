@@ -5,6 +5,8 @@ using TMPro;
 using System;
 using System.Linq;
 using UnityEngine.TextCore.Text;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class TextDecoder : MonoBehaviour
 {
@@ -26,6 +28,8 @@ public class TextDecoder : MonoBehaviour
     [SerializeField] private float updateDecodeTime;
     [SerializeField] private float updateCharIndexTime;
     [SerializeField] private bool respectSpaces;
+    [SerializeField] private bool cutCodedText;
+    [SerializeField] private int forwardRevealAmount;
 
     [Header("DECODING DICTIONERIES")]
     [SerializeField] private bool lowerCase;
@@ -111,18 +115,26 @@ public class TextDecoder : MonoBehaviour
     private void DecodeUpdate(string realText, string charDictionary, int realTextIndex)
     {
         string randomString = new string(Enumerable.Repeat(charDictionary, realText.Length).Select(d => d[random.Next(d.Length)]).ToArray());
-        
-        char charToReplace = ' ';
-        if (respectSpaces)
+
+        if (realText.Contains('\n'))
+            randomString = RespectOriginalChar('\n', realText, randomString);
+        if (respectSpaces && realText.Contains(' '))
+            randomString = RespectOriginalChar(' ', realText, randomString);
+
+        if (cutCodedText)
+            textComponent.text = realText.Substring(0, realTextIndex) + randomString.Substring(realTextIndex, Math.Clamp(forwardRevealAmount, 0, randomString.Substring(realTextIndex).Length));
+        else
+            textComponent.text = realText.Substring(0, realTextIndex) + randomString.Substring(realTextIndex);
+    }
+
+    private string RespectOriginalChar(char charToRespect, string realText, string stringToModify)
+    {
+        for (int i = realText.IndexOf(charToRespect, 0); i > (-1); i = realText.IndexOf(charToRespect, i + 1)) // for loop end when i=-1 ('a' not found)
         {
-            for (int i = realText.IndexOf(charToReplace, 0); i > (-1); i = realText.IndexOf(charToReplace, i + 1)) // for loop end when i=-1 ('a' not found)
-            {
-                randomString = randomString.Remove(i, 1).Insert(i, charToReplace.ToString());
-                Debug.Log(randomString);
-            }
+            stringToModify = stringToModify.Remove(i, 1).Insert(i, charToRespect.ToString());
         }
 
-        textComponent.text = realText.Substring(0, realTextIndex) + randomString.Substring(realTextIndex);
+        return stringToModify;
     }
 
     public void NextLine()

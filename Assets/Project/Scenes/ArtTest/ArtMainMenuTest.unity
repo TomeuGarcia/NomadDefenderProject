@@ -5547,6 +5547,8 @@ MonoBehaviour:
   updateDecodeTime: 0.02
   updateCharIndexTime: 0.1
   respectSpaces: 1
+  cutCodedText: 0
+  forwardRevealAmount: 0
   lowerCase: 0
   upperCase: 1
   digits: 1
@@ -11505,9 +11507,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateDecodeTime: 0.02
-  updateCharIndexTime: 0.1
-  respectSpaces: 1
+  updateDecodeTime: 0.01
+  updateCharIndexTime: 0.025
+  respectSpaces: 0
+  cutCodedText: 1
+  forwardRevealAmount: 5
   lowerCase: 0
   upperCase: 1
   digits: 1
@@ -11577,7 +11581,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
