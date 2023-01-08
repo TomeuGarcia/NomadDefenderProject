@@ -13,6 +13,7 @@ public class CurrencyBase : TurretPartBase_Prefab
     [SerializeField] private Material topCubeMaterial;
     [SerializeField] private GameObject currencyPlane;
     private Material currencyPlaneMaterial;
+    [SerializeField] private float lerpVelocity;
 
     private float positionMovement = 0;
 
@@ -91,5 +92,36 @@ public class CurrencyBase : TurretPartBase_Prefab
         topCube.Rotate(Vector3.up * 0.1f, Space.World);
         topCube.position = new Vector3(topCube.position.x, topCube.position.y + (Mathf.Sin(positionMovement) / 4000.0f), topCube.position.z);
         //Do animation up-down
+    }
+
+    public void DoBloomCube()
+    {
+        StartCoroutine(BloomCube());
+    }
+
+    IEnumerator BloomCube()
+    {
+        float tParam = 0.0f;
+
+        do
+        {
+            tParam += Time.deltaTime * lerpVelocity;
+            topCubeMaterial.SetFloat("_lerpTime", tParam);
+            yield return null;
+
+        } while (tParam < 1.0f) ;
+
+
+        yield return new WaitForSeconds(1.0f);
+
+        do
+        {
+            tParam -= Time.deltaTime * lerpVelocity;
+            topCubeMaterial.SetFloat("_lerpTime", tParam);
+            yield return null;
+
+        } while (tParam >= 0.0f);
+
+        topCubeMaterial.SetFloat("_lerpTime", 0.0f);
     }
 }
