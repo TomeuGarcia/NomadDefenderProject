@@ -16,6 +16,11 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("PAWN")]     
     [SerializeField] private OWMapPawn owMapPawn;
 
+    [Header("CANVAS")]
+    [SerializeField] private GameObject gameOverHolder;
+    [SerializeField] private GameObject victoryHolder;
+
+
     private OWMap_Node currentNode;
 
 
@@ -26,6 +31,9 @@ public class OverworldMapGameManager : MonoBehaviour
     private void Awake()
     {
         TDGameManager.OnQueryReferenceToBattleStateResult += CreateNewBattleStateResult;
+
+        gameOverHolder.SetActive(false);
+        victoryHolder.SetActive(false);
     }
 
     private void OnEnable()
@@ -109,6 +117,7 @@ public class OverworldMapGameManager : MonoBehaviour
         if (nodeMapRefData.isLastLevelNode)
         {
             Debug.Log("END OF MAP REACHED, ---> VICTORY");
+            StartVictory();
             return; // TODO do something here (END GAME)
         }
 
@@ -124,6 +133,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
+            StartGameOver();
             Debug.Log("ALL PATHS DESTROYED, ---> GAME OVER");
         }
 
@@ -175,11 +185,26 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ActivateMapCamera()
     {
-        owMapPawn.ActivateCamera();        
+        owMapPawn.ActivateCamera();
     }
     private void DeactivateMapCamera()
     {
         owMapPawn.DeactivateCamera();
     }
+
+
+    private void StartGameOver()
+    {
+        gameOverHolder.SetActive(true);
+        mapSceneLoader.LoadMainMenuScene(5f);
+    }
+
+    private void StartVictory()
+    {
+        victoryHolder.SetActive(true);
+        mapSceneLoader.LoadMainMenuScene(5f);
+    }
+
+
 
 }

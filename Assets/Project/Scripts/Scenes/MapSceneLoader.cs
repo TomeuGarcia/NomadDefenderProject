@@ -73,6 +73,17 @@ public class MapSceneLoader : MonoBehaviour
         }
     }
 
+    public void LoadMainMenuScene(float delay)
+    {
+        StartCoroutine(DoLoadMainMenuScene(delay));
+    }
+    private IEnumerator DoLoadMainMenuScene(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SceneLoader.GetInstance().StartLoadMainMenu();
+    }
+
 
     public void LoadUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
     {

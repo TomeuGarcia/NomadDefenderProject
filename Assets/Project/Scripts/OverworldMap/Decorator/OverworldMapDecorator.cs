@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OverworldMapDecorator : MonoBehaviour
@@ -99,13 +100,20 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel)
     {
+        HashSet<NodeEnums.UpgradeType> randomUpgradeTypes = new HashSet<NodeEnums.UpgradeType>();
+        while (randomUpgradeTypes.Count < upgradeLevel.Length) // UNSAFE this could explode in theory
+        {
+            randomUpgradeTypes.Add((NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT));
+        }
+        NodeEnums.UpgradeType[] randomUpgradeTypesArray = randomUpgradeTypes.ToArray();
+
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             // TODO decorate properly
             upgradeLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
-            NodeEnums.UpgradeType upgradeType = (NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT);
+            NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
             OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType);
             upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
         }

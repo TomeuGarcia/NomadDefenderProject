@@ -183,7 +183,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(nextSceneI);        
     }
 
-    private void StartLoadMainMenu()
+    public void StartLoadMainMenu()
     {
         StartCoroutine(DoLoadScene(LoadMainMenu));
     }
