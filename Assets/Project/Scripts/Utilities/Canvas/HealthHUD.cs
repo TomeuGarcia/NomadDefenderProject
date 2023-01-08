@@ -27,7 +27,7 @@ public class HealthHUD : MonoBehaviour
 
     private void UpdateHealthImage()
     {
-        healthImage.fillAmount = healthSystem.healthRatio;
+        healthImage.fillAmount = healthSystem.HealthRatio;
     }
 
     public void Hide()

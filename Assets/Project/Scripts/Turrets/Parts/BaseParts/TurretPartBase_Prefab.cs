@@ -21,6 +21,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
         InitMaterials();
     }
 
+    virtual public void Upgrade(int newStatLevel) { }
+
     private void InitMaterials()
     {
         defaultMaterials = new Material[meshRenderer.materials.Length];

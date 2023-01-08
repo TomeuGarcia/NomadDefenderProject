@@ -9,8 +9,7 @@ public class HealthSystem
     [SerializeField] private int maxHealth;
     public int health { get; private set; }
 
-    public float healthRatio => (float)health / (float)maxHealth;
-
+    public float HealthRatio => (float)health / (float)maxHealth;
 
     public delegate void HealthSystemAction();
     public event HealthSystemAction OnHealthUpdated;
@@ -56,6 +55,10 @@ public class HealthSystem
         return health <= 0;
     }
 
+    public bool IsFullHealth()
+    {
+        return health == maxHealth;
+    }
 
     private void InvokeOnHealthUpdated()
     {
