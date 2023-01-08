@@ -82,11 +82,6 @@ public class TextDecoder : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             indexLine++;
             indexChar = 0;
-
-            if(indexLine < textStrings.Count)
-            {
-                indexLine = 0;
-            }
         }
     }
 
