@@ -5546,17 +5546,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateDecodeTime: 0.02
   updateCharIndexTime: 0.1
-  respectSpaces: 1
-  cutCodedText: 0
-  forwardRevealAmount: 0
+  respectSpaces: 0
+  cutCodedText: 1
+  forwardRevealAmount: 2
   lowerCase: 0
   upperCase: 1
   digits: 1
   symbols: 0
-  textStrings:
-  - it is a game
-  - trust me, it is
-  - or not I do not know
+  textStrings: []
 --- !u!1001 &414272069
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7528,6 +7525,7 @@ GameObject:
   - component: {fileID: 547720849}
   - component: {fileID: 547720851}
   - component: {fileID: 547720850}
+  - component: {fileID: 547720852}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -7655,6 +7653,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 547720848}
   m_CullTransparentMesh: 1
+--- !u!114 &547720852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547720848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateDecodeTime: 0.02
+  updateCharIndexTime: 0.1
+  respectSpaces: 0
+  cutCodedText: 1
+  forwardRevealAmount: 2
+  lowerCase: 0
+  upperCase: 1
+  digits: 1
+  symbols: 0
+  textStrings: []
 --- !u!1 &549130042
 GameObject:
   m_ObjectHideFlags: 0
@@ -11474,7 +11494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &828670433
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15320,6 +15340,55 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1094290621}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1098747223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1098747225}
+  - component: {fileID: 1098747224}
+  m_Layer: 0
+  m_Name: TextManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1098747224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098747223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 399bf2b7dc62a0544a84545f3053938d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texts:
+  - {fileID: 401005362}
+  - {fileID: 1320615472}
+  - {fileID: 547720852}
+  delay: 0.5
+--- !u!4 &1098747225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098747223}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1111355200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18683,6 +18752,7 @@ GameObject:
   - component: {fileID: 1320615469}
   - component: {fileID: 1320615471}
   - component: {fileID: 1320615470}
+  - component: {fileID: 1320615472}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -18808,6 +18878,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320615468}
   m_CullTransparentMesh: 1
+--- !u!114 &1320615472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320615468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateDecodeTime: 0.02
+  updateCharIndexTime: 0.1
+  respectSpaces: 0
+  cutCodedText: 1
+  forwardRevealAmount: 2
+  lowerCase: 0
+  upperCase: 1
+  digits: 1
+  symbols: 0
+  textStrings: []
 --- !u!1001 &1324860582
 PrefabInstance:
   m_ObjectHideFlags: 0

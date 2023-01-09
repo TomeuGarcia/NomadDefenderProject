@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class TextDecoder : MonoBehaviour
 {
+    private bool doneDecoding;
+
     private bool nextLine;
     private TMP_Text textComponent;
 
@@ -40,17 +42,23 @@ public class TextDecoder : MonoBehaviour
     [Header("STRINGS")]
     [SerializeField] private List<string> textStrings;
 
-    private void OnEnable()
+    private void Awake()
     {
         InitDecodingVariables();
+    }
 
+    public void Activate()
+    {
+        doneDecoding = false;
         StartCoroutine(Decode());
+        textComponent.enabled = true;
     }
 
     private void InitDecodingVariables()
     {
         nextLine = false;
         textComponent = gameObject.GetComponent<TMP_Text>();
+        textComponent.enabled = false;
 
         indexLine = 0;
         indexChar = 0;
@@ -76,13 +84,18 @@ public class TextDecoder : MonoBehaviour
 
     private IEnumerator Decode()
     {
+        nextLine = true;
         while (indexLine < textStrings.Count)
         {
+            if(!nextLine)
+                yield return new WaitUntil(() => nextLine == true);
+            nextLine = false;
+
             yield return StartCoroutine(DecodeString(indexLine));
-            yield return new WaitForSeconds(1.5f);
             indexLine++;
-            indexChar = 0;
         }
+
+        doneDecoding = true;
     }
 
     private IEnumerator DecodeString(int currentIndexLine)
@@ -135,5 +148,10 @@ public class TextDecoder : MonoBehaviour
     public void NextLine()
     {
         nextLine = true;
+    }
+
+    public bool IsDoneDecoding()
+    {
+        return doneDecoding;
     }
 }
