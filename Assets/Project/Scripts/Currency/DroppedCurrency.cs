@@ -14,7 +14,6 @@ public class DroppedCurrency : MonoBehaviour
     [SerializeField] private float indicatorTime;
 
     [Header("COMPONENTS")]
-    [SerializeField] private MouseOverNotifier mouseOverNotifier;
     [SerializeField] private Transform meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private RectTransform canvasTransform;
@@ -29,7 +28,6 @@ public class DroppedCurrency : MonoBehaviour
 
     private void OnEnable()
     {
-        //mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
         StartGotPickedUp();
 
         beeingPickedUp = false;
@@ -48,12 +46,6 @@ public class DroppedCurrency : MonoBehaviour
         Vector3 forceDir = (Vector3.up * 3f + randomDir).normalized * 3.0f;
         rb.AddForce(forceDir, ForceMode.Impulse);
     }
-
-    private void OnDisable()
-    {
-        mouseOverNotifier.OnMouseEntered -= StartGotPickedUp;
-    }
-
 
     private void Update()
     {

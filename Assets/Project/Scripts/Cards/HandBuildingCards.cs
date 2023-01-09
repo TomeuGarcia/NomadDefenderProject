@@ -7,6 +7,7 @@ using UnityEngine;
 public class HandBuildingCards : MonoBehaviour
 {
     [SerializeField] private Transform cardHolder;
+    [SerializeField] private Transform buildingsHolder;
 
     [SerializeField] private AnimationCurve cardsHeightCurve;
     [SerializeField] private AnimationCurve cardsRotationCurve;
@@ -70,7 +71,7 @@ public class HandBuildingCards : MonoBehaviour
 
         for (int i = 0; i < cards.Count; ++i)
         {
-            cards[i].CreateCopyBuildingPrefab();
+            cards[i].CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         //HideHand(false);
@@ -275,7 +276,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (!card.AlreadySpawnedCopyBuildingPrefab)
         {
-            card.CreateCopyBuildingPrefab();
+            card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         CheckCardsCost();

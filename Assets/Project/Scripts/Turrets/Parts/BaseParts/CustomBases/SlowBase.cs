@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class SlowBase : TurretPartBase_Prefab
 {
-    [SerializeField] private float slowSpeedCoef;
+    public class SlowData
+    {
+        public int slowQuantity = 0;
+        public float slowCoefApplied = 0;
+    }
+
+    [SerializeField] private List<float> slowSpeedCoefs = new List<float>();
+    private int currentLvl = 0;
+
     [SerializeField] private GameObject slowPlane;
-    private static Dictionary<Enemy, int> slowedEnemies = new Dictionary<Enemy, int>();
+    private static Dictionary<Enemy, SlowData> slowedEnemies = new Dictionary<Enemy, SlowData>();
 
     override public void Init(TurretBuilding turretOwner, float turretRange) 
     {
@@ -27,16 +35,30 @@ public class SlowBase : TurretPartBase_Prefab
         slowPlane.transform.localScale = Vector3.one * ((float)supportRange / 10.0f);
     }
 
+    override public void Upgrade(int newStatnewStatLevel)
+    {
+        currentLvl = newStatnewStatLevel;
+
+        foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
+        {
+            if(slowedEnemy.Value.slowCoefApplied > slowSpeedCoefs[currentLvl])
+            {
+                slowedEnemy.Key.SetMoveSpeed(slowSpeedCoefs[currentLvl]);
+                slowedEnemy.Value.slowCoefApplied = slowSpeedCoefs[currentLvl];
+            }
+        }
+    }
+
     private void SlowEnemy(Enemy enemy)
     {
         if(slowedEnemies.ContainsKey(enemy))
         {
-            slowedEnemies[enemy] += 1;
+            slowedEnemies[enemy].slowQuantity += 1;
         }
         else
         {
-            enemy.SetMoveSpeed(slowSpeedCoef);
-            slowedEnemies[enemy] = 1;
+            enemy.SetMoveSpeed(slowSpeedCoefs[currentLvl]);
+            slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = slowSpeedCoefs[currentLvl] };
         }
     }
 
@@ -44,9 +66,9 @@ public class SlowBase : TurretPartBase_Prefab
     {
         if (!slowedEnemies.ContainsKey(enemy)) return;
 
-        slowedEnemies[enemy] -= 1;
+        slowedEnemies[enemy].slowQuantity -= 1;
         
-        if(slowedEnemies[enemy] == 0)
+        if(slowedEnemies[enemy].slowQuantity == 0)
         {
             slowedEnemies.Remove(enemy);
 

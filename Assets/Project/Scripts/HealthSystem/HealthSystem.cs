@@ -11,8 +11,7 @@ public class HealthSystem
     public int health { get; private set; }
     public int armor { get; private set; }
 
-    public float healthRatio => (float)health / (float)maxHealth;
-
+    public float HealthRatio => (float)health / (float)maxHealth;
 
     public delegate void HealthSystemAction();
     public event HealthSystemAction OnHealthUpdated;
@@ -78,6 +77,11 @@ public class HealthSystem
     public bool IsDead()
     {
         return health <= 0;
+    }
+
+    public bool IsFullHealth()
+    {
+        return health == maxHealth;
     }
 
     public bool HasArmor()

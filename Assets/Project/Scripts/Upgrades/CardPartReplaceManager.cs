@@ -7,6 +7,9 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("SCENE MANAGEMENT")]
+    [SerializeField] private MapSceneNotifier mapSceneNotifier;
+
     [Header("DECK DATA")]
     [SerializeField] private DeckData deckData;
     private List<BuildingCard> deckCards;
@@ -340,6 +343,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InvokeReplacementDone()
     {
         upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
+
+        mapSceneNotifier.InvokeOnSceneFinished();
 
         if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
     }
