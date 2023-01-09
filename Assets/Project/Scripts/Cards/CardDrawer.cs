@@ -35,6 +35,9 @@ public class CardDrawer : MonoBehaviour
     private void OnDisable()
     {
         HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
+        HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
+        HandBuildingCards.OnFinishRedrawing -= deactivateCanvas;
+        HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
         EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
     }
 
