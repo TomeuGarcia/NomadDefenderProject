@@ -45,6 +45,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
     {
         GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
+        temp.transform.parent = gameObject.transform.parent;
 
         targetEnemy.TakeDamage(damage, passiveDamageModifier);
 

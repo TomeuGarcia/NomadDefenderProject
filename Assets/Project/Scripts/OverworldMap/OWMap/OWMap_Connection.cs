@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class OWMap_Connection : MonoBehaviour
 {
-    [SerializeField] private static Color defaultColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    [SerializeField] private static Color selectedColor = new Color(38f / 255f, 142f / 255f, 138f / 255f);
-    [SerializeField] private static Color unavailableColor = new Color(140f / 255f, 7f / 255f, 36f / 255f);
-
     [SerializeField] private Transform connectionTransform;
 
+    [SerializeField] private MeshRenderer[] meshRenderers;
+    private Material[] materials;
+
+
+    private void Awake()
+    {
+        materials = new Material[meshRenderers.Length];
+
+        for (int i = 0; i < meshRenderers.Length; ++i)
+        {
+            materials[i] = meshRenderers[i].material;
+        }
+    }
 
     public void InitTransform(Vector3 cNodeLocalPos, Vector3 nNodeLocalPos, Vector3 mapForwardDir)
     {
@@ -23,5 +33,14 @@ public class OWMap_Connection : MonoBehaviour
         connectionTransform.localRotation = connectionRotation;
     }
 
+
+
+    public void SetColor(UnityEngine.Color color)
+    {
+        for (int i = 0; i < meshRenderers.Length; ++i)
+        {
+            materials[i].color = color;
+        }
+    }
 
 }
