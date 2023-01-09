@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
+using TMPro;
 
 public class CardDrawer : MonoBehaviour
 {
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] private DeckBuildingCards deck;
+    [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
+    [SerializeField] private GameObject canvas; // works for 1 waveSpawner
 
     [SerializeField, Min(1)] private int numCardsHandStart = 2;
 
     [SerializeField] private Image drawCooldownImage;
+    
     [SerializeField, Range(10, 60)] private float drawTimeCooldown;
     private float drawCountdown;
 
@@ -20,19 +24,23 @@ public class CardDrawer : MonoBehaviour
 
     private void OnEnable()
     {
-        HandBuildingCards.OnQueryDrawCard += TryDrawCard;
+        HandBuildingCards.OnQueryDrawCard += TryDrawCardAndUpdateHand;
+        HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
+        HandBuildingCards.OnFinishRedrawing += deactivateCanvas;
+        HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
         EnemyWaveManager.OnWaveFinished += DrawCardAfterWave;
 
     }
 
     private void OnDisable()
     {
-        HandBuildingCards.OnQueryDrawCard -= TryDrawCard;
+        HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
         EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
     }
 
     private void Start()
     {
+        redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
         deck.Init();      
         DrawStartHand();
         hand.Init();
@@ -50,6 +58,39 @@ public class CardDrawer : MonoBehaviour
     {
         if (deck.HasCardsLeft())
             DrawRandomCard();
+    }
+    public void TryRedrawCard()
+    {
+        if (deck.HasCardsLeft()) 
+        {
+            DrawRandomCard();
+            //TODO: UPDATE TEXT OF REDRAWS LEFT
+            redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
+            if (hand.HasRedrawsLeft())
+            {
+                hand.InitCardsInHandFirstDraw();
+            }
+            else
+            {
+                hand.InitCardsInHand();
+            }
+        }
+    }
+    public void OnFinishRedrawsButtonPressed()
+    {
+        hand.FinishedRedrawing();
+    }
+    private void deactivateCanvas()
+    {
+        canvas.SetActive(false);
+    }
+    public void TryDrawCardAndUpdateHand()
+    {
+        if (deck.HasCardsLeft()) 
+        {
+            DrawRandomCard();
+            hand.InitCardsInHand();
+        }
     }
 
     private void DrawTopCard()
@@ -74,6 +115,8 @@ public class CardDrawer : MonoBehaviour
     {
         for (int i = 0; i < cardsToDrawPerWave; i++)
             TryDrawCard();
+
+        hand.InitCardsInHand();
     }
 
 
@@ -85,6 +128,13 @@ public class CardDrawer : MonoBehaviour
         {
             TryDrawCard();
         }
+    }
+
+    public void ReturnCardToDeck(BuildingCard card)
+    {
+        hand.RemoveCard(card);
+        //hand.InitCardsInHand();
+        deck.AddCardToDeckBottom(card);
     }
 
     /*private void StartDrawOverTime()

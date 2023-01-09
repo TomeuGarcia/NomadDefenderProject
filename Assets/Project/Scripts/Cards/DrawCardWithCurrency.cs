@@ -69,7 +69,7 @@ public class DrawCardWithCurrency : MonoBehaviour
         //Add Random Card to Hand
         //Substract Player's Currency 
         currencyCounter.SubtractCurrency(drawCost);
-        cardDrawer.TryDrawCard();
+        cardDrawer.TryDrawCardAndUpdateHand();
         cardsDrawnWithCurrency++;
         drawCost += costIncrement;
         costText.text = drawCost.ToString();
