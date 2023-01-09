@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TurretPartBase : ScriptableObject
 {
-    private static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };
+    public static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };
 
 
     [Header("STATS")]

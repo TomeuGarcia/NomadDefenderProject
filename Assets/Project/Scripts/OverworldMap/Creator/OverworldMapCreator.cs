@@ -25,7 +25,7 @@ public class OverworldMapCreator : MonoBehaviour
     private Vector3 MapForwardDir => Vector3.forward;
     private Vector3 MapRightDir => Vector3.right;
 
-    private Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
+    public Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
 
     private const float NodeGapWidth = 2.0f;
 

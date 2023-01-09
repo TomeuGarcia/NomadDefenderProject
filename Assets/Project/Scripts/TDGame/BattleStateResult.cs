@@ -9,7 +9,7 @@ public class BattleStateResult
         public NodeBattleStateResult(OWMap_Node owMapNode)
         {
             this.owMapNode = owMapNode;
-            this.healthState = NodeEnums.HealthState.GREATLY_DAMAGED;
+            this.healthState = NodeEnums.HealthState.UNDAMAGED;
         }
 
         public readonly OWMap_Node owMapNode;

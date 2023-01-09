@@ -16,8 +16,10 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("PAWN")]     
     [SerializeField] private OWMapPawn owMapPawn;
 
-    [Header("CAMERA")]
-    [SerializeField] private GameObject mapCameraGO;
+    [Header("CANVAS")]
+    [SerializeField] private GameObject gameOverHolder;
+    [SerializeField] private GameObject victoryHolder;
+
 
     private OWMap_Node currentNode;
 
@@ -29,6 +31,9 @@ public class OverworldMapGameManager : MonoBehaviour
     private void Awake()
     {
         TDGameManager.OnQueryReferenceToBattleStateResult += CreateNewBattleStateResult;
+
+        gameOverHolder.SetActive(false);
+        victoryHolder.SetActive(false);
     }
 
     private void OnEnable()
@@ -62,9 +67,9 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode = mapNodes[0][0];
 
         currentNode.SetOwMapGameManagerRef(this);
-        currentNode.SetSelected();
+        currentNode.SetSelected(); // Simulate node is clicked
 
-        owMapPawn.Init(this, currentNode);        
+        owMapPawn.Init(this, currentNode, owMapCreator.DisplacementBetweenLevels);        
 
         StartCommunicationWithNextNodes(currentNode);
     }
@@ -86,62 +91,53 @@ public class OverworldMapGameManager : MonoBehaviour
         else
         {
             currentNode.nodeClass.StartLevel(this);
-            //StartCurrentNodeScene();
-            //ResumeMapAfterNodeScene(); // TEST (this should be called on scene finish)
-        }
+        }        
     }
 
     private void ResumeMapAfterNodeScene() // called from event
     {
         FinishCurrentMapLevelScene();
         ResumeMap();
+        owMapPawn.MoveCameraToNextLevel();
     }
     private void ResumeMap()
     {
-        StartCommunicationWithNextNodes(currentNode);
-        UpdateNodesInteraction();
-
         // If current node was BATTLE, apply BattleStateResult
         if (IsCurrentNodeBattle())
-            ApplyBattleStateResult();
+            ApplyBattleStateResult();        
+
+        StartCommunicationWithNextNodes(currentNode);
     }
 
 
     private void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
-        if (!nodeMapRefData.isLastLevelNode)
-        {
-            OWMap_Node[] nextLevel = mapNodes[nodeMapRefData.ownerlevelIndex + 1];
-
-            for (int nodeI = 0; nodeI < nextLevel.Length; ++nodeI)
-            {
-                nextLevel[nodeI].SetOwMapGameManagerRef(this);
-            }
-        }
-    }
-
-    private void UpdateNodesInteraction()
-    {
-        OWMap_Node.MapReferencesData nodeMapRefData = currentNode.GetMapReferencesData();
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            Debug.Log("END OF MAP REACHED");
+            Debug.Log("END OF MAP REACHED, ---> VICTORY");
+            StartVictory();
             return; // TODO do something here (END GAME)
         }
 
 
-        currentNode.EnableNextLevelNodesInteraction();
+        OWMap_Node[] nextLevelEnabledNodes = currentNode.EnableNextLevelNodesInteraction();
 
-        for (int i = 0; i < nodeMapRefData.nextLevelNodes.Length; ++i)
+        if (nextLevelEnabledNodes.Length > 0)
         {
-            OWMap_Node nextLevelNode = nodeMapRefData.nextLevelNodes[i];
-            nextLevelNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // TODO State shouldn't be set here
+            for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
+            {
+                nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
+            }
+        }
+        else
+        {
+            StartGameOver();
+            Debug.Log("ALL PATHS DESTROYED, ---> GAME OVER");
         }
 
     }
-
 
 
     private void CreateNewBattleStateResult(out BattleStateResult battleStateResultRef)
@@ -155,7 +151,6 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ApplyBattleStateResult()
     {
-        // TODO
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
 
         for (int i = 0; i < nodeResults.Length; ++i)
@@ -172,21 +167,6 @@ public class OverworldMapGameManager : MonoBehaviour
 
 
     // SCENES
-    private void StartCurrentNodeScene()
-    {
-        if (currentNode.GetNodeType() == NodeEnums.NodeType.UPGRADE)
-        {
-            StartUpgradeScene(NodeEnums.UpgradeType.NEW_TURRET_CARD, NodeEnums.HealthState.UNDAMAGED); // TEST hardcoded
-        }
-        else if (currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE)
-        {
-            StartBattleScene(NodeEnums.BattleType.EARLY, 1); // TEST hardcoded
-
-            CreateNewBattleStateResult(out currentBattleStateResult); // TEST (remove this once scenes are working) !!!
-        }
-    }
-
-
     public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
     {
         mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
@@ -205,11 +185,26 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ActivateMapCamera()
     {
-        mapCameraGO.SetActive(true);
+        owMapPawn.ActivateCamera();
     }
     private void DeactivateMapCamera()
     {
-        mapCameraGO.SetActive(false);
+        owMapPawn.DeactivateCamera();
     }
+
+
+    private void StartGameOver()
+    {
+        gameOverHolder.SetActive(true);
+        mapSceneLoader.LoadMainMenuScene(5f);
+    }
+
+    private void StartVictory()
+    {
+        victoryHolder.SetActive(true);
+        mapSceneLoader.LoadMainMenuScene(5f);
+    }
+
+
 
 }
