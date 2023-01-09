@@ -30,7 +30,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int baseHealth = 2;
     private float damage;
     private float health;
-    [SerializeField] public int currencyDrop;
+    [HideInInspector] public int currencyDrop;
+    [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;   
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
+    public EnemyAction OnEnemyDeath;
     public EnemyAction OnEnemyDeactivated;
 
     public Vector3 Position => meshRenderer.transform.position;
@@ -49,6 +51,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         ResetStats();
+
         healthSystem = new HealthSystem((int)health);
         healthHUD.Init(healthSystem);
 
@@ -91,6 +94,7 @@ public class Enemy : MonoBehaviour
     {
         damage = baseDamage;
         health = baseHealth;
+        currencyDrop = baseCurrencyDrop;
     }
 
 
@@ -137,6 +141,7 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+        if (OnEnemyDeath != null) OnEnemyDeath(this);
         Deactivation();
     }
 
