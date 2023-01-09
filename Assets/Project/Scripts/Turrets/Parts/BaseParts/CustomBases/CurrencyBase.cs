@@ -10,16 +10,17 @@ public class CurrencyBase : TurretPartBase_Prefab
     [SerializeField] private int quantityToIncreaseCurrencyDrop;
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
-    [SerializeField] private Material topCubeMaterial;
+    private Material topCubeMaterial;
     [SerializeField] private GameObject currencyPlane;
     private Material currencyPlaneMaterial;
-    [SerializeField] private float lerpVelocity;
+    [SerializeField] private float duration;
 
     private float positionMovement = 0;
 
     private void Awake()
     {
         currencyPlane.SetActive(false);
+        topCubeMaterial = cubeMeshRenderer.material;
     }
     public override void Init(TurretBuilding turretOwner, float turretRange)
     {
@@ -27,6 +28,9 @@ public class CurrencyBase : TurretPartBase_Prefab
         //owner = turretOwner;
         turretOwner.OnEnemyEnterRange += increaseCurrencyDrop;
         turretOwner.OnEnemyExitRange += decreaseCurrencyDrop;
+        turretOwner.OnEnemyEnterRange += EnemyBloomsCube;
+        turretOwner.OnEnemyExitRange += EnemyDoesNotBloomCube;
+
     }
 
     public override void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
@@ -34,6 +38,8 @@ public class CurrencyBase : TurretPartBase_Prefab
         base.InitAsSupportBuilding(supportBuilding, supportRange);
         supportBuilding.OnEnemyEnterRange += increaseCurrencyDrop;   
         supportBuilding.OnEnemyExitRange += decreaseCurrencyDrop;
+        supportBuilding.OnEnemyEnterRange += EnemyBloomsCube;
+        supportBuilding.OnEnemyExitRange += EnemyDoesNotBloomCube;
 
         float planeRange = supportBuilding.stats.range * 2 + 1; //only for square
         float range = supportBuilding.stats.range;
@@ -59,12 +65,6 @@ public class CurrencyBase : TurretPartBase_Prefab
         enemy.currencyDrop -= quantityToIncreaseCurrencyDrop;
     }
 
-    private void onEnemyDead()
-    {
-        //Change emissiveness of topObject
-        //PlaySound(?)
-    }
-
     public override void SetDefaultMaterial()
     {
         base.SetDefaultMaterial();
@@ -78,12 +78,6 @@ public class CurrencyBase : TurretPartBase_Prefab
 
     }
 
-    public void GlowTopCube()
-    {
-        //Change Material with more emissiveness
-        //cubeMeshRenderer.material.
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -94,9 +88,19 @@ public class CurrencyBase : TurretPartBase_Prefab
         //Do animation up-down
     }
 
-    public void DoBloomCube()
+    public void DoBloomCube(Enemy enemy)
     {
         StartCoroutine(BloomCube());
+    }
+
+    public void EnemyBloomsCube(Enemy enemy)
+    {
+        enemy.OnEnemyDeath += DoBloomCube;
+    }
+
+    public void EnemyDoesNotBloomCube(Enemy enemy)
+    {
+        enemy.OnEnemyDeath -= DoBloomCube;
     }
 
     IEnumerator BloomCube()
@@ -105,19 +109,20 @@ public class CurrencyBase : TurretPartBase_Prefab
 
         do
         {
-            tParam += Time.deltaTime * lerpVelocity;
-            topCubeMaterial.SetFloat("_lerpTime", tParam);
+
+            tParam += Time.deltaTime;
+            topCubeMaterial.SetFloat("_lerpTime", tParam / duration);
             yield return null;
 
-        } while (tParam < 1.0f) ;
+        } while (tParam < duration);
 
 
-        yield return new WaitForSeconds(1.0f);
+        yield return null;
 
         do
         {
-            tParam -= Time.deltaTime * lerpVelocity;
-            topCubeMaterial.SetFloat("_lerpTime", tParam);
+            tParam -= Time.deltaTime;
+            topCubeMaterial.SetFloat("_lerpTime", tParam / duration);
             yield return null;
 
         } while (tParam >= 0.0f);
