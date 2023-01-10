@@ -33,7 +33,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnFinishRedrawing += DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
 
-        EnemyWaveManager.OnWaveFinished += DrawCardAfterWave;
+        EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
 
     }
 
@@ -45,7 +45,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnFinishRedrawing -= DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
 
-        EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
+        EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
     }
 
     private void Start()
