@@ -21,6 +21,9 @@ public class CardDrawer : MonoBehaviour
 
     [SerializeField] private int cardsToDrawPerWave;
 
+    public delegate void CardDrawerAction();
+    public static event CardDrawerAction activateWaveCanvas;
+
 
     private void OnEnable()
     {
@@ -91,6 +94,7 @@ public class CardDrawer : MonoBehaviour
     private void DeactivateRedrawCanvas()
     {
         canvas.SetActive(false);
+        if (activateWaveCanvas != null) activateWaveCanvas();
     }
     public void TryDrawCardAndUpdateHand()
     {
