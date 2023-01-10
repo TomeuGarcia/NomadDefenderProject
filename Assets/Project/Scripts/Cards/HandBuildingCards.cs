@@ -14,7 +14,7 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
-    private int initialRedraws = 5;
+    private int initialRedraws = 3;
     int redrawsLeft;
     private List<BuildingCard> cards;
 

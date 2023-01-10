@@ -21,6 +21,9 @@ public class CardDrawer : MonoBehaviour
 
     [SerializeField] private int cardsToDrawPerWave;
 
+    public delegate void CardDrawerAction();
+    public static event CardDrawerAction activateWaveCanvas;
+
 
     private void OnEnable()
     {
@@ -30,7 +33,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnFinishRedrawing += DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
 
-        EnemyWaveManager.OnWaveFinished += DrawCardAfterWave;
+        EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
 
     }
 
@@ -42,7 +45,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnFinishRedrawing -= DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
 
-        EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
+        EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
     }
 
     private void Start()
@@ -91,6 +94,7 @@ public class CardDrawer : MonoBehaviour
     private void DeactivateRedrawCanvas()
     {
         canvas.SetActive(false);
+        if (activateWaveCanvas != null) activateWaveCanvas();
     }
     public void TryDrawCardAndUpdateHand()
     {
@@ -121,10 +125,15 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawCardAfterWave()
     {
-        for (int i = 0; i < cardsToDrawPerWave; i++)
-            TryDrawCard();
+        if (deck.HasCardsLeft())
+        {
+            for (int i = 0; i < cardsToDrawPerWave; i++)
+            {
+                TryDrawCard();
+            }
 
-        hand.InitCardsInHand();
+            hand.InitCardsInHand();
+        }        
     }
 
 
