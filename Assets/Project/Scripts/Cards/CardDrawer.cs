@@ -121,10 +121,15 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawCardAfterWave()
     {
-        for (int i = 0; i < cardsToDrawPerWave; i++)
-            TryDrawCard();
+        if (deck.HasCardsLeft())
+        {
+            for (int i = 0; i < cardsToDrawPerWave; i++)
+            {
+                TryDrawCard();
+            }
 
-        hand.InitCardsInHand();
+            hand.InitCardsInHand();
+        }        
     }
 
 
