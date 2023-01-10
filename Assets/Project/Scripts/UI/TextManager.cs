@@ -6,6 +6,7 @@ using UnityEngine;
 public class TextManager : MonoBehaviour
 {
     [SerializeField] private List<TextDecoder> texts = new List<TextDecoder>();
+    [SerializeField] private float startDelay;
     [SerializeField] private float delay;
 
     // Start is called before the first frame update
@@ -16,7 +17,7 @@ public class TextManager : MonoBehaviour
 
     IEnumerator DecodeTexts()
     {
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(startDelay);
 
         StartCoroutine(LinearDecode());
         //StartCoroutine(SimultaneousDecode(delay));
