@@ -6,11 +6,15 @@ using UnityEngine.SceneManagement;
 public class MapSceneLoader : MonoBehaviour
 {
     [System.Serializable]
-    struct SceneNames
+    public struct SceneNames
     {
         public SceneNames(int numNames)
         {
             names = new List<string>(numNames);
+        }
+        public SceneNames(string[] namesArray)
+        {
+            names = new List<string>(namesArray);
         }
 
         public void Add(string name)
@@ -24,23 +28,22 @@ public class MapSceneLoader : MonoBehaviour
         public void RemoveAt(int i)
         {
             names.RemoveAt(i);
-        }
+        }        
+
         public int Length => names.Count;
 
         public List<string> names;
     }
 
+    [Header("MAP SCENES LIBRARY")]
+    [SerializeField] private MapScenesLibrary mapScenesLibrary;
 
-    [Header("UPGRADE SCENES")]
-    [SerializeField] private SceneNames upgradeScenes;
 
-    [Header("BATTLE SCENES")]
-    [SerializeField] private SceneNames[] earlyBattleScenes;
-    [Space(50)]
-    [SerializeField] private SceneNames[] lateBattleScenes;
-    [Space(50)]
-    [SerializeField] private SceneNames[] bossBattleScenes;
-    [Space(50)]
+    private SceneNames upgradeScenes;
+
+    private SceneNames[] earlyBattleScenes;
+    private SceneNames[] lateBattleScenes;
+    private SceneNames[] bossBattleScenes;
     private SceneNames[] availableEarlyBattleScenes;
     private SceneNames[] availableLateBattleScenes;
     private SceneNames[] availableBossBattleScenes;
@@ -55,6 +58,9 @@ public class MapSceneLoader : MonoBehaviour
 
     public void Init()
     {
+        mapScenesLibrary.SetUpgradeSceneNames(out upgradeScenes);
+        mapScenesLibrary.SetBattleSceneNames(out earlyBattleScenes, out lateBattleScenes, out bossBattleScenes);
+
         CloneEntireSceneNames(out availableEarlyBattleScenes, earlyBattleScenes);
         CloneEntireSceneNames(out availableLateBattleScenes, lateBattleScenes);
         CloneEntireSceneNames(out availableBossBattleScenes, bossBattleScenes);
@@ -71,6 +77,17 @@ public class MapSceneLoader : MonoBehaviour
                 copy[i].Add(original[i].Get(j));
             }
         }
+    }
+
+    public void LoadMainMenuScene(float delay)
+    {
+        StartCoroutine(DoLoadMainMenuScene(delay));
+    }
+    private IEnumerator DoLoadMainMenuScene(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SceneLoader.GetInstance().StartLoadMainMenu();
     }
 
 

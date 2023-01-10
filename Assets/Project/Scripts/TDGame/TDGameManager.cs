@@ -65,6 +65,8 @@ public class TDGameManager : MonoBehaviour
 
         StartCoroutine(GameOverAnimation());
 
+        basePathLocation.OnDeath -= GameOver;
+
         if (OnGameOverStart != null) OnGameOverStart();
     }
 
