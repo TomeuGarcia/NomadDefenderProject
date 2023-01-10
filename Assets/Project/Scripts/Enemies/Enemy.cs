@@ -28,7 +28,9 @@ public class Enemy : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
     [SerializeField] private int baseHealth = 2;
+    [SerializeField] private int baseArmor = 0;
     private float damage;
+    private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
     [SerializeField] public int baseCurrencyDrop;
@@ -51,8 +53,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         ResetStats();
-
-        healthSystem = new HealthSystem((int)health);
+        healthSystem = new HealthSystem((int)health,(int)armor);
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
@@ -82,6 +83,7 @@ public class Enemy : MonoBehaviour
 
         //ChangeToBaseMat();
         healthSystem.HealToMax();
+        healthSystem.ArmorToMax();
 
         queuedDamage = 0;
 
@@ -94,7 +96,7 @@ public class Enemy : MonoBehaviour
     {
         damage = baseDamage;
         health = baseHealth;
-        currencyDrop = baseCurrencyDrop;
+        armor = baseArmor;
     }
 
 
