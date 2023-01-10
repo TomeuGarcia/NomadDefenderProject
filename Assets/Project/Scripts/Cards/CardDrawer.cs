@@ -25,9 +25,11 @@ public class CardDrawer : MonoBehaviour
     private void OnEnable()
     {
         HandBuildingCards.OnQueryDrawCard += TryDrawCardAndUpdateHand;
+
         HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing += deactivateCanvas;
+        HandBuildingCards.OnFinishRedrawing += DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
+
         EnemyWaveManager.OnWaveFinished += DrawCardAfterWave;
 
     }
@@ -35,9 +37,11 @@ public class CardDrawer : MonoBehaviour
     private void OnDisable()
     {
         HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
+
         HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing -= deactivateCanvas;
+        HandBuildingCards.OnFinishRedrawing -= DeactivateRedrawCanvas;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
+
         EnemyWaveManager.OnWaveFinished -= DrawCardAfterWave;
     }
 
@@ -66,9 +70,10 @@ public class CardDrawer : MonoBehaviour
     {
         if (deck.HasCardsLeft()) 
         {
-            DrawRandomCard();
-            //TODO: UPDATE TEXT OF REDRAWS LEFT
+            DrawTopCard();
+            
             redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
+
             if (hand.HasRedrawsLeft())
             {
                 hand.InitCardsInHandFirstDraw();
@@ -83,7 +88,7 @@ public class CardDrawer : MonoBehaviour
     {
         hand.FinishedRedrawing();
     }
-    private void deactivateCanvas()
+    private void DeactivateRedrawCanvas()
     {
         canvas.SetActive(false);
     }
@@ -135,6 +140,8 @@ public class CardDrawer : MonoBehaviour
 
     public void ReturnCardToDeck(BuildingCard card)
     {
+        card.SetCannotBePlayedAnimation();
+
         hand.RemoveCard(card);
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
