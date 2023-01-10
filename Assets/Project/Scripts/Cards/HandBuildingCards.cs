@@ -346,16 +346,13 @@ public class HandBuildingCards : MonoBehaviour
     private void Redraw(BuildingCard card)
     {
         redrawsLeft--;
-        Debug.Log("redraw function begining");
         card.OnCardHovered -= SetHoveredCard;
         card.OnCardUnhovered -= SetStandardCard;
         card.OnCardSelected -= Redraw;
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
-        Debug.Log("redraw function mid");
+        
         if (ReturnCardToDeck != null) ReturnCardToDeck(card);
-
-        Debug.Log("redraw function after 1st if");
         if (OnQueryRedrawCard != null) OnQueryRedrawCard();
 
         Debug.Log("redraw function after 2nd if");
