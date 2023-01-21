@@ -16,14 +16,10 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
-    [Header("COLLIDER")]
-    [SerializeField] private CapsuleCollider rangeCollider; // Might want to make this depend on BasePart in the future
-
     [Header("ATTACK POOL")]
     [SerializeField] private Pool attackPool;
 
     private TurretPartBody_Prefab bodyPart;
-    private TurretPartBase_Prefab basePart;
 
     public PassiveDamageModifier baseDamagePassive;
 
@@ -73,11 +69,10 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
-
+        
         InitStats(turretStats);
         bodyType = turretCardParts.turretPartBody.bodyType;
 
-        UpdateRange();
 
         TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         attackPool.SetPooledObject(turretPartAttack.prefab);
@@ -88,6 +83,9 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, stats.range);
 
+        UpdateRange();
+        SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
+
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
@@ -96,16 +94,11 @@ public class TurretBuilding : RangeBuilding
         DisableFunctionality();
     }
 
-    private void UpdateRange()
+    protected override void UpdateRange()
     {
-        float planeRange = stats.range * 2 + 1; //only for square
-        float range = stats.range;
-
-        rangeCollider.radius = range + 0.5f;
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
+        basePart.baseCollider.UpdateRange(stats.range);
     }
+
 
     public void InitStats(TurretBuildingStats stats)
     {
@@ -189,7 +182,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.DisableFunctionality();
 
-        rangeCollider.enabled = false;
+        basePart.baseCollider.DisableCollisions();
 
         bodyPart.SetPreviewMaterial();
         basePart.SetPreviewMaterial();
@@ -199,7 +192,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.EnableFunctionality();
 
-        rangeCollider.enabled = true;
+        basePart.baseCollider.EnableCollisions();
 
         bodyPart.SetDefaultMaterial();
         basePart.SetDefaultMaterial();
