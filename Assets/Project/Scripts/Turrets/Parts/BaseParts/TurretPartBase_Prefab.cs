@@ -10,6 +10,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
     private Material[] defaultMaterials;
     protected Material[] previewMaterials;
 
+    [Header("BASE COLLIDER")]
+    [SerializeField] public BaseCollider baseCollider;
 
 
     virtual public void Init(TurretBuilding turretOwner, float turretRange)
@@ -49,4 +51,5 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+
 }
