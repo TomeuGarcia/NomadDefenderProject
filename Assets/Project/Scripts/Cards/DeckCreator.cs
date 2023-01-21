@@ -30,7 +30,7 @@ public class DeckCreator : MonoBehaviour
         {
             //BuildingCard card = GetUninitializedNewBuildingCard();
             SupportBuildingCard card = GetUninitializedNewSupportCard();
-            card.ResetParts(deckData.starterSupportCardsComponents[turretCardNum-i]);
+            card.ResetParts(deckData.starterSupportCardsComponents[i - turretCardNum]);
 
             starterCards[i] = card;
         }

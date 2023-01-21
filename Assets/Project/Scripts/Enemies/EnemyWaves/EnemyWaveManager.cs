@@ -5,6 +5,7 @@ using TMPro;
 public class EnemyWaveManager : MonoBehaviour
 {
     [SerializeField] private Transform enemySpawnTransform;
+    [SerializeField] private GameObject canvas;
 
     [SerializeField] private TextMeshProUGUI debugText; // works for 1 waveSpawner
 
@@ -20,11 +21,15 @@ public class EnemyWaveManager : MonoBehaviour
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
     public static event EnemyWaveManagerAction OnWaveFinished;
+    public static event EnemyWaveManagerAction OnStartNewWaves;
+    
+
 
 
 
     private void Awake()
     {
+        canvas.SetActive(false);
         activeWaves = enemyWaveSpawners.Length;
         for (int i = 0; i< enemyWaveSpawners.Length; i++)
         {
@@ -37,19 +42,27 @@ public class EnemyWaveManager : MonoBehaviour
         StartCoroutine(WaitForStart());
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
+        
+
+
     }
     private void OnEnable()
     {
+        CardDrawer.activateWaveCanvas += ActivateCanvas;
         TDGameManager.OnGameOverStart += ForceStopWaves;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
     }
     private void OnDisable()
     {
+        CardDrawer.activateWaveCanvas -= ActivateCanvas;
         TDGameManager.OnGameOverStart -= ForceStopWaves;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
     }
 
-
+    private void ActivateCanvas()
+    {
+        canvas.SetActive(true);
+    }
 
     private void StartAfterFirstCardPlayed()
     {
@@ -96,6 +109,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             ////////
             /// Invoke event  Start new waves here 
+            if (OnStartNewWaves != null) OnStartNewWaves();
             ////////
 
             foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)

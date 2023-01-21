@@ -16,6 +16,23 @@ public class BuildingPlacer : MonoBehaviour
     private bool SelectedBuildingIsBeingShown => selectedBuilding != null;
 
 
+    private void OnEnable()
+    {
+        TDGameManager.OnEndGameResetPools += RemoveInteractions;
+    }
+
+    private void OnDisable()
+    {
+        TDGameManager.OnEndGameResetPools -= RemoveInteractions;
+    }
+
+    private void RemoveInteractions()
+    {
+        DisablePlacing();
+        selectedBuildingCard = null;
+        selectedBuilding = null;
+    }
+
 
     public void EnablePlacing(BuildingCard selectedBuildingCard)
     {
