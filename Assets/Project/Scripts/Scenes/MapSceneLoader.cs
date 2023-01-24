@@ -69,7 +69,7 @@ public class MapSceneLoader : MonoBehaviour
     private void CloneEntireSceneNames(out SceneNames[] copy, SceneNames[] original)
     {
         copy = new SceneNames[original.Length];
-        for (int i = 0; i < earlyBattleScenes.Length; ++i)
+        for (int i = 0; i < original.Length; ++i)
         {
             copy[i] = new SceneNames(original[i].Length);
             for (int j = 0; j < original[i].Length; ++j)
