@@ -33,7 +33,17 @@ public class DrawCardWithCurrency : MonoBehaviour
 
 
 
+    private void Awake()
+    {
+        DrawUI.SetActive(false);
+    }
 
+    IEnumerator Start()
+    {
+        yield return null;
+        costText.text = drawCost.ToString();
+        defaultCardPosition = deckBuildingCards.GetTopCardTransform().localPosition;
+    }
 
     private void OnMouseEnter()
     {
@@ -55,9 +65,15 @@ public class DrawCardWithCurrency : MonoBehaviour
 
     private void OnMouseDown()
     {
+        //TryDrawCard();
+    }
 
+
+
+    public void TryDrawCard()
+    {
         if (!deckBuildingCards.HasCardsLeft()) return;
-        else if(!currencyCounter.HasEnoughCurrency(drawCost))
+        else if (!currencyCounter.HasEnoughCurrency(drawCost))
         {
             //TODO Play Sound
             CantAffordDraw();
@@ -75,19 +91,6 @@ public class DrawCardWithCurrency : MonoBehaviour
         costText.text = drawCost.ToString();
         UntiltCard();
         GameAudioManager.GetInstance().PlayCurrencySpent();
-    }
-
-
-    private void Awake()
-    {
-        DrawUI.SetActive(false);
-    }
-
-    IEnumerator Start()
-    {
-        yield return null;
-        costText.text = drawCost.ToString();
-        defaultCardPosition = deckBuildingCards.GetTopCardTransform().localPosition;
     }
 
 
@@ -124,13 +127,13 @@ public class DrawCardWithCurrency : MonoBehaviour
     {
         //TODO Play Sound
 
-        tittleText.DOKill();
+        //tittleText.DOKill();
         costText.DOKill();
         currencySprite.DOKill();
 
-        tittleText.transform.DOPunchPosition(Vector3.forward * 0.1f, 0.25f, 1, 0.25f, false);
-        tittleText.color = cantDrawColor;
-        tittleText.DOColor(defualtTextColor, 0.5f);
+        //tittleText.transform.DOPunchPosition(Vector3.forward * 0.1f, 0.25f, 1, 0.25f, false);
+        //tittleText.color = cantDrawColor;
+        //tittleText.DOColor(defualtTextColor, 0.5f);
 
         costText.transform.DOPunchPosition(Vector3.forward * 0.11f, 0.25f, 1, 0.25f, false);
         costText.color = cantDrawColor;
