@@ -9,6 +9,7 @@ public class CardDrawer : MonoBehaviour
 {
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] private DeckBuildingCards deck;
+    [SerializeField] private BattleHUD battleHUD;
     [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
     [SerializeField] private GameObject canvas; // works for 1 waveSpawner
 
@@ -51,9 +52,12 @@ public class CardDrawer : MonoBehaviour
     private void Start()
     {
         redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
-        deck.Init();      
+        deck.Init();
+        battleHUD.InitCardIcons(deck.NumCards);
+
         DrawStartHand();
-        hand.Init();
+
+        hand.Init();                
 
         deck.GetDeckData().SetStarterCardComponentsAsSaved();
 
@@ -108,18 +112,32 @@ public class CardDrawer : MonoBehaviour
     private void DrawTopCard()
     {
         AddCardToHand(deck.GetTopCard());
+        TryHideDeckHUD();
     }
     private void DrawRandomCard()
     {
         AddCardToHand(deck.GetRandomCard());
+        TryHideDeckHUD();
     }
 
     private void AddCardToHand(BuildingCard card)
     {
         hand.HintedCardWillBeAdded();
         hand.AddCard(card);
+
+        battleHUD.SubtractHasCardIcon();
     }
 
+    private void TryHideDeckHUD()
+    {
+        if (!deck.HasCardsLeft())
+        {
+            if (!battleHUD.drewCardViaHUD)
+            {
+                battleHUD.HideDeckUI();
+            }
+        }
+    }
 
 
 

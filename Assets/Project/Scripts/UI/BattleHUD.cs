@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor.Rendering.LookDev;
+using System.Collections.Generic;
 
 public class BattleHUD : MonoBehaviour
 {
@@ -37,6 +38,11 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private RectTransform cardIconsHolder;
     private float hiddenCardIconsHolderY;
     private float shownCardIconsHolderY;
+    [SerializeField] private Image referenceCardIconImage;
+    [SerializeField] private Sprite spriteHasCard;
+    [SerializeField] private Sprite spriteNoCard;
+    private List<Image> cardIcons;
+    private int lastSpriteHasCardIndex;
 
     [Header("Draw Button Holder")]
     [SerializeField] private RectTransform drawButtonHolder;
@@ -51,6 +57,8 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private Image costTextImage;
     private float hiddenDrawButtonX;
     private float shownDrawButtonX;
+
+    [HideInInspector] public bool drewCardViaHUD = false; // scuffed flag boolean used to hide UI when last card is drawn not manually
 
     private bool canClickDrawButton = false;
     private bool isHoveringDrawButton = false;
@@ -73,7 +81,6 @@ public class BattleHUD : MonoBehaviour
     private void Awake()
     {
         hiddenDeckUIy = deckUI.localPosition.y;
-        shownDeckUIy = hiddenDeckUIy + 100f;
 
         hiddenCardIconsHolderY = cardIconsHolder.localPosition.y;
         shownCardIconsHolderY = hiddenCardIconsHolderY + 30f;
@@ -116,6 +123,8 @@ public class BattleHUD : MonoBehaviour
     {
         GameAudioManager.GetInstance().PlayCardHovered();
 
+        shownDeckUIy = ComputeShownDeckUIy();
+
         deckUI.DOLocalMoveY(shownDeckUIy, showDuration);
         deckText.DOScale(shownTextSize, showDuration);
 
@@ -148,7 +157,6 @@ public class BattleHUD : MonoBehaviour
 
     public void OnDrawButtonClicked() // called on click
     {
-
         if (!canClickDrawButton)
         {
             return;
@@ -254,6 +262,8 @@ public class BattleHUD : MonoBehaviour
 
     private void DoCanDrawCard()
     {
+        drewCardViaHUD = true;
+
         currencyCounter.SubtractCurrency(drawCost);
         cardDrawer.TryDrawCardAndUpdateHand();
         drawCost += costIncrement;
@@ -263,7 +273,7 @@ public class BattleHUD : MonoBehaviour
         drawButtonImageImage.DOBlendableColor(canDrawCardColor, blinkDuration)
         .OnComplete(() => drawButtonImageImage.DOBlendableColor(Color.white, blinkDuration)
             .OnComplete(() => drawButtonImage.DOBlendableMoveBy(Vector3.zero, 0.2f) // do nothing, wait extra time before hiding
-                .OnComplete(() => { HideDeckUI(); UpdateDrawCostText(drawCost); } )));
+                .OnComplete(() => { HideDeckUI(); UpdateDrawCostText(drawCost); drewCardViaHUD = false; } )));
 
         costText.DOPunchPosition(Vector3.up * 20f, blinkDuration * 2f);
         costTextText.DOBlendableColor(canDrawCardColor, blinkDuration)
@@ -293,5 +303,51 @@ public class BattleHUD : MonoBehaviour
     private void UpdateDrawCostText(int costAmount)
     {
         costTextText.text = "-" + costAmount.ToString();
+    }
+
+
+
+    public void InitCardIcons(int amount)
+    {
+        cardIcons = new List<Image>(amount);
+        for (int i = 0; i< amount; ++i)
+        {
+            AddNewCardIcon();
+        }
+
+        lastSpriteHasCardIndex = amount - 1;
+    }
+    public void AddNewCardIcon()
+    {
+        Image newCardIcon = Instantiate(referenceCardIconImage);
+        newCardIcon.gameObject.SetActive(true);
+
+        cardIcons.Add(newCardIcon);
+        newCardIcon.rectTransform.SetParent(cardIconsHolder);
+        newCardIcon.sprite = spriteHasCard;
+    }
+
+    public void SubtractHasCardIcon()
+    {
+        if (lastSpriteHasCardIndex < 0) return;
+
+        cardIcons[lastSpriteHasCardIndex].sprite = spriteNoCard;
+        --lastSpriteHasCardIndex;
+    }
+    public void AddHasCardIcon()
+    {
+        ++lastSpriteHasCardIndex;
+
+        if (lastSpriteHasCardIndex >= cardIcons.Count)
+        {
+            AddNewCardIcon();
+        }
+
+        cardIcons[lastSpriteHasCardIndex].sprite = spriteHasCard;
+    }
+
+    private float ComputeShownDeckUIy()
+    {
+        return hiddenDeckUIy + (50f * ((cardIcons.Count / 5) +1));
     }
 }

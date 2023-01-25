@@ -965,18 +965,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4885359581180190298}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9122825824264623569 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4419862365290777483, guid: 75df232e23165f144a581a6b041cda9f,
-    type: 3}
-  m_PrefabInstance: {fileID: 4885359581180190298}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21602d97c9082184aa839345bc1578f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4885359581339818345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1054,6 +1042,11 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 7860618247306374060}
+    - target: {fileID: 2683057792737234630, guid: 1e95f6c11d30a424c8a201ae4ad04870,
+        type: 3}
+      propertyPath: battleHUD
+      value: 
+      objectReference: {fileID: 3061516609394921384}
     - target: {fileID: 2683057792737234630, guid: 1e95f6c11d30a424c8a201ae4ad04870,
         type: 3}
       propertyPath: redrawingText
@@ -1937,7 +1930,7 @@ PrefabInstance:
         type: 3}
       propertyPath: drawCardWithCurrency
       value: 
-      objectReference: {fileID: 9122825824264623569}
+      objectReference: {fileID: 0}
     - target: {fileID: 8168852750387120144, guid: 579f3ac685ce43247be2a1d33201a582,
         type: 3}
       propertyPath: m_text
@@ -1980,6 +1973,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 579f3ac685ce43247be2a1d33201a582, type: 3}
+--- !u!114 &3061516609394921384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8144092802723001925, guid: 579f3ac685ce43247be2a1d33201a582,
+    type: 3}
+  m_PrefabInstance: {fileID: 6591317549251557869}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9b3a1784e02e842a4f8ea88f6e3ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4885359580415880068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1780426826839134825, guid: 579f3ac685ce43247be2a1d33201a582,
