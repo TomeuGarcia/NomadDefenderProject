@@ -21,7 +21,7 @@ public class DrawCardWithCurrency : MonoBehaviour
     [SerializeField] private int drawCost;
     [SerializeField] private int costIncrement;
 
-    [Header("Dependenices")]
+    [Header("Dependencies")]
     [SerializeField] private DeckBuildingCards deckBuildingCards;
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private CardDrawer cardDrawer;
@@ -65,14 +65,17 @@ public class DrawCardWithCurrency : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //TryDrawCard();
+        TryDrawCard();
     }
 
 
 
     public void TryDrawCard()
     {
-        if (!deckBuildingCards.HasCardsLeft()) return;
+        if (!deckBuildingCards.HasCardsLeft())
+        {
+            return;
+        }
         else if (!currencyCounter.HasEnoughCurrency(drawCost))
         {
             //TODO Play Sound
@@ -84,8 +87,10 @@ public class DrawCardWithCurrency : MonoBehaviour
         //Draw Card
         //Add Random Card to Hand
         //Substract Player's Currency 
-        currencyCounter.SubtractCurrency(drawCost);
-        cardDrawer.TryDrawCardAndUpdateHand();
+
+        //currencyCounter.SubtractCurrency(drawCost);
+        //cardDrawer.TryDrawCardAndUpdateHand();
+
         cardsDrawnWithCurrency++;
         drawCost += costIncrement;
         costText.text = drawCost.ToString();

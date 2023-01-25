@@ -22,7 +22,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private int cardsToDrawPerWave;
 
     public delegate void CardDrawerAction();
-    public static event CardDrawerAction activateWaveCanvas;
+    public static event CardDrawerAction OnStartSetupBattleCanvases;
 
 
     private void OnEnable()
@@ -30,7 +30,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard += TryDrawCardAndUpdateHand;
 
         HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing += DeactivateRedrawCanvas;
+        HandBuildingCards.OnFinishRedrawing += SetupUIBattleCanvases;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
 
         EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
@@ -42,7 +42,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
 
         HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing -= DeactivateRedrawCanvas;
+        HandBuildingCards.OnFinishRedrawing -= SetupUIBattleCanvases;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
 
         EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
@@ -91,10 +91,10 @@ public class CardDrawer : MonoBehaviour
     {
         hand.FinishedRedrawing();
     }
-    private void DeactivateRedrawCanvas()
+    private void SetupUIBattleCanvases()
     {
         canvas.SetActive(false);
-        if (activateWaveCanvas != null) activateWaveCanvas();
+        if (OnStartSetupBattleCanvases != null) OnStartSetupBattleCanvases();
     }
     public void TryDrawCardAndUpdateHand()
     {

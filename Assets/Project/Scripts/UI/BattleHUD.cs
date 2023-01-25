@@ -1,38 +1,74 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEditor.Rendering.LookDev;
 
 public class BattleHUD : MonoBehaviour
 {
     private readonly float showDuration = 0.2f;
     private readonly float hideDuration = 0.2f;
 
-    [Header("DrawCardWithCurrency")]
-    [SerializeField] private DrawCardWithCurrency drawCardWithCurrency;
+    [Header("SPEED UP")]
+    [Header("Speed Up Button")]
+    [SerializeField] private GameObject speedUpButtonHolder;
 
-    [Header("UI elements")]
+    [Header("DECK")]
+    [Header("Dependenices")]
+    [SerializeField] private DeckBuildingCards deckBuildingCards;
+    [SerializeField] private CurrencyCounter currencyCounter;
+    [SerializeField] private CardDrawer cardDrawer;
+
+    [Header("Draw Costs")]
+    [SerializeField] private int drawCost;
+    [SerializeField] private int costIncrement;
+
+    [Header("Deck UI")]
     [SerializeField] private RectTransform deckUI;
     private float hiddenDeckUIy;
     private float shownDeckUIy;
 
+    [Header("Deck text")]
     [SerializeField] private RectTransform deckText;
     [SerializeField] private Vector3 hiddenTextSize = Vector3.one * 1f;
     [SerializeField] private Vector3 shownTextSize = Vector3.one * 1.5f;
 
+    [Header("Card Icons")]
     [SerializeField] private RectTransform cardIconsHolder;
     private float hiddenCardIconsHolderY;
     private float shownCardIconsHolderY;
 
-    [SerializeField] private RectTransform drawCardButton;
-    private float hiddenDrawCardButtonX;
-    private float shownDrawCardButtonX;
+    [Header("Draw Button Holder")]
+    [SerializeField] private RectTransform drawButtonHolder;
+    
+    [Header("Draw Button Image")]
+    [SerializeField] private Image drawButtonImageImage;
+    private RectTransform drawButtonImage;
 
-    private bool canClickDrawButton;
+    [Header("Draw Button Cost Text")]
+    [SerializeField] private TextMeshProUGUI costTextText;
+    private RectTransform costText;
+    [SerializeField] private Image costTextImage;
+    private float hiddenDrawButtonX;
+    private float shownDrawButtonX;
+
+    private bool canClickDrawButton = false;
+    private bool isHoveringDrawButton = false;
+
+    [Header("Draw card animations")]
+    [SerializeField] private Color canDrawCardColor = Color.cyan;
+    [SerializeField] private Color canNotDrawCardColor = Color.red;
+    [SerializeField, Min(0.1f)] private float blinkDuration = 0.2f;
 
 
-
+    private void OnEnable()
+    {
+        CardDrawer.OnStartSetupBattleCanvases += EnableUI;
+    }
+    private void OnDisable()
+    {
+        CardDrawer.OnStartSetupBattleCanvases -= EnableUI;
+    }
 
     private void Awake()
     {
@@ -42,44 +78,220 @@ public class BattleHUD : MonoBehaviour
         hiddenCardIconsHolderY = cardIconsHolder.localPosition.y;
         shownCardIconsHolderY = hiddenCardIconsHolderY + 30f;
 
-        hiddenDrawCardButtonX = drawCardButton.localPosition.x + 200f;
-        shownDrawCardButtonX = hiddenDrawCardButtonX - 200f;
-        drawCardButton.localPosition = new Vector3(hiddenDrawCardButtonX, drawCardButton.localPosition.y, drawCardButton.localPosition.z);
+        hiddenDrawButtonX = drawButtonHolder.localPosition.x + 200f;
+        shownDrawButtonX = hiddenDrawButtonX - 200f;
+        drawButtonHolder.localPosition = new Vector3(hiddenDrawButtonX, drawButtonHolder.localPosition.y, drawButtonHolder.localPosition.z);
+
+        drawButtonImage = drawButtonImageImage.rectTransform;
+
+        costText = costTextText.rectTransform;
+        costText.gameObject.SetActive(false);
+
+        UpdateDrawCostText(drawCost);
+
+        DisableUI();
     }
 
-
-    public void ShowDeckUI()
+    private void Update()
     {
+        if (canClickDrawButton)
+        {
+            OnDrawButtonEnabled();
+        }
+    }
+
+    private void EnableUI()
+    {
+        speedUpButtonHolder.SetActive(true);
+        deckUI.gameObject.SetActive(true);
+    }
+
+    private void DisableUI()
+    {
+        speedUpButtonHolder.SetActive(false);
+        deckUI.gameObject.SetActive(false);
+    }
+
+    public void ShowDeckUI() // called on hover enter
+    {
+        GameAudioManager.GetInstance().PlayCardHovered();
+
         deckUI.DOLocalMoveY(shownDeckUIy, showDuration);
         deckText.DOScale(shownTextSize, showDuration);
+
+
         cardIconsHolder.DOLocalMoveY(shownCardIconsHolderY, showDuration)
-            .OnComplete( () => { drawCardButton.DOLocalMoveX(shownDrawCardButtonX, hideDuration); canClickDrawButton = true; } );     
+            .OnComplete(() => {
+                if (deckBuildingCards.HasCardsLeft())
+                {
+                    drawButtonHolder.DOLocalMoveX(shownDrawButtonX, hideDuration)
+                        .OnComplete(() => EnableClickDrawButton());
+                }
+
+            });
     }
 
-    public void HideDeckUI()
+    public void HideDeckUI() // called on hover exit
     {
+        GameAudioManager.GetInstance().PlayCardHoverExit();
+
         deckUI.DOLocalMoveY(hiddenDeckUIy, hideDuration);
         deckText.DOScale(hiddenTextSize, hideDuration);
         cardIconsHolder.DOLocalMoveY(hiddenCardIconsHolderY, hideDuration);
 
-        drawCardButton.DOLocalMoveX(hiddenDrawCardButtonX, hideDuration);
+        drawButtonHolder.DOLocalMoveX(hiddenDrawButtonX, hideDuration);
+        OnDrawButtonStopHover();
 
-        canClickDrawButton = false;
+        DisableClickDrawButton();
     }
 
 
-    public void DrawCard()
+    public void OnDrawButtonClicked() // called on click
     {
-        if (!canClickDrawButton) return;
 
-        Rect drawButtonRect = drawCardButton.rect;
-        drawButtonRect.x += drawCardButton.position.x;
-        drawButtonRect.y += drawCardButton.position.y;
+        if (!canClickDrawButton)
+        {
+            return;
+        }
 
-        if (!drawButtonRect.Contains(Input.mousePosition)) return;
+        if (!IsMouseHoveringDrawButton())
+        {
+            return;
+        }
 
-
-        drawCardWithCurrency.TryDrawCard();
+        CheckDrawCard();  
     }
 
+
+    private bool IsMouseHoveringDrawButton()
+    {
+        Rect drawButtonRect = drawButtonHolder.rect;
+        drawButtonRect.x += drawButtonHolder.position.x;
+        drawButtonRect.y += drawButtonHolder.position.y;
+
+        return drawButtonRect.Contains(Input.mousePosition);
+    }
+
+    private void EnableClickDrawButton()
+    {
+        canClickDrawButton = true;
+        isHoveringDrawButton = false;
+    }
+
+    private void DisableClickDrawButton()
+    {
+        canClickDrawButton = false;
+        isHoveringDrawButton = false; // just in case
+    }
+
+
+    private void OnDrawButtonEnabled()
+    {
+        if (IsHoverEnterDrawButton())
+        {
+            isHoveringDrawButton = true;
+            OnDrawButtonStartHover();
+        }
+        else if (IsHoverExitDrawButton())
+        {
+            isHoveringDrawButton = false;
+            OnDrawButtonStopHover();
+        }
+    }
+
+    private bool IsHoverEnterDrawButton()
+    {
+        return !isHoveringDrawButton && IsMouseHoveringDrawButton();
+    }
+    private bool IsHoverExitDrawButton()
+    { 
+        return isHoveringDrawButton && !IsMouseHoveringDrawButton();
+    }
+
+    private void OnDrawButtonStartHover()
+    {
+        drawButtonImage.DORotate(Vector3.forward * 15, 0.2f);
+        ShowCostText();
+
+        GameAudioManager.GetInstance().PlayCardHovered();
+    }
+    private void OnDrawButtonStopHover()
+    {
+        drawButtonImage.DORotate(Vector3.forward * 0, 0.2f);
+        HideCostText();
+
+        GameAudioManager.GetInstance().PlayCardHoverExit();
+    }
+
+    private void ShowCostText()
+    {
+        costText.gameObject.SetActive(true);
+        costText.DOPunchPosition(Vector3.up*10f, 0.6f, 8);
+    }
+    private void HideCostText()
+    {
+        costTextText.DOComplete(false);
+        costText.DOComplete(false);
+
+        costText.gameObject.SetActive(false);
+    }
+
+
+    private void CheckDrawCard()
+    {
+        canClickDrawButton = false;
+
+        if (currencyCounter.HasEnoughCurrency(drawCost))
+        {
+            DoCanDrawCard();
+        }
+        else
+        {
+            DoCanNotDrawCard();
+        }
+
+    }
+
+    private void DoCanDrawCard()
+    {
+        currencyCounter.SubtractCurrency(drawCost);
+        cardDrawer.TryDrawCardAndUpdateHand();
+        drawCost += costIncrement;
+
+        GameAudioManager.GetInstance().PlayCurrencySpent();
+
+        drawButtonImageImage.DOBlendableColor(canDrawCardColor, blinkDuration)
+        .OnComplete(() => drawButtonImageImage.DOBlendableColor(Color.white, blinkDuration)
+            .OnComplete(() => drawButtonImage.DOBlendableMoveBy(Vector3.zero, 0.2f) // do nothing, wait extra time before hiding
+                .OnComplete(() => { HideDeckUI(); UpdateDrawCostText(drawCost); } )));
+
+        costText.DOPunchPosition(Vector3.up * 20f, blinkDuration * 2f);
+        costTextText.DOBlendableColor(canDrawCardColor, blinkDuration)
+            .OnComplete(() => costTextText.DOBlendableColor(Color.white, blinkDuration));
+        costTextImage.DOBlendableColor(canDrawCardColor, blinkDuration)
+            .OnComplete(() => costTextImage.DOBlendableColor(Color.white, blinkDuration));
+    }
+
+    private void DoCanNotDrawCard()
+    {
+        GameAudioManager.GetInstance().PlayCardHoverExit();        
+
+        drawButtonImageImage.DOBlendableColor(canNotDrawCardColor, blinkDuration)
+            .OnComplete(() => drawButtonImageImage.DOBlendableColor(Color.white, blinkDuration)
+                .OnComplete(() => drawButtonImage.DOBlendableMoveBy(Vector3.zero, 0.5f) // do nothing, wait extra time before reenabling click
+                    .OnComplete(() => canClickDrawButton = true)));
+
+        costText.DOPunchPosition(Vector3.left * 20f, blinkDuration * 2f);
+        costTextText.DOBlendableColor(canNotDrawCardColor, blinkDuration)
+            .OnComplete(() => costTextText.DOBlendableColor(Color.white, blinkDuration));
+        costTextImage.DOBlendableColor(canNotDrawCardColor, blinkDuration)
+            .OnComplete(() => costTextImage.DOBlendableColor(Color.white, blinkDuration));
+
+    }
+
+
+    private void UpdateDrawCostText(int costAmount)
+    {
+        costTextText.text = "-" + costAmount.ToString();
+    }
 }
