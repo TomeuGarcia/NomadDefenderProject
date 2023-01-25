@@ -12,12 +12,7 @@ public class SupportBuilding : RangeBuilding
 
     [HideInInspector] public SupportBuildingStats stats;
 
-
-    [Header("COLLIDER")]
-    [SerializeField] private CapsuleCollider rangeCollider;
-
-    
-    private TurretPartBase_Prefab basePart;
+        
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform baseHolder;
@@ -40,22 +35,22 @@ public class SupportBuilding : RangeBuilding
     {
         InitStats(stats);
 
-        //area effect visual feedback
-        float planeRange = stats.range * 2 + 1; //only for square
-        float range = stats.range;
-
-        rangeCollider.radius = range + 0.5f;
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
-
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this,stats.range);
+
+        UpdateRange();
+        SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
         upgrader.InitSupport(currencyCounter); //TODO: change range for the actual level
 
         DisableFunctionality();
     }
+
+    protected override void UpdateRange()
+    {
+        basePart.baseCollider.UpdateRange(stats.range);
+    }
+
 
     public void InitStats(SupportBuildingStats stats)
     {
@@ -70,14 +65,18 @@ public class SupportBuilding : RangeBuilding
     protected override void DisableFunctionality()
     {
         base.DisableFunctionality();
-        rangeCollider.enabled = false;
+
+        basePart.baseCollider.DisableCollisions();
+
         basePart.SetPreviewMaterial();
     }
 
     protected override void EnableFunctionality()
     {
         base.EnableFunctionality();
-        rangeCollider.enabled = true;
+
+        basePart.baseCollider.EnableCollisions();
+
         basePart.SetDefaultMaterial();
     }
 

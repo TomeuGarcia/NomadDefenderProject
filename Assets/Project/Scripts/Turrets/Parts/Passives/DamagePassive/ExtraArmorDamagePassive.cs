@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "ExtraHPDamagePassive", menuName = "TurretPassives/ExtraHPDamagePassive")]
-public class ExtraHPDamagePassive : BaseDamagePassive
+[CreateAssetMenu(fileName = "ExtraArmorDamagePassive", menuName = "TurretPassives/ExtraArmorDamagePassive")]
+public class ExtraArmorDamagePassive : BaseDamagePassive
 {
     public override int PassiveDamageModifier(int damage, HealthSystem healthSystem)
     {
-        if(healthSystem.HasArmor())
+        if (!healthSystem.HasArmor())
         {
             return damage;
         }

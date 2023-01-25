@@ -10,18 +10,37 @@ public abstract class RangeBuilding : Building
 
     [Header("COMPONENTS")]
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
-    [SerializeField] protected GameObject rangePlaneMeshObject;
-    protected Material rangePlaneMaterial;
+    //[SerializeField] protected GameObject rangePlaneMeshObject;
+    //protected Material rangePlaneMaterial;
+
+    //[Header("COLLIDER")]
+    //[SerializeField] protected CapsuleCollider rangeCollider;
+
+    private TriggerNotifier triggerNotifier;
+
+    protected TurretPartBase_Prefab basePart; // Consider all ranged buildings have a BasePart
+
 
     public delegate int EnemySortFunction(Enemy e1, Enemy e2);
     private EnemySortFunction enemySortFunction;
-
 
     public delegate void RangeBuildingAction(Enemy enemy);
     public RangeBuildingAction OnEnemyEnterRange;
     public RangeBuildingAction OnEnemyExitRange;
 
+
     [SerializeField] protected InBattleBuildingUpgrader upgrader;
+
+
+    private void OnEnable()
+    {
+        if (triggerNotifier != null) { SubscribeToTriggerNotifier(); }
+    }
+    private void OnDisable()
+    {
+        if (triggerNotifier != null) { UnsubscribeToTriggerNotifier(); }
+    }
+
 
     private void Awake()
     {
@@ -29,12 +48,10 @@ public abstract class RangeBuilding : Building
     }
     protected override void AwakeInit()
     {
-        HideRangePlane();
-
         ResetEnemySortFunction();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnterNotif(Collider other)
     {
         if (other.tag == "Enemy")
         {
@@ -42,12 +59,29 @@ public abstract class RangeBuilding : Building
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExitNotif(Collider other)
     {
         if (other.tag == "Enemy")
         {
             OnEnemyExits(other.gameObject.GetComponent<Enemy>());
         }
+    }
+
+    public void SetUpTriggerNotifier(TriggerNotifier triggerNotifier)
+    {
+        this.triggerNotifier = triggerNotifier;
+        SubscribeToTriggerNotifier();
+    }
+
+    private void SubscribeToTriggerNotifier()
+    {
+        triggerNotifier.OnEnter += OnTriggerEnterNotif;
+        triggerNotifier.OnExit += OnTriggerExitNotif;
+    }
+    private void UnsubscribeToTriggerNotifier()
+    {
+        triggerNotifier.OnEnter -= OnTriggerEnterNotif;
+        triggerNotifier.OnExit -= OnTriggerExitNotif;
     }
 
 
@@ -143,12 +177,13 @@ public abstract class RangeBuilding : Building
 
     public override void ShowRangePlane()
     {
-        rangePlaneMeshObject.SetActive(true);
+        basePart.baseCollider.ShowRange();
     }
     public override void HideRangePlane()
     {
-        rangePlaneMeshObject.SetActive(false);
+        basePart.baseCollider.HideRange();
     }
+    protected abstract void UpdateRange();
 
 
     public void ShowUpgrades()
