@@ -68,6 +68,8 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private Color canNotDrawCardColor = Color.red;
     [SerializeField, Min(0.1f)] private float blinkDuration = 0.2f;
 
+    private bool isHiding = false;
+    private bool isShowing = false;
 
     private void OnEnable()
     {
@@ -121,6 +123,10 @@ public class BattleHUD : MonoBehaviour
 
     public void ShowDeckUI() // called on hover enter
     {
+        if (isHiding) return;
+
+        isShowing = true;
+
         GameAudioManager.GetInstance().PlayCardHovered();
 
         shownDeckUIy = ComputeShownDeckUIy();
@@ -134,7 +140,7 @@ public class BattleHUD : MonoBehaviour
                 if (deckBuildingCards.HasCardsLeft())
                 {
                     drawButtonHolder.DOLocalMoveX(shownDrawButtonX, hideDuration)
-                        .OnComplete(() => EnableClickDrawButton());
+                        .OnComplete(() => { EnableClickDrawButton(); isShowing = false; });
                 }
 
             });
@@ -142,13 +148,19 @@ public class BattleHUD : MonoBehaviour
 
     public void HideDeckUI() // called on hover exit
     {
+        if (isShowing) return;
+
+        isHiding = true;
+
         GameAudioManager.GetInstance().PlayCardHoverExit();
 
         deckUI.DOLocalMoveY(hiddenDeckUIy, hideDuration);
         deckText.DOScale(hiddenTextSize, hideDuration);
         cardIconsHolder.DOLocalMoveY(hiddenCardIconsHolderY, hideDuration);
 
-        drawButtonHolder.DOLocalMoveX(hiddenDrawButtonX, hideDuration);
+        drawButtonHolder.DOLocalMoveX(hiddenDrawButtonX, hideDuration)
+            .OnComplete(() => isHiding = false);
+        
         OnDrawButtonStopHover();
 
         DisableClickDrawButton();
