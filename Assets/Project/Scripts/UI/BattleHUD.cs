@@ -2,17 +2,23 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.Rendering.LookDev;
 using System.Collections.Generic;
+using System.Collections;
 
 public class BattleHUD : MonoBehaviour
 {
     private readonly float showDuration = 0.2f;
     private readonly float hideDuration = 0.2f;
 
+    [Header("CURRENCY")]
+    [Header("Currency UI")]
+    [SerializeField] private GameObject currencyUI;
+    [SerializeField] private CanvasGroup cgCurrencyUI;
+
     [Header("SPEED UP")]
     [Header("Speed Up Button")]
     [SerializeField] private GameObject speedUpButtonHolder;
+    [SerializeField] private CanvasGroup cgSpeedUpUI;
 
     [Header("DECK")]
     [Header("Dependenices")]
@@ -25,6 +31,8 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private int costIncrement;
 
     [Header("Deck UI")]
+    [HideInInspector] public bool canInteractWithDeckUI = false;
+    [SerializeField] private CanvasGroup cgDeckUI;
     [SerializeField] private RectTransform deckUI;
     private float hiddenDeckUIy;
     private float shownDeckUIy;
@@ -68,16 +76,13 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private Color canNotDrawCardColor = Color.red;
     [SerializeField, Min(0.1f)] private float blinkDuration = 0.2f;
 
-    private bool isHiding = false;
-    private bool isShowing = false;
-
     private void OnEnable()
     {
-        CardDrawer.OnStartSetupBattleCanvases += EnableUI;
+        CardDrawer.OnStartSetupBattleCanvases += PlayStartGameAnimation;
     }
     private void OnDisable()
     {
-        CardDrawer.OnStartSetupBattleCanvases -= EnableUI;
+        CardDrawer.OnStartSetupBattleCanvases -= PlayStartGameAnimation;
     }
 
     private void Awake()
@@ -98,7 +103,10 @@ public class BattleHUD : MonoBehaviour
 
         UpdateDrawCostText(drawCost);
 
-        DisableUI();
+        canInteractWithDeckUI = false;
+        HideUI();
+
+        StartCoroutine(CurrencyUIStartGameAnimation());
     }
 
     private void Update()
@@ -109,24 +117,105 @@ public class BattleHUD : MonoBehaviour
         }
     }
 
-    private void EnableUI()
+    private void ShowUI()
     {
         speedUpButtonHolder.SetActive(true);
         deckUI.gameObject.SetActive(true);
     }
 
-    private void DisableUI()
+    private void HideUI()
     {
         speedUpButtonHolder.SetActive(false);
         deckUI.gameObject.SetActive(false);
     }
 
-    public void ShowDeckUI() // called on hover enter
+    private void PlayStartGameAnimation()
     {
-        if (isHiding) return;
+        ShowUI();
+        StartCoroutine(DeckUIStartGameAnimation());   
+        StartCoroutine(SpeedUpUIStartGameAnimation());   
+    }
+    private IEnumerator CurrencyUIStartGameAnimation()
+    {
+        // Start wait
+        cgCurrencyUI.alpha = 0f;
+        yield return new WaitForSeconds(1.0f);
 
-        isShowing = true;
+        // Appear
+        cgCurrencyUI.DOFade(1f, 1f);
+    }
+    private IEnumerator SpeedUpUIStartGameAnimation()
+    {
+        // Start wait
+        cgSpeedUpUI.alpha = 0f;
+        yield return new WaitForSeconds(1.0f);
 
+        // Appear
+        cgSpeedUpUI.DOFade(1f, 1f);
+    }
+    private IEnumerator DeckUIStartGameAnimation()
+    {
+        canInteractWithDeckUI = false;
+
+        // Start wait
+        drawButtonHolder.gameObject.SetActive(false);
+        cgDeckUI.alpha = 0f;
+        yield return new WaitForSeconds(1.0f);
+
+
+        // Appear
+        cgDeckUI.DOFade(1f, 1.0f);
+
+        foreach (Image icon in cardIcons)
+        {
+            icon.DOFade(0f, 0.1f); // kinda scuffed but make all icons invisible before showing
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+
+        // Show up
+        ShowDeckUI();
+        yield return new WaitForSeconds(0.4f);
+
+        foreach (Image icon in cardIcons)
+        {
+            icon.DOFade(1f, 0.25f);
+            yield return new WaitForSeconds(0.25f);
+        }
+        yield return new WaitForSeconds(0.25f);
+
+
+        // Hide back
+        HideDeckUI();
+        yield return new WaitForSeconds(1.0f);
+
+
+        // Ready
+        drawButtonHolder.gameObject.SetActive(true);
+        canInteractWithDeckUI = true;
+    }
+
+
+    public void OnHoverEnter() // called by UI
+    {
+        if (!canInteractWithDeckUI) return;
+        ShowDeckUI();
+    }
+    public void OnHoverExit() // called by UI
+    {
+        if (!canInteractWithDeckUI) return;
+        HideDeckUI();
+    }
+    public void OnClick() // called by UI
+    {
+        if (!canInteractWithDeckUI) return;
+        CheckDrawButtonClicked();
+    }
+
+
+    public void ShowDeckUI()
+    {
         GameAudioManager.GetInstance().PlayCardHovered();
 
         shownDeckUIy = ComputeShownDeckUIy();
@@ -140,7 +229,7 @@ public class BattleHUD : MonoBehaviour
                 if (deckBuildingCards.HasCardsLeft())
                 {
                     drawButtonHolder.DOLocalMoveX(shownDrawButtonX, hideDuration)
-                        .OnComplete(() => { EnableClickDrawButton(); isShowing = false; });
+                        .OnComplete(() => { EnableClickDrawButton(); });
                 }
 
             });
@@ -148,18 +237,16 @@ public class BattleHUD : MonoBehaviour
 
     public void HideDeckUI() // called on hover exit
     {
-        if (isShowing) return;
-
-        isHiding = true;
-
         GameAudioManager.GetInstance().PlayCardHoverExit();
 
         deckUI.DOLocalMoveY(hiddenDeckUIy, hideDuration);
         deckText.DOScale(hiddenTextSize, hideDuration);
+
+        cardIconsHolder.DOComplete(false);
         cardIconsHolder.DOLocalMoveY(hiddenCardIconsHolderY, hideDuration);
 
-        drawButtonHolder.DOLocalMoveX(hiddenDrawButtonX, hideDuration)
-            .OnComplete(() => isHiding = false);
+        drawButtonHolder.DOComplete(false);
+        drawButtonHolder.DOLocalMoveX(hiddenDrawButtonX, hideDuration);
         
         OnDrawButtonStopHover();
 
@@ -167,7 +254,7 @@ public class BattleHUD : MonoBehaviour
     }
 
 
-    public void OnDrawButtonClicked() // called on click
+    public void CheckDrawButtonClicked() // called on click
     {
         if (!canClickDrawButton)
         {
