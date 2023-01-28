@@ -48,13 +48,13 @@ public class EnemyWaveManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        CardDrawer.activateWaveCanvas += ActivateCanvas;
+        CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
         TDGameManager.OnGameOverStart += ForceStopWaves;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
     }
     private void OnDisable()
     {
-        CardDrawer.activateWaveCanvas -= ActivateCanvas;
+        CardDrawer.OnStartSetupBattleCanvases -= ActivateCanvas;
         TDGameManager.OnGameOverStart -= ForceStopWaves;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
     }

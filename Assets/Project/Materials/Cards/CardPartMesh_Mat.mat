@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CardMesh_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 3ef10ab69216a0143a9335c2ad34cfa2,
+  m_Name: CardPartMesh_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 2b7ac072397244e4d8c7281a5f1ee306,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -22,7 +22,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 4a006021c021da048b9f034893abfe37, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 4a006021c021da048b9f034893abfe37, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -59,10 +59,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_c33d1ebb7d904f32ae1a17e01dfda6a3_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 4a006021c021da048b9f034893abfe37, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -86,7 +82,6 @@ Material:
     - _AlphaClip: 0
     - _Blend: 0
     - _BorderColorTransparency: 0
-    - _BorderLoopEnabled: 0
     - _BorderLoopSpeed: 0.5
     - _BumpScale: 1
     - _CanBePlayed: 0
@@ -112,7 +107,7 @@ Material:
     - _QueueOffset: 0
     - _RandomTimeAdd: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -123,18 +118,15 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BorderLoopColor: {r: 0, g: 0.19982491, b: 0.7075472, a: 0}
-    - _CanBePlayedBorderColor: {r: 0.87524384, g: 3.0418313, b: 2.6807334, a: 1}
-    - _CanBePlayedColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
-    - _CanBePlayedStripesColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 0}
+    - _BorderLoopColor: {r: 0.02149343, g: 0.4285356, b: 0.6509434, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _StripesColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+    - _StripesColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _StripesMoveSpeed: {r: -0.01, g: 0.01, b: 0, a: 0}
     - _StripesSeparation: {r: 0.13, g: 0.13, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &5120512440017749669
+--- !u!114 &3171069767246009184
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

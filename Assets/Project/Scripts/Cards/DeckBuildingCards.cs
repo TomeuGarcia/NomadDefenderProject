@@ -12,7 +12,8 @@ public class DeckBuildingCards : MonoBehaviour
 
     [Header("DECK")]
     [SerializeField] private Transform cardsHolder;
-    [SerializeField] private Transform fakeDeck;
+
+    public int NumCards => cards.Count;
 
 
     public void Init()

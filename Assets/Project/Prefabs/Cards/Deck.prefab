@@ -291,9 +291,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7824509788272755731}
   - component: {fileID: 63665581520157518}
-  - component: {fileID: 4419862365290777483}
   m_Layer: 10
-  m_Name: FakeDeck
+  m_Name: DeckHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,29 +328,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.65, y: 1, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4419862365290777483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3738778343730170132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21602d97c9082184aa839345bc1578f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DrawUI: {fileID: 7896820729630638159}
-  tittleText: {fileID: 7037497275662498882}
-  costText: {fileID: 9047694519631098091}
-  currencySprite: {fileID: 9076031584731776745}
-  defualtTextColor: {r: 0, g: 0, b: 0, a: 0}
-  cantDrawColor: {r: 0, g: 0, b: 0, a: 0}
-  drawCost: 10
-  costIncrement: 5
-  deckBuildingCards: {fileID: 7126227104347597876}
-  currencyCounter: {fileID: 0}
-  cardDrawer: {fileID: 0}
 --- !u!1 &7126227104347597867
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +375,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deckData: {fileID: 11400000, guid: 34287d5d7447ba8438b13f39557bad56, type: 2}
   cardsHolder: {fileID: 8794990797135172002}
-  fakeDeck: {fileID: 7824509788272755731}
 --- !u!1 &7896820729630638159
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4217865189042754889
 RectTransform:
   m_ObjectHideFlags: 0
