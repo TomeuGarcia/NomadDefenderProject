@@ -6,7 +6,7 @@ using static TurretPartAttack_Prefab;
 public delegate int PassiveDamageModifier(int damage, HealthSystem healthSystem);
 public class TurretPartAttack_Prefab : MonoBehaviour
 {
-    public enum AttackType { BASIC, TESLA, LONG_RANGE }
+    public enum AttackType { BASIC, TESLA, LONG_RANGE, PIERCING }
 
     protected Enemy targetEnemy;
     protected int damage;
@@ -68,7 +68,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         Disable();
     }
 
-    private void Disable()
+    protected void Disable()
     {
         SetPassiveDamageModifier(DefaultDamage);
 
