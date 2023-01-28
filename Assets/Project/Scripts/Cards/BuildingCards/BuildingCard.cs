@@ -66,6 +66,7 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardHovered;
     public event BuildingCardAction OnCardUnhovered;
     public event BuildingCardAction OnCardSelected;
+    public event BuildingCardAction OnCardInfoSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
@@ -105,10 +106,10 @@ public abstract class BuildingCard : MonoBehaviour
         if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
-    private void OnMouseDown()
+    private void OnMouseDown() // only called by Left Click
     {
         if (isRepositioning) return;
-
+        
         if (cardState == CardStates.HOVERED)
         {
             if (OnCardSelected != null) OnCardSelected(this);
@@ -116,6 +117,17 @@ public abstract class BuildingCard : MonoBehaviour
         else
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (cardState == CardStates.HOVERED)
+            {
+                if (OnCardInfoSelected != null) OnCardInfoSelected(this);
+            }
         }
     }
 
@@ -227,6 +239,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
             .OnComplete(() => EnableMouseInteraction());
     }
+
 
     // CARD MOVEMENT end
 
