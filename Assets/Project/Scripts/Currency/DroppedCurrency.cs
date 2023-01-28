@@ -70,7 +70,7 @@ public class DroppedCurrency : MonoBehaviour
 
         //value = Random.Range(1, 4); // Just for testing
         Vector3 minScale = Vector3.one * 0.1f;
-        meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
+        meshTransform.localScale = minScale + ((value -1) * 0.02f * minScale);
     }
 
     private IEnumerator GotPickedUp()

@@ -10,12 +10,23 @@ public class TurretBuildingCard : BuildingCard
     public class TurretCardParts
     {
         public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+               TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
+        {
+            this.turretPartAttack = turretPartAttack;
+            this.turretPartBody = turretPartBody;
+            this.turretPartBase = turretPartBase;
+            this.turretPassiveBase = turretPassiveBase;
+            this.cardCost = cardCost;
+        }
+
+        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
                TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
         {
             this.turretPartAttack = turretPartAttack;
             this.turretPartBody = turretPartBody;
             this.turretPartBase = turretPartBase;
             this.turretPassiveBase = turretPassiveBase;
+            this.cardCost = GetCostCombinedParts();
         }
 
         public TurretCardParts(TurretCardParts other)
@@ -24,17 +35,22 @@ public class TurretBuildingCard : BuildingCard
             this.turretPartBody = other.turretPartBody;
             this.turretPartBase = other.turretPartBase;
             this.turretPassiveBase = other.turretPassiveBase;
+            this.cardCost = other.cardCost;
         }
 
         public TurretPartAttack turretPartAttack;
         public TurretPartBody turretPartBody;
         public TurretPartBase turretPartBase;
         public TurretPassiveBase turretPassiveBase;
+        public int cardCost;
 
         public int GetCostCombinedParts()
         {
             return turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost + turretPassiveBase.cost;
         }
+
+        public int GetCardCost()
+        { return cardCost; }
     }
 
 
@@ -103,7 +119,9 @@ public class TurretBuildingCard : BuildingCard
 
     protected override void InitStatsFromTurretParts()
     {
-        turretStats.playCost = turretCardParts.GetCostCombinedParts();
+
+        turretStats.playCost = turretCardParts.GetCardCost();
+
         turretStats.damage = turretCardParts.turretPartBody.Damage;
         turretStats.range = turretCardParts.turretPartBase.Range;
         turretStats.cadence = turretCardParts.turretPartBody.Cadence;

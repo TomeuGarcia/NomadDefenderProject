@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd90c20383400b844aec752b344e52d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyCount: 20
+  currencyCount: 250
   currencyCountTextHolder: {fileID: 7826719552263272301}
   currencyCountText: {fileID: 8891730011413891390}
   addedCurrencyText: {fileID: 2412725747262003516}
@@ -322,8 +322,8 @@ MonoBehaviour:
   deckBuildingCards: {fileID: 0}
   currencyCounter: {fileID: 6500449594157875764}
   cardDrawer: {fileID: 0}
-  drawCost: 10
-  costIncrement: 5
+  drawCost: 100
+  costIncrement: 50
   deckUI: {fileID: 8049672562078500895}
   deckText: {fileID: 3311158692980988382}
   hiddenTextSize: {x: 1.5, y: 1.5, z: 1.5}
@@ -336,6 +336,7 @@ MonoBehaviour:
   drawButtonImageImage: {fileID: 2211685626627158640}
   costTextText: {fileID: 7170735077110596537}
   costTextImage: {fileID: 1245299253725354312}
+  drewCardViaHUD: 0
   canDrawCardColor: {r: 0.20060521, g: 0.8217802, b: 0.8679245, a: 1}
   canNotDrawCardColor: {r: 0.67058825, g: 0.15294118, b: 0.15294118, a: 1}
   blinkDuration: 0.2
@@ -1622,7 +1623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 250
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7a95264cacbe2fc48a83eea4f26fd8dd, type: 2}
   m_sharedMaterial: {fileID: 1425237230897982986, guid: 7a95264cacbe2fc48a83eea4f26fd8dd,
