@@ -170,7 +170,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void QueueDamage(int amount, PassiveDamageModifier modifier)
+    public int QueueDamage(int amount, PassiveDamageModifier modifier)
     {
         amount = modifier(amount, healthSystem);
         queuedDamage += amount;
@@ -179,6 +179,8 @@ public class Enemy : MonoBehaviour
         //{
         //    StartCoroutine(TimedDeath());
         //}
+
+        return amount;
     }
 
     IEnumerator TimedDeath()
@@ -188,7 +190,7 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    public void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
         queuedDamage -= amount;
     }
@@ -209,5 +211,10 @@ public class Enemy : MonoBehaviour
         health = (float)baseHealth * multiplier;
 
         healthSystem.UpdateHealth((int)health);
+    }
+
+    public bool IsDead()
+    {
+        return healthSystem.IsDead();
     }
 }
