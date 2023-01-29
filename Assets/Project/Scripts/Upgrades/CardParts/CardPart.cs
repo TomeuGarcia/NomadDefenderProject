@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting;
 using static Building;
 using DG.Tweening;
+using static BuildingCard;
 
 public class CardPart : MonoBehaviour
 {
@@ -13,8 +14,10 @@ public class CardPart : MonoBehaviour
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private float hoverSpeed;
-    [SerializeField] private float selectedSpeed; 
+    [SerializeField] private float selectedSpeed;
 
+    [Header("VISUALS")]
+    [SerializeField] protected CanvasGroup interfaceCanvasGroup;
 
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
@@ -26,10 +29,15 @@ public class CardPart : MonoBehaviour
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
+    [HideInInspector] public bool isShowingInfo;
+    protected bool canInfoInteract = true;
+
+
     public delegate void BuildingCardPartAction(CardPart cardPart);
     public static event BuildingCardPartAction OnCardHovered;
     public static event BuildingCardPartAction OnCardUnhovered;
     public static event BuildingCardPartAction OnCardSelected;
+    public event BuildingCardPartAction OnCardInfoSelected;
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
 
@@ -60,6 +68,17 @@ public class CardPart : MonoBehaviour
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
         
+    }
+
+    private void Update()
+    {
+        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        {
+            if (cardState == CardPartStates.HOVERED)
+            {
+                if (OnCardInfoSelected != null) OnCardInfoSelected(this);
+            }
+        }
     }
 
     public virtual void Init()
@@ -95,4 +114,15 @@ public class CardPart : MonoBehaviour
         CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime);
     }
 
+
+    public virtual void ShowInfo()
+    {
+        isShowingInfo = true;
+        Debug.Log("ShowInfo");
+    }
+    public virtual void HideInfo()
+    {
+        isShowingInfo = false;
+        Debug.Log("HideInfo");
+    }
 }

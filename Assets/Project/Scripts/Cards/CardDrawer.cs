@@ -83,7 +83,7 @@ public class CardDrawer : MonoBehaviour
 
             if (hand.HasRedrawsLeft())
             {
-                hand.InitCardsInHandFirstDraw();
+                hand.InitCardsInHandForRedraw();
             }
             else
             {
@@ -172,6 +172,8 @@ public class CardDrawer : MonoBehaviour
         hand.RemoveCard(card);
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
+
+        battleHUD.AddHasCardIcon();
     }
 
     /*private void StartDrawOverTime()

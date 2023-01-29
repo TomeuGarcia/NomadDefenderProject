@@ -17,7 +17,8 @@ public class CardPartBody : CardPart
     [SerializeField] public TurretPartBody turretPartBody;
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer bodyMeshRenderer;
+    //[SerializeField] private MeshRenderer bodyMeshRenderer;
+    [SerializeField] private Image bodyImage;
     private Material bodyMaterial;
 
 
@@ -29,7 +30,9 @@ public class CardPartBody : CardPart
 
     private void Awake()
     {
-        bodyMaterial = bodyMeshRenderer.material;
+        //bodyMaterial = bodyMeshRenderer.material;
+        bodyMaterial = new Material(bodyImage.material);
+        bodyImage.material = bodyMaterial;
     }
 
     public override void Init()
@@ -48,5 +51,16 @@ public class CardPartBody : CardPart
         playCostText.text = turretPartBody.cost.ToString();
         damageText.text = turretPartBody.Damage.ToString();
         cadenceText.text = turretPartBody.Cadence.ToString();
+    }
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+        interfaceCanvasGroup.alpha = 0f;
+    }
+    public override void HideInfo()
+    {
+        base.HideInfo();
+        interfaceCanvasGroup.alpha = 1f;
     }
 }

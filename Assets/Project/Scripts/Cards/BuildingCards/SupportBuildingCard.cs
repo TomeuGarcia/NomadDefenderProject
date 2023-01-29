@@ -41,7 +41,8 @@ public class SupportBuildingCard : BuildingCard
     private SupportBuilding.SupportBuildingStats supportBuildingStats;
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer baseMeshRenderer;
+    //[SerializeField] private MeshRenderer baseMeshRenderer;
+    [SerializeField] private Image baseImage;
     private Material material;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image abilityImage;
@@ -72,7 +73,9 @@ public class SupportBuildingCard : BuildingCard
     }
     protected override void GetMaterialsRefs()
     {
-        material = baseMeshRenderer.material;
+        //material = baseMeshRenderer.material;
+        material = new Material(baseImage.material);
+        baseImage.material = material;
     }
 
     protected override void InitStatsFromTurretParts()
@@ -101,5 +104,16 @@ public class SupportBuildingCard : BuildingCard
         supportCardParts.turretPartBase = newPartBase;
         supportCardParts.turretPartBase.cost = costHolder;
         Init();
+    }
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+        interfaceCanvasGroup.alpha = 0f;
+    }
+    public override void HideInfo()
+    {
+        base.HideInfo();
+        interfaceCanvasGroup.alpha = 1f;
     }
 }
