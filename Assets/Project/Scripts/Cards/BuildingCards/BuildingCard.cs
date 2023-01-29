@@ -39,7 +39,6 @@ public abstract class BuildingCard : MonoBehaviour
     public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
     public const float selectedTime = 0.3f;
 
-
     private Vector3 initialPosition;
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
@@ -57,8 +56,11 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
+    [HideInInspector] public bool isShowingInfo = false;
+
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
+    [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     private Material cardMaterial;
 
 
@@ -149,6 +151,8 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
+
+        isShowingInfo = false;
     }
 
 
@@ -286,6 +290,17 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (cardState == CardStates.HOVERED) 
             if (OnCardUnhovered != null) OnCardUnhovered(this);
+    }
+
+    public virtual void ShowInfo()
+    {
+        isShowingInfo = true;
+        Debug.Log("ShowInfo");
+    }
+    public virtual void HideInfo()
+    {
+        isShowingInfo = false;
+        Debug.Log("HideInfo");
     }
 
 }

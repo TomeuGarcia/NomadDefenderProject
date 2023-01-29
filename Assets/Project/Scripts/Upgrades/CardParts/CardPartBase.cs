@@ -18,7 +18,8 @@ public class CardPartBase : CardPart
     [SerializeField] public TurretPassiveBase turretPassiveBase;
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer baseMeshRenderer;
+    //[SerializeField] private MeshRenderer baseMeshRenderer;
+    [SerializeField] private Image baseImage;
     private Material baseMaterial;
 
     private void OnValidate()
@@ -28,7 +29,9 @@ public class CardPartBase : CardPart
 
     private void Awake()
     {
-        baseMaterial = baseMeshRenderer.material;
+        //baseMaterial = baseMeshRenderer.material;
+        baseMaterial = new Material(baseImage.material);
+        baseImage.material = baseMaterial;
     }
 
     public override void Init()
@@ -59,5 +62,17 @@ public class CardPartBase : CardPart
         rangeText.text = turretPartBase.Range.ToString();
 
         //TODO : set passive texts
+    }
+
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+        interfaceCanvasGroup.alpha = 0f;
+    }
+    public override void HideInfo()
+    {
+        base.HideInfo();
+        interfaceCanvasGroup.alpha = 1f;
     }
 }

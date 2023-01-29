@@ -44,10 +44,14 @@ public class TurretBuildingCard : BuildingCard
 
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer attackMeshRenderer;
-    [SerializeField] private MeshRenderer bodyMeshRenderer;
-    [SerializeField] private MeshRenderer baseMeshRenderer;
+    //[SerializeField] private MeshRenderer attackMeshRenderer;
+    //[SerializeField] private MeshRenderer bodyMeshRenderer;
+    //[SerializeField] private MeshRenderer baseMeshRenderer;
+    [SerializeField] private Image attackImage;
+    [SerializeField] private Image bodyImage;
+    [SerializeField] private Image baseImage;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+
 
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
@@ -62,9 +66,15 @@ public class TurretBuildingCard : BuildingCard
 
     protected override void GetMaterialsRefs() 
     {
-        cardAttackMaterial = attackMeshRenderer.material;
-        cardBodyMaterial = bodyMeshRenderer.material;
-        cardBaseMaterial = baseMeshRenderer.material;
+        //cardAttackMaterial = attackMeshRenderer.material;
+        //cardBodyMaterial = bodyMeshRenderer.material;
+        //cardBaseMaterial = baseMeshRenderer.material;
+        cardAttackMaterial = new Material(attackImage.material);
+        attackImage.material = cardAttackMaterial;
+        cardBodyMaterial = new Material(bodyImage.material);
+        bodyImage.material = cardBodyMaterial;
+        cardBaseMaterial = new Material(baseImage.material);
+        baseImage.material = cardBaseMaterial;
     }
 
     protected override void InitVisuals()
@@ -159,6 +169,19 @@ public class TurretBuildingCard : BuildingCard
         turretCardParts.turretPassiveBase.cost = 0;
 
         Init();
+    }
+
+
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+        interfaceCanvasGroup.alpha = 0f;
+    }
+    public override void HideInfo()
+    {
+        base.HideInfo();
+        interfaceCanvasGroup.alpha = 1f;
     }
 
 }

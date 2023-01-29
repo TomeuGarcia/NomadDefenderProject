@@ -67,7 +67,7 @@ public class HandBuildingCards : MonoBehaviour
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
-        InitCardsInHandFirstDraw();
+        InitCardsInHandForRedraw();
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -165,6 +165,8 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += CheckSelectCard;
 
+            card.OnCardInfoSelected += SetCardShowInfo;
+
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
@@ -175,7 +177,7 @@ public class HandBuildingCards : MonoBehaviour
         }
     }
 
-    public void InitCardsInHandFirstDraw()
+    public void InitCardsInHandForRedraw()
     {
         Debug.Log("InitCardsInHandFirstDraw");
         float cardCount = cards.Count;
@@ -208,11 +210,11 @@ public class HandBuildingCards : MonoBehaviour
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
             card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCardFirstDraw(card, selectedPosition, hiddenDisplacement, i));
+                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, i));
         }
 
     }
-    private void SetupCardFirstDraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
+    private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
     {
         card.InitPositions(selectedPosition, hiddenDisplacement);
 
@@ -221,6 +223,8 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardHovered += SetHoveredCard;
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
+
+            card.OnCardInfoSelected += SetCardShowInfo;
 
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
@@ -252,6 +256,13 @@ public class HandBuildingCards : MonoBehaviour
         card.OnCardHovered -= SetHoveredCard;
         card.OnCardUnhovered -= SetStandardCard;
         card.OnCardSelected -= Redraw;
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);
+        }
+        card.OnCardInfoSelected -= SetCardShowInfo;
+
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
 
@@ -324,6 +335,13 @@ public class HandBuildingCards : MonoBehaviour
         hoveredCard = null;
         card.StandardState();
 
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);            
+        }
+
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered += SetHoveredCard;            
@@ -334,6 +352,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         HandTransform.position = defaultHandPosition;
         SetStandardCard(selectedCard);
+        selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
         buildingPlacer.DisablePlacing();
@@ -357,6 +376,13 @@ public class HandBuildingCards : MonoBehaviour
 
         selectedCard = card;
         selectedCard.SelectedState();
+
+        if (selectedCard.isShowingInfo)
+        {
+            SetCardHideInfo(selectedCard);
+        }
+        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+
 
         buildingPlacer.EnablePlacing(card);
 
@@ -487,18 +513,22 @@ public class HandBuildingCards : MonoBehaviour
 
 
     private void SetCardShowInfo(BuildingCard card)
-    {
-        Debug.Log("Showing Card Info");
+    {        
+        card.ShowInfo();
+
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
+        card.OnCardInfoSelected += SetCardHideInfo;
     }
 
-    private void SetCardHoveredHideInfo(BuildingCard card)
+    private void SetCardHideInfo(BuildingCard card)
     {
-        Debug.Log("Hovered Hiding Card Info");
+        card.HideInfo();
+
+
+        card.OnCardInfoSelected += SetCardShowInfo;
+        card.OnCardInfoSelected -= SetCardHideInfo;
     }
 
-    private void SetCardSelectedHideInfo(BuildingCard card)
-    {
-        Debug.Log("Selected Hiding Card Info");
-    }
 
 }
