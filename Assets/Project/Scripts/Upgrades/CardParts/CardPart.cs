@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting;
 using static Building;
 using DG.Tweening;
+using static BuildingCard;
 
 public class CardPart : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public class CardPart : MonoBehaviour
 
 
     [HideInInspector] public bool isShowingInfo;
+    protected bool canInfoInteract = true;
 
 
     public delegate void BuildingCardPartAction(CardPart cardPart);
     public static event BuildingCardPartAction OnCardHovered;
     public static event BuildingCardPartAction OnCardUnhovered;
     public static event BuildingCardPartAction OnCardSelected;
+    public event BuildingCardPartAction OnCardInfoSelected;
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
 
@@ -65,6 +68,17 @@ public class CardPart : MonoBehaviour
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
         
+    }
+
+    private void Update()
+    {
+        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        {
+            if (cardState == CardPartStates.HOVERED)
+            {
+                if (OnCardInfoSelected != null) OnCardInfoSelected(this);
+            }
+        }
     }
 
     public virtual void Init()

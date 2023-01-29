@@ -516,7 +516,6 @@ public class HandBuildingCards : MonoBehaviour
     {        
         card.ShowInfo();
 
-
         card.OnCardInfoSelected -= SetCardShowInfo;
         card.OnCardInfoSelected += SetCardHideInfo;
     }
@@ -525,10 +524,8 @@ public class HandBuildingCards : MonoBehaviour
     {
         card.HideInfo();
 
-
         card.OnCardInfoSelected += SetCardShowInfo;
         card.OnCardInfoSelected -= SetCardHideInfo;
     }
-
-
+    
 }

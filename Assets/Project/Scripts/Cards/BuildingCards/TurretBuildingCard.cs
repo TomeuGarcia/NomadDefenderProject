@@ -184,4 +184,17 @@ public class TurretBuildingCard : BuildingCard
         interfaceCanvasGroup.alpha = 1f;
     }
 
+
+    private IEnumerator ShowInfoAnimation()
+    {
+        canInfoInteract = false;
+        
+        
+        yield return null;
+
+
+        canInfoInteract = true;
+    }
+
+
 }

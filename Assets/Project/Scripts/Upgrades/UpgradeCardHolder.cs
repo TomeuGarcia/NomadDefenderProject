@@ -110,6 +110,9 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         card.HoveredState();
 
+        card.OnCardInfoSelected += SetCardShowInfo;
+
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered -= SetHoveredCard;
@@ -124,6 +127,12 @@ public class UpgradeCardHolder : MonoBehaviour
     private void SetStandardCard(BuildingCard card)
     {
         card.StandardState();
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);
+        }
+        card.OnCardInfoSelected -= SetCardShowInfo;
 
         if (canInteract)
         {
@@ -147,6 +156,12 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = card;
         selectedCard.SelectedState();
 
+        if (selectedCard.isShowingInfo)
+        {
+            SetCardHideInfo(selectedCard);            
+        }
+
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered -= SetHoveredCard;
@@ -158,6 +173,24 @@ public class UpgradeCardHolder : MonoBehaviour
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
+
+    private void SetCardShowInfo(BuildingCard card)
+    {
+        card.ShowInfo();
+
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
+        card.OnCardInfoSelected += SetCardHideInfo;
+    }
+    private void SetCardHideInfo(BuildingCard card)
+    {
+        card.HideInfo();
+
+
+        card.OnCardInfoSelected += SetCardShowInfo;
+        card.OnCardInfoSelected -= SetCardHideInfo;
     }
 
 

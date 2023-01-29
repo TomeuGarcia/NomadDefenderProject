@@ -57,6 +57,7 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     [HideInInspector] public bool isShowingInfo = false;
+    protected bool canInfoInteract = true;
 
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
@@ -124,7 +125,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (canInfoInteract && Input.GetMouseButtonDown(1))
         {
             if (cardState == CardStates.HOVERED)
             {
