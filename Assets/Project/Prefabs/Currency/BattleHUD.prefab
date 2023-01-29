@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 8302042860707206161}
   - component: {fileID: 2057210470355426487}
   - component: {fileID: 3815670701790728986}
+  - component: {fileID: 8749278339109043398}
   m_Layer: 10
   m_Name: CurrencyBackgroundImage
   m_TagString: Untagged
@@ -253,6 +254,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &8749278339109043398
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593603368354500492}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2187565362742360348
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,12 +331,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a9b3a1784e02e842a4f8ea88f6e3ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currencyUI: {fileID: 1593603368354500492}
+  cgCurrencyUI: {fileID: 8749278339109043398}
   speedUpButtonHolder: {fileID: 3296238132714388524}
+  cgSpeedUpUI: {fileID: 7317154147133435078}
   deckBuildingCards: {fileID: 0}
   currencyCounter: {fileID: 6500449594157875764}
   cardDrawer: {fileID: 0}
   drawCost: 100
   costIncrement: 50
+  canInteractWithDeckUI: 0
+  cgDeckUI: {fileID: 5325191135218944496}
   deckUI: {fileID: 8049672562078500895}
   deckText: {fileID: 3311158692980988382}
   hiddenTextSize: {x: 1.5, y: 1.5, z: 1.5}
@@ -386,7 +404,7 @@ CanvasGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3036249909464158186}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 0
@@ -575,6 +593,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2714909740775028815}
+  - component: {fileID: 7317154147133435078}
   m_Layer: 10
   m_Name: SpeedUpButton
   m_TagString: Untagged
@@ -605,6 +624,18 @@ RectTransform:
   m_AnchoredPosition: {x: 810, y: 490}
   m_SizeDelta: {x: 216.7572, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &7317154147133435078
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3296238132714388524}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3674556571313427856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,6 +1384,7 @@ GameObject:
   - component: {fileID: 5608217077211937941}
   - component: {fileID: 8555786266117556516}
   - component: {fileID: 4274714030025694071}
+  - component: {fileID: 5325191135218944496}
   m_Layer: 10
   m_Name: DeckUI
   m_TagString: Untagged
@@ -1400,7 +1432,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 2194195053190281865}
           m_TargetAssemblyTypeName: BattleHUD, Assembly-CSharp
-          m_MethodName: ShowDeckUI
+          m_MethodName: OnHoverEnter
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1416,7 +1448,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 2194195053190281865}
           m_TargetAssemblyTypeName: BattleHUD, Assembly-CSharp
-          m_MethodName: HideDeckUI
+          m_MethodName: OnHoverExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1432,7 +1464,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 2194195053190281865}
           m_TargetAssemblyTypeName: BattleHUD, Assembly-CSharp
-          m_MethodName: OnDrawButtonClicked
+          m_MethodName: OnClick
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1480,6 +1512,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5325191135218944496
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6031220750118659365}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6122072267365508913
 GameObject:
   m_ObjectHideFlags: 0
