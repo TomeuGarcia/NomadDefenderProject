@@ -10,23 +10,29 @@ public class SupportBuildingCard : BuildingCard
     public class SupportCardParts
     {
         public TurretPartBase turretPartBase;
+        public int cardCost;
 
 
-        public SupportCardParts(TurretPartBase turretPartBase)
+        public SupportCardParts(TurretPartBase turretPartBase, int cardCost)
         {
 
             this.turretPartBase = turretPartBase;
+            this.cardCost = cardCost;
         }
       
         public SupportCardParts(SupportCardParts other)
         {
             this.turretPartBase = other.turretPartBase;
+            this.cardCost = other.cardCost;
         }
 
         public int GetCostCombinedParts()
         {
             return turretPartBase.cost;
         }
+
+        public int GetCardCost()
+        { return cardCost; }
     }
 
 
@@ -71,7 +77,7 @@ public class SupportBuildingCard : BuildingCard
 
     protected override void InitStatsFromTurretParts()
     {
-        supportBuildingStats.playCost = supportCardParts.GetCostCombinedParts();
+        supportBuildingStats.playCost = supportCardParts.GetCardCost();
         supportBuildingStats.range = supportCardParts.turretPartBase.Range;
     }
 
