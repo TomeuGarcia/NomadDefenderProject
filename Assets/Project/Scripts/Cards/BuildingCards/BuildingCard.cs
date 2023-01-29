@@ -1,8 +1,8 @@
 using UnityEngine;
 using TMPro;
-using static BuildingCard;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.UI;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -63,6 +63,9 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     private Material cardMaterial;
+
+    [Header("CARD INFO")]
+    [SerializeField] protected CanvasGroup[] cgsInfoHide;
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);

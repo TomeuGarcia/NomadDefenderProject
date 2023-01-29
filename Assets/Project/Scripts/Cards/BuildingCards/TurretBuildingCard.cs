@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static BuildingCard;
@@ -59,6 +61,27 @@ public class TurretBuildingCard : BuildingCard
     private TurretBuilding.TurretBuildingStats turretStats;
 
 
+    [Header("CARD INFO")]
+    [SerializeField] private GameObject infoInterface;
+
+    [Header("Attack card info")]
+    [SerializeField] private RectTransform infoShownAttackIcon;
+    [SerializeField] private RectTransform defaultAttackIcon; // used as Hidden info
+    private Vector3 infoShownAttackIconPos;
+    private Vector3 infoHiddenAttackIconPos;
+    [SerializeField] private TextMeshProUGUI attackNameText;
+    [SerializeField] private TextMeshProUGUI attackDescriptionText;
+
+    [Header("Base card info")]
+    [SerializeField] private RectTransform infoShownBaseIcon;
+    [SerializeField] private RectTransform defaultBaseIcon; // used as Hidden info
+    private Vector3 infoShownBaseIconPos;
+    private Vector3 infoHiddenBaseIconPos;
+    [SerializeField] private TextMeshProUGUI baseNameText;
+    [SerializeField] private TextMeshProUGUI baseDescriptionText;
+
+
+
     [Header("VISUALS")]
     //[SerializeField] private MeshRenderer attackMeshRenderer;
     //[SerializeField] private MeshRenderer bodyMeshRenderer;
@@ -74,10 +97,24 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
 
+    bool hasBasePassiveAbility = false;
+
+    Coroutine showInfoCoroutine = null;
+    bool isShowInfoAnimationPlaying = false;
+    bool isHideInfoAnimationPlaying = false;
+
+
+
 
     private void Awake()
     {
         AwakeInit(CardBuildingType.TURRET);
+    }
+
+    protected override void AwakeInit(CardBuildingType cardBuildingType)
+    {
+        base.AwakeInit(cardBuildingType);
+        SetupCardInfo();
     }
 
     protected override void GetMaterialsRefs() 
@@ -115,7 +152,9 @@ public class TurretBuildingCard : BuildingCard
         cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
 
-        if (turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive))
+        hasBasePassiveAbility = turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
+
+        if (hasBasePassiveAbility)
         {
             basePassiveImage.transform.parent.gameObject.SetActive(true);
 
@@ -194,21 +233,127 @@ public class TurretBuildingCard : BuildingCard
     public override void ShowInfo()
     {
         base.ShowInfo();
-        interfaceCanvasGroup.alpha = 0f;
+        //interfaceCanvasGroup.alpha = 0f;
+
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
     public override void HideInfo()
     {
+        if (isHideInfoAnimationPlaying) return;
+
         base.HideInfo();
-        interfaceCanvasGroup.alpha = 1f;
+        //interfaceCanvasGroup.alpha = 1f;        
+
+        if (isShowInfoAnimationPlaying)
+        {
+            StopCoroutine(showInfoCoroutine);
+        }        
+
+        StartCoroutine(HideInfoAnimation());
     }
 
+    private void SetupCardInfo()
+    {
+        // general
+        infoInterface.SetActive(true);
+        isShowInfoAnimationPlaying = false;
+
+        // attack
+        infoShownAttackIconPos = infoShownAttackIcon.localPosition;
+        infoHiddenAttackIconPos = defaultAttackIcon.localPosition;
+        attackNameText.alpha = 0;
+        attackDescriptionText.alpha = 0;
+
+        // base
+        infoShownBaseIconPos = infoShownBaseIcon.localPosition;
+        infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
+        baseNameText.alpha = 0;
+        baseDescriptionText.alpha = 0;
+    }
 
     private IEnumerator ShowInfoAnimation()
     {
         canInfoInteract = false;
-        
-        
-        yield return null;
+        isShowInfoAnimationPlaying = true;
+
+        // hide generics
+        float t = 0.05f;
+        for (int i = 0; i < cgsInfoHide.Length; ++i)            
+        {
+            cgsInfoHide[i].DOFade(0f, t);
+            yield return new WaitForSeconds(t);
+        }
+
+
+        float t2 = 0.1f;
+
+        // show attack
+        defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
+        yield return new WaitForSeconds(t2);
+
+        attackNameText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+        attackDescriptionText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+        // show base
+        if (hasBasePassiveAbility)
+        {
+            defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+
+            baseNameText.DOFade(1f, t2);
+            yield return new WaitForSeconds(t2);
+
+            baseDescriptionText.DOFade(1f, t2);
+            yield return new WaitForSeconds(t2);
+        }
+
+
+        canInfoInteract = true;
+        isShowInfoAnimationPlaying = false;
+    }
+
+    private IEnumerator HideInfoAnimation()
+    {
+        canInfoInteract = false;
+
+
+        float t2 = 0.1f;
+
+        // hide base
+        if (hasBasePassiveAbility)
+        {
+            baseDescriptionText.DOFade(0f, t2);
+            yield return new WaitForSeconds(t2);
+
+            baseNameText.DOFade(0f, t2);
+            yield return new WaitForSeconds(t2);
+
+            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+        }        
+
+        // hide attack
+        attackDescriptionText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+
+        attackNameText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+
+        defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
+        yield return new WaitForSeconds(t2);
+
+
+        // show generics
+        float t = 0.05f;
+
+        for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
+        {
+            cgsInfoHide[i].DOFade(1f, t);
+            yield return new WaitForSeconds(t);
+        }
 
 
         canInfoInteract = true;
