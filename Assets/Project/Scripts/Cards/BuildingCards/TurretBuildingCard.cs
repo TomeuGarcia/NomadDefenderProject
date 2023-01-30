@@ -99,10 +99,6 @@ public class TurretBuildingCard : BuildingCard
 
     bool hasBasePassiveAbility = false;
 
-    Coroutine showInfoCoroutine = null;
-    bool isShowInfoAnimationPlaying = false;
-    bool isHideInfoAnimationPlaying = false;
-
 
 
 
@@ -166,7 +162,7 @@ public class TurretBuildingCard : BuildingCard
         }
 
         // Ability Info
-        InitInfoVisals();
+        InitInfoVisuals();
     }
 
     protected override void InitStatsFromTurretParts()
@@ -232,7 +228,7 @@ public class TurretBuildingCard : BuildingCard
     }
 
 
-    protected override void InitInfoVisals()
+    protected override void InitInfoVisuals()
     {
         attackNameText.text = '/' + turretCardParts.turretPartAttack.abilityName;
         attackDescriptionText.text = turretCardParts.turretPartAttack.abilityDescription;
@@ -240,30 +236,7 @@ public class TurretBuildingCard : BuildingCard
         baseNameText.text = '/' + turretCardParts.turretPassiveBase.passive.abilityName;
         baseDescriptionText.text = turretCardParts.turretPassiveBase.passive.abilityDescription;
     }
-
-    public override void ShowInfo()
-    {
-        base.ShowInfo();
-        //interfaceCanvasGroup.alpha = 0f;
-
-        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
-    }
-    public override void HideInfo()
-    {
-        if (isHideInfoAnimationPlaying) return;
-
-        base.HideInfo();
-        //interfaceCanvasGroup.alpha = 1f;        
-
-        if (isShowInfoAnimationPlaying)
-        {
-            StopCoroutine(showInfoCoroutine);
-        }        
-
-        StartCoroutine(HideInfoAnimation());
-    }
-
-    private void SetupCardInfo()
+    protected override void SetupCardInfo()
     {
         // general
         infoInterface.SetActive(true);
@@ -280,6 +253,27 @@ public class TurretBuildingCard : BuildingCard
         infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
         baseNameText.alpha = 0;
         baseDescriptionText.alpha = 0;
+    }
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
+    }
+
+    public override void HideInfo()
+    {
+        if (isHideInfoAnimationPlaying) return;
+
+        base.HideInfo();
+
+        if (isShowInfoAnimationPlaying)
+        {
+            StopCoroutine(showInfoCoroutine);
+        }        
+
+        StartCoroutine(HideInfoAnimation());
     }
 
     private IEnumerator ShowInfoAnimation()

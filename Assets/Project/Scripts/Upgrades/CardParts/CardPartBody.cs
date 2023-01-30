@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,10 +7,15 @@ using UnityEngine.UI;
 
 public class CardPartBody : CardPart
 {
+    [Header("CARD INFO")]
+    [SerializeField] protected CanvasGroup[] cgsInfoHide;
+
+    [Header("Base card info")]
+    [SerializeField] private TextMeshProUGUI bodyNameText;
+    [SerializeField] private TextMeshProUGUI bodyDescriptionText;
+
+
     [Header("CANVAS COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI playCostText;
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private TextMeshProUGUI cadenceText;
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
 
@@ -23,44 +29,116 @@ public class CardPartBody : CardPart
 
 
 
-    private void OnValidate()
-    {
-        InitTexts();
-    }
 
     private void Awake()
     {
         //bodyMaterial = bodyMeshRenderer.material;
         bodyMaterial = new Material(bodyImage.material);
         bodyImage.material = bodyMaterial;
+
+        SetupCardInfo();
     }
 
     public override void Init()
     {
-        InitTexts();
-
         bodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
         //bodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color     ???? WHAT TO DO ????
 
         damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
         cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
+
+        InitInfoVisuals();
     }
 
-    private void InitTexts()
+
+    protected override void InitInfoVisuals()
     {
-        playCostText.text = turretPartBody.cost.ToString();
-        damageText.text = turretPartBody.Damage.ToString();
-        cadenceText.text = turretPartBody.Cadence.ToString();
+        bodyNameText.text = '/' + turretPartBody.partName;
+        bodyDescriptionText.text = turretPartBody.abilityDescription;
+    }
+    protected override void SetupCardInfo()
+    {
+        // general
+        infoInterface.SetActive(true);
+        isShowInfoAnimationPlaying = false;
+
+        // body
+        bodyNameText.alpha = 0;
+        bodyDescriptionText.alpha = 0;
     }
 
     public override void ShowInfo()
     {
         base.ShowInfo();
-        interfaceCanvasGroup.alpha = 0f;
+
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
+
     public override void HideInfo()
     {
+        if (isHideInfoAnimationPlaying) return;
+
         base.HideInfo();
-        interfaceCanvasGroup.alpha = 1f;
+
+        if (isShowInfoAnimationPlaying)
+        {
+            StopCoroutine(showInfoCoroutine);
+        }
+
+        StartCoroutine(HideInfoAnimation());
+    }
+
+    private IEnumerator ShowInfoAnimation()
+    {
+        canInfoInteract = false;
+        isShowInfoAnimationPlaying = true;
+
+        // hide generics
+        float t = 0.05f;
+        for (int i = 0; i < cgsInfoHide.Length; ++i)
+        {
+            cgsInfoHide[i].DOFade(0f, t);
+            yield return new WaitForSeconds(t);
+        }
+
+
+        float t2 = 0.1f;
+
+        // show body text
+        bodyNameText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+        bodyDescriptionText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+
+        canInfoInteract = true;
+        isShowInfoAnimationPlaying = false;
+    }
+
+    private IEnumerator HideInfoAnimation()
+    {
+        canInfoInteract = false;
+
+
+        float t2 = 0.1f;
+
+        // hide body text
+        bodyDescriptionText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+        bodyNameText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+
+
+        // show generics
+        float t = 0.05f;
+
+        for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
+        {
+            cgsInfoHide[i].DOFade(1f, t);
+            yield return new WaitForSeconds(t);
+        }
+
+
+        canInfoInteract = true;
     }
 }
