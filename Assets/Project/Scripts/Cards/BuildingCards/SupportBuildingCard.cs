@@ -97,6 +97,9 @@ public class SupportBuildingCard : BuildingCard
 
         abilityImage.sprite = turretPartBase.abilitySprite;
         abilityImage.color = turretPartBase.spriteColor;
+
+        // Ability Info
+        InitInfoVisals();
     }
     public void SetNewPartBase(TurretPartBase newPartBase)
     {
@@ -106,6 +109,10 @@ public class SupportBuildingCard : BuildingCard
         Init();
     }
 
+    protected override void InitInfoVisals()
+    {
+        // TODO
+    }
     public override void ShowInfo()
     {
         base.ShowInfo();

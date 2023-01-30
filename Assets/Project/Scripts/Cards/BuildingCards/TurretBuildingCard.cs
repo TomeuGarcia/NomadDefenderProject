@@ -164,6 +164,9 @@ public class TurretBuildingCard : BuildingCard
         else {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
+
+        // Ability Info
+        InitInfoVisals();
     }
 
     protected override void InitStatsFromTurretParts()
@@ -229,6 +232,14 @@ public class TurretBuildingCard : BuildingCard
     }
 
 
+    protected override void InitInfoVisals()
+    {
+        attackNameText.text = '/' + turretCardParts.turretPartAttack.abilityName;
+        attackDescriptionText.text = turretCardParts.turretPartAttack.abilityDescription;
+
+        baseNameText.text = '/' + turretCardParts.turretPassiveBase.passive.abilityName;
+        baseDescriptionText.text = turretCardParts.turretPassiveBase.passive.abilityDescription;
+    }
 
     public override void ShowInfo()
     {
@@ -287,25 +298,29 @@ public class TurretBuildingCard : BuildingCard
 
         float t2 = 0.1f;
 
-        // show attack
+
+        // show attack icon
         defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
         yield return new WaitForSeconds(t2);
 
-        attackNameText.DOFade(1f, t2);
-        yield return new WaitForSeconds(t2);
-
-        attackDescriptionText.DOFade(1f, t2);
-        yield return new WaitForSeconds(t2);
-
-        // show base
+        // show base icon
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
             yield return new WaitForSeconds(t2);
+        }
 
+        // show attack text
+        attackNameText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+        attackDescriptionText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+        // show base text
+        if (hasBasePassiveAbility)
+        {
             baseNameText.DOFade(1f, t2);
             yield return new WaitForSeconds(t2);
-
             baseDescriptionText.DOFade(1f, t2);
             yield return new WaitForSeconds(t2);
         }
@@ -322,26 +337,30 @@ public class TurretBuildingCard : BuildingCard
 
         float t2 = 0.1f;
 
-        // hide base
+        // hide base text
         if (hasBasePassiveAbility)
         {
             baseDescriptionText.DOFade(0f, t2);
             yield return new WaitForSeconds(t2);
-
             baseNameText.DOFade(0f, t2);
             yield return new WaitForSeconds(t2);
+        }
 
-            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
-            yield return new WaitForSeconds(t2);
-        }        
-
-        // hide attack
+        // hide attack text
         attackDescriptionText.DOFade(0f, t2);
         yield return new WaitForSeconds(t2);
-
         attackNameText.DOFade(0f, t2);
         yield return new WaitForSeconds(t2);
 
+
+        // hide base icon
+        if (hasBasePassiveAbility)
+        {
+            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+        }
+
+        // hide attack icon
         defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
         yield return new WaitForSeconds(t2);
 

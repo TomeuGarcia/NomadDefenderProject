@@ -23,6 +23,12 @@ public class TurretPartBase : ScriptableObject
     [SerializeField] public Sprite abilitySprite;
     [SerializeField] public Color32 spriteColor;
 
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string abilityName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription;
+
 
     public int Range { get => rangePerLvl[rangeLvl-1]; }
 

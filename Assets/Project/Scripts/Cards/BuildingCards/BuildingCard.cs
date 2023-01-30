@@ -296,6 +296,7 @@ public abstract class BuildingCard : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+    protected abstract void InitInfoVisals();
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
@@ -306,5 +307,6 @@ public abstract class BuildingCard : MonoBehaviour
         isShowingInfo = false;
         Debug.Log("HideInfo");
     }
+
 
 }
