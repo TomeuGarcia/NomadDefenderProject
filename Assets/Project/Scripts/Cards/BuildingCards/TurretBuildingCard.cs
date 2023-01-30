@@ -286,6 +286,7 @@ public class TurretBuildingCard : BuildingCard
         for (int i = 0; i < cgsInfoHide.Length; ++i)            
         {
             cgsInfoHide[i].DOFade(0f, t);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t);
         }
 
@@ -295,27 +296,33 @@ public class TurretBuildingCard : BuildingCard
 
         // show attack icon
         defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t2);
 
         // show base icon
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
             yield return new WaitForSeconds(t2);
         }
 
         // show attack text
         attackNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         attackDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
         // show base text
         if (hasBasePassiveAbility)
         {
             baseNameText.DOFade(1f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t2);
             baseDescriptionText.DOFade(1f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t2);
         }
 
@@ -335,15 +342,19 @@ public class TurretBuildingCard : BuildingCard
         if (hasBasePassiveAbility)
         {
             baseDescriptionText.DOFade(0f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t2);
             baseNameText.DOFade(0f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t2);
         }
 
         // hide attack text
         attackDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         attackNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -351,11 +362,13 @@ public class TurretBuildingCard : BuildingCard
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
             yield return new WaitForSeconds(t2);
         }
 
         // hide attack icon
         defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -365,6 +378,7 @@ public class TurretBuildingCard : BuildingCard
         for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t);
         }
 

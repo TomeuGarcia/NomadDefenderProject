@@ -29,6 +29,11 @@ public class GameAudioManager : MonoBehaviour
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
 
+    [Header("CARDS INFO")]
+    [SerializeField] private AudioSource cardsInfoAudioSource;
+    [SerializeField] private AudioClip cardInfoElement;
+    [SerializeField] private AudioClip cardInfoElementMoves;
+
     [Header("UPGRADES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
@@ -194,6 +199,42 @@ public class GameAudioManager : MonoBehaviour
         cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
         cardsAudioSource.Play();
+    }
+
+
+    // Cards Info
+    public void PlayCardInfoShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
+    }
+
+    public void PlayCardInfoHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
     }
 
 
