@@ -66,6 +66,9 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
+    protected Coroutine showInfoCoroutine = null;
+    protected bool isShowInfoAnimationPlaying = false;
+    protected bool isHideInfoAnimationPlaying = false;
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
@@ -296,6 +299,8 @@ public abstract class BuildingCard : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+    protected abstract void InitInfoVisuals();
+    protected abstract void SetupCardInfo();
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
@@ -306,5 +311,6 @@ public abstract class BuildingCard : MonoBehaviour
         isShowingInfo = false;
         Debug.Log("HideInfo");
     }
+
 
 }

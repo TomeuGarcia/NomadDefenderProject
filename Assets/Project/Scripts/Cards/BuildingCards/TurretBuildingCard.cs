@@ -99,10 +99,6 @@ public class TurretBuildingCard : BuildingCard
 
     bool hasBasePassiveAbility = false;
 
-    Coroutine showInfoCoroutine = null;
-    bool isShowInfoAnimationPlaying = false;
-    bool isHideInfoAnimationPlaying = false;
-
 
 
 
@@ -164,6 +160,9 @@ public class TurretBuildingCard : BuildingCard
         else {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
+
+        // Ability Info
+        InitInfoVisuals();
     }
 
     protected override void InitStatsFromTurretParts()
@@ -229,30 +228,15 @@ public class TurretBuildingCard : BuildingCard
     }
 
 
-
-    public override void ShowInfo()
+    protected override void InitInfoVisuals()
     {
-        base.ShowInfo();
-        //interfaceCanvasGroup.alpha = 0f;
+        attackNameText.text = '/' + turretCardParts.turretPartAttack.abilityName;
+        attackDescriptionText.text = turretCardParts.turretPartAttack.abilityDescription;
 
-        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
+        baseNameText.text = '/' + turretCardParts.turretPassiveBase.passive.abilityName;
+        baseDescriptionText.text = turretCardParts.turretPassiveBase.passive.abilityDescription;
     }
-    public override void HideInfo()
-    {
-        if (isHideInfoAnimationPlaying) return;
-
-        base.HideInfo();
-        //interfaceCanvasGroup.alpha = 1f;        
-
-        if (isShowInfoAnimationPlaying)
-        {
-            StopCoroutine(showInfoCoroutine);
-        }        
-
-        StartCoroutine(HideInfoAnimation());
-    }
-
-    private void SetupCardInfo()
+    protected override void SetupCardInfo()
     {
         // general
         infoInterface.SetActive(true);
@@ -271,6 +255,27 @@ public class TurretBuildingCard : BuildingCard
         baseDescriptionText.alpha = 0;
     }
 
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
+    }
+
+    public override void HideInfo()
+    {
+        if (isHideInfoAnimationPlaying) return;
+
+        base.HideInfo();
+
+        if (isShowInfoAnimationPlaying)
+        {
+            StopCoroutine(showInfoCoroutine);
+        }        
+
+        StartCoroutine(HideInfoAnimation());
+    }
+
     private IEnumerator ShowInfoAnimation()
     {
         canInfoInteract = false;
@@ -287,25 +292,29 @@ public class TurretBuildingCard : BuildingCard
 
         float t2 = 0.1f;
 
-        // show attack
+
+        // show attack icon
         defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
         yield return new WaitForSeconds(t2);
 
-        attackNameText.DOFade(1f, t2);
-        yield return new WaitForSeconds(t2);
-
-        attackDescriptionText.DOFade(1f, t2);
-        yield return new WaitForSeconds(t2);
-
-        // show base
+        // show base icon
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
             yield return new WaitForSeconds(t2);
+        }
 
+        // show attack text
+        attackNameText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+        attackDescriptionText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+        // show base text
+        if (hasBasePassiveAbility)
+        {
             baseNameText.DOFade(1f, t2);
             yield return new WaitForSeconds(t2);
-
             baseDescriptionText.DOFade(1f, t2);
             yield return new WaitForSeconds(t2);
         }
@@ -322,26 +331,30 @@ public class TurretBuildingCard : BuildingCard
 
         float t2 = 0.1f;
 
-        // hide base
+        // hide base text
         if (hasBasePassiveAbility)
         {
             baseDescriptionText.DOFade(0f, t2);
             yield return new WaitForSeconds(t2);
-
             baseNameText.DOFade(0f, t2);
             yield return new WaitForSeconds(t2);
+        }
 
-            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
-            yield return new WaitForSeconds(t2);
-        }        
-
-        // hide attack
+        // hide attack text
         attackDescriptionText.DOFade(0f, t2);
         yield return new WaitForSeconds(t2);
-
         attackNameText.DOFade(0f, t2);
         yield return new WaitForSeconds(t2);
 
+
+        // hide base icon
+        if (hasBasePassiveAbility)
+        {
+            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+        }
+
+        // hide attack icon
         defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
         yield return new WaitForSeconds(t2);
 

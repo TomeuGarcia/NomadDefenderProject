@@ -16,6 +16,11 @@ public class TurretPartAttack : ScriptableObject
     [SerializeField] public Texture2D materialTexture;
     [SerializeField] public Color materialColor;
 
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string abilityName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription;
 
     public void InitAsCopy(TurretPartAttack other)
     {

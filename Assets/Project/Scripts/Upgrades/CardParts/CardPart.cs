@@ -5,7 +5,7 @@ using static Building;
 using DG.Tweening;
 using static BuildingCard;
 
-public class CardPart : MonoBehaviour
+public abstract class CardPart : MonoBehaviour
 {
     public static float halfWidth = 0.7f;
 
@@ -18,6 +18,13 @@ public class CardPart : MonoBehaviour
 
     [Header("VISUALS")]
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
+
+    [Header("CARD INFO")]
+    [SerializeField] protected GameObject infoInterface;
+    protected Coroutine showInfoCoroutine = null;
+    protected bool isShowInfoAnimationPlaying = false;
+    protected bool isHideInfoAnimationPlaying = false;
+
 
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
@@ -115,6 +122,8 @@ public class CardPart : MonoBehaviour
     }
 
 
+    protected abstract void InitInfoVisuals();
+    protected abstract void SetupCardInfo();
     public virtual void ShowInfo()
     {
         isShowingInfo = true;

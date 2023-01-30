@@ -25,6 +25,7 @@ public class TurretPassiveBase : ScriptableObject
     [Header("VISUALS")]
     public VisualInformation visualInformation;
 
+
     public void InitAsCopy(TurretPassiveBase other)
     {
         this.cost = other.cost;
