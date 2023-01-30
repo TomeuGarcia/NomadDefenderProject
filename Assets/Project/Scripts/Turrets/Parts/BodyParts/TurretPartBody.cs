@@ -30,6 +30,12 @@ public class TurretPartBody : ScriptableObject
     [Header("VISUALS")]
     [SerializeField] public Texture2D materialTextureMap;
 
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string partName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
+
 
     public int Damage { get => damagePerLvl[damageLvl-1]; }
     public float Cadence { get => cadencePerLvl[cadenceLvl-1]; }

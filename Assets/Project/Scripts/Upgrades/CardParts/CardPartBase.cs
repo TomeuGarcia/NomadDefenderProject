@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,9 +8,19 @@ using static TurretBuildingCard;
 
 public class CardPartBase : CardPart
 {
+    [Header("CARD INFO")]
+    [SerializeField] protected CanvasGroup[] cgsInfoHide;
+
+    [Header("Base card info")]
+    [SerializeField] private RectTransform infoShownBaseIcon;
+    [SerializeField] private RectTransform defaultBaseIcon; // used as Hidden info
+    private Vector3 infoShownBaseIconPos;
+    private Vector3 infoHiddenBaseIconPos;
+    [SerializeField] private TextMeshProUGUI baseNameText;
+    [SerializeField] private TextMeshProUGUI baseDescriptionText;
+
+
     [Header("CANVAS COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI playCostText;
-    [SerializeField] private TextMeshProUGUI rangeText;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
 
@@ -18,29 +29,34 @@ public class CardPartBase : CardPart
     [SerializeField] public TurretPassiveBase turretPassiveBase;
 
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer baseMeshRenderer;
+    //[SerializeField] private MeshRenderer baseMeshRenderer;
+    [SerializeField] private Image baseImage;
     private Material baseMaterial;
 
-    private void OnValidate()
-    {
-        InitTexts();
-    }
+
+    private bool hasBasePassiveAbility;
+
+
 
     private void Awake()
     {
-        baseMaterial = baseMeshRenderer.material;
+        //baseMaterial = baseMeshRenderer.material;
+        baseMaterial = new Material(baseImage.material);
+        baseImage.material = baseMaterial;
+
+        SetupCardInfo();
     }
 
     public override void Init()
     {
-        InitTexts();
-
         baseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         baseMaterial.SetColor("_Color", turretPartBase.materialColor);
 
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
 
-        if (turretPassiveBase.passive.GetType() != typeof(BaseNullPassive))
+
+        hasBasePassiveAbility = turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
+        if (hasBasePassiveAbility)
         {
             basePassiveImage.transform.parent.gameObject.SetActive(true);
 
@@ -51,13 +67,117 @@ public class CardPartBase : CardPart
         {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
+
+        InitInfoVisuals();
     }
 
-    private void InitTexts()
+
+    protected override void InitInfoVisuals()
     {
-        playCostText.text = turretPartBase.cost.ToString();
-        rangeText.text = turretPartBase.Range.ToString();
-
-        //TODO : set passive texts
+        baseNameText.text = '/' + turretPassiveBase.passive.abilityName;
+        baseDescriptionText.text = turretPassiveBase.passive.abilityDescription;
     }
+    protected override void SetupCardInfo()
+    {
+        // general
+        infoInterface.SetActive(true);
+        isShowInfoAnimationPlaying = false;
+
+        // base
+        infoShownBaseIconPos = infoShownBaseIcon.localPosition;
+        infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
+        baseNameText.alpha = 0;
+        baseDescriptionText.alpha = 0;
+    }
+
+    public override void ShowInfo()
+    {
+        base.ShowInfo();
+
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
+    }
+
+    public override void HideInfo()
+    {
+        if (isHideInfoAnimationPlaying) return;
+
+        base.HideInfo();
+
+        if (isShowInfoAnimationPlaying)
+        {
+            StopCoroutine(showInfoCoroutine);
+        }
+
+        StartCoroutine(HideInfoAnimation());
+    }
+
+    private IEnumerator ShowInfoAnimation()
+    {
+        canInfoInteract = false;
+        isShowInfoAnimationPlaying = true;
+
+        // hide generics
+        float t = 0.05f;
+        for (int i = 0; i < cgsInfoHide.Length; ++i)
+        {
+            cgsInfoHide[i].DOFade(0f, t);
+            yield return new WaitForSeconds(t);
+        }
+
+
+        float t2 = 0.1f;
+
+        // show base icon
+        if (hasBasePassiveAbility)
+        {
+            defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+        }
+
+        // show base text
+        baseNameText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+        baseDescriptionText.DOFade(1f, t2);
+        yield return new WaitForSeconds(t2);
+
+
+        canInfoInteract = true;
+        isShowInfoAnimationPlaying = false;
+    }
+
+    private IEnumerator HideInfoAnimation()
+    {
+        canInfoInteract = false;
+
+
+        float t2 = 0.1f;
+
+        // hide base text
+        baseDescriptionText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+        baseNameText.DOFade(0f, t2);
+        yield return new WaitForSeconds(t2);
+
+
+        // hide base icon
+        if (hasBasePassiveAbility)
+        {
+            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            yield return new WaitForSeconds(t2);
+        }
+
+
+        // show generics
+        float t = 0.05f;
+
+        for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
+        {
+            cgsInfoHide[i].DOFade(1f, t);
+            yield return new WaitForSeconds(t);
+        }
+
+
+        canInfoInteract = true;
+    }
+
 }

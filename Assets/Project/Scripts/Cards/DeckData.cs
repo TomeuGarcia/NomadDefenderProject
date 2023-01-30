@@ -34,7 +34,7 @@ public class DeckData : ScriptableObject
             turretPassiveBase.InitAsCopy(otherComponents.turretPassiveBase);
 
             starterTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(turretPartAttack, turretPartBody,
-                                                                                    turretPartBase, turretPassiveBase));
+                                                                                    turretPartBase, turretPassiveBase, otherComponents.cardCost));
         }
 
         starterSupportCardsComponents = new List<SupportBuildingCard.SupportCardParts>();
@@ -45,7 +45,7 @@ public class DeckData : ScriptableObject
             TurretPartBase supportPartBase = ScriptableObject.CreateInstance("TurretPartBase") as TurretPartBase;
             supportPartBase.InitAsCopy(otherComponents.turretPartBase);
 
-            starterSupportCardsComponents.Add(new SupportBuildingCard.SupportCardParts(supportPartBase));
+            starterSupportCardsComponents.Add(new SupportBuildingCard.SupportCardParts(supportPartBase, otherComponents.cardCost));
         }
     }
 
