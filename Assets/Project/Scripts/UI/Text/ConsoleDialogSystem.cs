@@ -68,7 +68,7 @@ public class ConsoleDialogSystem : MonoBehaviour
         decoder.SetTextComponent(consoleLines[0].GetComponent<TMP_Text>());
         decoder.ResetDecoder();
         decoder.SetTextStrings(lineToPrint);
-        decoder.Activate();
+        decoder.Activate(textLine.textType);
 
         if(clearWithTime)
         {

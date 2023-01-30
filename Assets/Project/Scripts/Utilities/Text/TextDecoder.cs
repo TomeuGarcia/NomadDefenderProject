@@ -8,6 +8,7 @@ using UnityEngine.TextCore.Text;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using DG.Tweening;
+using static TurretPartBody;
 
 public class TextDecoder : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class TextDecoder : MonoBehaviour
     private static string digits_s = "0123456789";
     private static string symbols_s = "#@$^*?~&";
 
+    private TextTypes textType = 0;
+
     [Header("PARAMETERS")]
     public DecodingParameters decodingParameters;
 
@@ -42,6 +45,12 @@ public class TextDecoder : MonoBehaviour
         {
             textStrings.Insert(0, textComponent.text);
         }
+    }
+
+    public void Activate(TextTypes newTextType)
+    {
+        textType = newTextType;
+        Activate();
     }
 
     public void Activate()
@@ -127,6 +136,8 @@ public class TextDecoder : MonoBehaviour
                 } while (textStrings[currentIndexLine][indexChar] != '>');
             }
             //
+
+            GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
 
             indexChar++;
             yield return new WaitForSeconds(decodingParameters.updateCharIndexTime);
