@@ -98,6 +98,7 @@ public class CardPartBody : CardPart
         for (int i = 0; i < cgsInfoHide.Length; ++i)
         {
             cgsInfoHide[i].DOFade(0f, t);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t);
         }
 
@@ -106,8 +107,10 @@ public class CardPartBody : CardPart
 
         // show body text
         bodyNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         bodyDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
 
@@ -124,8 +127,10 @@ public class CardPartBody : CardPart
 
         // hide body text
         bodyDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         bodyNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -135,6 +140,7 @@ public class CardPartBody : CardPart
         for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t);
         }
 

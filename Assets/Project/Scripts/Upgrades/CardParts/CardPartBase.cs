@@ -121,6 +121,7 @@ public class CardPartBase : CardPart
         for (int i = 0; i < cgsInfoHide.Length; ++i)
         {
             cgsInfoHide[i].DOFade(0f, t);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t);
         }
 
@@ -131,13 +132,16 @@ public class CardPartBase : CardPart
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
             yield return new WaitForSeconds(t2);
         }
 
         // show base text
         baseNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         baseDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
 
@@ -154,8 +158,10 @@ public class CardPartBase : CardPart
 
         // hide base text
         baseDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         baseNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -163,6 +169,7 @@ public class CardPartBase : CardPart
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
             yield return new WaitForSeconds(t2);
         }
 
@@ -173,6 +180,7 @@ public class CardPartBase : CardPart
         for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t);
         }
 
