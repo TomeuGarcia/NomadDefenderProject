@@ -16,6 +16,10 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip screenShut;
     //[SerializeField] private AudioClip screenOpen;
 
+    [Header("TEXT")]
+    [SerializeField] private AudioSource textConsoleTypingSource;
+    [SerializeField] private AudioClip[] textConsoleTyping;
+
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
@@ -128,6 +132,19 @@ public class GameAudioManager : MonoBehaviour
         uiAudioSource.pitch = Random.Range(1.0f, 1.05f);
 
         uiAudioSource.Play();
+    }
+
+
+    // Text
+    public void PlayConsoleTyping(int textType)
+    {
+        if(textConsoleTyping.Length <= textType)
+            textType = 0;
+
+        textConsoleTypingSource.clip = textConsoleTyping[textType];
+        textConsoleTypingSource.pitch = Random.Range(0.9f, 1.1f);
+
+        textConsoleTypingSource.Play();
     }
 
 
