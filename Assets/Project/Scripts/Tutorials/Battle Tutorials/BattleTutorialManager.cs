@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleTutorialManager : MonoBehaviour
@@ -39,12 +40,14 @@ public class BattleTutorialManager : MonoBehaviour
 
         redrawInterface.GetComponent<CanvasGroup>().alpha = 0;
         redrawInterface.SetActive(false);
+
+        StartCoroutine(Tutorial());
     }
 
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(Tutorial());
+        
     }
 
     IEnumerator Tutorial()
@@ -65,16 +68,33 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitUntil(() => Input.GetKeyDown("space") == true);
+        yield return null;
+
+        scriptedSequence.Clear();
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(0.5f);
+
+        //Show Currency
+        currencyBackgroundImg.SetActive(true);
+
+        for(float i = 0.0f; i < 1.0f; i+=0.001f)
+        {
+            currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = i;
+            yield return null;
+        }
+        currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 1.0f;
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine();
         yield return new WaitForSeconds(2.0f);
