@@ -43,9 +43,6 @@ public class HealthSystem
             armor = armor > 0 ? armor : 0;
             InvokeOnArmorUpdated();
             //visuallyDestroyArmor();
-
-            if (remainingDamage > 0)
-                TakeDamage(remainingDamage); 
         }
         else
         {

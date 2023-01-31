@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
     private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
+    [HideInInspector] public int ogCurrencyDrop;
     [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
@@ -52,6 +53,8 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        ogCurrencyDrop = currencyDrop;
+
         ResetStats();
         healthSystem = new HealthSystem((int)health,(int)armor);
         healthHUD.Init(healthSystem);
@@ -97,6 +100,8 @@ public class Enemy : MonoBehaviour
         damage = baseDamage;
         health = baseHealth;
         armor = baseArmor;
+
+        currencyDrop = ogCurrencyDrop;
     }
 
 

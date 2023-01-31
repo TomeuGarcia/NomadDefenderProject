@@ -10,18 +10,29 @@ public class TurretPartBase_Prefab : MonoBehaviour
     private Material[] defaultMaterials;
     protected Material[] previewMaterials;
 
-
-
+    [Header("BASE COLLIDER")]
+    [SerializeField] public BaseCollider baseCollider;
+    [SerializeField] GameObject[] visualUpgrades;
+    private void Awake()
+    {
+        foreach (GameObject go in visualUpgrades)
+        {
+            go.SetActive(false);
+        }
+    }
     virtual public void Init(TurretBuilding turretOwner, float turretRange)
     {
         InitMaterials();
+        
     }
     virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding,float supportRange)
     {
         InitMaterials();
     }
 
-    virtual public void Upgrade(int newStatLevel) { }
+    virtual public void Upgrade(int newStatLevel) {
+        if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+    }
 
     private void InitMaterials()
     {
@@ -49,4 +60,5 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+
 }

@@ -14,6 +14,8 @@ public class OWMapPawn : MonoBehaviour
     private OverworldMapGameManager owMapGameManager;
 
     private Vector3 camDisplacementToNextLevel;
+
+    private Quaternion defaultRotation;
     
 
 
@@ -25,19 +27,33 @@ public class OWMapPawn : MonoBehaviour
         moveTransform.position = GetNodePos(startNode);
         moveTransform.rotation = Quaternion.LookRotation(startNode.Forward, startNode.Up);
 
+        defaultRotation = moveTransform.rotation;
+
         this.camDisplacementToNextLevel = camDisplacementToNextLevel;
     }
 
     public void MoveToNode(OWMap_Node targetNode)
     {
+        if (currentNode == null)
+        {
+            currentNode = targetNode;
+            return;
+        }
+
+
+        Vector3 startFwd = moveTransform.forward;
+        Vector3 endFwd = (targetNode.Position - currentNode.Position).normalized;
+
         currentNode = targetNode;
-        
-        Vector3 targetPos = GetNodePos(targetNode);
+
+        Vector3 targetPos = GetNodePos(currentNode);
         float distance = Vector3.Distance(moveTransform.position, targetPos);
         float duration = distance * 0.5f;
 
-        moveTransform.DOMove(targetPos, duration)
-            .OnComplete(NotifyNodeWasReached);
+        moveTransform.DORotateQuaternion(Quaternion.FromToRotation(startFwd, endFwd), 0.25f)
+            .OnComplete(() => moveTransform.DOMove(targetPos, duration)
+                .OnComplete(() => moveTransform.DORotateQuaternion(defaultRotation, 0.25f)
+                    .OnComplete(NotifyNodeWasReached)));
     }
 
 

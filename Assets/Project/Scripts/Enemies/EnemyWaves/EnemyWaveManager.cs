@@ -21,6 +21,7 @@ public class EnemyWaveManager : MonoBehaviour
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
     public static event EnemyWaveManagerAction OnWaveFinished;
+    public static event EnemyWaveManagerAction OnStartNewWaves;
     
 
 
@@ -108,6 +109,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             ////////
             /// Invoke event  Start new waves here 
+            if (OnStartNewWaves != null) OnStartNewWaves();
             ////////
 
             foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)

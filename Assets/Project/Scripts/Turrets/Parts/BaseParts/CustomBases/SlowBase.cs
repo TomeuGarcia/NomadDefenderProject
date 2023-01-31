@@ -16,6 +16,8 @@ public class SlowBase : TurretPartBase_Prefab
     [SerializeField] private GameObject slowPlane;
     private static Dictionary<Enemy, SlowData> slowedEnemies = new Dictionary<Enemy, SlowData>();
 
+    private Material slowPlaneMaterial;
+
     override public void Init(TurretBuilding turretOwner, float turretRange) 
     {
         base.Init(turretOwner, turretRange);
@@ -32,11 +34,17 @@ public class SlowBase : TurretPartBase_Prefab
         turretOwner.OnEnemyEnterRange += SlowEnemy;
         turretOwner.OnEnemyExitRange += StopEnemySlow;
 
-        slowPlane.transform.localScale = Vector3.one * ((float)supportRange / 10.0f);
+        float planeRange = turretOwner.stats.range * 2 + 1; //only for square
+        float range = turretOwner.stats.range;
+
+        slowPlane.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
+        slowPlaneMaterial = slowPlane.GetComponent<MeshRenderer>().materials[0];
+        slowPlaneMaterial.SetFloat("_TileNum", planeRange);
     }
 
     override public void Upgrade(int newStatnewStatLevel)
     {
+        base.Upgrade(newStatnewStatLevel);
         currentLvl = newStatnewStatLevel;
 
         foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
