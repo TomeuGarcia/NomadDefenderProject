@@ -88,7 +88,7 @@ public class BattleTutorialManager : MonoBehaviour
         //Show Currency
         currencyBackgroundImg.SetActive(true);
 
-        for(float i = 0.0f; i < 1.0f; i+=0.001f)
+        for(float i = 0.0f; i < 1.0f; i+=0.01f)
         {
             currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = i;
             yield return null;
@@ -98,6 +98,98 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();
         yield return new WaitForSeconds(2.0f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => Input.GetKeyDown("space") == true);
+        yield return null;
+
+        //Currency Finished showing
+
+
+        //Starts Cards Tutorial
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        //Finishes Cards Tutorial
+
+
+
+        //Starts Redraw Tutorial
+        scriptedSequence.Clear();
+        yield return new WaitForSeconds(5.0f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(1.0f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(1.0f);
+
+        //Show Redraw
+        redrawInterface.SetActive(true);
+
+        for (float i = 0.0f; i < 1.0f; i += 0.01f)
+        {
+            redrawInterface.GetComponent<CanvasGroup>().alpha = i;
+            yield return null;
+        }
+        redrawInterface.GetComponent<CanvasGroup>().alpha = 1.0f;
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(0.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        //yield return new WaitForSeconds(0.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        //yield return new WaitForSeconds(0.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        //yield return new WaitForSeconds(0.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        //yield return new WaitForSeconds(0.5f);
+
+        //Finishes Redraw Tutorial
+
+
+        //Starts Deck Tutorial
+        yield return new WaitUntil(() =>deckInterface.active == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(0.5f);
+
+        //Finishes Deck Tutorial
+
         //scriptedSequence.Clear();
     }
 
