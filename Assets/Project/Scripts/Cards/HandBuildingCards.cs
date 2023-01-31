@@ -220,7 +220,10 @@ public class HandBuildingCards : MonoBehaviour
 
         if (card.cardLocation != BuildingCard.CardLocation.HAND)
         {
-            card.OnCardHovered += SetHoveredCard;
+            if (!card.AlreadyCanBeHovered)
+            {
+                card.OnCardHovered += SetHoveredCard;
+            }
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
 
@@ -283,6 +286,42 @@ public class HandBuildingCards : MonoBehaviour
         return redrawsLeft;
     }
 
+
+    public void CorrectCardsBeforeAddingCard()
+    {
+        bool corrected = false;
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            if (cards[i].IsRepositioning)
+            {
+                cards[i].ForceEndRepositioning();
+            }
+            else if (cards[i].cardState != BuildingCard.CardStates.STANDARD)
+            {
+                cards[i].ImmediateStandardState();
+                corrected = true;
+
+                if (cards[i].isShowingInfo)
+                {
+                    SetCardHideInfo(cards[i]);
+                }
+            }
+        }
+
+        if (corrected)
+        {
+            //// bellow is copied from SetStandardCard
+            hoveredCard = null;
+
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.OnCardHovered += SetHoveredCard;               
+            }
+            ////
+        }
+
+    }
 
     public void HintedCardWillBeAdded()
     {
@@ -451,7 +490,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = true;
 
-        HandTransform.DOKill();
+        HandTransform.DOComplete();
         HandTransform.DOMove(hiddenHandPosition, 0.1f);
 
 
@@ -463,7 +502,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = false;
 
-        HandTransform.DOKill();
+        HandTransform.DOComplete();
         HandTransform.DOMove(defaultHandPosition, 0.1f);
     }
 

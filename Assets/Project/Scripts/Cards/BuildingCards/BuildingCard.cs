@@ -16,6 +16,7 @@ public abstract class BuildingCard : MonoBehaviour
     public enum CardLocation { NONE, DECK, HAND }
     [HideInInspector] public CardLocation cardLocation = CardLocation.NONE;
     private bool isRepositioning = false;
+    public bool IsRepositioning => isRepositioning;
 
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
@@ -81,6 +82,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
+
+    public bool AlreadyCanBeHovered => OnCardHovered != null;
 
 
     // MonoBehaviour methods
@@ -187,6 +190,7 @@ public abstract class BuildingCard : MonoBehaviour
     public void StartRepositioning(Vector3 finalPosition, float duration)
     {
         isRepositioning = true;
+
         RootCardTransform.DOMove(finalPosition, duration)
             .OnComplete(EndRepositioning);
     }
@@ -194,6 +198,10 @@ public abstract class BuildingCard : MonoBehaviour
     {
         StartCoroutine(ScuffedreinableMouseInteraction()); // not working 
         isRepositioning = false;
+    }
+    public void ForceEndRepositioning()
+    {
+        RootCardTransform.DOComplete(true);
     }
 
     public void ResetCardPosition()
@@ -220,8 +228,9 @@ public abstract class BuildingCard : MonoBehaviour
     public void ImmediateStandardState()
     {
         cardState = CardStates.STANDARD;
+        //CardTransform.DOComplete(true);
         CardTransform.localPosition = local_standardPosition;
-        CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
+        //CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
     public void StandardState(bool repositionColliderOnEnd = false)
     {
