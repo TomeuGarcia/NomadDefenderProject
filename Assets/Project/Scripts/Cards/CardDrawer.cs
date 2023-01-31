@@ -122,6 +122,7 @@ public class CardDrawer : MonoBehaviour
 
     private void AddCardToHand(BuildingCard card)
     {
+        hand.CorrectCardsBeforeAddingCard();
         hand.HintedCardWillBeAdded();
         hand.AddCard(card);
 

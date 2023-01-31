@@ -447,6 +447,7 @@ public class BattleHUD : MonoBehaviour
 
     private float ComputeShownDeckUIy()
     {
-        return hiddenDeckUIy + (50f * ((cardIcons.Count / 5) +1));
+        float yPerLevel = 50f;
+        return hiddenDeckUIy + (yPerLevel * (((cardIcons.Count-1) / 5) +1));
     }
 }
