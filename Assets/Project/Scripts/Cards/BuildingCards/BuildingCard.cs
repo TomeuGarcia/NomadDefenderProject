@@ -32,8 +32,10 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
+    private Vector3 cardColliderOffset;
     [SerializeField] private Transform cardHolder;
-    public Transform CardTransform => transform;
+    public Transform RootCardTransform => transform;
+    public Transform CardTransform => cardHolder;
 
     public const float unhoverTime = 0.05f;
     public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
@@ -152,6 +154,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
+        cardColliderOffset = cardCollider.center;
+
         this.cardBuildingType = cardBuildingType;
         GetMaterialsRefs();
 
@@ -183,7 +187,7 @@ public abstract class BuildingCard : MonoBehaviour
     public void StartRepositioning(Vector3 finalPosition, float duration)
     {
         isRepositioning = true;
-        CardTransform.DOMove(finalPosition, duration)
+        RootCardTransform.DOMove(finalPosition, duration)
             .OnComplete(EndRepositioning);
     }
     private void EndRepositioning()
@@ -219,7 +223,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = local_standardPosition;
         CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
-    public void StandardState()
+    public void StandardState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.STANDARD;
 
@@ -228,7 +232,10 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => {
+                EnableMouseInteraction();
+                if (repositionColliderOnEnd) RepositionColliderToCardTransform();
+            });
     }
 
     public void HoveredState()
@@ -239,7 +246,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
-    public void SelectedState()
+    public void SelectedState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.SELECTED;
 
@@ -248,20 +255,18 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => { EnableMouseInteraction(); 
+                                if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
+            });
     }
 
+
+    public void RepositionColliderToCardTransform()
+    {
+        cardCollider.center = cardColliderOffset + CardTransform.localPosition;
+    }
 
     // CARD MOVEMENT end
-
-    public void normalCollider()
-    {
-        cardCollider.size = new Vector3(1f, 2f, 0.2f);
-    }
-    public void bigCollider()
-    {
-        cardCollider.size = new Vector3(1.3f, 2f, 0.2f);
-    }
 
 
     private void InvokeGetSaved()

@@ -141,7 +141,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -150,7 +150,7 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, i));
         }
         
@@ -200,7 +200,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -209,7 +209,7 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, i));
         }
 
@@ -454,8 +454,6 @@ public class HandBuildingCards : MonoBehaviour
         HandTransform.DOKill();
         HandTransform.DOMove(hiddenHandPosition, 0.1f);
 
-        foreach(BuildingCard card in cards)
-            card.normalCollider();
 
         // Audio
         if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
@@ -467,9 +465,6 @@ public class HandBuildingCards : MonoBehaviour
 
         HandTransform.DOKill();
         HandTransform.DOMove(defaultHandPosition, 0.1f);
-
-        foreach (BuildingCard card in cards)
-            card.bigCollider();
     }
 
 

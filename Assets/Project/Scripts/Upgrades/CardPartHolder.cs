@@ -23,6 +23,8 @@ public class CardPartHolder : MonoBehaviour
 
     private bool canInteract;
 
+    private bool cardWasSelected = false;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
@@ -109,7 +111,8 @@ public class CardPartHolder : MonoBehaviour
 
     private void SetStandardCard(CardPart card)
     {
-        card.StandardState();
+        card.StandardState(cardWasSelected);
+        cardWasSelected = false; // reset
 
         if (card.isShowingInfo)
         {
@@ -128,7 +131,8 @@ public class CardPartHolder : MonoBehaviour
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
-        selectedCardPart.SelectedState();
+        selectedCardPart.SelectedState(true);
+        cardWasSelected = true;
 
         if (selectedCardPart.isShowingInfo)
         {
