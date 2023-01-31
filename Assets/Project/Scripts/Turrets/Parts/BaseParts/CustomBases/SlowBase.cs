@@ -44,6 +44,7 @@ public class SlowBase : TurretPartBase_Prefab
 
     override public void Upgrade(int newStatnewStatLevel)
     {
+        base.Upgrade(newStatnewStatLevel);
         currentLvl = newStatnewStatLevel;
 
         foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
