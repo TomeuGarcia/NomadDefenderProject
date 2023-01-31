@@ -406,17 +406,17 @@ public class BattleHUD : MonoBehaviour
 
 
 
-    public void InitCardIcons(int amount)
+    public void InitDeckCardIcons(int amount)
     {
         cardIcons = new List<Image>(amount);
         for (int i = 0; i< amount; ++i)
         {
-            AddNewCardIcon();
+            AddNewDeckCardIcon();
         }
 
         lastSpriteHasCardIndex = amount - 1;
     }
-    public void AddNewCardIcon()
+    public void AddNewDeckCardIcon()
     {
         Image newCardIcon = Instantiate(referenceCardIconImage);
         newCardIcon.gameObject.SetActive(true);
@@ -426,20 +426,20 @@ public class BattleHUD : MonoBehaviour
         newCardIcon.sprite = spriteHasCard;
     }
 
-    public void SubtractHasCardIcon()
+    public void SubtractHasDeckCardIcon()
     {
         if (lastSpriteHasCardIndex < 0) return;
 
         cardIcons[lastSpriteHasCardIndex].sprite = spriteNoCard;
         --lastSpriteHasCardIndex;
     }
-    public void AddHasCardIcon()
+    public void AddHasDeckCardIcon()
     {
         ++lastSpriteHasCardIndex;
 
         if (lastSpriteHasCardIndex >= cardIcons.Count)
         {
-            AddNewCardIcon();
+            AddNewDeckCardIcon();
         }
 
         cardIcons[lastSpriteHasCardIndex].sprite = spriteHasCard;

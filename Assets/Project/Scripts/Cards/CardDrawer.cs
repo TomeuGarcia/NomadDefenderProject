@@ -53,7 +53,7 @@ public class CardDrawer : MonoBehaviour
     {
         redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
         deck.Init();
-        battleHUD.InitCardIcons(deck.NumCards);
+        battleHUD.InitDeckCardIcons(deck.NumCards);
 
         DrawStartHand();
 
@@ -125,7 +125,7 @@ public class CardDrawer : MonoBehaviour
         hand.HintedCardWillBeAdded();
         hand.AddCard(card);
 
-        battleHUD.SubtractHasCardIcon();
+        battleHUD.SubtractHasDeckCardIcon();
     }
 
     private void TryHideDeckHUD()
@@ -173,7 +173,7 @@ public class CardDrawer : MonoBehaviour
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
 
-        battleHUD.AddHasCardIcon();
+        battleHUD.AddHasDeckCardIcon();
     }
 
     /*private void StartDrawOverTime()
