@@ -212,6 +212,8 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
 
+        selectedCard.IncrementCardLevel(1);
+
         switch (partType)
         {
             case PartType.ATTACK:

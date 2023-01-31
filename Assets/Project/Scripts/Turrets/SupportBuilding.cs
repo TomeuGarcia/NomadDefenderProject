@@ -65,9 +65,9 @@ public class SupportBuilding : RangeBuilding
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
         basePart.Upgrade(newStatLevel);
+
+        if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
-
-
     }
 
     protected override void DisableFunctionality()

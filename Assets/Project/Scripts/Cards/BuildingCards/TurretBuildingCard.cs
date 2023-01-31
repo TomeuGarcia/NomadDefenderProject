@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static BuildingCard;
 
 public class TurretBuildingCard : BuildingCard
 {
     [System.Serializable]
     public class TurretCardParts
     {
-        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+        public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
                TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
         {
             this.turretPartAttack = turretPartAttack;
@@ -19,9 +18,10 @@ public class TurretBuildingCard : BuildingCard
             this.turretPartBase = turretPartBase;
             this.turretPassiveBase = turretPassiveBase;
             this.cardCost = cardCost;
+            this.cardLevel = cardLevel;
         }
 
-        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+        public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
                TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
         {
             this.turretPartAttack = turretPartAttack;
@@ -29,6 +29,7 @@ public class TurretBuildingCard : BuildingCard
             this.turretPartBase = turretPartBase;
             this.turretPassiveBase = turretPassiveBase;
             this.cardCost = GetCostCombinedParts();
+            this.cardLevel = cardLevel;
         }
 
         public TurretCardParts(TurretCardParts other)
@@ -38,6 +39,7 @@ public class TurretBuildingCard : BuildingCard
             this.turretPartBase = other.turretPartBase;
             this.turretPassiveBase = other.turretPassiveBase;
             this.cardCost = other.cardCost;
+            this.cardLevel = other.cardLevel;
         }
 
         public TurretPartAttack turretPartAttack;
@@ -45,6 +47,7 @@ public class TurretBuildingCard : BuildingCard
         public TurretPartBase turretPartBase;
         public TurretPassiveBase turretPassiveBase;
         public int cardCost;
+        [Range(1, 3)] public int cardLevel = 1;
 
         public int GetCostCombinedParts()
         {
@@ -91,11 +94,13 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image baseImage;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
 
-
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
+
+    [SerializeField] private TextMeshProUGUI cardLevelText;
+    private const int MAX_CARD_LEVEL = 3;
 
     bool hasBasePassiveAbility = false;
 
@@ -163,6 +168,9 @@ public class TurretBuildingCard : BuildingCard
 
         // Ability Info
         InitInfoVisuals();
+
+        // Level
+        UpdateCardLevelText();
     }
 
     protected override void InitStatsFromTurretParts()
@@ -386,5 +394,13 @@ public class TurretBuildingCard : BuildingCard
         canInfoInteract = true;
     }
 
-
+    public void IncrementCardLevel(int levelIncrement)
+    {
+        turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, MAX_CARD_LEVEL);
+    }
+    private void UpdateCardLevelText()
+    {
+        int level = turretCardParts.cardLevel;
+        cardLevelText.text = level == MAX_CARD_LEVEL ? "MAX" : "lvl " + level.ToString();
+    }
 }

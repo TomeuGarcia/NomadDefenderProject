@@ -62,7 +62,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(attacks[i], bodies[i], bases[i], passives[i]);
+            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(1, attacks[i], bodies[i], bases[i], passives[i]);
             turretCard.ResetParts(cardParts);
 
             cards[i] = turretCard;

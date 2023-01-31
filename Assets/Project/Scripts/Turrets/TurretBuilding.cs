@@ -32,6 +32,9 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+    public int CardLevel { get; private set; }
+
+
     void Awake()
     {
         AwakeInit();
@@ -69,7 +72,9 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
-        
+
+        CardLevel = turretCardParts.cardLevel;
+
         InitStats(turretStats);
         bodyType = turretCardParts.turretPartBody.bodyType;
 
