@@ -33,7 +33,7 @@ public class DeckData : ScriptableObject
             TurretPassiveBase turretPassiveBase = ScriptableObject.CreateInstance("TurretPassiveBase") as TurretPassiveBase;
             turretPassiveBase.InitAsCopy(otherComponents.turretPassiveBase);
 
-            starterTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(turretPartAttack, turretPartBody,
+            starterTurretCardsComponents.Add(new TurretBuildingCard.TurretCardParts(otherComponents.cardLevel, turretPartAttack, turretPartBody,
                                                                                     turretPartBase, turretPassiveBase, otherComponents.cardCost));
         }
 

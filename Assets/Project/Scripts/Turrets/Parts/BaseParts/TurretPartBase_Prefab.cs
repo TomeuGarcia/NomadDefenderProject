@@ -30,8 +30,9 @@ public class TurretPartBase_Prefab : MonoBehaviour
         InitMaterials();
     }
 
-    virtual public void Upgrade(int newStatLevel) {
-        if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+    virtual public void Upgrade(int newStatLevel) 
+    {
+        if (newStatLevel < visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
     }
 
     private void InitMaterials()
