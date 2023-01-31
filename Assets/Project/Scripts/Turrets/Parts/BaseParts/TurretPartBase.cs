@@ -54,6 +54,9 @@ public class TurretPartBase : ScriptableObject
         this.materialColor = other.materialColor;
         this.abilitySprite = other.abilitySprite;
         this.spriteColor = other.spriteColor;
+
+        this.abilityName = other.abilityName;
+        this.abilityDescription = other.abilityDescription;
     }
 
 }
