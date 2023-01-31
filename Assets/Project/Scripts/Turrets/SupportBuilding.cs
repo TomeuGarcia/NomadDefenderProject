@@ -12,8 +12,8 @@ public class SupportBuilding : RangeBuilding
 
     [HideInInspector] public SupportBuildingStats stats;
 
-        
 
+    [SerializeField]GameObject[] visualUpgrades;
     [Header("HOLDERS")]
     [SerializeField] protected Transform baseHolder;
 
@@ -23,6 +23,11 @@ public class SupportBuilding : RangeBuilding
     void Awake()
     {
         AwakeInit();
+
+        foreach(GameObject go in visualUpgrades)
+        {
+            go.SetActive(false);
+        }
     }
     protected override void AwakeInit()
     {
@@ -60,6 +65,9 @@ public class SupportBuilding : RangeBuilding
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
         basePart.Upgrade(newStatLevel);
+        if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+
+
     }
 
     protected override void DisableFunctionality()
