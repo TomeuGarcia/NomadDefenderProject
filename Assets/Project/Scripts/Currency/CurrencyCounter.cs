@@ -93,7 +93,7 @@ public class CurrencyCounter : MonoBehaviour
             --initialCurrencyCount;
             --remainingAmountToSubtract;
             UpdateCurrencyCountText(initialCurrencyCount);
-            yield return new WaitForSeconds(delay);
+            yield return null;
         }
 
         isSubtracting = false;
@@ -123,14 +123,14 @@ public class CurrencyCounter : MonoBehaviour
 
         // Animations
         addedCurrencyText.transform.rotation = Quaternion.identity;
-        addedCurrencyText.transform.DOPunchRotation(Vector3.forward * 25f, 0.5f);
+        addedCurrencyText.transform.DOPunchRotation(Vector3.forward * 25f, 0.15f);
         //addedCurrencyText.transform.DOLocalMove(Vector3.up, 1.5f);
 
-        currencyCountTextHolder.DOPunchScale(Vector3.one * 0.8f, 1f, 4);
-        yield return new WaitForSeconds(0.5f);
+        currencyCountTextHolder.DOPunchScale(Vector3.one * 0.8f, 0.25f, 4);
+        yield return new WaitForSeconds(0.25f);
 
         addedCurrencyText.DOColor(endColorAddedCurrencyText, 1f);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.gameObject.SetActive(false);
     }

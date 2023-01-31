@@ -1,8 +1,8 @@
 using UnityEngine;
 using TMPro;
-using static BuildingCard;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.UI;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -32,13 +32,14 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
+    private Vector3 cardColliderOffset;
     [SerializeField] private Transform cardHolder;
-    public Transform CardTransform => transform;
+    public Transform RootCardTransform => transform;
+    public Transform CardTransform => cardHolder;
 
     public const float unhoverTime = 0.05f;
     public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
     public const float selectedTime = 0.3f;
-
 
     private Vector3 initialPosition;
     private Vector3 standardPosition;
@@ -57,15 +58,26 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
+    [HideInInspector] public bool isShowingInfo = false;
+    protected bool canInfoInteract = true;
+
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
+    [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     private Material cardMaterial;
+
+    [Header("CARD INFO")]
+    [SerializeField] protected CanvasGroup[] cgsInfoHide;
+    protected Coroutine showInfoCoroutine = null;
+    protected bool isShowInfoAnimationPlaying = false;
+    protected bool isHideInfoAnimationPlaying = false;
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public event BuildingCardAction OnCardHovered;
     public event BuildingCardAction OnCardUnhovered;
     public event BuildingCardAction OnCardSelected;
+    public event BuildingCardAction OnCardInfoSelected;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
@@ -105,10 +117,10 @@ public abstract class BuildingCard : MonoBehaviour
         if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
-    private void OnMouseDown()
+    private void OnMouseDown() // only called by Left Click
     {
         if (isRepositioning) return;
-
+        
         if (cardState == CardStates.HOVERED)
         {
             if (OnCardSelected != null) OnCardSelected(this);
@@ -116,6 +128,17 @@ public abstract class BuildingCard : MonoBehaviour
         else
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
+        }
+    }
+
+    private void Update()
+    {
+        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        {
+            if (cardState == CardStates.HOVERED)
+            {
+                if (OnCardInfoSelected != null) OnCardInfoSelected(this);
+            }
         }
     }
 
@@ -131,12 +154,16 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
+        cardColliderOffset = cardCollider.center;
+
         this.cardBuildingType = cardBuildingType;
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
+
+        isShowingInfo = false;
     }
 
 
@@ -160,7 +187,7 @@ public abstract class BuildingCard : MonoBehaviour
     public void StartRepositioning(Vector3 finalPosition, float duration)
     {
         isRepositioning = true;
-        CardTransform.DOMove(finalPosition, duration)
+        RootCardTransform.DOMove(finalPosition, duration)
             .OnComplete(EndRepositioning);
     }
     private void EndRepositioning()
@@ -196,7 +223,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = local_standardPosition;
         CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
-    public void StandardState()
+    public void StandardState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.STANDARD;
 
@@ -205,7 +232,10 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => {
+                EnableMouseInteraction();
+                if (repositionColliderOnEnd) RepositionColliderToCardTransform();
+            });
     }
 
     public void HoveredState()
@@ -216,7 +246,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
-    public void SelectedState()
+    public void SelectedState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.SELECTED;
 
@@ -225,19 +255,18 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => { EnableMouseInteraction(); 
+                                if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
+            });
+    }
+
+
+    public void RepositionColliderToCardTransform()
+    {
+        cardCollider.center = cardColliderOffset + CardTransform.localPosition;
     }
 
     // CARD MOVEMENT end
-
-    public void normalCollider()
-    {
-        cardCollider.size = new Vector3(1f, 2f, 0.2f);
-    }
-    public void bigCollider()
-    {
-        cardCollider.size = new Vector3(1.3f, 2f, 0.2f);
-    }
 
 
     private void InvokeGetSaved()
@@ -274,5 +303,19 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState == CardStates.HOVERED) 
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
+
+    protected abstract void InitInfoVisuals();
+    protected abstract void SetupCardInfo();
+    public virtual void ShowInfo()
+    {
+        isShowingInfo = true;
+        Debug.Log("ShowInfo");
+    }
+    public virtual void HideInfo()
+    {
+        isShowingInfo = false;
+        Debug.Log("HideInfo");
+    }
+
 
 }

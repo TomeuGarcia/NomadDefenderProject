@@ -26,6 +26,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private float startDelay, duration, delayBetweenCards; // Animation variables
 
+    private bool cardWasSelected = false;
 
 
     public delegate void CardPartHolderAction();
@@ -110,6 +111,9 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         card.HoveredState();
 
+        card.OnCardInfoSelected += SetCardShowInfo;
+
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered -= SetHoveredCard;
@@ -123,7 +127,14 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        card.StandardState();
+        card.StandardState(cardWasSelected);
+        cardWasSelected = false; // reset
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);
+        }
+        card.OnCardInfoSelected -= SetCardShowInfo;
 
         if (canInteract)
         {
@@ -145,7 +156,15 @@ public class UpgradeCardHolder : MonoBehaviour
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
-        selectedCard.SelectedState();
+        selectedCard.SelectedState(true);
+
+        cardWasSelected = true;
+
+        if (selectedCard.isShowingInfo)
+        {
+            SetCardHideInfo(selectedCard);            
+        }
+
 
         foreach (BuildingCard itCard in cards)
         {
@@ -158,6 +177,24 @@ public class UpgradeCardHolder : MonoBehaviour
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
+
+    private void SetCardShowInfo(BuildingCard card)
+    {
+        card.ShowInfo();
+
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
+        card.OnCardInfoSelected += SetCardHideInfo;
+    }
+    private void SetCardHideInfo(BuildingCard card)
+    {
+        card.HideInfo();
+
+
+        card.OnCardInfoSelected += SetCardShowInfo;
+        card.OnCardInfoSelected -= SetCardHideInfo;
     }
 
 

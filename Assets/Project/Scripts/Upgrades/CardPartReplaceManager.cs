@@ -245,9 +245,9 @@ public class CardPartReplaceManager : MonoBehaviour
         float flipDuration = 0.4f;
         float moveDuration = 0.5f;
 
-        Transform upgradedCardTransform = upgradeCardHolder.selectedCard.transform;
+        Transform upgradedCardTransform = upgradeCardHolder.selectedCard.CardTransform;
         Vector3 upgradedCardStartPos = upgradedCardTransform.position;
-        Transform partTransform = cardPartHolder.selectedCardPart.transform;
+        Transform partTransform = cardPartHolder.selectedCardPart.CardTransform;
 
 
         yield return new WaitForSeconds(0.1f);

@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering;
 
 public class HandBuildingCards : MonoBehaviour
 {
@@ -67,7 +67,7 @@ public class HandBuildingCards : MonoBehaviour
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
-        InitCardsInHandFirstDraw();
+        InitCardsInHandForRedraw();
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -89,22 +89,6 @@ public class HandBuildingCards : MonoBehaviour
         //    itCard.OnCardSelected += Redraw;
         //}
         //FinishedRedrawing();
-
-
-    }
-    public void FinishedRedrawing()
-    {
-        foreach (BuildingCard itCard in cards)
-        {
-            itCard.OnCardSelected += CheckSelectCard;
-            itCard.OnCardSelected -= Redraw;
-        }
-
-
-        buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
-        if (OnFinishRedrawing != null) OnFinishRedrawing();
-        currencyCounter.OnCurrencyAdded += CheckCardsCost;
-        currencyCounter.OnCurrencySpent += CheckCardsCost;
     }
     private void OnDisable()
     {
@@ -116,7 +100,6 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
-
         currencyCounter.OnCurrencyAdded -= CheckCardsCost;
         currencyCounter.OnCurrencySpent -= CheckCardsCost;
     }
@@ -158,7 +141,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -167,13 +150,34 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, i));
         }
         
     }
+    private void SetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
+    {
+        card.InitPositions(selectedPosition, hiddenDisplacement);
 
-    public void InitCardsInHandFirstDraw()
+        if (card.cardLocation != BuildingCard.CardLocation.HAND)
+        {
+            card.OnCardHovered += SetHoveredCard;
+            card.OnCardUnhovered += SetStandardCard;
+            card.OnCardSelected += CheckSelectCard;
+
+            card.OnCardInfoSelected += SetCardShowInfo;
+
+
+            card.cardLocation = BuildingCard.CardLocation.HAND;
+        }
+
+        if (index == cards.Count - 1)
+        {
+            HideHand(true);
+        }
+    }
+
+    public void InitCardsInHandForRedraw()
     {
         Debug.Log("InitCardsInHandFirstDraw");
         float cardCount = cards.Count;
@@ -196,7 +200,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -205,35 +209,12 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCardFirstDraw(card, selectedPosition, hiddenDisplacement, i));
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, i));
         }
 
     }
-
-    private void SetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
-    {
-        card.InitPositions(selectedPosition, hiddenDisplacement);
-
-        if (card.cardLocation != BuildingCard.CardLocation.HAND)
-        {
-            card.OnCardHovered += SetHoveredCard;
-            card.OnCardUnhovered += SetStandardCard;
-            card.OnCardSelected += CheckSelectCard;
-
-            card.cardLocation = BuildingCard.CardLocation.HAND;
-        }
-                
-        if (index == cards.Count-1)
-        {
-            HideHand(true);
-        }
-    }
-    public bool HasRedrawsLeft()
-    {
-        return redrawsLeft > 0;
-    }
-    private void SetupCardFirstDraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
+    private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
     {
         card.InitPositions(selectedPosition, hiddenDisplacement);
 
@@ -243,6 +224,9 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
 
+            card.OnCardInfoSelected += SetCardShowInfo;
+
+
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
 
@@ -251,6 +235,55 @@ public class HandBuildingCards : MonoBehaviour
             HideHand(true);
         }
     }
+    public void FinishedRedrawing()
+    {
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardSelected += CheckSelectCard;
+            itCard.OnCardSelected -= Redraw;
+        }
+
+        buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
+        currencyCounter.OnCurrencyAdded += CheckCardsCost;
+        currencyCounter.OnCurrencySpent += CheckCardsCost;
+
+        if (OnFinishRedrawing != null) OnFinishRedrawing();
+    }
+
+    private void Redraw(BuildingCard card)
+    {
+        redrawsLeft--;
+        card.OnCardHovered -= SetHoveredCard;
+        card.OnCardUnhovered -= SetStandardCard;
+        card.OnCardSelected -= Redraw;
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);
+        }
+        card.OnCardInfoSelected -= SetCardShowInfo;
+
+
+        card.cardLocation = BuildingCard.CardLocation.DECK;
+
+        if (ReturnCardToDeck != null) ReturnCardToDeck(card);
+        if (OnQueryRedrawCard != null) OnQueryRedrawCard();
+
+        if (!HasRedrawsLeft())
+        {
+            FinishedRedrawing();
+        }
+    }
+    public bool HasRedrawsLeft()
+    {
+        return redrawsLeft > 0;
+    }
+    public int GetRedrawsLeft()
+    {
+        return redrawsLeft;
+    }
+
+
     public void HintedCardWillBeAdded()
     {
         if (AlreadyHasSelectedCard)
@@ -265,27 +298,12 @@ public class HandBuildingCards : MonoBehaviour
 
         if (isHidden) HandTransform.position = defaultHandPosition;
 
-
-        /*
-        if (AlreadyHasSelectedCard)
-        {
-            selectedCard.ImmediateStandardState();
-            ResetAndSetStandardCard(selectedCard);
-        }
-        */
-
         if (!card.AlreadySpawnedCopyBuildingPrefab)
         {
             card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         CheckCardsCost();
-
-        /*
-        card.OnCardHovered += SetHoveredCard;
-        card.OnCardUnhovered += SetStandardCard;
-        card.OnCardSelected += CheckSelectCard;
-        */
     }
 
 
@@ -317,6 +335,13 @@ public class HandBuildingCards : MonoBehaviour
         hoveredCard = null;
         card.StandardState();
 
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);            
+        }
+
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered += SetHoveredCard;            
@@ -327,6 +352,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         HandTransform.position = defaultHandPosition;
         SetStandardCard(selectedCard);
+        selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
         buildingPlacer.DisablePlacing();
@@ -343,25 +369,6 @@ public class HandBuildingCards : MonoBehaviour
             SetSelectedCard(card);            
         }
     }
-    private void Redraw(BuildingCard card)
-    {
-        redrawsLeft--;
-        card.OnCardHovered -= SetHoveredCard;
-        card.OnCardUnhovered -= SetStandardCard;
-        card.OnCardSelected -= Redraw;
-
-        card.cardLocation = BuildingCard.CardLocation.DECK;
-        
-        if (ReturnCardToDeck != null) ReturnCardToDeck(card);
-        if (OnQueryRedrawCard != null) OnQueryRedrawCard();
-
-        Debug.Log("redraw function after 2nd if");
-        if (!HasRedrawsLeft()) 
-        {
-            FinishedRedrawing();
-        }
-        Debug.Log("redraw function end");
-    }
 
     private void SetSelectedCard(BuildingCard card)
     {
@@ -369,6 +376,13 @@ public class HandBuildingCards : MonoBehaviour
 
         selectedCard = card;
         selectedCard.SelectedState();
+
+        if (selectedCard.isShowingInfo)
+        {
+            SetCardHideInfo(selectedCard);
+        }
+        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+
 
         buildingPlacer.EnablePlacing(card);
 
@@ -440,8 +454,6 @@ public class HandBuildingCards : MonoBehaviour
         HandTransform.DOKill();
         HandTransform.DOMove(hiddenHandPosition, 0.1f);
 
-        foreach(BuildingCard card in cards)
-            card.normalCollider();
 
         // Audio
         if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
@@ -453,9 +465,6 @@ public class HandBuildingCards : MonoBehaviour
 
         HandTransform.DOKill();
         HandTransform.DOMove(defaultHandPosition, 0.1f);
-
-        foreach (BuildingCard card in cards)
-            card.bigCollider();
     }
 
 
@@ -496,9 +505,22 @@ public class HandBuildingCards : MonoBehaviour
             }
         }
     }
-    public int GetRedrawsLeft()
-    {
-        return redrawsLeft;
+
+
+    private void SetCardShowInfo(BuildingCard card)
+    {        
+        card.ShowInfo();
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
+        card.OnCardInfoSelected += SetCardHideInfo;
     }
 
+    private void SetCardHideInfo(BuildingCard card)
+    {
+        card.HideInfo();
+
+        card.OnCardInfoSelected += SetCardShowInfo;
+        card.OnCardInfoSelected -= SetCardHideInfo;
+    }
+    
 }

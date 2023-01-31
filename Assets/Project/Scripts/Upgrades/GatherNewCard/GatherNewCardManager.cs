@@ -94,6 +94,8 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.HoveredState();
 
+        card.OnCardInfoSelected += SetCardShowInfo;
+
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered -= SetHoveredCard;
@@ -108,6 +110,14 @@ public class GatherNewCardManager : MonoBehaviour
     private void SetStandardCard(BuildingCard card)
     {
         card.StandardState();
+
+        if (card.isShowingInfo)
+        {
+            SetCardHideInfo(card);
+        }
+
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
 
         foreach (BuildingCard itCard in cards)
         {
@@ -127,6 +137,13 @@ public class GatherNewCardManager : MonoBehaviour
 
         selectedCard = card;
 
+        if (selectedCard.isShowingInfo)
+        {
+            SetCardHideInfo(selectedCard);
+        }
+        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+
+
         if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
         {
             deckCreator.AddNewTurretCardToDeck(selectedCard as TurretBuildingCard);
@@ -142,6 +159,26 @@ public class GatherNewCardManager : MonoBehaviour
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
+
+
+    private void SetCardShowInfo(BuildingCard card)
+    {
+        card.ShowInfo();
+
+
+        card.OnCardInfoSelected -= SetCardShowInfo;
+        card.OnCardInfoSelected += SetCardHideInfo;
+    }
+
+    private void SetCardHideInfo(BuildingCard card)
+    {
+        card.HideInfo();
+
+
+        card.OnCardInfoSelected += SetCardShowInfo;
+        card.OnCardInfoSelected -= SetCardHideInfo;
+    }
+
 
 
     private IEnumerator InitCardsAnimation()
@@ -184,7 +221,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         foreach (BuildingCard itCard in cards)
         {
-            itCard.OnCardHovered += SetHoveredCard;
+            itCard.OnCardHovered += SetHoveredCard;            
         }
 
     }
@@ -236,5 +273,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         mapSceneNotifier.InvokeOnSceneFinished();
     }
+
+
 
 }

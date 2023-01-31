@@ -16,6 +16,10 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip screenShut;
     //[SerializeField] private AudioClip screenOpen;
 
+    [Header("TEXT")]
+    [SerializeField] private AudioSource textConsoleTypingSource;
+    [SerializeField] private AudioClip[] textConsoleTyping;
+
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
@@ -24,6 +28,11 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip cardPlayed;
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
+
+    [Header("CARDS INFO")]
+    [SerializeField] private AudioSource cardsInfoAudioSource;
+    [SerializeField] private AudioClip cardInfoElement;
+    [SerializeField] private AudioClip cardInfoElementMoves;
 
     [Header("UPGRADES")]
     [SerializeField] private AudioSource upgradesAudioSource;
@@ -131,6 +140,19 @@ public class GameAudioManager : MonoBehaviour
     }
 
 
+    // Text
+    public void PlayConsoleTyping(int textType)
+    {
+        if(textConsoleTyping.Length <= textType)
+            textType = 0;
+
+        textConsoleTypingSource.clip = textConsoleTyping[textType];
+        textConsoleTypingSource.pitch = Random.Range(0.9f, 1.1f);
+
+        textConsoleTypingSource.Play();
+    }
+
+
     // Cards
     public void PlayCardHovered()
     {
@@ -177,6 +199,42 @@ public class GameAudioManager : MonoBehaviour
         cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
         cardsAudioSource.Play();
+    }
+
+
+    // Cards Info
+    public void PlayCardInfoShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
+    }
+
+    public void PlayCardInfoHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
     }
 
 

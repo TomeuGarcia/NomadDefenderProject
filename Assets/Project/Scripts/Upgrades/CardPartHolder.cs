@@ -23,6 +23,8 @@ public class CardPartHolder : MonoBehaviour
 
     private bool canInteract;
 
+    private bool cardWasSelected = false;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
@@ -101,13 +103,23 @@ public class CardPartHolder : MonoBehaviour
         CardPart.OnCardUnhovered += SetStandardCard;
         CardPart.OnCardSelected += SetSelectedCard;
 
+        card.OnCardInfoSelected += SetCardPartShowInfo;
+
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
     }
 
     private void SetStandardCard(CardPart card)
     {
-        card.StandardState();
+        card.StandardState(cardWasSelected);
+        cardWasSelected = false; // reset
+
+        if (card.isShowingInfo)
+        {
+            SetCardPartHideInfo(card);
+        }
+        card.OnCardInfoSelected -= SetCardPartShowInfo;
+
 
         if (canInteract) CardPart.OnCardHovered += SetHoveredCard;
         CardPart.OnCardUnhovered -= SetStandardCard;
@@ -119,7 +131,15 @@ public class CardPartHolder : MonoBehaviour
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
-        selectedCardPart.SelectedState();
+        selectedCardPart.SelectedState(true);
+        cardWasSelected = true;
+
+        if (selectedCardPart.isShowingInfo)
+        {
+            SetCardPartHideInfo(selectedCardPart);
+        }
+        selectedCardPart.OnCardInfoSelected -= SetCardPartShowInfo;
+
 
         CardPart.OnCardHovered -= SetHoveredCard;
         CardPart.OnCardSelected -= SetSelectedCard;
@@ -129,6 +149,23 @@ public class CardPartHolder : MonoBehaviour
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
+    private void SetCardPartShowInfo(CardPart cardPart)
+    {
+        cardPart.ShowInfo();
+
+
+        cardPart.OnCardInfoSelected -= SetCardPartShowInfo;
+        cardPart.OnCardInfoSelected += SetCardPartHideInfo;
+    }
+    private void SetCardPartHideInfo(CardPart cardPart)
+    {
+        cardPart.HideInfo();
+
+
+        cardPart.OnCardInfoSelected += SetCardPartShowInfo;
+        cardPart.OnCardInfoSelected -= SetCardPartHideInfo;
     }
 
 

@@ -33,7 +33,6 @@ public class Enemy : MonoBehaviour
     private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
-    [HideInInspector] public int ogCurrencyDrop;
     [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
@@ -53,7 +52,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        ogCurrencyDrop = currencyDrop;
+        
 
         ResetStats();
         healthSystem = new HealthSystem((int)health,(int)armor);
@@ -101,7 +100,7 @@ public class Enemy : MonoBehaviour
         health = baseHealth;
         armor = baseArmor;
 
-        currencyDrop = ogCurrencyDrop;
+        currencyDrop = baseCurrencyDrop;
     }
 
 
@@ -170,7 +169,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void QueueDamage(int amount, PassiveDamageModifier modifier)
+    public int QueueDamage(int amount, PassiveDamageModifier modifier)
     {
         amount = modifier(amount, healthSystem);
         queuedDamage += amount;
@@ -179,6 +178,8 @@ public class Enemy : MonoBehaviour
         //{
         //    StartCoroutine(TimedDeath());
         //}
+
+        return amount;
     }
 
     IEnumerator TimedDeath()
@@ -188,7 +189,7 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    public void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
         queuedDamage -= amount;
     }
@@ -209,5 +210,10 @@ public class Enemy : MonoBehaviour
         health = (float)baseHealth * multiplier;
 
         healthSystem.UpdateHealth((int)health);
+    }
+
+    public bool IsDead()
+    {
+        return healthSystem.IsDead();
     }
 }

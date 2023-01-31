@@ -7,5 +7,12 @@ using UnityEngine;
 
 public abstract class BasePassive : ScriptableObject
 {
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string abilityName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription;
+
+
     public abstract void ApplyEffects(TurretBuilding owner);
 }
