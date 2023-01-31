@@ -30,8 +30,10 @@ public class CardPartBody : CardPart
 
 
 
-    private void Awake()
+    protected override void AwakeInit()
     {
+        base.AwakeInit();
+
         //bodyMaterial = bodyMeshRenderer.material;
         bodyMaterial = new Material(bodyImage.material);
         bodyImage.material = bodyMaterial;

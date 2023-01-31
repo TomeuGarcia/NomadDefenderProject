@@ -32,8 +32,9 @@ public class CardPartAttack : CardPart
 
 
 
-    private void Awake()
+    protected override void AwakeInit()
     {
+        base.AwakeInit();
         //attackMaterial = attackMeshRenderer.material;
         attackMaterial = new Material(attackImage.material);
         attackImage.material = attackMaterial;
