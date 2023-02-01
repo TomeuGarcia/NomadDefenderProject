@@ -144,27 +144,47 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawCardAfterWave()
     {
+        StartCoroutine(DoDrawCardAfterWave());   
+    }
+
+    private IEnumerator DoDrawCardAfterWave()
+    {
         if (deck.HasCardsLeft())
         {
             for (int i = 0; i < cardsToDrawPerWave; i++)
             {
                 TryDrawCard();
+                hand.InitCardsInHand();
+                yield return new WaitForSeconds(0.5f);
             }
-
-            hand.InitCardsInHand();
-        }        
+        }
     }
 
 
     private void DrawStartHand()
     {
-        DrawTopCard();
+        StartCoroutine(DoDrawStartHand());
+    }
 
-        for (int i = 1; i < numCardsHandStart; i++)
+    private IEnumerator DoDrawStartHand()
+    {
+        yield return new WaitForSeconds(1f);
+
+        DrawTopCard();
+        hand.InitCardsInHand();
+        yield return new WaitForSeconds(0.5f);
+
+        if (deck.HasCardsLeft())
         {
-            TryDrawCard();
+            for (int i = 1; i < numCardsHandStart; i++)
+            {
+                TryDrawCard();
+                hand.InitCardsInHand();
+                yield return new WaitForSeconds(0.5f);
+            }
         }
     }
+
 
     public void ReturnCardToDeck(BuildingCard card)
     {

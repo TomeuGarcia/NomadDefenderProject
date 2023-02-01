@@ -157,10 +157,11 @@ public class BattleHUD : MonoBehaviour
     {
         canInteractWithDeckUI = false;
 
+
         // Start wait
         drawButtonHolder.gameObject.SetActive(false);
         cgDeckUI.alpha = 0f;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
         // Appear
@@ -178,9 +179,13 @@ public class BattleHUD : MonoBehaviour
         ShowDeckUI();
         yield return new WaitForSeconds(0.4f);
 
+        float pitch = 0.9f;
+        float pitchIncrement = 0.05f;
         foreach (Image icon in cardIcons)
         {
             icon.DOFade(1f, 0.25f);
+            GameAudioManager.GetInstance().PlayCardUIInfoShown(pitch);
+            pitch += pitchIncrement;
             yield return new WaitForSeconds(0.25f);
         }
         yield return new WaitForSeconds(0.25f);

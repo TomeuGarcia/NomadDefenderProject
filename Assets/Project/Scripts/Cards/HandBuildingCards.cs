@@ -26,6 +26,8 @@ public class HandBuildingCards : MonoBehaviour
     private Vector3 hiddenHandPosition;
     private Vector3 hiddenDisplacement;
     private bool isHidden;
+    private bool isBeingHidden = false;
+    private bool isBeingShown = false;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
 
@@ -173,7 +175,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            HideHand(true);
+            if (!isBeingHidden) HideHand(true);
         }
     }
 
@@ -235,7 +237,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            HideHand(true);
+            if (!isBeingHidden) HideHand(true);
         }
     }
     public void FinishedRedrawing()
@@ -348,7 +350,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SetHoveredCard(BuildingCard card)
     {
-        if (isHidden) ShowHand();
+        if (isHidden && !isBeingShown) ShowHand();
 
         hoveredCard = card;
         card.HoveredState();
@@ -396,7 +398,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.DisablePlacing();
 
-        ShowHand();
+        if (!isBeingShown) ShowHand();
     }
 
     private void CheckSelectCard(BuildingCard card)
@@ -426,7 +428,7 @@ public class HandBuildingCards : MonoBehaviour
         buildingPlacer.EnablePlacing(card);
 
         //hide hand
-        HideHand(false);
+        if (!isBeingHidden) HideHand(false);
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
@@ -451,9 +453,7 @@ public class HandBuildingCards : MonoBehaviour
         cards.Remove(selectedCard);
 
 
-        //ResetAndSetStandardCard(selectedCard);
         ///////////
-        //SetStandardCard(selectedCard);
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered += SetHoveredCard;
@@ -462,7 +462,6 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard = null;
         buildingPlacer.DisablePlacing();
         HandTransform.position = defaultHandPosition;
-        //ShowHand();
         ///////////
         
         InitCardsInHand();
@@ -490,8 +489,11 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = true;
 
-        HandTransform.DOComplete();
-        HandTransform.DOMove(hiddenHandPosition, 0.1f);
+        isBeingHidden = true;
+
+        HandTransform.DOComplete(true);
+        HandTransform.DOMove(hiddenHandPosition, 0.1f)
+            .OnComplete(() => isBeingHidden = false);
 
 
         // Audio
@@ -502,8 +504,11 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = false;
 
-        HandTransform.DOComplete();
-        HandTransform.DOMove(defaultHandPosition, 0.1f);
+        isBeingShown = true;
+
+        HandTransform.DOComplete(true);
+        HandTransform.DOMove(defaultHandPosition, 0.1f)
+            .OnComplete( () => isBeingShown = false );
     }
 
 
@@ -511,7 +516,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         yield return new WaitForSeconds(0.05f);
 
-        if (!IsHoveringCard)
+        if (!IsHoveringCard && !isBeingHidden)
         {
             HideHand(true);
         }
