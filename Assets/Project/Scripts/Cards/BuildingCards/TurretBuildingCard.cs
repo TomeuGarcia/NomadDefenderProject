@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class TurretBuildingCard : BuildingCard
 {
@@ -396,11 +397,12 @@ public class TurretBuildingCard : BuildingCard
 
     public void IncrementCardLevel(int levelIncrement)
     {
-        turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, MAX_CARD_LEVEL);
+        turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, MAX_CARD_LEVEL);        
     }
     private void UpdateCardLevelText()
     {
         int level = turretCardParts.cardLevel;
         cardLevelText.text = level == MAX_CARD_LEVEL ? "MAX" : "lvl " + level.ToString();
     }
+
 }

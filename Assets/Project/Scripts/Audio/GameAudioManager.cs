@@ -237,6 +237,15 @@ public class GameAudioManager : MonoBehaviour
         cardsInfoAudioSource.Play();
     }
 
+    public void PlayCardUIInfoShown(float pitch)
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = pitch;
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+
 
     // Upgrades
     public void PlayCardPartSwap()
