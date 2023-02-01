@@ -67,7 +67,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
     }
 
-    public void Init(TurretBuildingStats turretStats, TurretBuildingCard.TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
+    public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;

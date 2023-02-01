@@ -9,36 +9,6 @@ using static TurretBuildingCard;
 
 public class SupportBuildingCard : BuildingCard
 {
-    [System.Serializable]
-    public class SupportCardParts
-    {
-        public TurretPartBase turretPartBase;
-        public int cardCost;
-
-
-        public SupportCardParts(TurretPartBase turretPartBase, int cardCost)
-        {
-
-            this.turretPartBase = turretPartBase;
-            this.cardCost = cardCost;
-        }
-      
-        public SupportCardParts(SupportCardParts other)
-        {
-            this.turretPartBase = other.turretPartBase;
-            this.cardCost = other.cardCost;
-        }
-
-        public int GetCostCombinedParts()
-        {
-            return turretPartBase.cost;
-        }
-
-        public int GetCardCost()
-        { return cardCost; }
-    }
-
-
     public SupportCardParts supportCardParts { get; private set; }
 
     private SupportBuilding.SupportBuildingStats supportBuildingStats;
