@@ -344,6 +344,8 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
+        card.PlayDrawAnimation();
+
         CheckCardsCost();
     }
 

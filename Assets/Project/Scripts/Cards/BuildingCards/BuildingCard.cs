@@ -73,6 +73,13 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
 
+    // CARD DRAW ANIMATION
+    [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
+    private const float drawAnimLoopDuration = 0.8f;
+    private const float drawAnimWaitDurationBeforeBlink = 0.2f;
+    private const float drawAnimBlinkDuration = 0.5f;
+    private const float drawAnimNumBlinks = 3f;
+
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public event BuildingCardAction OnCardHovered;
@@ -165,6 +172,14 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
+
+        cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+        cardMaterial.SetFloat("_IsSmoothLooping", 0f);
+
+        cardMaterial.SetFloat("_LoopDuration", drawAnimLoopDuration);
+        cardMaterial.SetFloat("_WaitBeforeBlink", drawAnimWaitDurationBeforeBlink);
+        cardMaterial.SetFloat("_BlinkDuration", drawAnimBlinkDuration);
+        cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
         isShowingInfo = false;
     }
@@ -326,5 +341,69 @@ public abstract class BuildingCard : MonoBehaviour
         Debug.Log("HideInfo");
     }
 
+
+    public void PlayDrawAnimation()
+    {
+        cardMaterial.SetFloat("_BorderLoopEnabled", 1f);
+        cardMaterial.SetFloat("_TimeStartBorderLoop", Time.time);
+
+        StartCoroutine(InterfaceDrawAnimation());
+    }
+
+    private IEnumerator InterfaceDrawAnimation()
+    {
+        canInfoInteract = false;
+
+
+        for (int i = 0; i < cgsInfoHide.Length; ++i)
+        {
+            cgsInfoHide[i].alpha = 0f;
+        }
+        for (int i = 0; i < otherCfDrawAnimation.Length; ++i)
+        {
+            otherCfDrawAnimation[i].alpha = 0f;
+        }
+
+
+        float startStep = 10f;
+        float step = startStep;
+        float stepDec = startStep * 0.02f;
+        for (float t = 0f; t < drawAnimLoopDuration; t+= Time.deltaTime * step)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+            yield return new WaitForSeconds(Time.deltaTime * step);
+
+            step -= stepDec;
+        }
+
+
+        yield return new WaitForSeconds(drawAnimWaitDurationBeforeBlink);
+
+
+        float tBlink = drawAnimBlinkDuration / drawAnimNumBlinks;
+        for (int i = 0; i < drawAnimNumBlinks; ++i)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+            yield return new WaitForSeconds(tBlink);
+        }
+
+
+        float t1 = 0.1f;
+        for (int i = cgsInfoHide.Length-1; i >= 0; --i)
+        {
+            cgsInfoHide[i].DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+        for (int i = otherCfDrawAnimation.Length - 1; i >= 0; --i)
+        {
+            otherCfDrawAnimation[i].DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+
+
+        canInfoInteract = true;
+    }
 
 }
