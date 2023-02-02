@@ -404,6 +404,7 @@ public abstract class BuildingCard : MonoBehaviour
 
 
         canInfoInteract = true;
+        cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
     }
 
 }
