@@ -44,6 +44,9 @@ public class TurretCardParts : ScriptableObject
     [Range(1, 3)] public int cardLevel = 1;
     public const int MAX_CARD_LEVEL = 3;
 
+    
+
+
     private void OnValidate()
     {
         cardLevel = Mathf.Clamp(cardLevel, 1, MAX_CARD_LEVEL);
