@@ -153,9 +153,9 @@ public class CardDrawer : MonoBehaviour
         {
             for (int i = 0; i < cardsToDrawPerWave; i++)
             {
+                yield return new WaitForSeconds(0.5f);
                 TryDrawCard();
                 hand.InitCardsInHand();
-                yield return new WaitForSeconds(0.5f);
             }
         }
     }
@@ -172,15 +172,14 @@ public class CardDrawer : MonoBehaviour
 
         DrawTopCard();
         hand.InitCardsInHand();
-        yield return new WaitForSeconds(0.5f);
 
         if (deck.HasCardsLeft())
         {
             for (int i = 1; i < numCardsHandStart; i++)
             {
+                yield return new WaitForSeconds(0.5f);
                 TryDrawCard();
                 hand.InitCardsInHand();
-                yield return new WaitForSeconds(0.5f);
             }
         }
     }
