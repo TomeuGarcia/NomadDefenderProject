@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class EntryTextLine : MonoBehaviour
 {
-    public IEnumerator ClearWithTime(float timeToClear)
+    private IEnumerator clearFunc;
+
+    public void ClearWithTime(float timeToClear)
+    {
+        clearFunc = Clear(timeToClear);
+        StartCoroutine(clearFunc);
+    }
+
+    private IEnumerator Clear(float timeToClear)
     {
         yield return new WaitForSeconds(timeToClear);
         gameObject.SetActive(false);
@@ -12,6 +20,7 @@ public class EntryTextLine : MonoBehaviour
 
     private void OnDisable()
     {
-        StopCoroutine(ClearWithTime(0));
+        if(clearFunc != null)
+            StopCoroutine(clearFunc);
     }
 }
