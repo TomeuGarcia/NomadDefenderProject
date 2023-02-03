@@ -721,6 +721,7 @@ GameObject:
   - component: {fileID: 670514567913568641}
   - component: {fileID: 9092104149203176440}
   - component: {fileID: 4756254740489510860}
+  - component: {fileID: 6598585969574252253}
   m_Layer: 10
   m_Name: BasePassive_Background
   m_TagString: Untagged
@@ -787,6 +788,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6598585969574252253
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5281394645196913957}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5422110154628474559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1261,6 +1274,8 @@ MonoBehaviour:
   - {fileID: 4190745303864258254}
   - {fileID: 3815957422693145386}
   - {fileID: 4788041828697245378}
+  otherCfDrawAnimation:
+  - {fileID: 6598585969574252253}
   infoInterface: {fileID: 7609954487759459054}
   infoShownPassiveIcon: {fileID: 7772817551273842811}
   defaultPassiveIcon: {fileID: 670514567913568641}

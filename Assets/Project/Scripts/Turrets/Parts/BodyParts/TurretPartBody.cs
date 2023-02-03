@@ -57,6 +57,9 @@ public class TurretPartBody : ScriptableObject
         this.cadenceLvl = other.cadenceLvl;
         this.prefab = other.prefab;
         this.materialTextureMap = other.materialTextureMap;
+
+        this.partName = other.partName;
+        this.abilityDescription = other.abilityDescription;
     }
 
 }

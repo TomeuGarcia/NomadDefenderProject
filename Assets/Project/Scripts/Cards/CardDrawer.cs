@@ -53,11 +53,11 @@ public class CardDrawer : MonoBehaviour
     {
         redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
         deck.Init();
-        battleHUD.InitCardIcons(deck.NumCards);
+        battleHUD.InitDeckCardIcons(deck.NumCards);
 
         DrawStartHand();
 
-        hand.Init();                
+        hand.Init();
 
         deck.GetDeckData().SetStarterCardComponentsAsSaved();
 
@@ -122,10 +122,11 @@ public class CardDrawer : MonoBehaviour
 
     private void AddCardToHand(BuildingCard card)
     {
+        hand.CorrectCardsBeforeAddingCard();
         hand.HintedCardWillBeAdded();
         hand.AddCard(card);
 
-        battleHUD.SubtractHasCardIcon();
+        battleHUD.SubtractHasDeckCardIcon();
     }
 
     private void TryHideDeckHUD()
@@ -143,27 +144,47 @@ public class CardDrawer : MonoBehaviour
 
     private void DrawCardAfterWave()
     {
+        StartCoroutine(DoDrawCardAfterWave());   
+    }
+
+    private IEnumerator DoDrawCardAfterWave()
+    {
         if (deck.HasCardsLeft())
         {
             for (int i = 0; i < cardsToDrawPerWave; i++)
             {
+                yield return new WaitForSeconds(0.5f);
                 TryDrawCard();
+                hand.InitCardsInHand();
             }
-
-            hand.InitCardsInHand();
-        }        
+        }
     }
 
 
     private void DrawStartHand()
     {
-        DrawTopCard();
-
-        for (int i = 1; i < numCardsHandStart; i++)
-        {
-            TryDrawCard();
-        }
+        StartCoroutine(DoDrawStartHand());
     }
+
+    private IEnumerator DoDrawStartHand()
+    {
+        yield return new WaitForSeconds(1f);
+
+        DrawTopCard();
+        hand.InitCardsInHandForRedraw();
+
+        if (deck.HasCardsLeft())
+        {
+            for (int i = 1; i < numCardsHandStart; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                TryDrawCard();
+                hand.InitCardsInHandForRedraw();
+            }
+        }
+        
+    }
+
 
     public void ReturnCardToDeck(BuildingCard card)
     {
@@ -173,7 +194,7 @@ public class CardDrawer : MonoBehaviour
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
 
-        battleHUD.AddHasCardIcon();
+        battleHUD.AddHasDeckCardIcon();
     }
 
     /*private void StartDrawOverTime()

@@ -82,8 +82,8 @@ public class CurrencyCounter : MonoBehaviour
 
         float delay = 0.05f;
 
-        currencyCountText.DOKill();
-        currencyCountText.transform.DOKill();
+        currencyCountText.DOComplete();
+        currencyCountText.transform.DOComplete();
         currencyCountText.color = colorSpentCurrencyText;
         currencyCountText.DOColor(startColorAddedCurrencyText, delay * amount + 1.5f);
         currencyCountText.transform.DOPunchPosition(Vector3.down * 40f, 0.5f, 6);
@@ -113,11 +113,11 @@ public class CurrencyCounter : MonoBehaviour
         addedCurrencyText.color = startColorAddedCurrencyText;
 
         // Reset
-        addedCurrencyText.transform.DOKill();
-        addedCurrencyText.DOKill();
+        addedCurrencyText.transform.DOComplete();
+        addedCurrencyText.DOComplete();
         addedCurrencyText.transform.rotation = Quaternion.identity;
         //addedCurrencyText.transform.localPosition = Vector3.zero;
-        currencyCountTextHolder.DOKill();
+        currencyCountTextHolder.DOComplete();
         currencyCountTextHolder.localScale = Vector3.one;
 
 
@@ -133,6 +133,17 @@ public class CurrencyCounter : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.gameObject.SetActive(false);
+    }
+
+    public void PlayNotEnoughCurrencyAnimation()
+    {
+        currencyCountText.DOComplete();
+        currencyCountText.transform.DOComplete();
+
+        currencyCountText.DOBlendableColor(colorSpentCurrencyText, 0.25f)
+            .OnComplete(() => currencyCountText.DOBlendableColor(startColorAddedCurrencyText, 0.25f));
+
+        currencyCountText.transform.DOPunchScale(Vector3.one * 0.6f, 0.5f, 6);
     }
 
 }

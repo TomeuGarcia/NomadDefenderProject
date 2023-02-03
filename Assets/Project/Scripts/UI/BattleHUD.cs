@@ -157,10 +157,11 @@ public class BattleHUD : MonoBehaviour
     {
         canInteractWithDeckUI = false;
 
+
         // Start wait
         drawButtonHolder.gameObject.SetActive(false);
         cgDeckUI.alpha = 0f;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
         // Appear
@@ -178,9 +179,13 @@ public class BattleHUD : MonoBehaviour
         ShowDeckUI();
         yield return new WaitForSeconds(0.4f);
 
+        float pitch = 0.9f;
+        float pitchIncrement = 0.05f;
         foreach (Image icon in cardIcons)
         {
             icon.DOFade(1f, 0.25f);
+            GameAudioManager.GetInstance().PlayCardUIInfoShown(pitch);
+            pitch += pitchIncrement;
             yield return new WaitForSeconds(0.25f);
         }
         yield return new WaitForSeconds(0.25f);
@@ -406,17 +411,17 @@ public class BattleHUD : MonoBehaviour
 
 
 
-    public void InitCardIcons(int amount)
+    public void InitDeckCardIcons(int amount)
     {
         cardIcons = new List<Image>(amount);
         for (int i = 0; i< amount; ++i)
         {
-            AddNewCardIcon();
+            AddNewDeckCardIcon();
         }
 
         lastSpriteHasCardIndex = amount - 1;
     }
-    public void AddNewCardIcon()
+    public void AddNewDeckCardIcon()
     {
         Image newCardIcon = Instantiate(referenceCardIconImage);
         newCardIcon.gameObject.SetActive(true);
@@ -426,20 +431,20 @@ public class BattleHUD : MonoBehaviour
         newCardIcon.sprite = spriteHasCard;
     }
 
-    public void SubtractHasCardIcon()
+    public void SubtractHasDeckCardIcon()
     {
         if (lastSpriteHasCardIndex < 0) return;
 
         cardIcons[lastSpriteHasCardIndex].sprite = spriteNoCard;
         --lastSpriteHasCardIndex;
     }
-    public void AddHasCardIcon()
+    public void AddHasDeckCardIcon()
     {
         ++lastSpriteHasCardIndex;
 
         if (lastSpriteHasCardIndex >= cardIcons.Count)
         {
-            AddNewCardIcon();
+            AddNewDeckCardIcon();
         }
 
         cardIcons[lastSpriteHasCardIndex].sprite = spriteHasCard;
@@ -447,6 +452,7 @@ public class BattleHUD : MonoBehaviour
 
     private float ComputeShownDeckUIy()
     {
-        return hiddenDeckUIy + (50f * ((cardIcons.Count / 5) +1));
+        float yPerLevel = 50f;
+        return hiddenDeckUIy + (yPerLevel * (((cardIcons.Count-1) / 5) +1));
     }
 }
