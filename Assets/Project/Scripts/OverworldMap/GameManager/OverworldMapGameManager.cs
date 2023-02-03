@@ -20,6 +20,10 @@ public class OverworldMapGameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverHolder;
     [SerializeField] private GameObject victoryHolder;
 
+    [Header("DeckDisplay")]
+    [SerializeField] private OverworldCardShower cardDisplayer;
+
+
 
     private OWMap_Node currentNode;
 
@@ -186,11 +190,12 @@ public class OverworldMapGameManager : MonoBehaviour
     private void DoMapSceneUnloaded()
     {
         owMapPawn.ActivateCamera();
+        cardDisplayer.ResetAll();
     }
     private void DoMapSceneLoaded()
     {
         owMapPawn.DeactivateCamera();
-        //myCardsHolder.resetcards(); // to update cards
+        cardDisplayer.DestroyAllCards();
     }
 
 
