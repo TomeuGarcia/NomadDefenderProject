@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 
@@ -21,6 +18,14 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     [SerializeField] private List<Image> fillBars = new List<Image>();
     
     [SerializeField] private Color32 disalbedTextColor;
+
+
+    [Header("BUILDING TYPE")]
+    [SerializeField] private BuildingCard.CardBuildingType buildingType = BuildingCard.CardBuildingType.NONE;
+    private TurretBuilding turretBuilding;
+    private SupportBuilding supportBuilding;
+    private int maxLevels;
+
 
     private CurrencyCounter currencyCounter;
 
@@ -54,6 +59,21 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         supportFillBarCoef = 100.0f / ((float)maxSupportStatLevel * 100.0f);
 
         visible = false;
+    }
+
+    private void Start()
+    {
+        if (buildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            turretBuilding = building.gameObject.GetComponent<TurretBuilding>();
+            maxLevels = turretBuilding.CardLevel;
+        }
+        else if (buildingType == BuildingCard.CardBuildingType.SUPPORT)
+        {
+            supportBuilding = building.gameObject.GetComponent<SupportBuilding>();
+            maxLevels = maxUpgradeCount;
+        }
+        UpdateLevelText();
     }
 
     private void Update()
@@ -136,7 +156,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             attackLvl++;
             UpdateAttackBar();
 
-            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.ATTACK, attackLvl);
+            turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
         }
     }
 
@@ -151,7 +171,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             cadenceLvl++;
             UpdateCadenceBar();
 
-            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+            turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
         }
     }
 
@@ -166,7 +186,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             rangeLvl++;
             UpdateRangeBar();
 
-            building.gameObject.GetComponent<TurretBuilding>().Upgrade(TurretUpgradeType.RANGE, rangeLvl);
+            turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
         }
     }
 
@@ -181,7 +201,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             supportLvl++;
             UpdateSupportBar();
 
-            building.gameObject.GetComponent<SupportBuilding>().Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
+            supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
         }
     }
 
@@ -194,15 +214,22 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     private void NextLevel()
     {
         currentLevel++;
-        
-        if(currentLevel < maxUpgradeCount)
+        UpdateLevelText();
+    }
+
+    private void UpdateLevelText()
+    {
+        lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (a b)
+
+        //if (currentLevel < maxUpgradeCount)
+        if (currentLevel < maxLevels)
         {
-            lvlText.text = "LVL " + currentLevel.ToString();
+            //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // a
             costText.text = upgradeCosts[currentLevel].ToString();
         }
         else
         {
-            lvlText.text = "LVL MAX";
+            //lvlText.text = "LVL MAX"; // b
             //costText.text = "NULL";
             costText.text = "0";
             costText.color = disalbedTextColor;

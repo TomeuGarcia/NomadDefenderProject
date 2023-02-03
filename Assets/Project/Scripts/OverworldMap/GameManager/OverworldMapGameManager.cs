@@ -39,15 +39,15 @@ public class OverworldMapGameManager : MonoBehaviour
     private void OnEnable()
     {
         MapSceneNotifier.OnMapSceneFinished += ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded += DeactivateMapCamera;
-        mapSceneLoader.OnMapSceneUnloaded += ActivateMapCamera;
+        mapSceneLoader.OnMapSceneLoaded += DoMapSceneLoaded;
+        mapSceneLoader.OnMapSceneUnloaded += DoMapSceneUnloaded;
     }
 
     private void OnDisable()
     {
         MapSceneNotifier.OnMapSceneFinished -= ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded -= DeactivateMapCamera;
-        mapSceneLoader.OnMapSceneUnloaded -= ActivateMapCamera;
+        mapSceneLoader.OnMapSceneLoaded -= DoMapSceneLoaded;
+        mapSceneLoader.OnMapSceneUnloaded -= DoMapSceneUnloaded;
     }
 
 
@@ -183,13 +183,14 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    private void ActivateMapCamera()
+    private void DoMapSceneUnloaded()
     {
         owMapPawn.ActivateCamera();
     }
-    private void DeactivateMapCamera()
+    private void DoMapSceneLoaded()
     {
         owMapPawn.DeactivateCamera();
+        //myCardsHolder.resetcards(); // to update cards
     }
 
 

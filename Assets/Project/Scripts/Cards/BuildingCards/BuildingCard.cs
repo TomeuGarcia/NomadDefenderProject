@@ -16,6 +16,7 @@ public abstract class BuildingCard : MonoBehaviour
     public enum CardLocation { NONE, DECK, HAND }
     [HideInInspector] public CardLocation cardLocation = CardLocation.NONE;
     private bool isRepositioning = false;
+    public bool IsRepositioning => isRepositioning;
 
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
@@ -32,8 +33,10 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
+    private Vector3 cardColliderOffset;
     [SerializeField] private Transform cardHolder;
-    public Transform CardTransform => transform;
+    public Transform RootCardTransform => transform;
+    public Transform CardTransform => cardHolder;
 
     public const float unhoverTime = 0.05f;
     public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
@@ -70,6 +73,17 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
 
+    // CARD DRAW ANIMATION
+    [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
+    private bool isPlayingDrawAnimation = false;
+    private const float drawAnimLoopDuration = 0.75f;
+    private const float drawAnimWaitDurationBeforeBlink = 0.2f;
+    private const float drawAnimBlinkDuration = 0.3f;
+    private const float drawAnimNumBlinks = 3f;
+
+    // CARD CAN NOT BE PLAYED ANIMATION
+    private const float canNotBePlayedAnimDuration = 0.5f;
+
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public event BuildingCardAction OnCardHovered;
@@ -79,6 +93,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
+
+    public bool AlreadyCanBeHovered => OnCardHovered != null;
 
 
     // MonoBehaviour methods
@@ -118,6 +134,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseDown() // only called by Left Click
     {
         if (isRepositioning) return;
+        if (isPlayingDrawAnimation) return;
         
         if (cardState == CardStates.HOVERED)
         {
@@ -152,12 +169,24 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
+        cardColliderOffset = cardCollider.center;
+
         this.cardBuildingType = cardBuildingType;
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
         SetCannotBePlayedAnimation();
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
+
+        cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+        cardMaterial.SetFloat("_IsSmoothLooping", 0f);
+
+        cardMaterial.SetFloat("_LoopDuration", drawAnimLoopDuration);
+        cardMaterial.SetFloat("_WaitBeforeBlink", drawAnimWaitDurationBeforeBlink);
+        cardMaterial.SetFloat("_BlinkDuration", drawAnimBlinkDuration);
+        cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
+
+        cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
 
         isShowingInfo = false;
     }
@@ -183,13 +212,20 @@ public abstract class BuildingCard : MonoBehaviour
     public void StartRepositioning(Vector3 finalPosition, float duration)
     {
         isRepositioning = true;
-        CardTransform.DOMove(finalPosition, duration)
+
+        ImmediateStandardState();/////
+
+        RootCardTransform.DOMove(finalPosition, duration)
             .OnComplete(EndRepositioning);
     }
     private void EndRepositioning()
     {
         StartCoroutine(ScuffedreinableMouseInteraction()); // not working 
         isRepositioning = false;
+    }
+    public void ForceEndRepositioning()
+    {
+        RootCardTransform.DOComplete(true);
     }
 
     public void ResetCardPosition()
@@ -216,10 +252,11 @@ public abstract class BuildingCard : MonoBehaviour
     public void ImmediateStandardState()
     {
         cardState = CardStates.STANDARD;
+        //CardTransform.DOComplete(true);
         CardTransform.localPosition = local_standardPosition;
-        CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
+        //CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
-    public void StandardState()
+    public void StandardState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.STANDARD;
 
@@ -228,7 +265,10 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => {
+                EnableMouseInteraction();
+                if (repositionColliderOnEnd) RepositionColliderToCardTransform();
+            });
     }
 
     public void HoveredState()
@@ -239,7 +279,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
-    public void SelectedState()
+    public void SelectedState(bool repositionColliderOnEnd = false)
     {
         cardState = CardStates.SELECTED;
 
@@ -248,20 +288,18 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => EnableMouseInteraction());
+            .OnComplete(() => { EnableMouseInteraction(); 
+                                if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
+            });
     }
 
+
+    public void RepositionColliderToCardTransform()
+    {
+        cardCollider.center = cardColliderOffset + CardTransform.localPosition;
+    }
 
     // CARD MOVEMENT end
-
-    public void normalCollider()
-    {
-        cardCollider.size = new Vector3(1f, 2f, 0.2f);
-    }
-    public void bigCollider()
-    {
-        cardCollider.size = new Vector3(1.3f, 2f, 0.2f);
-    }
 
 
     private void InvokeGetSaved()
@@ -312,5 +350,82 @@ public abstract class BuildingCard : MonoBehaviour
         Debug.Log("HideInfo");
     }
 
+
+    public void PlayDrawAnimation()
+    {
+        cardMaterial.SetFloat("_BorderLoopEnabled", 1f);
+        cardMaterial.SetFloat("_TimeStartBorderLoop", Time.time);
+
+        StartCoroutine(InterfaceDrawAnimation());
+    }
+
+    private IEnumerator InterfaceDrawAnimation()
+    {
+        canInfoInteract = false;
+        isPlayingDrawAnimation = true;
+
+
+        for (int i = 0; i < cgsInfoHide.Length; ++i)
+        {
+            cgsInfoHide[i].alpha = 0f;
+        }
+        for (int i = 0; i < otherCfDrawAnimation.Length; ++i)
+        {
+            otherCfDrawAnimation[i].alpha = 0f;
+        }
+
+
+        float startStep = 10f;
+        float step = startStep;
+        float stepDec = startStep * 0.02f;
+        for (float t = 0f; t < drawAnimLoopDuration; t+= Time.deltaTime * step)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+            yield return new WaitForSeconds(Time.deltaTime * step);
+
+            step -= stepDec;
+        }
+
+
+        yield return new WaitForSeconds(drawAnimWaitDurationBeforeBlink);
+
+
+        float tBlink = drawAnimBlinkDuration / drawAnimNumBlinks;
+        for (int i = 0; i < drawAnimNumBlinks; ++i)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+            yield return new WaitForSeconds(tBlink);
+        }
+
+
+        float t1 = 0.1f;
+        for (int i = cgsInfoHide.Length-1; i >= 0; --i)
+        {
+            cgsInfoHide[i].DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+        for (int i = otherCfDrawAnimation.Length - 1; i >= 0; --i)
+        {
+            otherCfDrawAnimation[i].DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+
+
+        canInfoInteract = true;
+        isPlayingDrawAnimation = false;
+        cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+    }
+
+
+    public void PlayCanNotBePlayedAnimation()
+    {
+        SetCannotBePlayedAnimation();
+        cardMaterial.SetFloat("_TimeStartCanNotBePlayed", Time.time);
+
+        CardTransform.DOComplete(true);
+        CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
+    }
 
 }

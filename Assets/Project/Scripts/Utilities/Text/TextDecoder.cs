@@ -5,10 +5,8 @@ using TMPro;
 using System;
 using System.Linq;
 using UnityEngine.TextCore.Text;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 using DG.Tweening;
-using static TurretPartBody;
 
 public class TextDecoder : MonoBehaviour
 {
@@ -239,4 +237,24 @@ public class TextDecoder : MonoBehaviour
         ClearText();
         InitDecodingVariables();
     }
+
+
+    /*
+    // Tomeu: I did this for Card Level
+    public void SetIndexLine(int indexLine)
+    {
+        this.indexLine = indexLine;
+        textComponent.enabled = true;
+    }
+    public void DecodeCurrentLine()
+    {        
+        StartCoroutine(DoDecodeCurrentLine());
+    }
+    private IEnumerator DoDecodeCurrentLine()
+    {
+        //doneDecoding = false;
+        yield return StartCoroutine(DecodeString(indexLine));
+        //doneDecoding = true;
+    }
+    */
 }

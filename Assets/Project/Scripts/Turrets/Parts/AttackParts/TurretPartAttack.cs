@@ -28,6 +28,9 @@ public class TurretPartAttack : ScriptableObject
         this.prefab = other.prefab;
         this.materialTexture = other.materialTexture;
         this.materialColor = other.materialColor;
+
+        this.abilityName = other.abilityName;
+        this.abilityDescription = other.abilityDescription;
     }
 
 

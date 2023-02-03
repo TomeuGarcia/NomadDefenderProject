@@ -62,7 +62,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            TurretBuildingCard.TurretCardParts cardParts = new TurretBuildingCard.TurretCardParts(attacks[i], bodies[i], bases[i], passives[i]);
+            TurretCardParts cardParts = new TurretCardParts(1, attacks[i], bodies[i], bases[i], passives[i]);
             turretCard.ResetParts(cardParts);
 
             cards[i] = turretCard;
@@ -186,13 +186,13 @@ public class GatherNewCardManager : MonoBehaviour
         Vector3[] endPositions = new Vector3[numCards];
         startPositions = new Vector3[numCards];
 
-        Quaternion upsideDown = Quaternion.AngleAxis(180f, cards[0].transform.forward);
+        Quaternion upsideDown = Quaternion.AngleAxis(180f, cards[0].RootCardTransform.forward);
         for (int i = 0; i < numCards; ++i)
         {
-            endPositions[i] = cards[i].transform.localPosition;
-            startPositions[i] = cards[i].transform.localPosition + (cards[i].transform.forward * -3f);
-            cards[i].transform.localPosition = startPositions[i];
-            cards[i].transform.localRotation = upsideDown;
+            endPositions[i] = cards[i].RootCardTransform.localPosition;
+            startPositions[i] = cards[i].RootCardTransform.localPosition + (cards[i].RootCardTransform.forward * -3f);
+            cards[i].RootCardTransform.localPosition = startPositions[i];
+            cards[i].RootCardTransform.localRotation = upsideDown;
         }
 
         yield return new WaitForSeconds(1f); // start delay
@@ -201,7 +201,7 @@ public class GatherNewCardManager : MonoBehaviour
         float moveDuration = 1.5f;
         for (int i = 0; i < numCards; ++i)
         {
-            cards[i].transform.DOLocalMove(endPositions[i], moveDuration);
+            cards[i].RootCardTransform.DOLocalMove(endPositions[i], moveDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -212,16 +212,24 @@ public class GatherNewCardManager : MonoBehaviour
         float rotationDuration = 0.5f;
         foreach (BuildingCard card in cards)
         {
-            card.transform.DOLocalRotate(Vector3.zero, rotationDuration);
+            card.RootCardTransform.DOLocalRotate(Vector3.zero, rotationDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
-        yield return new WaitForSeconds(rotationDuration);
+        yield return new WaitForSeconds(delayBetweenCards); // extra wait
 
 
         foreach (BuildingCard itCard in cards)
         {
-            itCard.OnCardHovered += SetHoveredCard;            
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
+        // scuffed fix, allow mouse interaction if already hovering the cards
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.DisableMouseInteraction();
+            yield return null;
+            itCard.EnableMouseInteraction();
         }
 
     }
@@ -229,7 +237,7 @@ public class GatherNewCardManager : MonoBehaviour
     private IEnumerator SelectCardAnimation()
     {
         float shakeDuration = 0.5f;
-        selectedCard.transform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 6);
+        selectedCard.RootCardTransform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 6);
 
         yield return new WaitForSeconds(shakeDuration);
 
@@ -239,7 +247,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             if (cards[i] == selectedCard) continue;
 
-            cards[i].transform.DOLocalMove(startPositions[i], moveDuration);
+            cards[i].RootCardTransform.DOLocalMove(startPositions[i], moveDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -249,21 +257,21 @@ public class GatherNewCardManager : MonoBehaviour
         float centerMoveDuration = 0.15f;
         Vector3 centerPos = cardHolder.transform.position;
         centerPos.y += 1f;
-        centerPos += selectedCard.transform.up * 0.4f;
+        centerPos += selectedCard.RootCardTransform.up * 0.4f;
 
-        selectedCard.transform.DOMove(centerPos, centerMoveDuration);
+        selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
         yield return new WaitForSeconds(centerMoveDuration);
 
         // smooth move up
         centerMoveDuration = 1f - centerMoveDuration;
-        centerPos += selectedCard.transform.up * 0.05f;
-        selectedCard.transform.DOMove(centerPos, centerMoveDuration);
+        centerPos += selectedCard.RootCardTransform.up * 0.05f;
+        selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
         yield return new WaitForSeconds(centerMoveDuration);
 
 
-        Vector3 endPos = selectedCard.transform.localPosition + (selectedCard.transform.forward * 3f);
-        selectedCard.transform.DOLocalMove(endPos, moveDuration);
-        selectedCard.transform.DOLocalRotate(selectedCard.transform.up * 15f, 0.5f);
+        Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
+        selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
+        selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 0.5f);
         yield return new WaitForSeconds(moveDuration);
 
 

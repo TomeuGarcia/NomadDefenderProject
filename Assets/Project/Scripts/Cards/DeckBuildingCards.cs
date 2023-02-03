@@ -25,12 +25,12 @@ public class DeckBuildingCards : MonoBehaviour
 
         for (int i = 0; i < cards.Count; ++i)
         {
-            cards[i].CardTransform.SetParent(transform);
+            cards[i].RootCardTransform.SetParent(transform);
 
-            Quaternion rotation = Quaternion.FromToRotation(cards[i].CardTransform.forward, -transform.up);
-            cards[i].CardTransform.rotation = rotation;      
-            cards[i].CardTransform.localPosition = Vector3.zero;
-            cards[i].CardTransform.position += transform.up * (upStep * (numCards - (i+1)));
+            Quaternion rotation = Quaternion.FromToRotation(cards[i].RootCardTransform.forward, -transform.up);
+            cards[i].RootCardTransform.rotation = rotation;      
+            cards[i].RootCardTransform.localPosition = Vector3.zero;
+            cards[i].RootCardTransform.position += transform.up * (upStep * (numCards - (i+1)));
 
             cards[i].cardLocation = BuildingCard.CardLocation.DECK;
 
@@ -47,9 +47,9 @@ public class DeckBuildingCards : MonoBehaviour
         {
             Vector3 offset = cardsHolder.forward * (i * 0.15f);
 
-            cards[i].CardTransform.SetParent(cardsHolder);
-            cards[i].CardTransform.localPosition = offset;
-            cards[i].CardTransform.localRotation = Quaternion.identity;
+            cards[i].RootCardTransform.SetParent(cardsHolder);
+            cards[i].RootCardTransform.localPosition = offset;
+            cards[i].RootCardTransform.localRotation = Quaternion.identity;
         }
     }
 
@@ -61,7 +61,7 @@ public class DeckBuildingCards : MonoBehaviour
 
     public Transform GetTopCardTransform()
     {
-        return cards[0].CardTransform;
+        return cards[0].RootCardTransform;
     }
 
     public BuildingCard GetTopCard()
