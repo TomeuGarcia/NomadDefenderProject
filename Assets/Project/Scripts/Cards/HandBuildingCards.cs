@@ -411,6 +411,11 @@ public class HandBuildingCards : MonoBehaviour
         {
             SetSelectedCard(card);            
         }
+        else
+        {
+            currencyCounter.PlayNotEnoughCurrencyAnimation();
+            card.PlayCanNotBePlayedAnimation();
+        }
     }
 
     private void SetSelectedCard(BuildingCard card)

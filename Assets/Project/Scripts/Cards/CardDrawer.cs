@@ -57,7 +57,7 @@ public class CardDrawer : MonoBehaviour
 
         DrawStartHand();
 
-        hand.Init();                
+        hand.Init();
 
         deck.GetDeckData().SetStarterCardComponentsAsSaved();
 
@@ -171,7 +171,7 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         DrawTopCard();
-        hand.InitCardsInHand();
+        hand.InitCardsInHandForRedraw();
 
         if (deck.HasCardsLeft())
         {
@@ -179,9 +179,10 @@ public class CardDrawer : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.5f);
                 TryDrawCard();
-                hand.InitCardsInHand();
+                hand.InitCardsInHandForRedraw();
             }
         }
+        
     }
 
 

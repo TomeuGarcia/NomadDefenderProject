@@ -75,10 +75,14 @@ public abstract class BuildingCard : MonoBehaviour
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
-    private const float drawAnimLoopDuration = 0.8f;
+    private bool isPlayingDrawAnimation = false;
+    private const float drawAnimLoopDuration = 0.75f;
     private const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    private const float drawAnimBlinkDuration = 0.5f;
+    private const float drawAnimBlinkDuration = 0.3f;
     private const float drawAnimNumBlinks = 3f;
+
+    // CARD CAN NOT BE PLAYED ANIMATION
+    private const float canNotBePlayedAnimDuration = 0.5f;
 
 
     public delegate void BuildingCardAction(BuildingCard buildingCard);
@@ -130,6 +134,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseDown() // only called by Left Click
     {
         if (isRepositioning) return;
+        if (isPlayingDrawAnimation) return;
         
         if (cardState == CardStates.HOVERED)
         {
@@ -181,6 +186,8 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_BlinkDuration", drawAnimBlinkDuration);
         cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
+        cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
+
         isShowingInfo = false;
     }
 
@@ -205,6 +212,8 @@ public abstract class BuildingCard : MonoBehaviour
     public void StartRepositioning(Vector3 finalPosition, float duration)
     {
         isRepositioning = true;
+
+        ImmediateStandardState();/////
 
         RootCardTransform.DOMove(finalPosition, duration)
             .OnComplete(EndRepositioning);
@@ -353,6 +362,7 @@ public abstract class BuildingCard : MonoBehaviour
     private IEnumerator InterfaceDrawAnimation()
     {
         canInfoInteract = false;
+        isPlayingDrawAnimation = true;
 
 
         for (int i = 0; i < cgsInfoHide.Length; ++i)
@@ -404,7 +414,18 @@ public abstract class BuildingCard : MonoBehaviour
 
 
         canInfoInteract = true;
+        isPlayingDrawAnimation = false;
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+    }
+
+
+    public void PlayCanNotBePlayedAnimation()
+    {
+        SetCannotBePlayedAnimation();
+        cardMaterial.SetFloat("_TimeStartCanNotBePlayed", Time.time);
+
+        CardTransform.DOComplete(true);
+        CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
     }
 
 }
