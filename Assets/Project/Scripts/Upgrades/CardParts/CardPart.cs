@@ -13,8 +13,9 @@ public abstract class CardPart : MonoBehaviour
     [HideInInspector] public CardPartStates cardState = CardPartStates.STANDARD;
 
     [Header("OTHER COMPONENTS")]
-    [SerializeField] private float hoverSpeed;
-    [SerializeField] private float selectedSpeed;
+    [SerializeField] private BoxCollider cardCollider;
+    private Vector3 cardColliderOffset;
+    [SerializeField] private Transform cardHolder;
 
     [Header("VISUALS")]
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
@@ -30,7 +31,8 @@ public abstract class CardPart : MonoBehaviour
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
 
-    public Transform CardTransform => transform;
+    public Transform RootCardTransform => transform;
+    public Transform CardTransform => cardHolder;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.04f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
@@ -48,7 +50,14 @@ public abstract class CardPart : MonoBehaviour
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
 
-
+    private void Awake()
+    {
+        AwakeInit();
+    }
+    protected virtual void AwakeInit()
+    {
+        cardColliderOffset = cardCollider.center;
+    }
 
     private void OnMouseEnter()
     {
@@ -100,11 +109,12 @@ public abstract class CardPart : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    public void StandardState()
+    public void StandardState(bool repositionColliderOnEnd = false)
     {
         cardState = CardPartStates.STANDARD;
 
-        CardTransform.DOMove(standardPosition, BuildingCard.unhoverTime);
+        CardTransform.DOMove(standardPosition, BuildingCard.unhoverTime)
+            .OnComplete( () => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
 
     public void HoveredState()
@@ -114,11 +124,17 @@ public abstract class CardPart : MonoBehaviour
         CardTransform.DOMove(hoveredPosition, BuildingCard.hoverTime);
     }
 
-    public void SelectedState()
+    public void SelectedState(bool repositionColliderOnEnd = false)
     {
         cardState = CardPartStates.SELECTED;
 
-        CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime);
+        CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime)
+            .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
+    }
+
+    public void RepositionColliderToCardTransform()
+    {
+        cardCollider.center = cardColliderOffset + CardTransform.localPosition;
     }
 
 

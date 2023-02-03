@@ -26,6 +26,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private float startDelay, duration, delayBetweenCards; // Animation variables
 
+    private bool cardWasSelected = false;
 
 
     public delegate void CardPartHolderAction();
@@ -126,7 +127,8 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        card.StandardState();
+        card.StandardState(cardWasSelected);
+        cardWasSelected = false; // reset
 
         if (card.isShowingInfo)
         {
@@ -154,7 +156,9 @@ public class UpgradeCardHolder : MonoBehaviour
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
-        selectedCard.SelectedState();
+        selectedCard.SelectedState(true);
+
+        cardWasSelected = true;
 
         if (selectedCard.isShowingInfo)
         {

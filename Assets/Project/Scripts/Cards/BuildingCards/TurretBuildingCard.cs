@@ -4,58 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static BuildingCard;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class TurretBuildingCard : BuildingCard
 {
-    [System.Serializable]
-    public class TurretCardParts
-    {
-        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-               TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
-        {
-            this.turretPartAttack = turretPartAttack;
-            this.turretPartBody = turretPartBody;
-            this.turretPartBase = turretPartBase;
-            this.turretPassiveBase = turretPassiveBase;
-            this.cardCost = cardCost;
-        }
-
-        public TurretCardParts(TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-               TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
-        {
-            this.turretPartAttack = turretPartAttack;
-            this.turretPartBody = turretPartBody;
-            this.turretPartBase = turretPartBase;
-            this.turretPassiveBase = turretPassiveBase;
-            this.cardCost = GetCostCombinedParts();
-        }
-
-        public TurretCardParts(TurretCardParts other)
-        {
-            this.turretPartAttack = other.turretPartAttack;
-            this.turretPartBody = other.turretPartBody;
-            this.turretPartBase = other.turretPartBase;
-            this.turretPassiveBase = other.turretPassiveBase;
-            this.cardCost = other.cardCost;
-        }
-
-        public TurretPartAttack turretPartAttack;
-        public TurretPartBody turretPartBody;
-        public TurretPartBase turretPartBase;
-        public TurretPassiveBase turretPassiveBase;
-        public int cardCost;
-
-        public int GetCostCombinedParts()
-        {
-            return turretPartAttack.cost + turretPartBody.cost + turretPartBase.cost + turretPassiveBase.cost;
-        }
-
-        public int GetCardCost()
-        { return cardCost; }
-    }
-
-
     public TurretCardParts turretCardParts { get; private set; }
 
     private TurretBuilding.TurretBuildingStats turretStats;
@@ -91,11 +43,12 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image baseImage;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
 
-
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
+
+    [SerializeField] private TextMeshProUGUI cardLevelText;
 
     bool hasBasePassiveAbility = false;
 
@@ -163,6 +116,9 @@ public class TurretBuildingCard : BuildingCard
 
         // Ability Info
         InitInfoVisuals();
+
+        // Level
+        UpdateCardLevelText();
     }
 
     protected override void InitStatsFromTurretParts()
@@ -286,6 +242,7 @@ public class TurretBuildingCard : BuildingCard
         for (int i = 0; i < cgsInfoHide.Length; ++i)            
         {
             cgsInfoHide[i].DOFade(0f, t);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t);
         }
 
@@ -295,27 +252,33 @@ public class TurretBuildingCard : BuildingCard
 
         // show attack icon
         defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t2);
 
         // show base icon
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
             yield return new WaitForSeconds(t2);
         }
 
         // show attack text
         attackNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         attackDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
         // show base text
         if (hasBasePassiveAbility)
         {
             baseNameText.DOFade(1f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t2);
             baseDescriptionText.DOFade(1f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t2);
         }
 
@@ -335,15 +298,19 @@ public class TurretBuildingCard : BuildingCard
         if (hasBasePassiveAbility)
         {
             baseDescriptionText.DOFade(0f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t2);
             baseNameText.DOFade(0f, t2);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t2);
         }
 
         // hide attack text
         attackDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         attackNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -351,11 +318,13 @@ public class TurretBuildingCard : BuildingCard
         if (hasBasePassiveAbility)
         {
             defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
             yield return new WaitForSeconds(t2);
         }
 
         // hide attack icon
         defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -365,6 +334,7 @@ public class TurretBuildingCard : BuildingCard
         for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t);
         }
 
@@ -372,5 +342,14 @@ public class TurretBuildingCard : BuildingCard
         canInfoInteract = true;
     }
 
+    public void IncrementCardLevel(int levelIncrement)
+    {
+        turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
+    }
+    private void UpdateCardLevelText()
+    {
+        int level = turretCardParts.cardLevel;
+        cardLevelText.text = level == TurretCardParts.MAX_CARD_LEVEL ? "MAX" : "lvl " + level.ToString();
+    }
 
 }

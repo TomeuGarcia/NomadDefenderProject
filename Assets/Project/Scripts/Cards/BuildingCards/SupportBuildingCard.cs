@@ -9,36 +9,6 @@ using static TurretBuildingCard;
 
 public class SupportBuildingCard : BuildingCard
 {
-    [System.Serializable]
-    public class SupportCardParts
-    {
-        public TurretPartBase turretPartBase;
-        public int cardCost;
-
-
-        public SupportCardParts(TurretPartBase turretPartBase, int cardCost)
-        {
-
-            this.turretPartBase = turretPartBase;
-            this.cardCost = cardCost;
-        }
-      
-        public SupportCardParts(SupportCardParts other)
-        {
-            this.turretPartBase = other.turretPartBase;
-            this.cardCost = other.cardCost;
-        }
-
-        public int GetCostCombinedParts()
-        {
-            return turretPartBase.cost;
-        }
-
-        public int GetCardCost()
-        { return cardCost; }
-    }
-
-
     public SupportCardParts supportCardParts { get; private set; }
 
     private SupportBuilding.SupportBuildingStats supportBuildingStats;
@@ -180,6 +150,7 @@ public class SupportBuildingCard : BuildingCard
         for (int i = 0; i < cgsInfoHide.Length; ++i)
         {
             cgsInfoHide[i].DOFade(0f, t);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t);
         }
 
@@ -188,12 +159,15 @@ public class SupportBuildingCard : BuildingCard
 
         // show passive icon
         defaultPassiveIcon.DOLocalMove(infoShownPassiveIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t2);
 
         // show passive text
         passiveNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         passiveDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
 
@@ -210,12 +184,15 @@ public class SupportBuildingCard : BuildingCard
 
         // hide passive text
         passiveDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         passiveNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
         // hide passive icon
         defaultPassiveIcon.DOLocalMove(infoHiddenPassiveIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t2);
 
 
@@ -225,6 +202,7 @@ public class SupportBuildingCard : BuildingCard
         for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
             yield return new WaitForSeconds(t);
         }
 

@@ -11,6 +11,7 @@ public class TurretPassiveBase : ScriptableObject
     public struct VisualInformation
     {
         public Sprite sprite;
+        public Texture2D spriteAsTexture;
         public Color32 color;
 
         [TextArea] public String description;
