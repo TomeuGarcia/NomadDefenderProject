@@ -72,7 +72,7 @@ public class ConsoleDialogSystem : MonoBehaviour
 
         if(clearWithTime)
         {
-            StartCoroutine(ClearWithTime());
+            StartCoroutine(consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime));
         }
     }
 
@@ -80,13 +80,6 @@ public class ConsoleDialogSystem : MonoBehaviour
     {
         consoleLines[consoleLines.Count - 1].SetActive(false);
         consoleLines.RemoveAt(consoleLines.Count - 1);
-    }
-
-    private IEnumerator ClearWithTime()
-    {
-        yield return new WaitForSeconds(clearTime);
-        if(consoleLines.Count > 0 && consoleLines[consoleLines.Count - 1].activeInHierarchy)
-            RemoveLine();
     }
 
     public void Clear()

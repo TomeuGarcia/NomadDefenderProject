@@ -26,6 +26,8 @@ public class HandBuildingCards : MonoBehaviour
     private Vector3 hiddenHandPosition;
     private Vector3 hiddenDisplacement;
     private bool isHidden;
+    private bool isBeingHidden = false;
+    private bool isBeingShown = false;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
 
@@ -141,7 +143,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -150,7 +152,7 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, i));
         }
         
@@ -173,7 +175,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            HideHand(true);
+            if (!isBeingHidden) HideHand(true);
         }
     }
 
@@ -200,7 +202,7 @@ public class HandBuildingCards : MonoBehaviour
             BuildingCard card = cards[i];
 
 
-            card.CardTransform.SetParent(HandTransform);
+            card.RootCardTransform.SetParent(HandTransform);
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
@@ -209,7 +211,7 @@ public class HandBuildingCards : MonoBehaviour
 
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
-            card.CardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, i));
         }
 
@@ -220,7 +222,10 @@ public class HandBuildingCards : MonoBehaviour
 
         if (card.cardLocation != BuildingCard.CardLocation.HAND)
         {
-            card.OnCardHovered += SetHoveredCard;
+            if (!card.AlreadyCanBeHovered)
+            {
+                card.OnCardHovered += SetHoveredCard;
+            }
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
 
@@ -232,7 +237,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            HideHand(true);
+            if (!isBeingHidden) HideHand(true);
         }
     }
     public void FinishedRedrawing()
@@ -284,6 +289,42 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
+    public void CorrectCardsBeforeAddingCard()
+    {
+        bool corrected = false;
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            if (cards[i].IsRepositioning)
+            {
+                cards[i].ForceEndRepositioning();
+            }
+            else if (cards[i].cardState != BuildingCard.CardStates.STANDARD)
+            {
+                cards[i].ImmediateStandardState();
+                corrected = true;
+
+                if (cards[i].isShowingInfo)
+                {
+                    SetCardHideInfo(cards[i]);
+                }
+            }
+        }
+
+        if (corrected)
+        {
+            //// bellow is copied from SetStandardCard
+            hoveredCard = null;
+
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.OnCardHovered += SetHoveredCard;               
+            }
+            ////
+        }
+
+    }
+
     public void HintedCardWillBeAdded()
     {
         if (AlreadyHasSelectedCard)
@@ -303,13 +344,15 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
+        card.PlayDrawAnimation();
+
         CheckCardsCost();
     }
 
 
     private void SetHoveredCard(BuildingCard card)
     {
-        if (isHidden) ShowHand();
+        if (isHidden && !isBeingShown) ShowHand();
 
         hoveredCard = card;
         card.HoveredState();
@@ -357,7 +400,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.DisablePlacing();
 
-        ShowHand();
+        if (!isBeingShown) ShowHand();
     }
 
     private void CheckSelectCard(BuildingCard card)
@@ -367,6 +410,11 @@ public class HandBuildingCards : MonoBehaviour
         if (currencyCounter.HasEnoughCurrency(cardCost))
         {
             SetSelectedCard(card);            
+        }
+        else
+        {
+            currencyCounter.PlayNotEnoughCurrencyAnimation();
+            card.PlayCanNotBePlayedAnimation();
         }
     }
 
@@ -387,7 +435,7 @@ public class HandBuildingCards : MonoBehaviour
         buildingPlacer.EnablePlacing(card);
 
         //hide hand
-        HideHand(false);
+        if (!isBeingHidden) HideHand(false);
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
@@ -412,9 +460,7 @@ public class HandBuildingCards : MonoBehaviour
         cards.Remove(selectedCard);
 
 
-        //ResetAndSetStandardCard(selectedCard);
         ///////////
-        //SetStandardCard(selectedCard);
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered += SetHoveredCard;
@@ -423,7 +469,6 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard = null;
         buildingPlacer.DisablePlacing();
         HandTransform.position = defaultHandPosition;
-        //ShowHand();
         ///////////
         
         InitCardsInHand();
@@ -451,11 +496,12 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = true;
 
-        HandTransform.DOKill();
-        HandTransform.DOMove(hiddenHandPosition, 0.1f);
+        isBeingHidden = true;
 
-        foreach(BuildingCard card in cards)
-            card.normalCollider();
+        HandTransform.DOComplete(true);
+        HandTransform.DOMove(hiddenHandPosition, 0.1f)
+            .OnComplete(() => isBeingHidden = false);
+
 
         // Audio
         if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
@@ -465,11 +511,11 @@ public class HandBuildingCards : MonoBehaviour
     {
         isHidden = false;
 
-        HandTransform.DOKill();
-        HandTransform.DOMove(defaultHandPosition, 0.1f);
+        isBeingShown = true;
 
-        foreach (BuildingCard card in cards)
-            card.bigCollider();
+        HandTransform.DOComplete(true);
+        HandTransform.DOMove(defaultHandPosition, 0.1f)
+            .OnComplete( () => isBeingShown = false );
     }
 
 
@@ -477,7 +523,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         yield return new WaitForSeconds(0.05f);
 
-        if (!IsHoveringCard)
+        if (!IsHoveringCard && !isBeingHidden)
         {
             HideHand(true);
         }

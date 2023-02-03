@@ -20,6 +20,7 @@ public class CardPartAttack : CardPart
     [SerializeField] private TextMeshProUGUI attackDescriptionText;
 
 
+
     [Header("PART")]
     [SerializeField] public TurretPartAttack turretPartAttack;
 
@@ -31,8 +32,9 @@ public class CardPartAttack : CardPart
 
 
 
-    private void Awake()
+    protected override void AwakeInit()
     {
+        base.AwakeInit();
         //attackMaterial = attackMeshRenderer.material;
         attackMaterial = new Material(attackImage.material);
         attackImage.material = attackMaterial;
@@ -98,12 +100,15 @@ public class CardPartAttack : CardPart
 
         // show attack icon
         defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t2);
 
         // show attack text
         attackNameText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
         attackDescriptionText.DOFade(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t2);
 
 
@@ -120,12 +125,15 @@ public class CardPartAttack : CardPart
 
         // hide attack text
         attackDescriptionText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
         attackNameText.DOFade(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t2);
 
         // hide attack icon
         defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t2);
 
 
