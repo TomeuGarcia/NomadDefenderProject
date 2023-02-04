@@ -112,7 +112,7 @@ public class TextDecoder : MonoBehaviour
         while (indexChar <= textStrings[currentIndexLine].Length)
         {
             DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, indexChar);
-            yield return new WaitForSeconds(decodingParameters.updateDecodeTime);
+            yield return new WaitForSecondsRealtime(decodingParameters.updateDecodeTime);
         }
 
         DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, textStrings[currentIndexLine].Length);
@@ -138,7 +138,7 @@ public class TextDecoder : MonoBehaviour
             //GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
 
             indexChar++;
-            yield return new WaitForSeconds(decodingParameters.updateCharIndexTime);
+            yield return new WaitForSecondsRealtime(decodingParameters.updateCharIndexTime);
         }
     }
 
