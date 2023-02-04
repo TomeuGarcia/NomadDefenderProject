@@ -72,7 +72,7 @@ public class ConsoleDialogSystem : MonoBehaviour
 
         if(clearWithTime)
         {
-            StartCoroutine(consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime));
+            consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime);
         }
     }
 

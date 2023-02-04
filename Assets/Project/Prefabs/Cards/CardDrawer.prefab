@@ -124,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2683057792737234625}
   - component: {fileID: 2683057792737234630}
+  - component: {fileID: 8344648765130201557}
   m_Layer: 0
   m_Name: CardDrawer
   m_TagString: Untagged
@@ -161,10 +162,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hand: {fileID: 0}
   deck: {fileID: 0}
+  battleHUD: {fileID: 0}
+  redrawingText: {fileID: 0}
+  canvas: {fileID: 0}
   numCardsHandStart: 2
   drawCooldownImage: {fileID: 9067291621066607374}
   drawTimeCooldown: 30
   cardsToDrawPerWave: 2
+--- !u!225 &8344648765130201557
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2683057792737234631}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3376237377653174981
 GameObject:
   m_ObjectHideFlags: 0
