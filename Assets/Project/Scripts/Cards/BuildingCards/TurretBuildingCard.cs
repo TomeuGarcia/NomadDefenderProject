@@ -413,7 +413,7 @@ public class TurretBuildingCard : BuildingCard
     public void SubtractPlayCost(int amountToSubtract)
     {
         int endValue = Mathf.Max(turretStats.playCost - amountToSubtract, TurretBuilding.MIN_PLAY_COST);
-
+        turretCardParts.cardCost = endValue;
         StartCoroutine(SubtractPlayCostAnimation(endValue));
     }
 
