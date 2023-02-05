@@ -49,6 +49,7 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image basePassiveImage;
 
     [SerializeField] private TextMeshProUGUI cardLevelText;
+    [SerializeField] private TextDecoder cardLevelTextDecoder;
 
     bool hasBasePassiveAbility = false;
 
@@ -346,10 +347,43 @@ public class TurretBuildingCard : BuildingCard
     {
         turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
     }
-    private void UpdateCardLevelText()
+
+    private bool IsCardLevelMaxed()
+    {
+        return turretCardParts.cardLevel == TurretCardParts.MAX_CARD_LEVEL;
+    }
+    private string GetCardLevelString()
     {
         int level = turretCardParts.cardLevel;
-        cardLevelText.text = level == TurretCardParts.MAX_CARD_LEVEL ? "MAX" : "lvl " + level.ToString();
+        return IsCardLevelMaxed() ? "MAX" : "lvl " + level.ToString();
+    }
+
+    private void UpdateCardLevelText()
+    {
+        cardLevelText.enabled = true;
+        cardLevelText.text = GetCardLevelString();
+    }
+
+    private void UpdateCardLevelTextWithDecoder()
+    {
+        cardLevelTextDecoder.ResetDecoder();
+        cardLevelTextDecoder.SetTextStrings(GetCardLevelString());
+        cardLevelTextDecoder.Activate();
+    }
+
+    public void PlayLevelUpAnimation()
+    {
+        if (!IsCardLevelMaxed())
+        {
+            StartCoroutine(DoPlayLevelUpAnimation());
+        }        
+    }
+
+    private IEnumerator DoPlayLevelUpAnimation()
+    {
+        cardLevelText.enabled = false;
+        yield return new WaitForSeconds(0.4f);
+        UpdateCardLevelTextWithDecoder();
     }
 
 }
