@@ -62,4 +62,25 @@ public class TurretPartBody : ScriptableObject
         this.abilityDescription = other.abilityDescription;
     }
 
+
+    // Operator Overloads
+    public static bool operator ==(TurretPartBody obj1, TurretPartBody obj2)
+    {
+        return obj1.prefab == obj2.prefab;
+    }
+
+    public static bool operator !=(TurretPartBody obj1, TurretPartBody obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }

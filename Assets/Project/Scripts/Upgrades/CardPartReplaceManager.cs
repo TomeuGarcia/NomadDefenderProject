@@ -33,6 +33,11 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+
+    [Header("SUBTRACT CARD PLAY COST")]
+    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
+
+
     [Header("COMPONENTS")]
     [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
@@ -274,7 +279,10 @@ public class CardPartReplaceManager : MonoBehaviour
         TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
         ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
+
+        if (selectedCard.ReplacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
         selectedCard.PlayLevelUpAnimation();
+
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
