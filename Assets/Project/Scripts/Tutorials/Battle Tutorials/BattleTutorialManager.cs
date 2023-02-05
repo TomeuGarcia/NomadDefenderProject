@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleTutorialManager : MonoBehaviour
 {
@@ -487,35 +488,38 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(3.5f);
 
         //Finish scene and load next
+        TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
+        SceneLoader.GetInstance().StartLoadFirstScene();
     }
 
 }

@@ -123,12 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &61374475 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5197006574378499511, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 4525846866438920759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &498795635
 GameObject:
   m_ObjectHideFlags: 3
@@ -341,7 +335,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &566305462
 GameObject:
@@ -436,7 +430,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &566305465
 MonoBehaviour:
@@ -542,7 +536,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 70, y: 0, z: 0}
 --- !u!114 &1007776004
 MonoBehaviour:
@@ -647,7 +641,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 61374475}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -680,14 +674,8 @@ Transform:
   m_Children:
   - {fileID: 498795636}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 75, y: 0, z: 0}
---- !u!1 &1184416222 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5750667213190007970, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 4525846866438920759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1220345306
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -698,7 +686,7 @@ PrefabInstance:
     - target: {fileID: 6244668554870657593, guid: b55efcc8422d93c43a9e94c700f96276,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6244668554870657593, guid: b55efcc8422d93c43a9e94c700f96276,
         type: 3}
@@ -938,6 +926,11 @@ PrefabInstance:
         type: 3}
       propertyPath: clearWithTime
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525846865304159890, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bea90a63c4431e143a62fe3e27dfe2f3, type: 3}

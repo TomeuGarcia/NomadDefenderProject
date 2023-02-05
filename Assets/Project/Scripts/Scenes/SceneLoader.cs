@@ -77,10 +77,10 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone += StartLoadNextScene; // not called, remove after check
+        GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart += StartLoadMainMenu;
-        MainMenu.OnPlayStart += StartLoadNextScene; // TODO change to load map scene
+        MainMenu.OnPlayStart += StartLoadFirstScene; // TODO change to load map scene
     }
 
     private void OnDisable()
@@ -90,10 +90,10 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene; // not called, remove after check
+        GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart -= StartLoadMainMenu;
-        MainMenu.OnPlayStart -= StartLoadNextScene; // TODO change to load map scene
+        MainMenu.OnPlayStart -= StartLoadFirstScene; // TODO change to load map scene
     }
 
     private void Update()
@@ -130,9 +130,9 @@ public class SceneLoader : MonoBehaviour
         backgroundImage.DOColor(openColor, duration * 1.2f);
     }
 
-    private void StartLoadNextScene()
+    public void StartLoadFirstScene()
     {
-        StartCoroutine(DoLoadScene(LoadNextScene));
+        StartCoroutine(DoLoadScene(LoadFirstScene));
     }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
     {
@@ -154,33 +154,12 @@ public class SceneLoader : MonoBehaviour
 
 
 
-    private void LoadNextScene()
+    private void LoadFirstScene()
     {
-        int nextSceneI = SceneManager.GetActiveScene().buildIndex;
-        int current = SceneManager.GetActiveScene().buildIndex;
-
-        
-
-        if (current <= menu)
-        {
-            nextSceneI++;
-        }
-        else if(current <= td2)
-        {
-            nextSceneI = Random.Range(0, 3) + upgrade1;
-
-            lastWasTD2 = (current == td2);
-        }
-        else if(current == newCard)
-        {
-            nextSceneI = (lastWasTD2) ? td1 : td2;
-        }
+        if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
+            SceneManager.LoadScene("InBattleTutorial");
         else
-        {
-            nextSceneI = newCard;
-        }
-
-        SceneManager.LoadScene(nextSceneI);        
+            SceneManager.LoadScene("MapGenerationTest");
     }
 
     public void StartLoadMainMenu()
@@ -208,6 +187,7 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
     }
+
     public void UnloadMapScene(string sceneName)
     {
         StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName));
@@ -238,6 +218,11 @@ public class SceneLoader : MonoBehaviour
     private void UnloadSceneAsyncByName(string sceneName)
     {
         SceneManager.UnloadSceneAsync(sceneName);
+    }
+
+    public void LoadNextScene(string sceneName)
+    {
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
     }
 
 }
