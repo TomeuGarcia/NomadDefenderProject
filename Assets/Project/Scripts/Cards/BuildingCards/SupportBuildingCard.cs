@@ -60,7 +60,8 @@ public class SupportBuildingCard : BuildingCard
     }
     public void ResetParts(SupportCardParts supportCardParts)
     {
-        this.supportCardParts = new SupportCardParts(supportCardParts);
+        this.supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
+        this.supportCardParts.Init(supportCardParts);
         Init();
     }
     protected override void GetMaterialsRefs()

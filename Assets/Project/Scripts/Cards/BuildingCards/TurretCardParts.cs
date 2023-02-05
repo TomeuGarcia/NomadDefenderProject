@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewTurretBuilding", menuName = "Cards/TurretCardParts")]
 public class TurretCardParts : ScriptableObject
 {
-    public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-           TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
+    public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+                     TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
     {
         this.turretPartAttack = turretPartAttack;
         this.turretPartBody = turretPartBody;
@@ -15,8 +15,8 @@ public class TurretCardParts : ScriptableObject
         this.cardLevel = cardLevel;
     }
 
-    public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-           TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
+    public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+                     TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
     {
         this.turretPartAttack = turretPartAttack;
         this.turretPartBody = turretPartBody;
@@ -26,7 +26,7 @@ public class TurretCardParts : ScriptableObject
         this.cardLevel = cardLevel;
     }
 
-    public TurretCardParts(TurretCardParts other)
+    public void Init(TurretCardParts other)
     {
         this.turretPartAttack = other.turretPartAttack;
         this.turretPartBody = other.turretPartBody;
@@ -35,6 +35,7 @@ public class TurretCardParts : ScriptableObject
         this.cardCost = other.cardCost;
         this.cardLevel = other.cardLevel;
     }
+
 
     public TurretPartAttack turretPartAttack;
     public TurretPartBody turretPartBody;

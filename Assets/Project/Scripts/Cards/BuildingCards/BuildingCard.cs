@@ -29,7 +29,7 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     [Header("CANVAS COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI playCostText;
+    [SerializeField] protected TextMeshProUGUI playCostText;
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
@@ -116,6 +116,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseEnter()
     {
         if (isRepositioning) return;
+        if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.STANDARD) return;
 
@@ -125,6 +126,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseExit()
     {
         if (isRepositioning) return;
+        if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.HOVERED) return;
 
@@ -202,7 +204,7 @@ public abstract class BuildingCard : MonoBehaviour
         InitVisuals();
     }
 
-    private void InitCostText()
+    protected void InitCostText()
     {
         playCostText.text = GetCardPlayCost().ToString();
     }
@@ -342,12 +344,12 @@ public abstract class BuildingCard : MonoBehaviour
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
-        Debug.Log("ShowInfo");
+        //Debug.Log("ShowInfo");
     }
     public virtual void HideInfo()
     {
         isShowingInfo = false;
-        Debug.Log("HideInfo");
+        //Debug.Log("HideInfo");
     }
 
 
@@ -416,6 +418,10 @@ public abstract class BuildingCard : MonoBehaviour
         canInfoInteract = true;
         isPlayingDrawAnimation = false;
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+
+        DisableMouseInteraction();
+        yield return null;
+        EnableMouseInteraction();
     }
 
 
