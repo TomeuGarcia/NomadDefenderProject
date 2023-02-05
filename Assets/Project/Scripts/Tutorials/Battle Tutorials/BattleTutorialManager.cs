@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -432,15 +433,16 @@ public class BattleTutorialManager : MonoBehaviour
         //Last Wave
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSecondsRealtime(5.0f);
+        yield return new WaitForSecondsRealtime(4.0f);
+
+        //Black Image animation
+
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSecondsRealtime(0.5f);
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSecondsRealtime(0.25f);
+
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
@@ -470,42 +472,50 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSecondsRealtime(0.25f);
 
-        //Random Shit Text
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.45f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.45f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.4f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.4f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.35f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(0.35f);
-
-        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSecondsRealtime(0.25f);
+
+        //Random Bullshit Text
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine();
 
         //Finish scene and load next
-
-
-        //Falta error final i finalitzar partida
-
-        //Finishes Deck Tutorial
-
-        //scriptedSequence.Clear();
     }
 
 }
