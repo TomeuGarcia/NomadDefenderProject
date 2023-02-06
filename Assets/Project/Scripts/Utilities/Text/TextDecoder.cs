@@ -135,7 +135,7 @@ public class TextDecoder : MonoBehaviour
             }
             //
 
-            GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
+            //GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
 
             indexChar++;
             yield return new WaitForSeconds(decodingParameters.updateCharIndexTime);
