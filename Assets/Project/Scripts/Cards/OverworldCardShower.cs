@@ -102,7 +102,8 @@ public class OverworldCardShower : MonoBehaviour
 
         showDeckButton.SetActive(false);
         backToMapButton.SetActive(true);
-        StartCoroutine(setCardsInPlace());
+        if(currentCoroutine!= null) { StopCoroutine(currentCoroutine); }
+        currentCoroutine =  StartCoroutine(setCardsInPlace());
 
     }
 
@@ -111,8 +112,9 @@ public class OverworldCardShower : MonoBehaviour
         showingDeck = false;
         //followCamera.transform.position = prevCameraPos;
         //followCamera.transform.rotation = prevCameraRot;
+        
 
-        followCamera.SetActive(true);
+         followCamera.SetActive(true);
         transform.GetChild(0).gameObject.SetActive(false);
          backToMapButton.SetActive(false);
         showDeckButton.SetActive(true);
@@ -200,6 +202,7 @@ public class OverworldCardShower : MonoBehaviour
         currentSelectedCard = null;
         foreach (BuildingCard itCard in cards)
         {
+            itCard.RootCardTransform.DOComplete();
             itCard.transform.position = new Vector3(0, 3, 3.5f);
             itCard.StandardState();
         }
