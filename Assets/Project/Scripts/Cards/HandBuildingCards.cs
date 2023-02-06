@@ -15,7 +15,10 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
     private int initialRedraws = 3;
-    int redrawsLeft;
+    private int redrawsLeft;
+    private bool isInRedrawPhase = false;
+
+
     private List<BuildingCard> cards;
 
     private BuildingCard selectedCard;
@@ -69,14 +72,13 @@ public class HandBuildingCards : MonoBehaviour
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
-        InitCardsInHandForRedraw();
+        isInRedrawPhase = true;
+        InitCardsInHandForRedraw();        
 
         for (int i = 0; i < cards.Count; ++i)
         {
             cards[i].CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
-
-        //HideHand(false);
 
         CheckCardsCost();
     }
@@ -175,7 +177,10 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            if (!isBeingHidden) HideHand(true);
+            if (!isBeingHidden && !isInRedrawPhase)
+            {
+                HideHand(true);
+            }
         }
     }
 
@@ -237,7 +242,10 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            if (!isBeingHidden) HideHand(true);
+            if (!isBeingHidden && !isInRedrawPhase)
+            {
+                HideHand(true);
+            }
         }
     }
     public void FinishedRedrawing()
@@ -253,6 +261,8 @@ public class HandBuildingCards : MonoBehaviour
         currencyCounter.OnCurrencySpent += CheckCardsCost;
 
         if (OnFinishRedrawing != null) OnFinishRedrawing();
+
+        isInRedrawPhase = false;
     }
 
     private void Redraw(BuildingCard card)
@@ -370,7 +380,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        if (!isHidden)
+        if (!isHidden && !isInRedrawPhase)
         {
             StartCoroutine("WaitToHideHand");
         }
@@ -435,7 +445,7 @@ public class HandBuildingCards : MonoBehaviour
         buildingPlacer.EnablePlacing(card);
 
         //hide hand
-        if (!isBeingHidden) HideHand(false);
+        if (!isBeingHidden && !isInRedrawPhase) HideHand(false);
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
