@@ -1,10 +1,8 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class TurretBuildingCard : BuildingCard
 {
@@ -49,9 +47,14 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image basePassiveImage;
 
     [SerializeField] private TextMeshProUGUI cardLevelText;
+    [SerializeField] private TextDecoder cardLevelTextDecoder;
+    private bool cardLevelAlredyDisplayedMax = false;
 
     bool hasBasePassiveAbility = false;
 
+
+    [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
+    private bool isPlayingSubtractCostAnimation = false;
 
 
 
@@ -148,13 +151,17 @@ public class TurretBuildingCard : BuildingCard
 
     public void ResetParts(TurretCardParts turretCardParts)
     {
-        this.turretCardParts = new TurretCardParts(turretCardParts);
+        this.turretCardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+        this.turretCardParts.Init(turretCardParts);
+
         Init();
     }
 
 
     public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
     {
+        ReplacedWithSamePart = turretCardParts.turretPartAttack == newTurretPartAttack; // Check replaced with same part
+
         int costHolder = turretCardParts.turretPartAttack.cost;
         turretCardParts.turretPartAttack = newTurretPartAttack;
         turretCardParts.turretPartAttack.cost = costHolder;
@@ -163,6 +170,8 @@ public class TurretBuildingCard : BuildingCard
 
     public void SetNewPartBody(TurretPartBody newTurretPartBody)
     {
+        ReplacedWithSamePart = turretCardParts.turretPartBody == newTurretPartBody; // Check replaced with same part
+
         int costHolder = turretCardParts.turretPartBody.cost;
         turretCardParts.turretPartBody = newTurretPartBody;
         turretCardParts.turretPartBody.cost = costHolder;
@@ -171,6 +180,8 @@ public class TurretBuildingCard : BuildingCard
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
     {
+        ReplacedWithSamePart = turretCardParts.turretPassiveBase == newTurretPassiveBase; // Check replaced with same part
+
         //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
         int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
 
@@ -342,14 +353,85 @@ public class TurretBuildingCard : BuildingCard
         canInfoInteract = true;
     }
 
+
+
+    // Card Level
     public void IncrementCardLevel(int levelIncrement)
     {
+        cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
         turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
     }
-    private void UpdateCardLevelText()
+
+    private bool IsCardLevelMaxed()
+    {
+        return turretCardParts.cardLevel == TurretCardParts.MAX_CARD_LEVEL;
+    }
+    private string GetCardLevelString()
     {
         int level = turretCardParts.cardLevel;
-        cardLevelText.text = level == TurretCardParts.MAX_CARD_LEVEL ? "MAX" : "lvl " + level.ToString();
+        return IsCardLevelMaxed() ? "MAX" : "lvl " + level.ToString();
+    }
+
+    private void UpdateCardLevelText()
+    {
+        cardLevelText.enabled = true;
+        cardLevelText.text = GetCardLevelString();
+    }
+
+    private void UpdateCardLevelTextWithDecoder()
+    {
+        cardLevelTextDecoder.ResetDecoder();
+        cardLevelTextDecoder.SetTextStrings(GetCardLevelString());
+        cardLevelTextDecoder.Activate();
+    }
+
+    public void PlayLevelUpAnimation()
+    {
+        if (!cardLevelAlredyDisplayedMax)
+        {
+            StartCoroutine(DoPlayLevelUpAnimation());
+            
+            if (IsCardLevelMaxed())
+            {
+                cardLevelAlredyDisplayedMax = true;
+            }
+        }        
+    }
+
+    private IEnumerator DoPlayLevelUpAnimation()
+    {
+        cardLevelText.enabled = false;
+
+        yield return new WaitUntil(() => !isPlayingSubtractCostAnimation);
+
+        yield return new WaitForSeconds(0.4f);
+        UpdateCardLevelTextWithDecoder();
+    }
+
+
+    
+    public void SubtractPlayCost(int amountToSubtract)
+    {
+        int endValue = Mathf.Max(turretStats.playCost - amountToSubtract, TurretBuilding.MIN_PLAY_COST);
+        turretCardParts.cardCost = endValue;
+        StartCoroutine(SubtractPlayCostAnimation(endValue));
+    }
+
+    private IEnumerator SubtractPlayCostAnimation(int endValue)
+    {
+        isPlayingSubtractCostAnimation = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        while (turretStats.playCost > endValue)
+        {
+            --turretStats.playCost;
+            InitCostText();
+            GameAudioManager.GetInstance().PlayConsoleTyping(0);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        isPlayingSubtractCostAnimation = false;
     }
 
 }

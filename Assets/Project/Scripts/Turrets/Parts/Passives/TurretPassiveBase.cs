@@ -33,4 +33,27 @@ public class TurretPassiveBase : ScriptableObject
         this.passive = other.passive;
         this.visualInformation = other.visualInformation;
     }
+
+
+    // Operator Overloads
+    public static bool operator ==(TurretPassiveBase obj1, TurretPassiveBase obj2)
+    {
+        return obj1.passive.abilityName == obj2.passive.abilityName;
+    }
+
+    public static bool operator !=(TurretPassiveBase obj1, TurretPassiveBase obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
 }

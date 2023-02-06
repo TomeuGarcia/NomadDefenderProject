@@ -34,4 +34,25 @@ public class TurretPartAttack : ScriptableObject
     }
 
 
+    // Operator Overloads
+    public static bool operator== (TurretPartAttack obj1, TurretPartAttack obj2)
+    {
+        return obj1.prefab == obj2.prefab;
+    }
+
+    public static bool operator !=(TurretPartAttack obj1, TurretPartAttack obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
 }
