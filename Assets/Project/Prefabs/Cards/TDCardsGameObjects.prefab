@@ -511,6 +511,7 @@ GameObject:
   - component: {fileID: 7678972490711836632}
   - component: {fileID: 6833405274619986173}
   - component: {fileID: 1402081141178370575}
+  - component: {fileID: 8152019533826951795}
   m_Layer: 5
   m_Name: FinishRedrawingButton
   m_TagString: Untagged
@@ -633,6 +634,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!225 &8152019533826951795
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056510457659878732}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &4885359580172842444
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1052,6 +1065,11 @@ PrefabInstance:
       propertyPath: redrawingText
       value: 
       objectReference: {fileID: 23746888936408319}
+    - target: {fileID: 2683057792737234630, guid: 1e95f6c11d30a424c8a201ae4ad04870,
+        type: 3}
+      propertyPath: finishRedrawsButtonCG
+      value: 
+      objectReference: {fileID: 8152019533826951795}
     - target: {fileID: 2683057792737234631, guid: 1e95f6c11d30a424c8a201ae4ad04870,
         type: 3}
       propertyPath: m_Name
@@ -1183,6 +1201,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1780426826839134824, guid: 579f3ac685ce43247be2a1d33201a582,
         type: 3}
+      propertyPath: handCamera
+      value: 
+      objectReference: {fileID: 4885359580403629099}
+    - target: {fileID: 1780426826839134824, guid: 579f3ac685ce43247be2a1d33201a582,
+        type: 3}
       propertyPath: cards.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -1211,6 +1234,11 @@ PrefabInstance:
       propertyPath: cards.Array.data[4]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1780426826839134824, guid: 579f3ac685ce43247be2a1d33201a582,
+        type: 3}
+      propertyPath: handCameraTransform
+      value: 
+      objectReference: {fileID: 4885359580403629099}
     - target: {fileID: 1780426826839134825, guid: 579f3ac685ce43247be2a1d33201a582,
         type: 3}
       propertyPath: m_RootOrder
