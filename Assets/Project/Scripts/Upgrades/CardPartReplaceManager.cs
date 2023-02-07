@@ -297,7 +297,8 @@ public class CardPartReplaceManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // Enable FINAL retreieve card
-        upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
