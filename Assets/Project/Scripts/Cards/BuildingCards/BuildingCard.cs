@@ -94,6 +94,8 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
 
+    public delegate void CardFunctionPtr();
+
     public bool AlreadyCanBeHovered => OnCardHovered != null;
 
 
@@ -116,7 +118,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseEnter()
     {
         if (isRepositioning) return;
-        if (isPlayingDrawAnimation) return;
+        //if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.STANDARD) return;
 
@@ -126,7 +128,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseExit()
     {
         if (isRepositioning) return;
-        if (isPlayingDrawAnimation) return;
+        //if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.HOVERED) return;
 
@@ -353,15 +355,15 @@ public abstract class BuildingCard : MonoBehaviour
     }
 
 
-    public void PlayDrawAnimation()
+    public void PlayDrawAnimation(CardFunctionPtr animationEndCallback)
     {
         cardMaterial.SetFloat("_BorderLoopEnabled", 1f);
         cardMaterial.SetFloat("_TimeStartBorderLoop", Time.time);
 
-        StartCoroutine(InterfaceDrawAnimation());
+        StartCoroutine(InterfaceDrawAnimation(animationEndCallback));
     }
 
-    private IEnumerator InterfaceDrawAnimation()
+    private IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
     {
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
@@ -419,9 +421,12 @@ public abstract class BuildingCard : MonoBehaviour
         isPlayingDrawAnimation = false;
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
 
-        DisableMouseInteraction();
-        yield return null;
-        EnableMouseInteraction();
+        //DisableMouseInteraction();
+        //yield return null;
+        //EnableMouseInteraction();
+
+
+        animationEndCallback();
     }
 
 

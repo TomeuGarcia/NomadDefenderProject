@@ -219,6 +219,18 @@ public class UpgradeCardHolder : MonoBehaviour
     }
 
 
+    public void StartFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    {
+        this.startDelay = startDelay;
+        this.duration = duration;
+        this.delayBetweenCards = delayBetweenCards;
+
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 1f);
+        
+        FinalRetrieveCard(selectedCard);
+    }
+
     public void EnableFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
     {
         selectedCard.OnCardSelectedNotHovered += FinalRetrieveCard;
