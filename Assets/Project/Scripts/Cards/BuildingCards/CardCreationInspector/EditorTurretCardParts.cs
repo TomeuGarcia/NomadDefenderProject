@@ -8,8 +8,8 @@ using UnityEditor;
 [CanEditMultipleObjects]
 public class EditorTurretCardParts : Editor
 {
-    private const float width = 128f;
-    private const float height = 128f;
+    private const float width = 96f;
+    private const float height = 96f;
 
     public override void OnInspectorGUI()
     {
