@@ -2,10 +2,9 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "NewSupportBuilding", menuName = "Cards/SupportCardParts")]
-public class SupportCardParts : ScriptableObject
+public class SupportCardParts : GroupedCardParts
 {
     public TurretPartBase turretPartBase;
-    public int cardCost;
 
 
     public void Init(TurretPartBase turretPartBase, int cardCost)
