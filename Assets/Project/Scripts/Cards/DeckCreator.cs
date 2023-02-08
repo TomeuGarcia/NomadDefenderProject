@@ -41,6 +41,7 @@ public class DeckCreator : MonoBehaviour
         }
 
         deckData.Init(starterCards);
+        Debug.Log("Spawn Cards");
     }
 
     private void OnDisable()
@@ -48,6 +49,7 @@ public class DeckCreator : MonoBehaviour
         deckData.Save();
     }
 
+    
     public TurretBuildingCard GetUninitializedNewTurretCard()
     {
         return Instantiate(turretCardPrefab, spawnTransform).GetComponent<TurretBuildingCard>();
