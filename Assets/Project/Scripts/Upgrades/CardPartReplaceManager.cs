@@ -280,7 +280,8 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
 
-        if (selectedCard.ReplacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -295,6 +296,8 @@ public class CardPartReplaceManager : MonoBehaviour
         // Hide parts
         cardPartHolder.Hide(0.5f, 0.2f);
         yield return new WaitForSeconds(1f);
+
+        if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
 
         // Enable FINAL retreieve card
         //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
