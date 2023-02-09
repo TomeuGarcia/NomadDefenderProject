@@ -57,7 +57,7 @@ public class OverworldMapDecorator : MonoBehaviour
         {
             lastLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
-            OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState);
+            OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState, NodeEnums.ProgressionState.LATE);
             lastLevel[nodeI].SetNodeClass(lastNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.LAST_LEVEL)); //Get Empty Node Texture
         }
     } 
@@ -70,7 +70,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = firstLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
 
-            OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState);
+            OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState, NodeEnums.ProgressionState.EARLY);
             firstLevel[nodeI].SetNodeClass(firstNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.FIRST_LEVEL)); //Get Empty Node Texture
         }
     }
@@ -84,21 +84,25 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = battleLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.BattleType battleType;
+            NodeEnums.ProgressionState progressionState;
 
             if (levelI < dSettings.midBattleStartIndex)
             {
                 battleType = NodeEnums.BattleType.EARLY;
+                progressionState = NodeEnums.ProgressionState.EARLY;
             }
             else if (levelI < dSettings.lateBattleStartIndex)
             {
                 battleType = NodeEnums.BattleType.MID;
+                progressionState = NodeEnums.ProgressionState.MID;
             }
             else
             {
                 battleType = NodeEnums.BattleType.LATE;
+                progressionState = NodeEnums.ProgressionState.LATE;
             }
 
-            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType);
+            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType, progressionState);
             battleLevel[nodeI].SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
         }
     }

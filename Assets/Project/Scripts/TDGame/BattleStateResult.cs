@@ -28,4 +28,19 @@ public class BattleStateResult
     }
 
     public NodeBattleStateResult[] nodeResults;
+    public bool DidWinWithPerfectDefense()
+    {
+        if (nodeResults.Length < 2) return false;
+
+        for (int i = 0; i < nodeResults.Length; i++)
+        {
+            if (nodeResults[i].healthState != NodeEnums.HealthState.UNDAMAGED)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
