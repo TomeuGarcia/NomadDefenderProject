@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
@@ -47,12 +50,18 @@ public class GatherNewCardManager : MonoBehaviour
         // NodeEnums.HealthState.UNDAMAGED + perfect    --> 2 Turret Cards + 1 Support Cards + Lvl3 Turrets + Reroll
 
         //// TODO read from data instead
-        NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
-        NodeEnums.HealthState currentNodeHealthState = NodeEnums.HealthState.GREATLY_DAMAGED;
-        bool lastBattleWasDefendedPerfectly = false;
+        NodeEnums.ProgressionState progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+        bool lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
         ////
 
+        Debug.Log("Draw card data:");
+        Debug.Log(progressionState);
+        Debug.Log(currentNodeHealthState);
+        Debug.Log(lastBattleWasDefendedPerfectly);
+
         int numSupportCards = 0;
+        turretCardsLevel = 1;
 
         if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
         {
