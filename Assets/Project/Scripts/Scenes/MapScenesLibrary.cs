@@ -18,6 +18,10 @@ public class MapScenesLibrary : ScriptableObject
     [SerializeField] private string[] early1Defense;
     [SerializeField] private string[] early2Defense;
 
+    [Header("MID")]
+    [SerializeField] private string[] mid1Defense;
+    [SerializeField] private string[] mid2Defenses;
+
     [Header("LATE")]
     [SerializeField] private string[] late1Defense;
     [SerializeField] private string[] late2Defenses;
@@ -43,12 +47,17 @@ public class MapScenesLibrary : ScriptableObject
 
 
     public void SetBattleSceneNames(out MapSceneLoader.SceneNames[] earlySceneNames,
+                                    out MapSceneLoader.SceneNames[] midSceneNames, 
                                     out MapSceneLoader.SceneNames[] lateSceneNames, 
                                     out MapSceneLoader.SceneNames[] bossSceneNames)
     {
         earlySceneNames = new MapSceneLoader.SceneNames[2];
         earlySceneNames[0] = new MapSceneLoader.SceneNames(early1Defense);
         earlySceneNames[1] = new MapSceneLoader.SceneNames(early2Defense);
+
+        midSceneNames = new MapSceneLoader.SceneNames[2];
+        midSceneNames[0] = new MapSceneLoader.SceneNames(mid1Defense);
+        midSceneNames[1] = new MapSceneLoader.SceneNames(mid2Defenses);
 
         lateSceneNames = new MapSceneLoader.SceneNames[2];
         lateSceneNames[0] = new MapSceneLoader.SceneNames(late1Defense);

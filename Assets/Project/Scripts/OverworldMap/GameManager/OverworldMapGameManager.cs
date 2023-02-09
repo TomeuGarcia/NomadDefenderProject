@@ -44,15 +44,15 @@ public class OverworldMapGameManager : MonoBehaviour
     private void OnEnable()
     {
         MapSceneNotifier.OnMapSceneFinished += ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded += DoMapSceneLoaded;
-        mapSceneLoader.OnMapSceneUnloaded += DoMapSceneUnloaded;
+        mapSceneLoader.OnSceneFromMapLoaded += DoOnSceneFromMapLoaded;
+        mapSceneLoader.OnSceneFromMapUnloaded += DoOnSceneFromMapUnloaded;
     }
 
     private void OnDisable()
     {
         MapSceneNotifier.OnMapSceneFinished -= ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded -= DoMapSceneLoaded;
-        mapSceneLoader.OnMapSceneUnloaded -= DoMapSceneUnloaded;
+        mapSceneLoader.OnSceneFromMapLoaded -= DoOnSceneFromMapLoaded;
+        mapSceneLoader.OnSceneFromMapUnloaded -= DoOnSceneFromMapUnloaded;
     }
 
 
@@ -168,6 +168,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {        
         return currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE;
     }
+    private bool IsCurrentNodeUpgrade()
+    {
+        return currentNode.GetNodeType() == NodeEnums.NodeType.UPGRADE;
+    }
 
 
 
@@ -188,15 +192,20 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    private void DoMapSceneUnloaded()
+    private void DoOnSceneFromMapUnloaded()
     {
         owMapPawn.ActivateCamera();
+
         cardDisplayer.ResetAll();
         cardShower.SetActive(true);
     }
-    private void DoMapSceneLoaded()
+    private void DoOnSceneFromMapLoaded()
     {
         owMapPawn.DeactivateCamera();
+
+        if (IsCurrentNodeUpgrade())
+            Debug.Log("entered upgrade scene");
+
         cardDisplayer.DestroyAllCards();
         cardShower.SetActive(false);
     }

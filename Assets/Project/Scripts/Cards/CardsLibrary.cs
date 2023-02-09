@@ -6,8 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CardsLibrary", menuName = "Cards/CardsLibrary")]
 public class CardsLibrary : ScriptableObject
 {
-    public TurretCardParts[] totalTurretCardParts;
-    public SupportCardParts[] totalSupportCardParts;
+    [Header("GROUPED CARD PARTS")]
+    [SerializeField] public TurretCardParts[] totalTurretCardParts;
+    [SerializeField] public SupportCardParts[] totalSupportCardParts;
 
 
     private int minPowerfulnessTurretRegistered = 0;
@@ -15,7 +16,21 @@ public class CardsLibrary : ScriptableObject
 
     private int minPowerfulnessSupportRegistered = 0;
     private int maxPowerfulnessSupportRegistered = 0;
-  
+
+
+    [System.Serializable]
+    public struct CardGenerationClassification
+    {
+        public NodeEnums.ProgressionState progressionState;
+        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int minPowerfulness;
+        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int maxPowerfulness;
+        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int minPerfectPowerfulness;
+        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int maxPerfectPowerfulness;       
+    }
+    [Header("GENERATION CLASSIFICATION")]
+    [SerializeField] public CardGenerationClassification[] cardGenerationClassifications;
+
+
 
 
     public void InitSetup()
@@ -61,14 +76,22 @@ public class CardsLibrary : ScriptableObject
 
 
     // ---- COMPLETELY RANDOM ----
+    private TurretCardParts GetRandomTurretCardPartsInCollection(TurretCardParts[] turretCardParts)
+    {
+        return turretCardParts[Random.Range(0, turretCardParts.Length)];
+    }
     public TurretCardParts GetRandomTurretCardParts()
     {
-        return totalTurretCardParts[Random.Range(0, totalTurretCardParts.Length)];
+        return GetRandomTurretCardPartsInCollection(totalTurretCardParts);
     }
 
+    private SupportCardParts GetRandomSupportCardPartsInCollection(SupportCardParts[] supportCardParts)
+    {
+        return supportCardParts[Random.Range(0, supportCardParts.Length)];
+    }
     public SupportCardParts GetRandomSupportCardParts()
     {
-        return totalSupportCardParts[Random.Range(0, totalSupportCardParts.Length)];
+        return GetRandomSupportCardPartsInCollection(totalSupportCardParts);
     }
 
 
@@ -101,34 +124,82 @@ public class CardsLibrary : ScriptableObject
 
 
     // ---- RANDOM WITHIN POWERFULNESS RANGE ----
+    private TurretCardParts[] GetTurretCardPartsInRange(int minPowerfulness, int maxPowerfulness)
+    {
+        List<TurretCardParts> turretCardParts = new List<TurretCardParts>();
+
+        for (int i = 0; i < totalTurretCardParts.Length; ++i)
+        {
+            if (totalTurretCardParts[i].IsPowerfulnessInRange(minPowerfulness, maxPowerfulness))
+            {
+                turretCardParts.Add(totalTurretCardParts[i]);
+            }
+        }
+
+        return turretCardParts.ToArray();
+    }
+    private SupportCardParts[] GetSupportCardPartsInRange(int minPowerfulness, int maxPowerfulness)
+    {
+        List<SupportCardParts> turretCardParts = new List<SupportCardParts>();
+
+        for (int i = 0; i < totalSupportCardParts.Length; ++i)
+        {
+            if (totalSupportCardParts[i].IsPowerfulnessInRange(minPowerfulness, maxPowerfulness))
+            {
+                turretCardParts.Add(totalSupportCardParts[i]);
+            }
+        }
+
+        return turretCardParts.ToArray();
+    }
+
+
+
+
+
     public TurretCardParts GetRandomTurretCardParts(int minPowerfulness, int maxPowerfulness)
     {
         minPowerfulness = Mathf.Max(minPowerfulnessTurretRegistered, minPowerfulness);
         maxPowerfulness = Mathf.Min(maxPowerfulnessTurretRegistered, maxPowerfulness);
 
+        TurretCardParts[] turretCardPartsInRange = GetTurretCardPartsInRange(minPowerfulness, maxPowerfulness);
+
         TurretCardParts turretCardParts = null;
+        int tries = 0;
+        int MAX_TRIES = 30;
 
         do
         {
-            turretCardParts = GetRandomTurretCardParts();
+            turretCardParts = GetRandomTurretCardPartsInCollection(turretCardPartsInRange);
         }
-        while(turretCardParts.IsPowerfulnessInRange(minPowerfulness, maxPowerfulness));
+        while(!turretCardParts.IsPowerfulnessInRange(minPowerfulness, maxPowerfulness) && tries++ < MAX_TRIES);
+
+
+        if (tries >= MAX_TRIES) Debug.Log("POSSIBLE ERROR: Couldn't find Turret Card in range [" + minPowerfulness + ", " + maxPowerfulness + "]");
+
 
         return turretCardParts;
     }
+
 
     public SupportCardParts GetRandomSupportCardParts(int minPowerfulness, int maxPowerfulness)
     {
         minPowerfulness = Mathf.Max(minPowerfulnessSupportRegistered, minPowerfulness);
         maxPowerfulness = Mathf.Min(maxPowerfulnessSupportRegistered, maxPowerfulness);
 
+        SupportCardParts[] supportCardPartsInRange = GetSupportCardPartsInRange(minPowerfulness, maxPowerfulness);        
+
         SupportCardParts supportCardParts = null;
+        int tries = 0;
+        int MAX_TRIES = 30;
 
         do
         {
-            supportCardParts = GetRandomSupportCardParts();
+            supportCardParts = GetRandomSupportCardPartsInCollection(supportCardPartsInRange);
         }
-        while (supportCardParts.IsPowerfulnessInRange(minPowerfulness, maxPowerfulness));
+        while (!supportCardParts.IsPowerfulnessInRange(minPowerfulness, maxPowerfulness) && tries++ < MAX_TRIES);
+
+        if (tries >= MAX_TRIES) Debug.Log("POSSIBLE ERROR: Couldn't find Support Card in range [" + minPowerfulness + ", " + maxPowerfulness + "]");
 
         return supportCardParts;
     }
@@ -160,6 +231,52 @@ public class CardsLibrary : ScriptableObject
 
         return partsSet.ToArray();
     }
+
+
+
+
+    private CardGenerationClassification GetClassificationByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        CardGenerationClassification classificationByProgress;
+        int i = 0;
+
+        do
+        {
+            classificationByProgress = cardGenerationClassifications[i++];
+        }
+        while (classificationByProgress.progressionState != progressionState && i < cardGenerationClassifications.Length);
+
+
+        return classificationByProgress;
+    }
+
+    public TurretCardParts[] GetRandomByProgressionTurretCardPartsSet(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    {
+        if (totalAmount > totalTurretCardParts.Length) totalAmount = totalTurretCardParts.Length;
+
+
+        CardGenerationClassification classificationByProgress = GetClassificationByProgressionState(progressionState);
+
+
+        HashSet<TurretCardParts> holderPartsSet = new HashSet<TurretCardParts>();
+
+        if (perfect)
+        {
+            while (holderPartsSet.Count < amountPerfect)
+            {
+                holderPartsSet.Add(GetRandomTurretCardParts(classificationByProgress.minPerfectPowerfulness, classificationByProgress.maxPerfectPowerfulness));
+            }
+        }
+
+        while (holderPartsSet.Count < totalAmount)
+        {
+            holderPartsSet.Add(GetRandomTurretCardParts(classificationByProgress.minPowerfulness, classificationByProgress.maxPowerfulness));
+        }
+
+
+        return holderPartsSet.ToArray();
+    }
+
 
 
 
@@ -202,5 +319,7 @@ public class CardsLibrary : ScriptableObject
 
         return partsSet;
     }
+
+
 
 }
