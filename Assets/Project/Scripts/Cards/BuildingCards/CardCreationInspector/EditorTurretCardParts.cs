@@ -8,8 +8,8 @@ using UnityEditor;
 [CanEditMultipleObjects]
 public class EditorTurretCardParts : Editor
 {
-    private const float width = 128f;
-    private const float height = 128f;
+    private const float width = 96f;
+    private const float height = 96f;
 
     public override void OnInspectorGUI()
     {
@@ -29,7 +29,7 @@ public class EditorTurretCardParts : Editor
         GUILayout.Label("\nAttack Preview:");
         if (turretPartAttack != null)
         {
-            GUILayout.Label(" - " + turretPartAttack.abilityName);
+            GUILayout.Label(" - " + turretPartAttack.abilityName);            
             GUILayout.Box(turretPartAttack.materialTexture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
@@ -44,7 +44,7 @@ public class EditorTurretCardParts : Editor
         GUILayout.Label("\nBody Preview:");
         if (turretPartBody != null)
         {
-            GUILayout.Label(" - " + turretPartBody.partName);
+            GUILayout.Label(" - " + turretPartBody.partName + (" (D" + turretPartBody.damageLvl) + (", C" + turretPartBody.cadenceLvl) + ")");
             GUILayout.Box(turretPartBody.materialTextureMap,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
@@ -59,7 +59,7 @@ public class EditorTurretCardParts : Editor
         GUILayout.Label("\nBase Preview:");
         if (turretPartBase != null)
         {
-            GUILayout.Label(" - " + turretPartBase.abilityName);
+            GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.rangeLvl) + ")");
             GUILayout.Box(turretPartBase.materialTexture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }

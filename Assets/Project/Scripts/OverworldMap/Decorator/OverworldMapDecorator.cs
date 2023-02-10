@@ -32,7 +32,7 @@ public class OverworldMapDecorator : MonoBehaviour
         firstBattleLevel = firstDecoratedLevel + dSettings.numStartUpgradesLevels;
         for (int levelI = firstDecoratedLevel; levelI < firstBattleLevel; ++levelI)
         {
-            DecorateUpgradeLevel(mapNodes[levelI]);
+            DecorateUpgradeLevel(mapNodes[levelI], levelI);
         }
 
         for (int levelI = firstBattleLevel; levelI < lastIteratedLevel; ++levelI)
@@ -43,7 +43,7 @@ public class OverworldMapDecorator : MonoBehaviour
             }
             else
             {
-                DecorateUpgradeLevel(mapNodes[levelI]);
+                DecorateUpgradeLevel(mapNodes[levelI], levelI);
             }
         }
 
@@ -57,7 +57,7 @@ public class OverworldMapDecorator : MonoBehaviour
         {
             lastLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
-            OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState);
+            OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState, NodeEnums.ProgressionState.LATE);
             lastLevel[nodeI].SetNodeClass(lastNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.LAST_LEVEL)); //Get Empty Node Texture
         }
     } 
@@ -70,7 +70,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = firstLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
 
-            OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState);
+            OWMap_NoneNode firstNode = new OWMap_NoneNode(nextLevelNodes, ref firstLevel[nodeI].healthState, NodeEnums.ProgressionState.EARLY);
             firstLevel[nodeI].SetNodeClass(firstNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.FIRST_LEVEL)); //Get Empty Node Texture
         }
     }
@@ -84,21 +84,30 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = battleLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.BattleType battleType;
+            NodeEnums.ProgressionState progressionState;
 
-            if (levelI < dSettings.lateBattleStartIndex)
+            if (levelI < dSettings.midBattleStartIndex)
             {
                 battleType = NodeEnums.BattleType.EARLY;
+                progressionState = NodeEnums.ProgressionState.EARLY;
+            }
+            else if (levelI < dSettings.lateBattleStartIndex)
+            {
+                battleType = NodeEnums.BattleType.MID;
+                progressionState = NodeEnums.ProgressionState.MID;
             }
             else
             {
                 battleType = NodeEnums.BattleType.LATE;
+                progressionState = NodeEnums.ProgressionState.LATE;
             }
-            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType);
+
+            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType, progressionState);
             battleLevel[nodeI].SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
         }
     }
 
-    private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel)
+    private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel, int levelI)
     {
         HashSet<NodeEnums.UpgradeType> randomUpgradeTypes = new HashSet<NodeEnums.UpgradeType>();
         while (randomUpgradeTypes.Count < upgradeLevel.Length) // UNSAFE this could explode in theory
@@ -114,7 +123,23 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
-            OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType);
+
+            NodeEnums.ProgressionState progressionState;
+
+            if (levelI < dSettings.midBattleStartIndex)
+            {
+                progressionState = NodeEnums.ProgressionState.EARLY;
+            }
+            else if (levelI < dSettings.lateBattleStartIndex)
+            {
+                progressionState = NodeEnums.ProgressionState.MID;
+            }
+            else
+            {
+                progressionState = NodeEnums.ProgressionState.LATE;
+            }
+
+            OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType, progressionState);
             upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
         }
     }

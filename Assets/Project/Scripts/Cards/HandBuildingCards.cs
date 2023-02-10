@@ -6,16 +6,24 @@ using UnityEngine.Rendering;
 
 public class HandBuildingCards : MonoBehaviour
 {
+    [SerializeField] private Transform handCameraTransform;
+
     [SerializeField] private Transform cardHolder;
     [SerializeField] private Transform buildingsHolder;
 
     [SerializeField] private AnimationCurve cardsHeightCurve;
     [SerializeField] private AnimationCurve cardsRotationCurve;
 
+    [SerializeField] private Transform handSideBlockerLeft;
+    [SerializeField] private Transform handSideBlockerRight;
+
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
     private int initialRedraws = 3;
-    int redrawsLeft;
+    private int redrawsLeft;
+    private bool isInRedrawPhase = false;
+
+
     private List<BuildingCard> cards;
 
     private BuildingCard selectedCard;
@@ -28,6 +36,8 @@ public class HandBuildingCards : MonoBehaviour
     private bool isHidden;
     private bool isBeingHidden = false;
     private bool isBeingShown = false;
+
+    private bool isPlayerHoveringTheCards = false;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
 
@@ -61,6 +71,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         cards = new List<BuildingCard>();
         redrawsLeft = initialRedraws;
+        isPlayerHoveringTheCards = false;
     }
 
     public void Init()
@@ -69,14 +80,13 @@ public class HandBuildingCards : MonoBehaviour
         ComputeSelectedPosition();
         ComputeHiddenPosition();
 
-        InitCardsInHandForRedraw();
+        isInRedrawPhase = true;
+        InitCardsInHandForRedraw();        
 
         for (int i = 0; i < cards.Count; ++i)
         {
             cards[i].CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
-
-        //HideHand(false);
 
         CheckCardsCost();
     }
@@ -121,7 +131,7 @@ public class HandBuildingCards : MonoBehaviour
     
     public void InitCardsInHand()
     {
-        Debug.Log("InitCardsInHand");
+        //Debug.Log("InitCardsInHand");
 
         float cardCount = cards.Count;
         float displacementStep = Mathf.Min(0.65f / (cardCount * 0.2f), 0.65f);
@@ -175,13 +185,53 @@ public class HandBuildingCards : MonoBehaviour
 
         if (index == cards.Count - 1)
         {
-            if (!isBeingHidden) HideHand(true);
+            if (!isBeingHidden && !isInRedrawPhase)
+            {
+                HideHand(true);
+            }
         }
+
+        UpdateHandSideBlockers();
     }
+
+
+    public void InitCardsInHandAfterPlayingCard()
+    {
+        float cardCount = cards.Count;
+        float displacementStep = Mathf.Min(0.65f / (cardCount * 0.2f), 0.65f);
+        float halfCardCount = cards.Count / 2f;
+        Vector3 startDisplacement = (-halfCardCount * displacementStep) * HandTransform.right;
+
+        float ratio = cards.Count == 0 ? 0f : 1f / cards.Count;
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            float iRatio = ratio * (i + 0.5f);
+            Vector3 widthDisplacement = HandTransform.right * displacementStep * i;
+            Vector3 heightDisplacement = HandTransform.up * cardsHeightCurve.Evaluate(iRatio);
+            Vector3 depthDisplacement = HandTransform.forward * (-0.2f * iRatio);
+            Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
+
+            Vector3 finalPosition = hiddenHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
+
+            BuildingCard card = cards[i];
+
+            float repositionDuration = 0.3f;
+            card.StartRepositioning(finalPosition, repositionDuration);
+            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+                .OnComplete(
+                () => {
+                    card.InitPositions(selectedPosition, hiddenDisplacement);
+                    UpdateHandSideBlockers();
+                });
+        }
+
+    }
+
 
     public void InitCardsInHandForRedraw()
     {
-        Debug.Log("InitCardsInHandFirstDraw");
+        //Debug.Log("InitCardsInHandFirstDraw");
         float cardCount = cards.Count;
         float displacementStep = Mathf.Min(0.65f / (cardCount * 0.2f), 0.65f);
         float halfCardCount = cards.Count / 2f;
@@ -235,10 +285,7 @@ public class HandBuildingCards : MonoBehaviour
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
 
-        if (index == cards.Count - 1)
-        {
-            if (!isBeingHidden) HideHand(true);
-        }
+        UpdateHandSideBlockers();
     }
     public void FinishedRedrawing()
     {
@@ -253,10 +300,17 @@ public class HandBuildingCards : MonoBehaviour
         currencyCounter.OnCurrencySpent += CheckCardsCost;
 
         if (OnFinishRedrawing != null) OnFinishRedrawing();
+
+        isInRedrawPhase = false;
     }
 
     private void Redraw(BuildingCard card)
     {
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
         redrawsLeft--;
         card.OnCardHovered -= SetHoveredCard;
         card.OnCardUnhovered -= SetStandardCard;
@@ -344,7 +398,10 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
-        card.PlayDrawAnimation();
+        card.PlayDrawAnimation(
+            () => { if (!isInRedrawPhase) { 
+                    StartCoroutine(DelayedTryHideHandAfterDraw()); } 
+            } );
 
         CheckCardsCost();
     }
@@ -352,6 +409,8 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SetHoveredCard(BuildingCard card)
     {
+        isPlayerHoveringTheCards = true;
+
         if (isHidden && !isBeingShown) ShowHand();
 
         hoveredCard = card;
@@ -370,9 +429,11 @@ public class HandBuildingCards : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        if (!isHidden)
+        isPlayerHoveringTheCards = false;
+
+        if (!isHidden && !isInRedrawPhase)
         {
-            StartCoroutine("WaitToHideHand");
+            StartCoroutine("DelayedHideHand");
         }
 
         hoveredCard = null;
@@ -393,14 +454,16 @@ public class HandBuildingCards : MonoBehaviour
 
     private void ResetAndSetStandardCard(BuildingCard card)
     {
-        HandTransform.position = defaultHandPosition;
+        //HandTransform.position = defaultHandPosition;
         SetStandardCard(selectedCard);
         selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
         buildingPlacer.DisablePlacing();
 
-        if (!isBeingShown) ShowHand();
+        //if (!isBeingShown) ShowHand();
+
+        UpdateHandSideBlockers();
     }
 
     private void CheckSelectCard(BuildingCard card)
@@ -435,7 +498,9 @@ public class HandBuildingCards : MonoBehaviour
         buildingPlacer.EnablePlacing(card);
 
         //hide hand
-        if (!isBeingHidden) HideHand(false);
+        if (!isBeingHidden && !isInRedrawPhase) HideHand(false);
+
+        DisableHandSideBlockers();
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
@@ -446,6 +511,9 @@ public class HandBuildingCards : MonoBehaviour
         SubtractCurrencyAndRemoveCard();
 
         if (OnCardPlayed != null) OnCardPlayed();
+
+        isPlayerHoveringTheCards = false;
+        StartCoroutine(DelayedTryHideHandAfterDraw());
 
         // Audio
         GameAudioManager.GetInstance().PlayCurrencySpent();
@@ -468,10 +536,10 @@ public class HandBuildingCards : MonoBehaviour
 
         selectedCard = null;
         buildingPlacer.DisablePlacing();
-        HandTransform.position = defaultHandPosition;
+        //HandTransform.position = defaultHandPosition;
         ///////////
-        
-        InitCardsInHand();
+
+        InitCardsInHandAfterPlayingCard();
     }
 
     void SetInitHandPosition()
@@ -519,7 +587,7 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
-    private IEnumerator WaitToHideHand()
+    private IEnumerator DelayedHideHand()
     {
         yield return new WaitForSeconds(0.05f);
 
@@ -528,6 +596,17 @@ public class HandBuildingCards : MonoBehaviour
             HideHand(true);
         }
     }
+
+    private IEnumerator DelayedTryHideHandAfterDraw()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (!isPlayerHoveringTheCards && !isBeingHidden)
+        {
+            HideHand(true);
+        }
+    }
+
 
     private IEnumerator InvokeDrawCardAfterDelay(float delay)
     {
@@ -574,4 +653,51 @@ public class HandBuildingCards : MonoBehaviour
         card.OnCardInfoSelected -= SetCardHideInfo;
     }
     
+
+    private void EnableHandSideBlockers()
+    {
+        handSideBlockerLeft.gameObject.SetActive(true);
+        handSideBlockerRight.gameObject.SetActive(true);
+    }
+    private void DisableHandSideBlockers()
+    {
+        handSideBlockerLeft.gameObject.SetActive(false);
+        handSideBlockerRight.gameObject.SetActive(false);
+    }
+    private void UpdateHandSideBlockers()
+    {
+        if (cards.Count < 2)
+        {
+            DisableHandSideBlockers();
+            return;
+        }
+
+
+
+        EnableHandSideBlockers();
+
+        float rightmostX = 0f;
+        float leftmostX = 0f;
+        foreach (BuildingCard card in cards)
+        {
+            float currentX = card.RootCardTransform.position.x;
+            if (currentX < leftmostX)
+            {
+                leftmostX = currentX;
+            }
+            else if(currentX > rightmostX)
+            {
+                rightmostX = currentX;
+            }
+            
+        }
+
+        Vector3 halfCardWidthOffset = Vector3.right * 0.5f;
+        handSideBlockerLeft.position = new Vector3(leftmostX, handSideBlockerLeft.position.y, handSideBlockerLeft.position.z) - halfCardWidthOffset;
+        handSideBlockerRight.position = new Vector3(rightmostX, handSideBlockerRight.position.y, handSideBlockerRight.position.z) + halfCardWidthOffset;
+
+        handSideBlockerLeft.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerLeft.position).normalized, handCameraTransform.up);
+        handSideBlockerRight.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerRight.position).normalized, handCameraTransform.up);
+    }
+
 }

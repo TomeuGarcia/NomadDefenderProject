@@ -33,6 +33,11 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+
+    [Header("SUBTRACT CARD PLAY COST")]
+    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
+
+
     [Header("COMPONENTS")]
     [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
@@ -208,10 +213,8 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
     
-    private void ReplacePartInCard()
+    private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
-        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
-
         selectedCard.IncrementCardLevel(1);
 
         switch (partType)
@@ -271,10 +274,16 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradedCardTransform.DOLocalRotate(Vector3.up * 180f, flipDuration);
         yield return new WaitForSeconds(flipDuration + 0.1f);
 
-        
+
         // EXECUTE REPLACEMENT
-        ReplacePartInCard();
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+        ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
+
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayLevelUpAnimation();
+
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
@@ -288,8 +297,11 @@ public class CardPartReplaceManager : MonoBehaviour
         cardPartHolder.Hide(0.5f, 0.2f);
         yield return new WaitForSeconds(1f);
 
+        if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
+
         // Enable FINAL retreieve card
-        upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
