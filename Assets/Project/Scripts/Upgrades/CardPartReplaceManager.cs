@@ -53,7 +53,10 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
-    
+
+    private int numPartsIfPerfect = 1;
+    private bool lastBattleWasDefendedPerfectly = false;
+    NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
 
 
     public delegate void CarPartReplaceManagerAction();
@@ -96,6 +99,12 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Init()
     {
+        // TODO
+        numPartsIfPerfect = 1;
+        lastBattleWasDefendedPerfectly = false;
+        progressionState = NodeEnums.ProgressionState.EARLY;
+
+
         if (partType == PartType.ATTACK) InitAttacks();
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
@@ -114,7 +123,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitAttacks()
     {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts);
+        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -128,7 +138,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBodies()
     {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts);
+        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -142,14 +153,15 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBases()
     {
-        TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
-        TurretPassiveBase[] randomPassives = partsLibrary.GetRandomTurretPassiveBases(numParts);
+        (TurretPartBase, TurretPassiveBase)[] randomBasesAndPassives = 
+            partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBases[i];
-            parts[i].turretPassiveBase = randomPassives[i];
+            parts[i].turretPartBase = randomBasesAndPassives[i].Item1;
+            parts[i].turretPassiveBase = randomBasesAndPassives[i].Item2;
         }
         cardPartHolder.Init(parts);
 
