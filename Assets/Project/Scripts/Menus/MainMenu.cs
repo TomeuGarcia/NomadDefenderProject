@@ -11,9 +11,6 @@ public class MainMenu : MonoBehaviour
     private bool canInteract = true;
 
 
-    public delegate void MainMenuAction();
-    public static event MainMenuAction OnPlayStart;
-
     private void Awake()
     {
         canInteract = true;
@@ -43,7 +40,9 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
 
-        if (OnPlayStart != null) OnPlayStart();
+            //Load First Scene
+            SceneLoader.GetInstance().StartLoadFirstScene();
+
     }
 
     public void Quit()

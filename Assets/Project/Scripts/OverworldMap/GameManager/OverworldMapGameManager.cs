@@ -29,6 +29,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private OWMap_Node currentNode;
 
+    private bool moveCameraAfterNodeScene;
+
 
     // BattleStateResult
     private BattleStateResult currentBattleStateResult;
@@ -63,6 +65,11 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapDecorator.DecorateMap(mapNodes);
 
         mapSceneLoader.Init();
+        if(!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
+        {
+            mapSceneLoader.LoadTutorialScene();
+            moveCameraAfterNodeScene = false;
+        }
 
         StartAtFirstLevel();
     }
@@ -117,9 +124,15 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ResumeMapAfterNodeScene() // called from event
     {
+
         FinishCurrentMapLevelScene();
         ResumeMap();
-        owMapPawn.MoveCameraToNextLevel();
+        if (moveCameraAfterNodeScene)
+        {
+            owMapPawn.MoveCameraToNextLevel();
+            
+        }
+        moveCameraAfterNodeScene = true;
     }
     private void ResumeMap()
     {

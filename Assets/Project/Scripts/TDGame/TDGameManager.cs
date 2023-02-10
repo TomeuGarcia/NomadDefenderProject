@@ -111,6 +111,13 @@ public class TDGameManager : MonoBehaviour
         //if (OnVictoryComplete != null) OnVictoryComplete(); // 
     }
 
+    public void ForceFinishScene()
+    {
+        if (OnEndGameResetPools != null) OnEndGameResetPools();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
+    }
+
 
     private void SetBattleStateResult()
     {

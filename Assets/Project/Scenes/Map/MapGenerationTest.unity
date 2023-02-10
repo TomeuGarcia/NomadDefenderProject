@@ -123,12 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &61374475 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5197006574378499511, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 4525846866438920759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &245125396
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +355,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1153166752}
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &498795638
@@ -542,7 +536,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &566305462
 GameObject:
@@ -637,7 +631,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &566305465
 MonoBehaviour:
@@ -943,7 +937,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 70, y: 0, z: 0}
 --- !u!114 &1007776004
 MonoBehaviour:
@@ -1012,7 +1006,7 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!1001 &1220345306
+--- !u!1001 &1393102738
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1083,6 +1077,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244668555209778723, guid: b55efcc8422d93c43a9e94c700f96276,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b55efcc8422d93c43a9e94c700f96276, type: 3}
@@ -1231,7 +1230,7 @@ PrefabInstance:
         type: 3}
       propertyPath: followCamera
       value: 
-      objectReference: {fileID: 1184416222}
+      objectReference: {fileID: 4525846866438920760}
     - target: {fileID: 5737185250737740865, guid: 8d57e5a24a344da45b4374983235efe7,
         type: 3}
       propertyPath: m_text
@@ -1522,7 +1521,7 @@ PrefabInstance:
         type: 3}
       propertyPath: mapCameraGO
       value: 
-      objectReference: {fileID: 1184416222}
+      objectReference: {fileID: 0}
     - target: {fileID: 481244355035842441, guid: bea90a63c4431e143a62fe3e27dfe2f3,
         type: 3}
       propertyPath: cardDisplayer
@@ -1590,6 +1589,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bea90a63c4431e143a62fe3e27dfe2f3, type: 3}
+--- !u!1 &4525846866438920760 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5750667213190007970, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4525846866438920759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4756271349926928986
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -42,6 +42,9 @@ public class BattleTutorialManager : MonoBehaviour
 
     [SerializeField] private int wavesCounter = 0;
 
+
+    [SerializeField] private TDGameManager tDGameManager;
+
     private bool waveFinished = false;
 
     private bool waveStarted = false;
@@ -519,7 +522,9 @@ public class BattleTutorialManager : MonoBehaviour
 
         //Finish scene and load next
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
-        SceneLoader.GetInstance().StartLoadFirstScene();
+        tDGameManager.ForceFinishScene();
+
+
     }
 
 }

@@ -80,7 +80,6 @@ public class SceneLoader : MonoBehaviour
         GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart += StartLoadMainMenu;
-        MainMenu.OnPlayStart += StartLoadFirstScene; // TODO change to load map scene
     }
 
     private void OnDisable()
@@ -93,7 +92,7 @@ public class SceneLoader : MonoBehaviour
         GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart -= StartLoadMainMenu;
-        MainMenu.OnPlayStart -= StartLoadFirstScene; // TODO change to load map scene
+
     }
 
     private void Update()
@@ -152,14 +151,27 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = false;
     }
 
+    public void StartLoadTutorialScene()
+    {
+        StartCoroutine(DoLoadSceneWithoutAnimation(LoadFirstScene));
+    }
+
+    private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
+    {
+        alreadyLoadingNextScene = true;
+
+        
+        loadSceneFunction();
+        yield return new WaitForSeconds(loadSceneDuration);
+
+        alreadyLoadingNextScene = false;
+    }
+
 
 
     private void LoadFirstScene()
     {
-        if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
-            SceneManager.LoadScene("InBattleTutorial");
-        else
-            SceneManager.LoadScene("MapGenerationTest");
+        SceneManager.LoadScene("MapGenerationTest");
     }
 
     public void StartLoadMainMenu()
@@ -183,30 +195,37 @@ public class SceneLoader : MonoBehaviour
 
 
 
-    public void LoadMapScene(string sceneName)
+    public void LoadMapScene(string sceneName, bool playAnimations)
     {
-        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName, playAnimations));
     }
 
-    public void UnloadMapScene(string sceneName)
+    public void UnloadMapScene(string sceneName, bool playAnimations)
     {
-        StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName));
+        StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName, playAnimations));
     }
 
-    private IEnumerator DoLoadSceneByName(LoadSceneByNameFunction loadSceneByNameFunction, string sceneName)
+    private IEnumerator DoLoadSceneByName(LoadSceneByNameFunction loadSceneByNameFunction, string sceneName, bool playAnimations)
     {
         alreadyLoadingNextScene = true;
 
-        ShutAnimation(shutAnimDuration);
-        GameAudioManager.GetInstance().PlayScreenShut();
-        yield return new WaitForSeconds(shutAnimDuration);
+        if(playAnimations)
+        {
+            ShutAnimation(shutAnimDuration);
+            GameAudioManager.GetInstance().PlayScreenShut();
+            yield return new WaitForSeconds(shutAnimDuration);
+        }
 
         loadSceneByNameFunction(sceneName);
         yield return new WaitForSeconds(loadSceneDuration);
 
-        OpenAnimation(openAnimDuration);
-        GameAudioManager.GetInstance().PlayScreenOpen();
-        yield return new WaitForSeconds(openAnimDuration);
+        if(playAnimations)
+        {
+            OpenAnimation(openAnimDuration);
+            GameAudioManager.GetInstance().PlayScreenOpen();
+            yield return new WaitForSeconds(openAnimDuration);
+        }
+
 
         alreadyLoadingNextScene = false;
     }
@@ -222,7 +241,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadNextScene(string sceneName)
     {
-        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName, true));
     }
 
 }
