@@ -7,96 +7,107 @@ using UnityEngine;
 public class PartsLibrary : ScriptableObject
 {
     [System.Serializable]
-    public struct AttackAndPowerfulness
-    {
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int powerfulness;
-        public TurretPartAttack attackPart;
-    }
-
-    [System.Serializable]
-    public struct BodyAndPowerfulness
-    {
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int powerfulness;
-        public TurretPartBody bodyPart;
-    }
-
-    [System.Serializable]
-    public struct BasePassiveBaseAndPowerfulness
-    {
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int powerfulness;
-        public TurretPartBase basePart;
-        public TurretPassiveBase basePassivePart;
-    }
-
-    public AttackAndPowerfulness[] attackPartsByPowerfulness;
-    public BodyAndPowerfulness[] bodyPartsByPowerfulness;
-    public BasePassiveBaseAndPowerfulness[] baseAndPassiveBasePartsByPowerfulness;
-
-
-    [System.Serializable]
-    public struct PartGenerationClassification
+    public struct AttacksByProgressionState
     {
         public NodeEnums.ProgressionState progressionState;
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int minPowerfulness;
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int maxPowerfulness;
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int minPerfectPowerfulness;
-        [Range(GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS)] public int maxPerfectPowerfulness;
-    }
-    [Header("GENERATION CLASSIFICATION")]
-    [SerializeField] public PartGenerationClassification[] partsGenerationClassifications;
+        public TurretPartAttack[] parts;
+        public TurretPartAttack[] perfectParts;
 
-
-    public AttackAndPowerfulness GetRandomTurretPartAttackInCollection(AttackAndPowerfulness[] attackAndPowerfulnesses)
-    {
-        return attackAndPowerfulnesses[Random.Range(0, attackAndPowerfulnesses.Length)];
-    }
-    public BodyAndPowerfulness GetRandomTurretPartBodyInCollection(BodyAndPowerfulness[] bodyAndPowerfulnesses)
-    {
-        return bodyAndPowerfulnesses[Random.Range(0, bodyAndPowerfulnesses.Length)];
-    }
-    public BasePassiveBaseAndPowerfulness GetRandomTurretPartBaseAndPassiveInCollection(BasePassiveBaseAndPowerfulness[] basePassiveBaseAndPowerfulness)
-    {
-        return basePassiveBaseAndPowerfulness[Random.Range(0, basePassiveBaseAndPowerfulness.Length)];
-    }
-
-
-
-    private bool IsPowerfulnessInRange(AttackAndPowerfulness partAndPowerfulness, int minPowerfulness, int maxPowerfulness)
-    {
-        return partAndPowerfulness.powerfulness >= minPowerfulness && partAndPowerfulness.powerfulness <= maxPowerfulness;
-    }
-    private bool IsPowerfulnessInRange(BodyAndPowerfulness partAndPowerfulness, int minPowerfulness, int maxPowerfulness)
-    {
-        return partAndPowerfulness.powerfulness >= minPowerfulness && partAndPowerfulness.powerfulness <= maxPowerfulness;
-    }
-    private bool IsPowerfulnessInRange(BasePassiveBaseAndPowerfulness partAndPowerfulness, int minPowerfulness, int maxPowerfulness)
-    {
-        return partAndPowerfulness.powerfulness >= minPowerfulness && partAndPowerfulness.powerfulness <= maxPowerfulness;
-    }
-    private PartGenerationClassification GetClassificationByProgressionState(NodeEnums.ProgressionState progressionState)
-    {
-        PartGenerationClassification classificationByProgress;
-        int i = 0;
-
-        do
+        public TurretPartAttack GetRandomPart()
         {
-            classificationByProgress = partsGenerationClassifications[i++];
+            return parts[Random.Range(0, parts.Length)];
         }
-        while (classificationByProgress.progressionState != progressionState && i < partsGenerationClassifications.Length);
-
-
-        return classificationByProgress;
+        public TurretPartAttack GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
     }
+
+
+    [System.Serializable]
+    public struct BodiesByProgressionState
+    {
+        public NodeEnums.ProgressionState progressionState;
+        public TurretPartBody[] parts;
+        public TurretPartBody[] perfectParts;
+
+        public TurretPartBody GetRandomPart()
+        {
+            return parts[Random.Range(0, parts.Length)];
+        }
+        public TurretPartBody GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
+    }
+
+    [System.Serializable]
+    public struct BaseAndPassive
+    {
+        public TurretPartBase turretPartBase;
+        public TurretPassiveBase turretPassiveBase;
+
+
+        public static bool operator== (BaseAndPassive obj1, BaseAndPassive obj2)
+        {
+            if (obj1 == null || obj2 == null) return false;
+            return obj1.turretPassiveBase == obj2.turretPassiveBase;
+        }
+        public static bool operator !=(BaseAndPassive obj1, BaseAndPassive obj2)
+        {
+            return !(obj1 == obj2);
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return System.HashCode.Combine(turretPartBase, turretPassiveBase);
+        }
+    }
+
+    [System.Serializable]
+    public struct BasesAndPassivesByProgressionState
+    {
+        public NodeEnums.ProgressionState progressionState;
+        public BaseAndPassive[] parts;
+        public BaseAndPassive[] perfectParts;
+
+        public BaseAndPassive GetRandomPart()
+        {
+            return parts[Random.Range(0, parts.Length)];
+        }
+        public BaseAndPassive GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
+    }
+
+    [SerializeField] private AttacksByProgressionState[] attacksByProgressionStates;
+    [SerializeField] private BodiesByProgressionState[] bodiesByProgressionStates;
+    [SerializeField] private BasesAndPassivesByProgressionState[] basesAndPassivesByProgressionStates;
 
 
 
     // ATTACK PARTS
+    private AttacksByProgressionState GetAttacksByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        for (int i = 0; i < attacksByProgressionStates.Length; ++i)
+        {
+            if (attacksByProgressionStates[i].progressionState == progressionState)
+                return attacksByProgressionStates[i];
+        }
+
+        return attacksByProgressionStates[0];
+    }
+
     public TurretPartAttack[] GetRandomTurretPartAttacks(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
-        if (totalAmount > attackPartsByPowerfulness.Length) totalAmount = attackPartsByPowerfulness.Length;
+        if (totalAmount > attacksByProgressionStates.Length) totalAmount = attacksByProgressionStates.Length;
 
 
-        PartGenerationClassification classificationByProgress = GetClassificationByProgressionState(progressionState);
+        AttacksByProgressionState attacksByProgressionState = GetAttacksByProgressionState(progressionState);
 
 
         HashSet<TurretPartAttack> holderPartsSet = new HashSet<TurretPartAttack>();
@@ -105,64 +116,38 @@ public class PartsLibrary : ScriptableObject
         {
             while (holderPartsSet.Count < amountPerfect)
             {
-                holderPartsSet.Add(GetRandomAttackPart(classificationByProgress.minPerfectPowerfulness, classificationByProgress.maxPerfectPowerfulness));
+                holderPartsSet.Add(attacksByProgressionState.GetRandomPerfectPart());
             }
         }
 
         while (holderPartsSet.Count < totalAmount)
         {
-            holderPartsSet.Add(GetRandomAttackPart(classificationByProgress.minPowerfulness, classificationByProgress.maxPowerfulness));
+            holderPartsSet.Add(attacksByProgressionState.GetRandomPart());
         }
 
 
         return holderPartsSet.ToArray();
     }
 
-    private TurretPartAttack GetRandomAttackPart(int minPowerfulness, int maxPowerfulness)
-    {
-        AttackAndPowerfulness[] partsInRange = GetAttackPartsInRange(minPowerfulness, maxPowerfulness);
-
-        AttackAndPowerfulness attackAndPowerfulness;
-        int tries = 0;
-        int MAX_TRIES = 30;
-
-        do
-        {
-            attackAndPowerfulness = GetRandomTurretPartAttackInCollection(partsInRange);
-        }
-        while (!IsPowerfulnessInRange(attackAndPowerfulness, minPowerfulness, maxPowerfulness) && tries++ < MAX_TRIES);
-
-
-        if (tries >= MAX_TRIES) Debug.Log("POSSIBLE ERROR: Couldn't find Attack Part in range [" + minPowerfulness + ", " + maxPowerfulness + "]");
-
-
-        return attackAndPowerfulness.attackPart;
-    }
-
-    private AttackAndPowerfulness[] GetAttackPartsInRange(int minPowerfulness, int maxPowerfulness)
-    {
-        List<AttackAndPowerfulness> partsAndPowerfulness = new List<AttackAndPowerfulness>();
-
-        for (int i = 0; i < attackPartsByPowerfulness.Length; ++i)
-        {
-            if (IsPowerfulnessInRange(attackPartsByPowerfulness[i], minPowerfulness, maxPowerfulness))
-            {
-                partsAndPowerfulness.Add(attackPartsByPowerfulness[i]);
-            }
-        }
-
-        return partsAndPowerfulness.ToArray();
-    }
-
-
 
     // BODY PARTS
+    private BodiesByProgressionState GetBodiesByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        for (int i = 0; i < bodiesByProgressionStates.Length; ++i)
+        {
+            if (bodiesByProgressionStates[i].progressionState == progressionState)
+                return bodiesByProgressionStates[i];
+        }
+
+        return bodiesByProgressionStates[0];
+    }
+
     public TurretPartBody[] GetRandomTurretPartBodies(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
-        if (totalAmount > bodyPartsByPowerfulness.Length) totalAmount = bodyPartsByPowerfulness.Length;
+        if (totalAmount > bodiesByProgressionStates.Length) totalAmount = bodiesByProgressionStates.Length;
 
 
-        PartGenerationClassification classificationByProgress = GetClassificationByProgressionState(progressionState);
+        BodiesByProgressionState bodiesByProgressionState = GetBodiesByProgressionState(progressionState);
 
 
         HashSet<TurretPartBody> holderPartsSet = new HashSet<TurretPartBody>();
@@ -171,119 +156,66 @@ public class PartsLibrary : ScriptableObject
         {
             while (holderPartsSet.Count < amountPerfect)
             {
-                holderPartsSet.Add(GetRandomBodyPart(classificationByProgress.minPerfectPowerfulness, classificationByProgress.maxPerfectPowerfulness));
+                holderPartsSet.Add(bodiesByProgressionState.GetRandomPerfectPart());
             }
         }
 
         while (holderPartsSet.Count < totalAmount)
         {
-            holderPartsSet.Add(GetRandomBodyPart(classificationByProgress.minPowerfulness, classificationByProgress.maxPowerfulness));
+            holderPartsSet.Add(bodiesByProgressionState.GetRandomPart());
         }
 
 
         return holderPartsSet.ToArray();
     }
 
-    private TurretPartBody GetRandomBodyPart(int minPowerfulness, int maxPowerfulness)
+
+    // BASE AND PASSIVE PARTS
+    private BasesAndPassivesByProgressionState GetBasesAndPassivesByProgressionState(NodeEnums.ProgressionState progressionState)
     {
-        BodyAndPowerfulness[] partsInRange = GetBodyPartsInRange(minPowerfulness, maxPowerfulness);
-
-        BodyAndPowerfulness bodyAndPowerfulness;
-        int tries = 0;
-        int MAX_TRIES = 30;
-
-        do
+        for (int i = 0; i < basesAndPassivesByProgressionStates.Length; ++i)
         {
-            bodyAndPowerfulness = GetRandomTurretPartBodyInCollection(partsInRange);
-        }
-        while (!IsPowerfulnessInRange(bodyAndPowerfulness, minPowerfulness, maxPowerfulness) && tries++ < MAX_TRIES);
-
-
-        if (tries >= MAX_TRIES) Debug.Log("POSSIBLE ERROR: Couldn't find Body Part in range [" + minPowerfulness + ", " + maxPowerfulness + "]");
-
-
-        return bodyAndPowerfulness.bodyPart;
-    }
-
-    private BodyAndPowerfulness[] GetBodyPartsInRange(int minPowerfulness, int maxPowerfulness)
-    {
-        List<BodyAndPowerfulness> partsAndPowerfulness = new List<BodyAndPowerfulness>();
-
-        for (int i = 0; i < bodyPartsByPowerfulness.Length; ++i)
-        {
-            if (IsPowerfulnessInRange(bodyPartsByPowerfulness[i], minPowerfulness, maxPowerfulness))
-            {
-                partsAndPowerfulness.Add(bodyPartsByPowerfulness[i]);
-            }
+            if (basesAndPassivesByProgressionStates[i].progressionState == progressionState)
+                return basesAndPassivesByProgressionStates[i];
         }
 
-        return partsAndPowerfulness.ToArray();
+        return basesAndPassivesByProgressionStates[0];
     }
 
-
-
-    // BASE PARTS
-    public (TurretPartBase, TurretPassiveBase)[] GetRandomTurretPartBaseAndPassive(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    public BaseAndPassive[] GetRandomTurretPartBaseAndPassive(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
-        if (totalAmount > baseAndPassiveBasePartsByPowerfulness.Length) totalAmount = baseAndPassiveBasePartsByPowerfulness.Length;
+        if (totalAmount > basesAndPassivesByProgressionStates.Length) totalAmount = basesAndPassivesByProgressionStates.Length;
 
 
-        PartGenerationClassification classificationByProgress = GetClassificationByProgressionState(progressionState);
+        BasesAndPassivesByProgressionState basesAndPassivesByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
 
 
-        HashSet<(TurretPartBase, TurretPassiveBase)> holderPartsSet = new HashSet<(TurretPartBase, TurretPassiveBase)>();
+        HashSet<BaseAndPassive> holderPartsSet = new HashSet<BaseAndPassive>();
 
         if (perfect)
         {
             while (holderPartsSet.Count < amountPerfect)
             {
-                holderPartsSet.Add(GetRandomBaseAndPassivePart(classificationByProgress.minPerfectPowerfulness, classificationByProgress.maxPerfectPowerfulness));
+                holderPartsSet.Add(basesAndPassivesByProgressionState.GetRandomPerfectPart());
+
+                /*
+                BaseAndPassive baseAndPassive = basesAndPassivesByProgressionState.GetRandomPerfectPart();
+                if (!holderPartsSet.Contains(baseAndPassive))
+                {
+                    holderPartsSet.Add(baseAndPassive);
+                } 
+                */
             }
         }
 
         while (holderPartsSet.Count < totalAmount)
         {
-            holderPartsSet.Add(GetRandomBaseAndPassivePart(classificationByProgress.minPowerfulness, classificationByProgress.maxPowerfulness));
+            holderPartsSet.Add(basesAndPassivesByProgressionState.GetRandomPart());
         }
 
 
         return holderPartsSet.ToArray();
     }
 
-    private (TurretPartBase, TurretPassiveBase) GetRandomBaseAndPassivePart(int minPowerfulness, int maxPowerfulness)
-    {
-        BasePassiveBaseAndPowerfulness[] partsInRange = GetBaseAndPassivePartsInRange(minPowerfulness, maxPowerfulness);
-
-        BasePassiveBaseAndPowerfulness baseAndPasssiveAndPowerfulness;
-        int tries = 0;
-        int MAX_TRIES = 30;
-
-        do
-        {
-            baseAndPasssiveAndPowerfulness = GetRandomTurretPartBaseAndPassiveInCollection(partsInRange);
-        }
-        while (!IsPowerfulnessInRange(baseAndPasssiveAndPowerfulness, minPowerfulness, maxPowerfulness) && tries++ < MAX_TRIES);
-
-
-        if (tries >= MAX_TRIES) Debug.Log("POSSIBLE ERROR: Couldn't find BaseAndPassiveBase Part in range [" + minPowerfulness + ", " + maxPowerfulness + "]");
-
-
-        return (baseAndPasssiveAndPowerfulness.basePart, baseAndPasssiveAndPowerfulness.basePassivePart);
-    }
-
-    private BasePassiveBaseAndPowerfulness[] GetBaseAndPassivePartsInRange(int minPowerfulness, int maxPowerfulness)
-    {
-        List<BasePassiveBaseAndPowerfulness> partsAndPowerfulness = new List<BasePassiveBaseAndPowerfulness>();
-
-        for (int i = 0; i < baseAndPassiveBasePartsByPowerfulness.Length; ++i)
-        {
-            if (IsPowerfulnessInRange(baseAndPassiveBasePartsByPowerfulness[i], minPowerfulness, maxPowerfulness))
-            {
-                partsAndPowerfulness.Add(baseAndPassiveBasePartsByPowerfulness[i]);
-            }
-        }
-
-        return partsAndPowerfulness.ToArray();
-    }
 
 }

@@ -67,12 +67,14 @@ public class OWMap_Node : MonoBehaviour
     private MapReferencesData mapReferencesData;    
     private OWMap_Connection cameFromConnection;
     private OWMap_Connection[] nextLevelConnections;
+    public OWMap_Connection[] GetNextLevelConnections() { return nextLevelConnections; }
     
 
     [SerializeField] private Transform nodeTransform;
     [SerializeField] private BoxCollider interactionCollider;
     [SerializeField] private MeshRenderer meshRenderer;
     private Material material;
+    public const float FADE_DURATION = 0.1f;
 
     //NODE ICON
     private Texture nodeIcon;
@@ -103,6 +105,10 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
         material.SetFloat("_IsDestroyed", 0f);
+
+        material.SetFloat("_FadeDuration", FADE_DURATION);
+        material.SetFloat("_TimeStartFade", 0f);
+        material.SetFloat("_IsFadingAway", 0f);
     }
 
 
@@ -350,5 +356,17 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
     }
 
+
+    public void PlayFadeInAnimation()
+    {
+        material.SetFloat("_TimeStartFade", Time.time);
+        material.SetFloat("_IsFadingAway", 0f);
+    }
+
+    public void PlayFadeOutAnimation()
+    {
+        material.SetFloat("_TimeStartFade", Time.time);
+        material.SetFloat("_IsFadingAway", 1f);
+    }
 
 }

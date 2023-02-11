@@ -7,6 +7,9 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
@@ -101,8 +104,30 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         // TODO
         numPartsIfPerfect = 1;
-        lastBattleWasDefendedPerfectly = false;
-        progressionState = NodeEnums.ProgressionState.EARLY;
+        progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            numCards = 2;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numParts = 3;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                // level up card to max
+            }
+        }
 
 
         if (partType == PartType.ATTACK) InitAttacks();
@@ -153,15 +178,15 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBases()
     {
-        (TurretPartBase, TurretPassiveBase)[] randomBasesAndPassives = 
+        PartsLibrary.BaseAndPassive[] randomBasesAndPassives = 
             partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
 
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBasesAndPassives[i].Item1;
-            parts[i].turretPassiveBase = randomBasesAndPassives[i].Item2;
+            parts[i].turretPartBase = randomBasesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = randomBasesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
