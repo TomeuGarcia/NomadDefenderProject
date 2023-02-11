@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class OWMapTutorialManager : MonoBehaviour
 {
 
@@ -10,6 +11,8 @@ public class OWMapTutorialManager : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
 
     [SerializeField] private GameObject mapHolder;
+
+    [SerializeField] private OverworldMapGameManager owMapGameManager;
 
 
 
@@ -22,14 +25,16 @@ public class OWMapTutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
-        StartCoroutine(Tutorial());
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartTutorial()
     {
-        
+        if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+            Destroy(this.gameObject);
+
+        Init();
+        StartCoroutine(Tutorial());
     }
 
     private void Init()
@@ -92,7 +97,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
     IEnumerator Tutorial()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(5.0f);
 
 
         scriptedSequence.NextLine();
@@ -142,5 +147,15 @@ public class OWMapTutorialManager : MonoBehaviour
         scriptedSequence.NextLine(); //Map Loaded
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
+
+        owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
+
+        scriptedSequence.NextLine(); //Select a node to go to it
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(1.0f);
+
+
+        //Set OW_Map Tutorial as done
+        //TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
     }
 }

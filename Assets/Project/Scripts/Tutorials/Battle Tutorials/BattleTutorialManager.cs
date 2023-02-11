@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static InBattleBuildingUpgrader;
 
 public class BattleTutorialManager : MonoBehaviour
 {
@@ -51,6 +52,8 @@ public class BattleTutorialManager : MonoBehaviour
 
     private bool allWavesFinished = false;
 
+    private bool firstUpgradeDone = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -86,6 +89,7 @@ public class BattleTutorialManager : MonoBehaviour
         EnemyWaveManager.OnWaveFinished += WaveStarted;
         EnemyWaveManager.OnStartNewWaves += WaveFinished;
         EnemyWaveManager.OnAllWavesFinished += AllWavesFinished;
+        InBattleBuildingUpgrader.OnTurretUpgrade += CheckFirstUpgrade;
     }
 
     private void WaveFinished()
@@ -103,6 +107,12 @@ public class BattleTutorialManager : MonoBehaviour
     private void AllWavesFinished()
     {
         allWavesFinished = true;
+    }
+
+    private void CheckFirstUpgrade(int newLevel)
+    {
+        firstUpgradeDone = true;
+        InBattleBuildingUpgrader.OnTurretUpgrade -= CheckFirstUpgrade;
     }
 
     IEnumerator Tutorial()
@@ -417,7 +427,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSecondsRealtime(5.0f);
+        yield return new WaitUntil(() => firstUpgradeDone == true);
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
