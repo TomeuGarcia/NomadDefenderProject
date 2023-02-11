@@ -9,19 +9,14 @@ using DG.Tweening;
 public class CardDrawer : MonoBehaviour
 {
     [SerializeField] private HandBuildingCards hand;
-    [SerializeField] private DeckBuildingCards deck;
-    [SerializeField] private BattleHUD battleHUD;
+    [SerializeField] protected DeckBuildingCards deck;
+    [SerializeField] protected BattleHUD battleHUD;
     [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
-    [SerializeField] private GameObject canvas; // works for 1 waveSpawner
     [SerializeField] private CanvasGroup finishRedrawsButtonCG;
 
     [SerializeField, Min(1)] private int numCardsHandStart = 2;
 
-    [SerializeField] private Image drawCooldownImage;
     
-    [SerializeField, Range(10, 60)] private float drawTimeCooldown;
-    private float drawCountdown;
-
     [SerializeField] private int cardsToDrawPerWave;
 
     public delegate void CardDrawerAction();
@@ -53,11 +48,13 @@ public class CardDrawer : MonoBehaviour
 
     private void Start()
     {
-        redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
-        StartRedrawButtonAnimation();
+        GameStartSetup();
+    }
 
-        deck.Init();
-        battleHUD.InitDeckCardIcons(deck.NumCards);
+    protected void GameStartSetup()
+    {
+        SetupRedraws();
+        SetupDeck();
 
         DrawStartHand();
 
@@ -65,11 +62,20 @@ public class CardDrawer : MonoBehaviour
 
         deck.GetDeckData().SetStarterCardComponentsAsSaved();
 
-        drawCountdown = drawTimeCooldown;
-
-        drawCooldownImage.gameObject.SetActive(false);
         //HandBuildingCards.OnCardPlayed += StartDrawOverTime;
     }
+
+    private void SetupRedraws()
+    {
+        redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
+        StartRedrawButtonAnimation();
+    }
+    protected virtual void SetupDeck()
+    {
+        deck.Init();
+        battleHUD.InitDeckCardIcons(deck.NumCards);
+    }
+
 
 
     public void TryDrawCard()
@@ -101,7 +107,6 @@ public class CardDrawer : MonoBehaviour
     }
     private void SetupUIBattleCanvases()
     {
-        canvas.SetActive(false);
         if (OnStartSetupBattleCanvases != null) OnStartSetupBattleCanvases();
     }
     public void TryDrawCardAndUpdateHand()
