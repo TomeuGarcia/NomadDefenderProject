@@ -9,9 +9,9 @@ public class BodyReplaceTutorial : MonoBehaviour
     [SerializeField] private GameObject mask1;
     [SerializeField] private GameObject mask2;
     [SerializeField] private GameObject mask3;
-
+    [SerializeField] private CardPartReplaceManager cardPartReplaceManager;
     [SerializeField] private ScriptedSequence scriptedSequence;
-    public bool buttonPressed;
+    private bool buttonPressed;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,7 +46,7 @@ public class BodyReplaceTutorial : MonoBehaviour
         }
         mask1.SetActive(true);
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0) == true); //TODO: hauria de comprovar que realment clica on toca
+        yield return new WaitUntil(() => cardPartReplaceManager.GetCardIsReady() == true); 
         mask1.SetActive(false);
 
             //load bodies
@@ -63,14 +63,14 @@ public class BodyReplaceTutorial : MonoBehaviour
 
         mask2.SetActive(true);
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0) == true); //TODO: hauria de comprovar que realment clica on toca
+        yield return new WaitUntil(() => cardPartReplaceManager.GetPartIsReady()); 
         mask2.SetActive(false);
         yield return null;
 
 
         mask3.SetActive(true);
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0) == true); //wait until turret parts replaced (buttonPressed == true);
+        yield return new WaitUntil(() => cardPartReplaceManager.GetReplacementDone() == true); 
         mask3.SetActive(false);
         yield return null;
 
