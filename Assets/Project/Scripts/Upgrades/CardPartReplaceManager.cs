@@ -7,6 +7,9 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
@@ -53,7 +56,10 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
-    
+
+    private int numPartsIfPerfect = 1;
+    private bool lastBattleWasDefendedPerfectly = false;
+    NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
 
 
     public delegate void CarPartReplaceManagerAction();
@@ -96,6 +102,34 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Init()
     {
+        // TODO
+        numPartsIfPerfect = 1;
+        progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            numCards = 2;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numParts = 3;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                // level up card to max
+            }
+        }
+
+
         if (partType == PartType.ATTACK) InitAttacks();
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
@@ -114,7 +148,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitAttacks()
     {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts);
+        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -128,7 +163,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBodies()
     {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts);
+        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -142,14 +178,15 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBases()
     {
-        TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
-        TurretPassiveBase[] randomPassives = partsLibrary.GetRandomTurretPassiveBases(numParts);
+        PartsLibrary.BaseAndPassive[] randomBasesAndPassives = 
+            partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBases[i];
-            parts[i].turretPassiveBase = randomPassives[i];
+            parts[i].turretPartBase = randomBasesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = randomBasesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
