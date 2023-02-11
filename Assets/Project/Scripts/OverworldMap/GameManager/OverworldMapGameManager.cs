@@ -5,6 +5,7 @@ using static OWMap_Node;
 public class OverworldMapGameManager : MonoBehaviour
 {
     private OWMap_Node[][] mapNodes;
+    public OWMap_Node[][] GetMapNodes() { return mapNodes; }
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
