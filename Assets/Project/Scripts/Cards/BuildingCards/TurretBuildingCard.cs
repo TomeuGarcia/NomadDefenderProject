@@ -46,7 +46,7 @@ public class TurretBuildingCard : BuildingCard
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
 
-    [SerializeField] private TextMeshProUGUI cardLevelText;
+    [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
 

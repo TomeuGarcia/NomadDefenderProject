@@ -75,6 +75,7 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     private Material material;
     public const float FADE_DURATION = 0.1f;
+    public const float SELECTED_DURATION = 0.075f;
 
     //NODE ICON
     private Texture nodeIcon;
@@ -109,6 +110,10 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_FadeDuration", FADE_DURATION);
         material.SetFloat("_TimeStartFade", 0f);
         material.SetFloat("_IsFadingAway", 0f);
+
+        material.SetFloat("_SelectedDuration", SELECTED_DURATION);
+        material.SetFloat("_IsSelected", 0f);
+        material.SetFloat("_TimeStartSelected", 0f);
     }
 
 
@@ -191,6 +196,9 @@ public class OWMap_Node : MonoBehaviour
         //SetColor(colorInUse, setCameFromConnectionNotInteracted: true);
         SetIconColor(colorInUse);
         SetCameFromColor(colorInUse, setCameFromConnectionNotInteracted: true);
+
+        material.SetFloat("_IsSelected", 0f);
+        material.SetFloat("_TimeStartSelected", Time.time);
     }
 
     public void SetHovered()
@@ -198,7 +206,10 @@ public class OWMap_Node : MonoBehaviour
         interactState = NodeInteractState.HOVERED;
 
         SetIconColor(lightGreyColor, true);
-        SetCameFromColor(lightGreyColor);
+        //SetCameFromColor(lightGreyColor);
+
+        material.SetFloat("_IsSelected", 1f);
+        material.SetFloat("_TimeStartSelected", Time.time);
     }
 
     public void SetSelected()
