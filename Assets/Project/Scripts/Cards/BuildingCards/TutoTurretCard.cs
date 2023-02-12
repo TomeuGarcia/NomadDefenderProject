@@ -12,6 +12,7 @@ public class TutoTurretCard : TurretBuildingCard
     [SerializeField] private CanvasGroup attackIconCg;
     [SerializeField] private CanvasGroup basePassiveIconCg;
 
+    [HideInInspector] public bool showLevel = false;
     [HideInInspector] public bool showRangeStat = false;
     [HideInInspector] public bool showCadenceStat = false;
     [HideInInspector] public bool showAttackStat = false;
@@ -62,6 +63,10 @@ public class TutoTurretCard : TurretBuildingCard
 
 
         float t1 = 0.1f;
+
+        yield return new WaitUntil(() => showLevel);
+        cardLevelText.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
 
         yield return new WaitUntil(() => showRangeStat);
         rangeBarCg.DOFade(1f, t1);
