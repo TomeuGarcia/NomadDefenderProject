@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 using static InBattleBuildingUpgrader;
 
 public class BattleTutorialManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class BattleTutorialManager : MonoBehaviour
     //Needs
     //CurrencyBackgroundImg (can set alpha to 0)
     [SerializeField] private TutorialCardDrawer tutoCardDrawer;
+    [SerializeField] private HandBuildingCards hand;
 
     [SerializeField] private GameObject currencyBackgroundImg;
 
@@ -65,6 +67,7 @@ public class BattleTutorialManager : MonoBehaviour
         blackImg.alpha = 1.0f;
 
         StartCoroutine(Tutorial());
+        hand.cheatDrawCardActivated = false;
 
 
         //Init Events
@@ -159,12 +162,6 @@ public class BattleTutorialManager : MonoBehaviour
 
         tutoCardDrawer.ActivateCurrencyUI();
 
-        /*for(float i = 0.0f; i < 1.0f; i+=0.01f)
-        {
-            currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 1.0f;*/
         yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine();
@@ -196,7 +193,7 @@ public class BattleTutorialManager : MonoBehaviour
 
 
         //Card Level
-        //tutoCardDrawer.tutorialCard.showLevel = true;
+        tutoCardDrawer.tutorialCard.showLevel = true;
 
 
         scriptedSequence.NextLine();
