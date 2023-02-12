@@ -2,8 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialsSaverLoader
+public class TutorialsSaverLoader : MonoBehaviour
 {
+    private static TutorialsSaverLoader instance;
+
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+    public static TutorialsSaverLoader GetInstance()
+    {
+        return instance;
+    }
+
 
     /// <summary>
     /// Given a Tutorials type returns if it has been done or not by the user
@@ -30,5 +51,10 @@ public class TutorialsSaverLoader
 
         tutorialsSaved += (int)Mathf.Pow(2, (int)tutorial);
         PlayerPrefs.SetInt("Tutorials", tutorialsSaved);
+    }
+
+    public void ResetTutorials()
+    {
+        PlayerPrefs.SetInt("Tutorials", 0);
     }
 }

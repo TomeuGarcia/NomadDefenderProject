@@ -47,6 +47,9 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private float lastScroll;
 
+    public delegate void TurretUpgradeEvent(int newLevel);
+    public static TurretUpgradeEvent OnTurretUpgrade;
+
     private void Awake()
     {
         xOffset = UIParent.anchoredPosition.x;
@@ -215,6 +218,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     {
         currentLevel++;
         UpdateLevelText();
+        if (OnTurretUpgrade != null) { OnTurretUpgrade(currentLevel); }
     }
 
     private void UpdateLevelText()

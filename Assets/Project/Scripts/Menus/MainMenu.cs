@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,19 @@ public class MainMenu : MonoBehaviour
     private bool canInteract = true;
 
 
-    public delegate void MainMenuAction();
-    public static event MainMenuAction OnPlayStart;
-
     private void Awake()
     {
         canInteract = true;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown("f"))
+        {
+            //Reset All Tutorials
+            TutorialsSaverLoader.GetInstance().ResetTutorials();
+            Debug.Log("All Tutorials Have Been Reset");
+        }
     }
 
     public void Play()
@@ -32,7 +40,9 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
 
-        if (OnPlayStart != null) OnPlayStart();
+            //Load First Scene
+            SceneLoader.GetInstance().StartLoadFirstScene();
+
     }
 
     public void Quit()
