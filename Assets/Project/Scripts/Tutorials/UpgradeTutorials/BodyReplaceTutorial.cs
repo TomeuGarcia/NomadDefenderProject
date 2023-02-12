@@ -11,6 +11,7 @@ public class BodyReplaceTutorial : MonoBehaviour
     [SerializeField] private GameObject mask3;
     [SerializeField] private CardPartReplaceManager cardPartReplaceManager;
     [SerializeField] private ScriptedSequence scriptedSequence;
+    [SerializeField] Tutorials tutoType;
     private bool buttonPressed;
     // Start is called before the first frame update
     void Start()
@@ -21,8 +22,11 @@ public class BodyReplaceTutorial : MonoBehaviour
         bodies.SetActive(false);
         mask1.SetActive(false);
         mask2.SetActive(false);
-        //if(TutorialsSaverLoader.)
-        StartCoroutine(Tutorial());
+        if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
+        {
+            StartCoroutine(Tutorial());
+
+        }
     }
 
     IEnumerator Tutorial()
@@ -86,6 +90,8 @@ public class BodyReplaceTutorial : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
+
+        TutorialsSaverLoader.GetInstance().SetTutorialDone(tutoType);
     }
 
 }
