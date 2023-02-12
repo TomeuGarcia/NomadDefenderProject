@@ -11,6 +11,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
+    [SerializeField] private GameObject redrawCanvasGameObject; // works for 1 waveSpawner
     [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
     [SerializeField] private CanvasGroup finishRedrawsButtonCG;
 
@@ -107,6 +108,7 @@ public class CardDrawer : MonoBehaviour
     }
     private void SetupUIBattleCanvases()
     {
+        redrawCanvasGameObject.SetActive(false);
         if (OnStartSetupBattleCanvases != null) OnStartSetupBattleCanvases();
     }
     public void TryDrawCardAndUpdateHand()
