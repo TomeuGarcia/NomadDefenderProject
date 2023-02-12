@@ -122,8 +122,8 @@ public class OverworldMapDecorator : MonoBehaviour
             upgradeLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
-            //NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
-            NodeEnums.UpgradeType upgradeType = NodeEnums.UpgradeType.REPLACE_BASE_PART;
+            NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
+           
 
             NodeEnums.ProgressionState progressionState;
 
