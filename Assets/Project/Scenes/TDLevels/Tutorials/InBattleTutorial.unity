@@ -4370,7 +4370,7 @@ PrefabInstance:
     - target: {fileID: 1851400534606186765, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2287175830089958520, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
@@ -4436,6 +4436,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3340382547285155349, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5576661055574051303, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
@@ -14755,7 +14760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1028193253
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27836,550 +27841,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &2969841928899518166
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.size
-      value: 66
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[0].text
-      value: Starting Simulation 0...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[1].text
-      value: Rendering Level...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[2].text
-      value: Level Loaded
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[3].text
-      value: Preparing Tutorial
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[4].text
-      value: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[5].text
-      value: Connecting to server
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[6].text
-      value: Recovering User currency
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[7].text
-      value: Loading User Currency...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[8].text
-      value: Currency Loaded Successfully
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[9].text
-      value: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[10].text
-      value: Creating First Card...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[11].text
-      value: 'Creating Cards Stats:'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[12].text
-      value: '/Cards Stats: LEVEL'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[13].text
-      value: '/Cards Stats: <color=#1DFF5F>RANGE</color>'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[14].text
-      value: '/Cards Stats:  <color=#FFF345>CADENCY</color>'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[15].text
-      value: '/Cards Stats:  <color=#FF003E>ATTACK</color>'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[16].text
-      value: '/Cards Stats: COST'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[17].text
-      value: '/Cards Stats:  <color=#F5550C>PROJECTILE</color>'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[18].text
-      value: '/Cards Stats: <color=#3EB6F4>PASSIVE</color>'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[19].text
-      value: Card Stats Created Successfully
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[20].text
-      value: <color=#FF003E>ERROR 5680</color>. Destroying Card...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[21].text
-      value: Redraw Initializing
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[22].text
-      value: '/Redraw: Activating...'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[23].text
-      value: '/Redraw: Successfully showing'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[24].text
-      value: '/Redraw: Generatin Info...'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[25].text
-      value: '/Redraw/Info: Click a Card to redraw it'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[26].text
-      value: '/Redraw/Info: Redraw ends when no redraws left or finish button clicked'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[27].text
-      value: '/Redraw: Waiting User to finish Redraw...'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[28].text
-      value: '/Redraw: Finished'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[29].text
-      value: Initializing User's Deck
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[30].text
-      value: Initializing Defense...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[31].text
-      value: '/Defense/Info: Select a Card'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[32].text
-      value: '/Defense/Info: Then place it in an available position in world'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[33].text
-      value: '/Defense: Waiting for User to place a Turret...'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[34].text
-      value: Turret placed Correctly
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[35].text
-      value: Generating Enemies...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[36].text
-      value: Wave 1/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[37].text
-      value: DEFENSE PAUSED
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[38].text
-      value: Click on the placed turret
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[39].text
-      value: And upgrade one stat
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[40].text
-      value: Waiting User to Upgrade Turret...
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[41].text
-      value: DEFENSE RESUMED
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[42].text
-      value: Wave 2/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[43].text
-      value: Defense <color=#FF003E>Finished?</color>
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[44].text
-      value: Wave 3/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[45].text
-      value: Wave 4/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[46].text
-      value: Wave 5/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[47].text
-      value: Wave 6/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[48].text
-      value: Wave 7/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[49].text
-      value: Wave 8/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[50].text
-      value: Wave 9/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[51].text
-      value: Wave 10/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[52].text
-      value: Wave 11/2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[53].text
-      value: defend
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[54].text
-      value: Defend
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[55].text
-      value: DEFEND
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[56].text
-      value: DEFENCK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[57].text
-      value: ATENCK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[58].text
-      value: ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[59].text
-      value: ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[60].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[61].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-        ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[62].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-        ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[63].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-        ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[64].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-        ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[65].text
-      value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-        ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[5].textType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[6].textType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[56].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[57].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[58].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[59].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[60].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[61].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[62].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[63].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[64].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4267870701329988558, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: textLines.Array.data[65].textType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4924602163032792581, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1084.5289
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 462.87485
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5704.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528870704316176416, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: card
-      value: 
-      objectReference: {fileID: 1600595380}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: cost
-      value: 
-      objectReference: {fileID: 1462185658}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: passive
-      value: 
-      objectReference: {fileID: 664000411}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: blackImg
-      value: 
-      objectReference: {fileID: 1028193254}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: cardLevel
-      value: 
-      objectReference: {fileID: 1232204812}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: rangeStat
-      value: 
-      objectReference: {fileID: 828445291}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: attackStat
-      value: 
-      objectReference: {fileID: 1673953376}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: projectile
-      value: 
-      objectReference: {fileID: 1907793042}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: cadencyStat
-      value: 
-      objectReference: {fileID: 1479225852}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: deckInterface
-      value: 
-      objectReference: {fileID: 314651047}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: speedUpButton
-      value: 
-      objectReference: {fileID: 314651048}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: tDGameManager
-      value: 
-      objectReference: {fileID: 773636324}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: currencyCounter
-      value: 
-      objectReference: {fileID: 314651050}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: redrawInterface
-      value: 
-      objectReference: {fileID: 314651046}
-    - target: {fileID: 7723315795059622173, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: currencyBackgroundImg
-      value: 
-      objectReference: {fileID: 314651049}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e816499ca36b6674ba128bd787597997, type: 3}
 --- !u!4 &3011136467589331879
 Transform:
   m_ObjectHideFlags: 0
@@ -29498,6 +28959,150 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &7308264897036777833
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1084.5289
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 462.87485
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5704.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 1600595380}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: cost
+      value: 
+      objectReference: {fileID: 1462185658}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: passive
+      value: 
+      objectReference: {fileID: 664000411}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: blackImg
+      value: 
+      objectReference: {fileID: 1028193254}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: cardLevel
+      value: 
+      objectReference: {fileID: 1232204812}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: rangeStat
+      value: 
+      objectReference: {fileID: 828445291}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: attackStat
+      value: 
+      objectReference: {fileID: 1673953376}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: projectile
+      value: 
+      objectReference: {fileID: 1907793042}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: cadencyStat
+      value: 
+      objectReference: {fileID: 1479225852}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: deckInterface
+      value: 
+      objectReference: {fileID: 314651047}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: speedUpButton
+      value: 
+      objectReference: {fileID: 314651048}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: tDGameManager
+      value: 
+      objectReference: {fileID: 773636324}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: currencyCounter
+      value: 
+      objectReference: {fileID: 314651050}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: redrawInterface
+      value: 
+      objectReference: {fileID: 314651046}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: currencyBackgroundImg
+      value: 
+      objectReference: {fileID: 314651049}
+    - target: {fileID: 7308264895925660343, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e816499ca36b6674ba128bd787597997, type: 3}
 --- !u!1 &7847715195306253084
 GameObject:
   m_ObjectHideFlags: 0

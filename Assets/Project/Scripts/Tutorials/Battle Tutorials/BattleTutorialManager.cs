@@ -154,10 +154,6 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
         yield return new WaitUntil(() => Input.GetKeyDown("space") == true);
         yield return null;
 
@@ -428,6 +424,18 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitUntil(() => firstUpgradeDone == true);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
