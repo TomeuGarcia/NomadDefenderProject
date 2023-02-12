@@ -106,7 +106,7 @@ public class BattleHUD : MonoBehaviour
         canInteractWithDeckUI = false;
         HideUI();
 
-        StartCoroutine(CurrencyUIStartGameAnimation());
+        StartCoroutine(CurrencyUIStartGameAnimation(true));
     }
 
     private void Update()
@@ -135,14 +135,35 @@ public class BattleHUD : MonoBehaviour
         StartCoroutine(DeckUIStartGameAnimation());   
         StartCoroutine(SpeedUpUIStartGameAnimation());   
     }
-    private IEnumerator CurrencyUIStartGameAnimation()
+
+
+    public void DeactivateCurrencyUI()
+    {
+        currencyUI.SetActive(false);
+    }
+    public void ActivateCurrencyUI()
+    {
+        currencyUI.SetActive(true);
+        StartCoroutine(CurrencyUIStartGameAnimation(false));
+    }
+
+    private IEnumerator CurrencyUIStartGameAnimation(bool startWithDelay)
     {
         // Start wait
         cgCurrencyUI.alpha = 0f;
-        yield return new WaitForSeconds(1.0f);
+        if (startWithDelay) yield return new WaitForSeconds(1.0f);
 
         // Appear
-        cgCurrencyUI.DOFade(1f, 1f);
+        float t1 = 0.1f;
+        cgCurrencyUI.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        cgCurrencyUI.DOFade(0f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        cgCurrencyUI.DOFade(1f, t1);        
     }
     private IEnumerator SpeedUpUIStartGameAnimation()
     {

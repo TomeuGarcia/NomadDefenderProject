@@ -72,5 +72,4 @@ public class DeckCreator : MonoBehaviour
         deckData.SetStarterCardComponentsAsSaved();
     }
 
-
 }
