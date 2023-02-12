@@ -65,7 +65,7 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
-    private Material cardMaterial;
+    protected Material cardMaterial;
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -75,11 +75,11 @@ public abstract class BuildingCard : MonoBehaviour
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
-    private bool isPlayingDrawAnimation = false;
-    private const float drawAnimLoopDuration = 0.75f;
-    private const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    private const float drawAnimBlinkDuration = 0.3f;
-    private const float drawAnimNumBlinks = 3f;
+    protected bool isPlayingDrawAnimation = false;
+    protected const float drawAnimLoopDuration = 0.75f;
+    protected const float drawAnimWaitDurationBeforeBlink = 0.2f;
+    protected const float drawAnimBlinkDuration = 0.3f;
+    protected const float drawAnimNumBlinks = 3f;
 
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
@@ -363,7 +363,7 @@ public abstract class BuildingCard : MonoBehaviour
         StartCoroutine(InterfaceDrawAnimation(animationEndCallback));
     }
 
-    private IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
+    protected virtual IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
     {
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
