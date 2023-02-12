@@ -21,7 +21,7 @@ public class BodyReplaceTutorial : MonoBehaviour
         bodies.SetActive(false);
         mask1.SetActive(false);
         mask2.SetActive(false);
-        //if(TutorialsSaverLoader.G)
+        //if(TutorialsSaverLoader.)
         StartCoroutine(Tutorial());
     }
 
