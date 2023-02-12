@@ -11,6 +11,8 @@ public class BattleTutorialManager : MonoBehaviour
 
     //Needs
     //CurrencyBackgroundImg (can set alpha to 0)
+    [SerializeField] private TutorialCardDrawer tutoCardDrawer;
+
     [SerializeField] private GameObject currencyBackgroundImg;
 
     //Speed Up Button (can set alpha to 0)
@@ -22,18 +24,9 @@ public class BattleTutorialManager : MonoBehaviour
     //Card Drawer -> Canvas -> BackgroundImage (can set alpha to 0)
     [SerializeField] private GameObject redrawInterface;
 
-    //Cards
-    [SerializeField] private GameObject card;
-    [SerializeField] private CanvasGroup attackStat;
-    [SerializeField] private CanvasGroup cadencyStat;
-    [SerializeField] private CanvasGroup rangeStat;
-    [SerializeField] private CanvasGroup projectile;
-    [SerializeField] private CanvasGroup passive;
-    [SerializeField] private CanvasGroup cost;
-    [SerializeField] private CanvasGroup cardLevel;
+
     [SerializeField] private CanvasGroup blackImg;
-    //List<Cards>cards -> only show cards[0] -> dont show cards[0] stats
-    //Maybe create a Card object to do the animation
+
 
     //Get Scripted Sequence
     [SerializeField] private ScriptedSequence scriptedSequence;
@@ -69,16 +62,6 @@ public class BattleTutorialManager : MonoBehaviour
         redrawInterface.GetComponent<CanvasGroup>().alpha = 0;
         redrawInterface.SetActive(false);
 
-        card.GetComponent<CanvasGroup>().alpha = 0;
-        card.SetActive(false);
-
-        attackStat.alpha = 0;
-        cadencyStat.alpha = 0;
-        rangeStat.alpha = 0;
-        projectile.alpha = 0;
-        passive.alpha = 0;
-        cost.alpha = 0;
-        cardLevel.alpha = 0;
         blackImg.alpha = 1.0f;
 
         StartCoroutine(Tutorial());
@@ -174,12 +157,14 @@ public class BattleTutorialManager : MonoBehaviour
         //Show Currency
         currencyBackgroundImg.SetActive(true);
 
-        for(float i = 0.0f; i < 1.0f; i+=0.01f)
+        tutoCardDrawer.ActivateCurrencyUI();
+
+        /*for(float i = 0.0f; i < 1.0f; i+=0.01f)
         {
             currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = i;
             yield return null;
         }
-        currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 1.0f;
+        currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 1.0f;*/
         yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine();
@@ -201,16 +186,9 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
 
-        card.SetActive(true);
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            card.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        card.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.DoGameStartSetup();
 
         //Cards Stats
-
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
@@ -218,12 +196,7 @@ public class BattleTutorialManager : MonoBehaviour
 
 
         //Card Level
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            cardLevel.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        cardLevel.GetComponent<CanvasGroup>().alpha = 1.0f;
+        //tutoCardDrawer.tutorialCard.showLevel = true;
 
 
         scriptedSequence.NextLine();
@@ -231,72 +204,42 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Range
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            rangeStat.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        rangeStat.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showRangeStat = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
         //Cadency
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            cadencyStat.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        cadencyStat.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showCadenceStat = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
         //Attack
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            attackStat.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        attackStat.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showAttackStat = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
         //Cost
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            cost.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        cost.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showPlayCost = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
         //Projectile
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            projectile.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        projectile.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showAttackIcon = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
         //Passive
-        for (float i = 0.0f; i < 1.0f; i += 0.01f)
-        {
-            passive.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        passive.GetComponent<CanvasGroup>().alpha = 1.0f;
+        tutoCardDrawer.tutorialCard.showBasePassiveIcon = true;
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
@@ -308,15 +251,6 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
-
-        
-        for (float i = 1.0f; i > 0.0f; i -= 0.01f)
-        {
-            card.GetComponent<CanvasGroup>().alpha = i;
-            yield return null;
-        }
-        card.GetComponent<CanvasGroup>().alpha = 0.0f;
-        card.SetActive(false);
 
         //Finishes Cards Tutorial
 

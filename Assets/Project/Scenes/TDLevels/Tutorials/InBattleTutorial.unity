@@ -4442,6 +4442,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5094152541944548896, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5576661055574051303, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_Alpha
@@ -4467,6 +4472,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7982427645377297919, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8859183146045818370, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4491,7 +4501,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: ac4314825bb9b65479c003072040fe74, type: 3}
 --- !u!1 &314651046 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 7417545680412858286, guid: ac4314825bb9b65479c003072040fe74,
+  m_CorrespondingSourceObject: {fileID: 7982427645377297918, guid: ac4314825bb9b65479c003072040fe74,
     type: 3}
   m_PrefabInstance: {fileID: 314651045}
   m_PrefabAsset: {fileID: 0}
@@ -4525,6 +4535,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd90c20383400b844aec752b344e52d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &314651051
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314651046}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &314651052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314651046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 508d37a3a2c8c174ca5eb5e129cf74b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 1635650534}
+  deck: {fileID: 1635650530}
+  battleHUD: {fileID: 1635650533}
+  redrawCanvasGameObject: {fileID: 1635650535}
+  redrawingText: {fileID: 1635650531}
+  finishRedrawsButtonCG: {fileID: 1635650532}
+  numCardsHandStart: 1
+  cardsToDrawPerWave: 2
+  tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
+    type: 3}
+  tutorialCardParts: {fileID: 11400000, guid: b326492a0a2315047b3876924dd2da53, type: 2}
+  tutorialCard: {fileID: 0}
 --- !u!1001 &317845071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18863,6 +18909,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1368443773}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1371673917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5094152541944548896, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1376795674
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22053,6 +22105,66 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4675701781462021929, guid: b8b908d25402545438e5920500e87082,
     type: 3}
   m_PrefabInstance: {fileID: 1630359477}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1635650530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2389504214443094638, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f361a7784327b57409cc95897e610bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1635650531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5412160906093144428, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &1635650532 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8719205494629726894, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1635650533 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3061516609394921384, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9b3a1784e02e842a4f8ea88f6e3ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1635650534 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4885359580415880069, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b07d8276f6a7d8409ab9744e66a84b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1635650535 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7287294236232450556, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1637751016
 PrefabInstance:
@@ -29083,6 +29195,11 @@ PrefabInstance:
       objectReference: {fileID: 773636324}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
+      propertyPath: tutoCardDrawer
+      value: 
+      objectReference: {fileID: 314651052}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
       propertyPath: currencyCounter
       value: 
       objectReference: {fileID: 314651050}
@@ -29090,7 +29207,7 @@ PrefabInstance:
         type: 3}
       propertyPath: redrawInterface
       value: 
-      objectReference: {fileID: 314651046}
+      objectReference: {fileID: 1371673917}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: currencyBackgroundImg
