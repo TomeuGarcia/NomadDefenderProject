@@ -6,11 +6,15 @@ using UnityEngine;
 public class TutoTurretCard : TurretBuildingCard
 {
     [Header("TUTORIAL DRAW ANIMATION")]
+    [SerializeField] private CanvasGroup cardLevelTextCg;
+    [SerializeField] private CanvasGroup baseAndBodyCg;
+    [SerializeField] private CanvasGroup playCostTextCg;
     [SerializeField] private CanvasGroup rangeBarCg;
     [SerializeField] private CanvasGroup cadenceBarCg;
     [SerializeField] private CanvasGroup attackBarCg;
     [SerializeField] private CanvasGroup attackIconCg;
     [SerializeField] private CanvasGroup basePassiveIconCg;
+
 
     [HideInInspector] public bool showLevel = false;
     [HideInInspector] public bool showRangeStat = false;
@@ -62,35 +66,130 @@ public class TutoTurretCard : TurretBuildingCard
         }
 
 
-        float t1 = 0.1f;
+        yield return new WaitForSeconds(0.4f);
 
+
+        float t1 = 0.05f;
+
+
+        // Show Turret Body and Base
+        baseAndBodyCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        yield return new WaitForSeconds(t1);
+
+        baseAndBodyCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        baseAndBodyCg.DOFade(0f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        yield return new WaitForSeconds(t1);
+
+
+
+        // Show Level
         yield return new WaitUntil(() => showLevel);
-        cardLevelText.DOFade(1f, t1);
-        GameAudioManager.GetInstance().PlayCardInfoShown();
 
+        cardLevelTextCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        cardLevelTextCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        cardLevelTextCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+
+        // Show Range Stat
         yield return new WaitUntil(() => showRangeStat);
+
         rangeBarCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
+        rangeBarCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        rangeBarCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+
+        // Show Cadence Stat
         yield return new WaitUntil(() => showCadenceStat);
+
         cadenceBarCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
+        cadenceBarCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        cadenceBarCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+
+        // Show Attack Stat
         yield return new WaitUntil(() => showAttackStat);
+
         attackBarCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
-        yield return new WaitUntil(() => showPlayCost);
-        playCostText.DOFade(1f, t1);
+        attackBarCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        attackBarCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
+
+
+        // Show Play Cost
+        yield return new WaitUntil(() => showPlayCost);
+
+        playCostTextCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        playCostTextCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        playCostTextCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+
+        // Show Attack Icon
         yield return new WaitUntil(() => showAttackIcon);
+
         attackIconCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
+        attackIconCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        attackIconCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+
+        // Show base Passive Icon
         yield return new WaitUntil(() => showBasePassiveIcon);
+        
         basePassiveIconCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        basePassiveIconCg.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
+        basePassiveIconCg.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
 
 
 
