@@ -16,17 +16,12 @@ public class OWMapTutorialManager : MonoBehaviour
 
 
 
-    private GameObject[] battleNodes;
+    private List<OWMap_Node> battleNodes;
 
-    private GameObject[] upgradeNodes;
+    private List<OWMap_Node> upgradeNodes;
 
     private GameObject[] nodesConnections;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     public void StartTutorial()
     {
@@ -39,21 +34,31 @@ public class OWMapTutorialManager : MonoBehaviour
 
     private void Init()
     {
-        //Initializing battle Nodes
-        battleNodes = new GameObject[2];
-        battleNodes[0] = mapHolder.transform.GetChild(2).transform.GetChild(0).transform.GetChild(0).gameObject;
-        battleNodes[1] = mapHolder.transform.GetChild(2).transform.GetChild(0).transform.GetChild(1).gameObject;
-        SetActiveBattleNodes(false);
+        OWMap_Node[][] tempOWMapNodes = owMapGameManager.GetMapNodes();
 
-        //Initializing upgrade nodes
-        upgradeNodes = new GameObject[5];
-        upgradeNodes[0] = mapHolder.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).gameObject;
-        upgradeNodes[1] = mapHolder.transform.GetChild(1).transform.GetChild(0).transform.GetChild(0).gameObject;
-        upgradeNodes[2] = mapHolder.transform.GetChild(3).transform.GetChild(0).transform.GetChild(0).gameObject;
-        upgradeNodes[3] = mapHolder.transform.GetChild(3).transform.GetChild(0).transform.GetChild(1).gameObject;
-        upgradeNodes[4] = mapHolder.transform.GetChild(3).transform.GetChild(0).transform.GetChild(2).gameObject;
 
-        SetActiveUpgradeNodes(false);
+        //Initializing battle Nodes and upgrade nodes
+        battleNodes = new List<OWMap_Node>();
+        upgradeNodes = new List<OWMap_Node>();
+        upgradeNodes.Add(tempOWMapNodes[0][0]);
+
+        for(int i = 0; i < tempOWMapNodes.Length; i++)
+        {
+            for(int j = 0; j < tempOWMapNodes[i].Length; j++)
+            {
+                if(tempOWMapNodes[i][j].GetNodeType() == NodeEnums.NodeType.BATTLE)
+                {
+                    battleNodes.Add(tempOWMapNodes[i][j]);
+                }
+                else if(tempOWMapNodes[i][j].GetNodeType() == NodeEnums.NodeType.UPGRADE)
+                {
+                    upgradeNodes.Add(tempOWMapNodes[i][j]);
+                }
+            }
+        }
+
+        SetInactiveBattleNodes();
+        SetInactiveUpgradeNodes();
 
         //Initializing nodes connections
         nodesConnections = new GameObject[9];
@@ -71,19 +76,19 @@ public class OWMapTutorialManager : MonoBehaviour
 
     }
 
-    private void SetActiveUpgradeNodes(bool active)
+    private void SetInactiveUpgradeNodes()
     {
-        foreach (GameObject gameObject in upgradeNodes)
+        foreach (OWMap_Node node in upgradeNodes)
         {
-            gameObject.SetActive(active);
+            node.PlayFadeOutAnimation();
         }
     }
 
-    private void SetActiveBattleNodes(bool active)
+    private void SetInactiveBattleNodes()
     {
-        foreach (GameObject gameObject in battleNodes)
+        foreach (OWMap_Node node in battleNodes)
         {
-            gameObject.SetActive(active);
+            node.PlayFadeOutAnimation();
         } 
     }
 
@@ -124,7 +129,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
-        SetActiveUpgradeNodes(true);
+        //Show Upgrade Nodes
+        foreach (OWMap_Node node in upgradeNodes)
+        {
+            node.PlayFadeInAnimation();
+            yield return new WaitForSeconds(0.25f);
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -132,7 +142,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
-        SetActiveBattleNodes(true);
+        //Show Upgrade Nodes
+        foreach (OWMap_Node node in battleNodes)
+        {
+            node.PlayFadeInAnimation();
+            yield return new WaitForSeconds(0.25f);
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -152,8 +167,9 @@ public class OWMapTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //Select a node to go to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(5.0f);
 
+        scriptedSequence.Clear();
 
         //Set OW_Map Tutorial as done
         //TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);

@@ -79,6 +79,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
+            moveCameraAfterNodeScene = true;
             if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
                 StartMapTutorial();
         }
