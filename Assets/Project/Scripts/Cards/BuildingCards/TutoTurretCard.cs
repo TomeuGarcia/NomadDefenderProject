@@ -80,7 +80,7 @@ public class TutoTurretCard : TurretBuildingCard
         baseAndBodyCg.DOFade(0f, t1);
         yield return new WaitForSeconds(t1);
 
-        baseAndBodyCg.DOFade(0f, t1);
+        baseAndBodyCg.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t1);
 
