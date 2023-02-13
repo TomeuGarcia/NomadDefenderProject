@@ -76,6 +76,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
         SetButtonNotReady();
         Init();
+
+        PlayCardAndCardPartsAppearAnimation();
     }
 
     private void OnEnable()
@@ -422,4 +424,30 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         return replacementDone;
     }
+
+
+    private void PlayCardAndCardPartsAppearAnimation()
+    {
+        StartCoroutine(upgradeCardHolder.AppearAnimation(1f));
+        StartCoroutine(cardPartHolder.AppearAnimation(2.5f));
+    }
+
+    public void PauseCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = true;
+    }
+
+    public void PauseCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = true;
+    }
+
 }
