@@ -57,6 +57,8 @@ public class HandBuildingCards : MonoBehaviour
     public static event CardAction ReturnCardToDeck;
     public event HandAction OnCanAddCard;
 
+    [HideInInspector] public bool cheatDrawCardActivated = true;
+
 
 
 
@@ -122,7 +124,7 @@ public class HandBuildingCards : MonoBehaviour
         {
             ResetAndSetStandardCard(selectedCard);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && cheatDrawCardActivated)
         {
             if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
