@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
 public class EnemyWaveSpawner : ScriptableObject
 {
+    [SerializeField, Tooltip("Enemy stats will increase each round ddepending on this coef")]
+    private float waveMultiplierCoef = 0.0f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
@@ -22,6 +26,7 @@ public class EnemyWaveSpawner : ScriptableObject
     public event EnemyWaveSpawnerAction OnWaveFinished;
     public event EnemyWaveSpawnerAction OnLastWaveFinished;
 
+    bool stopForced;
 
 
     public void Init(PathNode startNode)
@@ -29,10 +34,11 @@ public class EnemyWaveSpawner : ScriptableObject
         currentWave = 0;
         activeEnemies = 0;
         this.startNode = startNode;
+        stopForced = false;
     }
 
 
-    public IEnumerator SpawnCurrentWaveEnemies()
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
     {
         yield return new WaitForSeconds(delayWaveStart);
 
@@ -46,7 +52,9 @@ public class EnemyWaveSpawner : ScriptableObject
         {
             foreach (Enemy.EnemyType enemyType in enemyWaves[currentWave].enemies)
             {
-                SpawnEnemy(enemyType);
+                if (stopForced) break;
+
+                SpawnEnemy(enemyType, spawnTransform);
 
                 yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
             }
@@ -55,9 +63,10 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    private void SpawnEnemy(Enemy.EnemyType enemyType)
+    private void SpawnEnemy(Enemy.EnemyType enemyType, Transform spawnTransform)
     {
-        GameObject enemyGameObject = EnemyFactory.GetInstance().GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity);
+        GameObject enemyGameObject = EnemyFactory.GetInstance()
+            .GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity, spawnTransform);
         enemyGameObject.SetActive(true);
 
         /////////////
@@ -70,17 +79,23 @@ public class EnemyWaveSpawner : ScriptableObject
         }
 
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
-        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.2f, 0.2f)) + 
-                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.2f, 0.2f));
+        spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
+        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.3f, 0.3f)) + 
+                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.3f, 0.3f));
         spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
         /////////////
 
-        spawnedEnemy.OnEnemyDeath += SubtractActiveEnemy;
+        spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;
+    }
+
+    private float CalcWaveMultiplier()
+    {
+        return (1.0f + (currentWave * waveMultiplierCoef));
     }
 
     private void SubtractActiveEnemy(Enemy enemy)
     {
-        enemy.OnEnemyDeath -= SubtractActiveEnemy;
+        enemy.OnEnemyDeactivated -= SubtractActiveEnemy;
 
         if (--activeEnemies == 0)
         {
@@ -98,6 +113,11 @@ public class EnemyWaveSpawner : ScriptableObject
         {
             if (OnLastWaveFinished != null) OnLastWaveFinished(this);
         }
+    }
+
+    public void ForceStopWave()
+    {
+
     }
 
 }

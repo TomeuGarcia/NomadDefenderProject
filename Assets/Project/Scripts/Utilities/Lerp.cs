@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Lerp : MonoBehaviour
@@ -30,6 +29,8 @@ public class Lerp : MonoBehaviour
 
     private float posCurrentTime;
     private float posLerpTime;
+
+    private Transform transformTarget;
 
     //private Rigidbody2D rb;
 
@@ -171,6 +172,16 @@ public class Lerp : MonoBehaviour
         TrueLerpPosition(positionToGo);
     }
 
+    public void LerpPosition(Transform newTransformTarget, float lerpSpeed)
+    {
+        posLerpTime = ((newTransformTarget.position - transform.position).magnitude / 15.0f) / lerpSpeed;
+
+        invertPosFunction = false;
+        transformTarget = newTransformTarget;
+
+        TrueLerpPosition(transformTarget.position);
+    }
+
     public void SpeedLerpPosition(Vector3 positionToGo, float lerpSpeed)
     {
         //posLerpTime = ((positionToGo - transform.position).magnitude / 15.0f) * lerpSpeed;
@@ -191,7 +202,7 @@ public class Lerp : MonoBehaviour
     void TrueLerpPosition(Vector3 positionToGo)
     {
         startingVect = transform.position;
-        dirPosVect = positionToGo - transform.position;
+        dirPosVect = positionToGo - startingVect;
         finishedPositionLerp = false;
 
         if (gameObject.activeInHierarchy)
@@ -213,6 +224,11 @@ public class Lerp : MonoBehaviour
 
         while (posCurrentTime < posLerpTime)
         {
+            if(transformTarget != null)
+            {
+                dirPosVect = transformTarget.position - startingVect;
+            }
+
             posCurrentTime += Time.deltaTime;
 
             float tParam = positionLerpFunction.Evaluate(posCurrentTime / posLerpTime);
@@ -225,6 +241,7 @@ public class Lerp : MonoBehaviour
 
         finishedPositionLerp = true;
         //rb.velocity = Vector2.zero;
+        transformTarget = null;
     }
 
     IEnumerator InvertedRearrangeNow()

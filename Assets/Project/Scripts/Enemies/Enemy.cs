@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,19 +15,29 @@ public class Enemy : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material baseMaterial;
     [SerializeField] private Material selectedMaterial;
+    public Transform MeshTransform => meshRenderer.transform;
+    private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Image healthImage;
-    [SerializeField] private BoxCollider boxCollider;
+    //[SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private HealthHUD healthHUD;
 
     [Header("Stats")]
-    [SerializeField] private int damage = 1;
-    [SerializeField] private int health = 2;
-    [SerializeField] public int currencyDrop;
+    [SerializeField] private int baseDamage = 1;
+    [SerializeField] private int baseHealth = 2;
+    [SerializeField] private int baseArmor = 0;
+    private float damage;
+    private float armor;
+    private float health;
+    [HideInInspector] public int currencyDrop;
+    [SerializeField] public int baseCurrencyDrop;
+
+    // Queued damage
+    private int queuedDamage = 0;   
+
 
 
     private HealthSystem healthSystem;
@@ -33,19 +45,26 @@ public class Enemy : MonoBehaviour
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
     public EnemyAction OnEnemyDeath;
+    public EnemyAction OnEnemyDeactivated;
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
+        
+
+        ResetStats();
+        healthSystem = new HealthSystem((int)health,(int)armor);
+        healthHUD.Init(healthSystem);
+
+        originalMeshLocalScale = MeshTransform.localScale;
     }
 
     private void OnValidate()
     {
-        boxCollider.center = meshRenderer.gameObject.transform.localPosition;
-        boxCollider.size = meshRenderer.gameObject.transform.localScale;
+        //boxCollider.center = meshRenderer.gameObject.transform.localPosition;
+        //boxCollider.size = meshRenderer.gameObject.transform.localScale;
     }
 
     private void OnEnable()
@@ -64,26 +83,33 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
 
-        meshRenderer.material = baseMaterial;
+        //ChangeToBaseMat();
         healthSystem.HealToMax();
-        healthImage.fillAmount = healthSystem.healthRatio;
+        healthSystem.ArmorToMax();
+
+        queuedDamage = 0;
+
+        ResetStats();
+
+        healthHUD.Hide();
     }
 
-    private void Update()
+    private void ResetStats()
     {
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        //cameraDirection.y = 0;
+        damage = baseDamage;
+        health = baseHealth;
+        armor = baseArmor;
 
-        canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
+        currencyDrop = baseCurrencyDrop;
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage(damage);
+            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
             Suicide();
-            //Destroy(gameObject);//////////////////////////
         }
     }
 
@@ -95,15 +121,21 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, PassiveDamageModifier modifier)
     {
-        healthSystem.TakeDamage(damageAmount);
+        healthHUD.Show();
 
-        healthImage.fillAmount = healthSystem.healthRatio;
+        damageAmount = modifier(damageAmount, healthSystem);
+        healthSystem.TakeDamage(damageAmount);
+        RemoveQueuedDamage(damageAmount);
+
+        MeshTransform.localScale = originalMeshLocalScale;
+        MeshTransform.DOKill(true);
+        MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
         if (healthSystem.IsDead())
         {
-            Death();
+            Die();
         }
     }
 
@@ -112,15 +144,16 @@ public class Enemy : MonoBehaviour
         Deactivation();
     }
 
-    private void Death()
+    private void Die()
     {
         if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+        if (OnEnemyDeath != null) OnEnemyDeath(this);
         Deactivation();
     }
 
     private void Deactivation()
     {
-        if (OnEnemyDeath != null) OnEnemyDeath(this);
+        if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
@@ -128,10 +161,59 @@ public class Enemy : MonoBehaviour
 
     public void ChangeMat()
     {
-        meshRenderer.material = selectedMaterial;
+        //meshRenderer.material = selectedMaterial;
     }
     public void ChangeToBaseMat()
     {
-        meshRenderer.material = baseMaterial;
+        //meshRenderer.material = baseMaterial;
+    }
+
+
+    public int QueueDamage(int amount, PassiveDamageModifier modifier)
+    {
+        amount = modifier(amount, healthSystem);
+        queuedDamage += amount;
+
+        //if (queuedDamage >= healthSystem.health)
+        //{
+        //    StartCoroutine(TimedDeath());
+        //}
+
+        return amount;
+    }
+
+    IEnumerator TimedDeath()
+    {
+        Debug.LogWarning("Enemy Death for timer");
+        yield return new WaitForSeconds(0.5f);
+        Die();
+    }
+
+    public void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    {
+        queuedDamage -= amount;
+    }
+
+    public bool DiesFromQueuedDamage()
+    {
+        return queuedDamage >= healthSystem.health;
+    }
+
+    public void SetMoveSpeed(float speedCoef)
+    {
+        pathFollower.SetMoveSpeed(speedCoef);
+    }
+
+    public void ApplyWaveStatMultiplier(float multiplier)
+    {
+        damage = (float)baseDamage * multiplier;
+        health = (float)baseHealth * multiplier;
+
+        healthSystem.UpdateHealth((int)health);
+    }
+
+    public bool IsDead()
+    {
+        return healthSystem.IsDead();
     }
 }

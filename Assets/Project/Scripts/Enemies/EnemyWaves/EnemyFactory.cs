@@ -33,6 +33,15 @@ public class EnemyFactory : MonoBehaviour
             Destroy(this);
         }
     }
+    private void OnEnable()
+    {
+        TDGameManager.OnEndGameResetPools += ResetPools;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnEndGameResetPools -= ResetPools;
+    }
+
 
     public static EnemyFactory GetInstance()
     {
@@ -50,11 +59,18 @@ public class EnemyFactory : MonoBehaviour
         }
     }
 
-    public GameObject GetEnemyGameObject(Enemy.EnemyType enemyType, Vector3 position, Quaternion rotation)
+    public GameObject GetEnemyGameObject(Enemy.EnemyType enemyType, Vector3 position, Quaternion rotation, Transform spawnTransform)
     {
-        return sortedEnemies[enemyType].GetObject(position, rotation);
+        return sortedEnemies[enemyType].GetObject(position, rotation, spawnTransform);
     }
 
+    private void ResetPools()
+    {
+        foreach (EnemyTypeToPool enemyTypeToPool in enemiesToPool)
+        {
+            enemyTypeToPool.pool.ResetObjectsList();
+        }
+    }
 
 
 }

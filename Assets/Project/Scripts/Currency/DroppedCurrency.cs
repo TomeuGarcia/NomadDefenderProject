@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
@@ -15,7 +14,6 @@ public class DroppedCurrency : MonoBehaviour
     [SerializeField] private float indicatorTime;
 
     [Header("COMPONENTS")]
-    [SerializeField] private MouseOverNotifier mouseOverNotifier;
     [SerializeField] private Transform meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private RectTransform canvasTransform;
@@ -30,8 +28,7 @@ public class DroppedCurrency : MonoBehaviour
 
     private void OnEnable()
     {
-        mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
-
+        StartGotPickedUp();
 
         beeingPickedUp = false;
         text.gameObject.SetActive(false);
@@ -50,12 +47,6 @@ public class DroppedCurrency : MonoBehaviour
         rb.AddForce(forceDir, ForceMode.Impulse);
     }
 
-    private void OnDisable()
-    {
-        mouseOverNotifier.OnMouseEntered -= StartGotPickedUp;
-    }
-
-
     private void Update()
     {
         Vector3 cameraDirection = Camera.main.transform.forward;
@@ -69,6 +60,8 @@ public class DroppedCurrency : MonoBehaviour
 
         if (OnCurrencyGathered != null) OnCurrencyGathered(value);
         StartCoroutine(GotPickedUp());
+
+        GameAudioManager.GetInstance().PlayCurrencyDropped();
     }
 
     public void SetValue(int newValue)
@@ -76,8 +69,8 @@ public class DroppedCurrency : MonoBehaviour
         value = newValue;
 
         //value = Random.Range(1, 4); // Just for testing
-        Vector3 minScale = Vector3.one * 0.25f;
-        meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
+        Vector3 minScale = Vector3.one * 0.1f;
+        meshTransform.localScale = minScale + ((value -1) * 0.02f * minScale);
     }
 
     private IEnumerator GotPickedUp()
