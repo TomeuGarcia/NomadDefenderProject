@@ -160,9 +160,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         // If current node was BATTLE, apply BattleStateResult
         if (IsCurrentNodeBattle())
-            ApplyBattleStateResult();        
+            ApplyBattleStateResult();
 
-        StartCommunicationWithNextNodes(currentNode);
+        if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+            StartCommunicationWithNextNodes(currentNode);
     }
 
 
