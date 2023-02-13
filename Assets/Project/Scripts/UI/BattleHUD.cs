@@ -153,8 +153,12 @@ public class BattleHUD : MonoBehaviour
         cgCurrencyUI.alpha = 0f;
         if (startWithDelay) yield return new WaitForSeconds(1.0f);
 
+
         // Appear
         float t1 = 0.1f;
+
+        currencyCounter.PlayTextAppearAnimation(t1 * 4f);
+
         cgCurrencyUI.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
