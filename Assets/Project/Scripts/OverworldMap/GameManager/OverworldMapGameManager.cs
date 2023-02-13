@@ -230,7 +230,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     // SCENES
     public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
-    {
+    {        
         mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
     }
 
