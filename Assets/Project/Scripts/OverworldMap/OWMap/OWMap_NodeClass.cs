@@ -9,12 +9,17 @@ public abstract class OWMap_NodeClass
     protected int nextLevelNodes;
     protected NodeEnums.HealthState healthState; //Can create problems if its not saved as a reference
 
-    public OWMap_NodeClass(NodeEnums.NodeType _nodeType, int _nextLevelNodes, ref NodeEnums.HealthState _healthState) 
+    public NodeEnums.ProgressionState progressionState;
+
+    public OWMap_NodeClass(NodeEnums.NodeType _nodeType, int _nextLevelNodes, ref NodeEnums.HealthState _healthState, NodeEnums.ProgressionState _progressionState) 
     {
         nextLevelNodes = _nextLevelNodes;
         healthState = _healthState;
         nodeType = _nodeType;
+
+        progressionState = _progressionState;
     }
+
     public abstract void StartLevel(OverworldMapGameManager overwolrdMapGameManager);
     public void SetIconTexture(Texture mapIconTexture)
     {

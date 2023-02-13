@@ -89,6 +89,12 @@ public class DeckBuildingCards : MonoBehaviour
         ArrangeCards();
     }
 
+    public void AddCardToDeckTop(BuildingCard card)
+    {
+        cards.Insert(0, card);
+        ArrangeCards();
+    }
+
 
 
     public DeckData GetDeckData()
