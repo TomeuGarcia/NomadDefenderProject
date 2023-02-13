@@ -7,6 +7,9 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
@@ -33,6 +36,11 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+
+    [Header("SUBTRACT CARD PLAY COST")]
+    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
+
+
     [Header("COMPONENTS")]
     [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
@@ -48,7 +56,10 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
-    
+
+    private int numPartsIfPerfect = 1;
+    private bool lastBattleWasDefendedPerfectly = false;
+    NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
 
 
     public delegate void CarPartReplaceManagerAction();
@@ -91,6 +102,34 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Init()
     {
+        // TODO
+        numPartsIfPerfect = 1;
+        progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            numCards = 2;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numParts = 3;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                // level up card to max
+            }
+        }
+
+
         if (partType == PartType.ATTACK) InitAttacks();
         else if (partType == PartType.BODY) InitBodies();
         else if (partType == PartType.BASE) InitBases();
@@ -109,7 +148,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitAttacks()
     {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts);
+        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -123,7 +163,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBodies()
     {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts);
+        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
@@ -137,14 +178,15 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void InitBases()
     {
-        TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
-        TurretPassiveBase[] randomPassives = partsLibrary.GetRandomTurretPassiveBases(numParts);
+        PartsLibrary.BaseAndPassive[] randomBasesAndPassives = 
+            partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
+
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBases[i];
-            parts[i].turretPassiveBase = randomPassives[i];
+            parts[i].turretPartBase = randomBasesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = randomBasesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
@@ -208,10 +250,8 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
     
-    private void ReplacePartInCard()
+    private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
-        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
-
         selectedCard.IncrementCardLevel(1);
 
         switch (partType)
@@ -271,10 +311,16 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradedCardTransform.DOLocalRotate(Vector3.up * 180f, flipDuration);
         yield return new WaitForSeconds(flipDuration + 0.1f);
 
-        
+
         // EXECUTE REPLACEMENT
-        ReplacePartInCard();
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+        ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
+
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayLevelUpAnimation();
+
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
@@ -288,8 +334,11 @@ public class CardPartReplaceManager : MonoBehaviour
         cardPartHolder.Hide(0.5f, 0.2f);
         yield return new WaitForSeconds(1f);
 
+        if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
+
         // Enable FINAL retreieve card
-        upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
@@ -359,5 +408,18 @@ public class CardPartReplaceManager : MonoBehaviour
         buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
+    public bool GetPartIsReady()
+    {
+        return partIsReady;
+    }
 
+    public bool GetCardIsReady()
+    {
+        return cardIsReady;
+    }
+
+    public bool GetReplacementDone()
+    {
+        return replacementDone;
+    }
 }

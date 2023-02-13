@@ -29,7 +29,7 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     [Header("CANVAS COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI playCostText;
+    [SerializeField] protected TextMeshProUGUI playCostText;
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
@@ -65,7 +65,7 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
-    private Material cardMaterial;
+    protected Material cardMaterial;
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -75,11 +75,11 @@ public abstract class BuildingCard : MonoBehaviour
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
-    private bool isPlayingDrawAnimation = false;
-    private const float drawAnimLoopDuration = 0.75f;
-    private const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    private const float drawAnimBlinkDuration = 0.3f;
-    private const float drawAnimNumBlinks = 3f;
+    protected bool isPlayingDrawAnimation = false;
+    protected const float drawAnimLoopDuration = 0.75f;
+    protected const float drawAnimWaitDurationBeforeBlink = 0.2f;
+    protected const float drawAnimBlinkDuration = 0.3f;
+    protected const float drawAnimNumBlinks = 3f;
 
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
@@ -93,6 +93,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
+
+    public delegate void CardFunctionPtr();
 
     public bool AlreadyCanBeHovered => OnCardHovered != null;
 
@@ -116,6 +118,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseEnter()
     {
         if (isRepositioning) return;
+        //if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.STANDARD) return;
 
@@ -125,6 +128,7 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnMouseExit()
     {
         if (isRepositioning) return;
+        //if (isPlayingDrawAnimation) return;
 
         if (cardState != CardStates.HOVERED) return;
 
@@ -202,7 +206,7 @@ public abstract class BuildingCard : MonoBehaviour
         InitVisuals();
     }
 
-    private void InitCostText()
+    protected void InitCostText()
     {
         playCostText.text = GetCardPlayCost().ToString();
     }
@@ -342,24 +346,24 @@ public abstract class BuildingCard : MonoBehaviour
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
-        Debug.Log("ShowInfo");
+        //Debug.Log("ShowInfo");
     }
     public virtual void HideInfo()
     {
         isShowingInfo = false;
-        Debug.Log("HideInfo");
+        //Debug.Log("HideInfo");
     }
 
 
-    public void PlayDrawAnimation()
+    public void PlayDrawAnimation(CardFunctionPtr animationEndCallback)
     {
         cardMaterial.SetFloat("_BorderLoopEnabled", 1f);
         cardMaterial.SetFloat("_TimeStartBorderLoop", Time.time);
 
-        StartCoroutine(InterfaceDrawAnimation());
+        StartCoroutine(InterfaceDrawAnimation(animationEndCallback));
     }
 
-    private IEnumerator InterfaceDrawAnimation()
+    protected virtual IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
     {
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
@@ -416,6 +420,13 @@ public abstract class BuildingCard : MonoBehaviour
         canInfoInteract = true;
         isPlayingDrawAnimation = false;
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
+
+        //DisableMouseInteraction();
+        //yield return null;
+        //EnableMouseInteraction();
+
+
+        animationEndCallback();
     }
 
 

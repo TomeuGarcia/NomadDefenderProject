@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static MapSceneLoader;
 
 public class MapSceneLoader : MonoBehaviour
 {
@@ -42,26 +43,29 @@ public class MapSceneLoader : MonoBehaviour
     private SceneNames upgradeScenes;
 
     private SceneNames[] earlyBattleScenes;
+    private SceneNames[] midBattleScenes;
     private SceneNames[] lateBattleScenes;
     private SceneNames[] bossBattleScenes;
     private SceneNames[] availableEarlyBattleScenes;
+    private SceneNames[] availableMidBattleScenes;
     private SceneNames[] availableLateBattleScenes;
     private SceneNames[] availableBossBattleScenes;
 
     private string currentSceneName;
 
     public delegate void MapSceneLoaderAction();
-    public event MapSceneLoaderAction OnMapSceneLoaded;
-    public event MapSceneLoaderAction OnMapSceneUnloaded;
+    public event MapSceneLoaderAction OnSceneFromMapLoaded;
+    public event MapSceneLoaderAction OnSceneFromMapUnloaded;
 
 
 
     public void Init()
     {
         mapScenesLibrary.SetUpgradeSceneNames(out upgradeScenes);
-        mapScenesLibrary.SetBattleSceneNames(out earlyBattleScenes, out lateBattleScenes, out bossBattleScenes);
+        mapScenesLibrary.SetBattleSceneNames(out earlyBattleScenes, out midBattleScenes, out lateBattleScenes, out bossBattleScenes);
 
         CloneEntireSceneNames(out availableEarlyBattleScenes, earlyBattleScenes);
+        CloneEntireSceneNames(out availableMidBattleScenes, midBattleScenes);
         CloneEntireSceneNames(out availableLateBattleScenes, lateBattleScenes);
         CloneEntireSceneNames(out availableBossBattleScenes, bossBattleScenes);
     }
@@ -109,6 +113,11 @@ public class MapSceneLoader : MonoBehaviour
             availableBattleScenes = availableEarlyBattleScenes;
             battleScenes = earlyBattleScenes;
         }
+        else if (battleType == NodeEnums.BattleType.MID)
+        {
+            availableBattleScenes = availableMidBattleScenes;
+            battleScenes = midBattleScenes;
+        }
         else if (battleType == NodeEnums.BattleType.LATE)
         {
             availableBattleScenes = availableLateBattleScenes;
@@ -150,33 +159,41 @@ public class MapSceneLoader : MonoBehaviour
         StartScene(sceneName);
     }
 
+    public void LoadTutorialScene()
+    {
+        currentSceneName = "InBattleTutorial";
+        SceneLoader.GetInstance().LoadMapScene(currentSceneName, false);
+
+        SceneManager.sceneLoaded += InvokeOnSceneFromMapLoaded;
+    }
+
 
     private void StartScene(string sceneName)
     {
         currentSceneName = sceneName;
-        SceneLoader.GetInstance().LoadMapScene(sceneName);
+        SceneLoader.GetInstance().LoadMapScene(sceneName, true);
 
-        SceneManager.sceneLoaded += InvokeOnMapSceneLoaded;
+        SceneManager.sceneLoaded += InvokeOnSceneFromMapLoaded;
     }
 
     public void FinishCurrentScene()
     {
-        SceneLoader.GetInstance().UnloadMapScene(currentSceneName);
+        SceneLoader.GetInstance().UnloadMapScene(currentSceneName, true);
 
-        SceneManager.sceneUnloaded += InvokeOnMapSceneUnloaded;
+        SceneManager.sceneUnloaded += InvokeOnSceneFromMapUnloaded;
     }
 
-    private void InvokeOnMapSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    private void InvokeOnSceneFromMapLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (OnMapSceneLoaded != null) OnMapSceneLoaded();
+        if (OnSceneFromMapLoaded != null) OnSceneFromMapLoaded();
 
-        SceneManager.sceneLoaded -= InvokeOnMapSceneLoaded;
+        SceneManager.sceneLoaded -= InvokeOnSceneFromMapLoaded;
     }
-    private void InvokeOnMapSceneUnloaded(Scene scene)
+    private void InvokeOnSceneFromMapUnloaded(Scene scene)
     {
-        if (OnMapSceneUnloaded != null) OnMapSceneUnloaded();
+        if (OnSceneFromMapUnloaded != null) OnSceneFromMapUnloaded();
 
-        SceneManager.sceneUnloaded -= InvokeOnMapSceneUnloaded;
+        SceneManager.sceneUnloaded -= InvokeOnSceneFromMapUnloaded;
     }
 
 }

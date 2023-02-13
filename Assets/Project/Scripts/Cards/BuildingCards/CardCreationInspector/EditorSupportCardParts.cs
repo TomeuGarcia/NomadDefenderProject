@@ -8,8 +8,8 @@ using UnityEditor;
 [CanEditMultipleObjects]
 public class EditorSupportCardParts : Editor
 {
-    private const float width = 128f;
-    private const float height = 128f;
+    private const float width = 96f;
+    private const float height = 96f;
 
     public override void OnInspectorGUI()
     {
@@ -26,7 +26,7 @@ public class EditorSupportCardParts : Editor
         GUILayout.Label("\nBase Preview:");
         if (turretPartBase != null)
         {
-            GUILayout.Label(" - " + turretPartBase.abilityName);
+            GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.rangeLvl) + ")");
             GUILayout.Box(turretPartBase.materialTexture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }

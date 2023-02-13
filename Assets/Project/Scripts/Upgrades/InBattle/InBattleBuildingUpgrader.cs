@@ -211,6 +211,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private bool CanUpgrade(int levelToCheck)
     {
+        if (currentLevel >= maxLevels) return false;
+
         return (currentLevel < maxUpgradeCount && levelToCheck < maxStatLevel
                 && currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]));
     }

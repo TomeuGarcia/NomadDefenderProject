@@ -2,10 +2,10 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "NewTurretBuilding", menuName = "Cards/TurretCardParts")]
-public class TurretCardParts : ScriptableObject
+public class TurretCardParts : GroupedCardParts
 {
-    public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-           TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
+    public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+                     TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
     {
         this.turretPartAttack = turretPartAttack;
         this.turretPartBody = turretPartBody;
@@ -15,8 +15,8 @@ public class TurretCardParts : ScriptableObject
         this.cardLevel = cardLevel;
     }
 
-    public TurretCardParts(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-           TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
+    public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
+                     TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
     {
         this.turretPartAttack = turretPartAttack;
         this.turretPartBody = turretPartBody;
@@ -26,7 +26,7 @@ public class TurretCardParts : ScriptableObject
         this.cardLevel = cardLevel;
     }
 
-    public TurretCardParts(TurretCardParts other)
+    public void Init(TurretCardParts other)
     {
         this.turretPartAttack = other.turretPartAttack;
         this.turretPartBody = other.turretPartBody;
@@ -36,15 +36,14 @@ public class TurretCardParts : ScriptableObject
         this.cardLevel = other.cardLevel;
     }
 
+
     public TurretPartAttack turretPartAttack;
     public TurretPartBody turretPartBody;
     public TurretPartBase turretPartBase;
     public TurretPassiveBase turretPassiveBase;
-    public int cardCost;
     [Range(1, 3)] public int cardLevel = 1;
     public const int MAX_CARD_LEVEL = 3;
 
-    
 
 
     private void OnValidate()

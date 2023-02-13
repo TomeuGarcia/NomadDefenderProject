@@ -1,0 +1,469 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7308264895228913480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895228913482}
+  - component: {fileID: 7308264895228913483}
+  m_Layer: 5
+  m_Name: DialogSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264895228913482
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895228913480}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264895938301502}
+  m_Father: {fileID: 7308264895389281424}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7308264895228913483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895228913480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a247cde68abe4549aa29006c5e5aa14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textTypeLibrary: {fileID: 11400000, guid: 076487bd58a84ef40aba4dc387726cf0, type: 2}
+  textPool: {fileID: 7308264895938301503}
+  maxLinesOnScreen: 5
+  lineSeparation: {x: 0, y: 50, z: 0}
+  initialLinePosition: {x: 50, y: 250, z: 0}
+  contextColor:
+    serializedVersion: 2
+    rgba: 4288453788
+  clearWithTime: 0
+  clearTime: 20
+--- !u!1 &7308264895389281438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895389281424}
+  - component: {fileID: 7308264895389281425}
+  m_Layer: 5
+  m_Name: ScriptedSequence
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264895389281424
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895389281438}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264895228913482}
+  m_Father: {fileID: 7308264896860769001}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7308264895389281425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895389281438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91da1e024f5815f419393df38278d075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogSystem: {fileID: 7308264895228913483}
+  textLines:
+  - textType: 0
+    text: Starting Simulation 0...
+  - textType: 0
+    text: Rendering Level...
+  - textType: 0
+    text: Level Loaded
+  - textType: 0
+    text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+  - textType: 0
+    text: Connecting to server
+  - textType: 0
+    text: Recovering User currency
+  - textType: 0
+    text: Loading User Currency...
+  - textType: 0
+    text: Currency Loaded Successfully
+  - textType: 0
+    text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+  - textType: 0
+    text: Creating First Card...
+  - textType: 0
+    text: 'Creating Cards Stats:'
+  - textType: 0
+    text: '/Cards Stats: LEVEL'
+  - textType: 0
+    text: '/Cards Stats: <color=#1DFF5F>RANGE</color>'
+  - textType: 0
+    text: '/Cards Stats:  <color=#FFF345>CADENCY</color>'
+  - textType: 0
+    text: '/Cards Stats:  <color=#FF003E>ATTACK</color>'
+  - textType: 0
+    text: '/Cards Stats: COST'
+  - textType: 0
+    text: '/Cards Stats:  <color=#F5550C>PROJECTILE</color>'
+  - textType: 0
+    text: '/Cards Stats: <color=#3EB6F4>PASSIVE</color>'
+  - textType: 0
+    text: Card Stats Created Successfully
+  - textType: 0
+    text: <color=#FF003E>ERROR 5680</color>. Destroying Card...
+  - textType: 0
+    text: Redraw Initializing
+  - textType: 0
+    text: '/Redraw: Activating...'
+  - textType: 0
+    text: '/Redraw: Successfully showing'
+  - textType: 0
+    text: '/Redraw: Generatin Info...'
+  - textType: 0
+    text: '/Redraw/Info: Click a Card to redraw it'
+  - textType: 0
+    text: '/Redraw/Info: Redraw ends when no redraws left or finish button clicked'
+  - textType: 0
+    text: '/Redraw: Waiting User to finish Redraw...'
+  - textType: 0
+    text: '/Redraw: Finished'
+  - textType: 0
+    text: Initializing User's Deck
+  - textType: 0
+    text: Initializing Defense...
+  - textType: 0
+    text: '/Defense/Info: Select a Card'
+  - textType: 0
+    text: '/Defense/Info: Then place it in an available position in world'
+  - textType: 0
+    text: '/Defense: Waiting for User to place a Turret...'
+  - textType: 0
+    text: Turret placed Correctly
+  - textType: 0
+    text: Generating Enemies...
+  - textType: 0
+    text: Wave 1/2
+  - textType: 0
+    text: DEFENSE PAUSED
+  - textType: 0
+    text: Click on the placed turret
+  - textType: 0
+    text: And upgrade one stat
+  - textType: 0
+    text: Waiting User to Upgrade Turret...
+  - textType: 1
+    text: Turret upgraded 1 lvl
+  - textType: 1
+    text: This turret has reached its maximum upgrades in this battle
+  - textType: 1
+    text: Turret Max Upgrades = Turret Card Level
+  - textType: 0
+    text: DEFENSE RESUMED
+  - textType: 0
+    text: Wave 2/2
+  - textType: 0
+    text: Defense <color=#FF003E>Finished?</color>
+  - textType: 0
+    text: Wave 3/2
+  - textType: 0
+    text: Wave 4/2
+  - textType: 0
+    text: Wave 5/2
+  - textType: 0
+    text: Wave 6/2
+  - textType: 0
+    text: Wave 7/2
+  - textType: 0
+    text: Wave 8/2
+  - textType: 0
+    text: Wave 9/2
+  - textType: 0
+    text: Wave 10/2
+  - textType: 0
+    text: Wave 11/2
+  - textType: 0
+    text: defend
+  - textType: 0
+    text: Defend
+  - textType: 0
+    text: DEFEND
+  - textType: 1
+    text: DEFENCK
+  - textType: 1
+    text: ATENCK
+  - textType: 1
+    text: ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+--- !u!1 &7308264895925660343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895925660297}
+  - component: {fileID: 7308264895925660342}
+  m_Layer: 0
+  m_Name: TutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7308264895925660297
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895925660343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1084.5289, y: 462.87485, z: 5704.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264896860769001}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7308264895925660342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895925660343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c066430697a5641b62cc89748379fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencyBackgroundImg: {fileID: 0}
+  speedUpButton: {fileID: 0}
+  deckInterface: {fileID: 0}
+  redrawInterface: {fileID: 0}
+  card: {fileID: 0}
+  attackStat: {fileID: 0}
+  cadencyStat: {fileID: 0}
+  rangeStat: {fileID: 0}
+  projectile: {fileID: 0}
+  passive: {fileID: 0}
+  cost: {fileID: 0}
+  cardLevel: {fileID: 0}
+  blackImg: {fileID: 0}
+  scriptedSequence: {fileID: 7308264895389281425}
+  currencyCounter: {fileID: 0}
+  wavesCounter: 0
+  tDGameManager: {fileID: 0}
+--- !u!1 &7308264895938301500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895938301502}
+  - component: {fileID: 7308264895938301503}
+  m_Layer: 5
+  m_Name: TextPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264895938301502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895938301500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7308264895228913482}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7308264895938301503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895938301500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 5577889571280263581, guid: 62b18921823816c489ae4acf0aaa019e,
+    type: 3}
+--- !u!1 &7308264896860768790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264896860769001}
+  - component: {fileID: 7308264896860769002}
+  - component: {fileID: 7308264896860769003}
+  - component: {fileID: 7308264896860769000}
+  m_Layer: 5
+  m_Name: CanvasDialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264896860769001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264895389281424}
+  m_Father: {fileID: 7308264895925660297}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!223 &7308264896860769002
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &7308264896860769003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!114 &7308264896860769000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295

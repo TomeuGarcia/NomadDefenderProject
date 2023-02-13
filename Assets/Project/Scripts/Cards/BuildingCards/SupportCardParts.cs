@@ -2,24 +2,24 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "NewSupportBuilding", menuName = "Cards/SupportCardParts")]
-public class SupportCardParts : ScriptableObject
+public class SupportCardParts : GroupedCardParts
 {
     public TurretPartBase turretPartBase;
-    public int cardCost;
 
 
-    public SupportCardParts(TurretPartBase turretPartBase, int cardCost)
+    public void Init(TurretPartBase turretPartBase, int cardCost)
     {
 
         this.turretPartBase = turretPartBase;
         this.cardCost = cardCost;
     }
 
-    public SupportCardParts(SupportCardParts other)
+    public void Init(SupportCardParts other)
     {
         this.turretPartBase = other.turretPartBase;
         this.cardCost = other.cardCost;
     }
+
 
     public int GetCostCombinedParts()
     {
@@ -28,4 +28,6 @@ public class SupportCardParts : ScriptableObject
 
     public int GetCardCost()
     { return cardCost; }
+
+
 }
