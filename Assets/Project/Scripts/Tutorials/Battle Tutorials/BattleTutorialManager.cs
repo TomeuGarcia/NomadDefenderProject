@@ -69,7 +69,6 @@ public class BattleTutorialManager : MonoBehaviour
         StartCoroutine(Tutorial());
         hand.cheatDrawCardActivated = false;
 
-
         //Init Events
         HandBuildingCards.OnCardPlayed += WaveStarted;
         EnemyWaveManager.OnWaveFinished += WaveStarted;
@@ -274,6 +273,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
+
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
