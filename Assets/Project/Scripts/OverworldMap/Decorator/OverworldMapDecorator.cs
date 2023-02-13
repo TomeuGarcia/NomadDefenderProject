@@ -123,6 +123,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
+           
 
             NodeEnums.ProgressionState progressionState;
 
