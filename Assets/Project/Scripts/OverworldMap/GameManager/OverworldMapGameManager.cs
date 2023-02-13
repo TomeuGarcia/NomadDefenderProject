@@ -26,9 +26,14 @@ public class OverworldMapGameManager : MonoBehaviour
     [SerializeField] private OverworldCardShower cardDisplayer;
     [SerializeField] private GameObject cardShower;
 
+    [Header("Tutorial")]
+    [SerializeField] private OWMapTutorialManager owMapTutorial;
+
 
 
     private OWMap_Node currentNode;
+
+    private bool moveCameraAfterNodeScene;
 
 
     // BattleStateResult
@@ -64,8 +69,32 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapDecorator.DecorateMap(mapNodes);
 
         mapSceneLoader.Init();
+        if(!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
+        {
+            mapSceneLoader.LoadTutorialScene();
+            moveCameraAfterNodeScene = false;
+            //Do OWMapTutorial
+
+            mapSceneLoader.OnSceneFromMapUnloaded += StartMapTutorial;
+        }
+        else
+        {
+            moveCameraAfterNodeScene = true;
+            if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+                StartMapTutorial();
+        }
 
         StartAtFirstLevel();
+
+        if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+            StartCommunicationWithNextNodes(currentNode);
+
+    }
+
+    private void StartMapTutorial()
+    {
+        mapSceneLoader.OnSceneFromMapUnloaded -= StartMapTutorial;
+        owMapTutorial.StartTutorial();
     }
 
 
@@ -78,7 +107,6 @@ public class OverworldMapGameManager : MonoBehaviour
 
         owMapPawn.Init(this, currentNode, owMapCreator.DisplacementBetweenLevels);        
 
-        StartCommunicationWithNextNodes(currentNode);
     }
 
     public void OnMapNodeSelected(OWMap_Node owMapNode)
@@ -118,9 +146,15 @@ public class OverworldMapGameManager : MonoBehaviour
 
     private void ResumeMapAfterNodeScene() // called from event
     {
+
         FinishCurrentMapLevelScene();
         ResumeMap();
-        owMapPawn.MoveCameraToNextLevel();
+        if (moveCameraAfterNodeScene)
+        {
+            owMapPawn.MoveCameraToNextLevel();
+            
+        }
+        moveCameraAfterNodeScene = true;
     }
     private void ResumeMap()
     {
@@ -132,7 +166,8 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    private void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
+
+    public void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
 
@@ -242,5 +277,8 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-
+    public OWMap_Node GetCurrentNode()
+    {
+        return currentNode;
+    }
 }
