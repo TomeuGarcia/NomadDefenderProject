@@ -3,82 +3,219 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartLibrary", menuName = "TurretParts/TurretPartLibrary")]
+[CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = "TurretParts/TurretPartsLibrary")]
 public class PartsLibrary : ScriptableObject
 {
-    public TurretPartAttack[] attackParts;
-    public TurretPartBody[] bodyParts;
-    public TurretPartBase[] baseParts;
-    public TurretPassiveBase[] basePassive;
+    [System.Serializable]
+    public struct AttacksByProgressionState
+    {
+        public NodeEnums.ProgressionState progressionState;
+        public TurretPartAttack[] parts;
+        public TurretPartAttack[] perfectParts;
 
-
-    public TurretPartAttack GetRandomTurretPartAttack()
-    {
-        return attackParts[Random.Range(0, attackParts.Length)];
-    }
-    public TurretPartBody GetRandomTurretPartBody()
-    {
-        return bodyParts[Random.Range(0, bodyParts.Length)];
-    }
-    public TurretPartBase GetRandomTurretPartBase()
-    {
-        return baseParts[Random.Range(0, baseParts.Length)];
-    }
-    public TurretPassiveBase GetRandomTurretPassiveBase()
-    {
-        return basePassive[Random.Range(0, basePassive.Length)];
-    }
-
-    public TurretPartAttack[] GetRandomTurretPartAttacks(int amount)
-    {
-        if (amount > attackParts.Length) amount = attackParts.Length;
-
-        HashSet<TurretPartAttack> partsSet = new HashSet<TurretPartAttack>();
-        while (partsSet.Count < amount)
+        public TurretPartAttack GetRandomPart()
         {
-            partsSet.Add(GetRandomTurretPartAttack());
+            return parts[Random.Range(0, parts.Length)];
+        }
+        public TurretPartAttack GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
+    }
+
+
+    [System.Serializable]
+    public struct BodiesByProgressionState
+    {
+        public NodeEnums.ProgressionState progressionState;
+        public TurretPartBody[] parts;
+        public TurretPartBody[] perfectParts;
+
+        public TurretPartBody GetRandomPart()
+        {
+            return parts[Random.Range(0, parts.Length)];
+        }
+        public TurretPartBody GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
+    }
+
+    [System.Serializable]
+    public struct BaseAndPassive
+    {
+        public TurretPartBase turretPartBase;
+        public TurretPassiveBase turretPassiveBase;
+
+
+        public static bool operator== (BaseAndPassive obj1, BaseAndPassive obj2)
+        {
+            if (obj1 == null || obj2 == null) return false;
+            return obj1.turretPassiveBase == obj2.turretPassiveBase;
+        }
+        public static bool operator !=(BaseAndPassive obj1, BaseAndPassive obj2)
+        {
+            return !(obj1 == obj2);
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return System.HashCode.Combine(turretPartBase, turretPassiveBase);
+        }
+    }
+
+    [System.Serializable]
+    public struct BasesAndPassivesByProgressionState
+    {
+        public NodeEnums.ProgressionState progressionState;
+        public BaseAndPassive[] parts;
+        public BaseAndPassive[] perfectParts;
+
+        public BaseAndPassive GetRandomPart()
+        {
+            return parts[Random.Range(0, parts.Length)];
+        }
+        public BaseAndPassive GetRandomPerfectPart()
+        {
+            return perfectParts[Random.Range(0, perfectParts.Length)];
+        }
+    }
+
+    [SerializeField] private AttacksByProgressionState[] attacksByProgressionStates;
+    [SerializeField] private BodiesByProgressionState[] bodiesByProgressionStates;
+    [SerializeField] private BasesAndPassivesByProgressionState[] basesAndPassivesByProgressionStates;
+
+
+
+    // ATTACK PARTS
+    private AttacksByProgressionState GetAttacksByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        for (int i = 0; i < attacksByProgressionStates.Length; ++i)
+        {
+            if (attacksByProgressionStates[i].progressionState == progressionState)
+                return attacksByProgressionStates[i];
         }
 
-        return partsSet.ToArray();
+        return attacksByProgressionStates[0];
     }
 
-    public TurretPartBody[] GetRandomTurretPartBodies(int amount)
+    public TurretPartAttack[] GetRandomTurretPartAttacks(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
-        if (amount > bodyParts.Length) amount = bodyParts.Length;
+        if (totalAmount > attacksByProgressionStates.Length) totalAmount = attacksByProgressionStates.Length;
 
-        HashSet<TurretPartBody> partsSet = new HashSet<TurretPartBody>();
-        while (partsSet.Count < amount)
+
+        AttacksByProgressionState attacksByProgressionState = GetAttacksByProgressionState(progressionState);
+
+
+        HashSet<TurretPartAttack> holderPartsSet = new HashSet<TurretPartAttack>();
+
+        if (perfect)
         {
-            partsSet.Add(GetRandomTurretPartBody());
+            while (holderPartsSet.Count < amountPerfect)
+            {
+                holderPartsSet.Add(attacksByProgressionState.GetRandomPerfectPart());
+            }
         }
 
-        return partsSet.ToArray();
-    }
-
-    public TurretPartBase[] GetRandomTurretPartBases(int amount)
-    {
-        if (amount > baseParts.Length) amount = baseParts.Length;
-
-        HashSet<TurretPartBase> partsSet = new HashSet<TurretPartBase>();
-        while (partsSet.Count < amount)
+        while (holderPartsSet.Count < totalAmount)
         {
-            partsSet.Add(GetRandomTurretPartBase());
+            holderPartsSet.Add(attacksByProgressionState.GetRandomPart());
         }
 
-        return partsSet.ToArray();
+
+        return holderPartsSet.ToArray();
     }
 
-    public TurretPassiveBase[] GetRandomTurretPassiveBases(int amount)
-    {
-        if (amount > basePassive.Length) amount = basePassive.Length;
 
-        HashSet<TurretPassiveBase> passiveSet = new HashSet<TurretPassiveBase>();
-        while (passiveSet.Count < amount)
+    // BODY PARTS
+    private BodiesByProgressionState GetBodiesByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        for (int i = 0; i < bodiesByProgressionStates.Length; ++i)
         {
-            passiveSet.Add(GetRandomTurretPassiveBase());
+            if (bodiesByProgressionStates[i].progressionState == progressionState)
+                return bodiesByProgressionStates[i];
         }
 
-        return passiveSet.ToArray();
+        return bodiesByProgressionStates[0];
     }
+
+    public TurretPartBody[] GetRandomTurretPartBodies(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    {
+        if (totalAmount > bodiesByProgressionStates.Length) totalAmount = bodiesByProgressionStates.Length;
+
+
+        BodiesByProgressionState bodiesByProgressionState = GetBodiesByProgressionState(progressionState);
+
+
+        HashSet<TurretPartBody> holderPartsSet = new HashSet<TurretPartBody>();
+
+        if (perfect)
+        {
+            while (holderPartsSet.Count < amountPerfect)
+            {
+                holderPartsSet.Add(bodiesByProgressionState.GetRandomPerfectPart());
+            }
+        }
+
+        while (holderPartsSet.Count < totalAmount)
+        {
+            holderPartsSet.Add(bodiesByProgressionState.GetRandomPart());
+        }
+
+
+        return holderPartsSet.ToArray();
+    }
+
+
+    // BASE AND PASSIVE PARTS
+    private BasesAndPassivesByProgressionState GetBasesAndPassivesByProgressionState(NodeEnums.ProgressionState progressionState)
+    {
+        for (int i = 0; i < basesAndPassivesByProgressionStates.Length; ++i)
+        {
+            if (basesAndPassivesByProgressionStates[i].progressionState == progressionState)
+                return basesAndPassivesByProgressionStates[i];
+        }
+
+        return basesAndPassivesByProgressionStates[0];
+    }
+
+    public BaseAndPassive[] GetRandomTurretPartBaseAndPassive(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    {
+        if (totalAmount > basesAndPassivesByProgressionStates.Length) totalAmount = basesAndPassivesByProgressionStates.Length;
+
+
+        BasesAndPassivesByProgressionState basesAndPassivesByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
+
+
+        HashSet<BaseAndPassive> holderPartsSet = new HashSet<BaseAndPassive>();
+
+        if (perfect)
+        {
+            while (holderPartsSet.Count < amountPerfect)
+            {
+                holderPartsSet.Add(basesAndPassivesByProgressionState.GetRandomPerfectPart());
+
+                /*
+                BaseAndPassive baseAndPassive = basesAndPassivesByProgressionState.GetRandomPerfectPart();
+                if (!holderPartsSet.Contains(baseAndPassive))
+                {
+                    holderPartsSet.Add(baseAndPassive);
+                } 
+                */
+            }
+        }
+
+        while (holderPartsSet.Count < totalAmount)
+        {
+            holderPartsSet.Add(basesAndPassivesByProgressionState.GetRandomPart());
+        }
+
+
+        return holderPartsSet.ToArray();
+    }
+
 
 }

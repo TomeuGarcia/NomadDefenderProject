@@ -38,6 +38,7 @@ public class TurretPassiveBase : ScriptableObject
     // Operator Overloads
     public static bool operator ==(TurretPassiveBase obj1, TurretPassiveBase obj2)
     {
+        if (!obj1 || !obj2) return false;
         return obj1.passive.abilityName == obj2.passive.abilityName;
     }
 

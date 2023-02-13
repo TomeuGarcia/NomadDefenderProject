@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "NewTurretBuilding", menuName = "Cards/TurretCardParts")]
-public class TurretCardParts : ScriptableObject
+public class TurretCardParts : GroupedCardParts
 {
     public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
                      TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase, int cardCost)
@@ -41,11 +41,9 @@ public class TurretCardParts : ScriptableObject
     public TurretPartBody turretPartBody;
     public TurretPartBase turretPartBase;
     public TurretPassiveBase turretPassiveBase;
-    public int cardCost;
     [Range(1, 3)] public int cardLevel = 1;
     public const int MAX_CARD_LEVEL = 3;
 
-    
 
 
     private void OnValidate()

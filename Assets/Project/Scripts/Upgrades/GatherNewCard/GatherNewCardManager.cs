@@ -5,9 +5,13 @@ using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
+    [SerializeField] private CardsLibrary cardsLibrary;
     [SerializeField] private PartsLibrary partsLibrary;
     [SerializeField] private DeckCreator deckCreator;
 
@@ -18,9 +22,12 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField, Min(0f)] private float distanceBetweenCards = 1.2f;
     [SerializeField] private Transform cardHolder;
 
-
     // Animations
     Vector3[] startPositions;
+
+
+    // Card Generation Constants and Variables
+    private static int turretCardsLevel = 1;
 
 
     public delegate void GatherNewCardManagerAction();
@@ -35,13 +42,60 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void Init()
     {
+        cardsLibrary.InitSetup();
+
+        // NodeEnums.HealthState.GREATLY_DAMAGED        --> 2 Turret Cards
+        // NodeEnums.HealthState.SLIGHTLY_DAMAGED       --> 2-3 Turret Cards + 50% 0-1 Support Cards
+        // NodeEnums.HealthState.UNDAMAGED              --> 2 Turret Cards + 1 Support Cards
+        // NodeEnums.HealthState.UNDAMAGED + perfect    --> 2 Turret Cards + 1 Support Cards + Lvl3 Turrets + Reroll
+
+        //// TODO read from data instead
+        NodeEnums.ProgressionState progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+        bool lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        ////
+
+        Debug.Log("Draw card data:");
+        Debug.Log(progressionState);
+        Debug.Log(currentNodeHealthState);
+        Debug.Log(lastBattleWasDefendedPerfectly);
+
+        int numSupportCards = 0;
+        turretCardsLevel = 1;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            numCards = 2;
+            numSupportCards = 0;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numSupportCards = Random.Range(0,2); // 50%
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numSupportCards = 1;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                turretCardsLevel = TurretCardParts.MAX_CARD_LEVEL;
+            }
+        }
+
+
+
         cards = new BuildingCard[numCards];
+        int numTurretCards = numCards - numSupportCards;
 
-        // In the future (when Support buildins are added) might want to randomize "numTurretCards"
-        int numTurretCards = numCards;
-        CreateNTurretCards(numTurretCards); // Get Random Turrets
 
-        // if (numTurretCards < numCards) { CreateNSupportCards(numCards - numTurretCards); }
+        CreateNTurretCards(numTurretCards, 1, lastBattleWasDefendedPerfectly, progressionState); // Get Random Turrets
+
+        if (numSupportCards > 0)
+        {
+            CreateNSupportCards(numTurretCards, numSupportCards, GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS); // Get Random Supports
+        }
 
 
         InitCardsPlacement();
@@ -49,6 +103,8 @@ public class GatherNewCardManager : MonoBehaviour
         StartCoroutine(InitCardsAnimation());
     }
 
+
+    /*
     private void CreateNTurretCards(int numTurretCards)
     {
         // Get Random Turrets
@@ -62,12 +118,44 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            TurretCardParts cardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts; 
+            TurretCardParts cardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
             cardParts.Init(1, attacks[i], bodies[i], bases[i], passives[i]);
 
             turretCard.ResetParts(cardParts);
 
             cards[i] = turretCard;
+        }
+    }
+    */
+
+    private void CreateNTurretCards(int totalAmount, int perfectAmount, bool perfect, NodeEnums.ProgressionState progressionState)
+    {
+        TurretCardParts[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(totalAmount, perfectAmount, perfect, progressionState); // Generate 
+        turretCardPartsSet = cardsLibrary.GetConsumableTurretCardPartsSet(turretCardPartsSet); // Setup to create new cards
+
+        for (int i = 0; i < totalAmount; i++)
+        {
+            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+
+            turretCardPartsSet[i].cardLevel = turretCardsLevel;
+
+            turretCard.ResetParts(turretCardPartsSet[i]);
+
+            cards[i] = turretCard;
+        }
+    }
+
+    private void CreateNSupportCards(int startIndex, int numSupportCards, int minPowerfulness, int maxPowerfulness)
+    {
+        SupportCardParts[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(numSupportCards, minPowerfulness, maxPowerfulness); // Generate 
+        supportCardPartsSet = cardsLibrary.GetConsumableSupportCardPartsSet(supportCardPartsSet); // Setup to create new cards
+
+        for (int i = 0; i < numSupportCards; i++)
+        {
+            SupportBuildingCard turretCard = deckCreator.GetUninitializedNewSupportCard();
+            turretCard.ResetParts(supportCardPartsSet[i]);
+
+            cards[i + startIndex] = turretCard;
         }
     }
 
@@ -150,9 +238,9 @@ public class GatherNewCardManager : MonoBehaviour
         {
             deckCreator.AddNewTurretCardToDeck(selectedCard as TurretBuildingCard);
         }
-        else
-        {
-            Debug.Log("!!!  CAN'T ADD CARD OF THIS TYPE !!!");
+        else if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
+        {            
+            deckCreator.AddNewSupportCardToDeck(selectedCard as SupportBuildingCard);
         }
         
 
@@ -258,7 +346,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         float centerMoveDuration = 0.15f;
         Vector3 centerPos = cardHolder.transform.position;
-        centerPos.y += 1f;
+        centerPos.y += 0.5f;
         centerPos += selectedCard.RootCardTransform.up * 0.4f;
 
         selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
@@ -273,7 +361,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
         selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
-        selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 0.5f);
+        selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 1.5f);
         yield return new WaitForSeconds(moveDuration);
 
 

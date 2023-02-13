@@ -5,10 +5,12 @@ using static OWMap_Node;
 public class OverworldMapGameManager : MonoBehaviour
 {
     private OWMap_Node[][] mapNodes;
+    public OWMap_Node[][] GetMapNodes() { return mapNodes; }
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
     [SerializeField] private OverworldMapDecorator owMapDecorator;
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
 
     [Header("MAP SCENE LOADER")]
     [SerializeField] private MapSceneLoader mapSceneLoader;
@@ -19,6 +21,11 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("CANVAS")]
     [SerializeField] private GameObject gameOverHolder;
     [SerializeField] private GameObject victoryHolder;
+
+    [Header("DeckDisplay")]
+    [SerializeField] private OverworldCardShower cardDisplayer;
+    [SerializeField] private GameObject cardShower;
+
 
 
     private OWMap_Node currentNode;
@@ -39,15 +46,15 @@ public class OverworldMapGameManager : MonoBehaviour
     private void OnEnable()
     {
         MapSceneNotifier.OnMapSceneFinished += ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded += DoMapSceneLoaded;
-        mapSceneLoader.OnMapSceneUnloaded += DoMapSceneUnloaded;
+        mapSceneLoader.OnSceneFromMapLoaded += DoOnSceneFromMapLoaded;
+        mapSceneLoader.OnSceneFromMapUnloaded += DoOnSceneFromMapUnloaded;
     }
 
     private void OnDisable()
     {
         MapSceneNotifier.OnMapSceneFinished -= ResumeMapAfterNodeScene;
-        mapSceneLoader.OnMapSceneLoaded -= DoMapSceneLoaded;
-        mapSceneLoader.OnMapSceneUnloaded -= DoMapSceneUnloaded;
+        mapSceneLoader.OnSceneFromMapLoaded -= DoOnSceneFromMapLoaded;
+        mapSceneLoader.OnSceneFromMapUnloaded -= DoOnSceneFromMapUnloaded;
     }
 
 
@@ -82,6 +89,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnOwMapPawnReachedNode(OWMap_Node reachedNode)
     {
+        bool cameFromNodeWasBattle = IsCurrentNodeBattle();
+
         this.currentNode = reachedNode;
 
         if (currentNode.GetNodeType() == NodeEnums.NodeType.NONE)
@@ -90,8 +99,21 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
+            if (IsCurrentNodeUpgrade())
+            {
+                if (cameFromNodeWasBattle)
+                {
+                    upgradeSceneSetupInfo.SetData(currentNode.nodeClass.progressionState, currentNode.healthState, currentBattleStateResult.DidWinWithPerfectDefense());
+                }
+                else
+                {
+                    upgradeSceneSetupInfo.ResetDataAsPredefined(currentNode.nodeClass.progressionState);
+                }
+            }
+
             currentNode.nodeClass.StartLevel(this);
-        }        
+        }      
+        
     }
 
     private void ResumeMapAfterNodeScene() // called from event
@@ -163,6 +185,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {        
         return currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE;
     }
+    private bool IsCurrentNodeUpgrade()
+    {
+        return currentNode.GetNodeType() == NodeEnums.NodeType.UPGRADE;
+    }
 
 
 
@@ -183,14 +209,22 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    private void DoMapSceneUnloaded()
+    private void DoOnSceneFromMapUnloaded()
     {
         owMapPawn.ActivateCamera();
+
+        cardDisplayer.ResetAll();
+        cardShower.SetActive(true);
     }
-    private void DoMapSceneLoaded()
+    private void DoOnSceneFromMapLoaded()
     {
         owMapPawn.DeactivateCamera();
-        //myCardsHolder.resetcards(); // to update cards
+
+        if (IsCurrentNodeUpgrade())
+            Debug.Log("entered upgrade scene");
+
+        cardDisplayer.DestroyAllCards();
+        cardShower.SetActive(false);
     }
 
 
@@ -198,6 +232,7 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         gameOverHolder.SetActive(true);
         mapSceneLoader.LoadMainMenuScene(5f);
+        
     }
 
     private void StartVictory()

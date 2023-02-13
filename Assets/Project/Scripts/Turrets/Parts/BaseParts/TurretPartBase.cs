@@ -63,6 +63,7 @@ public class TurretPartBase : ScriptableObject
     // Operator Overloads
     public static bool operator ==(TurretPartBase obj1, TurretPartBase obj2)
     {
+        if (!obj1 || !obj2) return false;
         return obj1.prefab == obj2.prefab;
     }
 
