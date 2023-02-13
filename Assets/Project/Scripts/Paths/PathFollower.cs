@@ -60,6 +60,8 @@ public class PathFollower : MonoBehaviour
         currentStartPosition = transformToMove.position + positionOffset;
         currentEndPosition = targetNode.Position + positionOffset;
 
+        this.transformToMove.rotation = Quaternion.LookRotation((currentEndPosition - currentStartPosition).normalized, targetNode.Up);
+
         startToEndT = 0f;
 
         distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
