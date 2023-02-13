@@ -11,6 +11,7 @@ public class PathNode : MonoBehaviour
 
     public bool IsLastNode => nextNode == null;
     public Vector3 Position => transform.position;
+    public Vector3 Up => transform.up;
 
 
 
