@@ -1,9 +1,6 @@
 using UnityEngine;
-using TMPro;
-using Unity.VisualScripting;
-using static Building;
 using DG.Tweening;
-using static BuildingCard;
+using System.Collections;
 
 public abstract class CardPart : MonoBehaviour
 {
@@ -40,6 +37,7 @@ public abstract class CardPart : MonoBehaviour
 
     [HideInInspector] public bool isShowingInfo;
     protected bool canInfoInteract = true;
+    [HideInInspector] public bool isInteractable = true;
 
 
     public delegate void BuildingCardPartAction(CardPart cardPart);
@@ -61,6 +59,8 @@ public abstract class CardPart : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (!isInteractable) return;
+
         if (cardState != CardPartStates.STANDARD) return;
 
         if (OnCardHovered != null) OnCardHovered(this);
@@ -68,6 +68,8 @@ public abstract class CardPart : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (!isInteractable) return;
+
         if (cardState != CardPartStates.HOVERED) return;
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
@@ -75,6 +77,8 @@ public abstract class CardPart : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (!isInteractable) return;
+
         if (cardState == CardPartStates.HOVERED)
         {
             if (OnCardSelected != null) OnCardSelected(this);
@@ -88,7 +92,7 @@ public abstract class CardPart : MonoBehaviour
 
     private void Update()
     {
-        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        if (canInfoInteract && Input.GetMouseButtonDown(1) && isInteractable)
         {
             if (cardState == CardPartStates.HOVERED)
             {
@@ -150,4 +154,26 @@ public abstract class CardPart : MonoBehaviour
         isShowingInfo = false;
         Debug.Log("HideInfo");
     }
+
+
+    public void EnableMouseInteraction()
+    {
+        cardCollider.enabled = true;
+    }
+    public void DisableMouseInteraction()
+    {
+        cardCollider.enabled = false;
+    }
+
+    public void ReenableMouseInteraction()
+    {
+        StartCoroutine(ScuffedreinableMouseInteraction());
+    }
+    private IEnumerator ScuffedreinableMouseInteraction()
+    {
+        DisableMouseInteraction();
+        yield return null;
+        EnableMouseInteraction();
+    }
+
 }
