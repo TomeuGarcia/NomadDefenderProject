@@ -16,17 +16,18 @@ public class BodyReplaceTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cards.GetComponent<CanvasGroup>().alpha = 0;
-        cards.SetActive(false);
-        bodies.GetComponent<CanvasGroup>().alpha = 0;
-        bodies.SetActive(false);
-        mask1.SetActive(false);
-        mask2.SetActive(false);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());
-
+            cards.GetComponent<CanvasGroup>().alpha = 0;
+            //cards.SetActive(false);
+            bodies.GetComponent<CanvasGroup>().alpha = 0;
+            //bodies.SetActive(false);
+            mask1.SetActive(false);
+            mask2.SetActive(false);
         }
+        
+       
     }
 
     IEnumerator Tutorial()
