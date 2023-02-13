@@ -408,5 +408,18 @@ public class CardPartReplaceManager : MonoBehaviour
         buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
+    public bool GetPartIsReady()
+    {
+        return partIsReady;
+    }
 
+    public bool GetCardIsReady()
+    {
+        return cardIsReady;
+    }
+
+    public bool GetReplacementDone()
+    {
+        return replacementDone;
+    }
 }
