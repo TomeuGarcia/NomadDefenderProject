@@ -251,6 +251,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
         cardDisplayer.ResetAll();
         cardShower.SetActive(true);
+        EnemyFactory.GetInstance().ResetPools();
+        ProjectileParticleFactory.GetInstance().ResetPools();
     }
     private void DoOnSceneFromMapLoaded()
     {

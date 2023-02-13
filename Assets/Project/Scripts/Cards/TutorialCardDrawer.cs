@@ -25,6 +25,8 @@ public class TutorialCardDrawer : CardDrawer
 
     public void DoGameStartSetup()
     {
+        battleHUD.DisableSpeedUpUI();
+        battleHUD.canShowDrawCardButton = false;
         GameStartSetup();
     }
 

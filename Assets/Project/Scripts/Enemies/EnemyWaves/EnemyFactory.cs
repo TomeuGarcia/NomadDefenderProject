@@ -64,7 +64,7 @@ public class EnemyFactory : MonoBehaviour
         return sortedEnemies[enemyType].GetObject(position, rotation, spawnTransform);
     }
 
-    private void ResetPools()
+    public void ResetPools()
     {
         foreach (EnemyTypeToPool enemyTypeToPool in enemiesToPool)
         {
