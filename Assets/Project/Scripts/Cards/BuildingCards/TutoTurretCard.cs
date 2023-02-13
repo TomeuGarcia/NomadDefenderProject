@@ -69,7 +69,7 @@ public class TutoTurretCard : TurretBuildingCard
         yield return new WaitForSeconds(0.4f);
 
 
-        float t1 = 0.05f;
+        float t1 = 0.065f;
 
 
         // Show Turret Body and Base

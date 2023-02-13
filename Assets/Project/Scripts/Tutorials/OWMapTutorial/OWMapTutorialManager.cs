@@ -172,6 +172,6 @@ public class OWMapTutorialManager : MonoBehaviour
         scriptedSequence.Clear();
 
         //Set OW_Map Tutorial as done
-        //TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
+        TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
     }
 }
