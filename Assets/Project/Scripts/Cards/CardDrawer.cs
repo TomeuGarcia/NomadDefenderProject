@@ -24,6 +24,7 @@ public class CardDrawer : MonoBehaviour
     public static event CardDrawerAction OnStartSetupBattleCanvases;
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
+    [HideInInspector] public bool canRedraw = true;
 
 
     private void OnEnable()
@@ -88,7 +89,7 @@ public class CardDrawer : MonoBehaviour
     }
     public void TryRedrawCard()
     {
-        if (deck.HasCardsLeft()) 
+        if (deck.HasCardsLeft() && canRedraw) 
         {
             DrawTopCard();
             
