@@ -23,6 +23,8 @@ public class CardDrawer : MonoBehaviour
     public delegate void CardDrawerAction();
     public static event CardDrawerAction OnStartSetupBattleCanvases;
 
+    [HideInInspector] public bool cheatDrawCardActivated = true;
+
 
     private void OnEnable()
     {

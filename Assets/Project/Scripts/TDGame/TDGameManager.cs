@@ -34,6 +34,9 @@ public class TDGameManager : MonoBehaviour
     [SerializeField] private PathLocation[] pathLocations;
 
 
+    [SerializeField] private bool hasToSendBattleState = true;
+
+
 
 
     private void Awake()
@@ -108,9 +111,18 @@ public class TDGameManager : MonoBehaviour
         //if (OnVictoryComplete != null) OnVictoryComplete(); // 
     }
 
+    public void ForceFinishScene()
+    {
+        if (OnEndGameResetPools != null) OnEndGameResetPools();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
+    }
+
 
     private void SetBattleStateResult()
     {
+        if (!hasToSendBattleState) { return; }
+
         for (int i = 0; i < battleStateResult.nodeResults.Length; ++i)
         {
             battleStateResult.nodeResults[i].healthState = ComputeHealthState(pathLocations[i].healthSystem);

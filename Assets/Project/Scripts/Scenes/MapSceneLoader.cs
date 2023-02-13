@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static MapSceneLoader;
 
 public class MapSceneLoader : MonoBehaviour
 {
@@ -158,18 +159,26 @@ public class MapSceneLoader : MonoBehaviour
         StartScene(sceneName);
     }
 
+    public void LoadTutorialScene()
+    {
+        currentSceneName = "InBattleTutorial";
+        SceneLoader.GetInstance().LoadMapScene(currentSceneName, false);
+
+        SceneManager.sceneLoaded += InvokeOnSceneFromMapLoaded;
+    }
+
 
     private void StartScene(string sceneName)
     {
         currentSceneName = sceneName;
-        SceneLoader.GetInstance().LoadMapScene(sceneName);
+        SceneLoader.GetInstance().LoadMapScene(sceneName, true);
 
         SceneManager.sceneLoaded += InvokeOnSceneFromMapLoaded;
     }
 
     public void FinishCurrentScene()
     {
-        SceneLoader.GetInstance().UnloadMapScene(currentSceneName);
+        SceneLoader.GetInstance().UnloadMapScene(currentSceneName, true);
 
         SceneManager.sceneUnloaded += InvokeOnSceneFromMapUnloaded;
     }
