@@ -54,6 +54,12 @@ public abstract class BuildingCard : MonoBehaviour
     private Vector3 startRotation_euler;
     private Vector3 local_standardRotation_euler;
 
+    private Vector3 hiddenRootPosition;
+    private Vector3 shownRootPosition;
+    public Vector3 ShownRootPosition => shownRootPosition;
+    public Vector3 HiddenRootPosition => hiddenRootPosition;
+
+
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
     private Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
@@ -85,6 +91,8 @@ public abstract class BuildingCard : MonoBehaviour
     private const float canNotBePlayedAnimDuration = 0.5f;
 
 
+
+    [HideInInspector] public bool isMissingDefaultCallbacks = false;
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public event BuildingCardAction OnCardHovered;
     public event BuildingCardAction OnCardUnhovered;
@@ -246,19 +254,28 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = Vector3.zero;
     }
 
-    public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement)
+    public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
+    {
+        InitPositions(CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition);
+    }
+    public void InitPositions(Vector3 standardLocalPosition, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
     {
         //ResetCardPosition();
 
-        local_standardPosition = CardTransform.localPosition;
-        local_hoveredPosition = CardTransform.localPosition + HoveredTranslation;
+        local_standardPosition = standardLocalPosition;
+        local_hoveredPosition = local_standardPosition + HoveredTranslation;
         //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
         startRotation_euler = transform.rotation.eulerAngles;
         local_standardRotation_euler = transform.rotation.eulerAngles;
         this.hiddenDisplacement = hiddenDisplacement;
 
+        shownRootPosition = finalPosition;
+        //shownRootPosition = RootCardTransform.position;
+        hiddenRootPosition = shownRootPosition + hiddenDisplacement;
+                
         standardPosition = CardTransform.position;
-        hoveredPosition = CardTransform.position + HoveredTranslation;
+        hoveredPosition = standardPosition + HoveredTranslation;
+
         this.selectedPosition = selectedPosition;
     }
 

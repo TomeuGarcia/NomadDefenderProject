@@ -104,7 +104,7 @@ public class UpgradeCardHolder : MonoBehaviour
             cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement;
             cards[i].transform.localRotation = rotation;
 
-            cards[i].InitPositions(selectedTransform.position, Vector3.zero);
+            cards[i].InitPositions(selectedTransform.position, Vector3.zero, cards[i].transform.position);
         }
     }
 

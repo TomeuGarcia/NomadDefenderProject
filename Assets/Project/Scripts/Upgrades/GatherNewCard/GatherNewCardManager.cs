@@ -175,7 +175,7 @@ public class GatherNewCardManager : MonoBehaviour
             cards[i].transform.position += startDisplacement + widthDisplacement;
             cards[i].transform.localRotation = Quaternion.identity;
 
-            cards[i].InitPositions(cards[i].transform.position, Vector3.zero);
+            cards[i].InitPositions(cards[i].transform.position, Vector3.zero, cards[i].transform.position);
         }
     }
 

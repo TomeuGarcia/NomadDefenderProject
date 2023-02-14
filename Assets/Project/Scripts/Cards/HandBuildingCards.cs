@@ -27,6 +27,7 @@ public class HandBuildingCards : MonoBehaviour
     private List<BuildingCard> cards;
 
     private BuildingCard selectedCard;
+    private BuildingCard previouslySelectedCard;
     private Vector3 selectedPosition;
 
     private Vector3 initHandPosition;
@@ -40,12 +41,16 @@ public class HandBuildingCards : MonoBehaviour
     private bool isPlayerHoveringTheCards = false;
 
     private bool AlreadyHasSelectedCard => selectedCard != null;
+    private bool HasPreviouslySelectedCard => previouslySelectedCard != null;
 
     private BuildingCard hoveredCard;
     private bool IsHoveringCard => hoveredCard != null;
 
     public Transform HandTransform => cardHolder;
 
+
+    private int numCardsBeingAdded = 0;
+    private bool AreCardsBeingAdded => numCardsBeingAdded > 0;
 
 
     public delegate void HandAction();
@@ -142,6 +147,7 @@ public class HandBuildingCards : MonoBehaviour
 
         float ratio = cards.Count == 0 ? 0f : 1f / cards.Count;
 
+
         for (int i = 0; i < cards.Count; ++i)
         {
             float iRatio = ratio * (i + 0.5f);
@@ -154,33 +160,52 @@ public class HandBuildingCards : MonoBehaviour
 
             BuildingCard card = cards[i];
 
-
-            card.RootCardTransform.SetParent(HandTransform);
+            if (card.cardLocation != BuildingCard.CardLocation.HAND)
+            {
+                card.RootCardTransform.SetParent(HandTransform);
+            }
 
             //card.CardTransform.localPosition = Vector3.zero;
             //card.CardTransform.position = finalPosition;
             //card.CardTransform.localRotation = rotation;
             //card.InitPositions(selectedPosition, hiddenDisplacement);
 
-            float repositionDuration = 0.3f;
-            card.StartRepositioning(finalPosition, repositionDuration);
-            card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, i));
+            if (card == previouslySelectedCard)
+            {                
+                card.RootCardTransform.position = finalPosition;
+                card.RootCardTransform.localRotation = rotation;
+                SetupCard(card, Vector3.zero, selectedPosition, hiddenDisplacement, finalPosition, i);
+                card.CardTransform.position = selectedPosition; // Reset selected position
+                //card.CardTransform.position = selectedPosition + hiddenDisplacement; // Reset selected position
+            }
+            else
+            {
+                float repositionDuration = 0.3f;
+                card.StartRepositioning(finalPosition, repositionDuration);
+                card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+                    .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, finalPosition, i));
+            }
         }
         
     }
-    private void SetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
+    private void SetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
     {
-        card.InitPositions(selectedPosition, hiddenDisplacement);
+        SetupCard(card, card.CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition, index);
+    }
+
+    private void SetupCard(BuildingCard card, Vector3 standardLocalPosition, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
+    {
+        card.InitPositions(standardLocalPosition, selectedPosition, hiddenDisplacement, finalPosition);
 
         if (card.cardLocation != BuildingCard.CardLocation.HAND)
         {
-            card.OnCardHovered += SetHoveredCard;
             card.OnCardUnhovered += SetStandardCard;
+
+
+            card.OnCardHovered += SetHoveredCard;
             card.OnCardSelected += CheckSelectCard;
 
             card.OnCardInfoSelected += SetCardShowInfo;
-
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
@@ -223,7 +248,7 @@ public class HandBuildingCards : MonoBehaviour
             card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
                 .OnComplete(
                 () => {
-                    card.InitPositions(selectedPosition, hiddenDisplacement);
+                    card.InitPositions(selectedPosition, hiddenDisplacement, finalPosition - hiddenDisplacement);
                     UpdateHandSideBlockers();
                 });
         }
@@ -264,13 +289,12 @@ public class HandBuildingCards : MonoBehaviour
             float repositionDuration = 0.3f;
             card.StartRepositioning(finalPosition, repositionDuration);
             card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, i));
+                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, finalPosition, i));
         }
-
     }
-    private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, int index)
+    private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
     {
-        card.InitPositions(selectedPosition, hiddenDisplacement);
+        card.InitPositions(selectedPosition, hiddenDisplacement, finalPosition);
 
         if (card.cardLocation != BuildingCard.CardLocation.HAND)
         {
@@ -350,7 +374,7 @@ public class HandBuildingCards : MonoBehaviour
         bool corrected = false;
 
         for (int i = 0; i < cards.Count; ++i)
-        {
+        {          
             if (cards[i].IsRepositioning)
             {
                 cards[i].ForceEndRepositioning();
@@ -367,9 +391,10 @@ public class HandBuildingCards : MonoBehaviour
             }
         }
 
+        /*
         if (corrected)
         {
-            //// bellow is copied from SetStandardCard
+            //// below is copied from SetStandardCard
             hoveredCard = null;
 
             foreach (BuildingCard itCard in cards)
@@ -378,15 +403,17 @@ public class HandBuildingCards : MonoBehaviour
             }
             ////
         }
-
+        */
     }
 
     public void HintedCardWillBeAdded()
     {
         if (AlreadyHasSelectedCard)
         {
-            selectedCard.ImmediateStandardState();
-            ResetAndSetStandardCard(selectedCard);
+            previouslySelectedCard = selectedCard;
+
+            //selectedCard.ImmediateStandardState();
+            //ResetAndSetStandardCard(selectedCard);
         }
     }
     public void AddCard(BuildingCard card)
@@ -400,17 +427,34 @@ public class HandBuildingCards : MonoBehaviour
             card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
+        ++numCardsBeingAdded;
         card.PlayDrawAnimation(
-            () => { if (!isInRedrawPhase) { 
-                    StartCoroutine(DelayedTryHideHandAfterDraw()); } 
+            () => { 
+                if (!isInRedrawPhase) {
+                    isHidden = false;
+                    StartCoroutine(DelayedTryHideHandAfterDraw()); 
+                }
+                --numCardsBeingAdded;
             } );
 
         CheckCardsCost();
+
+        if (HasPreviouslySelectedCard)
+        {
+            StartCoroutine(ResetPreviouslySelectedCardAfterAddingCard());
+        }
+    }
+    private IEnumerator ResetPreviouslySelectedCardAfterAddingCard()
+    {
+        yield return null;
+        previouslySelectedCard = null;
     }
 
 
     private void SetHoveredCard(BuildingCard card)
     {
+        if (AlreadyHasSelectedCard) return;
+
         isPlayerHoveringTheCards = true;
 
         if (isHidden && !isBeingShown) ShowHand();
@@ -458,6 +502,22 @@ public class HandBuildingCards : MonoBehaviour
     {
         //HandTransform.position = defaultHandPosition;
         SetStandardCard(selectedCard);
+
+        if (AreCardsBeingAdded) 
+        {
+            selectedCard.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f);
+        }
+        else
+        {
+            selectedCard.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f);
+        }
+        
+
+        //ShowHand(true);
+        //StartCoroutine(DelayedTryHideHandAfterDraw());
+
+        //selectedCard.RootCardTransform.DOMove(selectedCard.HiddenRootPosition, 0.1f);
+
         selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
@@ -470,6 +530,8 @@ public class HandBuildingCards : MonoBehaviour
 
     private void CheckSelectCard(BuildingCard card)
     {
+        if (AlreadyHasSelectedCard) return;
+
         int cardCost = card.GetCardPlayCost();
 
         if (currencyCounter.HasEnoughCurrency(cardCost))
@@ -551,41 +613,77 @@ public class HandBuildingCards : MonoBehaviour
 
     private void ComputeSelectedPosition()
     {
-        selectedPosition = (HandTransform.right * (-2.5f)) + (HandTransform.up * (2f)) + HandTransform.position;
+        selectedPosition = (HandTransform.right * (-2.8f)) + (HandTransform.up * (0.8f)) + HandTransform.position;
     }
     
     private void ComputeHiddenPosition()
     {
-        defaultHandPosition = HandTransform.position;
-        hiddenHandPosition = HandTransform.position + (-1.15f * HandTransform.up);
+        hiddenDisplacement = -1.15f * HandTransform.up;
 
-        hiddenDisplacement = hiddenHandPosition - defaultHandPosition;
+        defaultHandPosition = HandTransform.position;
+        hiddenHandPosition = HandTransform.position + hiddenDisplacement;
     }
 
-    private void HideHand(bool playSound)
+    private void HideHand(bool playSound, bool reparentSelectedCard = false)
     {
         isHidden = true;
 
         isBeingHidden = true;
 
+
+        foreach (BuildingCard card in cards)
+        {
+            if (card != selectedCard)
+                card.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f).OnComplete(() => isBeingHidden = false);
+        }
+
+        
+        //if (reparentSelectedCard)
+        //{
+        //    selectedCard.RootCardTransform.parent = null;            
+        //}
+
+        /*
         HandTransform.DOComplete(true);
         HandTransform.DOMove(hiddenHandPosition, 0.1f)
-            .OnComplete(() => isBeingHidden = false);
-
-
+            .OnComplete(() => {
+                //if (reparentSelectedCard)
+                //{
+                //    selectedCard.RootCardTransform.SetParent(HandTransform);
+                //}
+                isBeingHidden = false; 
+            });
+        */
+       
         // Audio
         if (playSound) GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
-    private void ShowHand()
+    private void ShowHand(bool ignoreSelectedCard = false)
     {
         isHidden = false;
 
         isBeingShown = true;
 
+        int i = 0;
+        foreach (BuildingCard card in cards)
+        {
+            if (ignoreSelectedCard && card == selectedCard)
+            {
+            }
+            else
+            {
+                card.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f).OnComplete(() => isBeingShown = false);
+                ++i;
+
+            }
+        }
+
+        /*
         HandTransform.DOComplete(true);
         HandTransform.DOMove(defaultHandPosition, 0.1f)
             .OnComplete( () => isBeingShown = false );
+        */
     }
 
 
@@ -603,10 +701,14 @@ public class HandBuildingCards : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        if (!isPlayerHoveringTheCards && !isBeingHidden)
+        if (!isBeingHidden && !isHidden)
         {
-            HideHand(true);
+            if (!isPlayerHoveringTheCards || AlreadyHasSelectedCard)
+            {
+                HideHand(true, AlreadyHasSelectedCard);
+            }            
         }
+
     }
 
 
@@ -640,7 +742,9 @@ public class HandBuildingCards : MonoBehaviour
 
 
     private void SetCardShowInfo(BuildingCard card)
-    {        
+    {
+        if (AlreadyHasSelectedCard) return;
+
         card.ShowInfo();
 
         card.OnCardInfoSelected -= SetCardShowInfo;
