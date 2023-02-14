@@ -180,7 +180,8 @@ public class TurretBuildingCard : BuildingCard
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
     {
-        ReplacedWithSamePart = turretCardParts.turretPassiveBase == newTurretPassiveBase; // Check replaced with same part
+        ReplacedWithSamePart = turretCardParts.turretPartBase == newTurretPartBase &&
+                               turretCardParts.turretPassiveBase == newTurretPassiveBase; // Check replaced with same part
 
         //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
         int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class CurrencyCounter : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class CurrencyCounter : MonoBehaviour
     [SerializeField] private Transform currencyCountTextHolder;
     [SerializeField] public TextMeshProUGUI currencyCountText;
     [SerializeField] private TextMeshProUGUI addedCurrencyText;
+    [SerializeField] private Image currencyImage;
 
     [Header("Colors")]
     [SerializeField] private Color startColorAddedCurrencyText;
@@ -48,6 +50,44 @@ public class CurrencyCounter : MonoBehaviour
     private void OnDisable()
     {
         DroppedCurrency.OnCurrencyGathered -= AddCurrency;
+    }
+
+    public void PlayTextAppearAnimation(float noTextDelay)
+    {
+        StartCoroutine(TextAppearAnimation(noTextDelay));
+    }
+    private IEnumerator TextAppearAnimation(float noTextDelay)
+    {
+        currencyImage.gameObject.SetActive(false);
+
+        currencyCountText.text = "";        
+        yield return new WaitForSeconds(noTextDelay);
+
+
+        float t1 = 0.1f;
+
+        currencyImage.gameObject.SetActive(true);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        currencyImage.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        currencyImage.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        yield return new WaitForSeconds(t1);
+
+        int temp = 0;
+        int step = 20;
+        while (temp < currencyCount)
+        {
+            UpdateCurrencyCountText(temp);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+            yield return new WaitForSeconds(t1);
+
+            temp += step;
+            t1 -= 0.05f;
+        }
+
+        UpdateCurrencyCountText(currencyCount);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
     }
 
 

@@ -98,6 +98,9 @@ public abstract class BuildingCard : MonoBehaviour
 
     public bool AlreadyCanBeHovered => OnCardHovered != null;
 
+    [HideInInspector] public bool isInteractable = true;
+    [HideInInspector] public bool canBeHovered = true;
+
 
     // MonoBehaviour methods
     private void OnEnable()
@@ -117,6 +120,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
 
@@ -127,6 +131,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
 
@@ -137,7 +142,9 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseDown() // only called by Left Click
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
+        if (!isInteractable) return;
         if (isPlayingDrawAnimation) return;
         
         if (cardState == CardStates.HOVERED)
@@ -152,7 +159,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void Update()
     {
-        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        if (canBeHovered && canInfoInteract && Input.GetMouseButtonDown(1) && isInteractable)
         {
             if (cardState == CardStates.HOVERED)
             {
@@ -193,6 +200,8 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
 
         isShowingInfo = false;
+
+        isInteractable = true;
     }
 
 
@@ -331,6 +340,10 @@ public abstract class BuildingCard : MonoBehaviour
         cardCollider.enabled = false;
     }
 
+    public void ReenableMouseInteraction()
+    {
+        StartCoroutine(ScuffedreinableMouseInteraction());
+    }
     private IEnumerator ScuffedreinableMouseInteraction()
     {
         DisableMouseInteraction();

@@ -20,6 +20,8 @@ public class UpgradeCardHolder : MonoBehaviour
     [SerializeField] private MeshRenderer placerMeshRenderer;
     private Material placerMaterial;
 
+    [HideInInspector] public bool appearAnimationCanStartMoving = true;
+
     public bool AlreadyHasSelectedCard => selectedCard != null;
 
     private bool canInteract;
@@ -303,5 +305,36 @@ public class UpgradeCardHolder : MonoBehaviour
         placerMaterial.SetFloat("_IsOn", 0f);
     }
 
+
+    public IEnumerator AppearAnimation(float delayBeforeStartMoving)
+    {
+        Vector3 moveOffset = Vector3.forward * -2f;
+
+        foreach (BuildingCard card in cards)
+        {
+            card.RootCardTransform.position = card.RootCardTransform.position + moveOffset;
+            card.canBeHovered = false;
+        }
+
+        yield return new WaitForSeconds(delayBeforeStartMoving);
+        yield return new WaitUntil(() => appearAnimationCanStartMoving);
+
+
+        float moveDuration = 0.7f;
+        float delayBetweenCards = 0.3f;
+        foreach (BuildingCard card in cards)
+        {
+            card.RootCardTransform.DOMove(card.RootCardTransform.position - moveOffset, moveDuration);
+            yield return new WaitForSeconds(delayBetweenCards);
+        }
+
+        
+        foreach (BuildingCard card in cards)
+        {
+            yield return new WaitForSeconds(moveDuration - delayBetweenCards);
+            card.canBeHovered = true;
+            card.ReenableMouseInteraction();
+        }
+    }
 
 }

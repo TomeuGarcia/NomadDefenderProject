@@ -16,6 +16,8 @@ public class CardPartHolder : MonoBehaviour
     [SerializeField] private MeshRenderer placerMeshRenderer;
     private Material placerMaterial;
 
+    [HideInInspector] public bool appearAnimationCanStartMoving = true;
+
 
     public CardPart selectedCardPart { get; private set; }
 
@@ -92,6 +94,7 @@ public class CardPartHolder : MonoBehaviour
 
             cardParts[i].Init();
         }
+
     }
 
 
@@ -224,6 +227,38 @@ public class CardPartHolder : MonoBehaviour
     {
         placerMaterial.SetFloat("_IsAlwaysOn", 0f);
         placerMaterial.SetFloat("_IsOn", 0f);
+    }
+
+
+
+    public IEnumerator AppearAnimation(float delayBeforeStartMoving)
+    {
+        Vector3 moveOffset = Vector3.forward * -2f;
+
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.transform.position = cardPart.transform.position + moveOffset;
+            cardPart.isInteractable = false;
+        }
+
+        yield return new WaitForSeconds(delayBeforeStartMoving);
+        yield return new WaitUntil(() => appearAnimationCanStartMoving);
+
+
+        float moveDuration = 0.5f;
+        float delayBetweenCards = 0.3f;
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.transform.DOMove(cardPart.transform.position - moveOffset, moveDuration);
+            yield return new WaitForSeconds(delayBetweenCards);
+        }
+
+        foreach (CardPart cardPart in cardParts)
+        {
+            yield return new WaitForSeconds(moveDuration - delayBetweenCards);
+            cardPart.isInteractable = true;
+            cardPart.ReenableMouseInteraction();
+        }
     }
 
 }

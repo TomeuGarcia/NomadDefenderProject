@@ -76,6 +76,9 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private Color canNotDrawCardColor = Color.red;
     [SerializeField, Min(0.1f)] private float blinkDuration = 0.2f;
 
+    [HideInInspector] public bool showSpeedUp;
+    [HideInInspector] public bool canShowDrawCardButton;
+
     private void OnEnable()
     {
         CardDrawer.OnStartSetupBattleCanvases += PlayStartGameAnimation;
@@ -107,6 +110,9 @@ public class BattleHUD : MonoBehaviour
         HideUI();
 
         StartCoroutine(CurrencyUIStartGameAnimation(true));
+
+        showSpeedUp = true;
+        canShowDrawCardButton = true;
     }
 
     private void Update()
@@ -119,7 +125,9 @@ public class BattleHUD : MonoBehaviour
 
     private void ShowUI()
     {
-        speedUpButtonHolder.SetActive(true);
+        if(showSpeedUp)
+            speedUpButtonHolder.SetActive(true);
+
         deckUI.gameObject.SetActive(true);
     }
 
@@ -133,7 +141,8 @@ public class BattleHUD : MonoBehaviour
     {
         ShowUI();
         StartCoroutine(DeckUIStartGameAnimation());   
-        StartCoroutine(SpeedUpUIStartGameAnimation());   
+        if(showSpeedUp)
+            StartCoroutine(SpeedUpUIStartGameAnimation());   
     }
 
 
@@ -153,8 +162,12 @@ public class BattleHUD : MonoBehaviour
         cgCurrencyUI.alpha = 0f;
         if (startWithDelay) yield return new WaitForSeconds(1.0f);
 
+
         // Appear
         float t1 = 0.1f;
+
+        currencyCounter.PlayTextAppearAnimation(t1 * 4f);
+
         cgCurrencyUI.DOFade(1f, t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
@@ -173,6 +186,18 @@ public class BattleHUD : MonoBehaviour
 
         // Appear
         cgSpeedUpUI.DOFade(1f, 1f);
+    }
+
+    public void DisableSpeedUpUI()
+    {
+        showSpeedUp = false;
+        speedUpButtonHolder.SetActive(false);
+    }
+
+    public void EnableSpeedUpUI()
+    {
+        showSpeedUp = true;
+        speedUpButtonHolder.SetActive(true);
     }
     private IEnumerator DeckUIStartGameAnimation()
     {
@@ -252,7 +277,7 @@ public class BattleHUD : MonoBehaviour
 
         cardIconsHolder.DOLocalMoveY(shownCardIconsHolderY, showDuration)
             .OnComplete(() => {
-                if (deckBuildingCards.HasCardsLeft())
+                if (deckBuildingCards.HasCardsLeft() && canShowDrawCardButton)
                 {
                     drawButtonHolder.DOLocalMoveX(shownDrawButtonX, hideDuration)
                         .OnComplete(() => { EnableClickDrawButton(); });

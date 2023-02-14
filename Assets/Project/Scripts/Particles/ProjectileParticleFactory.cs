@@ -63,7 +63,7 @@ public class ProjectileParticleFactory : MonoBehaviour
         return sortedAttacks[attackType].GetObject(position, rotation);
     }
 
-    private void ResetPools()
+    public void ResetPools()
     {
         foreach (AttackTypeParticleToPool attackTypeParticleToPool in particleToPool)
         {

@@ -230,7 +230,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     // SCENES
     public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
-    {
+    {        
         mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
     }
 
@@ -251,6 +251,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
         cardDisplayer.ResetAll();
         cardShower.SetActive(true);
+        EnemyFactory.GetInstance().ResetPools();
+        ProjectileParticleFactory.GetInstance().ResetPools();
     }
     private void DoOnSceneFromMapLoaded()
     {

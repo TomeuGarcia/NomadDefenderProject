@@ -139,19 +139,17 @@ MonoBehaviour:
   - textType: 0
     text: '/Cards Stats: <color=#1DFF5F>RANGE</color>'
   - textType: 0
-    text: '/Cards Stats:  <color=#FFF345>CADENCY</color>'
+    text: '/Cards Stats: <color=#FFF345>CADENCY</color>'
   - textType: 0
-    text: '/Cards Stats:  <color=#FF003E>ATTACK</color>'
+    text: '/Cards Stats: <color=#FF003E>ATTACK</color>'
   - textType: 0
     text: '/Cards Stats: COST'
   - textType: 0
-    text: '/Cards Stats:  <color=#F5550C>PROJECTILE</color>'
+    text: '/Cards Stats: <color=#F5550C>PROJECTILE</color>'
   - textType: 0
-    text: '/Cards Stats: <color=#3EB6F4>PASSIVE</color>'
+    text: '/Cards Stats: <color=#2C32C8>PASSIVE</color>'
   - textType: 0
     text: Card Stats Created Successfully
-  - textType: 0
-    text: <color=#FF003E>ERROR 5680</color>. Destroying Card...
   - textType: 0
     text: Redraw Initializing
   - textType: 0
@@ -159,7 +157,7 @@ MonoBehaviour:
   - textType: 0
     text: '/Redraw: Successfully showing'
   - textType: 0
-    text: '/Redraw: Generatin Info...'
+    text: '/Redraw: Generating Info...'
   - textType: 0
     text: '/Redraw/Info: Click a Card to redraw it'
   - textType: 0
@@ -192,11 +190,11 @@ MonoBehaviour:
     text: And upgrade one stat
   - textType: 0
     text: Waiting User to Upgrade Turret...
-  - textType: 1
+  - textType: 0
     text: Turret upgraded 1 lvl
-  - textType: 1
+  - textType: 0
     text: This turret has reached its maximum upgrades in this battle
-  - textType: 1
+  - textType: 0
     text: Turret Max Upgrades = Turret Card Level
   - textType: 0
     text: DEFENSE RESUMED
@@ -298,18 +296,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c066430697a5641b62cc89748379fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutoCardDrawer: {fileID: 0}
+  hand: {fileID: 0}
   currencyBackgroundImg: {fileID: 0}
   speedUpButton: {fileID: 0}
   deckInterface: {fileID: 0}
   redrawInterface: {fileID: 0}
-  card: {fileID: 0}
-  attackStat: {fileID: 0}
-  cadencyStat: {fileID: 0}
-  rangeStat: {fileID: 0}
-  projectile: {fileID: 0}
-  passive: {fileID: 0}
-  cost: {fileID: 0}
-  cardLevel: {fileID: 0}
   blackImg: {fileID: 0}
   scriptedSequence: {fileID: 7308264895389281425}
   currencyCounter: {fileID: 0}
