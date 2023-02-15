@@ -99,6 +99,8 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardSelected;
     public event BuildingCardAction OnCardInfoSelected;
 
+    public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
+
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
 
