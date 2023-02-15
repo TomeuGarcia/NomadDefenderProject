@@ -12,7 +12,11 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
     [SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
+    [SerializeField] public static float multiplierColorHDR = 4f;
+
     private Color colorInUse = darkGreyColor;
+    public Color BorderColor { get; private set; }
+    public Texture NodeIconTexture { get; private set; }
 
     // INTERACTAVILITY
     // is interactable      ->  player can interact and travel there
@@ -238,7 +242,7 @@ public class OWMap_Node : MonoBehaviour
         {
             color = Color.Lerp(color, colorInUse, 0.5f);
         }
-        material.SetColor("_IconColor", color);
+        material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
     }
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
     {
@@ -259,9 +263,11 @@ public class OWMap_Node : MonoBehaviour
             }
         }
     }
+
     public void SetBorderColor(Color color)
     {
-        material.SetColor("_BorderColor", color);
+        BorderColor = color;
+        material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
     }
 
 
@@ -343,6 +349,8 @@ public class OWMap_Node : MonoBehaviour
 
     public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
     {
+        NodeIconTexture = mapIconTexture;
+
         nodeClass = _nodeClass;
         nodeClass.SetIconTexture(mapIconTexture);
         nodeIcon = mapIconTexture;

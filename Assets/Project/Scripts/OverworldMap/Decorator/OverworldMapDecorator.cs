@@ -1,3 +1,4 @@
+using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private int firstDecoratedLevel;
     private int firstBattleLevel;
+
+    private List<NodeEnums.UpgradeType> availableUpgradeTypes = new List<UpgradeType>();
 
 
     public void DecorateMap(OWMap_Node[][] mapNodes)
@@ -109,12 +112,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel, int levelI)
     {
-        HashSet<NodeEnums.UpgradeType> randomUpgradeTypes = new HashSet<NodeEnums.UpgradeType>();
-        while (randomUpgradeTypes.Count < upgradeLevel.Length) // UNSAFE this could explode in theory
-        {
-            randomUpgradeTypes.Add((NodeEnums.UpgradeType)Random.Range(0, (int)NodeEnums.UpgradeType.COUNT));
-        }
-        NodeEnums.UpgradeType[] randomUpgradeTypesArray = randomUpgradeTypes.ToArray();
+        List<NodeEnums.UpgradeType> upgradesAlreadyInLevel = new List<UpgradeType>();
 
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
@@ -122,8 +120,10 @@ public class OverworldMapDecorator : MonoBehaviour
             upgradeLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
-            NodeEnums.UpgradeType upgradeType = randomUpgradeTypesArray[nodeI];
-           
+
+            if (NoAvailableUpgradeTypesLeft()) ResetAvailableUpgradeTypes();
+            NodeEnums.UpgradeType upgradeType = GetRandomAvailableUpgradeType(upgradesAlreadyInLevel.ToArray());
+            upgradesAlreadyInLevel.Add(upgradeType);
 
             NodeEnums.ProgressionState progressionState;
 
@@ -152,5 +152,40 @@ public class OverworldMapDecorator : MonoBehaviour
         return (levelI - firstBattleLevel) % dSettings.battleAfterNLevels == 0;
     }
 
+
+
+    private void ResetAvailableUpgradeTypes()
+    {
+        for (int i = 0; i < (int)NodeEnums.UpgradeType.COUNT; ++i)
+        {
+            availableUpgradeTypes.Add((NodeEnums.UpgradeType)i);
+        }
+    }
+    private bool NoAvailableUpgradeTypesLeft()
+    {
+        return availableUpgradeTypes.Count == 0;
+    }
+
+    private NodeEnums.UpgradeType GetRandomAvailableUpgradeType(NodeEnums.UpgradeType[] upgradesAlreadyInLevel)
+    {
+        int randomI = Random.Range(0, availableUpgradeTypes.Count);
+        NodeEnums.UpgradeType randomUpgradeType = availableUpgradeTypes[randomI];
+
+        int tries = 0;
+        int MAX_TRIES = availableUpgradeTypes.Count;
+
+
+        while (upgradesAlreadyInLevel.Contains(randomUpgradeType) && tries < MAX_TRIES)
+        {
+            randomI = (randomI + 1) % availableUpgradeTypes.Count;
+            randomUpgradeType = availableUpgradeTypes[randomI];
+
+            ++tries;
+        }
+
+        availableUpgradeTypes.RemoveAt(randomI);
+
+        return randomUpgradeType;
+    }
 
 }
