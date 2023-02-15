@@ -201,13 +201,17 @@ public class HandBuildingCards : MonoBehaviour
         {
             card.OnCardUnhovered += SetStandardCard;
 
-
             card.OnCardHovered += SetHoveredCard;
             card.OnCardSelected += CheckSelectCard;
 
             card.OnCardInfoSelected += SetCardShowInfo;
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
+        }
+        else
+        {
+            if (!card.IsOnCardHoveredSubscrived)
+                card.OnCardHovered += SetHoveredCard;
         }
 
         if (index == cards.Count - 1)
