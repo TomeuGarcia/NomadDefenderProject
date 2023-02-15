@@ -46,6 +46,8 @@ public class TDGameManager : MonoBehaviour
 
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
+
+        InitLocationsVisuals();
     }    
 
 
@@ -59,6 +61,16 @@ public class TDGameManager : MonoBehaviour
     {
         basePathLocation.OnDeath -= GameOver;
         EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
+    }
+
+    private void InitLocationsVisuals()
+    {
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            OWMap_Node owMapNode = battleStateResult.nodeResults[i].owMapNode;
+            
+            pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
+        }        
     }
 
     private void GameOver()
