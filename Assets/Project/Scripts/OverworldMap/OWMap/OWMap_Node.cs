@@ -201,8 +201,7 @@ public class OWMap_Node : MonoBehaviour
         SetIconColor(colorInUse);
         SetCameFromColor(colorInUse, setCameFromConnectionNotInteracted: true);
 
-        material.SetFloat("_IsSelected", 0f);
-        material.SetFloat("_TimeStartSelected", Time.time);
+        SetUnhoveredVisuals();
     }
 
     public void SetHovered()
@@ -212,6 +211,16 @@ public class OWMap_Node : MonoBehaviour
         SetIconColor(lightGreyColor, true);
         //SetCameFromColor(lightGreyColor);
 
+        SetHoveredVisuals();
+    }
+
+    private void SetUnhoveredVisuals()
+    {
+        material.SetFloat("_IsSelected", 0f);
+        material.SetFloat("_TimeStartSelected", Time.time);
+    }
+    public void SetHoveredVisuals()
+    {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
     }
@@ -233,7 +242,7 @@ public class OWMap_Node : MonoBehaviour
         if (owMapGameManager != null)
         {
             owMapGameManager.OnMapNodeSelected(this);
-        }        
+        }
     }
 
     private void SetIconColor(Color color, bool mixWithColorInUse = false)

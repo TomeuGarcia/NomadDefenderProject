@@ -15,7 +15,7 @@ public class OverworldMapDecorator : MonoBehaviour
     private List<NodeEnums.UpgradeType> availableUpgradeTypes = new List<UpgradeType>();
 
 
-    public void DecorateMap(OWMap_Node[][] mapNodes)
+    public virtual void DecorateMap(OWMap_Node[][] mapNodes)
     {
         firstDecoratedLevel = 0;
         if (dSettings.firstNodeIsEmpty)
@@ -53,7 +53,7 @@ public class OverworldMapDecorator : MonoBehaviour
     }
 
 
-    private void DecorateLastLevelEmpty(OWMap_Node[] lastLevel)
+    protected void DecorateLastLevelEmpty(OWMap_Node[] lastLevel)
     {
         // TODO firstLevel[0]
         for (int nodeI = 0; nodeI < lastLevel.Length; ++nodeI)
@@ -63,8 +63,8 @@ public class OverworldMapDecorator : MonoBehaviour
             OWMap_NoneNode lastNode = new OWMap_NoneNode(0, ref lastLevel[nodeI].healthState, NodeEnums.ProgressionState.LATE);
             lastLevel[nodeI].SetNodeClass(lastNode, dUtils.GetEmptyNodeTexture(NodeEnums.EmptyType.LAST_LEVEL)); //Get Empty Node Texture
         }
-    } 
-    private void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
+    }
+    protected void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
     {
         // TODO firstLevel[0]
         for (int nodeI = 0; nodeI < firstLevel.Length; ++nodeI)
@@ -83,31 +83,25 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < battleLevel.Length; ++nodeI)
         {
             // TODO decorate properly
-            battleLevel[nodeI].SetBorderColor(OWMap_Node.redColor);
+            //battleLevel[nodeI].SetBorderColor(OWMap_Node.redColor);
 
             int nextLevelNodes = battleLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
-            NodeEnums.BattleType battleType;
-            NodeEnums.ProgressionState progressionState;
+            NodeEnums.BattleType battleType = GetLevelBattleType(levelI);
+            NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
 
-            if (levelI < dSettings.midBattleStartIndex)
-            {
-                battleType = NodeEnums.BattleType.EARLY;
-                progressionState = NodeEnums.ProgressionState.EARLY;
-            }
-            else if (levelI < dSettings.lateBattleStartIndex)
-            {
-                battleType = NodeEnums.BattleType.MID;
-                progressionState = NodeEnums.ProgressionState.MID;
-            }
-            else
-            {
-                battleType = NodeEnums.BattleType.LATE;
-                progressionState = NodeEnums.ProgressionState.LATE;
-            }
+            //OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType, progressionState);
+            //battleLevel[nodeI].SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
 
-            OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref battleLevel[nodeI].healthState, battleType, progressionState);
-            battleLevel[nodeI].SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
+            DecorateBattleNode(battleLevel[nodeI], nextLevelNodes, battleType, progressionState);
         }
+    }
+    protected void DecorateBattleNode(OWMap_Node node, int nextLevelNodes, NodeEnums.BattleType battleType, NodeEnums.ProgressionState progressionState)
+    {
+        // TODO decorate properly
+        node.SetBorderColor(OWMap_Node.redColor);
+
+        OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref node.healthState, battleType, progressionState);
+        node.SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
     }
 
     private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel, int levelI)
@@ -117,7 +111,7 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             // TODO decorate properly
-            upgradeLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
+            //upgradeLevel[nodeI].SetBorderColor(OWMap_Node.blueColor);
 
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
 
@@ -125,24 +119,21 @@ public class OverworldMapDecorator : MonoBehaviour
             NodeEnums.UpgradeType upgradeType = GetRandomAvailableUpgradeType(upgradesAlreadyInLevel.ToArray());
             upgradesAlreadyInLevel.Add(upgradeType);
 
-            NodeEnums.ProgressionState progressionState;
+            NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
 
-            if (levelI < dSettings.midBattleStartIndex)
-            {
-                progressionState = NodeEnums.ProgressionState.EARLY;
-            }
-            else if (levelI < dSettings.lateBattleStartIndex)
-            {
-                progressionState = NodeEnums.ProgressionState.MID;
-            }
-            else
-            {
-                progressionState = NodeEnums.ProgressionState.LATE;
-            }
+            //OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType, progressionState);
+            //upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
 
-            OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref upgradeLevel[nodeI].healthState, upgradeType, progressionState);
-            upgradeLevel[nodeI].SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
+            DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, upgradeType, progressionState);
         }
+    }
+    protected void DecorateUpgradeNode(OWMap_Node node, int nextLevelNodes, NodeEnums.UpgradeType upgradeType, NodeEnums.ProgressionState progressionState)
+    {
+        // TODO decorate properly
+        node.SetBorderColor(OWMap_Node.blueColor);
+
+        OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref node.healthState, upgradeType, progressionState);
+        node.SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
     }
 
     private bool IsBattleLevel(int levelI)
@@ -152,6 +143,36 @@ public class OverworldMapDecorator : MonoBehaviour
         return (levelI - firstBattleLevel) % dSettings.battleAfterNLevels == 0;
     }
 
+    private NodeEnums.BattleType GetLevelBattleType(int levelI)
+    {
+        if (levelI < dSettings.midBattleStartIndex)
+        {
+            return NodeEnums.BattleType.EARLY;
+        }
+        else if (levelI < dSettings.lateBattleStartIndex)
+        {
+            return NodeEnums.BattleType.MID;
+        }
+        else
+        {
+            return NodeEnums.BattleType.LATE;
+        }
+    }
+    private NodeEnums.ProgressionState GetLevelProgressionState(int levelI)
+    {
+        if (levelI < dSettings.midBattleStartIndex)
+        {
+            return NodeEnums.ProgressionState.EARLY;
+        }
+        else if (levelI < dSettings.lateBattleStartIndex)
+        {
+            return NodeEnums.ProgressionState.MID;
+        }
+        else
+        {
+            return NodeEnums.ProgressionState.LATE;
+        }
+    }
 
 
     private void ResetAvailableUpgradeTypes()

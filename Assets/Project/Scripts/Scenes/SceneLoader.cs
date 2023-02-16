@@ -171,7 +171,8 @@ public class SceneLoader : MonoBehaviour
 
     private void LoadFirstScene()
     {
-        SceneManager.LoadScene("MapGenerationTest");
+        //SceneManager.LoadScene("MapGenerationTest");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
     }
 
     public void StartLoadMainMenu()
