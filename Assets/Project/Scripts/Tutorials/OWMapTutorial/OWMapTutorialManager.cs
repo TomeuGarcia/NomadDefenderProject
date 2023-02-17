@@ -20,16 +20,20 @@ public class OWMapTutorialManager : MonoBehaviour
 
     private List<OWMap_Node> upgradeNodes;
 
-    private GameObject[] nodesConnections;
+    private List<GameObject> nodesConnections;
 
 
     public void StartTutorial()
     {
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+        {
             Destroy(this.gameObject);
-
-        Init();
-        StartCoroutine(Tutorial());
+        }
+        else
+        {
+            Init();
+            StartCoroutine(Tutorial());
+        }        
     }
 
     private void Init()
@@ -40,7 +44,6 @@ public class OWMapTutorialManager : MonoBehaviour
         //Initializing battle Nodes and upgrade nodes
         battleNodes = new List<OWMap_Node>();
         upgradeNodes = new List<OWMap_Node>();
-        upgradeNodes.Add(tempOWMapNodes[0][0]);
 
         for(int i = 0; i < tempOWMapNodes.Length; i++)
         {
@@ -57,21 +60,29 @@ public class OWMapTutorialManager : MonoBehaviour
             }
         }
 
+        for (int j = 0; j < tempOWMapNodes[tempOWMapNodes.Length-1].Length; j++)
+        {
+            upgradeNodes.Add(tempOWMapNodes[tempOWMapNodes.Length - 1][j]);
+        }
+
+
         SetInactiveBattleNodes();
         SetInactiveUpgradeNodes();
 
-        //Initializing nodes connections
-        nodesConnections = new GameObject[9];
 
-        nodesConnections[0] = mapHolder.transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).gameObject;
-        nodesConnections[1] = mapHolder.transform.GetChild(1).transform.GetChild(1).transform.GetChild(0).gameObject;
-        nodesConnections[2] = mapHolder.transform.GetChild(1).transform.GetChild(1).transform.GetChild(1).gameObject;
-        nodesConnections[3] = mapHolder.transform.GetChild(2).transform.GetChild(1).transform.GetChild(0).gameObject;
-        nodesConnections[4] = mapHolder.transform.GetChild(2).transform.GetChild(1).transform.GetChild(1).gameObject;
-        nodesConnections[5] = mapHolder.transform.GetChild(2).transform.GetChild(1).transform.GetChild(2).gameObject;
-        nodesConnections[6] = mapHolder.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).gameObject;
-        nodesConnections[7] = mapHolder.transform.GetChild(3).transform.GetChild(1).transform.GetChild(1).gameObject;
-        nodesConnections[8] = mapHolder.transform.GetChild(3).transform.GetChild(1).transform.GetChild(2).gameObject;
+        //Initializing nodes connections
+        nodesConnections = new List<GameObject>();
+        for (int levelI = 0; levelI < tempOWMapNodes.Length-1; ++levelI)
+        {
+            for (int nodeI = 0; nodeI < tempOWMapNodes[levelI].Length; ++nodeI)
+            {
+                OWMap_Connection[] nextLevelConnections = tempOWMapNodes[levelI][nodeI].GetNextLevelConnections();                
+                for (int connectionI = 0; connectionI < nextLevelConnections.Length; ++connectionI)
+                {
+                    nodesConnections.Add(nextLevelConnections[connectionI].gameObject);
+                }
+            }
+        }
         SetActiveNodesConnections(false);
 
     }

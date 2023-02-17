@@ -169,9 +169,13 @@ public class OverworldMapCreator : MonoBehaviour
         }
 
         // Set NodeReferences
-        OWMap_Node.MapReferencesData lastNode_mapReferencesData =
+        for (int nodeI = 0; nodeI < mapNodes[lastMapLevelIndex].Length; ++nodeI)
+        {
+            OWMap_Node.MapReferencesData lastNode_mapReferencesData =
             new OWMap_Node.MapReferencesData(lastMapLevelIndex, 0, true);
-        mapNodes[lastMapLevelIndex][0].InitMapReferencesData(lastNode_mapReferencesData);
+            mapNodes[lastMapLevelIndex][nodeI].InitMapReferencesData(lastNode_mapReferencesData);
+        }
+        
     }
 
 
