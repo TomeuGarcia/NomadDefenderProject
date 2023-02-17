@@ -33,18 +33,6 @@ public class SceneLoader : MonoBehaviour
     public static event SceneLoaderAction OnSceneForceQuit;
 
 
-    int init = 0;
-    int menu = 1;
-    int td1 = 2;
-    int td2 = 3;
-    int newCard = 4;
-    int upgrade1 = 5;
-    int upgrade2 = 6;
-    int upgrade3 = 7;
-
-    bool lastWasTD2 = false;
-
-
     private static SceneLoader instance;
     public static SceneLoader GetInstance()
     {
@@ -77,7 +65,7 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
+        //GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart += StartLoadMainMenu;
     }
@@ -89,7 +77,7 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
+        //GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart -= StartLoadMainMenu;
 
@@ -99,18 +87,10 @@ public class SceneLoader : MonoBehaviour
     {
         if (alreadyLoadingNextScene) return;
 
-        //if (Input.GetKeyDown(KeyCode.O)) OpenAnimation(openAnimDuration);
-        //else if (Input.GetKeyDown(KeyCode.P)) ShutAnimation(shutAnimDuration);
-
         if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
         {
             if (OnSceneForceQuit != null) OnSceneForceQuit();
             StartLoadMainMenu();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(Random.Range(0, 3) + upgrade1);
         }
     }
 
@@ -127,11 +107,6 @@ public class SceneLoader : MonoBehaviour
         topBlackScreen.DOLocalMove(topOpenPosition, duration);
         bottomBlackScreen.DOLocalMove(bottomOpenPosition, duration);
         backgroundImage.DOColor(openColor, duration * 1.2f);
-    }
-
-    public void StartLoadFirstScene()
-    {
-        StartCoroutine(DoLoadScene(LoadFirstScene));
     }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
     {
@@ -151,28 +126,40 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = false;
     }
 
-    public void StartLoadTutorialScene()
+    public void StartLoadNormalGame()
     {
-        StartCoroutine(DoLoadSceneWithoutAnimation(LoadFirstScene));
+        StartCoroutine(DoLoadScene(LoadNextScene));
+    }
+    public void StartLoadTutorialGame()
+    {
+        StartCoroutine(DoLoadScene(LoadTutorialScene));
     }
 
-    private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
-    {
-        alreadyLoadingNextScene = true;
+    //public void StartLoadTutorialScene()
+    //{
+    //    StartCoroutine(DoLoadSceneWithoutAnimation(LoadNextScene));
+    //}
+    //private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
+    //{
+    //    alreadyLoadingNextScene = true;
 
         
-        loadSceneFunction();
-        yield return new WaitForSeconds(loadSceneDuration);
+    //    loadSceneFunction();
+    //    yield return new WaitForSeconds(loadSceneDuration);
 
-        alreadyLoadingNextScene = false;
-    }
+    //    alreadyLoadingNextScene = false;
+    //}
 
 
 
-    private void LoadFirstScene()
+    private void LoadNextScene()
     {
         //SceneManager.LoadScene("MapGenerationTest");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
+    }
+    private void LoadTutorialScene()
+    {
+        SceneManager.LoadScene("TutorialMap");
     }
 
     public void StartLoadMainMenu()
