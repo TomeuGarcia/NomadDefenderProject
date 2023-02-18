@@ -38,12 +38,13 @@ public class BattleHUD : MonoBehaviour
     private float shownDeckUIy;
 
     [Header("Deck text")]
-    [SerializeField] private RectTransform deckText;
+    [SerializeField] private TextMeshProUGUI deckText;
     [SerializeField] private Vector3 hiddenTextSize = Vector3.one * 1f;
     [SerializeField] private Vector3 shownTextSize = Vector3.one * 1.5f;
 
     [Header("Card Icons")]
     [SerializeField] private RectTransform cardIconsHolder;
+    [SerializeField] private CanvasGroup cgCardIconsHolder;
     private float hiddenCardIconsHolderY;
     private float shownCardIconsHolderY;
     [SerializeField] private Image referenceCardIconImage;
@@ -70,6 +71,7 @@ public class BattleHUD : MonoBehaviour
 
     private bool canClickDrawButton = false;
     private bool isHoveringDrawButton = false;
+    private bool isPlayingDrawAnimation = false;
 
     [Header("Draw card animations")]
     [SerializeField] private Color canDrawCardColor = Color.cyan;
@@ -79,14 +81,6 @@ public class BattleHUD : MonoBehaviour
     [HideInInspector] public bool showSpeedUp;
     [HideInInspector] public bool canShowDrawCardButton;
 
-    private void OnEnable()
-    {
-        CardDrawer.OnStartSetupBattleCanvases += PlayStartGameAnimation;
-    }
-    private void OnDisable()
-    {
-        CardDrawer.OnStartSetupBattleCanvases -= PlayStartGameAnimation;
-    }
 
     private void Awake()
     {
@@ -107,7 +101,7 @@ public class BattleHUD : MonoBehaviour
         UpdateDrawCostText(drawCost);
 
         canInteractWithDeckUI = false;
-        HideUI();
+        SetNotActiveUI();
 
         StartCoroutine(CurrencyUIStartGameAnimation(true));
 
@@ -123,7 +117,7 @@ public class BattleHUD : MonoBehaviour
         }
     }
 
-    private void ShowUI()
+    private void SetActiveUI()
     {
         if(showSpeedUp)
             speedUpButtonHolder.SetActive(true);
@@ -131,18 +125,34 @@ public class BattleHUD : MonoBehaviour
         deckUI.gameObject.SetActive(true);
     }
 
-    private void HideUI()
+    private void SetNotActiveUI()
     {
         speedUpButtonHolder.SetActive(false);
         deckUI.gameObject.SetActive(false);
     }
 
-    private void PlayStartGameAnimation()
+    //public void PlayStartGameAnimation()
+    //{
+    //    SetActiveUI();
+    //    StartCoroutine(DeckUIStartGameAnimation());   
+    //    if(showSpeedUp)
+    //        StartCoroutine(SpeedUpUIStartGameAnimation());   
+    //}
+
+    public void PlayDeckUIShowStartGameAnimation()
     {
-        ShowUI();
-        StartCoroutine(DeckUIStartGameAnimation());   
-        if(showSpeedUp)
-            StartCoroutine(SpeedUpUIStartGameAnimation());   
+        deckUI.gameObject.SetActive(true);
+        StartCoroutine(DeckUIShowStartGameAnimation());
+    }
+    public void PlayDeckUIHideStartGameAnimation(float delay)
+    {
+        StartCoroutine(DeckUIHideStartGameAnimation(delay));
+    }
+
+    public void PlaySpeedUpUIStartGameAnimation()
+    {
+        speedUpButtonHolder.SetActive(true);
+        StartCoroutine(SpeedUpUIStartGameAnimation());
     }
 
 
@@ -185,7 +195,15 @@ public class BattleHUD : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         // Appear
-        cgSpeedUpUI.DOFade(1f, 1f);
+        float t1 = 0.1f;
+        cgSpeedUpUI.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        cgSpeedUpUI.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        cgSpeedUpUI.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
     }
 
     public void DisableSpeedUpUI()
@@ -199,26 +217,41 @@ public class BattleHUD : MonoBehaviour
         showSpeedUp = true;
         speedUpButtonHolder.SetActive(true);
     }
-    private IEnumerator DeckUIStartGameAnimation()
+    private IEnumerator DeckUIShowStartGameAnimation()
     {
         canInteractWithDeckUI = false;
+        canShowDrawCardButton = false;
 
-
-        // Start wait
+        // Start
         drawButtonHolder.gameObject.SetActive(false);
         cgDeckUI.alpha = 0f;
-        yield return new WaitForSeconds(2.0f);
-
-
-        // Appear
-        cgDeckUI.DOFade(1f, 1.0f);
-
         foreach (Image icon in cardIcons)
         {
-            icon.DOFade(0f, 0.1f); // kinda scuffed but make all icons invisible before showing
+            icon.DOFade(0f, 0.01f); // kinda scuffed but make all icons invisible before showing
         }
+        deckText.DOFade(0f, 0.01f);
 
-        yield return new WaitForSeconds(1.0f);
+        // Appear
+        float t1 = 0.1f;
+        cgDeckUI.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        cgDeckUI.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        cgDeckUI.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+
+        yield return new WaitForSeconds(0.2f);
+
+        deckText.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        deckText.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        deckText.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
 
 
         // Show up
@@ -234,16 +267,20 @@ public class BattleHUD : MonoBehaviour
             pitch += pitchIncrement;
             yield return new WaitForSeconds(0.25f);
         }
-        yield return new WaitForSeconds(0.25f);
 
+    }
+    private IEnumerator DeckUIHideStartGameAnimation(float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
         // Hide back
         HideDeckUI();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(hideDuration + 0.1f);
 
 
         // Ready
         drawButtonHolder.gameObject.SetActive(true);
+        canShowDrawCardButton = true;
         canInteractWithDeckUI = true;
     }
 
@@ -272,7 +309,7 @@ public class BattleHUD : MonoBehaviour
         shownDeckUIy = ComputeShownDeckUIy();
 
         deckUI.DOLocalMoveY(shownDeckUIy, showDuration);
-        deckText.DOScale(shownTextSize, showDuration);
+        deckText.rectTransform.DOScale(shownTextSize, showDuration);
 
 
         cardIconsHolder.DOLocalMoveY(shownCardIconsHolderY, showDuration)
@@ -291,7 +328,7 @@ public class BattleHUD : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardHoverExit();
 
         deckUI.DOLocalMoveY(hiddenDeckUIy, hideDuration);
-        deckText.DOScale(hiddenTextSize, hideDuration);
+        deckText.rectTransform.DOScale(hiddenTextSize, hideDuration);
 
         cardIconsHolder.DOComplete(false);
         cardIconsHolder.DOLocalMoveY(hiddenCardIconsHolderY, hideDuration);
@@ -302,6 +339,45 @@ public class BattleHUD : MonoBehaviour
         OnDrawButtonStopHover();
 
         DisableClickDrawButton();
+    }
+
+    public void PlayDeckDrawAnimation()
+    {
+        StartCoroutine(DeckDrawAnimation());
+    }
+    public IEnumerator DeckDrawAnimation()
+    {
+        isPlayingDrawAnimation = true;
+
+        canShowDrawCardButton = false;
+
+        ShowDeckUI();
+        yield return new WaitForSeconds(showDuration);
+
+
+        yield return new WaitForSeconds(0.3f);
+
+        float t1 = 0.1f;
+        cgCardIconsHolder.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        cgCardIconsHolder.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        cgCardIconsHolder.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        cgCardIconsHolder.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+
+        yield return new WaitForSeconds(0.3f);
+
+
+        HideDeckUI();
+        yield return new WaitForSeconds(hideDuration);
+
+        canShowDrawCardButton = true;
+
+        isPlayingDrawAnimation = false;
     }
 
 
@@ -481,7 +557,11 @@ public class BattleHUD : MonoBehaviour
     {
         if (lastSpriteHasCardIndex < 0) return;
 
-        cardIcons[lastSpriteHasCardIndex].sprite = spriteNoCard;
+        Image icon = cardIcons[lastSpriteHasCardIndex];
+        icon.sprite = spriteNoCard;
+        icon.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
+        icon.DOBlendableColor(canDrawCardColor, 0.2f)
+            .OnComplete(() => icon.DOBlendableColor(Color.white, 0.2f));
         --lastSpriteHasCardIndex;
     }
     public void AddHasDeckCardIcon()
