@@ -131,12 +131,12 @@ public class CardDrawer : MonoBehaviour
     private void DrawTopCard()
     {
         AddCardToHand(deck.GetTopCard());
-        TryHideDeckHUD();
+        //TryHideDeckHUD();        
     }
     private void DrawRandomCard()
     {
         AddCardToHand(deck.GetRandomCard());
-        TryHideDeckHUD();
+        //TryHideDeckHUD();
     }
 
     private void AddCardToHand(BuildingCard card)
@@ -176,6 +176,11 @@ public class CardDrawer : MonoBehaviour
                 TryDrawCard();
                 hand.InitCardsInHand();
             }
+            
+        }
+        else
+        {
+            battleHUD.PlayDeckNoCardsLeftAnimation();
         }
     }
 

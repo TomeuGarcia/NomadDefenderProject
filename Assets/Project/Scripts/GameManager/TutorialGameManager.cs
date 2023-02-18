@@ -14,7 +14,7 @@ public class TutorialGameManager : GameManager
     private IEnumerator DelayedStartVictorySceneLoad(float delay)
     {
         yield return new WaitForSeconds(delay);
-        SceneLoader.GetInstance().StartLoadNormalGame();
+        SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
 
 }

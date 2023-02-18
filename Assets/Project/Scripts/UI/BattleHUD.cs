@@ -341,11 +341,11 @@ public class BattleHUD : MonoBehaviour
         DisableClickDrawButton();
     }
 
-    public void PlayDeckDrawAnimation()
+    public void PlayDeckNoCardsLeftAnimation()
     {
-        StartCoroutine(DeckDrawAnimation());
+        StartCoroutine(DeckNoCardsLeftAnimation());
     }
-    public IEnumerator DeckDrawAnimation()
+    public IEnumerator DeckNoCardsLeftAnimation()
     {
         isPlayingDrawAnimation = true;
 
@@ -357,17 +357,15 @@ public class BattleHUD : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
 
-        float t1 = 0.1f;
-        cgCardIconsHolder.DOFade(0f, t1);
-        yield return new WaitForSeconds(t1);
-        cgCardIconsHolder.DOFade(1f, t1);
-        yield return new WaitForSeconds(t1);
-        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
-        cgCardIconsHolder.DOFade(0f, t1);
-        yield return new WaitForSeconds(t1);
-        cgCardIconsHolder.DOFade(1f, t1);
-        yield return new WaitForSeconds(t1);
-        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        float t1 = 0.15f;
+        for (int i = 0; i < 3; ++i)
+        {
+            cgCardIconsHolder.DOFade(0f, t1);
+            yield return new WaitForSeconds(t1);
+            cgCardIconsHolder.DOFade(1f, t1);
+            yield return new WaitForSeconds(t1);
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        }
 
         yield return new WaitForSeconds(0.3f);
 
