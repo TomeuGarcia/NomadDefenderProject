@@ -128,7 +128,7 @@ public class SceneLoader : MonoBehaviour
 
     public void StartLoadNormalGame()
     {
-        StartCoroutine(DoLoadScene(LoadNextScene));
+        StartCoroutine(DoLoadScene(LoadMapScene));
     }
     public void StartLoadTutorialGame()
     {
@@ -154,8 +154,11 @@ public class SceneLoader : MonoBehaviour
 
     private void LoadNextScene()
     {
-        //SceneManager.LoadScene("MapGenerationTest");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
+    }
+    private void LoadMapScene()
+    {
+        SceneManager.LoadScene("MapGenerationTest");
     }
     private void LoadTutorialScene()
     {
