@@ -49,6 +49,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6617860002002708536}
   - component: {fileID: 2115539070688538853}
+  - component: {fileID: 8957982376476687607}
   m_Layer: 10
   m_Name: CardIconsHolder
   m_TagString: Untagged
@@ -100,6 +101,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &8957982376476687607
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377526520455605247}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1449856203115493459
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,10 +357,11 @@ MonoBehaviour:
   canInteractWithDeckUI: 0
   cgDeckUI: {fileID: 5325191135218944496}
   deckUI: {fileID: 8049672562078500895}
-  deckText: {fileID: 3311158692980988382}
+  deckText: {fileID: 4502652076596958925}
   hiddenTextSize: {x: 1.5, y: 1.5, z: 1.5}
   shownTextSize: {x: 1, y: 1, z: 1}
   cardIconsHolder: {fileID: 6617860002002708536}
+  cgCardIconsHolder: {fileID: 8957982376476687607}
   referenceCardIconImage: {fileID: 7064610143775747089}
   spriteHasCard: {fileID: 21300000, guid: 7ff1e715d1ab32a4bafd3a69f93170e9, type: 3}
   spriteNoCard: {fileID: 21300000, guid: 153c9e136dd2c4348bd255a291f1dbe4, type: 3}
@@ -359,6 +373,8 @@ MonoBehaviour:
   canDrawCardColor: {r: 0.20060521, g: 0.8217802, b: 0.8679245, a: 1}
   canNotDrawCardColor: {r: 0.67058825, g: 0.15294118, b: 0.15294118, a: 1}
   blinkDuration: 0.2
+  showSpeedUp: 0
+  canShowDrawCardButton: 0
 --- !u!1 &3036249909464158186
 GameObject:
   m_ObjectHideFlags: 0

@@ -126,9 +126,12 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = false;
     }
 
-    public void StartLoadNormalGame()
+    public void StartLoadNormalGame(bool loadUsingSceneName = false)
     {
-        StartCoroutine(DoLoadScene(LoadMapScene));
+        if (loadUsingSceneName)
+            StartCoroutine(DoLoadScene(LoadMapScene));
+        else
+            StartCoroutine(DoLoadScene(LoadNextScene));
     }
     public void StartLoadTutorialGame()
     {
