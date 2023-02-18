@@ -70,8 +70,7 @@ public class BattleHUD : MonoBehaviour
     [HideInInspector] public bool drewCardViaHUD = false; // scuffed flag boolean used to hide UI when last card is drawn not manually
 
     private bool canClickDrawButton = false;
-    private bool isHoveringDrawButton = false;
-    private bool isPlayingDrawAnimation = false;
+    private bool isHoveringDrawButton = false;    
 
     [Header("Draw card animations")]
     [SerializeField] private Color canDrawCardColor = Color.cyan;
@@ -341,13 +340,13 @@ public class BattleHUD : MonoBehaviour
         DisableClickDrawButton();
     }
 
-    public void PlayDeckNoCardsLeftAnimation()
+    public void PlayDeckNoCardsLeftAnimation(int nBlinks)
     {
-        StartCoroutine(DeckNoCardsLeftAnimation());
+        StartCoroutine(DeckNoCardsLeftAnimation(nBlinks));
     }
-    public IEnumerator DeckNoCardsLeftAnimation()
+    public IEnumerator DeckNoCardsLeftAnimation(int nBlinks)
     {
-        isPlayingDrawAnimation = true;
+        canInteractWithDeckUI = false;
 
         canShowDrawCardButton = false;
 
@@ -355,19 +354,24 @@ public class BattleHUD : MonoBehaviour
         yield return new WaitForSeconds(showDuration);
 
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
 
-        float t1 = 0.15f;
-        for (int i = 0; i < 3; ++i)
+        float t1 = 0.1f;
+        for (int i = 0; i < nBlinks; ++i)
         {
-            cgCardIconsHolder.DOFade(0f, t1);
+            foreach (Image icon in cardIcons)
+            {
+                icon.rectTransform.DOPunchScale(Vector3.one * 0.4f, t1*2f);
+                icon.DOBlendableColor(canNotDrawCardColor, t1)
+                    .OnComplete(() => icon.DOBlendableColor(Color.white, t1));
+            }
             yield return new WaitForSeconds(t1);
-            cgCardIconsHolder.DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
+
             yield return new WaitForSeconds(t1);
-            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         }
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
 
 
         HideDeckUI();
@@ -375,7 +379,7 @@ public class BattleHUD : MonoBehaviour
 
         canShowDrawCardButton = true;
 
-        isPlayingDrawAnimation = false;
+        canInteractWithDeckUI = true;
     }
 
 
@@ -577,6 +581,8 @@ public class BattleHUD : MonoBehaviour
     private float ComputeShownDeckUIy()
     {
         float yPerLevel = 50f;
-        return hiddenDeckUIy + (yPerLevel * (((cardIcons.Count-1) / 5) +1));
+        float yLevelsRisen = Mathf.Max((cardIcons.Count - 1) / 5f, 1f) + 1;
+
+        return hiddenDeckUIy + (yPerLevel * yLevelsRisen);
     }
 }

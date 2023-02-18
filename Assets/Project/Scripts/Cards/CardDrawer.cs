@@ -167,20 +167,39 @@ public class CardDrawer : MonoBehaviour
     }
 
     private IEnumerator DoDrawCardAfterWave()
-    {
+    {        
         if (deck.HasCardsLeft())
         {
-            for (int i = 0; i < cardsToDrawPerWave; i++)
+            battleHUD.canInteractWithDeckUI = false;
+            battleHUD.canShowDrawCardButton = false;
+            battleHUD.ShowDeckUI();
+            yield return new WaitForSeconds(0.5f);
+
+            int numCardsDrawn = 0;
+            while (numCardsDrawn < cardsToDrawPerWave && deck.HasCardsLeft())
             {
                 yield return new WaitForSeconds(0.5f);
-                TryDrawCard();
+                DrawRandomCard();
                 hand.InitCardsInHand();
+                ++numCardsDrawn;
             }
-            
+
+            if (numCardsDrawn < cardsToDrawPerWave)
+            {
+                battleHUD.PlayDeckNoCardsLeftAnimation(2);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
+                battleHUD.HideDeckUI();
+                yield return new WaitForSeconds(0.5f);
+                battleHUD.canInteractWithDeckUI = true;
+                battleHUD.canShowDrawCardButton = true;
+            }
         }
         else
         {
-            battleHUD.PlayDeckNoCardsLeftAnimation();
+            battleHUD.PlayDeckNoCardsLeftAnimation(4);
         }
     }
 
