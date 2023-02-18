@@ -36,8 +36,8 @@ public class MainMenu : MonoBehaviour
     {
         List<TextDecoder> textDecoders = new List<TextDecoder>();
         textDecoders.Add(titleTextDecoder);
-        textDecoders.Add(newGameButtonTextDecoder);
         if (playButtonGO.activeInHierarchy) textDecoders.Add(playButtonTextDecoder);
+        textDecoders.Add(newGameButtonTextDecoder);
         textDecoders.Add(quitTextDecoder);
 
         textDecoderManager.SetTextDecoders(textDecoders);

@@ -53,7 +53,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         for (int i = 0; i < nodeResults.Length; ++i)
         {
             //nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
-            nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED);
+            nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // Hardcoded to always apply UNDAMAGED
         }
     }
+
 }
