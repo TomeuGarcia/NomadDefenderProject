@@ -9,12 +9,7 @@ public class BrokenKeepOutWall : MonoBehaviour
     [SerializeField] private List<float> initIntervalTimes;
     [SerializeField] private List<float> intervalLoopTimes;
 
-    void Start()
-    {
-        StartCoroutine(InitialBlink());
-    }
-
-    private IEnumerator InitialBlink()
+    public IEnumerator InitialBlink()
     {
         foreach(float interval in initIntervalTimes)
         {
