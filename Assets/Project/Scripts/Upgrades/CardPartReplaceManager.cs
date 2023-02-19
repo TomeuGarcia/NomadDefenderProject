@@ -20,6 +20,8 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
+    public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
+    public CardPartHolder CardPartHolder => cardPartHolder;
 
     private enum PartType { ATTACK, BODY, BASE }
     [Header("TYPE")]
