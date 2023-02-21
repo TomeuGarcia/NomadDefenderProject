@@ -483,7 +483,8 @@ public class HandBuildingCards : MonoBehaviour
 
         if (!isHandHidden && !isInRedrawPhase)
         {
-            StartCoroutine("DelayedHideHand");
+            //StartCoroutine("DelayedHideHand");
+            StartCoroutine(DelayedTryHideHandAfterDraw(0.05f));
         }
 
         hoveredCard = null;
@@ -631,7 +632,7 @@ public class HandBuildingCards : MonoBehaviour
         hiddenHandPosition = HandTransform.position + hiddenDisplacement;
     }
 
-    private void HideHand(bool playSound, bool reparentSelectedCard = false)
+    private void HideHand(bool playSound)
     {
         Debug.Log("Hide hand");
         isHandHidden = true;
@@ -710,17 +711,17 @@ public class HandBuildingCards : MonoBehaviour
         }
     }
 
-    private IEnumerator DelayedTryHideHandAfterDraw()
+    private IEnumerator DelayedTryHideHandAfterDraw(float delay = 0.5f)
     {
-        Debug.Log("DelayedTryHideHandAfterDraw");
-        yield return new WaitForSeconds(0.5f);
+        //Debug.Log("DelayedTryHideHandAfterDraw");
+        yield return new WaitForSeconds(delay);
 
         //if (!isHandBeingHidden && !isHandHidden)
         if (!isHandHidden)
         {
             if (!isPlayerHoveringTheCards || AlreadyHasSelectedCard)
             {
-                HideHand(true, AlreadyHasSelectedCard);
+                HideHand(true);
             }            
         }
 

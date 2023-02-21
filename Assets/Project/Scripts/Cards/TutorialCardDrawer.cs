@@ -21,13 +21,15 @@ public class TutorialCardDrawer : CardDrawer
         // OVERRIDING Start()
 
         battleHUD.DeactivateCurrencyUI();
+        redrawCanvasGameObject.SetActive(false);
     }
+
 
     public void DoGameStartSetup()
     {
         battleHUD.DisableSpeedUpUI();
         battleHUD.canShowDrawCardButton = false;
-        GameStartSetup();
+        GameStartSetup(0f, false);
     }
 
     protected override void SetupDeck()
@@ -51,4 +53,8 @@ public class TutorialCardDrawer : CardDrawer
         battleHUD.ActivateCurrencyUI();
     }
 
+    public BattleHUD GetBattleHUD()
+    {
+        return battleHUD;
+    }
 }

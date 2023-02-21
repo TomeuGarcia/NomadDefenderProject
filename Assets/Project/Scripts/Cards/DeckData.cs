@@ -132,8 +132,6 @@ public class DeckData : ScriptableObject
             SupportBuildingCard supportCard = card as SupportBuildingCard;
             AddToSavedSupportCardsComponents(supportCard);
         }
-
-
         else
         {
             Debug.Log("!!!  CAN'T SAVE CARD OF THIS TYPE !!!");
