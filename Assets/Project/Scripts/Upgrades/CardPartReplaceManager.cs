@@ -50,9 +50,11 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
 
     private bool replacementDone = false;
+    public bool ReplacementDone => replacementDone;
 
     private bool cardIsReady = false;
     private bool partIsReady = false;
+    [HideInInspector] public bool canFinalRetrieveCard = true;
 
     [Header("MATERIALS")]
     [SerializeField] private MeshRenderer buttonMeshRenderer;
@@ -67,6 +69,10 @@ public class CardPartReplaceManager : MonoBehaviour
     public delegate void CarPartReplaceManagerAction();
     public static event CarPartReplaceManagerAction OnReplacementStart;
     public static event CarPartReplaceManagerAction OnReplacementDone;
+
+
+    // TUTORIAL
+    private bool partsCreatedByTutorial = false;
 
     
 
@@ -133,10 +139,13 @@ public class CardPartReplaceManager : MonoBehaviour
             }
         }
 
+        if (!partsCreatedByTutorial)
+        {
+            if (partType == PartType.ATTACK) InitAttacksRandom();
+            else if (partType == PartType.BODY) InitBodiesRandom();
+            else if (partType == PartType.BASE) InitBasesRandom();
+        }
 
-        if (partType == PartType.ATTACK) InitAttacks();
-        else if (partType == PartType.BODY) InitBodies();
-        else if (partType == PartType.BASE) InitBases();
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
         for (int i = 0; i < deckCards.Count; ++i)
@@ -150,47 +159,72 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.Init(randomCards.ToArray());
     }
 
-    private void InitAttacks()
-    {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
 
+    public void InitTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    {
+        partsCreatedByTutorial = true;
+        numParts = turretPartAttacks.Length;
+        InitAttacks(turretPartAttacks);
+    }
+    private void InitAttacksRandom()
+    {
+        InitAttacks(partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitAttacks(TurretPartAttack[] attacks)
+    {
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].turretPartAttack = randomAttacks[i];
+            parts[i].turretPartAttack = attacks[i];
         }
         cardPartHolder.Init(parts);
 
         uiDescriptionText.text = "Replace a turret's ATTACK with a new one";
     }
 
-    private void InitBodies()
-    {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
 
+    public void InitTutorialBodies(TurretPartBody[] turretPartBodies)
+    {
+        partsCreatedByTutorial = true;
+        numParts = turretPartBodies.Length;
+        InitBodies(turretPartBodies);
+    }
+    private void InitBodiesRandom()
+    {
+        InitBodies(partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBodies(TurretPartBody[] bodies)
+    {
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBodyPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBody>();
-            parts[i].turretPartBody = randomBodies[i];
+            parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
 
         uiDescriptionText.text = "Replace a turret's BODY with a new one";
     }
 
-    private void InitBases()
+    public void InitTutorialBodies(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
-        PartsLibrary.BaseAndPassive[] randomBasesAndPassives = 
-            partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
-
+        partsCreatedByTutorial = true;
+        numParts = basesAndPassives.Length;
+        InitBases(basesAndPassives);
+    }
+    private void InitBasesRandom()
+    {
+        InitBases(partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    {
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBasesAndPassives[i].turretPartBase;
-            parts[i].turretPassiveBase = randomBasesAndPassives[i].turretPassiveBase;
+            parts[i].turretPartBase = basesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = basesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
@@ -339,6 +373,9 @@ public class CardPartReplaceManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
+
+
+        yield return new WaitUntil(() => canFinalRetrieveCard);
 
         // Enable FINAL retreieve card
         //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);

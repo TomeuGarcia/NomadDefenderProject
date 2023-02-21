@@ -104,6 +104,10 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
 
+
+    public delegate void BuildingCardAction2();
+    public static event BuildingCardAction2 OnInfoShown;
+
     public delegate void CardFunctionPtr();
 
     public bool AlreadyCanBeHovered => OnCardHovered != null;
@@ -379,6 +383,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
+        if (OnInfoShown != null) OnInfoShown();
     }
     public virtual void HideInfo()
     {
