@@ -53,11 +53,11 @@ public class AttackReplaceTutorial : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        //Calibrating turret projectile replacement upgrade…
+        //Calibrating projectile replacement upgrade…
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(4.0f);
         scriptedSequence.Clear();
 
 
@@ -66,20 +66,20 @@ public class AttackReplaceTutorial : MonoBehaviour
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(2.0f);
-        scriptedSequence.Clear();
+        yield return new WaitForSeconds(3.0f);
+        //scriptedSequence.Clear();
 
 
         //Loading High Voltage projectile card…
         //[HIGH VOLTAGE CARD PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(2.0f);
-        scriptedSequence.Clear();
+        yield return new WaitForSeconds(3.0f);
+        //scriptedSequence.Clear();
 
 
         //Display/Conceal a card’s ability using <color=#47B13A>Input</color>.<color=#F5550C>RightClick</color>
@@ -88,13 +88,13 @@ public class AttackReplaceTutorial : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitUntil(() => cardShowedInfo);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(4.0f);
         scriptedSequence.Clear();
         cardPartReplaceManager.CardPartHolder.canSelectCard = true;
         cardPartReplaceManager.UpgradeCardHolder.canSelectCard = true;
 
 
-        //Instruction> Effectuate replacement /REPLACE
+        //Instruction> Effectuate replacement
         //[WAIT FOR PLAYER TO PRESS REPLACE BUTTON]
         //[CLEAR]
         scriptedSequence.NextLine();
@@ -116,20 +116,18 @@ public class AttackReplaceTutorial : MonoBehaviour
         //[WAIT 1 SECOND]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3.0f);
 
         //Card now supports 2 battle upgrades.
         //[WAIT X SECOND]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(6.0f);
         scriptedSequence.Clear();
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(0.3f);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
 
         cardPartReplaceManager.canFinalRetrieveCard = true;
