@@ -57,4 +57,11 @@ public class TutorialsSaverLoader : MonoBehaviour
     {
         PlayerPrefs.SetInt("Tutorials", 0);
     }
+
+    public void ResetTutorialsExceptFirstBattle()
+    {
+        ResetTutorials();
+        SetTutorialDone(Tutorials.BATTLE);
+    }
+
 }

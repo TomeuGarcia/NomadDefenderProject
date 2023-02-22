@@ -12,6 +12,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         InitMapGeneration();
         InitMapSceneLoader();
 
+        StartAtFirstLevel();
+
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
         {
             mapSceneLoader.LoadTutorialScene();
@@ -30,7 +32,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             }
         }
 
-        StartAtFirstLevel();
+        //StartAtFirstLevel();
 
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
         {

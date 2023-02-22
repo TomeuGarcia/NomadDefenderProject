@@ -6,14 +6,12 @@ public class TutorialCardDrawer : CardDrawer
 {
     [Header("TUTORIAL")]
     [SerializeField] private GameObject tutorialTurretCardPrefab;
-    [SerializeField] private TurretCardParts tutorialCardParts;
 
     [HideInInspector] public TutoTurretCard tutorialCard;
 
     private void Awake()
     {
         tutorialCard = GetUninitializedNewTutorailTurretCard();
-        tutorialCard.ResetParts(tutorialCardParts);
     }
 
     private void Start()
@@ -35,6 +33,9 @@ public class TutorialCardDrawer : CardDrawer
     protected override void SetupDeck()
     {
         deck.Init();
+
+        // Transform the 1st card in the deck (1st DeckData turret) into a Tutorial Card
+        tutorialCard.ResetParts(deck.GetAndRemoveCard(0).GetComponent<TurretBuildingCard>().turretCardParts); 
 
         deck.AddCardToDeckTop(tutorialCard); // Adding the tutorial card to the top     
 
