@@ -30,6 +30,8 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private bool cardWasSelected = false;
 
+    [HideInInspector] public bool canSelectCard = true;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnCardSelected;
@@ -155,6 +157,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetSelectedCard(BuildingCard card)
     {
+        if (!canSelectCard) return;
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
