@@ -7,6 +7,8 @@ public class TextLine
 {
     public TextTypes textType;
     public string text;
+    [Tooltip("If set to 0, this variable will have no effect")]
+    public float clearTime;
     //EVENT TO GO FOR THE NEXT LINE?
 }
 

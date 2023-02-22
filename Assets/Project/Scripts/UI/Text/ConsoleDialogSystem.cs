@@ -41,7 +41,7 @@ public class ConsoleDialogSystem : MonoBehaviour
         //Remove the upper line if needed
         if (consoleLines.Count >= maxLinesOnScreen)
         {
-            RemoveLine();
+            RemoveLine(consoleLines.Count - 1);
         }
 
         //Make room for the new line of text
@@ -70,23 +70,46 @@ public class ConsoleDialogSystem : MonoBehaviour
         decoder.SetTextStrings(lineToPrint);
         decoder.Activate(textLine.textType);
 
-        if(clearWithTime)
+        if(textLine.clearTime > 0.0f)
         {
-            consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime);
+            consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(textLine.clearTime, this);
+        }
+        else if(clearWithTime)
+        {
+            consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime, this);
         }
     }
 
-    private void RemoveLine()
+    public void RemoveSpecificLine(EntryTextLine entryLine)
     {
-        consoleLines[consoleLines.Count - 1].SetActive(false);
-        consoleLines.RemoveAt(consoleLines.Count - 1);
+        for(int i = 0; i < consoleLines.Count; i++)
+        {
+            if (consoleLines[i].GetComponent<EntryTextLine>() == entryLine)
+            {
+                int n = i + 1;
+                while (n <= consoleLines.Count - 1)
+                {
+                    consoleLines[n].GetComponent<RectTransform>().position -= lineSeparation;
+                    n++;
+                }
+
+                RemoveLine(i);
+                return;
+            }
+        }
+    }
+
+    private void RemoveLine(int lineIndex)
+    {
+        consoleLines[lineIndex].SetActive(false);
+        consoleLines.RemoveAt(lineIndex);
     }
 
     public void Clear()
     {
         while (consoleLines.Count > 0)
         {
-            RemoveLine();
+            RemoveLine(consoleLines.Count - 1);
         }
     }
 
