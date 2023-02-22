@@ -106,12 +106,12 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //0
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
 
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //1
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
 
@@ -134,25 +134,13 @@ public class BattleTutorialManager : MonoBehaviour
 
 
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //2
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) );
-        yield return null;
-
         scriptedSequence.Clear();
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(2.0f);
-
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
 
@@ -161,14 +149,14 @@ public class BattleTutorialManager : MonoBehaviour
 
         tutoCardDrawer.ActivateCurrencyUI();
 
-        yield return new WaitForSeconds(0.5f);
-
-        scriptedSequence.NextLine();
         yield return new WaitForSeconds(2.0f);
 
-        scriptedSequence.NextLine();
+
+        scriptedSequence.NextLine(); //4
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) );
         yield return null;
+
+        scriptedSequence.Clear();
 
         //Currency Finished showing
 
@@ -176,179 +164,110 @@ public class BattleTutorialManager : MonoBehaviour
         //Starts Cards Tutorial
         tutoCardDrawer.DoGameStartSetup();
 
-        scriptedSequence.Clear();
-        scriptedSequence.NextLine(); //Initializing User's Deck Line
+        scriptedSequence.NextLine(); //Initializing User's Deck Line 5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(2.5f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //6
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.0f); 
         tutoCardDrawer.tutorialCard.isInteractable = false;
         yield return new WaitForSeconds(1.5f);
 
 
         //Cards Visuals
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //7
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
         tutoCardDrawer.tutorialCard.showTurret = true;
         yield return new WaitForSeconds(1.5f);
 
         //Cards Stats
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();// 8
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
-        
+
+
+        //Cost
+        scriptedSequence.NextLine();// 9
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        tutoCardDrawer.tutorialCard.showPlayCost = true;
+        yield return new WaitForSeconds(2.5f);
 
         //Attack
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();// 10
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showAttackStat = true;
         yield return new WaitForSeconds(2.5f);
 
         //Cadency
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();// 11
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showCadenceStat = true;
         yield return new WaitForSeconds(2.5f);
 
         //Range
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();// 12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showRangeStat = true;
         yield return new WaitForSeconds(2.5f);
 
 
-        //Cost
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        tutoCardDrawer.tutorialCard.showPlayCost = true;
-        yield return new WaitForSeconds(2.5f);
 
-
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();// 13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
 
         //Finishes Cards Tutorial
 
 
-
-        //Starts Redraw Tutorial
+        
+        //Skips Redraw
         scriptedSequence.Clear();
-        yield return new WaitForSeconds(2.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-        //Show Redraw
-        tutoCardDrawer.StartRedrawButtonAnimation();
-        tutoCardDrawer.GetBattleHUD().isManualDrawingEnabled = false;
-        tutoCardDrawer.canDisplaySpeedUp = false;
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
+        tutoCardDrawer.OnFinishRedrawsButtonPressed();
         tutoCardDrawer.tutorialCard.isInteractable = true;
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
+       
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
-
-        yield return new WaitUntil(() => !redrawInterface.activeInHierarchy);
-        //Finishes Redraw Tutorial
         
 
         //Starts Deck Tutorial
         yield return new WaitUntil(() =>deckInterface.activeInHierarchy );
 
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
-
-        //scriptedSequence.NextLine(); //Initializing User's Deck Line
-        //yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        //yield return new WaitForSeconds(0.5f);
-
         scriptedSequence.Clear();
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //14
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.5f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //15
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
         yield return new WaitUntil(() => waveStarted );
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine(); //16
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//17
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//18
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(150) );
         scriptedSequence.Clear();
 
         Time.timeScale = 0.0f;
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//19
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.5f);
 
         scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitUntil(() => firstUpgradeDone == true);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(1.0f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
