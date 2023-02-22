@@ -207,7 +207,7 @@ public class CardPartReplaceManager : MonoBehaviour
         uiDescriptionText.text = "Replace a turret's BODY with a new one";
     }
 
-    public void InitTutorialBodies(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    public void InitTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
         partsCreatedByTutorial = true;
         numParts = basesAndPassives.Length;

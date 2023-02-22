@@ -305,7 +305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6007134268857275728
 RectTransform:
   m_ObjectHideFlags: 0
@@ -700,6 +700,7 @@ MonoBehaviour:
   interfaceCanvasGroup: {fileID: 3900070926281709077}
   infoInterface: {fileID: 1048062117452219098}
   isShowingInfo: 0
+  isInteractable: 1
   cgsInfoHide:
   - {fileID: 4427303408274483191}
   - {fileID: 3819720731930307329}
@@ -709,6 +710,8 @@ MonoBehaviour:
   baseDescriptionText: {fileID: 3114506224500605599}
   rangeFillImage: {fileID: 3785943215656454329}
   basePassiveImage: {fileID: 198006566833586972}
+  cgRange: {fileID: 3819720731930307329}
+  cgPassive: {fileID: 1945943077393010356}
   turretPartBase: {fileID: 11400000, guid: 63b0a314aadd34c47a16663127da0770, type: 2}
   turretPassiveBase: {fileID: 0}
   baseImage: {fileID: 5436802564010464961}
@@ -901,6 +904,7 @@ GameObject:
   - component: {fileID: 6713492665992794844}
   - component: {fileID: 4180439739036724238}
   - component: {fileID: 3993355058692308295}
+  - component: {fileID: 1945943077393010356}
   m_Layer: 10
   m_Name: BasePassive_Background
   m_TagString: Untagged
@@ -967,6 +971,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1945943077393010356
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5700554897438513703}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &6143203119064930463
 GameObject:
   m_ObjectHideFlags: 0

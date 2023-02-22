@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
-using static BuildingCard;
+
 
 public abstract class CardPart : MonoBehaviour
 {
