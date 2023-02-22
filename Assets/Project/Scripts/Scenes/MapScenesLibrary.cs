@@ -31,6 +31,11 @@ public class MapScenesLibrary : ScriptableObject
     [SerializeField] private string[] boss2Defenses;
 
 
+    [Header("\n\nTESTING: Battle scene's names")]
+    [SerializeField] private bool useTestingScenes = false;
+    [SerializeField] private string[] testing1Defense;
+    [SerializeField] private string[] testing2Defenses;
+
 
     public void SetUpgradeSceneNames(out MapSceneLoader.SceneNames sceneNames)
     {
@@ -47,10 +52,16 @@ public class MapScenesLibrary : ScriptableObject
 
 
     public void SetBattleSceneNames(out MapSceneLoader.SceneNames[] earlySceneNames,
-                                    out MapSceneLoader.SceneNames[] midSceneNames, 
-                                    out MapSceneLoader.SceneNames[] lateSceneNames, 
+                                    out MapSceneLoader.SceneNames[] midSceneNames,
+                                    out MapSceneLoader.SceneNames[] lateSceneNames,
                                     out MapSceneLoader.SceneNames[] bossSceneNames)
     {
+        if (useTestingScenes)
+        {
+            SetBattleTestingSceneNames(out earlySceneNames, out midSceneNames, out lateSceneNames, out bossSceneNames);
+            return;
+        }
+
         earlySceneNames = new MapSceneLoader.SceneNames[2];
         earlySceneNames[0] = new MapSceneLoader.SceneNames(early1Defense);
         earlySceneNames[1] = new MapSceneLoader.SceneNames(early2Defense);
@@ -68,5 +79,26 @@ public class MapScenesLibrary : ScriptableObject
         bossSceneNames[1] = new MapSceneLoader.SceneNames(boss2Defenses);
     }
 
+    private void SetBattleTestingSceneNames(out MapSceneLoader.SceneNames[] earlySceneNames,
+                                            out MapSceneLoader.SceneNames[] midSceneNames,
+                                            out MapSceneLoader.SceneNames[] lateSceneNames,
+                                            out MapSceneLoader.SceneNames[] bossSceneNames)
+    {
+        earlySceneNames = new MapSceneLoader.SceneNames[2];
+        earlySceneNames[0] = new MapSceneLoader.SceneNames(testing1Defense);
+        earlySceneNames[1] = new MapSceneLoader.SceneNames(testing2Defenses);
+
+        midSceneNames = new MapSceneLoader.SceneNames[2];
+        midSceneNames[0] = new MapSceneLoader.SceneNames(testing1Defense);
+        midSceneNames[1] = new MapSceneLoader.SceneNames(testing2Defenses);
+
+        lateSceneNames = new MapSceneLoader.SceneNames[2];
+        lateSceneNames[0] = new MapSceneLoader.SceneNames(testing1Defense);
+        lateSceneNames[1] = new MapSceneLoader.SceneNames(testing2Defenses);
+
+        bossSceneNames = new MapSceneLoader.SceneNames[2];
+        bossSceneNames[0] = new MapSceneLoader.SceneNames(testing1Defense);
+        bossSceneNames[1] = new MapSceneLoader.SceneNames(testing2Defenses);
+    }
 
 }
