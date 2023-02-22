@@ -7,7 +7,6 @@ public class AttackReplaceTutorial : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
     private Tutorials tutoType;
     private bool cardShowedInfo;
-    private bool buttonPressed;
 
     [SerializeField] TurretPartAttack[] tutorialAttacks;
 

@@ -29,6 +29,10 @@ public class ScriptedSequence : MonoBehaviour
         currentLine = 0;
     }
 
+    public void SkipLine()
+    {
+        currentLine++;
+    }
     public void NextLine()
     {
         dialogSystem.PrintLine(textLines[currentLine]);

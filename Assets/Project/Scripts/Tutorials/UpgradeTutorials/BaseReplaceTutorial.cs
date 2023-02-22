@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyReplaceTutorial : MonoBehaviour
+public class BaseReplaceTutorial : MonoBehaviour
 {
     [SerializeField] private CardPartReplaceManager cardPartReplaceManager;
     [SerializeField] private ScriptedSequence scriptedSequence;
     private Tutorials tutoType;
 
-    [SerializeField] TurretPartBody[] tutorialBodies;
+    [SerializeField] PartsLibrary.BaseAndPassive[] tutorialBaseAndPassive;
 
 
     private void Awake()
     {
-        tutoType = Tutorials.BODY_FUSION_UPG;
+        tutoType = Tutorials.BASE_FUSION_UPG;
 
-        cardPartReplaceManager.InitTutorialBodies(tutorialBodies);
+        cardPartReplaceManager.InitTutorialBases(tutorialBaseAndPassive);
     }
 
     void Start()
@@ -35,14 +35,12 @@ public class BodyReplaceTutorial : MonoBehaviour
     }
 
 
-
-
     IEnumerator Tutorial()
     {
         yield return new WaitForSeconds(1.0f);
 
 
-        //Calibrating body replacement upgrade…
+        //Calibrating base replacement upgrade…
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -59,18 +57,23 @@ public class BodyReplaceTutorial : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
 
 
-        //Loading Spammer body card…
-        //[SPAMMER PART SHOWS UP]
+        //Loading new Clean Strike base card…
+        //[Clean Strike PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
         cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = true;
         yield return new WaitForSeconds(3.0f);
 
-        // Loading Body card stats: <color=#FF003E>ATTACK</color> and <color=#FFF345>CADENCY</color>
+        ///Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(3.0f);
+
+        ///Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(3.0f);
 
         //Waiting for <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
         //[CLEAR]
@@ -84,18 +87,11 @@ public class BodyReplaceTutorial : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
-
-        //Card stats will be<color=#FF003E>OVERWRITTEN</color>
-        //[WAIT FOR PLAYER SELECT BOTH CARD AND PART]
-        //[CLEAR]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        
         cardPartReplaceManager.CardPartHolder.canSelectCard = true;
         cardPartReplaceManager.UpgradeCardHolder.canSelectCard = true;
-
         yield return new WaitUntil(() => cardPartReplaceManager.ReplacementDone);
-        yield return new WaitForSeconds(1.0f);
-        scriptedSequence.Clear();
+        bool cardLevelWasMax = cardPartReplaceManager.UpgradeCardHolder.selectedCard.GetComponent<TurretBuildingCard>().IsCardLevelMaxed();
 
 
         //Successful replacement status.
@@ -105,13 +101,29 @@ public class BodyReplaceTutorial : MonoBehaviour
         scriptedSequence.Clear();
 
 
-        //Successful card level up.
-        //[CARD IS RETRIEVED BUT STAYS]
-        //[WAIT 1 SECOND]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3.0f);
-        scriptedSequence.Clear();
+        // CEHCK IF LEVEL WAS ALREADY MAXED        
+        if (cardLevelWasMax)
+        {
+            //Card already max level
+            //[CARD IS RETRIEVED BUT STAYS]
+            //[WAIT 1 SECOND]
+            scriptedSequence.SkipLine();
+            scriptedSequence.NextLine();
+            yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+            yield return new WaitForSeconds(3.0f);
+            scriptedSequence.Clear();
+        }
+        else
+        {
+            //Successful card level up
+            //[CARD IS RETRIEVED BUT STAYS]
+            //[WAIT 1 SECOND]
+            scriptedSequence.NextLine();
+            yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+            yield return new WaitForSeconds(3.0f);
+            scriptedSequence.Clear();
+            scriptedSequence.SkipLine();
+        }
 
 
         //Upgrade completed
@@ -124,5 +136,4 @@ public class BodyReplaceTutorial : MonoBehaviour
 
         TutorialsSaverLoader.GetInstance().SetTutorialDone(tutoType);
     }
-
 }

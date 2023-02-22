@@ -765,21 +765,38 @@ MonoBehaviour:
   dialogSystem: {fileID: 1995482114}
   textLines:
   - textType: 0
-    text: calibrating base replacement node...
+    text: "Calibrating base replacement upgrade\u2026"
+    clearTime: 0
   - textType: 0
-    text: loading cards...
+    text: "Loading deck cards\u2026"
+    clearTime: 0
   - textType: 0
-    text: waiting for user to chose the card to modify
+    text: "Loading new <color=#E36818>Clean Strike</color> base card\u2026"
+    clearTime: 0
   - textType: 0
-    text: loading turret bases...
+    text: '/Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat '
+    clearTime: 0
   - textType: 0
-    text: waiting for user to choose a new turret base for the card
+    text: /Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
+    clearTime: 0
   - textType: 0
-    text: waiting for user to hit the replace button to modify the turret
+    text: Waiting for <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+    clearTime: 0
   - textType: 0
-    text: replace done succesfully.
+    text: /Instruction> Effectuate replacement
+    clearTime: 0
   - textType: 0
-    text: calibration done
+    text: Successful replacement status
+    clearTime: 0
+  - textType: 0
+    text: Successful card level up
+    clearTime: 0
+  - textType: 0
+    text: Card already max level
+    clearTime: 0
+  - textType: 0
+    text: Upgrade completed
+    clearTime: 0
 --- !u!224 &825538439
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1311,7 +1328,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1786101446}
-  - component: {fileID: 1786101445}
+  - component: {fileID: 1786101447}
   m_Layer: 0
   m_Name: TutorialManager
   m_TagString: Untagged
@@ -1319,26 +1336,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1786101445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786101444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b23a02a1aa0684ab55ce2f03f64a59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cards: {fileID: 456910615}
-  bodies: {fileID: 456910614}
-  mask1: {fileID: 1364199055}
-  mask2: {fileID: 1449662550}
-  mask3: {fileID: 1797340414}
-  cardPartReplaceManager: {fileID: 456910612}
-  scriptedSequence: {fileID: 825538438}
-  tutoType: 1
 --- !u!4 &1786101446
 Transform:
   m_ObjectHideFlags: 0
@@ -1355,6 +1352,24 @@ Transform:
   m_Father: {fileID: 1788141608}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1786101447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786101444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5493d9f9623422846907a43e189881c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPartReplaceManager: {fileID: 456910612}
+  scriptedSequence: {fileID: 825538438}
+  tutorialBaseAndPassive:
+  - turretPartBase: {fileID: 11400000, guid: c8d4bbcaf16c5f948bc36d3c447b95e3, type: 2}
+    turretPassiveBase: {fileID: 11400000, guid: f14592b72e74df64186a82e4d0fb0f87,
+      type: 2}
 --- !u!1 &1788141607
 GameObject:
   m_ObjectHideFlags: 0

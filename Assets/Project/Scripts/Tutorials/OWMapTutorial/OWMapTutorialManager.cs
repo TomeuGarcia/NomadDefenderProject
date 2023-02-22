@@ -22,6 +22,14 @@ public class OWMapTutorialManager : MonoBehaviour
 
     private List<GameObject> nodesConnections;
 
+    private void OnEnable()
+    {
+        owMapGameManager.OnMapNodeSceneStartsLoading += ClearConsoleOnNodeSceneStarts;
+    }
+    private void OnDisable()
+    {
+        owMapGameManager.OnMapNodeSceneStartsLoading -= ClearConsoleOnNodeSceneStarts;
+    }
 
     public void StartTutorial()
     {
@@ -184,5 +192,11 @@ public class OWMapTutorialManager : MonoBehaviour
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
+    }
+
+
+    private void ClearConsoleOnNodeSceneStarts()
+    {
+        scriptedSequence.Clear();
     }
 }
