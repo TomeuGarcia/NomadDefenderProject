@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum TextTypes { SYSTEM, WATCHER, SHOPKEEPER };
+public enum TextTypes { SYSTEM, WATCHER, INSTRUCTION };
 
 [System.Serializable]
 public class TextType
@@ -12,6 +12,9 @@ public class TextType
     public string context;
     public Color32 color;
     public DecodingParameters decodingParameters;
+
+    [HideInInspector] public string openingContextColor;
+    [HideInInspector] public string closeingContextColor = "</color>";
 };
 
 [CreateAssetMenu(fileName = "TextTypeLibrary", menuName = "UI/Text/TextTypeLibrary")]
@@ -22,6 +25,14 @@ public class TextTypeLibrary : ScriptableObject
     public TextType GetTextType(TextTypes demandedTextType)
     {
         return textTypes[(int)demandedTextType];
+    }
+
+    private void OnValidate()
+    {
+        foreach(TextType tType in textTypes)
+        {
+            tType.openingContextColor = "<color=#" + ColorUtility.ToHtmlStringRGB(tType.color) + ">";
+        }
     }
 }
 

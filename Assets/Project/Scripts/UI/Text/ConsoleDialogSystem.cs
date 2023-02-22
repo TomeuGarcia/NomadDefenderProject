@@ -11,6 +11,9 @@ public class ConsoleDialogSystem : MonoBehaviour
     public Pool textPool;   //the pool should have the prefab of the text format
     private List<GameObject> consoleLines = new List<GameObject>();
 
+    private string openingContext;
+    private string closingContext;
+
     [Header("PARAMETERS")]
     [SerializeField] private int maxLinesOnScreen;
     [SerializeField] private Vector3 lineSeparation;
@@ -21,13 +24,10 @@ public class ConsoleDialogSystem : MonoBehaviour
     [SerializeField] private bool clearWithTime;
     [SerializeField] private float clearTime;
 
-    private string openingContextColor;
-    private string closeingContextColor = "</color>";
-
-    private void Awake()
+    private void OnValidate()
     {
-        openingContextColor = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">";
-        closeingContextColor = "</color>";
+        openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
+        closingContext = ">" + "</color>";
     }
 
     public void PrintLine(TextLine textLine)
@@ -35,30 +35,34 @@ public class ConsoleDialogSystem : MonoBehaviour
 
         //Build the whole line of text
         TextType textType = textTypeLibrary.GetTextType(textLine.textType);
-        string wholeContext = openingContextColor + textType.context + closeingContextColor;
+        string wholeContext = openingContext + textType.openingContextColor + textType.context + textType.closeingContextColor + closingContext;
         string lineToPrint = wholeContext + " " + textLine.text;
 
         //Remove the upper line if needed
         if (consoleLines.Count >= maxLinesOnScreen)
         {
             RemoveLine(consoleLines.Count - 1);
-        }
-
-        //Make room for the new line of text
-        if (consoleLines.Count > 0)
-        {
-            for(int i = 0; i < consoleLines.Count; i++)
+            for (int i = 0; i < consoleLines.Count; i++)
             {
                 consoleLines[i].GetComponent<RectTransform>().position += lineSeparation;
             }
         }
+
+        //Make room for the new line of text
+        //if (consoleLines.Count > 0)
+        //{
+        //    for(int i = 0; i < consoleLines.Count; i++)
+        //    {
+        //        consoleLines[i].GetComponent<RectTransform>().position -= lineSeparation;
+        //    }
+        //}
 
         //Get the text
         consoleLines.Insert(0, textPool.GetObject());
         consoleLines[0].SetActive(true);
         consoleLines[0].transform.SetParent(textPool.transform, false);
         consoleLines[0].GetComponent<RectTransform>().pivot = new Vector2(0f, 0.5f);
-        consoleLines[0].GetComponent<RectTransform>().anchoredPosition = initialLinePosition;
+        consoleLines[0].GetComponent<RectTransform>().anchoredPosition = initialLinePosition - lineSeparation * (consoleLines.Count - 1);
 
         //Configure the TextDecoder
         TextDecoder decoder = consoleLines[0].GetComponent<TextDecoder>();
@@ -89,7 +93,7 @@ public class ConsoleDialogSystem : MonoBehaviour
                 int n = i + 1;
                 while (n <= consoleLines.Count - 1)
                 {
-                    consoleLines[n].GetComponent<RectTransform>().position -= lineSeparation;
+                    consoleLines[n].GetComponent<RectTransform>().position += lineSeparation;
                     n++;
                 }
 
