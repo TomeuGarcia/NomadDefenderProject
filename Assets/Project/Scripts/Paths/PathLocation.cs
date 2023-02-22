@@ -48,8 +48,6 @@ public class PathLocation : MonoBehaviour
 
     public void InitNodeVisuals(Texture nodeIconTexture, Color borderColor)
     {
-        float materailHDR = 4f;
-
         nodeMeshMaterial = nodeMesh.material;
 
         nodeMeshMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
@@ -69,6 +67,11 @@ public class PathLocation : MonoBehaviour
 
         nodeMeshMaterial.SetTexture("_IconTexture", nodeIconTexture);
         nodeMeshMaterial.SetColor("_BorderColor", borderColor * OWMap_Node.multiplierColorHDR);
+
+        nodeMeshMaterial.SetFloat("_NormalBorderMoveSpeed", OWMap_Node.DEFAULT_BORDER_MOVE_SPEED);
+        nodeMeshMaterial.SetFloat("_FastBorderMoveSpeed", OWMap_Node.SELECTED_BORDER_MOVE_SPEED);
+        nodeMeshMaterial.SetFloat("_FastBorderDuration", OWMap_Node.SELECTED_BORDER_MOVE_DURATION);
+        nodeMeshMaterial.SetFloat("_DoFastBorder", 0f);
     }
 
 }

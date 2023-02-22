@@ -82,6 +82,7 @@ public class OWMap_Node : MonoBehaviour
     public const float SELECTED_DURATION = 0.075f;
     public const float DEFAULT_BORDER_MOVE_SPEED = 0.05f;
     public const float SELECTED_BORDER_MOVE_SPEED = 0.15f;
+    public const float SELECTED_BORDER_MOVE_DURATION = 0.2f;
 
     //NODE ICON
     private Texture nodeIcon;
@@ -120,6 +121,11 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_SelectedDuration", SELECTED_DURATION);
         material.SetFloat("_IsSelected", 0f);
         material.SetFloat("_TimeStartSelected", 0f);
+
+        material.SetFloat("_NormalBorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
+        material.SetFloat("_FastBorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
+        material.SetFloat("_FastBorderDuration", SELECTED_BORDER_MOVE_DURATION);
+        material.SetFloat("_DoFastBorder", 0f);
     }
 
 
@@ -220,18 +226,17 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_IsSelected", 0f);
         material.SetFloat("_TimeStartSelected", Time.time);
-        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
     }
     private void SetHoveredVisuals()
     {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
-        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
     }
     private void SetSelectedVisuals()
     {
         material.SetFloat("_IsSelected", 1f);
-        material.SetFloat("_BorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
+        material.SetFloat("_StartTimeFastBorderMoveSpeed", Time.time);
+        material.SetFloat("_DoFastBorder", 1f);
     }
 
     public void SetSelected()

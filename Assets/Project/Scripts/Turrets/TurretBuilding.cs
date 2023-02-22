@@ -32,6 +32,10 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedPS;
+
     public int CardLevel { get; private set; }
 
 
@@ -45,7 +49,8 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        currentShootTimer = 0.0f;        
+        currentShootTimer = 0.0f;
+        placedPS.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -210,6 +215,9 @@ public class TurretBuilding : RangeBuilding
     {
         HideRangePlane();
         EnableFunctionality();
+
+        placedPS.gameObject.SetActive(true);
+        placedPS.Play();
     }
 
 }
