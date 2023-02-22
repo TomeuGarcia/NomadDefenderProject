@@ -27,6 +27,8 @@ public class CardPartHolder : MonoBehaviour
 
     private bool cardWasSelected = false;
 
+    [HideInInspector] public bool canSelectCard = true;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
@@ -131,6 +133,7 @@ public class CardPartHolder : MonoBehaviour
 
     private void SetSelectedCard(CardPart card)
     {
+        if (!canSelectCard) return;
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
