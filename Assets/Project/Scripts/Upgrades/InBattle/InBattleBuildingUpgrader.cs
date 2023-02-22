@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Enemy;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 
@@ -220,7 +221,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     {
         currentLevel++;
         UpdateLevelText();
-        if (OnTurretUpgrade != null) { OnTurretUpgrade(currentLevel); }
+
+        if(OnTurretUpgrade != null) { OnTurretUpgrade(currentLevel); }
     }
 
     private void UpdateLevelText()

@@ -40,7 +40,7 @@ public class OverworldCardShower : MonoBehaviour
             itCard.OnCardSelected += SelectCard;
             Quaternion rotation = transform.rotation;
             itCard.RootCardTransform.rotation = Quaternion.Euler(90, 0, 0);
-            itCard.InitPositions(Vector3.zero + Vector3.up * 3.5f, Vector3.zero);
+            itCard.InitPositions(Vector3.up * 3.5f, Vector3.zero, itCard.RootCardTransform.position);
             itCard.RootCardTransform.SetParent(transform);
 
         }

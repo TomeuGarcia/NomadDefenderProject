@@ -25,6 +25,9 @@ public class BodyReplaceTutorial : MonoBehaviour
             //bodies.SetActive(false);
             mask1.SetActive(false);
             mask2.SetActive(false);
+
+            cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = false;
+            cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = false;
         }
         
        
@@ -43,6 +46,8 @@ public class BodyReplaceTutorial : MonoBehaviour
         //load cards
         scriptedSequence.NextLine();
         yield return new WaitForSeconds(1.0f);
+        cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
+
         cards.SetActive(true);
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         for (float i = 0.0f; i < 1; i += Time.deltaTime)
@@ -55,9 +60,12 @@ public class BodyReplaceTutorial : MonoBehaviour
         yield return new WaitUntil(() => cardPartReplaceManager.GetCardIsReady() == true); 
         mask1.SetActive(false);
         scriptedSequence.Clear();
-            //load bodies
-            scriptedSequence.NextLine();
+
+        //load bodies
+        scriptedSequence.NextLine();
         yield return new WaitForSeconds(1.0f);
+        cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = true;
+
         bodies.SetActive(true);
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         for (float i = 0.0f; i < 1; i += Time.deltaTime)

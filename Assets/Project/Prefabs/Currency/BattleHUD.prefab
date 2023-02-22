@@ -49,6 +49,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6617860002002708536}
   - component: {fileID: 2115539070688538853}
+  - component: {fileID: 8957982376476687607}
   m_Layer: 10
   m_Name: CardIconsHolder
   m_TagString: Untagged
@@ -100,6 +101,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &8957982376476687607
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377526520455605247}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1449856203115493459
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 55, y: -19.999989}
+  m_AnchoredPosition: {x: 43, y: -19.999989}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &5616656602545355878
@@ -316,6 +329,7 @@ MonoBehaviour:
   currencyCountTextHolder: {fileID: 7826719552263272301}
   currencyCountText: {fileID: 8891730011413891390}
   addedCurrencyText: {fileID: 2412725747262003516}
+  currencyImage: {fileID: 7829667981034856192}
   startColorAddedCurrencyText: {r: 1, g: 1, b: 1, a: 1}
   endColorAddedCurrencyText: {r: 1, g: 1, b: 1, a: 1}
   colorSpentCurrencyText: {r: 0.6698113, g: 0.15481488, b: 0.15481488, a: 1}
@@ -343,10 +357,11 @@ MonoBehaviour:
   canInteractWithDeckUI: 0
   cgDeckUI: {fileID: 5325191135218944496}
   deckUI: {fileID: 8049672562078500895}
-  deckText: {fileID: 3311158692980988382}
+  deckText: {fileID: 4502652076596958925}
   hiddenTextSize: {x: 1.5, y: 1.5, z: 1.5}
   shownTextSize: {x: 1, y: 1, z: 1}
   cardIconsHolder: {fileID: 6617860002002708536}
+  cgCardIconsHolder: {fileID: 8957982376476687607}
   referenceCardIconImage: {fileID: 7064610143775747089}
   spriteHasCard: {fileID: 21300000, guid: 7ff1e715d1ab32a4bafd3a69f93170e9, type: 3}
   spriteNoCard: {fileID: 21300000, guid: 153c9e136dd2c4348bd255a291f1dbe4, type: 3}
@@ -358,6 +373,8 @@ MonoBehaviour:
   canDrawCardColor: {r: 0.20060521, g: 0.8217802, b: 0.8679245, a: 1}
   canNotDrawCardColor: {r: 0.67058825, g: 0.15294118, b: 0.15294118, a: 1}
   blinkDuration: 0.2
+  showSpeedUp: 0
+  canShowDrawCardButton: 0
 --- !u!1 &3036249909464158186
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,8 +1653,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 10.311, y: 0}
+  m_SizeDelta: {x: -20.622, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6254579417800091521
 CanvasRenderer:
@@ -1702,7 +1719,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1884,8 +1901,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 27.499985, y: -5.6739}
-  m_SizeDelta: {x: -155, y: -11.3478}
+  m_AnchoredPosition: {x: 45.973892, y: -5.673897}
+  m_SizeDelta: {x: -109.4597, y: -11.3478}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &9114404017117638326
 GameObject:

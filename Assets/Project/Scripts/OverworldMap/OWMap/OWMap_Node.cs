@@ -12,7 +12,11 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
     [SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
+    [SerializeField] public static float multiplierColorHDR = 4f;
+
     private Color colorInUse = darkGreyColor;
+    public Color BorderColor { get; private set; }
+    public Texture NodeIconTexture { get; private set; }
 
     // INTERACTAVILITY
     // is interactable      ->  player can interact and travel there
@@ -76,6 +80,8 @@ public class OWMap_Node : MonoBehaviour
     private Material material;
     public const float FADE_DURATION = 0.1f;
     public const float SELECTED_DURATION = 0.075f;
+    public const float DEFAULT_BORDER_MOVE_SPEED = 0.05f;
+    public const float SELECTED_BORDER_MOVE_SPEED = 0.15f;
 
     //NODE ICON
     private Texture nodeIcon;
@@ -197,8 +203,7 @@ public class OWMap_Node : MonoBehaviour
         SetIconColor(colorInUse);
         SetCameFromColor(colorInUse, setCameFromConnectionNotInteracted: true);
 
-        material.SetFloat("_IsSelected", 0f);
-        material.SetFloat("_TimeStartSelected", Time.time);
+        SetUnhoveredVisuals();
     }
 
     public void SetHovered()
@@ -208,8 +213,25 @@ public class OWMap_Node : MonoBehaviour
         SetIconColor(lightGreyColor, true);
         //SetCameFromColor(lightGreyColor);
 
+        SetHoveredVisuals();
+    }
+
+    private void SetUnhoveredVisuals()
+    {
+        material.SetFloat("_IsSelected", 0f);
+        material.SetFloat("_TimeStartSelected", Time.time);
+        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
+    }
+    private void SetHoveredVisuals()
+    {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
+        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
+    }
+    private void SetSelectedVisuals()
+    {
+        material.SetFloat("_IsSelected", 1f);
+        material.SetFloat("_BorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
     }
 
     public void SetSelected()
@@ -229,7 +251,9 @@ public class OWMap_Node : MonoBehaviour
         if (owMapGameManager != null)
         {
             owMapGameManager.OnMapNodeSelected(this);
-        }        
+        }
+
+        SetSelectedVisuals();
     }
 
     private void SetIconColor(Color color, bool mixWithColorInUse = false)
@@ -238,7 +262,7 @@ public class OWMap_Node : MonoBehaviour
         {
             color = Color.Lerp(color, colorInUse, 0.5f);
         }
-        material.SetColor("_IconColor", color);
+        material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
     }
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
     {
@@ -259,9 +283,11 @@ public class OWMap_Node : MonoBehaviour
             }
         }
     }
+
     public void SetBorderColor(Color color)
     {
-        material.SetColor("_BorderColor", color);
+        BorderColor = color;
+        material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
     }
 
 
@@ -343,6 +369,8 @@ public class OWMap_Node : MonoBehaviour
 
     public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
     {
+        NodeIconTexture = mapIconTexture;
+
         nodeClass = _nodeClass;
         nodeClass.SetIconTexture(mapIconTexture);
         nodeIcon = mapIconTexture;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PathLocation : MonoBehaviour
@@ -10,6 +8,11 @@ public class PathLocation : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material deadMaterial;
     [SerializeField] private HealthHUD healthHUD;
+
+    [Header("NODE VISUALS")]
+    [SerializeField] private MeshRenderer nodeMesh;
+    private Material nodeMeshMaterial;
+
 
 
     public bool IsDead => healthSystem.IsDead();
@@ -40,6 +43,32 @@ public class PathLocation : MonoBehaviour
         meshRenderer.material = deadMaterial;
 
         if (OnDeath != null) OnDeath();
+    }
+
+
+    public void InitNodeVisuals(Texture nodeIconTexture, Color borderColor)
+    {
+        float materailHDR = 4f;
+
+        nodeMeshMaterial = nodeMesh.material;
+
+        nodeMeshMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
+        nodeMeshMaterial.SetColor("_IconColor", OWMap_Node.darkGreyColor * OWMap_Node.multiplierColorHDR);
+        nodeMeshMaterial.SetFloat("_IsInteractable", 0f);
+        nodeMeshMaterial.SetFloat("_NoiseTwitchingEnabled", 0f);
+        nodeMeshMaterial.SetFloat("_IsDestroyed", 0f);
+
+        nodeMeshMaterial.SetFloat("_FadeDuration", OWMap_Node.FADE_DURATION);
+        nodeMeshMaterial.SetFloat("_TimeStartFade", 0f);
+        nodeMeshMaterial.SetFloat("_IsFadingAway", 0f);
+
+        nodeMeshMaterial.SetFloat("_SelectedDuration", OWMap_Node.SELECTED_DURATION);
+        nodeMeshMaterial.SetFloat("_IsSelected", 0f);
+        nodeMeshMaterial.SetFloat("_TimeStartSelected", 0f);
+
+
+        nodeMeshMaterial.SetTexture("_IconTexture", nodeIconTexture);
+        nodeMeshMaterial.SetColor("_BorderColor", borderColor * OWMap_Node.multiplierColorHDR);
     }
 
 }
