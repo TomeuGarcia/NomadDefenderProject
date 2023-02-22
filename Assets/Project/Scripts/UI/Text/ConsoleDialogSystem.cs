@@ -26,7 +26,7 @@ public class ConsoleDialogSystem : MonoBehaviour
 
     private void OnValidate()
     {
-        openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:" + System.Convert.ToChar(92);
+        openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
         closingContext = ">" + "</color>";
     }
 
@@ -42,23 +42,27 @@ public class ConsoleDialogSystem : MonoBehaviour
         if (consoleLines.Count >= maxLinesOnScreen)
         {
             RemoveLine(consoleLines.Count - 1);
+            for (int i = 0; i < consoleLines.Count; i++)
+            {
+                consoleLines[i].GetComponent<RectTransform>().position += lineSeparation;
+            }
         }
 
         //Make room for the new line of text
-        if (consoleLines.Count > 0)
-        {
-            for(int i = 0; i < consoleLines.Count; i++)
-            {
-                consoleLines[i].GetComponent<RectTransform>().position -= lineSeparation;
-            }
-        }
+        //if (consoleLines.Count > 0)
+        //{
+        //    for(int i = 0; i < consoleLines.Count; i++)
+        //    {
+        //        consoleLines[i].GetComponent<RectTransform>().position -= lineSeparation;
+        //    }
+        //}
 
         //Get the text
         consoleLines.Insert(0, textPool.GetObject());
         consoleLines[0].SetActive(true);
         consoleLines[0].transform.SetParent(textPool.transform, false);
         consoleLines[0].GetComponent<RectTransform>().pivot = new Vector2(0f, 0.5f);
-        consoleLines[0].GetComponent<RectTransform>().anchoredPosition = initialLinePosition;
+        consoleLines[0].GetComponent<RectTransform>().anchoredPosition = initialLinePosition - lineSeparation * (consoleLines.Count - 1);
 
         //Configure the TextDecoder
         TextDecoder decoder = consoleLines[0].GetComponent<TextDecoder>();
