@@ -68,6 +68,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         ///Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        cardPartReplaceManager.CardPartHolder.PlayBaseTutorialBlinkAnimation();
         yield return new WaitForSeconds(3.0f);
 
         ///Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>

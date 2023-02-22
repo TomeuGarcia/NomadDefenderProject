@@ -70,6 +70,7 @@ public class BodyReplaceTutorial : MonoBehaviour
         // Loading Body card stats: <color=#FF003E>ATTACK</color> and <color=#FFF345>CADENCY</color>
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        cardPartReplaceManager.CardPartHolder.PlayBodyTutorialBlinkAnimation();
         yield return new WaitForSeconds(4.0f);
 
         //Waiting for <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
