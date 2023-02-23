@@ -12,6 +12,9 @@ public class HealthHUD : MonoBehaviour
     [SerializeField] private bool startHidden;
     [SerializeField] private RectTransform canvasRectTransform;
 
+    [Header("FEEDBACK")]
+    [SerializeField] private Image armorFlashImage;
+    private IEnumerator armorBreak;
 
 
     public void Init(HealthSystem healthSystem)
@@ -39,11 +42,20 @@ public class HealthHUD : MonoBehaviour
         {
             armorImage.enabled = false;
             //feedback to destroy armor
+
+            armorBreak = ArmorBreak();
+            StartCoroutine(armorBreak);
         }
     }
 
     public void Hide()
     {
+        if(armorBreak != null)
+        {
+            StopCoroutine(armorBreak);
+            armorFlashImage.enabled = false;
+        }
+
         canvasGroup.alpha = 0.0f;
     }
 
@@ -65,4 +77,25 @@ public class HealthHUD : MonoBehaviour
         }
     }
 
+    private IEnumerator ArmorBreak()
+    {
+        Color32 color = armorFlashImage.color;
+
+        //yield return new WaitForSeconds(0.1f);
+
+        armorFlashImage.enabled = true;
+        color.a = (byte)75;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+        color.a = (byte)50;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+        color.a = (byte)25;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+
+        color.a = (byte)255;
+        armorFlashImage.color = color;
+        armorFlashImage.enabled = false;
+    }
 }
