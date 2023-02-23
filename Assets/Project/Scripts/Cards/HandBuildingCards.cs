@@ -822,4 +822,9 @@ public class HandBuildingCards : MonoBehaviour
         handSideBlockerRight.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerRight.position).normalized, handCameraTransform.up);
     }
 
+    public List<BuildingCard> GetCards()
+    {
+        return cards;
+    }
+
 }

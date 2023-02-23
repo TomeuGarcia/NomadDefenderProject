@@ -26,6 +26,7 @@ public class CardDrawer : MonoBehaviour
     [HideInInspector] public bool cheatDrawCardActivated = true;
     [HideInInspector] public bool canRedraw = true;
     [HideInInspector] public bool canDisplaySpeedUp = true;
+    [HideInInspector] public bool displayRedrawsOnGameStart = true;
 
 
     private void OnEnable()
@@ -53,7 +54,7 @@ public class CardDrawer : MonoBehaviour
 
     private void Start()
     {
-        GameStartSetup(2.5f, true);
+        GameStartSetup(2.5f, displayRedrawsOnGameStart);
     }
 
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd)
