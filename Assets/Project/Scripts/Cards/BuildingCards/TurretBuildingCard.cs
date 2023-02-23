@@ -363,7 +363,7 @@ public class TurretBuildingCard : BuildingCard
         turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
     }
 
-    private bool IsCardLevelMaxed()
+    public bool IsCardLevelMaxed()
     {
         return turretCardParts.cardLevel == TurretCardParts.MAX_CARD_LEVEL;
     }
