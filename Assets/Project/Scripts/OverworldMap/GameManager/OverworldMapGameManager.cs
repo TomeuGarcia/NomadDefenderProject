@@ -198,7 +198,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
     }
 
-    private bool IsCurrentNodeBattle()
+    protected bool IsCurrentNodeBattle()
     {        
         return currentNode.GetNodeType() == NodeEnums.NodeType.BATTLE;
     }
