@@ -49,11 +49,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //1
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.NextLine(); //2
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
 
         scriptedSequence.NextLine(); //3 -> Simulation will FAIL if no nodes are available
@@ -65,12 +65,12 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //4
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
         scriptedSequence.NextLine(); //5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
         scriptedSequence.NextLine(); //6 -> It better not happen again
@@ -102,19 +102,19 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //10 -> I
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.NextLine(); //11 -> Will
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.NextLine(); //12 -> Be
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.NextLine(); //13 -> Watching
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();
         yield return new WaitForSeconds(1.0f);
