@@ -94,6 +94,10 @@ public class OWMap_Node : MonoBehaviour
 
     private OverworldMapGameManager owMapGameManager;
 
+
+    [SerializeField] private ParticleSystem particleSystem;
+
+
     public void Print()
     {
         Debug.Log("NODE: Lvl-" + mapReferencesData.ownerlevelIndex + ", Idx-" + mapReferencesData.nodeIndexInLevel);
@@ -126,6 +130,8 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_FastBorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
         material.SetFloat("_FastBorderDuration", SELECTED_BORDER_MOVE_DURATION);
         material.SetFloat("_DoFastBorder", 0f);
+
+        particleSystem.gameObject.SetActive(false);
     }
 
 
@@ -268,7 +274,11 @@ public class OWMap_Node : MonoBehaviour
             color = Color.Lerp(color, colorInUse, 0.5f);
         }
         material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
+
+        particleSystem.gameObject.SetActive(true);
+        particleSystem.Play();
     }
+
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
     {
         if (mixWithDarkGrey)
