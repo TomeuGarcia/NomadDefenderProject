@@ -39,7 +39,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         speedUpButton.SetActive(false);
 
 
-        redrawInterface.GetComponent<CanvasGroup>().alpha = 0;
+        redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
         redrawInterface.SetActive(false);
 
         //Make cards no interactable
@@ -82,16 +82,19 @@ public class BattleTutorialManager2 : MonoBehaviour
         //Activate redraw
 
         redrawInterface.SetActive(true);
+        redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
+        yield return new WaitForSeconds(0.5f);
         cardDrawer.StartRedrawButtonAnimation();
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
-        //Make cards interactable
+
 
         //Redraw shown
 
         scriptedSequence.NextLine(); //2 -> Successfully showing
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
+        yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();
 
@@ -109,15 +112,15 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //6 -> /Redraw> Waiting to finish Redraw...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted()); //Wait until button clicked
+        yield return new WaitUntil(() => !hand.isInRedrawPhase); //Wait until button clicked
         yield return new WaitForSeconds(1.0f);
 
+        //Make cards interactable
         SetCardsInteractable();
 
 
 
         scriptedSequence.Clear();
-
-        //Currency Finished showing
 
 
         scriptedSequence.NextLine(); //7 -> /Redraw> Finished

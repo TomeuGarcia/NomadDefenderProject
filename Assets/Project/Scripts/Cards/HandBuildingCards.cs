@@ -21,7 +21,7 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private BuildingPlacer buildingPlacer;
     private int initialRedraws = 3;
     private int redrawsLeft;
-    private bool isInRedrawPhase = false;
+    public bool isInRedrawPhase { get; private set; } = false;
 
 
     private List<BuildingCard> cards;
