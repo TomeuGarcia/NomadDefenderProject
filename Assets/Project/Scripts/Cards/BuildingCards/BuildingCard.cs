@@ -324,7 +324,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => { EnableMouseInteraction(); 
+            .OnComplete(() => { //EnableMouseInteraction(); 
                                 if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
             });
     }
@@ -357,10 +357,12 @@ public abstract class BuildingCard : MonoBehaviour
     public void EnableMouseInteraction()
     {
         cardCollider.enabled = true;
+        //Debug.Log("Interaction ON");
     }
     public void DisableMouseInteraction()
     {
         cardCollider.enabled = false;
+        //Debug.Log("Interaction OFF");
     }
 
     public void ReenableMouseInteraction()
