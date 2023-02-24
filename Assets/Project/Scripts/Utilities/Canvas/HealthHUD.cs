@@ -31,11 +31,11 @@ public class HealthHUD : MonoBehaviour
         SetArmorImageVisibility();
     }
 
-    private void UpdateHealthImage()
+    private void UpdateHealthImage(HealthSystem.UpdateType updateType)
     {
         healthImage.fillAmount = healthSystem.HealthRatio;
     }
-    private void UpdateArmorImage()
+    private void UpdateArmorImage(HealthSystem.UpdateType updateType)
     {
         Debug.Log(healthSystem.GetArmorRatio());
         armorImage.fillAmount = healthSystem.GetArmorRatio();

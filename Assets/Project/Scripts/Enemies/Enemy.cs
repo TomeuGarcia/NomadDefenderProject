@@ -228,12 +228,26 @@ public class Enemy : MonoBehaviour
     }
 
 
+
     //ARMOR
-    private void OnArmorUpdated()
+    private void OnArmorUpdated(HealthSystem.UpdateType updateType)
     {
-        if(!healthSystem.HasArmor())
+        switch (updateType)
         {
-            armorCover.enabled = false;
+            case HealthSystem.UpdateType.INCREASE:
+                break;
+            case HealthSystem.UpdateType.DECREASE:
+                break;
+            case HealthSystem.UpdateType.GAIN:
+                //ACTIVATE SHIELD
+                //LERP "_DisappearAmount" to 0
+                break;
+            case HealthSystem.UpdateType.LOSE:
+                //SHATTER SHIELD
+                break;
+            case HealthSystem.UpdateType.IGNORE:
+            default:
+                break;
         }
     }
 }
