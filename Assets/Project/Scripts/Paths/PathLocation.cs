@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 public class PathLocation : MonoBehaviour
 {
@@ -13,6 +15,24 @@ public class PathLocation : MonoBehaviour
     [SerializeField] private MeshRenderer nodeMesh;
     private Material nodeMeshMaterial;
 
+    [System.Serializable]
+    private struct DamagedVisuals
+    {
+        public NodeEnums.HealthState healthState;
+        public ParticleSystem takeDamageParticles;
+
+        public void Activate()
+        {
+            takeDamageParticles.gameObject.SetActive(true);
+        }
+        public void Deactivate()
+        {
+            takeDamageParticles.gameObject.SetActive(false);
+        }
+    }
+    [Header("DAMAGED VISUALS")]
+    [SerializeField] private DamagedVisuals[] damagedVisualsList;
+    [SerializeField] private Dictionary<NodeEnums.HealthState, DamagedVisuals> mappedDamagedVisuals;
 
 
     public bool IsDead => healthSystem.IsDead();
@@ -26,21 +46,32 @@ public class PathLocation : MonoBehaviour
     {
         healthSystem = new HealthSystem(health);
         healthHUD.Init(healthSystem);
+        InitParticles();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D)) TakeDamage(1);
     }
 
     public void TakeDamage(int damageAmount)
     {
         healthSystem.TakeDamage(damageAmount);
-        
+
+        SetDamagedVisuals();
+
         if (healthSystem.IsDead())
         {
-            Die();
+            Die();            
         }   
     }
 
     private void Die()
     {
         meshRenderer.material = deadMaterial;
+
+        nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_redColor);
+        nodeMeshMaterial.SetFloat("_IsDestroyed", 1f);
 
         if (OnDeath != null) OnDeath();
     }
@@ -51,9 +82,10 @@ public class PathLocation : MonoBehaviour
         nodeMeshMaterial = nodeMesh.material;
 
         nodeMeshMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
-        nodeMeshMaterial.SetColor("_IconColor", OWMap_Node.darkGreyColor * OWMap_Node.multiplierColorHDR);
+        nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_darkGreyColor);
         nodeMeshMaterial.SetFloat("_IsInteractable", 0f);
         nodeMeshMaterial.SetFloat("_NoiseTwitchingEnabled", 0f);
+        nodeMeshMaterial.SetFloat("_IsDamaged", 0f);
         nodeMeshMaterial.SetFloat("_IsDestroyed", 0f);
 
         nodeMeshMaterial.SetFloat("_FadeDuration", OWMap_Node.FADE_DURATION);
@@ -66,12 +98,41 @@ public class PathLocation : MonoBehaviour
 
 
         nodeMeshMaterial.SetTexture("_IconTexture", nodeIconTexture);
-        nodeMeshMaterial.SetColor("_BorderColor", borderColor * OWMap_Node.multiplierColorHDR);
+        nodeMeshMaterial.SetColor("_BorderColor", borderColor);
 
         nodeMeshMaterial.SetFloat("_NormalBorderMoveSpeed", OWMap_Node.DEFAULT_BORDER_MOVE_SPEED);
         nodeMeshMaterial.SetFloat("_FastBorderMoveSpeed", OWMap_Node.SELECTED_BORDER_MOVE_SPEED);
         nodeMeshMaterial.SetFloat("_FastBorderDuration", OWMap_Node.SELECTED_BORDER_MOVE_DURATION);
         nodeMeshMaterial.SetFloat("_DoFastBorder", 0f);
+    }
+
+
+    private void InitParticles()
+    {
+        mappedDamagedVisuals = new Dictionary<NodeEnums.HealthState, DamagedVisuals>();
+        foreach (DamagedVisuals damagedVisuals in damagedVisualsList)
+        {
+            damagedVisuals.Deactivate();
+            mappedDamagedVisuals[damagedVisuals.healthState] = damagedVisuals;
+        }        
+    }
+
+    private void SetDamagedVisuals()
+    {
+        NodeEnums.HealthState healthState = TDGameManager.ComputeHealthState(healthSystem);
+
+
+        if (!mappedDamagedVisuals.ContainsKey(healthState)) return;
+
+        DamagedVisuals damagedVisuals = mappedDamagedVisuals[healthState];
+        
+        damagedVisuals.Activate();
+        damagedVisuals.takeDamageParticles.Clear(true);
+        damagedVisuals.takeDamageParticles.Play();
+
+        nodeMeshMaterial.SetFloat("_IsDamaged", 1f);
+        nodeMeshMaterial.SetFloat("_StartTimeBorderFlash", Time.time);
+
     }
 
 }

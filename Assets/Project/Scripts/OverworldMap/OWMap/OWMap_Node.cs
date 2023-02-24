@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class OWMap_Node : MonoBehaviour
 {
-    [SerializeField] public static Color darkGreyColor =   new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    [SerializeField] public static Color lightGreyColor =  new Color(.9f, .9f, .9f);
-    [SerializeField] public static Color blueColor =       new Color(38f / 255f, 142f / 255f, 138f / 255f);
+    //[SerializeField] public static Color darkGreyColor =   new Color(106f / 255f, 106f / 255f, 106f / 255f);
+    //[SerializeField] public static Color lightGreyColor =  new Color(.9f, .9f, .9f);
+    //[SerializeField] public static Color blueColor =       new Color(38f / 255f, 142f / 255f, 138f / 255f);
 
-    [SerializeField] public static Color yellowColor =     new Color(190f / 255f, 190f / 255f, 50f / 255f);
-    [SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
-    [SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
+    //[SerializeField] public static Color yellowColor =     new Color(190f / 255f, 190f / 255f, 50f / 255f);
+    //[SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
+    //[SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
-    [SerializeField] public static float multiplierColorHDR = 4f;
+    //[SerializeField] public static float multiplierColorHDR = 4f;
 
-    private Color colorInUse = darkGreyColor;
+    private Color colorInUse = OWMapDecoratorUtils.s_darkGreyColor;    
     public Color BorderColor { get; private set; }
     public Texture NodeIconTexture { get; private set; }
 
@@ -110,12 +110,13 @@ public class OWMap_Node : MonoBehaviour
 
         material = meshRenderer.material;
 
-        colorInUse = darkGreyColor;
+        colorInUse = OWMapDecoratorUtils.s_darkGreyColor;
         material.SetFloat("_TimeOffset", Random.Range(0f, 1f));
-        material.SetColor("_BorderColor", darkGreyColor);
-        material.SetColor("_IconColor", darkGreyColor);
+        material.SetColor("_BorderColor", OWMapDecoratorUtils.s_darkGreyColor);
+        material.SetColor("_IconColor", OWMapDecoratorUtils.s_darkGreyColor);
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
+        material.SetFloat("_IsDamaged", 0f);
         material.SetFloat("_IsDestroyed", 0f);
 
         material.SetFloat("_FadeDuration", FADE_DURATION);
@@ -222,7 +223,7 @@ public class OWMap_Node : MonoBehaviour
     {
         interactState = NodeInteractState.HOVERED;
 
-        SetIconColor(lightGreyColor, true);
+        SetIconColor(OWMapDecoratorUtils.s_lightGreyColor, true);
         //SetCameFromColor(lightGreyColor);
 
         SetHoveredVisuals();
@@ -250,7 +251,7 @@ public class OWMap_Node : MonoBehaviour
         interactState = NodeInteractState.SELECTED;
 
         //SetColor(blueColor);
-        SetCameFromColor(blueColor);
+        SetCameFromColor(OWMapDecoratorUtils.s_blueColor2);
 
         DisableInteraction();
         if (!mapReferencesData.isLastLevelNode)
@@ -273,7 +274,8 @@ public class OWMap_Node : MonoBehaviour
         {
             color = Color.Lerp(color, colorInUse, 0.5f);
         }
-        material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
+        //material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
+        material.SetColor("_IconColor", color);
 
         particleSystem.gameObject.SetActive(true);
         particleSystem.Play();
@@ -283,14 +285,14 @@ public class OWMap_Node : MonoBehaviour
     {
         if (mixWithDarkGrey)
         {
-            color = Color.Lerp(color, darkGreyColor, 0.5f);
+            color = Color.Lerp(color, OWMapDecoratorUtils.s_darkGreyColor, 0.5f);
         }
 
         if (cameFromConnection != null)
         {
             if (setCameFromConnectionNotInteracted)
             {
-                cameFromConnection.SetColor(darkGreyColor);
+                cameFromConnection.SetColor(OWMapDecoratorUtils.s_darkGreyColor);
             }
             else
             {
@@ -302,7 +304,8 @@ public class OWMap_Node : MonoBehaviour
     public void SetBorderColor(Color color)
     {
         BorderColor = color;
-        material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
+        //material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
+        material.SetColor("_BorderColor", color);
     }
 
 
@@ -314,26 +317,29 @@ public class OWMap_Node : MonoBehaviour
         {
             case NodeEnums.HealthState.UNDAMAGED:
                 {
-                    SetIconColor(blueColor);
-                    colorInUse = blueColor;
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
                 {
-                    SetIconColor(yellowColor);
-                    colorInUse = yellowColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    SetIconColor(OWMapDecoratorUtils.s_yellowColor);
+                    colorInUse = OWMapDecoratorUtils.s_yellowColor;
                 }
                 break;
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
-                    SetIconColor(orangeColor);
-                    colorInUse = orangeColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    SetIconColor(OWMapDecoratorUtils.s_orangeColor);
+                    colorInUse = OWMapDecoratorUtils.s_orangeColor;
                 }
                 break;
             case NodeEnums.HealthState.DESTROYED:
                 {
-                    SetIconColor(redColor);
-                    colorInUse = redColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    SetIconColor(OWMapDecoratorUtils.s_redColor);
+                    colorInUse = OWMapDecoratorUtils.s_redColor;
                 }
                 break;
             default:
@@ -404,8 +410,9 @@ public class OWMap_Node : MonoBehaviour
     }
     public void SetDestroyedVisuals()
     {
-        SetIconColor(redColor);
-        SetCameFromColor(redColor);
+        SetIconColor(OWMapDecoratorUtils.s_redColor);
+        SetCameFromColor(OWMapDecoratorUtils.s_redColor);
+        material.SetFloat("_IsDamaged", 1f);
         material.SetFloat("_IsDestroyed", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
     }
