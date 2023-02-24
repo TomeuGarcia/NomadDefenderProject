@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
+    [SerializeField] private MeshRenderer armorCover;
 
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
@@ -59,6 +60,8 @@ public class Enemy : MonoBehaviour
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
+
+        healthSystem.OnArmorUpdated += OnArmorUpdated;
     }
 
     private void OnValidate()
@@ -92,6 +95,13 @@ public class Enemy : MonoBehaviour
         ResetStats();
 
         healthHUD.Hide();
+
+        if(healthSystem.HasArmor())
+        {
+            armorCover.enabled = true;
+        } else {
+            armorCover.enabled = false;
+        }
     }
 
     private void ResetStats()
@@ -215,5 +225,15 @@ public class Enemy : MonoBehaviour
     public bool IsDead()
     {
         return healthSystem.IsDead();
+    }
+
+
+    //ARMOR
+    private void OnArmorUpdated()
+    {
+        if(!healthSystem.HasArmor())
+        {
+            armorCover.enabled = false;
+        }
     }
 }

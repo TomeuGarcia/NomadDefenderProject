@@ -14,6 +14,7 @@ public class HealthHUD : MonoBehaviour
 
     [Header("FEEDBACK")]
     [SerializeField] private Image armorFlashImage;
+    [SerializeField] private ParticleSystem armorShatterParticles;
     private IEnumerator armorBreak;
 
 
@@ -79,22 +80,25 @@ public class HealthHUD : MonoBehaviour
 
     private IEnumerator ArmorBreak()
     {
+        armorShatterParticles.Play();
+
         Color32 color = armorFlashImage.color;
 
-        //yield return new WaitForSeconds(0.1f);
-
         armorFlashImage.enabled = true;
-        color.a = (byte)75;
+        color.a = 100;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.04f);
+        color.a = 75;
         armorFlashImage.color = color;
         yield return new WaitForSeconds(0.02f);
-        color.a = (byte)50;
+        color.a = 50;
         armorFlashImage.color = color;
         yield return new WaitForSeconds(0.02f);
-        color.a = (byte)25;
+        color.a = 25;
         armorFlashImage.color = color;
         yield return new WaitForSeconds(0.02f);
 
-        color.a = (byte)255;
+        color.a = 255;
         armorFlashImage.color = color;
         armorFlashImage.enabled = false;
     }
