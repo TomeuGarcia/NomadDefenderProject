@@ -14,12 +14,19 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     [SerializeField] private PathLocation firstBase;
 
+    [SerializeField] private TurretCardParts watcherCardScriptableObject;
+
+    [SerializeField] private GameObject obstacleTile;
+
+    [SerializeField] private DeckCreator deckCreator;
+
+    [SerializeField] private Tile watcherCardTile;
+
+    [SerializeField] private CurrencyCounter currencyCounter;
+
 
     //Speed Up Button (can set alpha to 0)
     [SerializeField] private GameObject speedUpButton;
-
-    //DeckUI (can set alpha to 0)
-    [SerializeField] private GameObject deckInterface;
 
     //Card Drawer -> Canvas -> BackgroundImage (can set alpha to 0)
     [SerializeField] private GameObject redrawInterface;
@@ -43,6 +50,8 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
         redrawInterface.SetActive(false);
+
+        watcherCardTile.gameObject.SetActive(false);
 
         //Make cards no interactable
         SetCardsNonInteractable();
@@ -155,13 +164,29 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
-        //TODO Create new turret
+        //Create new turret
+
+        TurretBuildingCard card = deckCreator.GetUninitializedNewTurretCard();
+        card.ResetParts(watcherCardScriptableObject);
+
+        //Place new Turret
+        obstacleTile.SetActive(false);
+        watcherCardTile.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
+
+        PlaceSelectedBuilding(watcherCardTile, card);
 
         //Wait until Wathcer's turret is placed
+        yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine(); //11 -> Don't get used to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.0f);
+
+        //Resume time with a lerp
 
         for (float i = 0; i < 1.0f; i += 0.005f)
         {
@@ -170,45 +195,21 @@ public class BattleTutorialManager2 : MonoBehaviour
         }
 
         Time.timeScale = 1.0f;
-        //Resume time with a lerp
+        
+    }
 
-        /*
-        //tutoCardDrawer.tutorialCard.isInteractable = false;
-        yield return new WaitForSeconds(1.5f);
+    private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)
+    {
+        tile.isOccupied = true;
 
+        selectedBuildingCard.copyBuildingPrefab.SetActive(true);
+        selectedBuildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
 
-     
+        Building selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
+        selectedBuilding.ShowRangePlane();
 
+        selectedBuilding.GotPlaced();
 
-        scriptedSequence.NextLine();// 13
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
-
-        //Finishes Cards Tutorial
-
-
-
-        scriptedSequence.Clear();
-        //tutoCardDrawer.tutorialCard.isInteractable = true;
-
-        yield return new WaitForSeconds(1.0f);
-
-
-
-        //Starts Deck Tutorial
-        yield return new WaitUntil(() => deckInterface.activeInHierarchy);
-
-
-        //Second Wave (2/2)
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        scriptedSequence.Clear();
-
-        //Last Wave
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSecondsRealtime(4.0f);
-        */
+        //Maybe play a special sound
     }
 }
