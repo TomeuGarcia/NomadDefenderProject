@@ -9,7 +9,7 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { BASIC, FAST, TANK }
+    public enum EnemyType { BASIC, FAST, TANK,BASIC_ARMORED,FAST_ARMORED,TANK_ARMORED, ARMOR_TRUCK}
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;

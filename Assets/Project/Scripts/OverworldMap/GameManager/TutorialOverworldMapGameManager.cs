@@ -7,6 +7,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     [Header("TUTORIAL")]
     [SerializeField] protected OWMapTutorialManager owMapTutorial;
     [SerializeField] protected OWMapTutorialManager2 owMapTutorial2;
+    bool firstBattleResultApplied = false;
+
 
     protected override void Init()
     {
@@ -65,11 +67,22 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     {
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
 
-        for (int i = 0; i < nodeResults.Length; ++i)
+        if (firstBattleResultApplied)
         {
-            //nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
-            nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // Hardcoded to always apply UNDAMAGED
+            for (int i = 0; i < nodeResults.Length; ++i)
+            {
+                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
+            }
         }
+        else
+        {
+            firstBattleResultApplied = true;
+            for (int i = 0; i < nodeResults.Length; ++i)
+            {
+                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // Hardcoded to always apply UNDAMAGED
+            }
+        }
+
     }
 
 }
