@@ -24,7 +24,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
-    [SerializeField] private MeshRenderer armorCover;
+    [SerializeField] private EnemyFeedback enemyFeedback;
+    //[SerializeField] private MeshRenderer armorCover;
 
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
@@ -61,7 +62,7 @@ public class Enemy : MonoBehaviour
 
         originalMeshLocalScale = MeshTransform.localScale;
 
-        healthSystem.OnArmorUpdated += OnArmorUpdated;
+        healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
     }
 
     private void OnValidate()
@@ -96,12 +97,7 @@ public class Enemy : MonoBehaviour
 
         healthHUD.Hide();
 
-        if(healthSystem.HasArmor())
-        {
-            armorCover.enabled = true;
-        } else {
-            armorCover.enabled = false;
-        }
+        enemyFeedback.ResetEnemy(healthSystem.HasArmor());
     }
 
     private void ResetStats()
@@ -225,29 +221,5 @@ public class Enemy : MonoBehaviour
     public bool IsDead()
     {
         return healthSystem.IsDead();
-    }
-
-
-
-    //ARMOR
-    private void OnArmorUpdated(HealthSystem.UpdateType updateType)
-    {
-        switch (updateType)
-        {
-            case HealthSystem.UpdateType.INCREASE:
-                break;
-            case HealthSystem.UpdateType.DECREASE:
-                break;
-            case HealthSystem.UpdateType.GAIN:
-                //ACTIVATE SHIELD
-                //LERP "_DisappearAmount" to 0
-                break;
-            case HealthSystem.UpdateType.LOSE:
-                //SHATTER SHIELD
-                break;
-            case HealthSystem.UpdateType.IGNORE:
-            default:
-                break;
-        }
     }
 }

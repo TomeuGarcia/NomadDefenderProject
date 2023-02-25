@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyArmorCover_Mat
+  m_Name: TankEnemyArmorCover_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 75226645a0cf0ef4e8c7470f901d8ae6,
     type: 3}
   m_ValidKeywords: []
@@ -50,10 +50,12 @@ Material:
     m_Floats:
     - _AppearCoef: 0.5
     - _DisappearCoef: 0
+    - _InitTimeOffset: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Scale: 0.1
     - _StipRotation: 6
-    - _StripFactor: 0.2
+    - _StripFactor: 0.18
     - _StripWidth: 0.175
     m_Colors:
     - _AlphaClamp: {r: 0.1, g: 1, b: 0, a: 0}
