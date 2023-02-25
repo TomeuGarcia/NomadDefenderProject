@@ -70,9 +70,6 @@ public class PathLocation : MonoBehaviour
     {
         meshRenderer.material = deadMaterial;
 
-        nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_redColor);
-        nodeMeshMaterial.SetFloat("_IsDestroyed", 1f);
-
         if (OnDeath != null) OnDeath();
     }
 
@@ -130,9 +127,27 @@ public class PathLocation : MonoBehaviour
         damagedVisuals.takeDamageParticles.Clear(true);
         damagedVisuals.takeDamageParticles.Play();
 
+
         nodeMeshMaterial.SetFloat("_IsDamaged", 1f);
         nodeMeshMaterial.SetFloat("_StartTimeBorderFlash", Time.time);
-
+        if (healthState == NodeEnums.HealthState.DESTROYED)
+        {
+            nodeMeshMaterial.SetFloat("_IsDestroyed", 1f);
+            nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+            nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_redColor);
+        }
+        else if (healthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            nodeMeshMaterial.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
+            nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+            nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_blueColor);
+        }
+        else
+        {
+            nodeMeshMaterial.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
+            nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_yellowColor);
+            nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_blueColor);
+        }
     }
 
 }

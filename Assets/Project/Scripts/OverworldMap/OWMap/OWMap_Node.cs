@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -136,7 +137,6 @@ public class OWMap_Node : MonoBehaviour
         destroyedParticles.gameObject.SetActive(false);
     }
 
-
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
     {
         float centerDisplacement = (1f - numLevelNodes) / 2.0f;
@@ -187,7 +187,7 @@ public class OWMap_Node : MonoBehaviour
     {
         if (!isInteractable) return;
 
-        SetSelected();
+        SetSelected(true);
     }
 
     public void EnableInteraction()
@@ -247,7 +247,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_DoFastBorder", 1f);
     }
 
-    public void SetSelected()
+    public void SetSelected(bool wasSelectedByPlayer)
     {
         interactState = NodeInteractState.SELECTED;
 
@@ -263,7 +263,7 @@ public class OWMap_Node : MonoBehaviour
 
         if (owMapGameManager != null)
         {
-            owMapGameManager.OnMapNodeSelected(this);
+            owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
 
         SetSelectedVisuals();
@@ -441,6 +441,22 @@ public class OWMap_Node : MonoBehaviour
         destroyedParticles.gameObject.SetActive(true);
         destroyedParticles.Clear(true);
         destroyedParticles.Play();
+
+        //StartCoroutine(LoopingSparksSound());
+    }
+
+    private IEnumerator LoopingSparksSound()
+    {
+        while (true)
+        {
+            int r = Random.Range(2, 4);
+            for (int i = 0; i < r; ++i)
+            {
+                GameAudioManager.GetInstance().PlaySparksSound();
+                yield return new WaitForSeconds(Random.Range(0.1f, 0.2f));
+            }
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
+        }
     }
 
 }

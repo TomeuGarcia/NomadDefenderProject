@@ -634,7 +634,7 @@ public class HandBuildingCards : MonoBehaviour
 
     private void HideHand(bool playSound)
     {
-        Debug.Log("Hide hand");
+        //Debug.Log("Hide hand");
         isHandHidden = true;
 
         isHandBeingHidden = true;

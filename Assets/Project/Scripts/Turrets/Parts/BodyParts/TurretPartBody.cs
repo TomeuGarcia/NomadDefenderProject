@@ -60,6 +60,8 @@ public class TurretPartBody : ScriptableObject
 
         this.partName = other.partName;
         this.abilityDescription = other.abilityDescription;
+
+        this.bodyType = other.bodyType;
     }
 
 
