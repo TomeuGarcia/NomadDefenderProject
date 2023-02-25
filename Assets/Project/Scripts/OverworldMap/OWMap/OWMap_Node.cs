@@ -94,8 +94,9 @@ public class OWMap_Node : MonoBehaviour
 
     private OverworldMapGameManager owMapGameManager;
 
-
-    [SerializeField] private ParticleSystem particleSystem;
+    [Header("PARTICLES")]
+    [SerializeField] private Transform particlesParent;
+    [SerializeField] private ParticleSystem destroyedParticles;
 
 
     public void Print()
@@ -132,7 +133,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_FastBorderDuration", SELECTED_BORDER_MOVE_DURATION);
         material.SetFloat("_DoFastBorder", 0f);
 
-        particleSystem.gameObject.SetActive(false);
+        destroyedParticles.gameObject.SetActive(false);
     }
 
 
@@ -276,9 +277,6 @@ public class OWMap_Node : MonoBehaviour
         }
         //material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
         material.SetColor("_IconColor", color);
-
-        particleSystem.gameObject.SetActive(true);
-        particleSystem.Play();
     }
 
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
@@ -324,22 +322,28 @@ public class OWMap_Node : MonoBehaviour
             case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
                 {
                     material.SetFloat("_IsDamaged", 1f);
-                    SetIconColor(OWMapDecoratorUtils.s_yellowColor);
-                    colorInUse = OWMapDecoratorUtils.s_yellowColor;
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_yellowColor);
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
                     material.SetFloat("_IsDamaged", 1f);
-                    SetIconColor(OWMapDecoratorUtils.s_orangeColor);
-                    colorInUse = OWMapDecoratorUtils.s_orangeColor;
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.DESTROYED:
                 {
                     material.SetFloat("_IsDamaged", 1f);
-                    SetIconColor(OWMapDecoratorUtils.s_redColor);
+                    material.SetFloat("_IsDestroyed", 1f);
+                    material.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
                     colorInUse = OWMapDecoratorUtils.s_redColor;
+                    SetIconColor(OWMapDecoratorUtils.s_redColor);
+                    PlayDestroyedParticles();
                 }
                 break;
             default:
@@ -428,6 +432,15 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 1f);
+    }
+
+
+    private void PlayDestroyedParticles()
+    {
+        particlesParent.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
+        destroyedParticles.gameObject.SetActive(true);
+        destroyedParticles.Clear(true);
+        destroyedParticles.Play();
     }
 
 }
