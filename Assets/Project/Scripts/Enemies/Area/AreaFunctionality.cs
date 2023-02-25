@@ -7,6 +7,9 @@ public class AreaFunctionality : MonoBehaviour
     // Start is called before the first frame update
     Transform enemy;
     ParticleSystem ps;
+    int armorToAdd;
+
+    protected List<Enemy> enemies = new List<Enemy>();
     public enum AreaType { ARMOR, HP, STUNT }
     private void Start()
     {
@@ -14,6 +17,7 @@ public class AreaFunctionality : MonoBehaviour
     }
     private void OnEnable()
     {
+        enemies.Clear();
         StartCoroutine(Deactivate());
     }
 
@@ -39,9 +43,32 @@ public class AreaFunctionality : MonoBehaviour
         enemy = null;
     }
 
-    void OnParticleCollision(GameObject other)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("particlecollision");
-        Debug.Log(other);
+        if ((other.tag == "Enemy") && !(enemies.Contains(other.GetComponent<Enemy>())))
+        {
+            if (enemy)
+            {
+                if ((other.gameObject == enemy.gameObject))
+                {
+                    return;
+                }
+            }
+           
+            other.GetComponent<Enemy>().AddArmor(armorToAdd);
+            enemies.Add(other.GetComponent<Enemy>());
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy" && enemies.Contains(other.GetComponent<Enemy>()))
+        {
+            enemies.Remove(other.GetComponent<Enemy>());
+        }
+    }
+
+    public void SetArmorToAdd(int armorAmount)
+    {
+        armorToAdd = armorAmount;
     }
 }

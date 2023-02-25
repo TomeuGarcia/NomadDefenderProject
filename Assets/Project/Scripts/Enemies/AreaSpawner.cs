@@ -8,6 +8,7 @@ public class AreaSpawner : MonoBehaviour
     [SerializeField] AreaFunctionality.AreaType areaType;
     [SerializeField] SpawnType spawnType;
     [SerializeField] float spawnRate;
+    [SerializeField] int armorAmount;
     GameObject currentWave;
 
     private void OnEnable()
@@ -61,6 +62,7 @@ public class AreaSpawner : MonoBehaviour
     {
         currentWave = AreaStateFactory.GetInstance().GetAreaGameObject(areaType, transform.position + transform.up * 0.25f , Quaternion.identity, null);
         currentWave.SetActive(true);
+        currentWave.GetComponent<AreaFunctionality>().SetArmorToAdd(armorAmount);
         currentWave.GetComponent<AreaFunctionality>().Follow(transform);
         Debug.Log("spawn Area");
     }
