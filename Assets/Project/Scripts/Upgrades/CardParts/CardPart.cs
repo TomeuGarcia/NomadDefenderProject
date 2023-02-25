@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
+
 public abstract class CardPart : MonoBehaviour
 {
     public static float halfWidth = 0.7f;
@@ -47,6 +48,11 @@ public abstract class CardPart : MonoBehaviour
     public event BuildingCardPartAction OnCardInfoSelected;
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
+
+
+    public delegate void BuildingCardPartAction2();
+    public static event BuildingCardPartAction2 OnInfoShown;
+
 
     private void Awake()
     {
@@ -147,12 +153,13 @@ public abstract class CardPart : MonoBehaviour
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
-        Debug.Log("ShowInfo");
+        //Debug.Log("ShowInfo");
+        if (OnInfoShown != null) OnInfoShown();
     }
     public virtual void HideInfo()
     {
         isShowingInfo = false;
-        Debug.Log("HideInfo");
+        //Debug.Log("HideInfo");
     }
 
 

@@ -104,6 +104,10 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
 
+
+    public delegate void BuildingCardAction2();
+    public static event BuildingCardAction2 OnInfoShown;
+
     public delegate void CardFunctionPtr();
 
     public bool AlreadyCanBeHovered => OnCardHovered != null;
@@ -320,7 +324,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => { EnableMouseInteraction(); 
+            .OnComplete(() => { //EnableMouseInteraction(); 
                                 if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
             });
     }
@@ -353,10 +357,12 @@ public abstract class BuildingCard : MonoBehaviour
     public void EnableMouseInteraction()
     {
         cardCollider.enabled = true;
+        //Debug.Log("Interaction ON");
     }
     public void DisableMouseInteraction()
     {
         cardCollider.enabled = false;
+        //Debug.Log("Interaction OFF");
     }
 
     public void ReenableMouseInteraction()
@@ -379,6 +385,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
+        if (OnInfoShown != null) OnInfoShown();
     }
     public virtual void HideInfo()
     {

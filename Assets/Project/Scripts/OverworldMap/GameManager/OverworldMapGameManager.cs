@@ -31,6 +31,7 @@ public class OverworldMapGameManager : MonoBehaviour
     public delegate void OverworldMapGameManagerAction();
     public event OverworldMapGameManagerAction OnVictory; // Event to be invoked when player reaches the end of the map
     public event OverworldMapGameManagerAction OnGameOver; // Event to be invoked when all available paths are destroyed
+    public event OverworldMapGameManagerAction OnMapNodeSceneStartsLoading; // For now only used to clear console in tutorial
 
 
 
@@ -215,11 +216,13 @@ public class OverworldMapGameManager : MonoBehaviour
     public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
     {        
         mapSceneLoader.LoadUpgradeScene(upgradeType, nodeHealthState);
+        if (OnMapNodeSceneStartsLoading != null) OnMapNodeSceneStartsLoading();
     }
 
     public void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
         mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
+        if (OnMapNodeSceneStartsLoading != null) OnMapNodeSceneStartsLoading();
     }
 
     private void FinishCurrentMapLevelScene()

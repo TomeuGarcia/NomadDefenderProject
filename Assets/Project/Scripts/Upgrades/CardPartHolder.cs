@@ -27,6 +27,8 @@ public class CardPartHolder : MonoBehaviour
 
     private bool cardWasSelected = false;
 
+    [HideInInspector] public bool canSelectCard = true;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
@@ -131,6 +133,7 @@ public class CardPartHolder : MonoBehaviour
 
     private void SetSelectedCard(CardPart card)
     {
+        if (!canSelectCard) return;
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
@@ -258,6 +261,26 @@ public class CardPartHolder : MonoBehaviour
             yield return new WaitForSeconds(moveDuration - delayBetweenCards);
             cardPart.isInteractable = true;
             cardPart.ReenableMouseInteraction();
+        }
+    }
+
+
+
+    public void PlayBodyTutorialBlinkAnimation()
+    {
+        foreach (CardPart cardPart in cardParts)
+        {
+            CardPartBody cardPartBody = cardPart as CardPartBody;
+            cardPartBody.PlayTutorialBlinkAnimation();
+        }
+    }
+
+    public void PlayBaseTutorialBlinkAnimation()
+    {
+        foreach (CardPart cardPart in cardParts)
+        {
+            CardPartBase cardPartBase = cardPart as CardPartBase;
+            cardPartBase.PlayTutorialBlinkAnimation();
         }
     }
 

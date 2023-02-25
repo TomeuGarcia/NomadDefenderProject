@@ -17,6 +17,8 @@ public class MainMenu : MonoBehaviour
 
     private bool canInteract = true;
 
+    private bool skipFirstBattle = false;
+
 
     private void Awake()
     {
@@ -47,10 +49,11 @@ public class MainMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.F))
         {
-            //Reset All Tutorials
-            TutorialsSaverLoader.GetInstance().ResetTutorials();
-            Debug.Log("All Tutorials Have Been Reset");
-            playButtonGO.SetActive(false);
+            skipFirstBattle = true;
+            ////Reset All Tutorials
+            //TutorialsSaverLoader.GetInstance().ResetTutorials();
+            //Debug.Log("All Tutorials Have Been Reset");
+            //playButtonGO.SetActive(false);
         }
     }
 
@@ -59,7 +62,16 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        TutorialsSaverLoader.GetInstance().ResetTutorials();
+        
+
+        if (skipFirstBattle)
+        {
+            TutorialsSaverLoader.GetInstance().ResetTutorialsExceptFirstBattle();
+        }
+        else
+        {
+            TutorialsSaverLoader.GetInstance().ResetTutorials();
+        }
 
         StartCoroutine(DoPlayNewGame());
     }

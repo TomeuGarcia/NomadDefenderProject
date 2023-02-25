@@ -141,7 +141,7 @@ public class TDGameManager : MonoBehaviour
         }
     }
 
-    public NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
+    public static NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
     {
         if (healthSystem.IsDead())
             return NodeEnums.HealthState.DESTROYED;
