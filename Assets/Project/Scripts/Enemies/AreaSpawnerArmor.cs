@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaSpawner : MonoBehaviour
+public class AreaSpawnerArmor : MonoBehaviour
 {
     public enum SpawnType { ON_DEATH, REPEATEDLY}
-    [SerializeField] AreaFunctionality.AreaType areaType;
+    [SerializeField] AreaFunctionalityArmor.AreaType areaType;
     [SerializeField] SpawnType spawnType;
     [SerializeField] float spawnRate;
     [SerializeField] int armorAmount;
@@ -30,7 +30,7 @@ public class AreaSpawner : MonoBehaviour
             case SpawnType.REPEATEDLY:
                 StopRepeating();
                 if(currentWave)
-                currentWave.GetComponent<AreaFunctionality>().StopFollowing();
+                currentWave.GetComponent<AreaFunctionalityArmor>().StopFollowing();
                 break;
         }
     }
@@ -62,8 +62,8 @@ public class AreaSpawner : MonoBehaviour
     {
         currentWave = AreaStateFactory.GetInstance().GetAreaGameObject(areaType, transform.position + transform.up * 0.25f , Quaternion.identity, null);
         currentWave.SetActive(true);
-        currentWave.GetComponent<AreaFunctionality>().SetArmorToAdd(armorAmount);
-        currentWave.GetComponent<AreaFunctionality>().Follow(transform);
+        currentWave.GetComponent<AreaFunctionalityArmor>().SetArmorToAdd(armorAmount);
+        currentWave.GetComponent<AreaFunctionalityArmor>().Follow(transform);
         Debug.Log("spawn Area");
     }
 }
