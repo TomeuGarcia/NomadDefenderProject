@@ -96,7 +96,8 @@ public class OWMap_Node : MonoBehaviour
     private OverworldMapGameManager owMapGameManager;
 
     [Header("PARTICLES")]
-    [SerializeField] private Transform particlesParent;
+    [SerializeField] private Transform particlesHolder;
+    [SerializeField] private ParticleSystem selectedParticles;
     [SerializeField] private ParticleSystem destroyedParticles;
 
 
@@ -135,6 +136,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_DoFastBorder", 0f);
 
         destroyedParticles.gameObject.SetActive(false);
+        selectedParticles.gameObject.SetActive(false);
     }
 
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
@@ -265,6 +267,9 @@ public class OWMap_Node : MonoBehaviour
         {
             owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
+
+        selectedParticles.gameObject.SetActive(true);
+        selectedParticles.Play();
 
         SetSelectedVisuals();
     }
@@ -437,7 +442,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void PlayDestroyedParticles()
     {
-        particlesParent.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
+        particlesHolder.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
         destroyedParticles.gameObject.SetActive(true);
         destroyedParticles.Clear(true);
         destroyedParticles.Play();

@@ -50,6 +50,7 @@ public class SupportBuilding : RangeBuilding
         upgrader.InitSupport(currencyCounter); //TODO: change range for the actual level
 
         DisableFunctionality();
+        basePart.PlacedParticleSystem.gameObject.SetActive(false);
     }
 
     protected override void UpdateRange()
@@ -91,10 +92,14 @@ public class SupportBuilding : RangeBuilding
 
     public override void GotPlaced()
     {
-        basePart.MeshTransform.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
         HideRangePlane();
         EnableFunctionality();
         basePart.OnGetPlaced();
+
+        basePart.MeshTransform.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
+        
+        basePart.PlacedParticleSystem.gameObject.SetActive(true);
+        basePart.PlacedParticleSystem.Play();
     }
 
 }

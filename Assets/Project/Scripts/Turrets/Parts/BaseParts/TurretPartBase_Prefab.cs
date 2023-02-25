@@ -15,6 +15,12 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [Header("BASE COLLIDER")]
     [SerializeField] public BaseCollider baseCollider;
     [SerializeField] GameObject[] visualUpgrades;
+
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+    public ParticleSystem PlacedParticleSystem => placedParticleSystem;
+
+
     private void Awake()
     {
         foreach (GameObject go in visualUpgrades)
