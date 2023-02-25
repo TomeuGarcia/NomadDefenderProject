@@ -12,6 +12,8 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     [SerializeField] private CardDrawer cardDrawer;
 
+    [SerializeField] private PathLocation firstBase;
+
 
     //Speed Up Button (can set alpha to 0)
     [SerializeField] private GameObject speedUpButton;
@@ -70,6 +72,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     IEnumerator Tutorial()
     {
+        yield return new WaitForSeconds(2.0f);
 
         scriptedSequence.NextLine(); //0 -> Redraw Initializing
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -85,7 +88,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
         yield return new WaitForSeconds(0.5f);
         cardDrawer.StartRedrawButtonAnimation();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
 
@@ -104,16 +107,15 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //4 -> Click a Card to redraw it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
 
         scriptedSequence.NextLine(); //5 -> Redraw ends when no redraws left or finish button clicked
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
 
         scriptedSequence.NextLine(); //6 -> /Redraw> Waiting to finish Redraw...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted()); //Wait until button clicked
         yield return new WaitUntil(() => !hand.isInRedrawPhase); //Wait until button clicked
-        yield return new WaitForSeconds(1.0f);
 
         //Make cards interactable
         SetCardsInteractable();
@@ -127,25 +129,47 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
 
-        //After losing 1 base
+
+        //After losing 1 base!!
+        yield return new WaitUntil(() => firstBase.IsDead);
         //Slow time with a lerp
+
+
+        for(float i = 0; i < 1.0f; i+= 0.005f)
+        {
+            Time.timeScale = Mathf.Lerp(1.0f, 0.1f, i);
+            yield return null;
+        }
+
+        Time.timeScale = 0.1f;
 
         scriptedSequence.NextLine(); //8 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine(); //9 -> One of the nodes got destroyed
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine(); //10 -> Let me help you with this gift
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        //TODO Create new turret
+
+        //Wait until Wathcer's turret is placed
 
         scriptedSequence.NextLine(); //11 -> Don't get used to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
+        for (float i = 0; i < 1.0f; i += 0.005f)
+        {
+            Time.timeScale = Mathf.Lerp(0.1f, 1.0f, i);
+            yield return null;
+        }
+
+        Time.timeScale = 1.0f;
         //Resume time with a lerp
 
         /*
