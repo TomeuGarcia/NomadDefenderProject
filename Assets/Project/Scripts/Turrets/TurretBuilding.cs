@@ -45,7 +45,7 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        currentShootTimer = 0.0f;        
+        currentShootTimer = 0.0f;
     }
 
     private void Update()

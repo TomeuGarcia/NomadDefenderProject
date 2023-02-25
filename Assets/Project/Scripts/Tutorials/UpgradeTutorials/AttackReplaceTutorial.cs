@@ -87,7 +87,7 @@ public class AttackReplaceTutorial : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitUntil(() => cardShowedInfo);
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(1.0f);
         scriptedSequence.Clear();
         cardPartReplaceManager.CardPartHolder.canSelectCard = true;
         cardPartReplaceManager.UpgradeCardHolder.canSelectCard = true;
