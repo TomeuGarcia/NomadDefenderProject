@@ -208,6 +208,7 @@ public class TurretBuilding : RangeBuilding
 
     public override void GotPlaced()
     {
+        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
         HideRangePlane();
         EnableFunctionality();
     }

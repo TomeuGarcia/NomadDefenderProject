@@ -34,6 +34,9 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip cardInfoElement;
     [SerializeField] private AudioClip cardInfoElementMoves;
 
+    [Header("CARDS PLAYED")]
+    [SerializeField] private AudioSource cardPlayedAudioSource;
+
     [Header("UPGRADES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
@@ -58,8 +61,9 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] projectileShots;
     [SerializeField] private AudioClip zapProjectileShot;
 
-
-
+    [Header("OVERWORLD MAP")]
+    [SerializeField] private AudioSource nodeAudioSource;
+    [SerializeField] private AudioSource sparkAudioSource;
 
 
 
@@ -247,6 +251,32 @@ public class GameAudioManager : MonoBehaviour
     }
 
 
+    // Cards played
+    public void PlayTurretCardPlaced(TurretPartBody.BodyType bodyType)
+    {
+        float pitch = 1f;
+        if (bodyType == TurretPartBody.BodyType.SENTRY)
+        {
+            Debug.Log("SENTRY");
+            pitch = 1f;
+        }
+        else if (bodyType == TurretPartBody.BodyType.BLASTER)
+        {
+            Debug.Log("BLAST");
+            pitch = 0.8f;
+        }
+        else if (bodyType == TurretPartBody.BodyType.SPAMMER)
+        {
+            Debug.Log("SPMR");
+            pitch = 1.3f;
+        }
+
+        cardPlayedAudioSource.pitch = pitch;
+
+        cardPlayedAudioSource.Play();
+    }
+
+
     // Upgrades
     public void PlayCardPartSwap()
     {
@@ -319,5 +349,17 @@ public class GameAudioManager : MonoBehaviour
 
 
 
+    // Environment
+    public void PlaySparksSound()
+    {
+        sparkAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        sparkAudioSource.Play();
+    }
+    
+    public void PlayNodeSelectedSound()
+    {
+        nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        nodeAudioSource.Play();
+    }
 
 }

@@ -161,7 +161,7 @@ public class UpgradeCardHolder : MonoBehaviour
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
-        selectedCard.SelectedState(true);
+        selectedCard.SelectedState(true, true);
 
         cardWasSelected = true;
 

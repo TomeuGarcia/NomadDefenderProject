@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TurretPartBase_Prefab : MonoBehaviour
 {
+    [SerializeField] private Transform meshTransform;
+    public Transform MeshTransform => meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material previewMaterial;
     private Material[] defaultMaterials;

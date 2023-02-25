@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class SupportBuilding : RangeBuilding
 {
@@ -90,6 +91,7 @@ public class SupportBuilding : RangeBuilding
 
     public override void GotPlaced()
     {
+        basePart.MeshTransform.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
         HideRangePlane();
         EnableFunctionality();
         basePart.OnGetPlaced();
