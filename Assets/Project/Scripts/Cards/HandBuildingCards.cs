@@ -21,7 +21,7 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private BuildingPlacer buildingPlacer;
     private int initialRedraws = 3;
     private int redrawsLeft;
-    private bool isInRedrawPhase = false;
+    public bool isInRedrawPhase { get; private set; } = false;
 
 
     private List<BuildingCard> cards;
@@ -820,6 +820,11 @@ public class HandBuildingCards : MonoBehaviour
 
         handSideBlockerLeft.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerLeft.position).normalized, handCameraTransform.up);
         handSideBlockerRight.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerRight.position).normalized, handCameraTransform.up);
+    }
+
+    public List<BuildingCard> GetCards()
+    {
+        return cards;
     }
 
 }
