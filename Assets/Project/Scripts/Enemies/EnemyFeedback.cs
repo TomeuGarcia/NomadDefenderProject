@@ -8,21 +8,10 @@ public class EnemyFeedback : MonoBehaviour
     [Header("ARMOR")]
     [SerializeField] private MeshRenderer armorCover;
     [SerializeField] private ParticleSystem armorShatterParticles;
-    [SerializeField] private float armorLerpCoefMax;
-    [SerializeField] private float armorLerpCoefMin;
-    [SerializeField] private float armorLerpTime;
-    [SerializeField] private AnimationCurve armorLerpCurve;
-    private List<Material> armorMaterials = new List<Material>();
+    [SerializeField] private List<MaterialLerp.FloatData> matLerpsData = new List<MaterialLerp.FloatData>();
     private string armorDisappearCoef = "_DisappearCoef";
-    private IEnumerator armorMatLerp;
-
-    private void Awake()
-    {
-        foreach(Material material in armorCover.materials)
-        {
-            armorMaterials.Add(material);
-        }
-    }
+    private IEnumerator armorGainLerp;
+    private IEnumerator armorBrightnesLerp;
 
     public void ResetEnemy(bool hasArmor)
     {
@@ -35,8 +24,8 @@ public class EnemyFeedback : MonoBehaviour
 
         if (hasArmor)
         {
-            armorMatLerp = ArmorMaterialLerp();
-            StartCoroutine(armorMatLerp);
+            armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], armorCover.materials);
+            StartCoroutine(armorGainLerp);
         }
     }
 
@@ -65,56 +54,43 @@ public class EnemyFeedback : MonoBehaviour
 
     private void IncreaseArmor()
     {
+        //play inc sound
 
+
+        armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], armorCover.materials);
+        StartCoroutine(armorBrightnesLerp);
     }
     private void DecreaseArmor()
     {
+        //play hit sound
 
+
+        armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], armorCover.materials);
+        StartCoroutine(armorBrightnesLerp);
     }
     private void GainArmor()
     {
+        //play gain sound
+
+
         //ACTIVATE SHIELD
         armorCover.enabled = true;
 
-        //LERP "_DisappearAmount" to 0
-        armorMatLerp = ArmorMaterialLerp();
-        StartCoroutine(armorMatLerp);
+        armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], armorCover.materials);
+        StartCoroutine(armorGainLerp);
     }
     private void LoseArmor()
     {
+        //play break sound
+
+
         //SHATTER SHIELD
         armorShatterParticles.Play();
 
+        armorCover.enabled = false;
         foreach (Material material in armorCover.materials)
         {
             material.SetFloat(armorDisappearCoef, 1.0f);
-        }
-    }
-
-    private IEnumerator ArmorMaterialLerp()
-    {
-        float tParam;
-        float currentTime = 0.0f;
-        float lerpCoefDif = armorLerpCoefMax - armorLerpCoefMin;
-
-        while(currentTime < armorLerpTime)
-        {
-            currentTime += Time.deltaTime;
-
-            tParam = armorLerpCurve.Evaluate(currentTime / armorLerpTime);
-            tParam = armorLerpCoefMin + lerpCoefDif * tParam;
-
-            foreach (Material material in armorCover.materials)
-            {
-                material.SetFloat(armorDisappearCoef, 1 - tParam);
-            }
-
-            yield return null;
-        }
-
-        foreach (Material material in armorCover.materials)
-        {
-            material.SetFloat(armorDisappearCoef, 0.0f);
         }
     }
 }
