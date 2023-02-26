@@ -11,6 +11,7 @@ public class HealthSystem
 
     [SerializeField] private int maxHealth;
     [SerializeField] private int maxArmor;
+    [SerializeField] private int spawnArmorAmount;
     public int health { get; private set; }
     public int armor { get; private set; }
 
@@ -25,15 +26,16 @@ public class HealthSystem
     {
         this.maxHealth = maxHealth;
         health = this.maxHealth;
+        maxArmor = this.maxHealth;
         armor = 0;
-        maxArmor = 0;
+        
     }
     public HealthSystem(int maxHealth , int maxArmour)
     {
         this.maxHealth = maxHealth;
         this.maxArmor = maxArmour;
         health = this.maxHealth;
-        armor = this.maxArmor;
+        armor = spawnArmorAmount;
         
     }
     public void TakeDamage(int damageAmount)
@@ -80,6 +82,12 @@ public class HealthSystem
 
         InvokeOnHealthUpdated(type);
     }
+    public void AddArmor(int armorAmount)
+    {
+        armor += armorAmount;
+        armor = armor < maxArmor ? armor : maxArmor;
+        InvokeOnArmorUpdated();
+    }
 
     public void HealToMax()
     {
@@ -91,7 +99,11 @@ public class HealthSystem
         armor = maxArmor;
         if (HasArmor()) InvokeOnArmorUpdated(UpdateType.IGNORE);
     }
-
+    public void SetArmor(int armorAmount)
+    {
+        armor = armorAmount;
+        armor = armor < maxArmor ? armor : maxArmor;
+    }
     public bool IsDead()
     {
         return health <= 0;
@@ -124,6 +136,10 @@ public class HealthSystem
     public int GetMaxHealth()
     {
         return maxHealth;
+    }
+    public int GetSpawnArmor()
+    {
+        return spawnArmorAmount;
     }
     public float GetArmorRatio()
     {

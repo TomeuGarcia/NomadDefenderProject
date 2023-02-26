@@ -1,20 +1,21 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OWMap_Node : MonoBehaviour
 {
-    [SerializeField] public static Color darkGreyColor =   new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    [SerializeField] public static Color lightGreyColor =  new Color(.9f, .9f, .9f);
-    [SerializeField] public static Color blueColor =       new Color(38f / 255f, 142f / 255f, 138f / 255f);
+    //[SerializeField] public static Color darkGreyColor =   new Color(106f / 255f, 106f / 255f, 106f / 255f);
+    //[SerializeField] public static Color lightGreyColor =  new Color(.9f, .9f, .9f);
+    //[SerializeField] public static Color blueColor =       new Color(38f / 255f, 142f / 255f, 138f / 255f);
 
-    [SerializeField] public static Color yellowColor =     new Color(190f / 255f, 190f / 255f, 50f / 255f);
-    [SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
-    [SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
+    //[SerializeField] public static Color yellowColor =     new Color(190f / 255f, 190f / 255f, 50f / 255f);
+    //[SerializeField] public static Color orangeColor =     new Color(190f / 255f, 80f / 255f, 0f / 255f);
+    //[SerializeField] public static Color redColor =        new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
-    [SerializeField] public static float multiplierColorHDR = 4f;
+    //[SerializeField] public static float multiplierColorHDR = 4f;
 
-    private Color colorInUse = darkGreyColor;
+    private Color colorInUse = OWMapDecoratorUtils.s_darkGreyColor;    
     public Color BorderColor { get; private set; }
     public Texture NodeIconTexture { get; private set; }
 
@@ -82,6 +83,7 @@ public class OWMap_Node : MonoBehaviour
     public const float SELECTED_DURATION = 0.075f;
     public const float DEFAULT_BORDER_MOVE_SPEED = 0.05f;
     public const float SELECTED_BORDER_MOVE_SPEED = 0.15f;
+    public const float SELECTED_BORDER_MOVE_DURATION = 0.2f;
 
     //NODE ICON
     private Texture nodeIcon;
@@ -92,6 +94,13 @@ public class OWMap_Node : MonoBehaviour
 
 
     private OverworldMapGameManager owMapGameManager;
+
+    [Header("GAMEFEEL VISUALS")]
+    [SerializeField] private Transform particlesHolder;
+    [SerializeField] private ParticleSystem destroyedParticles;
+    [SerializeField] private MeshRenderer flashMeshRenderer;
+    private Material flashMaterial;
+
 
     public void Print()
     {
@@ -105,12 +114,13 @@ public class OWMap_Node : MonoBehaviour
 
         material = meshRenderer.material;
 
-        colorInUse = darkGreyColor;
+        colorInUse = OWMapDecoratorUtils.s_darkGreyColor;
         material.SetFloat("_TimeOffset", Random.Range(0f, 1f));
-        material.SetColor("_BorderColor", darkGreyColor);
-        material.SetColor("_IconColor", darkGreyColor);
+        material.SetColor("_BorderColor", OWMapDecoratorUtils.s_darkGreyColor);
+        material.SetColor("_IconColor", OWMapDecoratorUtils.s_darkGreyColor);
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
+        material.SetFloat("_IsDamaged", 0f);
         material.SetFloat("_IsDestroyed", 0f);
 
         material.SetFloat("_FadeDuration", FADE_DURATION);
@@ -120,8 +130,18 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_SelectedDuration", SELECTED_DURATION);
         material.SetFloat("_IsSelected", 0f);
         material.SetFloat("_TimeStartSelected", 0f);
-    }
 
+        material.SetFloat("_NormalBorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
+        material.SetFloat("_FastBorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
+        material.SetFloat("_FastBorderDuration", SELECTED_BORDER_MOVE_DURATION);
+        material.SetFloat("_DoFastBorder", 0f);
+
+        destroyedParticles.gameObject.SetActive(false);
+
+        flashMaterial = flashMeshRenderer.material;
+        flashMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
+        flashMeshRenderer.gameObject.SetActive(false);
+    }
 
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
     {
@@ -173,7 +193,7 @@ public class OWMap_Node : MonoBehaviour
     {
         if (!isInteractable) return;
 
-        SetSelected();
+        SetSelected(true);
     }
 
     public void EnableInteraction()
@@ -210,7 +230,7 @@ public class OWMap_Node : MonoBehaviour
     {
         interactState = NodeInteractState.HOVERED;
 
-        SetIconColor(lightGreyColor, true);
+        SetIconColor(OWMapDecoratorUtils.s_lightGreyColor, true);
         //SetCameFromColor(lightGreyColor);
 
         SetHoveredVisuals();
@@ -220,26 +240,25 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_IsSelected", 0f);
         material.SetFloat("_TimeStartSelected", Time.time);
-        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
     }
     private void SetHoveredVisuals()
     {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
-        material.SetFloat("_BorderMoveSpeed", DEFAULT_BORDER_MOVE_SPEED);
     }
     private void SetSelectedVisuals()
     {
         material.SetFloat("_IsSelected", 1f);
-        material.SetFloat("_BorderMoveSpeed", SELECTED_BORDER_MOVE_SPEED);
+        material.SetFloat("_StartTimeFastBorderMoveSpeed", Time.time);
+        material.SetFloat("_DoFastBorder", 1f);
     }
 
-    public void SetSelected()
+    public void SetSelected(bool wasSelectedByPlayer)
     {
         interactState = NodeInteractState.SELECTED;
 
         //SetColor(blueColor);
-        SetCameFromColor(blueColor);
+        SetCameFromColor(OWMapDecoratorUtils.s_blueColor2);
 
         DisableInteraction();
         if (!mapReferencesData.isLastLevelNode)
@@ -250,8 +269,11 @@ public class OWMap_Node : MonoBehaviour
 
         if (owMapGameManager != null)
         {
-            owMapGameManager.OnMapNodeSelected(this);
+            owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
+
+        flashMeshRenderer.gameObject.SetActive(true);
+        flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
     }
@@ -262,20 +284,22 @@ public class OWMap_Node : MonoBehaviour
         {
             color = Color.Lerp(color, colorInUse, 0.5f);
         }
-        material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
+        //material.SetColor("_IconColor", color * OWMap_Node.multiplierColorHDR);
+        material.SetColor("_IconColor", color);
     }
+
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
     {
         if (mixWithDarkGrey)
         {
-            color = Color.Lerp(color, darkGreyColor, 0.5f);
+            color = Color.Lerp(color, OWMapDecoratorUtils.s_darkGreyColor, 0.5f);
         }
 
         if (cameFromConnection != null)
         {
             if (setCameFromConnectionNotInteracted)
             {
-                cameFromConnection.SetColor(darkGreyColor);
+                cameFromConnection.SetColor(OWMapDecoratorUtils.s_darkGreyColor);
             }
             else
             {
@@ -287,7 +311,8 @@ public class OWMap_Node : MonoBehaviour
     public void SetBorderColor(Color color)
     {
         BorderColor = color;
-        material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
+        //material.SetColor("_BorderColor", color * OWMap_Node.multiplierColorHDR);
+        material.SetColor("_BorderColor", color);
     }
 
 
@@ -299,26 +324,35 @@ public class OWMap_Node : MonoBehaviour
         {
             case NodeEnums.HealthState.UNDAMAGED:
                 {
-                    SetIconColor(blueColor);
-                    colorInUse = blueColor;
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
                 {
-                    SetIconColor(yellowColor);
-                    colorInUse = yellowColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_yellowColor);
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
-                    SetIconColor(orangeColor);
-                    colorInUse = orangeColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
+                    colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
             case NodeEnums.HealthState.DESTROYED:
                 {
-                    SetIconColor(redColor);
-                    colorInUse = redColor;
+                    material.SetFloat("_IsDamaged", 1f);
+                    material.SetFloat("_IsDestroyed", 1f);
+                    material.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+                    colorInUse = OWMapDecoratorUtils.s_redColor;
+                    SetIconColor(OWMapDecoratorUtils.s_redColor);
+                    PlayDestroyedParticles();
                 }
                 break;
             default:
@@ -376,6 +410,8 @@ public class OWMap_Node : MonoBehaviour
         nodeIcon = mapIconTexture;
 
         material.SetTexture("_IconTexture", nodeIcon);
+
+        flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE ? OWMapDecoratorUtils.s_orangeColor : OWMapDecoratorUtils.s_blueColor);
     }
 
     public NodeEnums.NodeType GetNodeType()
@@ -389,8 +425,9 @@ public class OWMap_Node : MonoBehaviour
     }
     public void SetDestroyedVisuals()
     {
-        SetIconColor(redColor);
-        SetCameFromColor(redColor);
+        SetIconColor(OWMapDecoratorUtils.s_redColor);
+        SetCameFromColor(OWMapDecoratorUtils.s_redColor);
+        material.SetFloat("_IsDamaged", 1f);
         material.SetFloat("_IsDestroyed", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
     }
@@ -406,6 +443,31 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 1f);
+    }
+
+
+    private void PlayDestroyedParticles()
+    {
+        particlesHolder.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
+        destroyedParticles.gameObject.SetActive(true);
+        destroyedParticles.Clear(true);
+        destroyedParticles.Play();
+
+        //StartCoroutine(LoopingSparksSound());
+    }
+
+    private IEnumerator LoopingSparksSound()
+    {
+        while (true)
+        {
+            int r = Random.Range(2, 4);
+            for (int i = 0; i < r; ++i)
+            {
+                GameAudioManager.GetInstance().PlaySparksSound();
+                yield return new WaitForSeconds(Random.Range(0.1f, 0.2f));
+            }
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
+        }
     }
 
 }

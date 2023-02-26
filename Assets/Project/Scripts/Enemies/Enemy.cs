@@ -9,7 +9,7 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { BASIC, FAST, TANK }
+    public enum EnemyType { BASIC, FAST, TANK,BASIC_ARMORED,FAST_ARMORED,TANK_ARMORED, ARMOR_TRUCK,HEALTH_TRUCK}
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -57,7 +57,15 @@ public class Enemy : MonoBehaviour
         
 
         ResetStats();
-        healthSystem = new HealthSystem((int)health,(int)armor);
+        if(armor == 0)
+        {
+            healthSystem = new HealthSystem((int)health);
+
+        }
+        else
+        {
+            healthSystem = new HealthSystem((int)health, (int)armor);
+        }
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
@@ -89,7 +97,7 @@ public class Enemy : MonoBehaviour
 
         //ChangeToBaseMat();
         healthSystem.HealToMax();
-        healthSystem.ArmorToMax();
+        healthSystem.SetArmor(healthSystem.GetSpawnArmor());
 
         queuedDamage = 0;
 
@@ -221,5 +229,20 @@ public class Enemy : MonoBehaviour
     public bool IsDead()
     {
         return healthSystem.IsDead();
+    }
+
+    public void AddHealth(int healthToAdd)
+    {
+        
+        healthSystem.Heal(healthToAdd);
+        healthHUD.Show();
+
+    }
+
+    public void AddArmor(int armorToAdd)
+    {
+        
+        healthSystem.AddArmor(armorToAdd);
+        healthHUD.Show();
     }
 }

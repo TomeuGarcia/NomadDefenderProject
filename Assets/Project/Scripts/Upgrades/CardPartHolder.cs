@@ -264,4 +264,24 @@ public class CardPartHolder : MonoBehaviour
         }
     }
 
+
+
+    public void PlayBodyTutorialBlinkAnimation()
+    {
+        foreach (CardPart cardPart in cardParts)
+        {
+            CardPartBody cardPartBody = cardPart as CardPartBody;
+            cardPartBody.PlayTutorialBlinkAnimation();
+        }
+    }
+
+    public void PlayBaseTutorialBlinkAnimation()
+    {
+        foreach (CardPart cardPart in cardParts)
+        {
+            CardPartBase cardPartBase = cardPart as CardPartBase;
+            cardPartBase.PlayTutorialBlinkAnimation();
+        }
+    }
+
 }

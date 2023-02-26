@@ -6,7 +6,7 @@ using static SupportBuilding;
 
 public class CurrencyBase : TurretPartBase_Prefab
 {
-
+    [Header("CURRENCY BASE")]
     [SerializeField] private int quantityToIncreaseCurrencyDrop;
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
