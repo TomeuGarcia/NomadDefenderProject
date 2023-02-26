@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1626341512122004569}
   - component: {fileID: 6458616864240699446}
   - component: {fileID: 4650990172065204862}
-  - component: {fileID: 3339635394632044978}
+  - component: {fileID: 1990587698628968477}
   m_Layer: 6
-  m_Name: Enemy_AreaSpawner
+  m_Name: Enemy_HealthTruck
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
   rb: {fileID: 4650990172065204862}
   healthHUD: {fileID: 9085599442052968132}
   baseDamage: 1
-  baseHealth: 70
+  baseHealth: 700
   baseArmor: 0
   currencyDrop: 5
   baseCurrencyDrop: 30
@@ -105,7 +105,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &3339635394632044978
+--- !u!114 &1990587698628968477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,12 +114,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 163396529507246355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 729b9ab80d193304badbcd8d5677e0ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 443aa587e4e3ad44faaabf47fc8dca7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaType: 0
+  areaType: 1
   spawnType: 1
-  spawnRate: 1
+  spawnRate: 5
+  healthAmount: 10
 --- !u!1 &6973226056397854212
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +183,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 9ef2b62413952b94aa62a44947ea37f8, type: 2}
-  - {fileID: 2100000, guid: fb89eaed2cec2ce4ab5bcfe5cde71327, type: 2}
+  - {fileID: 2100000, guid: abfae64322c4d4c4b8bbae175eb8b70f, type: 2}
   - {fileID: -1836404426189418413, guid: 0f5bebf19b221dd498df921d9e174754, type: 3}
   - {fileID: -5099111074680885803, guid: b26c325b09af52e428b9e3e4d752d044, type: 3}
   m_StaticBatchInfo:
