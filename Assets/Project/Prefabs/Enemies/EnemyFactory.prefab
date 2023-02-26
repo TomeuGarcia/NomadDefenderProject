@@ -92,6 +92,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 4599594694859222385, guid: afe61742b7b34834c8262d02ec089e96,
     type: 3}
+--- !u!1 &5358312093481203060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7840321244591696054}
+  - component: {fileID: 8847085611556857988}
+  m_Layer: 0
+  m_Name: HealthTruckEnemyPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7840321244591696054
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358312093481203060}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8847085611556857988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358312093481203060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 163396529507246355, guid: 23043bc525febff42a46425ad568e34c,
+    type: 3}
 --- !u!1 &5937173816068285023
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,6 +174,7 @@ Transform:
   - {fileID: 4980238292722443800}
   - {fileID: 1036065357476877141}
   - {fileID: 3347861597061700021}
+  - {fileID: 7840321244591696054}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -150,14 +197,16 @@ MonoBehaviour:
     pool: {fileID: 1459440374239873001}
   - type: 2
     pool: {fileID: 6208814779952199653}
-  - type: 6
-    pool: {fileID: 2978566795682042435}
   - type: 3
     pool: {fileID: 9219593916588372213}
   - type: 4
     pool: {fileID: 2382694982798193530}
   - type: 5
     pool: {fileID: 1957489279646115172}
+  - type: 6
+    pool: {fileID: 2978566795682042435}
+  - type: 7
+    pool: {fileID: 8847085611556857988}
 --- !u!1 &6647312936594356182
 GameObject:
   m_ObjectHideFlags: 0

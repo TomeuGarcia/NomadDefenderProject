@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaSpawner : MonoBehaviour
+public class AreaSpawnerHealth : MonoBehaviour
 {
-    public enum SpawnType { ON_DEATH, REPEATEDLY}
-    [SerializeField] AreaFunctionality.AreaType areaType;
+    public enum SpawnType { ON_DEATH, REPEATEDLY }
+    [SerializeField] AreaFunctionalityArmor.AreaType areaType;
     [SerializeField] SpawnType spawnType;
     [SerializeField] float spawnRate;
+    [SerializeField] int healthAmount;
     GameObject currentWave;
-
     private void OnEnable()
     {
         InitAreaSpawn();
@@ -28,8 +28,8 @@ public class AreaSpawner : MonoBehaviour
 
             case SpawnType.REPEATEDLY:
                 StopRepeating();
-                if(currentWave)
-                currentWave.GetComponent<AreaFunctionality>().StopFollowing();
+                if (currentWave)
+                    currentWave.GetComponent<AreaFunctionalityArmor>().StopFollowing();
                 break;
         }
     }
@@ -55,13 +55,13 @@ public class AreaSpawner : MonoBehaviour
         }
     }
 
-    
+
 
     void SpawnWave()
     {
-        currentWave = AreaStateFactory.GetInstance().GetAreaGameObject(areaType, transform.position + transform.up * 0.25f , Quaternion.identity, null);
+        currentWave = AreaStateFactory.GetInstance().GetAreaGameObject(areaType, transform.position + transform.up * 0.25f, Quaternion.identity, null);
         currentWave.SetActive(true);
-        currentWave.GetComponent<AreaFunctionality>().Follow(transform);
-        Debug.Log("spawn Area");
+        currentWave.GetComponent<AreaFunctionalityHealth>().SetHealthToAdd(healthAmount);
+        currentWave.GetComponent<AreaFunctionalityHealth>().Follow(transform);
     }
 }
