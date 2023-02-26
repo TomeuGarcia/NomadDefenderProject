@@ -17,22 +17,23 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
         StartAtFirstLevel();
 
-        if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
+        if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE))
         {
-            mapSceneLoader.LoadTutorialScene();
-            moveCameraAfterNodeScene = false;
-            //Do OWMapTutorial
-
-            mapSceneLoader.OnSceneFromMapUnloaded += StartMapTutorial;
-        }
-        else
-        {
+            firstBattleResultApplied = true;
             moveCameraAfterNodeScene = true;
             if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
             {
                 CreateNewBattleStateResult(out currentBattleStateResult);
                 StartMapTutorial();
             }
+        }
+        else
+        {
+            mapSceneLoader.LoadTutorialScene();
+            moveCameraAfterNodeScene = false;
+            //Do OWMapTutorial
+
+            mapSceneLoader.OnSceneFromMapUnloaded += StartMapTutorial;
         }
 
         //StartAtFirstLevel();
