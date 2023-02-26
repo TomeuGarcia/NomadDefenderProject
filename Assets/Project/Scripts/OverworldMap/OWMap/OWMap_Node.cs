@@ -95,10 +95,11 @@ public class OWMap_Node : MonoBehaviour
 
     private OverworldMapGameManager owMapGameManager;
 
-    [Header("PARTICLES")]
+    [Header("GAMEFEEL VISUALS")]
     [SerializeField] private Transform particlesHolder;
-    [SerializeField] private ParticleSystem selectedParticles;
     [SerializeField] private ParticleSystem destroyedParticles;
+    [SerializeField] private MeshRenderer flashMeshRenderer;
+    private Material flashMaterial;
 
 
     public void Print()
@@ -136,7 +137,10 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_DoFastBorder", 0f);
 
         destroyedParticles.gameObject.SetActive(false);
-        selectedParticles.gameObject.SetActive(false);
+
+        flashMaterial = flashMeshRenderer.material;
+        flashMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
+        flashMeshRenderer.gameObject.SetActive(false);
     }
 
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
@@ -268,8 +272,8 @@ public class OWMap_Node : MonoBehaviour
             owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
 
-        selectedParticles.gameObject.SetActive(true);
-        selectedParticles.Play();
+        flashMeshRenderer.gameObject.SetActive(true);
+        flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
     }
@@ -406,6 +410,8 @@ public class OWMap_Node : MonoBehaviour
         nodeIcon = mapIconTexture;
 
         material.SetTexture("_IconTexture", nodeIcon);
+
+        flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE ? OWMapDecoratorUtils.s_orangeColor : OWMapDecoratorUtils.s_blueColor);
     }
 
     public NodeEnums.NodeType GetNodeType()
