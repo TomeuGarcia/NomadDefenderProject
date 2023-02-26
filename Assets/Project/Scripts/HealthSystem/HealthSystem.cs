@@ -71,22 +71,15 @@ public class HealthSystem
 
         InvokeOnHealthUpdated(UpdateType.INCREASE);
     }
-    public void HealArmor(int healAmount)
-    {
-        UpdateType type;
-        if(armor == 0) { type = UpdateType.GAIN; }
-        else { type = UpdateType.INCREASE; }
-
-        armor += healAmount;
-        armor = armor < maxArmor ? armor : maxArmor;
-
-        InvokeOnHealthUpdated(type);
-    }
     public void AddArmor(int armorAmount)
     {
+        UpdateType type;
+        if (armor == 0) { type = UpdateType.GAIN; }
+        else { type = UpdateType.INCREASE; }
+
         armor += armorAmount;
         armor = armor < maxArmor ? armor : maxArmor;
-        InvokeOnArmorUpdated();
+        InvokeOnArmorUpdated(type);
     }
 
     public void HealToMax()
