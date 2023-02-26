@@ -339,12 +339,12 @@ public class GameAudioManager : MonoBehaviour
     // Projectiles
     public void PlayProjectileShot(TurretPartBody.BodyType bodyType)
     {
-        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.85f, 1.15f));
+        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.8f, 1.2f));
     }
 
     public void PlayZapProjectileShot()
     {
-        LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.85f, 1.15f));
+        LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.8f, 1.2f));
     }
 
 

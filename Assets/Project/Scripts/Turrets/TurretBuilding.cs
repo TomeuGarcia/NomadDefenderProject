@@ -178,10 +178,18 @@ public class TurretBuilding : RangeBuilding
     private void Shoot(Enemy enemyTarget)
     {
         TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
-        currentAttack.transform.position = bodyPart.GetNextShootingPoint();
+        Vector3 shootPoint = bodyPart.GetNextShootingPoint();
+        currentAttack.transform.position = shootPoint;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.Init(enemyTarget, this);
+
+
+        // Spawn particle
+        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        temp.gameObject.SetActive(true);
+        temp.transform.parent = gameObject.transform.parent;
+
 
         enemyTarget.ChangeMat();
 
