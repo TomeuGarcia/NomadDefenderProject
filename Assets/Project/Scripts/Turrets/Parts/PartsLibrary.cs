@@ -210,7 +210,16 @@ public class PartsLibrary : ScriptableObject
 
         while (holderPartsSet.Count < totalAmount)
         {
-            holderPartsSet.Add(basesAndPassivesByProgressionState.GetRandomPart());
+            BaseAndPassive randomPart = basesAndPassivesByProgressionState.GetRandomPart();
+            bool canAdd = true;
+
+            foreach (BaseAndPassive part in holderPartsSet) 
+            {
+                if (part.turretPassiveBase == randomPart.turretPassiveBase)
+                    canAdd = false;
+            }
+
+            if (canAdd) holderPartsSet.Add(randomPart);
         }
 
 

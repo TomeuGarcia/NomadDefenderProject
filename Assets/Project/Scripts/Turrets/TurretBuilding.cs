@@ -32,6 +32,10 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+
+
     public int CardLevel { get; private set; }
 
 
@@ -46,6 +50,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         currentShootTimer = 0.0f;
+        placedParticleSystem.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -208,9 +213,13 @@ public class TurretBuilding : RangeBuilding
 
     public override void GotPlaced()
     {
-        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
         HideRangePlane();
         EnableFunctionality();
+
+        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
+     
+        placedParticleSystem.gameObject.SetActive(true);
+        placedParticleSystem.Play();
     }
 
 }
