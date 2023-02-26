@@ -178,7 +178,7 @@ MonoBehaviour:
   enemyFeedback: {fileID: 3623447730478713804}
   baseDamage: 1
   baseHealth: 20
-  baseArmor: 20
+  baseArmor: 0
   currencyDrop: 2
   baseCurrencyDrop: 10
 --- !u!114 &3623447730478713804
@@ -195,33 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armorCover: {fileID: 6540096300714111431}
   armorShatterParticles: {fileID: 557786487139173358}
-  armorLerpCoefMax: 0.72
-  armorLerpCoefMin: 0.3
-  armorLerpTime: 1
-  armorLerpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   matLerpsData:
   - time: 1
     min: 0.3
@@ -588,6 +561,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7299927587272334990, guid: 71bebb7ea45d79b40a4465a11d384fbe,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8531217368700076297, guid: 71bebb7ea45d79b40a4465a11d384fbe,
         type: 3}
