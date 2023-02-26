@@ -6,6 +6,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 {
     [Header("TUTORIAL")]
     [SerializeField] protected OWMapTutorialManager owMapTutorial;
+    [SerializeField] protected OWMapTutorialManager2 owMapTutorial2;
     bool firstBattleResultApplied = false;
 
 
@@ -48,7 +49,19 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     {
         mapSceneLoader.OnSceneFromMapUnloaded -= StartMapTutorial;
         owMapTutorial.StartTutorial();
+        mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle;
     }
+
+
+    private void MapTutorialAfterSecondBattle()
+    {
+        if (!IsCurrentNodeBattle()) return;
+
+        owMapTutorial2.StartTutorial();
+        mapSceneLoader.OnSceneFromMapUnloaded -= MapTutorialAfterSecondBattle;
+
+    }
+  
 
     protected override void ApplyBattleStateResult()
     {
