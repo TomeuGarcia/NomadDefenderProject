@@ -12,6 +12,10 @@ public class HealthHUD : MonoBehaviour
     [SerializeField] private bool startHidden;
     [SerializeField] private RectTransform canvasRectTransform;
 
+    [Header("FEEDBACK")]
+    [SerializeField] private Image armorFlashImage;
+    [SerializeField] private ParticleSystem armorShatterParticles;
+    private IEnumerator armorBreak;
 
 
     public void Init(HealthSystem healthSystem)
@@ -27,11 +31,11 @@ public class HealthHUD : MonoBehaviour
         SetArmorImageVisibility();
     }
 
-    private void UpdateHealthImage()
+    private void UpdateHealthImage(HealthSystem.UpdateType updateType)
     {
         healthImage.fillAmount = healthSystem.HealthRatio;
     }
-    private void UpdateArmorImage()
+    private void UpdateArmorImage(HealthSystem.UpdateType updateType)
     {
         Debug.Log(healthSystem.GetArmorRatio());
         armorImage.fillAmount = healthSystem.GetArmorRatio();
@@ -39,11 +43,20 @@ public class HealthHUD : MonoBehaviour
         {
             armorImage.enabled = false;
             //feedback to destroy armor
+
+            armorBreak = ArmorBreak();
+            StartCoroutine(armorBreak);
         }
     }
 
     public void Hide()
     {
+        if(armorBreak != null)
+        {
+            StopCoroutine(armorBreak);
+            armorFlashImage.enabled = false;
+        }
+
         canvasGroup.alpha = 0.0f;
     }
 
@@ -65,4 +78,28 @@ public class HealthHUD : MonoBehaviour
         }
     }
 
+    private IEnumerator ArmorBreak()
+    {
+        armorShatterParticles.Play();
+
+        Color32 color = armorFlashImage.color;
+
+        armorFlashImage.enabled = true;
+        color.a = 100;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.04f);
+        color.a = 75;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+        color.a = 50;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+        color.a = 25;
+        armorFlashImage.color = color;
+        yield return new WaitForSeconds(0.02f);
+
+        color.a = 255;
+        armorFlashImage.color = color;
+        armorFlashImage.enabled = false;
+    }
 }

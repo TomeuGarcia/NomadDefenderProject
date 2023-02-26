@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
 [System.Serializable]
 public class HealthSystem
 {
+    public enum UpdateType { INCREASE, DECREASE, GAIN, LOSE, IGNORE };
+
     [SerializeField] private int maxHealth;
     [SerializeField] private int maxArmor;
     public int health { get; private set; }
@@ -13,7 +16,7 @@ public class HealthSystem
 
     public float HealthRatio => (float)health / (float)maxHealth;
 
-    public delegate void HealthSystemAction();
+    public delegate void HealthSystemAction(UpdateType updateType);
     public event HealthSystemAction OnHealthUpdated;
     public event HealthSystemAction OnArmorUpdated;
 
@@ -35,20 +38,27 @@ public class HealthSystem
     }
     public void TakeDamage(int damageAmount)
     {
+        UpdateType type;
+
         if (HasArmor())
         {
             Debug.Log("Take damage on armor");
             armor -= damageAmount;
             int remainingDamage = -armor;
             armor = armor > 0 ? armor : 0;
-            InvokeOnArmorUpdated();
-            //visuallyDestroyArmor();
+
+            if (HasArmor()) { type = UpdateType.DECREASE; }
+            else { type = UpdateType.LOSE; }
+            InvokeOnArmorUpdated(type);
         }
         else
         {
             health -= damageAmount;
             health = health > 0 ? health : 0;
-            InvokeOnHealthUpdated();
+
+            if (IsDead()) { type = UpdateType.LOSE; }
+            else { type = UpdateType.DECREASE; }
+            InvokeOnHealthUpdated(type);
         }
     }
 
@@ -57,18 +67,29 @@ public class HealthSystem
         health += healAmount;
         health = health < maxHealth ? health : maxHealth;
 
-        InvokeOnHealthUpdated();
+        InvokeOnHealthUpdated(UpdateType.INCREASE);
+    }
+    public void HealArmor(int healAmount)
+    {
+        UpdateType type;
+        if(armor == 0) { type = UpdateType.GAIN; }
+        else { type = UpdateType.INCREASE; }
+
+        armor += healAmount;
+        armor = armor < maxArmor ? armor : maxArmor;
+
+        InvokeOnHealthUpdated(type);
     }
 
     public void HealToMax()
     {
         health = maxHealth;
-        InvokeOnHealthUpdated();
+        InvokeOnHealthUpdated(UpdateType.IGNORE);
     }
     public void ArmorToMax()
     {
         armor = maxArmor;
-        if (HasArmor()) InvokeOnArmorUpdated();
+        if (HasArmor()) InvokeOnArmorUpdated(UpdateType.IGNORE);
     }
 
     public bool IsDead()
@@ -85,13 +106,13 @@ public class HealthSystem
     {
         return armor > 0;
     }
-    private void InvokeOnHealthUpdated()
+    private void InvokeOnHealthUpdated(UpdateType updateType)
     {
-        if (OnHealthUpdated != null) OnHealthUpdated();
+        if (OnHealthUpdated != null) OnHealthUpdated(updateType);
     }
-    private void InvokeOnArmorUpdated()
+    private void InvokeOnArmorUpdated(UpdateType updateType)
     {
-        if (OnArmorUpdated != null) OnArmorUpdated();
+        if (OnArmorUpdated != null) OnArmorUpdated(updateType);
     }
 
     public void UpdateHealth(int newHealth)
