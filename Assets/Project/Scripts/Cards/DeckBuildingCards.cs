@@ -9,6 +9,8 @@ public class DeckBuildingCards : MonoBehaviour
     
     private List<BuildingCard> cards;
 
+    public List<BuildingCard> Cards => cards;
+
 
     [Header("DECK")]
     [SerializeField] private Transform cardsHolder;

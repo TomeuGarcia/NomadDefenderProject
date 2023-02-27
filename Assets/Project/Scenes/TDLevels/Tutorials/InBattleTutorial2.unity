@@ -4754,6 +4754,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4885359580415880069, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: initialRedraws
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5094152541944548896, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_IsActive
@@ -4763,6 +4768,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982427645377297919, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982427645377297919, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: canDisplaySpeedUp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982427645377297919, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: displayRedrawsOnGameStart
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8859183146045818370, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
@@ -4811,8 +4831,8 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 314651045}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_GameObject: {fileID: 1554980248}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fd7960cfa3321c47ae6d227acb891cc, type: 3}
   m_Name: 
@@ -20662,6 +20682,86 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1547426937}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1554980246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2389504214443094638, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f361a7784327b57409cc95897e610bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1554980247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3061516609394921384, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9b3a1784e02e842a4f8ea88f6e3ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1554980248 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7982427645377297918, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1554980249 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8719205494629726894, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1554980250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5412160906093144428, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1554980251 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7287294236232450556, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1554980252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554980248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60aa3ff72717c3d458742c837b0c3b1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 314651048}
+  deck: {fileID: 1554980246}
+  battleHUD: {fileID: 1554980247}
+  redrawCanvasGameObject: {fileID: 1554980251}
+  redrawingText: {fileID: 1554980250}
+  finishRedrawsButtonCG: {fileID: 1554980249}
+  numCardsHandStart: 1
+  cardsToDrawPerWave: 2
+  cheatDrawCardActivated: 1
+  canRedraw: 1
+  canDisplaySpeedUp: 0
+  displayRedrawsOnGameStart: 0
+  turretPartAttackToSortFirst: {fileID: 11400000, guid: 9a858331c3e429244aed06460b331c43,
+    type: 2}
 --- !u!1001 &1556827411
 PrefabInstance:
   m_ObjectHideFlags: 0
