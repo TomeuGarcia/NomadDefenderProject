@@ -54,18 +54,17 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        
-
         ResetStats();
+
         if(armor == 0)
         {
             healthSystem = new HealthSystem((int)health);
-
         }
         else
         {
             healthSystem = new HealthSystem((int)health, (int)armor);
         }
+
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
@@ -97,7 +96,7 @@ public class Enemy : MonoBehaviour
 
         //ChangeToBaseMat();
         healthSystem.HealToMax();
-        healthSystem.SetArmor(healthSystem.GetSpawnArmor());
+        healthSystem.ResetArmor();
 
         queuedDamage = 0;
 

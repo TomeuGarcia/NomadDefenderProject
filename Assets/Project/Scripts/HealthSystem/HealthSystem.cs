@@ -28,7 +28,7 @@ public class HealthSystem
         health = this.maxHealth;
         maxArmor = this.maxHealth;
         armor = 0;
-        
+        spawnArmorAmount = 0;
     }
     public HealthSystem(int maxHealth , int maxArmour)
     {
@@ -36,7 +36,6 @@ public class HealthSystem
         this.maxArmor = maxArmour;
         health = this.maxHealth;
         armor = spawnArmorAmount;
-        
     }
     public void TakeDamage(int damageAmount)
     {
@@ -87,15 +86,10 @@ public class HealthSystem
         health = maxHealth;
         InvokeOnHealthUpdated(UpdateType.IGNORE);
     }
-    public void ArmorToMax()
+    public void ResetArmor()
     {
-        armor = maxArmor;
+        armor = spawnArmorAmount;
         if (HasArmor()) InvokeOnArmorUpdated(UpdateType.IGNORE);
-    }
-    public void SetArmor(int armorAmount)
-    {
-        armor = armorAmount;
-        armor = armor < maxArmor ? armor : maxArmor;
     }
     public bool IsDead()
     {
