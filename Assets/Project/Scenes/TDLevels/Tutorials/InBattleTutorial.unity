@@ -4586,6 +4586,7 @@ MonoBehaviour:
   cheatDrawCardActivated: 1
   canRedraw: 1
   canDisplaySpeedUp: 1
+  displayRedrawsOnGameStart: 1
   tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
     type: 3}
   tutorialCard: {fileID: 0}
@@ -28826,7 +28827,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: textLines.Array.data[3].text
-      value: Loading User Currency...
+      value: Loading Currency...
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
@@ -28871,7 +28872,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: textLines.Array.data[12].text
-      value: '/Card Stats: <color=#1DFF5F>RANGE</color>'
+      value: '/Card Stats: <color=#1DFF5F>FIRE RATE</color>'
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
@@ -28886,7 +28887,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: textLines.Array.data[15].text
-      value: /Instruction> PLACE a turret on the map
+      value: PLACE a turret on the map
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
@@ -28911,7 +28912,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: textLines.Array.data[20].text
-      value: /Instruction> UPGRADE the turret
+      value: UPGRADE the turret
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
@@ -29126,6 +29127,21 @@ PrefabInstance:
       propertyPath: textLines.Array.data[59].text
       value: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
         ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: textLines.Array.data[4].textType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: textLines.Array.data[15].textType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: textLines.Array.data[20].textType
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
