@@ -32,6 +32,10 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+
+
     public int CardLevel { get; private set; }
 
 
@@ -46,6 +50,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         currentShootTimer = 0.0f;
+        placedParticleSystem.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -173,10 +178,18 @@ public class TurretBuilding : RangeBuilding
     private void Shoot(Enemy enemyTarget)
     {
         TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
-        currentAttack.transform.position = bodyPart.GetNextShootingPoint();
+        Vector3 shootPoint = bodyPart.GetNextShootingPoint();
+        currentAttack.transform.position = shootPoint;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.Init(enemyTarget, this);
+
+
+        // Spawn particle
+        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        temp.gameObject.SetActive(true);
+        temp.transform.parent = gameObject.transform.parent;
+
 
         enemyTarget.ChangeMat();
 
@@ -210,6 +223,11 @@ public class TurretBuilding : RangeBuilding
     {
         HideRangePlane();
         EnableFunctionality();
+
+        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
+     
+        placedParticleSystem.gameObject.SetActive(true);
+        placedParticleSystem.Play();
     }
 
 }

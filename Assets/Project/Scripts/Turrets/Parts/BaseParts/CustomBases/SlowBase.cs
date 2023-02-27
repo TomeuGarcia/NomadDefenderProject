@@ -10,6 +10,7 @@ public class SlowBase : TurretPartBase_Prefab
         public float slowCoefApplied = 0;
     }
 
+    [Header("SLOW BASE")]
     [SerializeField] private List<float> slowSpeedCoefs = new List<float>();
     private int currentLvl = 0;
 

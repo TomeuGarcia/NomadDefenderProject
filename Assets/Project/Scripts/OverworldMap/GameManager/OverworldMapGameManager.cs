@@ -85,15 +85,20 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode = mapNodes[0][0];
 
         currentNode.SetOwMapGameManagerRef(this);
-        currentNode.SetSelected(); // Simulate node is clicked
+        currentNode.SetSelected(false); // Simulate node is clicked
 
         owMapPawn.Init(this, currentNode, owMapCreator.DisplacementBetweenLevels);        
 
     }
 
-    public void OnMapNodeSelected(OWMap_Node owMapNode)
+    public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
         owMapPawn.MoveToNode(owMapNode);
+        
+        if (wasSelectedByPlayer)
+        {
+            GameAudioManager.GetInstance().PlayNodeSelectedSound();
+        }
     }
 
 

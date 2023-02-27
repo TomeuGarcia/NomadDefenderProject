@@ -94,6 +94,17 @@ public class BuildingPlacer : MonoBehaviour
         selectedBuilding.GotPlaced();
         placedBuildings.Add(selectedBuilding);
 
+
+        if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)selectedBuildingCard).turretCardParts.turretPartBody.bodyType);
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(TurretPartBody.BodyType.SENTRY);
+        }
+
+
         selectedBuildingCard = null;
         selectedBuilding = null;
 

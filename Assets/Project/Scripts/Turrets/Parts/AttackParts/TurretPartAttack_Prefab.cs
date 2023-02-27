@@ -11,6 +11,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     protected Enemy targetEnemy;
     protected int damage;
     [SerializeField] protected AttackType attackType;
+    public AttackType GetAttackType => attackType;
     [SerializeField] protected float bulletSpeed = 2.0f;
 
     [SerializeField] public Material materialForTurret;

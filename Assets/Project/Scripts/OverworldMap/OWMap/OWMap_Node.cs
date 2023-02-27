@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -94,9 +95,11 @@ public class OWMap_Node : MonoBehaviour
 
     private OverworldMapGameManager owMapGameManager;
 
-    [Header("PARTICLES")]
-    [SerializeField] private Transform particlesParent;
+    [Header("GAMEFEEL VISUALS")]
+    [SerializeField] private Transform particlesHolder;
     [SerializeField] private ParticleSystem destroyedParticles;
+    [SerializeField] private MeshRenderer flashMeshRenderer;
+    private Material flashMaterial;
 
 
     public void Print()
@@ -134,8 +137,11 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_DoFastBorder", 0f);
 
         destroyedParticles.gameObject.SetActive(false);
-    }
 
+        flashMaterial = flashMeshRenderer.material;
+        flashMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
+        flashMeshRenderer.gameObject.SetActive(false);
+    }
 
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
     {
@@ -187,7 +193,7 @@ public class OWMap_Node : MonoBehaviour
     {
         if (!isInteractable) return;
 
-        SetSelected();
+        SetSelected(true);
     }
 
     public void EnableInteraction()
@@ -247,7 +253,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_DoFastBorder", 1f);
     }
 
-    public void SetSelected()
+    public void SetSelected(bool wasSelectedByPlayer)
     {
         interactState = NodeInteractState.SELECTED;
 
@@ -263,8 +269,11 @@ public class OWMap_Node : MonoBehaviour
 
         if (owMapGameManager != null)
         {
-            owMapGameManager.OnMapNodeSelected(this);
+            owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
+
+        flashMeshRenderer.gameObject.SetActive(true);
+        flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
     }
@@ -401,6 +410,8 @@ public class OWMap_Node : MonoBehaviour
         nodeIcon = mapIconTexture;
 
         material.SetTexture("_IconTexture", nodeIcon);
+
+        flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE ? OWMapDecoratorUtils.s_orangeColor : OWMapDecoratorUtils.s_blueColor);
     }
 
     public NodeEnums.NodeType GetNodeType()
@@ -437,10 +448,26 @@ public class OWMap_Node : MonoBehaviour
 
     private void PlayDestroyedParticles()
     {
-        particlesParent.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
+        particlesHolder.localRotation = Quaternion.AngleAxis(Random.Range(0f, 360f), transform.up);
         destroyedParticles.gameObject.SetActive(true);
         destroyedParticles.Clear(true);
         destroyedParticles.Play();
+
+        //StartCoroutine(LoopingSparksSound());
+    }
+
+    private IEnumerator LoopingSparksSound()
+    {
+        while (true)
+        {
+            int r = Random.Range(2, 4);
+            for (int i = 0; i < r; ++i)
+            {
+                GameAudioManager.GetInstance().PlaySparksSound();
+                yield return new WaitForSeconds(Random.Range(0.1f, 0.2f));
+            }
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
+        }
     }
 
 }

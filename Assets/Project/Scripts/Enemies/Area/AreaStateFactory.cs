@@ -7,13 +7,13 @@ public class AreaStateFactory : MonoBehaviour
     [System.Serializable]
     private struct AreaTypeToPool
     {
-        public AreaFunctionality.AreaType type;
+        public AreaFunctionalityArmor.AreaType type;
         public Pool pool;
     }
     private static AreaStateFactory instance;
 
     [SerializeField] private AreaTypeToPool[] areasToPool;
-    private Dictionary<AreaFunctionality.AreaType, Pool> sortedAreas;
+    private Dictionary<AreaFunctionalityArmor.AreaType, Pool> sortedAreas;
 
     private void Awake()
     {
@@ -43,14 +43,14 @@ public class AreaStateFactory : MonoBehaviour
     }
     private void Init()
     {
-        sortedAreas = new Dictionary<AreaFunctionality.AreaType, Pool>();
+        sortedAreas = new Dictionary<AreaFunctionalityArmor.AreaType, Pool>();
         foreach (AreaTypeToPool areaTypeToPool in areasToPool)
         {
             sortedAreas[areaTypeToPool.type] = areaTypeToPool.pool;
         }
     }
 
-    public GameObject GetAreaGameObject(AreaFunctionality.AreaType areaType,Vector3 position,Quaternion rotation,Transform parent)
+    public GameObject GetAreaGameObject(AreaFunctionalityArmor.AreaType areaType,Vector3 position,Quaternion rotation,Transform parent)
     {
         return sortedAreas[areaType].GetObject(position, rotation, parent);
     }

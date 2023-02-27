@@ -9,7 +9,7 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { BASIC, FAST, TANK,BASIC_ARMORED,FAST_ARMORED,TANK_ARMORED, ARMOR_TRUCK}
+    public enum EnemyType { BASIC, FAST, TANK,BASIC_ARMORED,FAST_ARMORED,TANK_ARMORED, ARMOR_TRUCK,HEALTH_TRUCK}
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
+    [SerializeField] private EnemyFeedback enemyFeedback;
+    //[SerializeField] private MeshRenderer armorCover;
 
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
@@ -52,13 +54,22 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        
-
         ResetStats();
-        healthSystem = new HealthSystem((int)health,(int)armor);
+
+        if(armor == 0)
+        {
+            healthSystem = new HealthSystem((int)health);
+        }
+        else
+        {
+            healthSystem = new HealthSystem((int)health, (int)armor);
+        }
+
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
+
+        healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
     }
 
     private void OnValidate()
@@ -85,13 +96,15 @@ public class Enemy : MonoBehaviour
 
         //ChangeToBaseMat();
         healthSystem.HealToMax();
-        healthSystem.ArmorToMax();
+        healthSystem.ResetArmor();
 
         queuedDamage = 0;
 
         ResetStats();
 
         healthHUD.Hide();
+
+        enemyFeedback.ResetEnemy(healthSystem.HasArmor());
     }
 
     private void ResetStats()
@@ -215,5 +228,20 @@ public class Enemy : MonoBehaviour
     public bool IsDead()
     {
         return healthSystem.IsDead();
+    }
+
+    public void AddHealth(int healthToAdd)
+    {
+        
+        healthSystem.Heal(healthToAdd);
+        healthHUD.Show();
+
+    }
+
+    public void AddArmor(int armorToAdd)
+    {
+        
+        healthSystem.AddArmor(armorToAdd);
+        healthHUD.Show();
     }
 }
