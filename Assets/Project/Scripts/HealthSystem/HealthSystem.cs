@@ -35,7 +35,8 @@ public class HealthSystem
         this.maxHealth = maxHealth;
         this.maxArmor = maxArmour;
         health = this.maxHealth;
-        armor = spawnArmorAmount;
+        spawnArmorAmount = maxArmour;
+        armor = maxArmour;
     }
     public void TakeDamage(int damageAmount)
     {
