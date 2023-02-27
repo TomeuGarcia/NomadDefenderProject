@@ -8417,6 +8417,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985878308}
   m_Mesh: {fileID: 5668471003314617649, guid: 6cec0c46ae320484cbafbd3271094a75, type: 3}
+--- !u!1 &997412354 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7459440337270203656, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4525846866438920759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1003791711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12247,6 +12253,85 @@ Transform:
   m_Father: {fileID: 1748058006}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1498611504
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5737185250470237840, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_Name
+      value: CardShower
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5737185250470237843, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: deckCreator
+      value: 
+      objectReference: {fileID: 727766090}
+    - target: {fileID: 5737185250470237843, guid: 8d57e5a24a344da45b4374983235efe7,
+        type: 3}
+      propertyPath: followCamera
+      value: 
+      objectReference: {fileID: 997412354}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8d57e5a24a344da45b4374983235efe7, type: 3}
 --- !u!1 &1512791335
 GameObject:
   m_ObjectHideFlags: 0
@@ -13222,7 +13307,7 @@ PrefabInstance:
     - target: {fileID: 7528870704316176416, guid: 9170c7e8082a36d42adc57afcac6beb3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7528870704316176416, guid: 9170c7e8082a36d42adc57afcac6beb3,
         type: 3}
@@ -15485,113 +15570,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3525e41dc816bf4b8cdc3d2e43fa7db, type: 3}
---- !u!1001 &2132508862
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5737185250470237840, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_Name
-      value: CardShower
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237842, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185250470237843, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: deckCreator
-      value: 
-      objectReference: {fileID: 727766090}
-    - target: {fileID: 5737185250470237843, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: followCamera
-      value: 
-      objectReference: {fileID: 399295464}
-    - target: {fileID: 5737185250737740865, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_text
-      value: Display Deck (D)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5737185251598198539, guid: 8d57e5a24a344da45b4374983235efe7,
-        type: 3}
-      propertyPath: m_text
-      value: Show Map (D)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8d57e5a24a344da45b4374983235efe7, type: 3}
---- !u!1 &2132508863 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5737185250470237840, guid: 8d57e5a24a344da45b4374983235efe7,
-    type: 3}
-  m_PrefabInstance: {fileID: 2132508862}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2132508864 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5737185250470237843, guid: 8d57e5a24a344da45b4374983235efe7,
-    type: 3}
-  m_PrefabInstance: {fileID: 2132508862}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132508863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8700c121b6e9d34d96ee951bbfdaf89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2146643558 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1ee778922cf84b7489ffdec46861323f,
@@ -16454,7 +16432,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cardShower
       value: 
-      objectReference: {fileID: 2132508863}
+      objectReference: {fileID: 0}
     - target: {fileID: 481244355035842441, guid: bea90a63c4431e143a62fe3e27dfe2f3,
         type: 3}
       propertyPath: mapCameraGO
@@ -16464,7 +16442,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cardDisplayer
       value: 
-      objectReference: {fileID: 2132508864}
+      objectReference: {fileID: 0}
     - target: {fileID: 481244355035842441, guid: bea90a63c4431e143a62fe3e27dfe2f3,
         type: 3}
       propertyPath: owMapTutorial
@@ -16578,11 +16556,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1709635821}
     m_Modifications:
-    - target: {fileID: 4525846865304159890, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 4756271349304155937, guid: 7217a23b2e7c74a4f9276c622bdf5dc8,
         type: 3}
       propertyPath: m_Name
@@ -16752,6 +16725,11 @@ PrefabInstance:
         type: 3}
       propertyPath: clearWithTime
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525846865304159890, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7217a23b2e7c74a4f9276c622bdf5dc8, type: 3}
