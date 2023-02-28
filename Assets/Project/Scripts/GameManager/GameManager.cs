@@ -5,12 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("DECK DATA")]
-    [SerializeField] private DeckData starterDeckData;
-    [SerializeField] private DeckData gameDeckData;
+    [SerializeField] protected DeckData starterDeckData;
+    [SerializeField] protected DeckData gameDeckData;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
-    [SerializeField] private GameObject gameOverHolder;
+    [SerializeField] protected GameObject gameOverHolder;
 
     [Header("DEPENDENCIES")]
     [SerializeField] private OverworldMapGameManager overworldMapGameManager;

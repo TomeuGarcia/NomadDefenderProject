@@ -83,6 +83,10 @@ public class TutoTurretCard : TurretBuildingCard
         //yield return new WaitUntil(() => showLevel);
         //yield return StartCoroutine(ShowCanvasGroupElement(cardLevelTextCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
 
+        // Show Play Cost
+        yield return new WaitUntil(() => showPlayCost);
+        yield return StartCoroutine(ShowCanvasGroupElement(playCostTextCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
+
         // Show Attack Stat
         yield return new WaitUntil(() => showAttackStat);
         yield return StartCoroutine(ShowCanvasGroupElement(attackBarCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
@@ -94,10 +98,6 @@ public class TutoTurretCard : TurretBuildingCard
         // Show Range Stat
         yield return new WaitUntil(() => showRangeStat);
         yield return StartCoroutine(ShowCanvasGroupElement(rangeBarCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
-
-        // Show Play Cost
-        yield return new WaitUntil(() => showPlayCost);
-        yield return StartCoroutine(ShowCanvasGroupElement(playCostTextCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
 
         //// Show Attack Icon
         //yield return new WaitUntil(() => showAttackIcon);

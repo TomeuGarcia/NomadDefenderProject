@@ -8,8 +8,6 @@ public class TDGameManager : MonoBehaviour
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
-    [Header("Base Path Location")]
-    [SerializeField] private PathLocation basePathLocation;
 
     [Header("Canvas")]
     [SerializeField] private GameObject victoryHolder;
@@ -32,6 +30,7 @@ public class TDGameManager : MonoBehaviour
     private BattleStateResult battleStateResult;
     [Header("PATH LOCATIONS")]
     [SerializeField] private PathLocation[] pathLocations;
+    private int numAliveLocations = 0;
 
 
     [SerializeField] private bool hasToSendBattleState = true;
@@ -47,20 +46,30 @@ public class TDGameManager : MonoBehaviour
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
 
+        numAliveLocations = pathLocations.Length;        
+
         InitLocationsVisuals();
     }    
 
 
     private void OnEnable()
     {
-        basePathLocation.OnDeath += GameOver;
         EnemyWaveManager.OnAllWavesFinished += CheckVictory;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            pathLocations[i].OnDeath += DecreaseAliveLocationsAndCheckGameOver;
+        }
     }
 
     private void OnDisable()
     {
-        basePathLocation.OnDeath -= GameOver;
         EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            pathLocations[i].OnDeath -= DecreaseAliveLocationsAndCheckGameOver;
+        }
     }
 
     private void InitLocationsVisuals()
@@ -73,6 +82,21 @@ public class TDGameManager : MonoBehaviour
         }        
     }
 
+
+    private bool HasAliveLocationsLeft()
+    {
+        return numAliveLocations > 0;
+    }
+
+    private void DecreaseAliveLocationsAndCheckGameOver()
+    {
+        --numAliveLocations;
+        if (!HasAliveLocationsLeft())
+        {
+            GameOver();
+        }
+    }
+
     private void GameOver()
     {
         Debug.Log("GameOver");
@@ -80,14 +104,12 @@ public class TDGameManager : MonoBehaviour
 
         StartCoroutine(GameOverAnimation());
 
-        basePathLocation.OnDeath -= GameOver;
-
         if (OnGameOverStart != null) OnGameOverStart();
     }
 
     private void CheckVictory()
     {
-        if (!basePathLocation.healthSystem.IsDead())
+        if (HasAliveLocationsLeft())
         {
             Victory();
         }
