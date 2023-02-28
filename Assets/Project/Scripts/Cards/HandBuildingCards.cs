@@ -19,7 +19,7 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
-    private int initialRedraws = 3;
+    [SerializeField] private int initialRedraws = 2;
     private int redrawsLeft;
     public bool isInRedrawPhase { get; private set; } = false;
 

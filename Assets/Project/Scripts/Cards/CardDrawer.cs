@@ -25,8 +25,8 @@ public class CardDrawer : MonoBehaviour
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
     [HideInInspector] public bool canRedraw = true;
-    [HideInInspector] public bool canDisplaySpeedUp = true;
-    [HideInInspector] public bool displayRedrawsOnGameStart = true;
+    [SerializeField]  public bool canDisplaySpeedUp = true;
+    [SerializeField] public bool displayRedrawsOnGameStart = true;
 
 
     private void OnEnable()
@@ -231,7 +231,9 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         DrawTopCard();
+
         hand.InitCardsInHandForRedraw();
+
 
         if (deck.HasCardsLeft())
         {
@@ -244,6 +246,7 @@ public class CardDrawer : MonoBehaviour
         }
 
         if (displayRedrawsOnEnd) StartRedrawButtonAnimation();
+        else FinishRedrawSetupUI();
     }
 
     public void StartRedrawButtonAnimation()
