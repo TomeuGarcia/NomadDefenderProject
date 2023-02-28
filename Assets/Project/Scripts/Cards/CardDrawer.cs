@@ -231,7 +231,9 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         DrawTopCard();
+
         hand.InitCardsInHandForRedraw();
+
 
         if (deck.HasCardsLeft())
         {
