@@ -195,7 +195,10 @@ public class BattleTutorialManager2 : MonoBehaviour
         }
 
         Time.timeScale = 1.0f;
-        
+
+
+        yield return new WaitForSecondsRealtime(7.5f);
+        scriptedSequence.Clear();
     }
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)
