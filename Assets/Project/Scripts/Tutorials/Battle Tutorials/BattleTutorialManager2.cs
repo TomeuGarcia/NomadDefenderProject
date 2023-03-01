@@ -146,11 +146,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for(float i = 0; i < 1.0f; i+= 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(1.0f, 0.1f, i);
+            Time.timeScale = Mathf.Lerp(1.0f, 0.0f, i);
             yield return null;
         }
 
-        Time.timeScale = 0.1f;
+        Time.timeScale = 0.0f;
 
         scriptedSequence.NextLine(); //8 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -190,7 +190,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for (float i = 0; i < 1.0f; i += 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(0.1f, 1.0f, i);
+            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
             yield return null;
         }
 
