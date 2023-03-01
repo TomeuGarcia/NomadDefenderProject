@@ -121,7 +121,11 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
+            PathLocation pathLocation = other.gameObject.GetComponent<PathLocation>();
+            if (!pathLocation.IsDead)
+            {
+                pathLocation.TakeDamage((int)damage);
+            }
             Suicide();
         }
     }
