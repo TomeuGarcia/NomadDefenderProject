@@ -291,9 +291,10 @@ public class HandBuildingCards : MonoBehaviour
             //card.InitPositions(selectedPosition, hiddenDisplacement);
 
             float repositionDuration = 0.3f;
+            int cardIndex = i;
             card.StartRepositioning(finalPosition, repositionDuration);
             card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, finalPosition, i));
+                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, finalPosition, cardIndex));
         }
     }
     private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
@@ -316,6 +317,11 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         UpdateHandSideBlockers();
+
+        if (index == cards.Count - 1 && !HasRedrawsLeft())
+        {
+            FinishedRedrawing();
+        }
     }
     public void FinishedRedrawing()
     {

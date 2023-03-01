@@ -199,7 +199,7 @@ public class OWMap_Node : MonoBehaviour
     public void EnableInteraction()
     {
         isInteractable = true;
-        interactionCollider.enabled = true;
+        //interactionCollider.enabled = true;
 
         material.SetFloat("_IsInteractable", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
@@ -208,7 +208,7 @@ public class OWMap_Node : MonoBehaviour
     public void DisableInteraction()
     {
         isInteractable = false;
-        interactionCollider.enabled = false;
+        //interactionCollider.enabled = false;
 
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
