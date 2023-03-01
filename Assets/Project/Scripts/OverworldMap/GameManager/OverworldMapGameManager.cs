@@ -135,10 +135,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         FinishCurrentMapLevelScene();
         ResumeMap();
+
         if (moveCameraAfterNodeScene)
         {
-            owMapPawn.MoveCameraToNextLevel();
-            
+            owMapPawn.MoveCameraToNextLevel();            
         }
         moveCameraAfterNodeScene = true;
     }
@@ -147,6 +147,18 @@ public class OverworldMapGameManager : MonoBehaviour
         // If current node was BATTLE, apply BattleStateResult
         if (IsCurrentNodeBattle())
             ApplyBattleStateResult();
+        else if (!currentNode.GetMapReferencesData().isLastLevelNode)
+        {
+            // Check if next nodes are upgardes that come after non-battle nodes 
+            OWMap_Node[] nextLevelNodes = currentNode.GetMapReferencesData().nextLevelNodes;
+            if (nextLevelNodes[0].GetNodeType() == NodeEnums.NodeType.UPGRADE)
+            {
+                foreach (OWMap_Node node in nextLevelNodes)
+                {
+                    node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false);
+                }
+            }
+        }
 
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
             StartCommunicationWithNextNodes(currentNode);
@@ -196,10 +208,11 @@ public class OverworldMapGameManager : MonoBehaviour
     protected virtual void ApplyBattleStateResult()
     {
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
+        bool wonWithPerfectDefense = currentBattleStateResult.DidWinWithPerfectDefense();
 
         for (int i = 0; i < nodeResults.Length; ++i)
         {
-            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
+            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense);
         }
     }
 

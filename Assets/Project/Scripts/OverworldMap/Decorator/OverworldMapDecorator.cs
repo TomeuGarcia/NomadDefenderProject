@@ -6,8 +6,13 @@ using UnityEngine;
 
 public class OverworldMapDecorator : MonoBehaviour
 {
+    [Header("DECORATOR SETTINGS")]
     [SerializeField] OWMapDecoratorSettings dSettings;
+    [Header("DECORATOR UTILS")]
     [SerializeField] OWMapDecoratorUtils dUtils;
+
+    [Header("DECORATOR UTILS")]
+    [SerializeField] private GameObject UpgradeNodeInfoPrefab;
 
     private int firstDecoratedLevel;
     private int firstBattleLevel;
@@ -112,16 +117,22 @@ public class OverworldMapDecorator : MonoBehaviour
 
             NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
 
-            DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, upgradeType, progressionState);
+            DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
         }
     }
-    protected void DecorateUpgradeNode(OWMap_Node node, int nextLevelNodes, NodeEnums.UpgradeType upgradeType, NodeEnums.ProgressionState progressionState)
+    protected void DecorateUpgradeNode(OWMap_Node node, int nextLevelNodes, int nodeIndexInLevel, int totalNodesInLevel, 
+        NodeEnums.UpgradeType upgradeType, NodeEnums.ProgressionState progressionState)
     {
         // TODO decorate properly
         node.SetBorderColor(OWMapDecoratorUtils.s_blueColor);
 
         OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref node.healthState, upgradeType, progressionState);
         node.SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
+
+        OWMap_NodeInfo upgradeNodeInfo = Instantiate(UpgradeNodeInfoPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_NodeInfo>();
+
+        bool positionAtRight = (nodeIndexInLevel+1f) / (float)totalNodesInLevel > 0.5f;
+        upgradeNodeInfo.Init(node, node.MouseOverNotifier, positionAtRight);
     }
 
     private bool IsBattleLevel(int levelI)
