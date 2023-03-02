@@ -6,6 +6,7 @@ public class OverworldMapGameManager : MonoBehaviour
 {
     private OWMap_Node[][] mapNodes;
     public OWMap_Node[][] GetMapNodes() { return mapNodes; }
+    private int currentMapLevelI;
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
@@ -82,6 +83,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     protected void StartAtFirstLevel()
     {
+        currentMapLevelI = 0;
         currentNode = mapNodes[0][0];
 
         currentNode.SetOwMapGameManagerRef(this);
@@ -104,6 +106,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnOwMapPawnReachedNode(OWMap_Node reachedNode)
     {
+        ++this.currentMapLevelI;
+
         bool cameFromNodeWasBattle = IsCurrentNodeBattle();
 
         this.currentNode = reachedNode;
@@ -144,24 +148,22 @@ public class OverworldMapGameManager : MonoBehaviour
     }
     private void ResumeMap()
     {
+        bool isNextLevelLastLevel = currentNode.GetMapReferencesData().isLastLevelNode;
+
         // If current node was BATTLE, apply BattleStateResult
         if (IsCurrentNodeBattle())
-            ApplyBattleStateResult();
-        else if (!currentNode.GetMapReferencesData().isLastLevelNode)
         {
-            // Check if next nodes are upgardes that come after non-battle nodes 
-            OWMap_Node[] nextLevelNodes = currentNode.GetMapReferencesData().nextLevelNodes;
-            if (nextLevelNodes[0].GetNodeType() == NodeEnums.NodeType.UPGRADE)
-            {
-                foreach (OWMap_Node node in nextLevelNodes)
-                {
-                    node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false);
-                }
-            }
+            ApplyBattleStateResult();
+        }        
+        else if (!isNextLevelLastLevel && IsNextLevelUpgrade())
+        {
+            ApplyBattleStateResultForUpgradeBackToBack();
         }
 
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
             StartCommunicationWithNextNodes(currentNode);
+
+        if (!isNextLevelLastLevel && IsNextLevelUpgrade()) foreach (OWMap_Node node in mapNodes[currentMapLevelI+1]) node.InvokeOnNodeInfoInteractionEnabled();
     }
 
 
@@ -215,6 +217,16 @@ public class OverworldMapGameManager : MonoBehaviour
             nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense);
         }
     }
+    private void ApplyBattleStateResultForUpgradeBackToBack()
+    {
+        // Check if next nodes are upgardes that come after non-battle nodes 
+        OWMap_Node[] nextLevelNodes = currentNode.GetMapReferencesData().nextLevelNodes;
+        foreach (OWMap_Node node in nextLevelNodes)
+        {
+            node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false);
+        }
+    }
+
 
     protected bool IsCurrentNodeBattle()
     {        
@@ -228,7 +240,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         return currentNode;
     }
-
+    private bool IsNextLevelUpgrade()
+    {
+        return currentNode.GetMapReferencesData().nextLevelNodes[0].GetNodeType() == NodeEnums.NodeType.UPGRADE;
+    }
 
     // SCENES
     public void StartUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)

@@ -108,8 +108,15 @@ public class OWMap_Node : MonoBehaviour
     private Material flashMaterial;
 
 
+    // EVENTS
     public delegate void NodeHealthStateAction(NodeEnums.HealthState healthState, bool wonWithPerfectDefense);
     public event NodeHealthStateAction OnNodeHealthStateSet;
+
+    public delegate void NodeInteractionAction();
+    public event NodeInteractionAction OnNodeInfoInteractionEnabled;
+    public event NodeInteractionAction OnNodeInfoInteractionDisabled;
+    public void InvokeOnNodeInfoInteractionEnabled() { if (OnNodeInfoInteractionEnabled != null) OnNodeInfoInteractionEnabled(); }
+    public void InvokeOnNodeInfoInteractionDisabled() { if (OnNodeInfoInteractionDisabled != null) OnNodeInfoInteractionDisabled(); }
 
 
     public void Print()
@@ -347,7 +354,7 @@ public class OWMap_Node : MonoBehaviour
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
                     material.SetFloat("_IsDamaged", 1f);
-                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_orangeColor);
                     SetIconColor(OWMapDecoratorUtils.s_blueColor);
                     colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
@@ -397,7 +404,7 @@ public class OWMap_Node : MonoBehaviour
                 nextLevelNode.EnableInteraction();
 
                 nextLevelEnabledNodes.Add(nextLevelNode);
-            }            
+            }
         }
 
         return nextLevelEnabledNodes.ToArray();

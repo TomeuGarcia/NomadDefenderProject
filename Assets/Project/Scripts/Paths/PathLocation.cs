@@ -51,7 +51,7 @@ public class PathLocation : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.D)) TakeDamage(1);
+        if (Input.GetKeyDown(KeyCode.D)) TakeDamage(1);
     }
 
     public void TakeDamage(int damageAmount)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 public class OWMap_NodeInfo : MonoBehaviour
@@ -14,6 +15,7 @@ public class OWMap_NodeInfo : MonoBehaviour
 
     [Header("DISPLAY")]
     [SerializeField] private RectTransform infoCanvasTransform;
+    [SerializeField] private Image barImage;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private TextMeshProUGUI nodeInfoText;
     [SerializeField] private TextMeshProUGUI statusText;
@@ -55,7 +57,7 @@ public class OWMap_NodeInfo : MonoBehaviour
 
         if (attachedNode != null)
         {
-            attachedNode.OnNodeHealthStateSet += SetupTexts;
+            SubscriveToAttachedNodeEvents();
         }
         
     }
@@ -69,22 +71,36 @@ public class OWMap_NodeInfo : MonoBehaviour
 
         if (attachedNode != null)
         {
-            attachedNode.OnNodeHealthStateSet -= SetupTexts;
+            UnsubscriveToAttachedNodeEvents();
         }
     }
 
     public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight)
     {
         this.attachedNode = attachedNode;
-        this.attachedNode.OnNodeHealthStateSet += SetupTexts;
+        SubscriveToAttachedNodeEvents();
 
         this.mouseOverNotifier = mouseOverNotifier;
         SubscriveToMouseOverEvents();
 
         float posX = positionedAtRight ? transform.localPosition.x : -transform.localPosition.x;
-        transform.localPosition = new Vector3(posX, 0f, 0f);        
-    }    
+        transform.localPosition = new Vector3(posX, 0f, 0f);
 
+        barImage.transform.localRotation = positionedAtRight? Quaternion.identity : Quaternion.AngleAxis(180f, Vector3.up);
+    }   
+    public void SetIsInteractableFalse()
+    {
+        Debug.Log("isInteractable FALSE");
+        this.isInteractable = false;
+    }
+    public void SetIsInteractableTrue()
+    {
+        Debug.Log("isInteractable TRUE");
+        this.isInteractable = true;
+    }
+
+
+    // Events
     private void SubscriveToMouseOverEvents()
     {
         mouseOverNotifier.OnMouseEntered += CheckShowInfo;
@@ -96,6 +112,19 @@ public class OWMap_NodeInfo : MonoBehaviour
         mouseOverNotifier.OnMouseExited -= CheckHideInfo;
     }
 
+    private void SubscriveToAttachedNodeEvents()
+    {
+        this.attachedNode.OnNodeHealthStateSet += SetupTexts;
+        this.attachedNode.OnNodeInfoInteractionEnabled += SetIsInteractableTrue;
+    }
+    private void UnsubscriveToAttachedNodeEvents()
+    {
+        this.attachedNode.OnNodeHealthStateSet -= SetupTexts;
+        this.attachedNode.OnNodeInfoInteractionEnabled -= SetIsInteractableTrue;
+    }
+
+
+    // Functionality
     private void SetupTexts(NodeEnums.HealthState nodeHealth, bool wonWithPerfectDefense)
     {
         if (wonWithPerfectDefense)
@@ -135,6 +164,8 @@ public class OWMap_NodeInfo : MonoBehaviour
 
     private IEnumerator ShowNodeInfoAnimation()
     {
+        transform.DOComplete();
+        barImage.DOComplete();
         backgroundImage.DOComplete();
         nodeInfoText.DOComplete();
         statusText.DOComplete();
@@ -145,6 +176,7 @@ public class OWMap_NodeInfo : MonoBehaviour
         float t2 = 0.2f;
 
         infoCanvasTransform.gameObject.SetActive(true);
+        barImage.fillAmount = 0f;
         backgroundImage.fillAmount = 0f;
         nodeInfoText.DOFade(0f, t0);
         statusText.DOFade(0f, t0);
@@ -152,7 +184,10 @@ public class OWMap_NodeInfo : MonoBehaviour
         yield return new WaitForSeconds(t0);
 
 
-        backgroundImage.DOFillAmount(1f, t2);
+        transform.DORotate(Vector3.right * -20f, 0.75f);
+
+        barImage.DOFillAmount(1f, t2);
+        backgroundImage.DOFillAmount(1f, t2*2f);
         GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t1);
 
@@ -184,12 +219,16 @@ public class OWMap_NodeInfo : MonoBehaviour
 
     private IEnumerator HideNodeInfoAnimation()
     {
+        transform.DOComplete();
+        barImage.DOComplete();
         backgroundImage.DOComplete();
         nodeInfoText.DOComplete();
         statusText.DOComplete();
         rewardsText.DOComplete();
 
         float t1 = 0.1f;
+
+        transform.DORotate(Vector3.zero, 1f);
 
         rewardsText.DOFade(0f, t1);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
@@ -203,6 +242,7 @@ public class OWMap_NodeInfo : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t1);
 
+        barImage.DOFillAmount(0f, t1);
         backgroundImage.DOFillAmount(0f, t1);
         GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t1);

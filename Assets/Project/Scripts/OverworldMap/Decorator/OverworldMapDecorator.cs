@@ -130,9 +130,9 @@ public class OverworldMapDecorator : MonoBehaviour
         node.SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
 
         OWMap_NodeInfo upgradeNodeInfo = Instantiate(UpgradeNodeInfoPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_NodeInfo>();
-
         bool positionAtRight = (nodeIndexInLevel+1f) / (float)totalNodesInLevel > 0.5f;
         upgradeNodeInfo.Init(node, node.MouseOverNotifier, positionAtRight);
+        upgradeNodeInfo.SetIsInteractableTrue();
     }
 
     private bool IsBattleLevel(int levelI)
