@@ -74,7 +74,8 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         foreach (UpgradeLevelData upgradeLevel in upgradeLevels)
         {
-            DecorateUpgradeNode(mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI], upgradeLevel.numNextLevelNodes, upgradeLevel.upgradeType, upgradeLevel.progressionState);
+            DecorateUpgradeNode(mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI], upgradeLevel.numNextLevelNodes, upgradeLevel.nodeI, mapNodes[upgradeLevel.levelI].Length, 
+                upgradeLevel.upgradeType, upgradeLevel.progressionState);
         }
     }
 

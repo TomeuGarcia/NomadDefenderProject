@@ -75,9 +75,11 @@ public class OverworldMapCreator : MonoBehaviour
             }
 
             // For easier development purposes:
+            /*
             Transform textTransform = Instantiate(mapTextPrefab, otherHolder).transform;
             textTransform.GetChild(0).GetComponent<TextMeshPro>().text = levelI.ToString();
             textTransform.localPosition = MapRightDir * -3f;
+            */
         }
 
     }

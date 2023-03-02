@@ -54,10 +54,9 @@ MonoBehaviour:
     type: 2}
   mapSceneLoader: {fileID: 8485875724773115229}
   owMapPawn: {fileID: 2813399844669948103}
-  gameOverHolder: {fileID: 6195462066364974422}
-  victoryHolder: {fileID: 628256618140451985}
   cardDisplayer: {fileID: 0}
   owMapTutorial: {fileID: 0}
+  owMapTutorial2: {fileID: 0}
 --- !u!114 &1897838225408051679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,16 +93,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dSettings: {fileID: 11400000, guid: 54fa6e541346171458ecc57650572d46, type: 2}
   dUtils: {fileID: 11400000, guid: 19de1eea6c6b5aa4288193707bac74bc, type: 2}
+  UpgradeNodeInfoPrefab: {fileID: 2209075628736127882, guid: 4386498a9dca425459c3f4feeb5aee2c,
+    type: 3}
   emptyLevels:
-  - levelI: 5
-    nodeI: 1
-    progressionState: 2
-    emptyType: 1
-  - levelI: 5
+  - levelI: 6
     nodeI: 0
     progressionState: 2
     emptyType: 1
-  - levelI: 5
+  - levelI: 6
     nodeI: 1
     progressionState: 2
     emptyType: 1
@@ -113,7 +110,12 @@ MonoBehaviour:
     progressionState: 0
     battleType: 0
     numNextLevelNodes: 1
-  - levelI: 4
+  - levelI: 2
+    nodeI: 0
+    progressionState: 1
+    battleType: 1
+    numNextLevelNodes: 1
+  - levelI: 5
     nodeI: 0
     progressionState: 2
     battleType: 2
@@ -124,12 +126,12 @@ MonoBehaviour:
     progressionState: 0
     upgradeType: 1
     numNextLevelNodes: 1
-  - levelI: 2
+  - levelI: 3
     nodeI: 0
     progressionState: 0
     upgradeType: 3
     numNextLevelNodes: 1
-  - levelI: 3
+  - levelI: 4
     nodeI: 0
     progressionState: 0
     upgradeType: 2
@@ -246,12 +248,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e67164a059227448845f4d773d39dce, type: 3}
---- !u!1 &628256618140451985 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5756603798315518339, guid: 4e67164a059227448845f4d773d39dce,
-    type: 3}
-  m_PrefabInstance: {fileID: 5141866914738212114}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2813399844669948103 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6940224012387552725, guid: 4e67164a059227448845f4d773d39dce,
@@ -273,12 +269,6 @@ Transform:
 --- !u!4 &6076429243194866471 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1371421422813115957, guid: 4e67164a059227448845f4d773d39dce,
-    type: 3}
-  m_PrefabInstance: {fileID: 5141866914738212114}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6195462066364974422 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1342397439794579524, guid: 4e67164a059227448845f4d773d39dce,
     type: 3}
   m_PrefabInstance: {fileID: 5141866914738212114}
   m_PrefabAsset: {fileID: 0}

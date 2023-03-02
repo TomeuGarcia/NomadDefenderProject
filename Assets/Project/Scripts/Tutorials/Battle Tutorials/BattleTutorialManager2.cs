@@ -40,7 +40,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     private void Awake()
     {
-        cardDrawer.displayRedrawsOnGameStart = false;
+        //cardDrawer.displayRedrawsOnGameStart = false;
     }
     void Start()
     {
@@ -48,8 +48,8 @@ public class BattleTutorialManager2 : MonoBehaviour
         speedUpButton.SetActive(false);
 
 
-        redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
-        redrawInterface.SetActive(false);
+        //redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
+        //redrawInterface.SetActive(false);
 
         watcherCardTile.gameObject.SetActive(false);
 
@@ -93,8 +93,8 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //Activate redraw
 
-        redrawInterface.SetActive(true);
-        redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
+        //redrawInterface.SetActive(true);
+        //redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
         yield return new WaitForSeconds(0.5f);
         cardDrawer.StartRedrawButtonAnimation();
         yield return new WaitForSeconds(2.0f);
@@ -105,7 +105,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //2 -> Successfully showing
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
+        //yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
         yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();

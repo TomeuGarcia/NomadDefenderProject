@@ -8,6 +8,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     [SerializeField] protected OWMapTutorialManager owMapTutorial;
     [SerializeField] protected OWMapTutorialManager2 owMapTutorial2;
     bool firstBattleResultApplied = false;
+    int battleCounter = 0;
 
 
     protected override void Init()
@@ -57,6 +58,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     private void MapTutorialAfterSecondBattle()
     {
         if (!IsCurrentNodeBattle()) return;
+        battleCounter++;
+        if (battleCounter <= 1) return;
 
         owMapTutorial2.StartTutorial();
         mapSceneLoader.OnSceneFromMapUnloaded -= MapTutorialAfterSecondBattle;
@@ -67,12 +70,12 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     protected override void ApplyBattleStateResult()
     {
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
-
+        bool wonWithPerfectDefense = currentBattleStateResult.DidWinWithPerfectDefense();
         if (firstBattleResultApplied)
         {
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState);
+                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense);
             }
         }
         else
@@ -80,7 +83,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             firstBattleResultApplied = true;
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED); // Hardcoded to always apply UNDAMAGED
+                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false); // Hardcoded to always apply UNDAMAGED
             }
         }
 
