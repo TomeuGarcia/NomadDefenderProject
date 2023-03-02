@@ -76,7 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9778cbffe227af3478c66989ef8ad4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorCover: {fileID: 5553744831218316705}
+  armorCovers:
+  - {fileID: 5553744831218316705}
   armorShatterParticles: {fileID: 1183439867971192712}
   matLerpsData:
   - time: 1
@@ -139,6 +140,20 @@ MonoBehaviour:
     invert: 1
     variableReference: _BrightnesCoef
     endGoal: 1
+  areaMeshIndicator: {fileID: 0}
+  areaMatLerpData:
+    time: 0
+    min: 0
+    max: 0
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    invert: 0
+    variableReference: 
+    endGoal: 0
 --- !u!114 &4234449244446336290
 MonoBehaviour:
   m_ObjectHideFlags: 0
