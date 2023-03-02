@@ -75,9 +75,15 @@ public class OWMap_Node : MonoBehaviour
     public OWMap_Connection[] GetNextLevelConnections() { return nextLevelConnections; }
     
 
+    [SerializeField] private MouseOverNotifier mouseOverNotifier;
+    public MouseOverNotifier MouseOverNotifier => mouseOverNotifier;
+
+    [SerializeField] private Transform nodeAdditionsTransform;
+    public Transform NodeAdditionsTransform => nodeAdditionsTransform;
+
     [SerializeField] private Transform nodeTransform;
-    [SerializeField] private BoxCollider interactionCollider;
     [SerializeField] private MeshRenderer meshRenderer;
+
     private Material material;
     public const float FADE_DURATION = 0.1f;
     public const float SELECTED_DURATION = 0.075f;
@@ -100,6 +106,17 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private ParticleSystem destroyedParticles;
     [SerializeField] private MeshRenderer flashMeshRenderer;
     private Material flashMaterial;
+
+
+    // EVENTS
+    public delegate void NodeHealthStateAction(NodeEnums.HealthState healthState, bool wonWithPerfectDefense);
+    public event NodeHealthStateAction OnNodeHealthStateSet;
+
+    public delegate void NodeInteractionAction();
+    public event NodeInteractionAction OnNodeInfoInteractionEnabled;
+    public event NodeInteractionAction OnNodeInfoInteractionDisabled;
+    public void InvokeOnNodeInfoInteractionEnabled() { if (OnNodeInfoInteractionEnabled != null) OnNodeInfoInteractionEnabled(); }
+    public void InvokeOnNodeInfoInteractionDisabled() { if (OnNodeInfoInteractionDisabled != null) OnNodeInfoInteractionDisabled(); }
 
 
     public void Print()
@@ -199,7 +216,6 @@ public class OWMap_Node : MonoBehaviour
     public void EnableInteraction()
     {
         isInteractable = true;
-        //interactionCollider.enabled = true;
 
         material.SetFloat("_IsInteractable", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
@@ -208,7 +224,6 @@ public class OWMap_Node : MonoBehaviour
     public void DisableInteraction()
     {
         isInteractable = false;
-        //interactionCollider.enabled = false;
 
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
@@ -316,7 +331,7 @@ public class OWMap_Node : MonoBehaviour
     }
 
 
-    public void SetHealthState(NodeEnums.HealthState nodeHealthState)
+    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense)
     {
         healthState = nodeHealthState;
 
@@ -339,7 +354,7 @@ public class OWMap_Node : MonoBehaviour
             case NodeEnums.HealthState.GREATLY_DAMAGED:
                 {
                     material.SetFloat("_IsDamaged", 1f);
-                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
+                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_orangeColor);
                     SetIconColor(OWMapDecoratorUtils.s_blueColor);
                     colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
@@ -358,6 +373,8 @@ public class OWMap_Node : MonoBehaviour
             default:
                 break;
         }
+
+        if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState, wonWithPerfectDefense);
     }
 
     private void DisableNextLevelNodesInteraction()
@@ -387,7 +404,7 @@ public class OWMap_Node : MonoBehaviour
                 nextLevelNode.EnableInteraction();
 
                 nextLevelEnabledNodes.Add(nextLevelNode);
-            }            
+            }
         }
 
         return nextLevelEnabledNodes.ToArray();
