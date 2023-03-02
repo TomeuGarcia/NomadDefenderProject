@@ -46,6 +46,7 @@ public class AreaSpawnerHealth : MonoBehaviour
 
             case SpawnType.REPEATEDLY:
                 //should I add StopRepeating() to a OnDeath event?
+                enemyFeedback.AreaOnCooldown(spawnRate);
                 InvokeRepeating("AreaCooldown", spawnRate, spawnRate);
                 break;
         }
