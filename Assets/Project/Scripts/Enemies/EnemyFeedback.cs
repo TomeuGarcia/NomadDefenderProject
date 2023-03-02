@@ -6,26 +6,35 @@ using UnityEngine;
 public class EnemyFeedback : MonoBehaviour
 {
     [Header("ARMOR")]
-    [SerializeField] private MeshRenderer armorCover;
+    [SerializeField] private List<MeshRenderer> armorCovers = new List<MeshRenderer>();
     [SerializeField] private ParticleSystem armorShatterParticles;
     [SerializeField] private List<MaterialLerp.FloatData> matLerpsData = new List<MaterialLerp.FloatData>();
     private string armorDisappearCoef = "_DisappearCoef";
     private IEnumerator armorGainLerp;
     private IEnumerator armorBrightnesLerp;
 
+    [Header("AREA ABILITY")]
+    [SerializeField] private MeshRenderer areaMeshIndicator;
+    [SerializeField] private MaterialLerp.FloatData areaMatLerpData;
+    private IEnumerator areaCooldownLerp;
+
+
     public void ResetEnemy(bool hasArmor)
     {
-        armorCover.enabled = hasArmor;
-
-        foreach (Material material in armorCover.materials)
+        foreach (MeshRenderer mesh in armorCovers)
         {
-            material.SetFloat(armorDisappearCoef, Convert.ToInt32(hasArmor));
-        }
+            mesh.enabled = hasArmor;
 
-        if (hasArmor)
-        {
-            armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], armorCover.materials);
-            StartCoroutine(armorGainLerp);
+            foreach (Material material in mesh.materials)
+            {
+                material.SetFloat(armorDisappearCoef, Convert.ToInt32(hasArmor));
+            }
+
+            if (hasArmor)
+            {
+                armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], mesh.materials);
+                StartCoroutine(armorGainLerp);
+            }
         }
     }
 
@@ -57,16 +66,21 @@ public class EnemyFeedback : MonoBehaviour
         //play inc sound
 
 
-        armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], armorCover.materials);
-        StartCoroutine(armorBrightnesLerp);
+        foreach (MeshRenderer mesh in armorCovers)
+        {
+            armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], mesh.materials);
+            StartCoroutine(armorBrightnesLerp);
+        }
     }
     private void DecreaseArmor()
     {
         //play hit sound
 
-
-        armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], armorCover.materials);
-        StartCoroutine(armorBrightnesLerp);
+        foreach (MeshRenderer mesh in armorCovers)
+        {
+            armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], mesh.materials);
+            StartCoroutine(armorBrightnesLerp);
+        }
     }
     private void GainArmor()
     {
@@ -74,10 +88,13 @@ public class EnemyFeedback : MonoBehaviour
 
 
         //ACTIVATE SHIELD
-        armorCover.enabled = true;
+        foreach (MeshRenderer mesh in armorCovers)
+        {
+            mesh.enabled = true;
 
-        armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], armorCover.materials);
-        StartCoroutine(armorGainLerp);
+            armorGainLerp = MaterialLerp.FloatLerp(matLerpsData[0], mesh.materials);
+            StartCoroutine(armorGainLerp);
+        }
     }
     private void LoseArmor()
     {
@@ -85,12 +102,24 @@ public class EnemyFeedback : MonoBehaviour
 
 
         //SHATTER SHIELD
-        armorShatterParticles.Play();
-
-        armorCover.enabled = false;
-        foreach (Material material in armorCover.materials)
+        foreach (MeshRenderer mesh in armorCovers)
         {
-            material.SetFloat(armorDisappearCoef, 1.0f);
+            armorShatterParticles.Play();
+
+            mesh.enabled = false;
+            foreach (Material material in mesh.materials)
+            {
+                material.SetFloat(armorDisappearCoef, 1.0f);
+            }
         }
+    }
+
+
+    //AREA
+    public void AreaOnCooldown(float lerpTime)
+    {
+        areaMatLerpData.time = lerpTime;
+        areaCooldownLerp = MaterialLerp.FloatLerp(areaMatLerpData, areaMeshIndicator.materials);
+        StartCoroutine(areaCooldownLerp);
     }
 }
