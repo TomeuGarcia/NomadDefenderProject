@@ -11,6 +11,9 @@ public class AreaSpawnerArmor : MonoBehaviour
     [SerializeField] int armorAmount;
     GameObject currentWave;
 
+    [Header("FEEDBACK")]
+    [SerializeField] EnemyFeedback enemyFeedback;
+
     private void OnEnable()
     {
         InitAreaSpawn();
@@ -43,7 +46,8 @@ public class AreaSpawnerArmor : MonoBehaviour
 
             case SpawnType.REPEATEDLY:
                 //should I add StopRepeating() to a OnDeath event?
-                InvokeRepeating("SpawnWave", spawnRate, spawnRate);
+                enemyFeedback.AreaOnCooldown(spawnRate);
+                InvokeRepeating("AreaCooldown", spawnRate, spawnRate);
                 break;
         }
     }
@@ -52,11 +56,15 @@ public class AreaSpawnerArmor : MonoBehaviour
     {
         if (spawnType == SpawnType.REPEATEDLY)
         {
-            CancelInvoke("SpawnWave");
+            CancelInvoke("AreaCooldown");
         }
     }
 
-    
+    void AreaCooldown()
+    {
+        enemyFeedback.AreaOnCooldown(spawnRate);
+        SpawnWave();
+    }
 
     void SpawnWave()
     {
