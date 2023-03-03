@@ -29,7 +29,13 @@ public class ConsoleDialogSystem : MonoBehaviour
         openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
         closingContext = ">" + "</color>";
     }
-
+    private void Awake()
+    {
+        textTypeLibrary.Init();
+        openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
+        closingContext = ">" + "</color>";
+        
+    }
     public void PrintLine(TextLine textLine)
     {
 
