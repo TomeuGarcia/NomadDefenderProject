@@ -15,11 +15,12 @@ public class BaseReplaceTutorial : MonoBehaviour
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
 
-        cardPartReplaceManager.InitTutorialBases(tutorialBaseAndPassive);
+        
     }
 
     void Start()
     {
+        cardPartReplaceManager.InitTutorialBases(tutorialBaseAndPassive);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());

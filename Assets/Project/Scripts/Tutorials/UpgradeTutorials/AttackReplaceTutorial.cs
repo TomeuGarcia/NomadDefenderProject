@@ -15,11 +15,12 @@ public class AttackReplaceTutorial : MonoBehaviour
     {
         tutoType = Tutorials.PROJECTILE_FUSION_UPG;
 
-        cardPartReplaceManager.InitTutorialAttacks(tutorialAttacks);
+        
     }
 
     void Start()
     {
+        cardPartReplaceManager.InitTutorialAttacks(tutorialAttacks);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());

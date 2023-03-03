@@ -15,11 +15,12 @@ public class BodyReplaceTutorial : MonoBehaviour
     {
         tutoType = Tutorials.BODY_FUSION_UPG;
 
-        cardPartReplaceManager.InitTutorialBodies(tutorialBodies);
+        
     }
 
     void Start()
     {
+        cardPartReplaceManager.InitTutorialBodies(tutorialBodies);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());
