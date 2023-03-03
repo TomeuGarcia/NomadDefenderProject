@@ -1,6 +1,6 @@
 using UnityEngine;
-using static MapData;
-using static OWMap_Node;
+using DG.Tweening;
+
 
 public class OverworldMapGameManager : MonoBehaviour
 {
@@ -66,6 +66,7 @@ public class OverworldMapGameManager : MonoBehaviour
         InitMapSceneLoader();
         StartAtFirstLevel();
         StartCommunicationWithNextNodes(currentNode);
+        UpdateNodesInfoDisplayInteractions();
 
         moveCameraAfterNodeScene = true;
     }
@@ -101,11 +102,14 @@ public class OverworldMapGameManager : MonoBehaviour
         {
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
         }
+
+        // scuffed camera shake :)
+        //owMapPawn.FollowCameraTransform.DOPunchRotation(new Vector3(Random.Range(0.5f, 1.0f), Random.Range(0f, 0.4f), Random.Range(0f, 0.4f)) * 2f, 0.5f);
     }
 
 
     public void OnOwMapPawnReachedNode(OWMap_Node reachedNode)
-    {
+    {        
         ++this.currentMapLevelI;
 
         bool cameFromNodeWasBattle = IsCurrentNodeBattle();
@@ -163,9 +167,24 @@ public class OverworldMapGameManager : MonoBehaviour
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
             StartCommunicationWithNextNodes(currentNode);
 
-        if (!isNextLevelLastLevel && IsNextLevelUpgrade()) foreach (OWMap_Node node in mapNodes[currentMapLevelI+1]) node.InvokeOnNodeInfoInteractionEnabled();
-    }
 
+        UpdateNodesInfoDisplayInteractions();
+    }
+    
+    private void UpdateNodesInfoDisplayInteractions()
+    {
+        bool isNextLevelLastLevel = currentNode.GetMapReferencesData().isLastLevelNode;
+
+        // Enable next info displays
+        if (!isNextLevelLastLevel)
+        {
+            OWMap_Node[] nextLevelAvailableNodes = currentNode.GetMapReferencesData().nextLevelNodes;
+            foreach (OWMap_Node node in nextLevelAvailableNodes) node.InvokeOnNodeInfoInteractionEnabled();
+        }
+
+        // Disable current info displays
+        foreach (OWMap_Node node in mapNodes[currentMapLevelI]) node.InvokeOnNodeInfoInteractionDisabled();
+    }
 
 
     public void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
@@ -187,6 +206,7 @@ public class OverworldMapGameManager : MonoBehaviour
             for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
             {
                 nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
+                // TODO set node material for active interaction
             }
         }
         else

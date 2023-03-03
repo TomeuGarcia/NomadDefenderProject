@@ -8,6 +8,7 @@ public class OWMapPawn : MonoBehaviour
 
     [SerializeField] private Transform moveTransform;
     [SerializeField] private GameObject followCamera;
+    public Transform FollowCameraTransform => followCamera.transform;
 
     private OWMap_Node currentNode;
 
