@@ -76,8 +76,9 @@ public class CardPartReplaceManager : MonoBehaviour
 
     
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return null; // scuffed
         deckCards = deckData.GetCardsReference();
 
         buttonMaterial = buttonMeshRenderer.material;
@@ -160,9 +161,12 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
-    public void InitTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    public void SetPartsCreatedByTutorialTrue()
     {
         partsCreatedByTutorial = true;
+    }
+    public void InitTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    {
         numParts = turretPartAttacks.Length;
         InitAttacks(turretPartAttacks);
     }
@@ -186,7 +190,6 @@ public class CardPartReplaceManager : MonoBehaviour
 
     public void InitTutorialBodies(TurretPartBody[] turretPartBodies)
     {
-        partsCreatedByTutorial = true;
         numParts = turretPartBodies.Length;
         InitBodies(turretPartBodies);
     }
@@ -209,7 +212,6 @@ public class CardPartReplaceManager : MonoBehaviour
 
     public void InitTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
-        partsCreatedByTutorial = true;
         numParts = basesAndPassives.Length;
         InitBases(basesAndPassives);
     }

@@ -79,7 +79,7 @@ public class BattleHUD : MonoBehaviour
 
     [HideInInspector] public bool showSpeedUp;
     [HideInInspector] public bool canShowDrawCardButton;
-    [HideInInspector] public bool isManualDrawingEnabled;
+    [SerializeField] public bool playerCanDrawCardManually = true;
 
 
     private void Awake()
@@ -107,7 +107,6 @@ public class BattleHUD : MonoBehaviour
 
         showSpeedUp = true;
         canShowDrawCardButton = true;
-        isManualDrawingEnabled = true;
     }
 
     private void Update()
@@ -315,7 +314,7 @@ public class BattleHUD : MonoBehaviour
 
         cardIconsHolder.DOLocalMoveY(shownCardIconsHolderY, showDuration)
             .OnComplete(() => {
-                if (deckBuildingCards.HasCardsLeft() && canShowDrawCardButton && isManualDrawingEnabled)
+                if (deckBuildingCards.HasCardsLeft() && canShowDrawCardButton && playerCanDrawCardManually)
                 {
                     drawButtonHolder.DOLocalMoveX(shownDrawButtonX, hideDuration)
                         .OnComplete(() => { EnableClickDrawButton(); });

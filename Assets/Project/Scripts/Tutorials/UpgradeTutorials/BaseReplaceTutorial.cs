@@ -14,8 +14,7 @@ public class BaseReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
-
-        
+        cardPartReplaceManager.SetPartsCreatedByTutorialTrue();
     }
 
     void Start()

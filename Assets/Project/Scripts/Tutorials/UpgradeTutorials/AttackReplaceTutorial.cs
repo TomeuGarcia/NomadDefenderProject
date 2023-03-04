@@ -15,7 +15,7 @@ public class AttackReplaceTutorial : MonoBehaviour
     {
         tutoType = Tutorials.PROJECTILE_FUSION_UPG;
 
-        
+        cardPartReplaceManager.SetPartsCreatedByTutorialTrue();
     }
 
     void Start()
