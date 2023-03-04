@@ -257,17 +257,14 @@ public class GameAudioManager : MonoBehaviour
         float pitch = 1f;
         if (bodyType == TurretPartBody.BodyType.SENTRY)
         {
-            Debug.Log("SENTRY");
             pitch = 1f;
         }
         else if (bodyType == TurretPartBody.BodyType.BLASTER)
         {
-            Debug.Log("BLAST");
             pitch = 0.8f;
         }
         else if (bodyType == TurretPartBody.BodyType.SPAMMER)
         {
-            Debug.Log("SPMR");
             pitch = 1.3f;
         }
 

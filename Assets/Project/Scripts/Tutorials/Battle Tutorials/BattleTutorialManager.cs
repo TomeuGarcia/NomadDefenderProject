@@ -49,7 +49,12 @@ public class BattleTutorialManager : MonoBehaviour
 
     private bool firstUpgradeDone = false;
 
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        tutoCardDrawer.finishRedrawSetup = false;
+    }
+
     void Start()
     {
         currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 0;
@@ -182,6 +187,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         tutoCardDrawer.tutorialCard.showTurret = true;
         yield return new WaitForSeconds(1.5f);
+        scriptedSequence.Clear();
 
         //Cards Stats
         scriptedSequence.NextLine();// 8
@@ -238,6 +244,8 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() =>deckInterface.activeInHierarchy );
 
         scriptedSequence.Clear();
+
+        tutoCardDrawer.FinishRedrawSetupUI();
 
         scriptedSequence.NextLine(); //14
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -368,7 +376,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();
-        yield return new WaitForSecondsRealtime(3.5f);
+        yield return new WaitForSecondsRealtime(2.8f);
 
         //Finish scene and load next
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);

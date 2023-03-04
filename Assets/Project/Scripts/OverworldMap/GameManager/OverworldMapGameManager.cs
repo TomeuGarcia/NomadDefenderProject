@@ -179,7 +179,7 @@ public class OverworldMapGameManager : MonoBehaviour
         if (!isNextLevelLastLevel)
         {
             OWMap_Node[] nextLevelAvailableNodes = currentNode.GetMapReferencesData().nextLevelNodes;
-            foreach (OWMap_Node node in nextLevelAvailableNodes) node.InvokeOnNodeInfoInteractionEnabled();
+            foreach (OWMap_Node node in nextLevelAvailableNodes) if (!node.IsDestroyed()) node.InvokeOnNodeInfoInteractionEnabled();
         }
 
         // Disable current info displays

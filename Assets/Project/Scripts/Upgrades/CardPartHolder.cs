@@ -275,12 +275,12 @@ public class CardPartHolder : MonoBehaviour
         }
     }
 
-    public void PlayBaseTutorialBlinkAnimation()
+    public void PlayBaseTutorialBlinkAnimation(float delayBeforeAbility)
     {
         foreach (CardPart cardPart in cardParts)
         {
             CardPartBase cardPartBase = cardPart as CardPartBase;
-            cardPartBase.PlayTutorialBlinkAnimation();
+            cardPartBase.PlayTutorialBlinkAnimation(delayBeforeAbility);
         }
     }
 

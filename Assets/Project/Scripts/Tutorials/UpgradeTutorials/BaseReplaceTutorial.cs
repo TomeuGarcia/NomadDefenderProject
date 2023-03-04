@@ -14,12 +14,11 @@ public class BaseReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
-        cardPartReplaceManager.SetPartsCreatedByTutorialTrue();
+        cardPartReplaceManager.AwakeSetupTutorialBases(tutorialBaseAndPassive);
     }
 
     void Start()
     {
-        cardPartReplaceManager.InitTutorialBases(tutorialBaseAndPassive);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());
@@ -68,14 +67,14 @@ public class BaseReplaceTutorial : MonoBehaviour
         ///Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        cardPartReplaceManager.CardPartHolder.PlayBaseTutorialBlinkAnimation();
+        cardPartReplaceManager.CardPartHolder.PlayBaseTutorialBlinkAnimation(2f);
         yield return new WaitForSeconds(2.0f);
 
         ///Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
-
+        scriptedSequence.Clear();
 
         //Instruction> Effectuate replacement
         scriptedSequence.NextLine();

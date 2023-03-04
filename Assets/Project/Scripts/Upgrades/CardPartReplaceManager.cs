@@ -38,6 +38,10 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+    private TurretPartAttack[] tutorialTurretPartAttacks;
+    private TurretPartBody[] tutorialTurretPartBodies;
+    private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
+
 
     [Header("SUBTRACT CARD PLAY COST")]
     [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
@@ -76,9 +80,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return null; // scuffed
         deckCards = deckData.GetCardsReference();
 
         buttonMaterial = buttonMeshRenderer.material;
@@ -146,6 +149,12 @@ public class CardPartReplaceManager : MonoBehaviour
             else if (partType == PartType.BODY) InitBodiesRandom();
             else if (partType == PartType.BASE) InitBasesRandom();
         }
+        else
+        {
+            if (partType == PartType.ATTACK) InitAttacksTutorial();
+            else if (partType == PartType.BODY) InitBodiesTutorial();
+            else if (partType == PartType.BASE) InitBasesTutorial();
+        }
 
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
@@ -161,14 +170,15 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
-    public void SetPartsCreatedByTutorialTrue()
+    public void AwakeSetupTutorialAttacks(TurretPartAttack[] turretPartAttacks)
     {
         partsCreatedByTutorial = true;
+        tutorialTurretPartAttacks = turretPartAttacks;
     }
-    public void InitTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    private void InitAttacksTutorial()
     {
-        numParts = turretPartAttacks.Length;
-        InitAttacks(turretPartAttacks);
+        numParts = tutorialTurretPartAttacks.Length;
+        InitAttacks(tutorialTurretPartAttacks);
     }
     private void InitAttacksRandom()
     {
@@ -188,10 +198,15 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
-    public void InitTutorialBodies(TurretPartBody[] turretPartBodies)
+    public void AwakeSetupTutorialBodies(TurretPartBody[] turretPartBodies)
     {
-        numParts = turretPartBodies.Length;
-        InitBodies(turretPartBodies);
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBodies = turretPartBodies;
+    }
+    private void InitBodiesTutorial()
+    {
+        numParts = tutorialTurretPartBodies.Length;
+        InitBodies(tutorialTurretPartBodies);
     }
     private void InitBodiesRandom()
     {
@@ -210,10 +225,15 @@ public class CardPartReplaceManager : MonoBehaviour
         uiDescriptionText.text = "Replace a turret's BODY with a new one";
     }
 
-    public void InitTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
-        numParts = basesAndPassives.Length;
-        InitBases(basesAndPassives);
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBases = basesAndPassives;
+    }
+    private void InitBasesTutorial()
+    {
+        numParts = tutorialTurretPartBases.Length;
+        InitBases(tutorialTurretPartBases);
     }
     private void InitBasesRandom()
     {

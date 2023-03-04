@@ -14,13 +14,11 @@ public class AttackReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.PROJECTILE_FUSION_UPG;
-
-        cardPartReplaceManager.SetPartsCreatedByTutorialTrue();
+        cardPartReplaceManager.AwakeSetupTutorialAttacks(tutorialAttacks);
     }
 
     void Start()
     {
-        cardPartReplaceManager.InitTutorialAttacks(tutorialAttacks);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());
@@ -88,6 +86,7 @@ public class AttackReplaceTutorial : MonoBehaviour
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitUntil(() => cardShowedInfo);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.Clear();
         cardPartReplaceManager.CardPartHolder.canSelectCard = true;
