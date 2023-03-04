@@ -67,6 +67,7 @@ public abstract class OWMap_NodeInfoDisplay : MonoBehaviour
     {
         //Debug.Log("isInteractable FALSE");
         this.isInteractable = false;
+        HideNodeInfo();
     }
     public void SetIsInteractableTrue()
     {

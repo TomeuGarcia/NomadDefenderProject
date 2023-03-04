@@ -219,6 +219,8 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetFloat("_IsInteractable", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
+
+        InvokeOnNodeInfoInteractionEnabled();
     }
 
     public void DisableInteraction()
@@ -227,6 +229,8 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
+
+        InvokeOnNodeInfoInteractionDisabled();
     }
 
 
@@ -454,12 +458,16 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 0f);
+        InvokeOnNodeInfoInteractionEnabled();
     }
+
 
     public void PlayFadeOutAnimation()
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 1f);
+
+        InvokeOnNodeInfoInteractionDisabled();
     }
 
 

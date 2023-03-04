@@ -10,12 +10,12 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
     [SerializeField] private TextMeshProUGUI nodeTitleText;
     [SerializeField] private TextMeshProUGUI difficultyText;
 
-    private static string[] nodeDifficultyToText = { "<color=#1DFF5F>LOW</color>",
+    private static string[] nodeDifficultyToText = { "<color=#1DFF5F>EARLY</color>",
                                                  "<color=#FFF345>MID</color>",
-                                                 "<color=#F5550C>HIGH</color>",
+                                                 "<color=#F5550C>LATE</color>",
                                                  "<color=#FF003E>BOSS</color>" };
 
-    private const string difficultyStr = "\\threat: ";
+    private const string difficultyStr = "\\stage: ";
     private const string unknownStr = "???";
 
 

@@ -14,13 +14,11 @@ public class BodyReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.BODY_FUSION_UPG;
-
-        
-    }
+        cardPartReplaceManager.AwakeSetupTutorialBodies(tutorialBodies);
+   }
 
     void Start()
     {
-        cardPartReplaceManager.InitTutorialBodies(tutorialBodies);
         if (!TutorialsSaverLoader.GetInstance().IsTutorialDone(tutoType))
         {
             StartCoroutine(Tutorial());
@@ -73,7 +71,7 @@ public class BodyReplaceTutorial : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         cardPartReplaceManager.CardPartHolder.PlayBodyTutorialBlinkAnimation();
         yield return new WaitForSeconds(2.0f);
-
+        scriptedSequence.Clear();
 
         //Instruction> Effectuate replacement
         scriptedSequence.NextLine();
