@@ -183,7 +183,11 @@ public class OverworldMapGameManager : MonoBehaviour
         }
 
         // Disable current info displays
-        foreach (OWMap_Node node in mapNodes[currentMapLevelI]) node.InvokeOnNodeInfoInteractionDisabled();
+        foreach (OWMap_Node node in mapNodes[currentMapLevelI])
+        {
+            node.InvokeOnNodeInfoInteractionDisabled();
+            node.SetActiveNodeSelection(false);
+        }
     }
 
 
@@ -206,6 +210,7 @@ public class OverworldMapGameManager : MonoBehaviour
             for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
             {
                 nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
+                nextLevelEnabledNodes[i].SetActiveNodeSelection(true);
                 // TODO set node material for active interaction
             }
         }
