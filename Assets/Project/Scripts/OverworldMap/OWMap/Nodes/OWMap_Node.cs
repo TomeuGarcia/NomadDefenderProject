@@ -183,7 +183,7 @@ public class OWMap_Node : MonoBehaviour
     {
         this.owMapGameManager = owMapGameManager;
     }
-    public void SetActiveNodeSelection(bool active) // parameter for    blue / orange
+    public void SetActiveNodeSelection(bool active)
     {
         foreach(GameObject obj in nodeLegs)
         {
