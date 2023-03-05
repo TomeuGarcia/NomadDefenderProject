@@ -1,9 +1,11 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 using static UnityEngine.UI.Image;
 
 public class CameraMovement : MonoBehaviour
@@ -44,6 +46,17 @@ public class CameraMovement : MonoBehaviour
         cameraOriginPos = transform.position;
         cameraDragPos = cameraOriginPos;
         cameraZoomPos = Vector3.zero;
+    }
+
+    private void OnEnable()
+    {
+        PathLocation.OnTakeDamage += CameraShakeLocationTakeDamage;
+        Building.OnBuildingPlaced += CameraShakeBuildingPlaced;
+    }
+    private void OnDisable()
+    {
+        PathLocation.OnTakeDamage -= CameraShakeLocationTakeDamage;
+        Building.OnBuildingPlaced -= CameraShakeBuildingPlaced;
     }
 
     void LateUpdate()
@@ -93,6 +106,25 @@ public class CameraMovement : MonoBehaviour
         }
 
         transform.position = cameraDragPos + cameraZoomPos;
+    }
+
+
+
+    private void CameraShakeLocationTakeDamage()
+    {
+        transform.DOComplete();
+
+        float randomY = Random.Range(0, 2) > 0 ? Random.Range(0.3f, 0.5f) : Random.Range(-0.5f, -0.3f);
+        Vector3 shakePunch = new Vector3(Random.Range(0.1f, 0.2f), randomY, Random.Range(0.1f, 0.2f)) * 1.5f;
+        transform.DOPunchRotation(shakePunch, 0.5f, 10);
+    }
+
+    private void CameraShakeBuildingPlaced()
+    {
+        transform.DOComplete();
+
+        Vector3 shakePunch = new Vector3(Random.Range(-0.25f, -0.1f), 0f, 0f) * 1.5f;
+        transform.DOPunchRotation(shakePunch, 0.4f, 9);
     }
 
 }
