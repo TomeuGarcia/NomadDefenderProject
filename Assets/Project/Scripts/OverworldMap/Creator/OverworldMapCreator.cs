@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
-using static MapData;
-using static OWMap_Node;
+
 
 public class OverworldMapCreator : MonoBehaviour
 {
@@ -22,10 +20,10 @@ public class OverworldMapCreator : MonoBehaviour
 
 
 
-    private Vector3 MapForwardDir => Vector3.forward;
-    private Vector3 MapRightDir => Vector3.right;
+    private static Vector3 MapForwardDir => Vector3.forward;
+    private static Vector3 MapRightDir => Vector3.right;
 
-    public Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
+    public static Vector3 DisplacementBetweenLevels => MapForwardDir * 2f;
 
     private const float NodeGapWidth = 2.0f;
 
@@ -48,6 +46,18 @@ public class OverworldMapCreator : MonoBehaviour
 
     private void CreateMap(out OWMap_Node[][] mapNodes)
     {
+        //// TODO move this code when precedural generation is added
+        for (int levelI = 0; levelI < mapData.levels.Length; ++levelI)
+        {
+            int numNodesInLevel = mapData.levels[levelI].nodes.Length;
+            for (int nodeI = 0; nodeI < numNodesInLevel; ++nodeI)
+            {
+                // Formula xAxisPos: nodeI*2 - (numNodesInLevel-1) 
+                mapData.levels[levelI].nodes[nodeI].xAxisPos = (nodeI * 2) - (numNodesInLevel - 1);
+            }
+        }
+        ////
+
         CreateNodes(out mapNodes);
         CreateConnections(mapNodes);
         SetNodeReferences(mapNodes);
@@ -59,7 +69,7 @@ public class OverworldMapCreator : MonoBehaviour
 
         for (int levelI = 0; levelI < mapData.levels.Length; ++levelI)
         {
-            MapData.MapLevel mapLevel = mapData.levels[levelI];
+            MapData.MapLevelData mapLevel = mapData.levels[levelI];
 
             Transform levelHolder = Instantiate(levelHolderPrefab, holder).transform;
             levelHolder.localPosition = DisplacementBetweenLevels * levelI;
@@ -90,8 +100,8 @@ public class OverworldMapCreator : MonoBehaviour
 
         for (int levelI = 0; levelI < lastMapLevelIndex; ++levelI)
         {
-            MapData.MapLevel mapLevel = mapData.levels[levelI];
-            MapData.MapLevel mapNextLevel = mapData.levels[levelI+1];
+            MapData.MapLevelData mapLevel = mapData.levels[levelI];
+            MapData.MapLevelData mapNextLevel = mapData.levels[levelI+1];
 
             Transform levelHolder = holder.GetChild(levelI);
             Transform cNodesHolder = levelHolder.GetChild(0);
@@ -102,7 +112,7 @@ public class OverworldMapCreator : MonoBehaviour
 
             for (int nodeI = 0; nodeI < mapLevel.nodes.Length; ++nodeI)
             {
-                MapData.MapNode currentNode = mapLevel.nodes[nodeI];
+                MapData.MapNodeData currentNode = mapLevel.nodes[nodeI];
                 Transform currentNodeTransform = cNodesHolder.GetChild(nodeI);
 
                 List<OWMap_Connection> nextLevelConnections = new List<OWMap_Connection>(); // Connections Reference
@@ -112,7 +122,7 @@ public class OverworldMapCreator : MonoBehaviour
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];
 
-                    MapData.MapNode nextNode = mapNextLevel.nodes[connectedNextNodeI]; // DO whatever with this
+                    MapData.MapNodeData nextNode = mapNextLevel.nodes[connectedNextNodeI]; // DO whatever with this
                     Transform nextNodeTransform = nNodesHolder.GetChild(connectedNextNodeI);
 
                     Vector3 cPos = currentNodeTransform.localPosition;
@@ -121,6 +131,8 @@ public class OverworldMapCreator : MonoBehaviour
                     OWMap_Connection owMapConnection = Instantiate(nodeConnectionPrefab, cConnectionsHolder).GetComponent<OWMap_Connection>();
                     owMapConnection.InitTransform(cPos, nPos, MapForwardDir);
 
+                    // int distance = Mathf.Abs(currentNode.xAxisPos - nextNode.xAxisPos); // know the x axis distance (in "generation space") between nodes                    
+                    
                     nextLevelConnections.Add(owMapConnection); // Connections Reference
                 }
 
@@ -138,11 +150,11 @@ public class OverworldMapCreator : MonoBehaviour
 
         for (int levelI = 0; levelI < lastMapLevelIndex; ++levelI)
         {
-            MapData.MapLevel mapLevel = mapData.levels[levelI];
+            MapData.MapLevelData mapLevel = mapData.levels[levelI];
 
             for (int nodeI = 0; nodeI < mapLevel.nodes.Length; ++nodeI)
             {
-                MapData.MapNode currentNode = mapLevel.nodes[nodeI];
+                MapData.MapNodeData currentNode = mapLevel.nodes[nodeI];
 
                 List<OWMap_Node> nextLevelNodes = new List<OWMap_Node>(); // NodeReferences
 

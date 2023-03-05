@@ -76,6 +76,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
         SetInactiveBattleNodes();
         SetInactiveUpgradeNodes();
+        upgradeNodes[0].InvokeOnNodeInfoInteractionDisabled();
 
 
         //Initializing nodes connections
@@ -149,9 +150,9 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Show Upgrade Nodes
-        foreach (OWMap_Node node in upgradeNodes)
+        for (int i = 0; i < upgradeNodes.Count; ++i)        
         {
-            node.PlayFadeInAnimation();
+            upgradeNodes[i].PlayFadeInAnimation();
             yield return new WaitForSeconds(0.25f);
         }
 
