@@ -66,7 +66,7 @@ public class OverworldMapGameManager : MonoBehaviour
         InitMapSceneLoader();
         StartAtFirstLevel();
         StartCommunicationWithNextNodes(currentNode);
-        UpdateNodesInfoDisplayInteractions();
+        DisableCurrentLevelNodesInfoDisplay();
 
         moveCameraAfterNodeScene = true;
     }
@@ -168,20 +168,11 @@ public class OverworldMapGameManager : MonoBehaviour
             StartCommunicationWithNextNodes(currentNode);
 
 
-        UpdateNodesInfoDisplayInteractions();
+        DisableCurrentLevelNodesInfoDisplay();
     }
     
-    private void UpdateNodesInfoDisplayInteractions()
+    private void DisableCurrentLevelNodesInfoDisplay()
     {
-        bool isNextLevelLastLevel = currentNode.GetMapReferencesData().isLastLevelNode;
-
-        // Enable next info displays
-        if (!isNextLevelLastLevel)
-        {
-            OWMap_Node[] nextLevelAvailableNodes = currentNode.GetMapReferencesData().nextLevelNodes;
-            foreach (OWMap_Node node in nextLevelAvailableNodes) if (!node.IsDestroyed()) node.InvokeOnNodeInfoInteractionEnabled();
-        }
-
         // Disable current info displays
         foreach (OWMap_Node node in mapNodes[currentMapLevelI]) node.InvokeOnNodeInfoInteractionDisabled();
     }
@@ -234,7 +225,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
         for (int i = 0; i < nodeResults.Length; ++i)
         {
-            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense);
+            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense, true);
         }
     }
     private void ApplyBattleStateResultForUpgradeBackToBack()
@@ -243,7 +234,7 @@ public class OverworldMapGameManager : MonoBehaviour
         OWMap_Node[] nextLevelNodes = currentNode.GetMapReferencesData().nextLevelNodes;
         foreach (OWMap_Node node in nextLevelNodes)
         {
-            node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false);
+            node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false, true);
         }
     }
 

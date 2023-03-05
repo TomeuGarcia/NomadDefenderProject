@@ -75,7 +75,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         {
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense);
+                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense, true);
             }
         }
         else
@@ -83,7 +83,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             firstBattleResultApplied = true;
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false); // Hardcoded to always apply UNDAMAGED
+                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false, true); // Hardcoded to always apply UNDAMAGED
             }
         }
 
