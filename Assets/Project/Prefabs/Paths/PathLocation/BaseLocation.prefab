@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.9411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -559,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.9411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -688,7 +688,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6448977592455844683}
-  - {fileID: 3548763918830844476}
+  - {fileID: 7929733091624712799}
   m_Father: {fileID: 6195562928705511367}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -748,6 +748,7 @@ MonoBehaviour:
   deadMaterial: {fileID: 2100000, guid: d25b84825e1204b4494d539f44989c5d, type: 2}
   healthHUD: {fileID: 2711073837169316936}
   nodeMesh: {fileID: 7150025867646675715}
+  locationMeshHolder: {fileID: 7929733091624712799}
   damagedVisualsList:
   - healthState: 1
     takeDamageParticles: {fileID: 6266365075444574482}
@@ -768,7 +769,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSceneNotifier: {fileID: 1843325350936860458}
-  basePathLocation: {fileID: 6195562928705511366}
   victoryHolder: {fileID: 448126591770314068}
   victoryTextTransform: {fileID: 8734239497260064183}
   defeatHolder: {fileID: 2229208245415549911}
@@ -5612,6 +5612,38 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &7914332140043849707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7929733091624712799}
+  m_Layer: 7
+  m_Name: LocationMeshHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7929733091624712799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914332140043849707}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3548763918830844476}
+  m_Father: {fileID: 6195562928591517215}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8287657810957576767
 GameObject:
   m_ObjectHideFlags: 0
@@ -10807,12 +10839,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6195562928591517215}
+    m_TransformParent: {fileID: 7929733091624712799}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4502e34154c39fa45b76f59ff30663c1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4502e34154c39fa45b76f59ff30663c1,
         type: 3}
@@ -10827,7 +10859,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4502e34154c39fa45b76f59ff30663c1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.095
+      value: -0.09500009
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4502e34154c39fa45b76f59ff30663c1,
         type: 3}

@@ -335,7 +335,7 @@ public class OWMap_Node : MonoBehaviour
     }
 
 
-    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense)
+    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense, bool enableInfoDisplay)
     {
         healthState = nodeHealthState;
 
@@ -379,6 +379,7 @@ public class OWMap_Node : MonoBehaviour
         }
 
         if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState, wonWithPerfectDefense);
+        if (enableInfoDisplay) InvokeOnNodeInfoInteractionEnabled();
     }
 
     private void DisableNextLevelNodesInteraction()

@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 114
+  controlID: 115
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -242,14 +242,14 @@ MonoBehaviour:
     y: 613
     width: 1466
     height: 334
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 15}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -401,9 +401,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 00870000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 0cfbffff
+      m_ExpandedIDs: 528df3ff8874f4ff0cacf4ff4e12f6ffda5bf6ff0cfbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -419,7 +419,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 10}
+        m_ClientGUIView: {fileID: 8}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -560,7 +560,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 0
-      snapOffset: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 25}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Camera
@@ -675,9 +675,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5.6961884, y: -0.50399166, z: 6.3300805}
+    m_Target: {x: -6.662374, y: -9.189933, z: 30.198408}
     speed: 2
-    m_Value: {x: 5.6961884, y: -0.50399166, z: 6.3300805}
+    m_Value: {x: -6.662374, y: -9.189933, z: 30.198408}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -724,13 +724,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.1380036, y: -0.19766359, z: 0.028121805, w: 0.9701051}
+    m_Target: {x: -0.12909731, y: 0.14170155, z: -0.018646583, w: -0.9812911}
     speed: 2
-    m_Value: {x: 0.13800287, y: -0.19766255, z: 0.028121658, w: 0.97010005}
+    m_Value: {x: -0.12909569, y: 0.14169976, z: -0.018646348, w: -0.9812787}
   m_Size:
-    m_Target: 8.709839
+    m_Target: 20.458088
     speed: 2
-    m_Value: 8.709839
+    m_Value: 20.458088
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -785,7 +785,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: init
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -797,22 +797,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Project/Prefabs/OverworldMap
+    - Assets/Project/Scenes/Init
     m_Globs: []
-    m_OriginalText: 
+    m_OriginalText: init
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Project/Prefabs/OverworldMap
+  - Assets/Project/Scenes/Init
   m_LastFoldersGridSize: -1
   m_LastProjectPath: "E:\\Users\\Tomeu Garcia Pint\xF3\\Documents\\GitKraken\\NomadDefenderProject"
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 287}
-    m_SelectedIDs: cc860000
-    m_LastClickedID: 34508
-    m_ExpandedIDs: 00000000c07a00001c8000006a8000007a800000908000001098000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 411}
+    m_SelectedIDs: 9ec90100
+    m_LastClickedID: 117150
+    m_ExpandedIDs: 00000000c07a0000128000006080000068800000908000009280000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -867,7 +867,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
