@@ -43,6 +43,7 @@ public class PathLocation : MonoBehaviour
 
     public delegate void PathLocationAction();
     public event PathLocationAction OnDeath;
+    public static event PathLocationAction OnTakeDamage;
 
 
     private void Awake()
@@ -61,9 +62,7 @@ public class PathLocation : MonoBehaviour
     {
         healthSystem.TakeDamage(damageAmount);
 
-        SetDamagedVisuals();
-
-        
+        SetDamagedVisuals();      
 
         if (healthSystem.IsDead())
         {
@@ -76,6 +75,8 @@ public class PathLocation : MonoBehaviour
             locationMeshHolder.DOPunchScale(Vector3.up * 0.6f, 0.6f, 8);
             GameAudioManager.GetInstance().PlayLocationTakeDamage();
         }
+
+        if (OnTakeDamage != null) OnTakeDamage();
     }
 
     private void Die()
