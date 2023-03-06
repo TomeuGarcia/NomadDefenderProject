@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,13 +11,13 @@ public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 public class InBattleBuildingUpgrader : MonoBehaviour
 {
     [SerializeField] private Transform building;
-    [SerializeField] private RectTransform UIParent;
     [SerializeField] private RectTransform mouseDetectionPanel;
-    [SerializeField] private TMP_Text costText;
     [SerializeField] private TMP_Text lvlText;
+    [SerializeField] private TMP_Text costText;
+    [SerializeField] private Image costCurrencyImage;
 
     [SerializeField] private List<int> upgradeCosts = new List<int>();
-    [SerializeField] private List<Image> fillBars = new List<Image>();
+    [SerializeField] protected List<Image> fillBars = new List<Image>();
     
     [SerializeField] private Color32 disalbedTextColor;
 
@@ -28,21 +29,33 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     private int maxLevels;
 
 
+    [Header("NEW UI")]
+    [Header("General")]
+    [SerializeField] protected RectTransform newUiParent;
+    [SerializeField] protected Image barImage;
+    [SerializeField] protected Image backgroundImage;
+    [SerializeField] protected CanvasGroup cgLvlText;
+    [SerializeField] protected CanvasGroup cgCostText;
+    protected Coroutine openAnimationCoroutine = null;
+    protected Coroutine closeAnimationCoroutine = null;
+
+
+
     private CurrencyCounter currencyCounter;
 
     private float xOffset;
     private const int maxStatLevel = 5;
     private const int maxSupportStatLevel = 3;
     private const int maxUpgradeCount = 3;
-    private int currentLevel = 0;
+    protected int currentLevel = 0;
 
-    private int attackLvl;
-    private int cadenceLvl;
-    private int rangeLvl;
+    protected int attackLvl;
+    protected int cadenceLvl;
+    protected int rangeLvl;
     private int supportLvl;
 
-    private float turretFillBarCoef;
-    private float supportFillBarCoef;
+    protected float turretFillBarCoef;
+    protected float supportFillBarCoef;
 
     private bool visible;
 
@@ -53,9 +66,16 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private void Awake()
     {
-        xOffset = UIParent.anchoredPosition.x;
+        AwakeInit();
+    }
 
-        UIParent.gameObject.SetActive(false);
+    protected virtual void AwakeInit()
+    {
+        xOffset = newUiParent.anchoredPosition.x;
+
+        newUiParent.gameObject.SetActive(false);
+
+
 
         costText.text = upgradeCosts[0].ToString();
 
@@ -71,11 +91,15 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         {
             turretBuilding = building.gameObject.GetComponent<TurretBuilding>();
             maxLevels = turretBuilding.CardLevel;
+            UpdateAttackBar();
+            UpdateCadenceBar();
+            UpdateRangeBar();
         }
         else if (buildingType == BuildingCard.CardBuildingType.SUPPORT)
         {
             supportBuilding = building.gameObject.GetComponent<SupportBuilding>();
             maxLevels = maxUpgradeCount;
+            UpdateSupportBar();
         }
         UpdateLevelText();
     }
@@ -101,18 +125,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         cadenceLvl = newCadenceLvl;
         rangeLvl = newRangeLvl;
 
-        UpdateAttackBar();
-        UpdateCadenceBar();
-        UpdateRangeBar();
-
         currencyCounter = newCurrencyCounter;
     }
 
     public void InitSupport(CurrencyCounter newCurrencyCounter)
     {
         supportLvl = 0;
-
-        UpdateSupportBar();
 
         currencyCounter = newCurrencyCounter;
     }
@@ -123,10 +141,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         {
             UIWindowManager.GetInstance().OpenedWindow(this);
 
-            UIParent.gameObject.SetActive(true);
+            newUiParent.gameObject.SetActive(true);
 
-            UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
+            newUiParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
             StartCoroutine(SetVisible());
+
+            PlayOpenAnimation();
         }
     }
 
@@ -135,7 +155,10 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         UIWindowManager.GetInstance().ClosedWindow(this);
 
         visible = false;
-        UIParent.gameObject.SetActive(false);
+        //UIParent.gameObject.SetActive(false);
+        
+
+        PlayCloseAnimation();
     }
 
     public bool IsHoveringWindow()
@@ -149,7 +172,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         visible = true;
     }
 
-    public void UpgradedAttack()
+    public void UpgradedAttack() // Called by button
     {
         if(CanUpgrade(attackLvl))
         {
@@ -164,7 +187,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         }
     }
 
-    public void UpgradedCadence()
+    public void UpgradedCadence() // Called by button
     {
         if (CanUpgrade(cadenceLvl))
         {
@@ -179,7 +202,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         }
     }
 
-    public void UpgradedRange()
+    public void UpgradedRange() // Called by button
     {
         if (CanUpgrade(rangeLvl))
         {
@@ -211,10 +234,21 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private bool CanUpgrade(int levelToCheck)
     {
-        if (currentLevel >= maxLevels) return false;
+        if (IsCardUpgradedToMax(currentLevel)) return false;
 
-        return (currentLevel < maxUpgradeCount && levelToCheck < maxStatLevel
-                && currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]));
+        return currentLevel < maxUpgradeCount && !IsStatMaxed(levelToCheck) && HasEnoughCurrencyToLevelUp();
+    }
+    protected bool IsCardUpgradedToMax(int levelToCheck)
+    {
+        return levelToCheck >= maxLevels;
+    }
+    protected bool IsStatMaxed(int levelToCheck)
+    {
+        return levelToCheck >= maxStatLevel;
+    }
+    protected bool HasEnoughCurrencyToLevelUp()
+    {
+        return currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]);
     }
 
     private void NextLevel()
@@ -241,23 +275,65 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             //costText.text = "NULL";
             costText.text = "0";
             costText.color = disalbedTextColor;
+            costCurrencyImage.color = disalbedTextColor;
         }
     }
 
-    private void UpdateAttackBar()
+    protected virtual void UpdateAttackBar()
     {
-        fillBars[(int)TurretUpgradeType.ATTACK].fillAmount = (float)attackLvl * turretFillBarCoef;
     }
-    private void UpdateCadenceBar()
+    protected virtual void UpdateCadenceBar()
     {
-        fillBars[(int)TurretUpgradeType.CADENCE].fillAmount = (float)cadenceLvl * turretFillBarCoef;
     }
-    private void UpdateRangeBar()
+    protected virtual void UpdateRangeBar()
     {
-        fillBars[(int)TurretUpgradeType.RANGE].fillAmount = (float)rangeLvl * turretFillBarCoef;
     }
-    private void UpdateSupportBar()
+    protected virtual void UpdateSupportBar()
     {
-        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
+        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;        
     }
+
+
+    protected virtual void DisableButtons()
+    {
+    }
+
+
+
+    // Animations
+    protected virtual void PlayOpenAnimation()
+    {
+    }
+
+
+    protected virtual void PlayCloseAnimation()
+    {
+    }
+    
+
+
+    protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill)
+    {
+        bar.DOComplete();
+        bar.DOFillAmount(1f, 0.2f);
+
+        button.transform.DOComplete();
+        button.transform.DOScale(Vector3.one * 1.1f, 0.2f);
+
+        backFillBar.fillAmount = backFill;
+    }
+
+
+    protected void EmptyStatBar(Image bar, Image button, Image backFillBar, float backFill)
+    {
+        bar.DOComplete();
+        bar.DOFillAmount(0f, 0.2f);
+
+        button.transform.DOComplete();
+        button.transform.DOScale(Vector3.one, 0.2f);
+
+        backFillBar.fillAmount = backFill;
+    }
+
+
 }
