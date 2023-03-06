@@ -29,6 +29,10 @@ public class TextTypeLibrary : ScriptableObject
 
     private void OnValidate()
     {
+        Init();
+    } 
+    public void Init()
+    {
         foreach(TextType tType in textTypes)
         {
             tType.openingContextColor = "<color=#" + ColorUtility.ToHtmlStringRGB(tType.color) + ">";

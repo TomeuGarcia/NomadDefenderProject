@@ -40,7 +40,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     private void Awake()
     {
-        cardDrawer.displayRedrawsOnGameStart = false;
+        //cardDrawer.displayRedrawsOnGameStart = false;
     }
     void Start()
     {
@@ -48,8 +48,8 @@ public class BattleTutorialManager2 : MonoBehaviour
         speedUpButton.SetActive(false);
 
 
-        redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
-        redrawInterface.SetActive(false);
+        //redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
+        //redrawInterface.SetActive(false);
 
         watcherCardTile.gameObject.SetActive(false);
 
@@ -93,8 +93,8 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //Activate redraw
 
-        redrawInterface.SetActive(true);
-        redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
+        //redrawInterface.SetActive(true);
+        //redrawInterface.GetComponent<CanvasGroup>().DOFade(1.0f, 0.25f);
         yield return new WaitForSeconds(0.5f);
         cardDrawer.StartRedrawButtonAnimation();
         yield return new WaitForSeconds(2.0f);
@@ -105,7 +105,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         scriptedSequence.NextLine(); //2 -> Successfully showing
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
+        //yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
         yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();
@@ -146,11 +146,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for(float i = 0; i < 1.0f; i+= 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(1.0f, 0.1f, i);
+            Time.timeScale = Mathf.Lerp(1.0f, 0.0f, i);
             yield return null;
         }
 
-        Time.timeScale = 0.1f;
+        Time.timeScale = 0.0f;
 
         scriptedSequence.NextLine(); //8 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -190,12 +190,15 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for (float i = 0; i < 1.0f; i += 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(0.1f, 1.0f, i);
+            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
             yield return null;
         }
 
         Time.timeScale = 1.0f;
-        
+
+
+        yield return new WaitForSecondsRealtime(7.5f);
+        scriptedSequence.Clear();
     }
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)

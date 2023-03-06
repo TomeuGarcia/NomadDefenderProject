@@ -2,9 +2,8 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static TurretBuilding;
+
 
 public abstract class Building : MonoBehaviour
 {
@@ -12,6 +11,11 @@ public abstract class Building : MonoBehaviour
 
 
     protected bool isFunctional = false;
+
+
+    public delegate void BuildingAction();
+    public static event BuildingAction OnBuildingPlaced;
+    protected void InvokeOnBuildingPlaced() { if (OnBuildingPlaced != null) OnBuildingPlaced(); }
 
 
     protected virtual void DisableFunctionality()

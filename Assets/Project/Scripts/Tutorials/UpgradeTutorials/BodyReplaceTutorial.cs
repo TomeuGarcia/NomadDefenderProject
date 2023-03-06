@@ -14,9 +14,8 @@ public class BodyReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.BODY_FUSION_UPG;
-
-        cardPartReplaceManager.InitTutorialBodies(tutorialBodies);
-    }
+        cardPartReplaceManager.AwakeSetupTutorialBodies(tutorialBodies);
+   }
 
     void Start()
     {
@@ -46,7 +45,7 @@ public class BodyReplaceTutorial : MonoBehaviour
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
 
 
@@ -54,32 +53,25 @@ public class BodyReplaceTutorial : MonoBehaviour
         //[CARDS SHOW UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.5f);
 
 
         //Loading Spammer body card…
         //[SPAMMER PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.5f);
 
         // Loading Body card stats: <color=#FF003E>ATTACK</color> and <color=#FFF345>CADENCY</color>
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         cardPartReplaceManager.CardPartHolder.PlayBodyTutorialBlinkAnimation();
-        yield return new WaitForSeconds(4.0f);
-
-        //Waiting for <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
-        //[CLEAR]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
-
 
         //Instruction> Effectuate replacement
         scriptedSequence.NextLine();
@@ -95,14 +87,14 @@ public class BodyReplaceTutorial : MonoBehaviour
         cardPartReplaceManager.UpgradeCardHolder.canSelectCard = true;
 
         yield return new WaitUntil(() => cardPartReplaceManager.ReplacementDone);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         scriptedSequence.Clear();
 
 
         //Successful replacement status.
         //[WAIT 1 SECOND THEN CLEAR]
         scriptedSequence.NextLine();
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
 
 
@@ -111,14 +103,14 @@ public class BodyReplaceTutorial : MonoBehaviour
         //[WAIT 1 SECOND]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
 
 
         //Upgrade completed
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
 
         cardPartReplaceManager.canFinalRetrieveCard = true;

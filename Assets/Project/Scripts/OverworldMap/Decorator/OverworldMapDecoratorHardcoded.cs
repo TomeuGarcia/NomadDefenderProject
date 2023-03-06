@@ -66,7 +66,8 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         foreach (BattleLevelData battleLevel in battleLevels)
         {
-            DecorateBattleNode(mapNodes[battleLevel.levelI][battleLevel.nodeI], battleLevel.numNextLevelNodes, battleLevel.battleType, battleLevel.progressionState);
+            DecorateBattleNode(mapNodes[battleLevel.levelI][battleLevel.nodeI], battleLevel.numNextLevelNodes, battleLevel.nodeI, mapNodes[battleLevel.levelI].Length,
+                battleLevel.battleType, battleLevel.progressionState);
         }
     }
 
@@ -74,7 +75,8 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         foreach (UpgradeLevelData upgradeLevel in upgradeLevels)
         {
-            DecorateUpgradeNode(mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI], upgradeLevel.numNextLevelNodes, upgradeLevel.upgradeType, upgradeLevel.progressionState);
+            DecorateUpgradeNode(mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI], upgradeLevel.numNextLevelNodes, upgradeLevel.nodeI, mapNodes[upgradeLevel.levelI].Length, 
+                upgradeLevel.upgradeType, upgradeLevel.progressionState);
         }
     }
 

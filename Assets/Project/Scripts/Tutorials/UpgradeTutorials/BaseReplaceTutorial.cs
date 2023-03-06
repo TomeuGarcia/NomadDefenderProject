@@ -14,8 +14,7 @@ public class BaseReplaceTutorial : MonoBehaviour
     private void Awake()
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
-
-        cardPartReplaceManager.InitTutorialBases(tutorialBaseAndPassive);
+        cardPartReplaceManager.AwakeSetupTutorialBases(tutorialBaseAndPassive);
     }
 
     void Start()
@@ -44,7 +43,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
 
 
@@ -52,42 +51,34 @@ public class BaseReplaceTutorial : MonoBehaviour
         //[CARDS SHOW UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.5f);
 
 
         //Loading new Clean Strike base card…
         //[Clean Strike PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         cardPartReplaceManager.CardPartHolder.appearAnimationCanStartMoving = true;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.5f);
 
         ///Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        cardPartReplaceManager.CardPartHolder.PlayBaseTutorialBlinkAnimation();
-        yield return new WaitForSeconds(3.0f);
+        cardPartReplaceManager.CardPartHolder.PlayBaseTutorialBlinkAnimation(2f);
+        yield return new WaitForSeconds(2.0f);
 
         ///Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3.0f);
-
-        //Waiting for <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
-        //[CLEAR]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
-
 
         //Instruction> Effectuate replacement
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
         
         cardPartReplaceManager.CardPartHolder.canSelectCard = true;
         cardPartReplaceManager.UpgradeCardHolder.canSelectCard = true;
@@ -98,7 +89,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         //Successful replacement status.
         //[WAIT 1 SECOND THEN CLEAR]
         scriptedSequence.NextLine();
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
 
 
@@ -111,7 +102,7 @@ public class BaseReplaceTutorial : MonoBehaviour
             scriptedSequence.SkipLine();
             scriptedSequence.NextLine();
             yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(1.5f);
             scriptedSequence.Clear();
         }
         else
@@ -121,7 +112,7 @@ public class BaseReplaceTutorial : MonoBehaviour
             //[WAIT 1 SECOND]
             scriptedSequence.NextLine();
             yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(1.5f);
             scriptedSequence.Clear();
             scriptedSequence.SkipLine();
         }
@@ -130,7 +121,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         //Upgrade completed
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
 
         cardPartReplaceManager.canFinalRetrieveCard = true;

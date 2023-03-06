@@ -25,8 +25,9 @@ public class CardDrawer : MonoBehaviour
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
     [HideInInspector] public bool canRedraw = true;
-    [HideInInspector] public bool canDisplaySpeedUp = true;
-    [HideInInspector] public bool displayRedrawsOnGameStart = true;
+    [SerializeField]  public bool canDisplaySpeedUp = true;
+    [SerializeField] public bool displayRedrawsOnGameStart = true;
+    [SerializeField] public bool finishRedrawSetup = true;
 
 
     private void OnEnable()
@@ -54,15 +55,15 @@ public class CardDrawer : MonoBehaviour
 
     private void Start()
     {
-        GameStartSetup(2.5f, displayRedrawsOnGameStart);
+        GameStartSetup(2.5f, displayRedrawsOnGameStart, finishRedrawSetup);
     }
 
-    protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd)
+    protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
         SetupRedraws();
         SetupDeck();
 
-        DrawStartHand(startDelay, displayRedrawsOnEnd);
+        DrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup);
 
         hand.Init();
 
@@ -113,7 +114,7 @@ public class CardDrawer : MonoBehaviour
     {
         hand.FinishedRedrawing();
     }
-    private void FinishRedrawSetupUI()
+    public void FinishRedrawSetupUI()
     {
         redrawCanvasGameObject.SetActive(false);
 
@@ -218,12 +219,12 @@ public class CardDrawer : MonoBehaviour
     }
 
 
-    private void DrawStartHand(float startDelay, bool displayRedrawsOnEnd)
+    private void DrawStartHand(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
-        StartCoroutine(DoDrawStartHand(startDelay, displayRedrawsOnEnd));
+        StartCoroutine(DoDrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup));
     }
 
-    private IEnumerator DoDrawStartHand(float startDelay, bool displayRedrawsOnEnd)
+    private IEnumerator DoDrawStartHand(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
         yield return new WaitForSeconds(startDelay);
 
@@ -231,7 +232,9 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         DrawTopCard();
+
         hand.InitCardsInHandForRedraw();
+
 
         if (deck.HasCardsLeft())
         {
@@ -243,7 +246,18 @@ public class CardDrawer : MonoBehaviour
             }
         }
 
-        if (displayRedrawsOnEnd) StartRedrawButtonAnimation();
+        if (displayRedrawsOnEnd)
+        {
+            StartRedrawButtonAnimation();
+        }
+        else
+        {
+            if (finishRedrawSetup)
+            {
+                Debug.Log("finish redraw xd");
+                FinishRedrawSetupUI();
+            }            
+        }
     }
 
     public void StartRedrawButtonAnimation()
