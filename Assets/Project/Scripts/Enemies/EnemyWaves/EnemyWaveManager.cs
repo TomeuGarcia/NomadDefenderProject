@@ -22,9 +22,9 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnAllWavesFinished;
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
-    
 
 
+    [SerializeField] TextLine textLine;
 
 
     private void Awake()
@@ -87,7 +87,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         ++currentWaves;
         StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform));
-        
+        //set the textline.text to the needed string and call dialog system.printLine
         debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves;/* + 
             " (Enemies: " + enemyWaveSpawner.activeEnemies + ")";*/
     }
