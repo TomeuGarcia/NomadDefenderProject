@@ -331,12 +331,14 @@ public class OWMap_Node : MonoBehaviour
 
         if (cameFromConnection != null)
         {
-            if (setCameFromConnectionNotInteracted)
+            if (setCameFromConnectionNotInteracted) //Hover Connection
             {
+                //cameFromConnection.LightConnection(false);
                 cameFromConnection.SetColor(OWMapDecoratorUtils.s_darkGreyColor);
             }
             else
             {
+                cameFromConnection.LightConnection(false);
                 cameFromConnection.SetColor(color);
             }
         }
