@@ -76,6 +76,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
         SetInactiveBattleNodes();
         SetInactiveUpgradeNodes();
+        upgradeNodes[0].InvokeOnNodeInfoInteractionDisabled();
 
 
         //Initializing nodes connections
@@ -149,9 +150,9 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Show Upgrade Nodes
-        foreach (OWMap_Node node in upgradeNodes)
+        for (int i = 0; i < upgradeNodes.Count; ++i)        
         {
-            node.PlayFadeInAnimation();
+            upgradeNodes[i].PlayFadeInAnimation();
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -180,15 +181,13 @@ public class OWMapTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //Map Loaded
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
+        scriptedSequence.Clear();
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 
         scriptedSequence.NextLine(); //Select a node to go to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(5.0f);
-
-        scriptedSequence.Clear();
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);

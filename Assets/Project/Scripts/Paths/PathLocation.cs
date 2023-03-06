@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using DG.Tweening;
 
 public class PathLocation : MonoBehaviour
 {
@@ -14,6 +14,9 @@ public class PathLocation : MonoBehaviour
     [Header("NODE VISUALS")]
     [SerializeField] private MeshRenderer nodeMesh;
     private Material nodeMeshMaterial;
+
+    [Header("MESH HOLDER")]
+    [SerializeField] private Transform locationMeshHolder;
 
     [System.Serializable]
     private struct DamagedVisuals
@@ -40,6 +43,7 @@ public class PathLocation : MonoBehaviour
 
     public delegate void PathLocationAction();
     public event PathLocationAction OnDeath;
+    public static event PathLocationAction OnTakeDamage;
 
 
     private void Awake()
@@ -51,19 +55,28 @@ public class PathLocation : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D)) TakeDamage(1);
+        if (Input.GetKeyDown(KeyCode.D) && !IsDead) TakeDamage(1);
     }
 
     public void TakeDamage(int damageAmount)
     {
         healthSystem.TakeDamage(damageAmount);
 
-        SetDamagedVisuals();
+        SetDamagedVisuals();      
 
         if (healthSystem.IsDead())
         {
-            Die();            
-        }   
+            Die();
+            locationMeshHolder.DOPunchScale(Vector3.up * 0.4f, 0.5f, 8);
+            GameAudioManager.GetInstance().PlayLocationDestroyed();
+        }
+        else
+        {
+            locationMeshHolder.DOPunchScale(Vector3.up * 0.6f, 0.6f, 8);
+            GameAudioManager.GetInstance().PlayLocationTakeDamage();
+        }
+
+        if (OnTakeDamage != null) OnTakeDamage();
     }
 
     private void Die()

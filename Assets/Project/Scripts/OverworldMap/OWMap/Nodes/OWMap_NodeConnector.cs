@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class OWMap_NodeConnector : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private List<GameObject> sockets = new List<GameObject>();
+    [SerializeField] private List<GameObject> cableConnectionPrefabs = new List<GameObject>();
 
-    // Update is called once per frame
-    void Update()
+    public void SetConnectionTypes(int[] connectionTypes)
     {
-        
+        foreach(int type in connectionTypes)
+        {
+            GameObject cable = Instantiate(cableConnectionPrefabs[type]); //FINISH
+            //POSITION IT ACCORDINGLY
+
+            if(type < 0)
+            {
+                //INVERT
+                //ALSO INVERT POS
+            }
+        }
     }
 }

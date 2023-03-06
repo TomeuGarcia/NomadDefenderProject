@@ -84,6 +84,8 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private Transform nodeTransform;
     [SerializeField] private MeshRenderer meshRenderer;
 
+    [SerializeField] private OWMap_NodeConnector nodeConnector;
+
     private Material material;
     public const float FADE_DURATION = 0.1f;
     public const float SELECTED_DURATION = 0.075f;
@@ -191,6 +193,11 @@ public class OWMap_Node : MonoBehaviour
         }
     }
 
+    public void SetConnectionTypes(int[] connectionTypes)
+    {
+        nodeConnector.SetConnectionTypes(connectionTypes);
+    }
+
     public MapReferencesData GetMapReferencesData()
     {
         return mapReferencesData;
@@ -227,6 +234,8 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetFloat("_IsInteractable", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
+
+        InvokeOnNodeInfoInteractionEnabled();
     }
 
     public void DisableInteraction()
@@ -235,6 +244,8 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetFloat("_IsInteractable", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
+
+        InvokeOnNodeInfoInteractionDisabled();
     }
 
 
@@ -339,7 +350,7 @@ public class OWMap_Node : MonoBehaviour
     }
 
 
-    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense)
+    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense, bool enableInfoDisplay)
     {
         healthState = nodeHealthState;
 
@@ -383,6 +394,7 @@ public class OWMap_Node : MonoBehaviour
         }
 
         if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState, wonWithPerfectDefense);
+        if (enableInfoDisplay) InvokeOnNodeInfoInteractionEnabled();
     }
 
     private void DisableNextLevelNodesInteraction()
@@ -462,7 +474,8 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 0f);
-    }
+            }
+
 
     public void PlayFadeOutAnimation()
     {

@@ -4447,6 +4447,11 @@ PrefabInstance:
       propertyPath: m_text
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 3061516609394921384, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: playerCanDrawCardManually
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3340382547285155349, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_IsActive
@@ -4587,6 +4592,7 @@ MonoBehaviour:
   canRedraw: 1
   canDisplaySpeedUp: 0
   displayRedrawsOnGameStart: 0
+  finishRedrawSetup: 1
   tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
     type: 3}
   tutorialCard: {fileID: 0}
@@ -28812,7 +28818,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: textLines.Array.size
-      value: 46
+      value: 47
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}

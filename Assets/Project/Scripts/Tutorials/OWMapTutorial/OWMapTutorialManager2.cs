@@ -24,7 +24,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
     {
         foreach(OWMap_Node node in lastNodes)
         {
-            node.EnableInteraction();
+            if (!node.IsDestroyed()) node.EnableInteraction();
         }
     }
 
