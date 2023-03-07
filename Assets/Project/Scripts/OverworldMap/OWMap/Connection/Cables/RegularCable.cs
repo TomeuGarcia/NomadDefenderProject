@@ -6,7 +6,7 @@ public class RegularCable : ConnectionCable
 {
     public override void FillCable(bool destroyed) 
     {
-        if(destroyed) { foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 1.0f); } }
+        base.FillCable(destroyed);
         StartCoroutine(MaterialLerp.FloatLerp(lerpData, cableMaterials.ToArray()));
     }
 }

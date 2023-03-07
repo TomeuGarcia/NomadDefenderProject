@@ -84,8 +84,6 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private Transform nodeTransform;
     [SerializeField] private MeshRenderer meshRenderer;
 
-    [SerializeField] private OWMap_NodeConnector nodeConnector;
-
     private Material material;
     public const float FADE_DURATION = 0.1f;
     public const float SELECTED_DURATION = 0.075f;
@@ -191,11 +189,6 @@ public class OWMap_Node : MonoBehaviour
         {
             obj.SetActive(active);
         }
-    }
-
-    public void SetConnectionTypes(int[] connectionTypes)
-    {
-        nodeConnector.SetConnectionTypes(connectionTypes);
     }
 
     public MapReferencesData GetMapReferencesData()
@@ -324,22 +317,15 @@ public class OWMap_Node : MonoBehaviour
 
     public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
     {
-        if (mixWithDarkGrey)
-        {
-            color = Color.Lerp(color, OWMapDecoratorUtils.s_darkGreyColor, 0.5f);
-        }
-
         if (cameFromConnection != null)
         {
             if (setCameFromConnectionNotInteracted) //Hover Connection
             {
-                //cameFromConnection.LightConnection(false);
-                cameFromConnection.SetColor(OWMapDecoratorUtils.s_darkGreyColor);
+                cameFromConnection.HoverConnection();
             }
             else
             {
                 cameFromConnection.LightConnection(false);
-                cameFromConnection.SetColor(color);
             }
         }
     }

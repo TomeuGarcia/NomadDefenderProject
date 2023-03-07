@@ -8,20 +8,7 @@ public class OWMap_Connection : MonoBehaviour
 {
     [SerializeField] private Transform connectionTransform;
 
-    [SerializeField] private MeshRenderer[] meshRenderers;
-    private Material[] materials;
-
-    [SerializeField] private ConnectionCable cable;
-
-    private void Awake()
-    {
-        materials = new Material[meshRenderers.Length];
-
-        for (int i = 0; i < meshRenderers.Length; ++i)
-        {
-            materials[i] = meshRenderers[i].material;
-        }
-    }
+    private ConnectionCable cable;
 
     public void InitTransform(Vector3 cNodeLocalPos, Vector3 nNodeLocalPos, Vector3 mapForwardDir)
     {
@@ -50,12 +37,8 @@ public class OWMap_Connection : MonoBehaviour
         cable.FillCable(destroyed);
     }
 
-    public void SetColor(UnityEngine.Color color) //CONNECTION HERE
+    public void HoverConnection()
     {
-        for (int i = 0; i < meshRenderers.Length; ++i)
-        {
-            materials[i].color = color;
-        }
+        cable.HoverCable();
     }
-
 }

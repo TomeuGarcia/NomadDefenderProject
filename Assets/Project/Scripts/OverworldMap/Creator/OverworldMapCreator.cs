@@ -14,7 +14,7 @@ public class OverworldMapCreator : MonoBehaviour
     [SerializeField] private GameObject nodeConnectionPrefab;
     [SerializeField] private GameObject mapTextPrefab; 
     [SerializeField] private GameObject levelHolderPrefab;
-    [SerializeField] private ConnectionCablePool cablePool; //TODO
+    [SerializeField] private ConnectionCablePool cablePool;
 
     [Header("TRANSFORMS")]
     [SerializeField] private Transform holder;
@@ -119,7 +119,6 @@ public class OverworldMapCreator : MonoBehaviour
                 List<OWMap_Connection> nextLevelConnections = new List<OWMap_Connection>(); // Connections Reference
 
                 int[] connectionsNextLevel = currentNode.connectionsNextLevel;
-                List<int> connextionTypes = new List<int>();
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI) //connection iteration
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];
@@ -137,14 +136,11 @@ public class OverworldMapCreator : MonoBehaviour
                     GameObject calbe = cablePool.GetConnectionCable(Mathf.Abs(connectionType));
                     owMapConnection.SetConnection(calbe, (connectionType > 0));
 
-                    connextionTypes.Add(currentNode.xAxisPos - nextNode.xAxisPos); // know the x axis distance (in "generation space") between nodes                    
-                    
                     nextLevelConnections.Add(owMapConnection); // Connections Reference
                 }
 
                 // Set Connections Reference
                 mapNodes[levelI][nodeI].SetNextLevelConnections(nextLevelConnections.ToArray());
-                //mapNodes[levelI][nodeI].SetConnectionTypes(connextionTypes.ToArray());
             }
         }
 

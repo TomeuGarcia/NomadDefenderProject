@@ -2207,7 +2207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7936925334401813892}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16, y: 0.046, z: 0.38}
+  m_LocalPosition: {x: -0.8175, y: 0.046, z: -0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2229,7 +2229,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cableAmount: 2
-  cableMaterials: []
+  calbeMeshes:
+  - {fileID: 7008525132495122075}
+  - {fileID: 3311371924659049206}
+  - {fileID: 2641624194362395350}
+  - {fileID: 673325808645180666}
+  lerpData:
+    time: 0.75
+    min: 0.45
+    max: 1
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    invert: 0
+    variableReference: _ConnectionCoef
+    endGoal: 1
+  secondLerpData:
+    time: 0.75
+    min: 0
+    max: 0.85
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    invert: 0
+    variableReference: _ConnectionCoef
+    endGoal: 1
 --- !u!1 &8079320384320121305
 GameObject:
   m_ObjectHideFlags: 0
