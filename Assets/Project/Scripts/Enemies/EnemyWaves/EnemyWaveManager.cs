@@ -12,6 +12,8 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] private EnemyWaveSpawner[] enemyWaveSpawners;
     [SerializeField] private PathNode[] startPathNodes;
 
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+
 
     private int currentWaves = 0;
     private int activeWaves = 0;
@@ -22,14 +24,15 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnAllWavesFinished;
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
+
     
 
-
+    [SerializeField] TextLine textLine;
 
 
     private void Awake()
     {
-        canvas.SetActive(false);
+        //canvas.SetActive(false);
         activeWaves = enemyWaveSpawners.Length;
         for (int i = 0; i< enemyWaveSpawners.Length; i++)
         {
@@ -37,8 +40,7 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished += FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
-
-        debugText.text = "Play a card to start Enemy Waves";
+        
         StartCoroutine(WaitForStart());
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
@@ -61,7 +63,8 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void ActivateCanvas()
     {
-        canvas.SetActive(true);
+        //canvas.SetActive(true);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Play a card to start Enemy Waves",true);
     }
 
     private void StartAfterFirstCardPlayed()
@@ -87,15 +90,33 @@ public class EnemyWaveManager : MonoBehaviour
     {
         ++currentWaves;
         StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform));
-        
-        debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves;/* + 
+
+
+        //set the textline.text to the needed string and call dialog system.printLine
+        PrintConsoleLine(TextTypes.SYSTEM, "Wave " + (enemyWaveSpawner.currentWave + 1) + "/" + enemyWaveSpawner.numWaves,true);
+
+
+       /* debugText.text = "Wave " + (enemyWaveSpawner.currentWave+1) + "/" + enemyWaveSpawner.numWaves;/* + 
             " (Enemies: " + enemyWaveSpawner.activeEnemies + ")";*/
     }
 
+    void PrintConsoleLine(TextTypes type, string text)
+    {
+        textLine.textType = type;
+        textLine.text = text;
+        consoleDialog.PrintLine(textLine);
+    }
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting)
+    {
+        if(clearBeforeWritting)
+            consoleDialog.Clear();
 
+        textLine.textType = type;
+        textLine.text = text;
+        consoleDialog.PrintLine(textLine);
+    }
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner)
     {
-        debugText.text = "Waiting for new wave...";
         if(OnWaveFinished != null) OnWaveFinished();
 
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
@@ -115,7 +136,9 @@ public class EnemyWaveManager : MonoBehaviour
             foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)
             {
                 StartCoroutine(StartNextWave(enemyWaveSpawnerI));
-            }            
+            }  
+            PrintConsoleLine(TextTypes.SYSTEM, "Waiting for new wave...");
+            
         }
     }
 
