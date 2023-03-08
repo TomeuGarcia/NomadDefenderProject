@@ -37,7 +37,7 @@ public class SupportBuilding : RangeBuilding
 
 
 
-    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter)
+    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter, Sprite abilitySprite)
     {
         InitStats(stats);
 
@@ -47,7 +47,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        upgrader.InitSupport(currencyCounter); //TODO: change range for the actual level
+        upgrader.InitSupport(currencyCounter, abilitySprite); //TODO: change range for the actual level
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -104,4 +104,14 @@ public class SupportBuilding : RangeBuilding
         InvokeOnBuildingPlaced();
     }
 
+
+    public override void ShowQuickLevelUI() 
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI() 
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
 }
