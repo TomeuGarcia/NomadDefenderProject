@@ -188,7 +188,7 @@ public abstract class RangeBuilding : Building
 
     public void ShowUpgrades()
     {
-        upgrader.OpenWindow();
+        if (!upgrader.IsOpenWindowInCooldown) upgrader.OpenWindow();
     }
     public void HideUpgrades()
     {
