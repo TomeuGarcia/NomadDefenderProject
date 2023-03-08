@@ -107,8 +107,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgRangeStat.alpha = 0f;
 
 
-        float t1 = 0.1f;
-        float t3 = 0.3f;
+        float t1 = 0.075f;
+        float t3 = t1 * 3;
         bool isCardUpgradedToMax = IsCardUpgradedToMax(currentLevel);
 
         barImage.DOFillAmount(1f, t1);

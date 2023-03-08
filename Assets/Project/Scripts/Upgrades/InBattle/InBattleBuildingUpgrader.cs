@@ -8,7 +8,7 @@ using static Enemy;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 
-public class InBattleBuildingUpgrader : MonoBehaviour
+public abstract class InBattleBuildingUpgrader : MonoBehaviour
 {
     [SerializeField] private Transform building;
     [SerializeField] private RectTransform mouseDetectionPanel;
@@ -22,6 +22,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     [SerializeField] private Color32 disalbedTextColor;
 
     public bool IsOpenWindowInCooldown { get; private set; }
+    public bool IsOpen { get; private set; }
 
 
     [Header("BUILDING TYPE")]
@@ -78,6 +79,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         newUiParent.gameObject.SetActive(false);
 
         IsOpenWindowInCooldown = false;
+        IsOpen = false;
 
         costText.text = upgradeCosts[0].ToString();
 
@@ -149,6 +151,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             StartCoroutine(SetVisible());
 
             PlayOpenAnimation();
+
+            IsOpen = true;
         }
     }
 
@@ -162,6 +166,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         PlayCloseAnimation();
 
         StartCoroutine(OpenWindowCooldown());
+
+        IsOpen = false;
     }
     private IEnumerator OpenWindowCooldown()
     {
@@ -194,6 +200,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateAttackBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
+
+            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+        }
+        else
+        {
+            PlayAnimationTextCostPunch(Color.red, Color.white);
         }
     }
 
@@ -209,6 +221,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateCadenceBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+
+            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+        }
+        else
+        {
+            PlayAnimationTextCostPunch(Color.red, Color.white);
         }
     }
 
@@ -224,6 +242,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateRangeBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
+
+            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+        }
+        else
+        {
+            PlayAnimationTextCostPunch(Color.red, Color.white);
         }
     }
 
@@ -239,6 +263,12 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateSupportBar();
 
             supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
+
+            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+        }
+        else
+        {
+            PlayAnimationTextCostPunch(Color.red, Color.white);
         }
     }
 
@@ -344,5 +374,19 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         backFillBar.fillAmount = backFill;
     }
 
+
+    protected void PlayAnimationTextCostPunch(Color flashColor, Color endColor)
+    {
+        float t = 0.15f;
+
+        costText.DOComplete();
+        costText.transform.DOComplete();
+        costCurrencyImage.DOComplete();
+
+        costText.DOColor(flashColor, t).OnComplete(() => costText.DOColor(endColor, t));
+        costText.transform.DOPunchScale(Vector3.one * 0.1f, t * 2);
+
+        costCurrencyImage.DOColor(flashColor, t).OnComplete(() => costCurrencyImage.DOColor(endColor, t));
+    }
 
 }
