@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class MaterialLerp
@@ -17,7 +18,6 @@ public static class MaterialLerp
         public string variableReference;
         public float endGoal;
     }
-
 
     public static IEnumerator FloatLerp(FloatData lerpData, Material[] materials)
     {

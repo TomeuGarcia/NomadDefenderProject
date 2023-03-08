@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -34,7 +35,20 @@ public class OWMap_Connection : MonoBehaviour
 
     public void LightConnection(bool destroyed)
     {
-        cable.FillCable(destroyed);
+        if(destroyed)
+        {
+            StartCoroutine(DestroyedNode());
+        }
+        else
+        {
+            cable.FillCable(false);
+        }
+    }
+
+    public IEnumerator DestroyedNode()
+    {
+        yield return new WaitForSeconds(2.0f);
+        cable.FillCable(true);
     }
 
     public void HoverConnection()

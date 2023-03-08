@@ -24,7 +24,7 @@ public class ConnectionCable : MonoBehaviour
 
     public virtual void FillCable(bool destroyed)
     {
-        if (destroyed) { foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 1.0f); } }
+        if (destroyed) { foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 1.0f); mat.SetFloat("_ConnectionCoef", 0.0f); } }
     }
 
     public virtual void HoverCable() { }

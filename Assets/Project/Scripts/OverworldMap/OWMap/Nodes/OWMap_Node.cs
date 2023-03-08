@@ -106,6 +106,8 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private ParticleSystem destroyedParticles;
     [SerializeField] private MeshRenderer flashMeshRenderer;
     [SerializeField] private List<GameObject> nodeLegs = new List<GameObject>();
+    [SerializeField] private MeshRenderer circuitMesh;
+    [SerializeField] private MaterialLerp.FloatData borderLerpData;
     private Material flashMaterial;
 
 
@@ -248,7 +250,7 @@ public class OWMap_Node : MonoBehaviour
 
         //SetColor(colorInUse, setCameFromConnectionNotInteracted: true);
         SetIconColor(colorInUse);
-        SetCameFromColor(colorInUse, setCameFromConnectionNotInteracted: true);
+        SetCameFromColor(false, true);
 
         SetUnhoveredVisuals();
     }
@@ -285,7 +287,7 @@ public class OWMap_Node : MonoBehaviour
         interactState = NodeInteractState.SELECTED;
 
         //SetColor(blueColor);
-        SetCameFromColor(OWMapDecoratorUtils.s_blueColor2);
+        SetCameFromColor();
 
         DisableInteraction();
         if (!mapReferencesData.isLastLevelNode)
@@ -299,10 +301,20 @@ public class OWMap_Node : MonoBehaviour
             owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
 
+        //Debug.Log("2");
+        //UpdateBorderMaterial();
+
         flashMeshRenderer.gameObject.SetActive(true);
         flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
+    }
+
+    public void UpdateBorderMaterial()
+    {
+        borderLerpData.invert = !borderLerpData.invert;
+        borderLerpData.endGoal = 1.0f - borderLerpData.endGoal;
+        StartCoroutine(MaterialLerp.FloatLerp(borderLerpData, new Material[1] { circuitMesh.materials[1] }));
     }
 
     private void SetIconColor(Color color, bool mixWithColorInUse = false)
@@ -315,7 +327,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetColor("_IconColor", color);
     }
 
-    public void SetCameFromColor(Color color, bool mixWithDarkGrey = false, bool setCameFromConnectionNotInteracted = false)
+    public void SetCameFromColor(bool destroyed = false, bool setCameFromConnectionNotInteracted = false)
     {
         if (cameFromConnection != null)
         {
@@ -325,7 +337,7 @@ public class OWMap_Node : MonoBehaviour
             }
             else
             {
-                cameFromConnection.LightConnection(false);
+                cameFromConnection.LightConnection(destroyed);
             }
         }
     }
@@ -451,7 +463,7 @@ public class OWMap_Node : MonoBehaviour
     public void SetDestroyedVisuals()
     {
         SetIconColor(OWMapDecoratorUtils.s_redColor);
-        SetCameFromColor(OWMapDecoratorUtils.s_redColor);
+        SetCameFromColor(true);
         material.SetFloat("_IsDamaged", 1f);
         material.SetFloat("_IsDestroyed", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
