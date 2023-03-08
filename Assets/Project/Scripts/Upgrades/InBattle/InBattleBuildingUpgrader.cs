@@ -21,6 +21,8 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     
     [SerializeField] private Color32 disalbedTextColor;
 
+    public bool IsOpenWindowInCooldown { get; private set; }
+
 
     [Header("BUILDING TYPE")]
     [SerializeField] private BuildingCard.CardBuildingType buildingType = BuildingCard.CardBuildingType.NONE;
@@ -52,7 +54,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     protected int attackLvl;
     protected int cadenceLvl;
     protected int rangeLvl;
-    private int supportLvl;
+    protected int supportLvl;
 
     protected float turretFillBarCoef;
     protected float supportFillBarCoef;
@@ -75,7 +77,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
         newUiParent.gameObject.SetActive(false);
 
-
+        IsOpenWindowInCooldown = false;
 
         costText.text = upgradeCosts[0].ToString();
 
@@ -157,9 +159,17 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         visible = false;
         //UIParent.gameObject.SetActive(false);
         
-
         PlayCloseAnimation();
+
+        StartCoroutine(OpenWindowCooldown());
     }
+    private IEnumerator OpenWindowCooldown()
+    {
+        IsOpenWindowInCooldown = true;
+        yield return new WaitForSeconds(0.1f);
+        IsOpenWindowInCooldown = false;
+    }
+
 
     public bool IsHoveringWindow()
     {
@@ -232,7 +242,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         }
     }
 
-    private bool CanUpgrade(int levelToCheck)
+    protected bool CanUpgrade(int levelToCheck)
     {
         if (IsCardUpgradedToMax(currentLevel)) return false;
 
@@ -290,7 +300,6 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     }
     protected virtual void UpdateSupportBar()
     {
-        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;        
     }
 
 

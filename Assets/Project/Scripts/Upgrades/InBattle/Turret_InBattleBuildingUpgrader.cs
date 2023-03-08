@@ -42,7 +42,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         fillBars[(int)TurretUpgradeType.ATTACK].fillAmount = (float)attackLvl * turretFillBarCoef;
 
         // Update UI
-        EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
+        if (!CanUpgrade(attackLvl)) EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
+
         if (IsStatMaxed(attackLvl)) attackButton.interactable = false;
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
@@ -51,7 +52,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         fillBars[(int)TurretUpgradeType.CADENCE].fillAmount = (float)cadenceLvl * turretFillBarCoef;
 
         // Update UI
-        EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
+        if (!CanUpgrade(cadenceLvl)) EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
+
         if (IsStatMaxed(cadenceLvl)) fireRateButton.interactable = false;
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
@@ -60,7 +62,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         fillBars[(int)TurretUpgradeType.RANGE].fillAmount = (float)rangeLvl * turretFillBarCoef;
 
         // Update UI
-        EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
+        if (!CanUpgrade(rangeLvl)) EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
+
         if (IsStatMaxed(rangeLvl)) rangeButton.interactable = false;
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
