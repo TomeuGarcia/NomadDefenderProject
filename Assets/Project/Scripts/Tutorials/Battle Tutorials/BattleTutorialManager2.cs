@@ -164,6 +164,16 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
+        //Resume time with a lerp
+
+        for (float i = 0; i < 1.0f; i += 0.005f)
+        {
+            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
+            yield return null;
+        }
+
+        Time.timeScale = 1.0f;
+
         //Create new turret
 
         TurretBuildingCard card = deckCreator.GetUninitializedNewTurretCard();
@@ -180,21 +190,10 @@ public class BattleTutorialManager2 : MonoBehaviour
         PlaceSelectedBuilding(watcherCardTile, card);
 
         //Wait until Wathcer's turret is placed
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine(); //11 -> Don't get used to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSecondsRealtime(1.0f);
-
-        //Resume time with a lerp
-
-        for (float i = 0; i < 1.0f; i += 0.005f)
-        {
-            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
-            yield return null;
-        }
-
-        Time.timeScale = 1.0f;
 
 
         yield return new WaitForSecondsRealtime(7.5f);
