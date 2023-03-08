@@ -154,25 +154,16 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         //Start animation
 
-        float currentTime = 0;
-        float tParam;
-        
-        while (currentTime < animation1Time)
-        {
-            currentTime += Time.deltaTime;
-            tParam = currentTime / animation1Time;
-            animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = Mathf.Lerp(0.0f, 1.0f, tParam);
-            yield return null;
-        }
-        
-        animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1.0f;
+        yield return new WaitForSeconds(0.5f);
+
+        StartCoroutine(TestingTutorial());
 
 
     }
 
     IEnumerator TestingTutorial()
     {
-        yield return new WaitForSeconds(5.0f);
+        //yield return new WaitForSeconds(5.0f);
         //Camera Animation
 
         animationCamera.gameObject.transform.position = mainCamera.transform.position;
