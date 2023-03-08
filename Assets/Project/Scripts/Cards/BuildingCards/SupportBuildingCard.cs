@@ -34,7 +34,6 @@ public class SupportBuildingCard : BuildingCard
     [SerializeField] private Image abilityImage;
 
 
-
     public void Awake()
     {
         AwakeInit(CardBuildingType.SUPPORT);
@@ -50,7 +49,7 @@ public class SupportBuildingCard : BuildingCard
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(supportBuildingStats, supportCardParts.turretPartBase, currencyCounter);
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(supportBuildingStats, supportCardParts.turretPartBase, currencyCounter, abilityImage.sprite);
         copyBuildingPrefab.SetActive(false);
     }
 

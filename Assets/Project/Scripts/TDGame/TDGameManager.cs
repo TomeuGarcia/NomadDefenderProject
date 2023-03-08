@@ -17,6 +17,7 @@ public class TDGameManager : MonoBehaviour
 
 
     public delegate void TDGameManagerAction();
+    public static event TDGameManagerAction OnGameFinishStart;
     public static event TDGameManagerAction OnVictoryComplete;
     public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
@@ -105,6 +106,7 @@ public class TDGameManager : MonoBehaviour
         StartCoroutine(GameOverAnimation());
 
         if (OnGameOverStart != null) OnGameOverStart();
+        if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
     private void CheckVictory()
@@ -120,6 +122,7 @@ public class TDGameManager : MonoBehaviour
         SetBattleStateResult();
 
         StartCoroutine(VictoryAnimation());
+        if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
 
@@ -130,8 +133,7 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();
-        //if (OnGameOverComplete != null) OnGameOverComplete();
+        mapSceneNotifier.InvokeOnSceneFinished();        
     }
 
     private IEnumerator VictoryAnimation()
@@ -141,8 +143,7 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();
-        //if (OnVictoryComplete != null) OnVictoryComplete(); // 
+        mapSceneNotifier.InvokeOnSceneFinished();        
     }
 
     public void ForceFinishScene()

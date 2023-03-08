@@ -9,6 +9,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     [Header("Ability")]
     [SerializeField] private CanvasGroup cgAbilityStat;
+    [SerializeField] private Image supportIcon;
     [SerializeField] private Button abilityButton;
     [SerializeField] private Image abilityButtonImage;
     [SerializeField] private Image abilityBackFillImage;
@@ -21,13 +22,23 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         abilityBarToCurrencyCost.fillAmount = 0f;
     }
 
+    public override void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
+    {
+        base.InitSupport(newCurrencyCounter, abilitySprite);
+        supportIcon.sprite = abilitySprite;
+    }
+
 
     protected override void UpdateSupportBar()
     {
         fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
 
         // Update UI
-        if (!CanUpgrade(supportLvl)) EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)attackLvl * turretFillBarCoef);
+        if (!CanUpgrade(supportLvl))
+        {
+            EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)attackLvl * turretFillBarCoef);
+            PlayAnimationIconPunch(supportIcon.transform);
+        }
 
         if (IsStatMaxed(attackLvl)) abilityButton.interactable = false;
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();

@@ -232,4 +232,15 @@ public class TurretBuilding : RangeBuilding
         InvokeOnBuildingPlaced();
     }
 
+
+    public override void ShowQuickLevelUI()
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI()
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
+
 }

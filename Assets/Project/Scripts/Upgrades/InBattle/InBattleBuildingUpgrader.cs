@@ -22,7 +22,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     [SerializeField] private Color32 disalbedTextColor;
 
     public bool IsOpenWindowInCooldown { get; private set; }
-    public bool IsOpen { get; private set; }
+    public bool IsWindowOpen { get; private set; }
+
+    private bool hasGameFinished = false;
+    protected Coroutine automaticCloseCoroutine = null;
 
 
     [Header("BUILDING TYPE")]
@@ -31,6 +34,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private SupportBuilding supportBuilding;
     private int maxLevels;
 
+
+    [Header("QUICK LEVEL DISPLAY UI")]
+    [SerializeField] protected RectTransform quickLevelDisplay;
+    [SerializeField] protected CanvasGroup cgQuickLevelDisplay;
+    [SerializeField] protected TextMeshProUGUI quickLevelDisplayText;
 
     [Header("NEW UI")]
     [Header("General")]
@@ -41,6 +49,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     [SerializeField] protected CanvasGroup cgCostText;
     protected Coroutine openAnimationCoroutine = null;
     protected Coroutine closeAnimationCoroutine = null;
+
 
 
 
@@ -79,7 +88,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         newUiParent.gameObject.SetActive(false);
 
         IsOpenWindowInCooldown = false;
-        IsOpen = false;
+        IsWindowOpen = false;
+        hasGameFinished = false;
 
         costText.text = upgradeCosts[0].ToString();
 
@@ -87,6 +97,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         supportFillBarCoef = 100.0f / ((float)maxSupportStatLevel * 100.0f);
 
         visible = false;
+
+        quickLevelDisplay.gameObject.SetActive(false);
+        cgQuickLevelDisplay.alpha = 0f;
     }
 
     private void Start()
@@ -108,6 +121,17 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         UpdateLevelText();
     }
 
+
+    private void OnEnable()
+    {
+        TDGameManager.OnGameFinishStart += SetHasGameFinishedTrueAndCloseWindow;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnGameFinishStart -= SetHasGameFinishedTrueAndCloseWindow;
+    }
+
+
     private void Update()
     {
         bool outOfArea = !IsHoveringWindow();
@@ -116,6 +140,21 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         {
             CloseWindow();
         }
+
+        if (IsWindowOpen)
+        {
+            if (outOfArea && automaticCloseCoroutine == null)
+            {
+                Debug.Log("CLOSE START");
+                AutomaticWindowCloseStart();
+            }
+            else if (!outOfArea && automaticCloseCoroutine != null)
+            {
+                Debug.Log("CLOSE STOP");
+                AutomaticWindowCloseStop();
+            }
+        }
+
     }
 
     private void LateUpdate()
@@ -132,13 +171,25 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         currencyCounter = newCurrencyCounter;
     }
 
-    public void InitSupport(CurrencyCounter newCurrencyCounter)
+    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
     {
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;
     }
 
+    private void SetHasGameFinishedTrueAndCloseWindow()
+    {
+        if (IsWindowOpen)
+        {
+            CloseWindow();
+        }
+        hasGameFinished = true;        
+    }
+    public bool CanOpenWindow()
+    {
+        return !IsOpenWindowInCooldown && !IsWindowOpen && !hasGameFinished;
+    }
     public void OpenWindow()
     {
         if(!UIWindowManager.GetInstance().IsHoveringOtherWindow(this))
@@ -152,7 +203,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             PlayOpenAnimation();
 
-            IsOpen = true;
+            IsWindowOpen = true;
+
+            HideQuickLevelDisplay();
         }
     }
 
@@ -167,7 +220,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         StartCoroutine(OpenWindowCooldown());
 
-        IsOpen = false;
+        IsWindowOpen = false;
+
+        AutomaticWindowCloseStop();
     }
     private IEnumerator OpenWindowCooldown()
     {
@@ -201,11 +256,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
 
-            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+            PlayPositiveAnimationTextCostPunch();
         }
         else
         {
-            PlayAnimationTextCostPunch(Color.red, Color.white);
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
@@ -222,11 +277,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
 
-            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+            PlayPositiveAnimationTextCostPunch();
         }
         else
         {
-            PlayAnimationTextCostPunch(Color.red, Color.white);
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
@@ -243,11 +298,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
 
-            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+            PlayPositiveAnimationTextCostPunch();
         }
         else
         {
-            PlayAnimationTextCostPunch(Color.red, Color.white);
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
@@ -264,11 +319,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
 
-            PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white);
+            PlayPositiveAnimationTextCostPunch();
         }
         else
         {
-            PlayAnimationTextCostPunch(Color.red, Color.white);
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
@@ -301,17 +356,18 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     private void UpdateLevelText()
     {
-        lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (a b)
+        lvlText.text = ">upgrade " + currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
+        quickLevelDisplayText.text = currentLevel + "/" + maxLevels;
 
         //if (currentLevel < maxUpgradeCount)
         if (currentLevel < maxLevels)
         {
-            //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // a
+            //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // A
             costText.text = upgradeCosts[currentLevel].ToString();
         }
         else
         {
-            //lvlText.text = "LVL MAX"; // b
+            //lvlText.text = "LVL MAX"; // B
             //costText.text = "NULL";
             costText.text = "0";
             costText.color = disalbedTextColor;
@@ -374,19 +430,64 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         backFillBar.fillAmount = backFill;
     }
 
-
-    protected void PlayAnimationTextCostPunch(Color flashColor, Color endColor)
+    protected void PlayAnimationIconPunch(Transform iconTransform)
     {
-        float t = 0.15f;
+        iconTransform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 7);
+    }
 
+    protected void PlayAnimationTextCostPunch(Color flashColor, Color endColor, float duration, float punchScale, int punchVibrato)
+    {
         costText.DOComplete();
         costText.transform.DOComplete();
         costCurrencyImage.DOComplete();
 
-        costText.DOColor(flashColor, t).OnComplete(() => costText.DOColor(endColor, t));
-        costText.transform.DOPunchScale(Vector3.one * 0.1f, t * 2);
+        costText.DOColor(flashColor, duration).OnComplete(() => costText.DOColor(endColor, duration));
+        costText.transform.DOPunchScale(Vector3.one * punchScale, duration * 2, punchVibrato);
 
-        costCurrencyImage.DOColor(flashColor, t).OnComplete(() => costCurrencyImage.DOColor(endColor, t));
+        costCurrencyImage.DOColor(flashColor, duration).OnComplete(() => costCurrencyImage.DOColor(endColor, duration));
+    }
+    protected void PlayPositiveAnimationTextCostPunch()
+    {
+        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
+    }
+    protected void PlayNegativeAnimationTextCostPunch()
+    {
+        PlayAnimationTextCostPunch(Color.red, Color.white, 0.2f, 0.1f, 10);
+    }
+
+
+    public void AutomaticWindowCloseStart()
+    {
+        automaticCloseCoroutine = StartCoroutine(DelayedAutomaticWindowClose());
+    }
+
+    public void AutomaticWindowCloseStop()
+    {
+        if (automaticCloseCoroutine == null) return;
+
+        StopCoroutine(automaticCloseCoroutine);
+        automaticCloseCoroutine = null;
+    }
+
+    private IEnumerator DelayedAutomaticWindowClose()
+    {
+        yield return new WaitForSeconds(4f);
+
+        CloseWindow();
+        automaticCloseCoroutine = null;
+    }
+
+    public void ShowQuickLevelDisplay()
+    {
+        if (IsWindowOpen) return;
+        
+        quickLevelDisplay.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.down * 35.0f;
+        quickLevelDisplay.gameObject.SetActive(true);
+        cgQuickLevelDisplay.DOFade(1f, 0.1f);
+    }
+    public void HideQuickLevelDisplay()
+    {
+        cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
     }
 
 }
