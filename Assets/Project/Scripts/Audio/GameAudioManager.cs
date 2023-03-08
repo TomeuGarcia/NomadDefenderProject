@@ -50,6 +50,10 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip enemyDeath;
     [SerializeField] private AudioClip enemySpawn;
 
+    [Header("BATTLE")]
+    [SerializeField] private AudioSource battleAudioSource;
+    [SerializeField] private AudioClip locationTakeDamage;
+
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
     [SerializeField] private AudioSource UIcurrencyAudioSource;
@@ -257,17 +261,14 @@ public class GameAudioManager : MonoBehaviour
         float pitch = 1f;
         if (bodyType == TurretPartBody.BodyType.SENTRY)
         {
-            Debug.Log("SENTRY");
             pitch = 1f;
         }
         else if (bodyType == TurretPartBody.BodyType.BLASTER)
         {
-            Debug.Log("BLAST");
             pitch = 0.8f;
         }
         else if (bodyType == TurretPartBody.BodyType.SPAMMER)
         {
-            Debug.Log("SPMR");
             pitch = 1.3f;
         }
 
@@ -319,6 +320,24 @@ public class GameAudioManager : MonoBehaviour
     {
         LoopAudioSources(enemiesAudioSources, enemySpawn, Random.Range(0.9f, 1.1f));
     }
+
+
+    // Battle
+    public void PlayLocationTakeDamage()
+    {
+        battleAudioSource.clip = locationTakeDamage;
+        battleAudioSource.pitch = Random.Range(0.8f, 0.9f);
+
+        battleAudioSource.Play();
+    }
+    public void PlayLocationDestroyed()
+    {
+        battleAudioSource.clip = locationTakeDamage;
+        battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
+
+        battleAudioSource.Play();
+    }
+
 
 
     // Currency

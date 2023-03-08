@@ -2,15 +2,23 @@ using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OverworldCardShower : MonoBehaviour
 {
-
+    [Header("DECK DATA")]
     [SerializeField] private DeckData deckData;
+
+    [Header("DEPENDENCIES")]
     [SerializeField] private DeckCreator deckCreator;
     [SerializeField] private GameObject followCamera;
-    [SerializeField] private GameObject showDeckButton;
-    [SerializeField] private GameObject backToMapButton;
+
+    [Header("BUTTONS")]
+    [SerializeField] private Button showDeckButton;
+    [SerializeField] private Button backToMapButton;
+    [SerializeField] private CanvasGroup showDeckButtonCG;
+    [SerializeField] private bool showButtons = true;
+
     private List<BuildingCard> cards;
     private Vector3 prevCameraPos;
     private Quaternion prevCameraRot;
@@ -22,15 +30,57 @@ public class OverworldCardShower : MonoBehaviour
 
     Dictionary<BuildingCard, Vector3> positions;
 
-    // Start is called before the first frame update
+
+
     void Start()
     {
         Init();
+
+        if (showButtons)
+        {
+            showDeckButton.gameObject.SetActive(true);
+            backToMapButton.gameObject.SetActive(false); 
+            StartCoroutine(PlayGameStartAnimation());
+        }
+        else
+        {
+            showDeckButton.gameObject.SetActive(false);
+            backToMapButton.gameObject.SetActive(false);
+        }
+
     }
+
+    private void OnDisable()
+    {
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SelectCard;
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (!showingDeck)
+                OnShowDeck();
+            else
+                OnBackToMap();
+        }
+        if (Input.GetMouseButtonDown(2))
+        {
+            DeselectCard();
+        }
+    }
+
     private void Init()
     {
-        showDeckButton.SetActive(true);
-        backToMapButton.SetActive(false);
+        showDeckButton.gameObject.SetActive(true);
+        backToMapButton.gameObject.SetActive(false);
+
         showingDeck = false;
         cards = new List<BuildingCard>(deckData.GetCards());
         foreach (BuildingCard itCard in cards)
@@ -45,39 +95,37 @@ public class OverworldCardShower : MonoBehaviour
 
         }
     }
+
+    private IEnumerator PlayGameStartAnimation()
+    {
+        showDeckButtonCG.interactable = false;
+        showDeckButtonCG.alpha = 0f;
+
+        yield return new WaitForSeconds(4f);
+
+        float t1 = 0.1f;
+        showDeckButtonCG.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        showDeckButtonCG.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1*2);
+
+        showDeckButtonCG.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+        yield return new WaitForSeconds(t1);
+
+        showDeckButtonCG.interactable = true;
+    }
+
     public void ResetAll ()
     {
         //DestroyAllCards();
         ResetDeckData();
         Init();
     }
-    private void OnDisable()
-    {
 
-        foreach (BuildingCard itCard in cards)
-        {
-            itCard.OnCardHovered -= SetHoveredCard;
-            itCard.OnCardUnhovered -= SetStandardCard;
-            itCard.OnCardSelected -= SelectCard;
-        }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (!showingDeck)
-                OnShowDeck();
-            else
-                OnBackToMap();
-        }
-        if (Input.GetMouseButtonDown(2))
-        {
-            DeselectCard();
-        }
-
-    }
     public void DestroyAllCards()
     {
         for(int i = 0; i < cards.Count; i++)
@@ -93,6 +141,7 @@ public class OverworldCardShower : MonoBehaviour
     public void OnShowDeck()
     {
         showingDeck = true;
+
         prevCameraPos = followCamera.transform.position;
         prevCameraRot = followCamera.transform.rotation;
         //followCamera.transform.position = transform.position + Vector3.up * 5;
@@ -100,8 +149,9 @@ public class OverworldCardShower : MonoBehaviour
         followCamera.SetActive(false);
         transform.GetChild(0).gameObject.SetActive(true);
 
-        showDeckButton.SetActive(false);
-        backToMapButton.SetActive(true);
+        showDeckButton.gameObject.SetActive(false);
+        backToMapButton.gameObject.SetActive(true);
+
         if(currentCoroutine!= null) { StopCoroutine(currentCoroutine); }
         currentCoroutine =  StartCoroutine(setCardsInPlace());
 
@@ -116,8 +166,8 @@ public class OverworldCardShower : MonoBehaviour
 
          followCamera.SetActive(true);
         transform.GetChild(0).gameObject.SetActive(false);
-         backToMapButton.SetActive(false);
-        showDeckButton.SetActive(true);
+         backToMapButton.gameObject.SetActive(false);
+        showDeckButton.gameObject.SetActive(true);
     }
 
 

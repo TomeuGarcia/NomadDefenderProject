@@ -192,11 +192,11 @@ public class CardPartBase : CardPart
     }
 
 
-    public void PlayTutorialBlinkAnimation()
+    public void PlayTutorialBlinkAnimation(float delayBeforeAbility)
     {
-        StartCoroutine(TutorialBlinkAnimation());
+        StartCoroutine(TutorialBlinkAnimation(delayBeforeAbility));
     }
-    private IEnumerator TutorialBlinkAnimation()
+    private IEnumerator TutorialBlinkAnimation(float delayBeforeAbility)
     {
         float t1 = 0.1f;
 
@@ -211,7 +211,7 @@ public class CardPartBase : CardPart
         }
 
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(delayBeforeAbility);
         
 
         for (int i = 0; i < 8; ++i)

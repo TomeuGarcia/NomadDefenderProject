@@ -86,9 +86,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6437153166042572471}
-  - component: {fileID: 4456121463430913109}
+  - component: {fileID: 985072559939134118}
   m_Layer: 0
-  m_Name: UpgradeNodeInfo
+  m_Name: UpgradeNodeInfoDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2209075628736127882}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.55, y: 0, z: -0.3}
+  m_LocalPosition: {x: 1.55, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -110,7 +110,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4456121463430913109
+--- !u!114 &985072559939134118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,13 +119,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2209075628736127882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6f011ad6611c34f93059e8673a042a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0fe8237875b1d2d4a8e2314d3254b221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   infoCanvasTransform: {fileID: 3580798172950602881}
-  barImage: {fileID: 473959473042146092}
   backgroundImage: {fileID: 7955110279829966865}
-  nodeInfoText: {fileID: 7921269038690246533}
+  barImage: {fileID: 473959473042146092}
+  nodeTitleText: {fileID: 7921269038690246533}
   statusText: {fileID: 3191529357316995179}
   rewardsText: {fileID: 7631423634850817915}
 --- !u!1 &2597020426195937340
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 4277544100389482365}
   - component: {fileID: 7921269038690246533}
   m_Layer: 5
-  m_Name: UpgradeNode_Text
+  m_Name: NodeTitle_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -639,7 +639,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8615279046522710386}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.3}
   m_LocalScale: {x: 0.01, y: 0.009999999, z: 0.009999999}
   m_ConstrainProportionsScale: 0
   m_Children:
