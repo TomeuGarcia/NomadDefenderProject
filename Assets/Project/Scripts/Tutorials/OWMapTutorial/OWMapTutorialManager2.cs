@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using Unity.VisualScripting;
 
 public class OWMapTutorialManager2 : MonoBehaviour
 {
@@ -8,7 +11,28 @@ public class OWMapTutorialManager2 : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
     [SerializeField] private OverworldMapGameManager owMapGameManager;
 
+    [SerializeField] private GameObject mainCamera;
+    [SerializeField] private CinemachineVirtualCamera animationCamera;
+
+    [Header("Animations Time")]
+    [SerializeField] [Range(0.0f, 10.0f)] private float animation1Time;
+    [SerializeField] [Range(0.0f, 10.0f)] private float animation2Time;
+    [SerializeField] [Range(0.0f, 10.0f)] private float animation3Time;
+
+    [Header("Developer Test")] 
+    [SerializeField] private bool testing = false;
+
+    
     private OWMap_Node[] lastNodes;
+
+    private void Start()
+    {
+        if (testing)
+        {
+            StartCoroutine(TestingTutorial());
+        }
+    }
+
     public void StartTutorial()
     {
             Init();
@@ -120,5 +144,58 @@ public class OWMapTutorialManager2 : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         EnableLastNodes();
+
+        //Camera Animation
+
+        animationCamera.gameObject.transform.position = mainCamera.transform.position;
+        animationCamera.gameObject.transform.rotation = mainCamera.transform.rotation;
+
+        animationCamera.gameObject.SetActive(true);
+
+        //Start animation
+
+        yield return new WaitForSeconds(0.5f);
+
+        StartCoroutine(TestingTutorial());
+
+
+    }
+
+    IEnumerator TestingTutorial()
+    {
+        //yield return new WaitForSeconds(5.0f);
+        //Camera Animation
+
+        animationCamera.gameObject.transform.position = mainCamera.transform.position;
+        animationCamera.gameObject.transform.rotation = mainCamera.transform.rotation;
+
+        animationCamera.gameObject.SetActive(true);
+
+        //Start animation
+
+        float currentTime = 0.0f;
+        float tParam;
+        
+        while (currentTime < animation1Time)
+        {
+            currentTime += Time.deltaTime;
+            tParam = currentTime / animation1Time;
+            animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = Mathf.Sin(tParam * (Mathf.PI / 2.0f));
+            yield return null;
+        }
+        
+        animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1.0f;
+
+        yield return new WaitForSeconds(2.0f);
+
+        currentTime = 0.0f;
+        while (currentTime < animation2Time)
+        {
+            currentTime += Time.deltaTime;
+            tParam = currentTime / animation2Time;
+            animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1 +Mathf.Sin(tParam * (Mathf.PI / 2.0f));
+            yield return null;
+        }
+        animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 2.0f;
     }
 }
