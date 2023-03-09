@@ -229,6 +229,8 @@ public class TurretBuilding : RangeBuilding
         placedParticleSystem.gameObject.SetActive(true);
         placedParticleSystem.Play();
 
+        upgrader.OnBuildingOwnerPlaced();
+
         InvokeOnBuildingPlaced();
     }
 
