@@ -14,23 +14,25 @@ public class OWMapTutorialManager2 : MonoBehaviour
     [SerializeField] private GameObject mainCamera;
     [SerializeField] private CinemachineVirtualCamera animationCamera;
 
-    [Header("Animations Time")]
+    [Header("Animations")]
     [SerializeField] [Range(0.0f, 10.0f)] private float animation1Time;
     [SerializeField] [Range(0.0f, 10.0f)] private float animation2Time;
     [SerializeField] [Range(0.0f, 10.0f)] private float animation3Time;
 
+    [SerializeField] private GameObject wathcersEyes;
+
     [Header("Developer Test")] 
     [SerializeField] private bool testing = false;
+
+    [SerializeField] private GameObject owMapTutorial1;
+    [SerializeField] private GameObject camera;
 
     
     private OWMap_Node[] lastNodes;
 
     private void Start()
     {
-        if (testing)
-        {
-            StartCoroutine(TestingTutorial());
-        }
+        wathcersEyes.SetActive(false);
     }
 
     public void StartTutorial()
@@ -61,6 +63,13 @@ public class OWMapTutorialManager2 : MonoBehaviour
     }
     IEnumerator Tutorial()
     {
+        yield return new WaitForSeconds(2.0f);
+
+        if (testing)
+        {
+            camera.transform.localPosition = new Vector3(0.0f, 4.5f, 8.0f);
+        }
+
         DisableLastNodes();
         yield return new WaitForSeconds(1.0f);
 
@@ -101,68 +110,45 @@ public class OWMapTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
 
-        scriptedSequence.Clear();
-        yield return new WaitForSeconds(1.0f);
-
-
-        scriptedSequence.NextLine(); //7 -> Don't you want to get to the end of this?
+        scriptedSequence.NextLine(); //7 -> I won't be always around...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
-
+        
         scriptedSequence.Clear();
         yield return new WaitForSeconds(1.0f);
-
-
-        scriptedSequence.NextLine(); //8 -> I won't be always arround
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine(); //9 -> But...
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.Clear();
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine(); //10 -> I
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
-
-        scriptedSequence.NextLine(); //11 -> Will
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
-
-        scriptedSequence.NextLine(); //12 -> Be
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
-
-        scriptedSequence.NextLine(); //13 -> Watching
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
-
-        scriptedSequence.Clear();
-        yield return new WaitForSeconds(1.0f);
-
+        
         EnableLastNodes();
-
-        //Camera Animation
-
-        animationCamera.gameObject.transform.position = mainCamera.transform.position;
-        animationCamera.gameObject.transform.rotation = mainCamera.transform.rotation;
-
-        animationCamera.gameObject.SetActive(true);
-
-        //Start animation
-
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3.0f); //TODO Wait until last node is clicked
 
         StartCoroutine(TestingTutorial());
+        
 
+        
 
+        yield return new WaitForSeconds(1.0f);
+
+       
+        
     }
 
     IEnumerator TestingTutorial()
     {
+        
+        scriptedSequence.NextLine(); //8 -> Hmmm...
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(1.0f);
+
+        scriptedSequence.NextLine(); //9 -> So you want to get to the end of this
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(3.0f);
+        scriptedSequence.Clear();
+        
+        scriptedSequence.NextLine(); //10 -> In that case...
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(1.5f);
+
+        scriptedSequence.Clear();
+        
         //yield return new WaitForSeconds(5.0f);
         //Camera Animation
 
@@ -171,26 +157,56 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         animationCamera.gameObject.SetActive(true);
 
+
+        
         //Start animation
 
         float currentTime = 0.0f;
         float tParam;
+        bool text1Shown = false;
+        bool text2Shown = false;
         
         while (currentTime < animation1Time)
         {
+            if (!text1Shown && currentTime > 2.0f)
+            {
+                text1Shown = true;
+                scriptedSequence.NextLine(); //11 -> I
+            }
+            else if (!text2Shown && currentTime > 5.0f)
+            {
+                text2Shown = true;
+                scriptedSequence.NextLine(); //12 -> Will
+            }
             currentTime += Time.deltaTime;
             tParam = currentTime / animation1Time;
             animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = Mathf.Sin(tParam * (Mathf.PI / 2.0f));
             yield return null;
         }
-        
+
         animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1.0f;
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
+        //Starts Opening door
+        
+        yield return new WaitForSeconds(1.0f);
+        scriptedSequence.NextLine(); //13 -> Be
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(1.5f);
+        
+        scriptedSequence.NextLine(); //14 -> Watching
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        wathcersEyes.SetActive(true);
+        yield return new WaitForSeconds(2.5f);
+
+        scriptedSequence.Clear();
+        
+        yield return new WaitForSeconds(2.5f);
 
         currentTime = 0.0f;
         while (currentTime < animation2Time)
         {
+            if(currentTime > 2.0f){ wathcersEyes.SetActive(false); }
             currentTime += Time.deltaTime;
             tParam = currentTime / animation2Time;
             animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1 +Mathf.Sin(tParam * (Mathf.PI / 2.0f));
