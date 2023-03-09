@@ -35,6 +35,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private int maxLevels;
 
 
+    [Header("FEEDBACk")]
+    [SerializeField] private ParticleSystem canUpgradeParticles;
+    private bool canUpgardeParticlesAreActive = false;
+
+
     [Header("QUICK LEVEL DISPLAY UI")]
     [SerializeField] protected RectTransform quickLevelDisplay;
     [SerializeField] protected CanvasGroup cgQuickLevelDisplay;
@@ -51,9 +56,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     protected Coroutine closeAnimationCoroutine = null;
 
 
+    private bool buildingOwnerWasPlaced = false;
 
-
-    private CurrencyCounter currencyCounter;
+    private CurrencyCounter currencyCounter = null;
 
     private float xOffset;
     private const int maxStatLevel = 5;
@@ -100,6 +105,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         quickLevelDisplay.gameObject.SetActive(false);
         cgQuickLevelDisplay.alpha = 0f;
+
+        canUpgradeParticles.gameObject.SetActive(false);
+        canUpgardeParticlesAreActive = false;
+
+        buildingOwnerWasPlaced = false;
     }
 
     private void Start()
@@ -125,10 +135,22 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private void OnEnable()
     {
         TDGameManager.OnGameFinishStart += SetHasGameFinishedTrueAndCloseWindow;
+
+        if (currencyCounter != null)
+        {
+            currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+            currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
+        }        
     }
     private void OnDisable()
     {
         TDGameManager.OnGameFinishStart -= SetHasGameFinishedTrueAndCloseWindow;
+
+        if (currencyCounter != null)
+        {
+            currencyCounter.OnCurrencyAdded -= CheckStartParticlesCanUpgrade;
+            currencyCounter.OnCurrencySpent -= CheckStopParticlesCanUpgrade;
+        }        
     }
 
 
@@ -169,6 +191,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         rangeLvl = newRangeLvl;
 
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+        currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
     public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
@@ -176,7 +200,16 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+        currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
+
+    public void OnBuildingOwnerPlaced()
+    {
+        buildingOwnerWasPlaced = true;
+        CheckStartParticlesCanUpgrade();
+    }
+
 
     private void SetHasGameFinishedTrueAndCloseWindow()
     {
@@ -256,6 +289,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
 
+            CheckStopParticlesCanUpgrade();
+
             PlayPositiveAnimationTextCostPunch();
         }
         else
@@ -276,6 +311,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             UpdateCadenceBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+
+            CheckStopParticlesCanUpgrade();
 
             PlayPositiveAnimationTextCostPunch();
         }
@@ -298,6 +335,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
 
+            CheckStopParticlesCanUpgrade();
+
             PlayPositiveAnimationTextCostPunch();
         }
         else
@@ -319,7 +358,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
 
-            PlayPositiveAnimationTextCostPunch();
+            CheckStopParticlesCanUpgrade();
+
+            PlayPositiveAnimationTextCostPunch();            
         }
         else
         {
@@ -488,6 +529,31 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     public void HideQuickLevelDisplay()
     {
         cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
+    }
+
+
+
+
+
+    private void CheckStartParticlesCanUpgrade()
+    {
+        if (buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp())
+        {
+            canUpgradeParticles.gameObject.SetActive(true);
+            canUpgradeParticles.Play();
+            canUpgardeParticlesAreActive = true;
+        }        
+
+    }
+
+    private void CheckStopParticlesCanUpgrade()
+    {
+        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && !HasEnoughCurrencyToLevelUp())
+        {
+            canUpgradeParticles.Stop();
+            canUpgardeParticlesAreActive = false;
+        }
+
     }
 
 }

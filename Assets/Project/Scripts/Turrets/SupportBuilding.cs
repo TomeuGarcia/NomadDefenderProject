@@ -101,6 +101,8 @@ public class SupportBuilding : RangeBuilding
         basePart.PlacedParticleSystem.gameObject.SetActive(true);
         basePart.PlacedParticleSystem.Play();
 
+        upgrader.OnBuildingOwnerPlaced();
+
         InvokeOnBuildingPlaced();
     }
 
