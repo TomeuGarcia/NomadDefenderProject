@@ -35,7 +35,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private int maxLevels;
 
 
-    [Header("FEEDBACk")]
+    [Header("FEEDBACK")]
     [SerializeField] private ParticleSystem canUpgradeParticles;
     private bool canUpgardeParticlesAreActive = false;
 
@@ -397,7 +397,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     private void UpdateLevelText()
     {
-        lvlText.text = ">upgrade " + currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
+        lvlText.text = currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
         quickLevelDisplayText.text = currentLevel + "/" + maxLevels;
 
         //if (currentLevel < maxUpgradeCount)
