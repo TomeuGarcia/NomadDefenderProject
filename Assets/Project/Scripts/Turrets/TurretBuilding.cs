@@ -36,9 +36,7 @@ public class TurretBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private ParticleSystem upgradeParticles;
-    [SerializeField] private Material matAttack;
-    [SerializeField] private Material matCadency;
-    [SerializeField] private Material matRange;
+    [SerializeField] private BuildingsUtils buildingsUtils;
 
 
 
@@ -260,25 +258,22 @@ public class TurretBuilding : RangeBuilding
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
     {
         bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        
 
-
-        Color particleColor;
         ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
-        Material particleMaterial = particleRenderer.sharedMaterial;
         if (upgradeType == TurretUpgradeType.ATTACK)
         {            
-            particleRenderer.sharedMaterial = matAttack;
+            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
         }
         else if (upgradeType == TurretUpgradeType.CADENCE)
         {
-            particleRenderer.sharedMaterial = matCadency;
+            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
         }
         else //(upgradeType == TurretUpgradeType.RANGE)
         {
-            particleRenderer.sharedMaterial = matRange;
+            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
         }
 
-        //particleMaterial.SetColor("Color", particleColor);
 
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
