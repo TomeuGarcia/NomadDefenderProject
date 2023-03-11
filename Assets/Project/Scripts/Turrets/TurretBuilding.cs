@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -34,6 +35,11 @@ public class TurretBuilding : RangeBuilding
 
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
+    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private Material matAttack;
+    [SerializeField] private Material matCadency;
+    [SerializeField] private Material matRange;
+
 
 
     public int CardLevel { get; private set; }
@@ -103,6 +109,7 @@ public class TurretBuilding : RangeBuilding
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
         upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
     }
@@ -243,6 +250,39 @@ public class TurretBuilding : RangeBuilding
     public override void HideQuickLevelUI()
     {
         upgrader.HideQuickLevelDisplay();
+    }
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+    
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+
+
+        Color particleColor;
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        Material particleMaterial = particleRenderer.sharedMaterial;
+        if (upgradeType == TurretUpgradeType.ATTACK)
+        {            
+            particleRenderer.sharedMaterial = matAttack;
+        }
+        else if (upgradeType == TurretUpgradeType.CADENCE)
+        {
+            particleRenderer.sharedMaterial = matCadency;
+        }
+        else //(upgradeType == TurretUpgradeType.RANGE)
+        {
+            particleRenderer.sharedMaterial = matRange;
+        }
+
+        //particleMaterial.SetColor("Color", particleColor);
+
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
 
 }
