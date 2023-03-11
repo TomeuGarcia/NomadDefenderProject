@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
+using DG.Tweening;
+using UnityEditor.Rendering.LookDev;
 
 public class OWMapTutorialManager2 : MonoBehaviour
 {
@@ -21,6 +24,14 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     [SerializeField] private GameObject wathcersEyes;
 
+    [SerializeField] private Animator animator;
+    [SerializeField] private CinemachineSmoothPath dollyTrack;
+
+    [SerializeField] private List<Lerp> doorSides = new List<Lerp>();
+    [SerializeField] private List<VolumeProfile> volumes = new List<VolumeProfile>();
+    [SerializeField] private Volume globalVolume;
+
+
     [Header("Developer Test")] 
     [SerializeField] private bool testing = false;
 
@@ -29,6 +40,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     
     private OWMap_Node[] lastNodes;
+    private int currentVolume = 0;
 
     private void Start()
     {
@@ -37,8 +49,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     public void StartTutorial()
     {
-            Init();
-            StartCoroutine(Tutorial());
+        Init();
+        StartCoroutine(Tutorial());
     }
 
     private void Init()
@@ -68,6 +80,12 @@ public class OWMapTutorialManager2 : MonoBehaviour
         if (testing)
         {
             camera.transform.localPosition = new Vector3(0.0f, 4.5f, 8.0f);
+            for (int i = 0; i < 8; i++)
+            {
+                scriptedSequence.SkipLine();
+            }
+            StartCoroutine(TestingTutorial());
+            yield break;
         }
 
         DisableLastNodes();
@@ -133,12 +151,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     IEnumerator TestingTutorial()
     {
-        
-        scriptedSequence.NextLine(); //8 -> Hmmm...
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        animator.Play("TutorialAnimation", 0, 0.0f);
+        NextVolume();
 
-        scriptedSequence.NextLine(); //9 -> So you want to get to the end of this
+
+        scriptedSequence.NextLine(); //9 -> So you want to get to the end of this...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(3.0f);
         scriptedSequence.Clear();
@@ -168,12 +185,12 @@ public class OWMapTutorialManager2 : MonoBehaviour
         
         while (currentTime < animation1Time)
         {
-            if (!text1Shown && currentTime > 2.0f)
+            if (!text1Shown && currentTime > 1.0f)
             {
                 text1Shown = true;
                 scriptedSequence.NextLine(); //11 -> I
             }
-            else if (!text2Shown && currentTime > 5.0f)
+            else if (!text2Shown && currentTime > 3.5f)
             {
                 text2Shown = true;
                 scriptedSequence.NextLine(); //12 -> Will
@@ -186,32 +203,107 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1.0f;
 
-        yield return new WaitForSeconds(1.0f);
-        //Starts Opening door
-        
-        yield return new WaitForSeconds(1.0f);
+
+        yield return new WaitForSeconds(2.0f);
+
+
+        //yield return new WaitForSeconds(1.0f);
         scriptedSequence.NextLine(); //13 -> Be
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.5f);
+
+        //Starts Opening door
+        float doorLerpTime = 4.0f;
+        float offset = 1.0f;
+        doorSides[0].LerpPosition(new Vector3(10046.1f + offset, 4.5f, 41.64484f), doorLerpTime);
+        doorSides[1].LerpPosition(new Vector3(10063.94f - offset, 4.5f, 41.64484f), doorLerpTime);
+        //CAMERA SHAKE
+        StartCoroutine(CameraShake(doorLerpTime));
+        StartCoroutine(LastCameraMovement());
+        NextVolume();
+        yield return new WaitForSeconds(5.5f);
         
         scriptedSequence.NextLine(); //14 -> Watching
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         wathcersEyes.SetActive(true);
-        yield return new WaitForSeconds(2.5f);
 
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
-        
-        yield return new WaitForSeconds(2.5f);
+        wathcersEyes.SetActive(false);
 
-        currentTime = 0.0f;
+    }
+
+    private void NextVolume()
+    {
+        currentVolume++;
+        globalVolume.profile = volumes[currentVolume];
+    }
+
+    private void PreviousVolume()
+    {
+        currentVolume--;
+        globalVolume.profile = volumes[currentVolume];
+    }
+
+    private IEnumerator CameraShake(float doorOpeningTime)
+    {
+        float offset = 0.2f;
+        CinemachineBasicMultiChannelPerlin shake = animationCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        shake.m_AmplitudeGain = 3.0f;
+        yield return new WaitForSeconds(offset);
+        shake.m_AmplitudeGain = 0.5f;
+        yield return new WaitForSeconds(doorOpeningTime - offset);
+        shake.m_AmplitudeGain = 3.0f;
+        yield return new WaitForSeconds(offset);
+        shake.m_AmplitudeGain = 2.0f;
+        yield return new WaitForSeconds(offset);
+        shake.m_AmplitudeGain = 1.0f;
+        yield return new WaitForSeconds(offset);
+        shake.m_AmplitudeGain = 0.5f;
+        yield return new WaitForSeconds(offset);
+        shake.m_AmplitudeGain = 0.0f;
+
+        StartCoroutine(LerpDollyTrackPoint());
+    }
+
+    private IEnumerator LerpDollyTrackPoint()
+    {
+        float totalTime = 4.0f;
+        float currentTime = 0.0f;
+        float tParam = 0.0f;
+
+        float animStart = 8.0f;
+        float animEnd = 4.0f;
+        float diff = animStart- animEnd;
+
+        while (currentTime < totalTime)
+        {
+            currentTime += Time.deltaTime;
+            tParam = currentTime / totalTime;
+            dollyTrack.m_Waypoints[2].position.y = animStart - (diff * tParam);
+            yield return null;
+        }
+    }
+
+    private IEnumerator LastCameraMovement()
+    {
+        yield return new WaitForSeconds(7.5f);
+
+        float currentTime = 0.0f;
+        float tParam;
+
         while (currentTime < animation2Time)
         {
-            if(currentTime > 2.0f){ wathcersEyes.SetActive(false); }
+            //if(currentTime > 2.0f){ wathcersEyes.SetActive(false); }
             currentTime += Time.deltaTime;
             tParam = currentTime / animation2Time;
-            animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1 +Mathf.Sin(tParam * (Mathf.PI / 2.0f));
+            animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1 + Mathf.Sin(tParam * (Mathf.PI / 2.0f));
             yield return null;
         }
         animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 2.0f;
+    }
+
+    private void OnDestroy()
+    {
+        globalVolume.profile = volumes[0];
     }
 }

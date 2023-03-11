@@ -127,6 +127,13 @@ public class OWMapTutorialManager : MonoBehaviour
 
     IEnumerator Tutorial()
     {
+        if (testing)
+        {
+            yield return new WaitForSeconds(2.0f);
+            owMapTuto2.StartTutorial();
+            yield break;
+        }
+
         yield return new WaitForSeconds(5.0f);
 
 
@@ -189,11 +196,11 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
 
-        if (testing)
-        {
-            owMapTuto2.StartTutorial();
-            yield break;
-        }
+        //if (testing)
+        //{
+        //    owMapTuto2.StartTutorial();
+        //    yield break;
+        //}
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 
