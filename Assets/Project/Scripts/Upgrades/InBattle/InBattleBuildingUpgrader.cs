@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Enemy;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 
@@ -80,6 +79,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     public delegate void TurretUpgradeEvent(int newLevel);
     public static TurretUpgradeEvent OnTurretUpgrade;
+
+    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType);
+    public BuildingUpgraderEvent OnUpgrade;
+    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType); }
+
 
     private void Awake()
     {
@@ -290,8 +294,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
 
             CheckStopParticlesCanUpgrade();
-
+            
             PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.ATTACK);
         }
         else
         {
@@ -315,6 +321,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             CheckStopParticlesCanUpgrade();
 
             PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.CADENCE);
         }
         else
         {
@@ -338,6 +346,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             CheckStopParticlesCanUpgrade();
 
             PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.RANGE);
         }
         else
         {
@@ -360,7 +370,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
             CheckStopParticlesCanUpgrade();
 
-            PlayPositiveAnimationTextCostPunch();            
+            PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
         }
         else
         {
@@ -548,12 +560,12 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     private void CheckStopParticlesCanUpgrade()
     {
-        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && !HasEnoughCurrencyToLevelUp())
+        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp()))
         {
             canUpgradeParticles.Stop();
             canUpgardeParticlesAreActive = false;
         }
 
-    }
+    }    
 
 }
