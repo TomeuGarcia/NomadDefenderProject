@@ -37,7 +37,10 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS PLAYED")]
     [SerializeField] private AudioSource cardPlayedAudioSource;
 
-    [Header("UPGRADES")]
+    [Header("IN-BATTLE UPGRADES")]
+    [SerializeField] private AudioSource inBattleBuildingUpgradeAudioSource;
+
+    [Header("UPGRADE SCENES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
     [SerializeField] private AudioClip upgradeButtonPressed;
@@ -49,8 +52,9 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip enemyTakeDamage;
     [SerializeField] private AudioClip enemyDeath;
     [SerializeField] private AudioClip enemySpawn;
+    [SerializeField] private AudioSource enemyArmorBreakAudioSource;
 
-    [Header("BATTLE")]
+    [Header("BATTLE SCENES")]
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
 
@@ -68,6 +72,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("OVERWORLD MAP")]
     [SerializeField] private AudioSource nodeAudioSource;
     [SerializeField] private AudioSource sparkAudioSource;
+    [SerializeField] private AudioSource nodeSpawnAudioSource;
 
 
 
@@ -81,7 +86,7 @@ public class GameAudioManager : MonoBehaviour
         else
         {
             Destroy(this);
-        }
+        }        
     }
 
     public static GameAudioManager GetInstance()
@@ -278,7 +283,15 @@ public class GameAudioManager : MonoBehaviour
     }
 
 
-    // Upgrades
+    // In-Battle Upgrades
+    public void PlayInBattleBuildingUpgrade()
+    {
+        inBattleBuildingUpgradeAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        inBattleBuildingUpgradeAudioSource.Play();
+    }
+
+
+    // Upgrade Scenes
     public void PlayCardPartSwap()
     {
         upgradesAudioSource.clip = cardPartSwap;
@@ -319,6 +332,12 @@ public class GameAudioManager : MonoBehaviour
     public void PlayEnemySpawn()
     {
         LoopAudioSources(enemiesAudioSources, enemySpawn, Random.Range(0.9f, 1.1f));
+    }
+
+    public void PlayEnemyArmorBreak()
+    {
+        enemyArmorBreakAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        enemyArmorBreakAudioSource.Play();
     }
 
 
@@ -379,6 +398,12 @@ public class GameAudioManager : MonoBehaviour
     {
         nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeAudioSource.Play();
+    }
+    
+    public void PlayNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        nodeSpawnAudioSource.Play();
     }
 
 }
