@@ -80,6 +80,7 @@ public class HealthHUD : MonoBehaviour
 
     private IEnumerator ArmorBreak()
     {
+        GameAudioManager.GetInstance().PlayEnemyArmorBreak();
         armorShatterParticles.Play();
 
         Color32 color = armorFlashImage.color;

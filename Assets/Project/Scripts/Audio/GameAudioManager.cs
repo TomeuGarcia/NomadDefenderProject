@@ -400,7 +400,19 @@ public class GameAudioManager : MonoBehaviour
         nodeAudioSource.Play();
     }
     
-    public void PlayNodeSpawnSound()
+    public void PlayUpgradeNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(1.15f, 1.3f);
+        nodeSpawnAudioSource.Play();
+    }
+
+    public void PlayBattleNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(0.6f, 0.75f);
+        nodeSpawnAudioSource.Play();
+    }
+
+    public void PlayConnectionsNodeSpawnSound()
     {
         nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeSpawnAudioSource.Play();
