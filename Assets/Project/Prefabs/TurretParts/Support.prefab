@@ -596,6 +596,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7881853994490119724}
+  - {fileID: 2907593147826155245}
   m_Father: {fileID: 5698239489495674825}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1537,6 +1538,8 @@ MonoBehaviour:
   upgrader: {fileID: 8437271579559806259}
   visualUpgrades: []
   baseHolder: {fileID: 40166544886556335}
+  upgradeParticles: {fileID: 2907593147826155250}
+  buildingsUtils: {fileID: 11400000, guid: 1b5d68d06ba91654fb779dfe256efc8b, type: 2}
 --- !u!1 &5947730926330722142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2365,4 +2368,85 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4662412007931874886, guid: 03b48e5ac214f8a4a97fde4030c2e2db,
     type: 3}
   m_PrefabInstance: {fileID: 3302774009344051317}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6534755031629444911
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7509195882973863239}
+    m_Modifications:
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8280366561528748511, guid: e5080559fefd86b41b257a77baf9d45d,
+        type: 3}
+      propertyPath: m_Name
+      value: BurstCanUpgradeBuildingParticles
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e5080559fefd86b41b257a77baf9d45d, type: 3}
+--- !u!4 &2907593147826155245 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
+    type: 3}
+  m_PrefabInstance: {fileID: 6534755031629444911}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2907593147826155250 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8280366561528748509, guid: e5080559fefd86b41b257a77baf9d45d,
+    type: 3}
+  m_PrefabInstance: {fileID: 6534755031629444911}
   m_PrefabAsset: {fileID: 0}

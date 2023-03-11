@@ -197,7 +197,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true, 2f);
     }
 
 
@@ -224,7 +224,7 @@ public class CardPartReplaceManager : MonoBehaviour
             parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true, 2f);
     }
 
     public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
@@ -252,7 +252,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true, 2f);
     }
 
 
@@ -405,7 +405,8 @@ public class CardPartReplaceManager : MonoBehaviour
         //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
         upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
-        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false);
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
         
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
@@ -517,8 +518,18 @@ public class CardPartReplaceManager : MonoBehaviour
         cardPartHolder.appearAnimationCanStartMoving = true;
     }
 
-    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting)
+
+
+
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
     {
+        StartCoroutine(DoPrintConsoleLine(type, text, clearBeforeWritting, delay));
+    }
+
+    private IEnumerator DoPrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         if (!isTutorial)
         {
 
@@ -527,9 +538,11 @@ public class CardPartReplaceManager : MonoBehaviour
 
             textLine.textType = type;
             textLine.text = text;
-            consoleDialog.PrintLine(textLine);
+            consoleDialog.PrintLine(textLine);            
         }
     }
+
+
     void PrintConsoleLine(TextTypes type, string text)
     {
         textLine.textType = type;

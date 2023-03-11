@@ -19,6 +19,10 @@ public class SupportBuilding : RangeBuilding
     [SerializeField] protected Transform baseHolder;
 
 
+    [Header("PARTICLES")]
+    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private BuildingsUtils buildingsUtils;
+
 
 
     void Awake()
@@ -102,6 +106,7 @@ public class SupportBuilding : RangeBuilding
         basePart.PlacedParticleSystem.Play();
 
         upgrader.OnBuildingOwnerPlaced();
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         InvokeOnBuildingPlaced();
     }
@@ -116,4 +121,24 @@ public class SupportBuilding : RangeBuilding
     {
         upgrader.HideQuickLevelDisplay();
     }
+
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        baseHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+
+
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        particleRenderer.sharedMaterial = buildingsUtils.SupportUpgradeParticleMat;
+
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
+    }
+
 }
