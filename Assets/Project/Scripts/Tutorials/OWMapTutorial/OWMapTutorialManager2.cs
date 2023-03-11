@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine.Rendering;
 using DG.Tweening;
-using UnityEditor.Rendering.LookDev;
 
 public class OWMapTutorialManager2 : MonoBehaviour
 {
