@@ -152,6 +152,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
         animator.Play("TutorialAnimation", 0, 0.0f);
         NextVolume();
 
+        GameAudioManager.GetInstance().PlayDroneBuildUp(25.0f, 0.0f, 0.0f);
 
         scriptedSequence.NextLine(); //9 -> So you want to get to the end of this...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -209,6 +210,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.NextLine(); //13 -> Be
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
+        GameAudioManager.GetInstance().PlayDroneBuildUp(0.0f, 10.0f, 7.5f);
         //Starts Opening door
         float doorLerpTime = 4.0f;
         float offset = 1.0f;

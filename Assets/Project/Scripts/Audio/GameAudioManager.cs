@@ -69,6 +69,12 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource nodeAudioSource;
     [SerializeField] private AudioSource sparkAudioSource;
 
+    [Header("BACKGROUND")]
+    [SerializeField] private AudioSource droneAudioSource;
+    private float droneBuildUpInitVolume;
+    private IEnumerator droneBuildUp;
+    private IEnumerator droneLerpBuildUp;
+
 
 
     private void Awake()
@@ -77,6 +83,8 @@ public class GameAudioManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this);
+
+            InitVariables();
         }
         else
         {
@@ -89,6 +97,11 @@ public class GameAudioManager : MonoBehaviour
         return instance;
     }
 
+
+    private void InitVariables()
+    {
+        droneBuildUpInitVolume = droneAudioSource.volume;
+    }
 
     // Helpers
     private void LoopAudioSources(AudioSource[] audioSources, AudioClip clip, float pitch)
@@ -107,6 +120,42 @@ public class GameAudioManager : MonoBehaviour
 
             ++i;
         }
+    }
+    private IEnumerator BuildUp(AudioSource source, float initVol, float endVol, float attackTime, float sustainTime, float releaseTime)
+    {
+        if(attackTime > 0.0f)
+        {
+            droneLerpBuildUp = LerpVolume(source, initVol, endVol, attackTime);
+            yield return StartCoroutine(droneLerpBuildUp);
+        }
+        else
+            source.volume = endVol;
+
+        if (sustainTime > 0.0f)
+            yield return new WaitForSeconds(sustainTime);
+
+        if (releaseTime > 0.0f)
+        {
+            droneLerpBuildUp = LerpVolume(source, endVol, initVol, releaseTime);
+            yield return StartCoroutine(droneLerpBuildUp);
+        }
+    }
+    private IEnumerator LerpVolume(AudioSource source, float initVol, float endVol, float lerpTime)
+    {
+        float currentTime = 0.0f;
+        float tParam;
+
+        float diff = endVol - initVol;
+
+        while (currentTime < lerpTime)
+        {
+            currentTime += Time.deltaTime;
+            tParam = currentTime / lerpTime;
+            source.volume = tParam * diff + initVol;
+            yield return null;
+        }
+
+        source.volume = endVol;
     }
 
 
@@ -379,6 +428,24 @@ public class GameAudioManager : MonoBehaviour
     {
         nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeAudioSource.Play();
+    }
+
+
+
+    // Background
+    public void PlayDroneBuildUp(float attackTime, float sustainTime, float releaseTime)
+    {
+        if(!droneAudioSource.isPlaying)
+        {
+            droneAudioSource.Play();
+        } else {
+            droneAudioSource.volume = droneBuildUpInitVolume;
+            StopCoroutine(droneBuildUp);
+            StopCoroutine(droneLerpBuildUp);
+        }
+
+        droneBuildUp = BuildUp(droneAudioSource, 0.0f, droneAudioSource.volume, attackTime, sustainTime, releaseTime);
+        StartCoroutine(droneBuildUp);
     }
 
 }
