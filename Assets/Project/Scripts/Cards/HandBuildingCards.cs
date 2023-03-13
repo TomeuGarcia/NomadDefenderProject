@@ -21,7 +21,8 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private BuildingPlacer buildingPlacer;
     [SerializeField] private int initialRedraws = 2;
     private int redrawsLeft;
-    public bool isInRedrawPhase { get; private set; } = false;
+    public bool isInRedrawPhase { get; private set; } = false;
+
 
 
     private List<BuildingCard> cards;
@@ -552,6 +553,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         else
         {
+            GameAudioManager.GetInstance().PlayError();
             currencyCounter.PlayNotEnoughCurrencyAnimation();
             card.PlayCanNotBePlayedAnimation();
         }
@@ -828,9 +830,12 @@ public class HandBuildingCards : MonoBehaviour
         handSideBlockerRight.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerRight.position).normalized, handCameraTransform.up);
     }
 
-    public List<BuildingCard> GetCards()
-    {
-        return cards;
+    public List<BuildingCard> GetCards()
+
+    {
+
+        return cards;
+
     }
 
 }
