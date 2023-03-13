@@ -485,6 +485,7 @@ public class BattleHUD : MonoBehaviour
         else
         {
             DoCanNotDrawCard();
+            GameAudioManager.GetInstance().PlayError();
         }
 
     }
