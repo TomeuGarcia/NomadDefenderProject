@@ -48,10 +48,13 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     [Header("COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
     [SerializeField] private Animator buttonAnimator;
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
+
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+    [SerializeField] TextLine textLine;
+    [SerializeField] bool isTutorial;
 
     private bool replacementDone = false;
     public bool ReplacementDone => replacementDone;
@@ -194,7 +197,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's ATTACK with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true, 2f);
     }
 
 
@@ -221,8 +224,7 @@ public class CardPartReplaceManager : MonoBehaviour
             parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-
-        uiDescriptionText.text = "Replace a turret's BODY with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true, 2f);
     }
 
     public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
@@ -250,7 +252,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's BASE with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true, 2f);
     }
 
 
@@ -403,6 +405,10 @@ public class CardPartReplaceManager : MonoBehaviour
         //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
         upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+        
+
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
     
@@ -459,6 +465,7 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
 
         mapSceneNotifier.InvokeOnSceneFinished();
+        consoleDialog.Clear();
 
         if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
     }
@@ -509,6 +516,38 @@ public class CardPartReplaceManager : MonoBehaviour
     public void ResumeCardPartsAppearAnimation()
     {
         cardPartHolder.appearAnimationCanStartMoving = true;
+    }
+
+
+
+
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        StartCoroutine(DoPrintConsoleLine(type, text, clearBeforeWritting, delay));
+    }
+
+    private IEnumerator DoPrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (!isTutorial)
+        {
+
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
+
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);            
+        }
+    }
+
+
+    void PrintConsoleLine(TextTypes type, string text)
+    {
+        textLine.textType = type;
+        textLine.text = text;
+        consoleDialog.PrintLine(textLine);
     }
 
 }

@@ -21,6 +21,7 @@ public class BattleTutorialManager2 : MonoBehaviour
     [SerializeField] private DeckCreator deckCreator;
 
     [SerializeField] private Tile watcherCardTile;
+    [SerializeField] private BuildingPlacer buildingPlacer;
 
     [SerializeField] private CurrencyCounter currencyCounter;
 
@@ -34,6 +35,9 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     //Get Scripted Sequence
     [SerializeField] private ScriptedSequence scriptedSequence;
+
+
+    [SerializeField] private ParticleSystem turretSpawnParticles;
 
 
     // Start is called before the first frame update
@@ -187,6 +191,9 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
 
+        turretSpawnParticles.Play();
+        yield return new WaitForSeconds(1.0f);
+
         PlaceSelectedBuilding(watcherCardTile, card);
 
         //Wait until Wathcer's turret is placed
@@ -202,6 +209,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)
     {
+        /*
         tile.isOccupied = true;
 
         selectedBuildingCard.copyBuildingPrefab.SetActive(true);
@@ -211,6 +219,11 @@ public class BattleTutorialManager2 : MonoBehaviour
         selectedBuilding.ShowRangePlane();
 
         selectedBuilding.GotPlaced();
+        */
+
+        Building selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
+        buildingPlacer.PlaceTutorialBuilding(selectedBuildingCard, selectedBuilding, tile);
+
 
         //Maybe play a special sound
     }
