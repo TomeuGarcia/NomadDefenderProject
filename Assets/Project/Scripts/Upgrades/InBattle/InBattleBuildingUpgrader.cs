@@ -465,13 +465,6 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         float duration = 0.2f;
 
-        if (Time.timeScale < 0.1f)
-        {
-            StartCoroutine(UnscaledTimeFillStatBar(bar, button, backFillBar, backFill, duration));
-            return;
-        }
-
-
         bar.DOComplete();
         bar.DOFillAmount(1f, duration);
 
@@ -480,33 +473,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         backFillBar.fillAmount = backFill;
     }
-    private IEnumerator UnscaledTimeFillStatBar(Image bar, Image button, Image backFillBar, float backFill, float duration)
-    {
-        float step = (1f / duration);
-        float value = bar.fillAmount;
-
-        while (value < 0.99f)
-        {
-            value += Time.unscaledDeltaTime * step;
-            bar.fillAmount = value;
-            button.transform.localScale = Vector3.one * (1.1f * value);
-            yield return new WaitForSeconds(Time.unscaledDeltaTime);
-            Debug.Log("fill: " + value);
-        }
-        bar.fillAmount = 1f;
-        button.transform.localScale = Vector3.one * 1.1f;
-    }
-
 
     protected void EmptyStatBar(Image bar, Image button, Image backFillBar, float backFill)
     {
         float duration = 0.2f;
-
-        if (Time.timeScale < 0.1f)
-        {
-            StartCoroutine(UnscaledTimeEmptyStatBar(bar, button, backFillBar, backFill, duration));
-            return;
-        }
 
         bar.DOComplete();
         bar.DOFillAmount(0f, duration);
@@ -516,23 +486,6 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         backFillBar.fillAmount = backFill;
     }
-    private IEnumerator UnscaledTimeEmptyStatBar(Image bar, Image button, Image backFillBar, float backFill, float duration)
-    {
-        float step = (1f / duration);
-        float value = bar.fillAmount;
-
-        while (value > 0.01f)
-        {
-            value -= Time.unscaledDeltaTime * step;
-            bar.fillAmount = value;
-            button.transform.localScale = Vector3.one * (1.1f * value);
-            yield return new WaitForSeconds(Time.unscaledDeltaTime);
-            Debug.Log("empty: " + value);
-        }
-        bar.fillAmount = 0f;
-        button.transform.localScale = Vector3.one;
-    }
-
 
 
     protected void PlayAnimationIconPunch(Transform iconTransform)
