@@ -67,6 +67,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         StartCoroutine(Tutorial());
         hand.cheatDrawCardActivated = false;
         HandBuildingCards.OnCardPlayed += WaveStarted;
+        EnemyWaveManager.OnWaveFinished += WaveStarted;
 
     }
 
@@ -160,6 +161,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => waveStarted);
         scriptedSequence.NextLine(); //8 -> Initializing Enemy Waves
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(1.0f);
         scriptedSequence.NextLine(); //9 -> Wave 1 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
@@ -170,11 +172,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for(float i = 0; i < 1.0f; i+= 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(1.0f, 0.0f, i);
+            GameTime.SetTimeScale(Mathf.Lerp(1.0f, 0.0f, i));
             yield return null;
         }
 
-        Time.timeScale = 0.0f;
+        GameTime.SetTimeScale(0.0f);
 
         scriptedSequence.NextLine(); //10 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -192,11 +194,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for (float i = 0; i < 1.0f; i += 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
+            GameTime.SetTimeScale(Mathf.Lerp(0.0f, 1.0f, i));
             yield return null;
         }
 
-        Time.timeScale = 1.0f;
+        GameTime.SetTimeScale(1.0f);
 
         //Create new turret
 
