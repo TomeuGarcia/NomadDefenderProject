@@ -96,6 +96,12 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
+        currentNode.UpdateBorderMaterial();
+        if(currentNode != owMapNode)
+        {
+            owMapNode.UpdateBorderMaterial();
+        }
+
         owMapPawn.MoveToNode(owMapNode);
         
         if (wasSelectedByPlayer)
@@ -174,7 +180,11 @@ public class OverworldMapGameManager : MonoBehaviour
     private void DisableCurrentLevelNodesInfoDisplay()
     {
         // Disable current info displays
-        foreach (OWMap_Node node in mapNodes[currentMapLevelI]) node.InvokeOnNodeInfoInteractionDisabled();
+        foreach (OWMap_Node node in mapNodes[currentMapLevelI])
+        {
+            node.InvokeOnNodeInfoInteractionDisabled();
+            node.SetActiveNodeSelection(false);
+        }
     }
 
 
@@ -197,6 +207,7 @@ public class OverworldMapGameManager : MonoBehaviour
             for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
             {
                 nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
+                nextLevelEnabledNodes[i].SetActiveNodeSelection(true);
                 // TODO set node material for active interaction
             }
         }
@@ -226,6 +237,11 @@ public class OverworldMapGameManager : MonoBehaviour
         for (int i = 0; i < nodeResults.Length; ++i)
         {
             nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense, true);
+            if(nodeResults[i].healthState == NodeEnums.HealthState.DESTROYED)
+            {
+                currentNode.GetNextLevelConnections()[i].LightConnection(true);
+            }
+            //currentNode.GetNextLevelConnections()[i].LightConnection(nodeResults[i].healthState == NodeEnums.HealthState.DESTROYED);
         }
     }
     private void ApplyBattleStateResultForUpgradeBackToBack()

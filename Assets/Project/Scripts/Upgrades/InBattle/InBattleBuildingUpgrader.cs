@@ -1,24 +1,30 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Enemy;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
 
-public class InBattleBuildingUpgrader : MonoBehaviour
+public abstract class InBattleBuildingUpgrader : MonoBehaviour
 {
     [SerializeField] private Transform building;
-    [SerializeField] private RectTransform UIParent;
     [SerializeField] private RectTransform mouseDetectionPanel;
-    [SerializeField] private TMP_Text costText;
     [SerializeField] private TMP_Text lvlText;
+    [SerializeField] private TMP_Text costText;
+    [SerializeField] private Image costCurrencyImage;
 
     [SerializeField] private List<int> upgradeCosts = new List<int>();
-    [SerializeField] private List<Image> fillBars = new List<Image>();
+    [SerializeField] protected List<Image> fillBars = new List<Image>();
     
     [SerializeField] private Color32 disalbedTextColor;
+
+    public bool IsOpenWindowInCooldown { get; private set; }
+    public bool IsWindowOpen { get; private set; }
+
+    private bool hasGameFinished = false;
+    protected Coroutine automaticCloseCoroutine = null;
 
 
     [Header("BUILDING TYPE")]
@@ -28,21 +34,44 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     private int maxLevels;
 
 
-    private CurrencyCounter currencyCounter;
+    [Header("FEEDBACK")]
+    [SerializeField] private ParticleSystem canUpgradeParticles;
+    private bool canUpgardeParticlesAreActive = false;
+
+
+    [Header("QUICK LEVEL DISPLAY UI")]
+    [SerializeField] protected RectTransform quickLevelDisplay;
+    [SerializeField] protected CanvasGroup cgQuickLevelDisplay;
+    [SerializeField] protected TextMeshProUGUI quickLevelDisplayText;
+
+    [Header("NEW UI")]
+    [Header("General")]
+    [SerializeField] protected RectTransform newUiParent;
+    [SerializeField] protected Image barImage;
+    [SerializeField] protected Image backgroundImage;
+    [SerializeField] protected CanvasGroup cgLvlText;
+    [SerializeField] protected CanvasGroup cgCostText;
+    protected Coroutine openAnimationCoroutine = null;
+    protected Coroutine closeAnimationCoroutine = null;
+
+
+    private bool buildingOwnerWasPlaced = false;
+
+    private CurrencyCounter currencyCounter = null;
 
     private float xOffset;
     private const int maxStatLevel = 5;
     private const int maxSupportStatLevel = 3;
     private const int maxUpgradeCount = 3;
-    private int currentLevel = 0;
+    protected int currentLevel = 0;
 
-    private int attackLvl;
-    private int cadenceLvl;
-    private int rangeLvl;
-    private int supportLvl;
+    protected int attackLvl;
+    protected int cadenceLvl;
+    protected int rangeLvl;
+    protected int supportLvl;
 
-    private float turretFillBarCoef;
-    private float supportFillBarCoef;
+    protected float turretFillBarCoef;
+    protected float supportFillBarCoef;
 
     private bool visible;
 
@@ -51,11 +80,25 @@ public class InBattleBuildingUpgrader : MonoBehaviour
     public delegate void TurretUpgradeEvent(int newLevel);
     public static TurretUpgradeEvent OnTurretUpgrade;
 
+    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType);
+    public BuildingUpgraderEvent OnUpgrade;
+    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType); }
+
+
     private void Awake()
     {
-        xOffset = UIParent.anchoredPosition.x;
+        AwakeInit();
+    }
 
-        UIParent.gameObject.SetActive(false);
+    protected virtual void AwakeInit()
+    {
+        xOffset = newUiParent.anchoredPosition.x;
+
+        newUiParent.gameObject.SetActive(false);
+
+        IsOpenWindowInCooldown = false;
+        IsWindowOpen = false;
+        hasGameFinished = false;
 
         costText.text = upgradeCosts[0].ToString();
 
@@ -63,6 +106,14 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         supportFillBarCoef = 100.0f / ((float)maxSupportStatLevel * 100.0f);
 
         visible = false;
+
+        quickLevelDisplay.gameObject.SetActive(false);
+        cgQuickLevelDisplay.alpha = 0f;
+
+        canUpgradeParticles.gameObject.SetActive(false);
+        canUpgardeParticlesAreActive = false;
+
+        buildingOwnerWasPlaced = false;
     }
 
     private void Start()
@@ -71,14 +122,41 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         {
             turretBuilding = building.gameObject.GetComponent<TurretBuilding>();
             maxLevels = turretBuilding.CardLevel;
+            UpdateAttackBar();
+            UpdateCadenceBar();
+            UpdateRangeBar();
         }
         else if (buildingType == BuildingCard.CardBuildingType.SUPPORT)
         {
             supportBuilding = building.gameObject.GetComponent<SupportBuilding>();
             maxLevels = maxUpgradeCount;
+            UpdateSupportBar();
         }
         UpdateLevelText();
     }
+
+
+    private void OnEnable()
+    {
+        TDGameManager.OnGameFinishStart += SetHasGameFinishedTrueAndCloseWindow;
+
+        if (currencyCounter != null)
+        {
+            currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+            currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
+        }        
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnGameFinishStart -= SetHasGameFinishedTrueAndCloseWindow;
+
+        if (currencyCounter != null)
+        {
+            currencyCounter.OnCurrencyAdded -= CheckStartParticlesCanUpgrade;
+            currencyCounter.OnCurrencySpent -= CheckStopParticlesCanUpgrade;
+        }        
+    }
+
 
     private void Update()
     {
@@ -88,6 +166,21 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         {
             CloseWindow();
         }
+
+        if (IsWindowOpen)
+        {
+            if (outOfArea && automaticCloseCoroutine == null)
+            {
+                Debug.Log("CLOSE START");
+                AutomaticWindowCloseStart();
+            }
+            else if (!outOfArea && automaticCloseCoroutine != null)
+            {
+                Debug.Log("CLOSE STOP");
+                AutomaticWindowCloseStop();
+            }
+        }
+
     }
 
     private void LateUpdate()
@@ -95,38 +188,62 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter)
+    public virtual void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
+        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
         attackLvl = newAttackLvl;
         cadenceLvl = newCadenceLvl;
         rangeLvl = newRangeLvl;
 
-        UpdateAttackBar();
-        UpdateCadenceBar();
-        UpdateRangeBar();
-
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+        currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public void InitSupport(CurrencyCounter newCurrencyCounter)
+    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
     {
         supportLvl = 0;
 
-        UpdateSupportBar();
-
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
+        currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
+    public void OnBuildingOwnerPlaced()
+    {
+        buildingOwnerWasPlaced = true;
+        CheckStartParticlesCanUpgrade();
+    }
+
+
+    private void SetHasGameFinishedTrueAndCloseWindow()
+    {
+        if (IsWindowOpen)
+        {
+            CloseWindow();
+        }
+        hasGameFinished = true;        
+    }
+    public bool CanOpenWindow()
+    {
+        return !IsOpenWindowInCooldown && !IsWindowOpen && !hasGameFinished;
+    }
     public void OpenWindow()
     {
         if(!UIWindowManager.GetInstance().IsHoveringOtherWindow(this))
         {
             UIWindowManager.GetInstance().OpenedWindow(this);
 
-            UIParent.gameObject.SetActive(true);
+            newUiParent.gameObject.SetActive(true);
 
-            UIParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 150.0f + (Vector3.right * xOffset);
+            newUiParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
             StartCoroutine(SetVisible());
+
+            PlayOpenAnimation();
+
+            IsWindowOpen = true;
+
+            HideQuickLevelDisplay();
         }
     }
 
@@ -135,8 +252,23 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         UIWindowManager.GetInstance().ClosedWindow(this);
 
         visible = false;
-        UIParent.gameObject.SetActive(false);
+        //UIParent.gameObject.SetActive(false);
+        
+        PlayCloseAnimation();
+
+        StartCoroutine(OpenWindowCooldown());
+
+        IsWindowOpen = false;
+
+        AutomaticWindowCloseStop();
     }
+    private IEnumerator OpenWindowCooldown()
+    {
+        IsOpenWindowInCooldown = true;
+        yield return new WaitForSeconds(0.1f);
+        IsOpenWindowInCooldown = false;
+    }
+
 
     public bool IsHoveringWindow()
     {
@@ -149,7 +281,7 @@ public class InBattleBuildingUpgrader : MonoBehaviour
         visible = true;
     }
 
-    public void UpgradedAttack()
+    public void UpgradedAttack() // Called by button
     {
         if(CanUpgrade(attackLvl))
         {
@@ -161,10 +293,20 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateAttackBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
+
+            CheckStopParticlesCanUpgrade();
+            
+            PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.ATTACK);
+        }
+        else
+        {
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
-    public void UpgradedCadence()
+    public void UpgradedCadence() // Called by button
     {
         if (CanUpgrade(cadenceLvl))
         {
@@ -176,10 +318,20 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateCadenceBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+
+            CheckStopParticlesCanUpgrade();
+
+            PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.CADENCE);
+        }
+        else
+        {
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
-    public void UpgradedRange()
+    public void UpgradedRange() // Called by button
     {
         if (CanUpgrade(rangeLvl))
         {
@@ -191,6 +343,16 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateRangeBar();
 
             turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
+
+            CheckStopParticlesCanUpgrade();
+
+            PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.RANGE);
+        }
+        else
+        {
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
@@ -206,15 +368,36 @@ public class InBattleBuildingUpgrader : MonoBehaviour
             UpdateSupportBar();
 
             supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
+
+            CheckStopParticlesCanUpgrade();
+
+            PlayPositiveAnimationTextCostPunch();
+
+            InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
+        }
+        else
+        {
+            PlayNegativeAnimationTextCostPunch();
         }
     }
 
-    private bool CanUpgrade(int levelToCheck)
+    protected bool CanUpgrade(int levelToCheck)
     {
-        if (currentLevel >= maxLevels) return false;
+        if (IsCardUpgradedToMax(currentLevel)) return false;
 
-        return (currentLevel < maxUpgradeCount && levelToCheck < maxStatLevel
-                && currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]));
+        return currentLevel < maxUpgradeCount && !IsStatMaxed(levelToCheck) && HasEnoughCurrencyToLevelUp();
+    }
+    protected bool IsCardUpgradedToMax(int levelToCheck)
+    {
+        return levelToCheck >= maxLevels;
+    }
+    protected bool IsStatMaxed(int levelToCheck)
+    {
+        return levelToCheck >= maxStatLevel;
+    }
+    protected bool HasEnoughCurrencyToLevelUp()
+    {
+        return currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]);
     }
 
     private void NextLevel()
@@ -227,37 +410,163 @@ public class InBattleBuildingUpgrader : MonoBehaviour
 
     private void UpdateLevelText()
     {
-        lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (a b)
+        lvlText.text = currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
+        quickLevelDisplayText.text = currentLevel + "/" + maxLevels;
 
         //if (currentLevel < maxUpgradeCount)
         if (currentLevel < maxLevels)
         {
-            //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // a
+            //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // A
             costText.text = upgradeCosts[currentLevel].ToString();
         }
         else
         {
-            //lvlText.text = "LVL MAX"; // b
+            //lvlText.text = "LVL MAX"; // B
             //costText.text = "NULL";
             costText.text = "0";
             costText.color = disalbedTextColor;
+            costCurrencyImage.color = disalbedTextColor;
         }
     }
 
-    private void UpdateAttackBar()
+    protected virtual void UpdateAttackBar()
     {
-        fillBars[(int)TurretUpgradeType.ATTACK].fillAmount = (float)attackLvl * turretFillBarCoef;
     }
-    private void UpdateCadenceBar()
+    protected virtual void UpdateCadenceBar()
     {
-        fillBars[(int)TurretUpgradeType.CADENCE].fillAmount = (float)cadenceLvl * turretFillBarCoef;
     }
-    private void UpdateRangeBar()
+    protected virtual void UpdateRangeBar()
     {
-        fillBars[(int)TurretUpgradeType.RANGE].fillAmount = (float)rangeLvl * turretFillBarCoef;
     }
-    private void UpdateSupportBar()
+    protected virtual void UpdateSupportBar()
     {
-        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
     }
+
+
+    protected virtual void DisableButtons()
+    {
+    }
+
+
+
+    // Animations
+    protected virtual void PlayOpenAnimation()
+    {
+    }
+
+
+    protected virtual void PlayCloseAnimation()
+    {
+    }
+    
+
+
+    protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill)
+    {
+        bar.DOComplete();
+        bar.DOFillAmount(1f, 0.2f);
+
+        button.transform.DOComplete();
+        button.transform.DOScale(Vector3.one * 1.1f, 0.2f);
+
+        backFillBar.fillAmount = backFill;
+    }
+
+
+    protected void EmptyStatBar(Image bar, Image button, Image backFillBar, float backFill)
+    {
+        bar.DOComplete();
+        bar.DOFillAmount(0f, 0.2f);
+
+        button.transform.DOComplete();
+        button.transform.DOScale(Vector3.one, 0.2f);
+
+        backFillBar.fillAmount = backFill;
+    }
+
+    protected void PlayAnimationIconPunch(Transform iconTransform)
+    {
+        iconTransform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 7);
+    }
+
+    protected void PlayAnimationTextCostPunch(Color flashColor, Color endColor, float duration, float punchScale, int punchVibrato)
+    {
+        costText.DOComplete();
+        costText.transform.DOComplete();
+        costCurrencyImage.DOComplete();
+
+        costText.DOColor(flashColor, duration).OnComplete(() => costText.DOColor(endColor, duration));
+        costText.transform.DOPunchScale(Vector3.one * punchScale, duration * 2, punchVibrato);
+
+        costCurrencyImage.DOColor(flashColor, duration).OnComplete(() => costCurrencyImage.DOColor(endColor, duration));
+    }
+    protected void PlayPositiveAnimationTextCostPunch()
+    {
+        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
+    }
+    protected void PlayNegativeAnimationTextCostPunch()
+    {
+        PlayAnimationTextCostPunch(Color.red, Color.white, 0.2f, 0.1f, 10);
+    }
+
+
+    public void AutomaticWindowCloseStart()
+    {
+        automaticCloseCoroutine = StartCoroutine(DelayedAutomaticWindowClose());
+    }
+
+    public void AutomaticWindowCloseStop()
+    {
+        if (automaticCloseCoroutine == null) return;
+
+        StopCoroutine(automaticCloseCoroutine);
+        automaticCloseCoroutine = null;
+    }
+
+    private IEnumerator DelayedAutomaticWindowClose()
+    {
+        yield return new WaitForSeconds(4f);
+
+        CloseWindow();
+        automaticCloseCoroutine = null;
+    }
+
+    public void ShowQuickLevelDisplay()
+    {
+        if (IsWindowOpen) return;
+        
+        quickLevelDisplay.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.down * 35.0f;
+        quickLevelDisplay.gameObject.SetActive(true);
+        cgQuickLevelDisplay.DOFade(1f, 0.1f);
+    }
+    public void HideQuickLevelDisplay()
+    {
+        cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
+    }
+
+
+
+
+
+    private void CheckStartParticlesCanUpgrade()
+    {
+        if (buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp())
+        {
+            canUpgradeParticles.gameObject.SetActive(true);
+            canUpgradeParticles.Play();
+            canUpgardeParticlesAreActive = true;
+        }        
+
+    }
+
+    private void CheckStopParticlesCanUpgrade()
+    {
+        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp()))
+        {
+            canUpgradeParticles.Stop();
+            canUpgardeParticlesAreActive = false;
+        }
+
+    }    
+
 }

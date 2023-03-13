@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);
-        mapSceneLoader.LoadMainMenuScene(3f);
+        mapSceneLoader.LoadMainMenuScene(5f);
     }
 
 

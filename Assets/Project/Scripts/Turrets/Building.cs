@@ -43,4 +43,8 @@ public abstract class Building : MonoBehaviour
 
     public abstract void DisablePlayerInteraction();
 
+    public virtual void ShowQuickLevelUI() { }
+
+    public virtual void HideQuickLevelUI() { }
+
 }

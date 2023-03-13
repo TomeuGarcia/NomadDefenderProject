@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -34,6 +35,9 @@ public class TurretBuilding : RangeBuilding
 
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
+    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private BuildingsUtils buildingsUtils;
+
 
 
     public int CardLevel { get; private set; }
@@ -80,6 +84,8 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
 
@@ -102,7 +108,9 @@ public class TurretBuilding : RangeBuilding
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
     }
@@ -229,7 +237,50 @@ public class TurretBuilding : RangeBuilding
         placedParticleSystem.gameObject.SetActive(true);
         placedParticleSystem.Play();
 
+        upgrader.OnBuildingOwnerPlaced();
+
         InvokeOnBuildingPlaced();
+    }
+
+
+    public override void ShowQuickLevelUI()
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI()
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+    
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        
+
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        if (upgradeType == TurretUpgradeType.ATTACK)
+        {            
+            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.CADENCE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
+        }
+        else //(upgradeType == TurretUpgradeType.RANGE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
+        }
+
+
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
 
 }

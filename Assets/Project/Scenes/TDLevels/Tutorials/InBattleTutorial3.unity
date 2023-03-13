@@ -11143,6 +11143,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 793459819}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &795174188
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183127, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180880159909183130, guid: a06728e3695f5b0469b69fd42398888e,
+        type: 3}
+      propertyPath: m_Name
+      value: TurretSpawn
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a06728e3695f5b0469b69fd42398888e, type: 3}
+--- !u!198 &795174189 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4180880159909183124, guid: a06728e3695f5b0469b69fd42398888e,
+    type: 3}
+  m_PrefabInstance: {fileID: 795174188}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &797463761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25480,6 +25555,11 @@ PrefabInstance:
       objectReference: {fileID: 383159568}
     - target: {fileID: 1502475401564033126, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
+      propertyPath: turretSpawnParticles
+      value: 
+      objectReference: {fileID: 795174189}
+    - target: {fileID: 1502475401564033126, guid: dfde26954f543794ca0a0db4e9cf6a32,
+        type: 3}
       propertyPath: watcherCardScriptableObject
       value: 
       objectReference: {fileID: 11400000, guid: 21e4828ef728f974aa528c2ae5fd18bc,
@@ -28132,6 +28212,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
+      propertyPath: isTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
       propertyPath: startPathNodes.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -28838,10 +28923,10 @@ Transform:
   - {fileID: 2111506088}
   - {fileID: 19323464}
   - {fileID: 619515460}
+  - {fileID: 1886568285}
   - {fileID: 358308406}
   - {fileID: 762658990}
   - {fileID: 2071072589}
-  - {fileID: 1886568285}
   - {fileID: 1462711602}
   m_Father: {fileID: 1044937294779486004}
   m_RootOrder: 8

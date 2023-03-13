@@ -19,6 +19,10 @@ public class SupportBuilding : RangeBuilding
     [SerializeField] protected Transform baseHolder;
 
 
+    [Header("PARTICLES")]
+    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private BuildingsUtils buildingsUtils;
+
 
 
     void Awake()
@@ -37,7 +41,7 @@ public class SupportBuilding : RangeBuilding
 
 
 
-    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter)
+    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter, Sprite abilitySprite)
     {
         InitStats(stats);
 
@@ -47,7 +51,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        upgrader.InitSupport(currencyCounter); //TODO: change range for the actual level
+        upgrader.InitSupport(currencyCounter, abilitySprite); //TODO: change range for the actual level
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -101,7 +105,40 @@ public class SupportBuilding : RangeBuilding
         basePart.PlacedParticleSystem.gameObject.SetActive(true);
         basePart.PlacedParticleSystem.Play();
 
+        upgrader.OnBuildingOwnerPlaced();
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
+
         InvokeOnBuildingPlaced();
+    }
+
+
+    public override void ShowQuickLevelUI() 
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI() 
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
+
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        baseHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+
+
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        particleRenderer.sharedMaterial = buildingsUtils.SupportUpgradeParticleMat;
+
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
 
 }
