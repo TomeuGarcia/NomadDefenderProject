@@ -47,9 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cableAmount: 2
-  calbeMeshes:
+  cableMeshes:
   - {fileID: 6679417747125198193}
   - {fileID: 5865844576083468427}
+  cableBones:
+  - {fileID: 6704183130964466614}
+  - {fileID: 5827568397755393612}
   lerpData:
     time: 1.5
     min: 0
@@ -205,6 +208,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6016590130874448082}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5827568397755393612 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 261374032512081566, guid: 6f7cf6fe3b58d0b4282bb60e36b0c1f0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6016590130874448082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &5865844576083468427 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 151031429696788569, guid: 6f7cf6fe3b58d0b4282bb60e36b0c1f0,
@@ -339,6 +348,12 @@ Transform:
 --- !u!137 &6679417747125198193 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 151031429696788569, guid: 6f7cf6fe3b58d0b4282bb60e36b0c1f0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6821437508357276968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6704183130964466614 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 261374032512081566, guid: 6f7cf6fe3b58d0b4282bb60e36b0c1f0,
     type: 3}
   m_PrefabInstance: {fileID: 6821437508357276968}
   m_PrefabAsset: {fileID: 0}

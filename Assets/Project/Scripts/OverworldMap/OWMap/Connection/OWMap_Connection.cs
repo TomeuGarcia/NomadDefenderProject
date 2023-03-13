@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +10,7 @@ public class OWMap_Connection : MonoBehaviour
 {
     [SerializeField] private Transform connectionTransform;
 
-    private ConnectionCable cable;
+    public ConnectionCable cable { get; private set; }
 
     public void InitTransform(Vector3 cNodeLocalPos, Vector3 nNodeLocalPos, Vector3 mapForwardDir)
     {
@@ -55,4 +56,6 @@ public class OWMap_Connection : MonoBehaviour
     {
         cable.HoverCable();
     }
+
+
 }
