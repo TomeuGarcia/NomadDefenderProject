@@ -76,7 +76,7 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
     }
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
@@ -147,7 +147,7 @@ public class TurretBuilding : RangeBuilding
     {
         if (currentShootTimer < stats.cadence)
         {
-            currentShootTimer += Time.deltaTime;
+            currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
 

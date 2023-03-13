@@ -110,7 +110,7 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        float iterationStep = Time.deltaTime * step;
+        float iterationStep = Time.deltaTime * step * GameTime.TimeScale;
         travelledDistance += iterationStep * distanceStartToEnd;
 
         startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
@@ -119,7 +119,7 @@ public class PathFollower : MonoBehaviour
 
         if (Vector3.Dot(transformToMove.forward, moveDirection) < 1f)
         {
-            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
+            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime * GameTime.TimeScale);
         }
     }
 
