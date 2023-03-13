@@ -12,8 +12,7 @@ public class CircularBaseCollider : BaseCollider
         float range = statsRange;
 
         rangeCollider.radius = range + 0.5f;
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
+        rangePlaneMesh.transform.localScale = Vector3.one * (planeRange / 10f);
         rangePlaneMaterial.SetFloat("_TileNum", planeRange);
     }
 

@@ -64,7 +64,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private void ShowBuildingOnTilePreview(Tile tile)
     {
-        ShowAndPositionSelectedBuilding(tile);
+        ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
     }
 
     private void HideBuildingPreview()
@@ -90,7 +90,7 @@ public class BuildingPlacer : MonoBehaviour
     {
         tile.isOccupied = true;
 
-        ShowAndPositionSelectedBuilding(tile);
+        ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
         selectedBuilding.GotPlaced();
         placedBuildings.Add(selectedBuilding);
 
@@ -111,11 +111,34 @@ public class BuildingPlacer : MonoBehaviour
         if (OnBuildingPlaced != null) OnBuildingPlaced();
     }
 
-    private void ShowAndPositionSelectedBuilding(Tile tile)
+    public void PlaceTutorialBuilding(BuildingCard buildingCard, Building building, Tile tile)
     {
-        selectedBuildingCard.copyBuildingPrefab.SetActive(true);
-        selectedBuildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
-        selectedBuilding.ShowRangePlane();
+        tile.isOccupied = true;
+
+        ShowAndPositionSelectedBuilding(buildingCard, building, tile);
+        building.GotPlaced();
+        placedBuildings.Add(building);
+
+
+        if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)buildingCard).turretCardParts.turretPartBody.bodyType);
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(TurretPartBody.BodyType.SENTRY);
+        }
+
+        building.EnablePlayerInteraction();
+    }
+
+
+
+    private void ShowAndPositionSelectedBuilding(BuildingCard buildingCard, Building building, Tile tile)
+    {
+        buildingCard.copyBuildingPrefab.SetActive(true);
+        buildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
+        building.ShowRangePlane();
     }
 
     private void HideSelectedBuilding()

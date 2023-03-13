@@ -36,9 +36,7 @@ public class TurretBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private ParticleSystem upgradeParticles;
-    [SerializeField] private Material matAttack;
-    [SerializeField] private Material matCadency;
-    [SerializeField] private Material matRange;
+    [SerializeField] private BuildingsUtils buildingsUtils;
 
 
 
@@ -78,7 +76,7 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
     }
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
@@ -86,6 +84,8 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
 
@@ -108,7 +108,8 @@ public class TurretBuilding : RangeBuilding
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
@@ -146,7 +147,7 @@ public class TurretBuilding : RangeBuilding
     {
         if (currentShootTimer < stats.cadence)
         {
-            currentShootTimer += Time.deltaTime;
+            currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
 
@@ -260,25 +261,22 @@ public class TurretBuilding : RangeBuilding
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
     {
         bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        
 
-
-        Color particleColor;
         ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
-        Material particleMaterial = particleRenderer.sharedMaterial;
         if (upgradeType == TurretUpgradeType.ATTACK)
         {            
-            particleRenderer.sharedMaterial = matAttack;
+            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
         }
         else if (upgradeType == TurretUpgradeType.CADENCE)
         {
-            particleRenderer.sharedMaterial = matCadency;
+            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
         }
         else //(upgradeType == TurretUpgradeType.RANGE)
         {
-            particleRenderer.sharedMaterial = matRange;
+            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
         }
 
-        //particleMaterial.SetColor("Color", particleColor);
 
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();

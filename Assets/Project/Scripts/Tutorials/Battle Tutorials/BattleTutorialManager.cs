@@ -265,9 +265,10 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();//18
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(150) );
+        yield return new WaitForSeconds(1.0f); // Extra wait
         scriptedSequence.Clear();
 
-        Time.timeScale = 0.0f;
+        GameTime.SetTimeScale(0f);
 
         scriptedSequence.NextLine();//19
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -281,7 +282,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.5f);
 
-        Time.timeScale = 1.0f;
+        GameTime.SetTimeScale(1f);
 
         yield return new WaitUntil(() => wavesCounter > 1);
 

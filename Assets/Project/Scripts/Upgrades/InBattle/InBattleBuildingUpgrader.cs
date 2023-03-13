@@ -188,7 +188,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter)
+    public virtual void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
+        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
         attackLvl = newAttackLvl;
         cadenceLvl = newCadenceLvl;
@@ -462,26 +463,30 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill)
     {
+        float duration = 0.2f;
+
         bar.DOComplete();
-        bar.DOFillAmount(1f, 0.2f);
+        bar.DOFillAmount(1f, duration);
 
         button.transform.DOComplete();
-        button.transform.DOScale(Vector3.one * 1.1f, 0.2f);
+        button.transform.DOScale(Vector3.one * 1.1f, duration);
 
         backFillBar.fillAmount = backFill;
     }
-
 
     protected void EmptyStatBar(Image bar, Image button, Image backFillBar, float backFill)
     {
+        float duration = 0.2f;
+
         bar.DOComplete();
-        bar.DOFillAmount(0f, 0.2f);
+        bar.DOFillAmount(0f, duration);
 
         button.transform.DOComplete();
-        button.transform.DOScale(Vector3.one, 0.2f);
+        button.transform.DOScale(Vector3.one, duration);
 
         backFillBar.fillAmount = backFill;
     }
+
 
     protected void PlayAnimationIconPunch(Transform iconTransform)
     {

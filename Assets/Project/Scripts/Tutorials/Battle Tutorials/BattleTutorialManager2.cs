@@ -21,6 +21,7 @@ public class BattleTutorialManager2 : MonoBehaviour
     [SerializeField] private DeckCreator deckCreator;
 
     [SerializeField] private Tile watcherCardTile;
+    [SerializeField] private BuildingPlacer buildingPlacer;
 
     [SerializeField] private CurrencyCounter currencyCounter;
 
@@ -37,6 +38,9 @@ public class BattleTutorialManager2 : MonoBehaviour
 
 
     [SerializeField] private ParticleSystem turretSpawnParticles;
+    
+    private bool waveStarted = false;
+    private int wavesCounter = 0;
 
 
     // Start is called before the first frame update
@@ -62,6 +66,8 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         StartCoroutine(Tutorial());
         hand.cheatDrawCardActivated = false;
+        HandBuildingCards.OnCardPlayed += WaveStarted;
+        EnemyWaveManager.OnWaveFinished += WaveStarted;
 
     }
 
@@ -79,6 +85,13 @@ public class BattleTutorialManager2 : MonoBehaviour
         {
             card.isInteractable = false;
         }
+    }
+    
+    private void WaveStarted()
+    {
+        HandBuildingCards.OnCardPlayed -= WaveStarted;
+        waveStarted = true;
+        wavesCounter++;
     }
 
 
@@ -140,7 +153,17 @@ public class BattleTutorialManager2 : MonoBehaviour
         scriptedSequence.NextLine(); //7 -> /Redraw> Finished
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
+        scriptedSequence.Clear();
+        
+        
 
+        
+        yield return new WaitUntil(() => waveStarted);
+        scriptedSequence.NextLine(); //8 -> Initializing Enemy Waves
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(1.0f);
+        scriptedSequence.NextLine(); //9 -> Wave 1 / 3
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
         //After losing 1 base!!
         yield return new WaitUntil(() => firstBase.IsDead);
@@ -149,21 +172,21 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for(float i = 0; i < 1.0f; i+= 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(1.0f, 0.0f, i);
+            GameTime.SetTimeScale(Mathf.Lerp(1.0f, 0.0f, i));
             yield return null;
         }
 
-        Time.timeScale = 0.0f;
+        GameTime.SetTimeScale(0.0f);
 
-        scriptedSequence.NextLine(); //8 -> I see you are struggling
+        scriptedSequence.NextLine(); //10 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //9 -> One of the nodes got destroyed
+        scriptedSequence.NextLine(); //11 -> One of the nodes got destroyed
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //10 -> Let me help you with this gift
+        scriptedSequence.NextLine(); //12 -> Let me help you with this gift
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
@@ -171,11 +194,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         for (float i = 0; i < 1.0f; i += 0.005f)
         {
-            Time.timeScale = Mathf.Lerp(0.0f, 1.0f, i);
+            GameTime.SetTimeScale(Mathf.Lerp(0.0f, 1.0f, i));
             yield return null;
         }
 
-        Time.timeScale = 1.0f;
+        GameTime.SetTimeScale(1.0f);
 
         //Create new turret
 
@@ -196,18 +219,29 @@ public class BattleTutorialManager2 : MonoBehaviour
         PlaceSelectedBuilding(watcherCardTile, card);
 
         //Wait until Wathcer's turret is placed
-        yield return new WaitForSecondsRealtime(1.0f);
+        yield return new WaitForSecondsRealtime(0.25f);
 
-        scriptedSequence.NextLine(); //11 -> Don't get used to it
+        scriptedSequence.NextLine(); //13 -> Don't get used to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
 
-        yield return new WaitForSecondsRealtime(7.5f);
+        //TODO YEAH YEAH
+        
+        yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
+        scriptedSequence.NextLine(); //14 -> Wave 2 / 3
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        
+        yield return new WaitUntil(() => wavesCounter > 2);
+        scriptedSequence.Clear();
+        scriptedSequence.NextLine(); //15 -> Wave 3 / 3
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+
     }
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)
     {
+        /*
         tile.isOccupied = true;
 
         selectedBuildingCard.copyBuildingPrefab.SetActive(true);
@@ -217,6 +251,11 @@ public class BattleTutorialManager2 : MonoBehaviour
         selectedBuilding.ShowRangePlane();
 
         selectedBuilding.GotPlaced();
+        */
+
+        Building selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
+        buildingPlacer.PlaceTutorialBuilding(selectedBuildingCard, selectedBuilding, tile);
+
 
         //Maybe play a special sound
     }
