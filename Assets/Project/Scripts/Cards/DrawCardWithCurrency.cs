@@ -78,7 +78,7 @@ public class DrawCardWithCurrency : MonoBehaviour
         }
         else if (!currencyCounter.HasEnoughCurrency(drawCost))
         {
-            //TODO Play Sound
+            GameAudioManager.GetInstance().PlayError();
             CantAffordDraw();
             UntiltCard();
             GameAudioManager.GetInstance().PlayCardHoverExit();
