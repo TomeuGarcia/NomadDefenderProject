@@ -14,7 +14,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     [SerializeField] ConsoleDialogSystem consoleDialog;
 
-
+    [SerializeField] bool isTutorial;
     private int currentWaves = 0;
     private int activeWaves = 0;
     private bool started = false;
@@ -102,18 +102,23 @@ public class EnemyWaveManager : MonoBehaviour
 
     void PrintConsoleLine(TextTypes type, string text)
     {
+        if (!isTutorial){ 
         textLine.textType = type;
         textLine.text = text;
         consoleDialog.PrintLine(textLine);
+        }
     }
     void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting)
     {
-        if(clearBeforeWritting)
-            consoleDialog.Clear();
+        if (!isTutorial)
+        {
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
 
-        textLine.textType = type;
-        textLine.text = text;
-        consoleDialog.PrintLine(textLine);
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);
+        }
     }
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner)
     {

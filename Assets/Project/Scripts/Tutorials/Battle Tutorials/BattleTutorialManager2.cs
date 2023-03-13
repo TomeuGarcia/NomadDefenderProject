@@ -37,6 +37,9 @@ public class BattleTutorialManager2 : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
 
 
+    [SerializeField] private ParticleSystem turretSpawnParticles;
+
+
     // Start is called before the first frame update
 
     private void Awake()
@@ -187,6 +190,9 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
+
+        turretSpawnParticles.Play();
+        yield return new WaitForSeconds(1.0f);
 
         PlaceSelectedBuilding(watcherCardTile, card);
 

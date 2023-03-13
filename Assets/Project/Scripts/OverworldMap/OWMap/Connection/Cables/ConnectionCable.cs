@@ -1,19 +1,21 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ConnectionCable : MonoBehaviour
+public abstract class ConnectionCable : MonoBehaviour
 {
     [SerializeField] protected int cableAmount;
-    [SerializeField] protected List<SkinnedMeshRenderer> calbeMeshes = new List<SkinnedMeshRenderer>();
+    [SerializeField] protected List<SkinnedMeshRenderer> cableMeshes = new List<SkinnedMeshRenderer>();
+    [SerializeField] protected List<GameObject> cableBones = new List<GameObject>();
     protected List<Material> cableMaterials = new List<Material>();
 
     [SerializeField] protected MaterialLerp.FloatData lerpData;
 
     private void Awake()
     {
-        foreach(SkinnedMeshRenderer mesh in calbeMeshes)
+        foreach(SkinnedMeshRenderer mesh in cableMeshes)
         {
             foreach (Material material in mesh.materials)
             {
@@ -28,4 +30,23 @@ public class ConnectionCable : MonoBehaviour
     }
 
     public virtual void HoverCable() { }
+
+    public void StartNodesConnectionsScaleZToZero()
+    {
+
+        foreach (GameObject cableBone in cableBones)
+        {
+            cableBone.transform.localScale = new Vector3(100.0f, 100.0f, 0.0f);
+        }
+    }
+
+    public IEnumerator ShowNodesConnections(float timeToLerp)
+    {
+        foreach (GameObject cableBone in cableBones)
+        {
+            GameAudioManager.GetInstance().PlayConnectionsNodeSpawnSound();
+            cableBone.transform.DOScale(Vector3.one * 100, timeToLerp);
+        }
+        yield return new WaitForSeconds(timeToLerp);
+    }
 }

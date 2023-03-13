@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -15,12 +16,16 @@ public class OWMapTutorialManager : MonoBehaviour
     [SerializeField] private OverworldMapGameManager owMapGameManager;
 
 
-
     private List<OWMap_Node> battleNodes;
 
     private List<OWMap_Node> upgradeNodes;
 
-    private List<GameObject> nodesConnections;
+    private List<OWMap_Connection> nodesConnections;
+    
+    [Header("Developer Test")] 
+    [SerializeField] private bool testing = false;
+
+    [SerializeField] private OWMapTutorialManager2 owMapTuto2;
 
     private void OnEnable()
     {
@@ -80,7 +85,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
 
         //Initializing nodes connections
-        nodesConnections = new List<GameObject>();
+        nodesConnections = new List<OWMap_Connection>();
         for (int levelI = 0; levelI < tempOWMapNodes.Length-1; ++levelI)
         {
             for (int nodeI = 0; nodeI < tempOWMapNodes[levelI].Length; ++nodeI)
@@ -88,11 +93,15 @@ public class OWMapTutorialManager : MonoBehaviour
                 OWMap_Connection[] nextLevelConnections = tempOWMapNodes[levelI][nodeI].GetNextLevelConnections();                
                 for (int connectionI = 0; connectionI < nextLevelConnections.Length; ++connectionI)
                 {
-                    nodesConnections.Add(nextLevelConnections[connectionI].gameObject);
+                    nodesConnections.Add(nextLevelConnections[connectionI]);
                 }
             }
         }
-        SetActiveNodesConnections(false);
+        
+        foreach(OWMap_Connection connection in nodesConnections)
+        {
+            connection.cable.StartNodesConnectionsScaleZToZero();
+        }
 
     }
 
@@ -112,16 +121,17 @@ public class OWMapTutorialManager : MonoBehaviour
         } 
     }
 
-    private void SetActiveNodesConnections(bool active)
-    {
-        foreach (GameObject gameObject in nodesConnections)
-        {
-            gameObject.SetActive(active);
-        }
-    }
+
 
     IEnumerator Tutorial()
     {
+        if (testing)
+        {
+            yield return new WaitForSeconds(2.0f);
+            owMapTuto2.StartTutorial();
+            yield break;
+        }
+
         yield return new WaitForSeconds(5.0f);
 
 
@@ -152,6 +162,7 @@ public class OWMapTutorialManager : MonoBehaviour
         //Show Upgrade Nodes
         for (int i = 0; i < upgradeNodes.Count; ++i)        
         {
+            GameAudioManager.GetInstance().PlayUpgradeNodeSpawnSound();
             upgradeNodes[i].PlayFadeInAnimation();
             yield return new WaitForSeconds(0.25f);
         }
@@ -162,10 +173,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
-        //Show Upgrade Nodes
+        //Show Battle Nodes
         foreach (OWMap_Node node in battleNodes)
         {
+            GameAudioManager.GetInstance().PlayBattleNodeSpawnSound();
             node.PlayFadeInAnimation();
+            
             yield return new WaitForSeconds(0.25f);
         }
 
@@ -175,7 +188,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(2.5f);
 
-        SetActiveNodesConnections(true);
+        GameAudioManager.GetInstance().PlayConnectionsNodeSpawnSound();
+
+        foreach (OWMap_Connection connection in nodesConnections)
+        {
+            yield return StartCoroutine(connection.cable.ShowNodesConnections(0.25f));
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -183,6 +201,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
+
+        //if (testing)
+        //{
+        //    owMapTuto2.StartTutorial();
+        //    yield break;
+        //}
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 
