@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class TutorialGameManager : GameManager
 {
+    [SerializeField] private OWMapTutorialManager2 tutoManager2;
+
     protected override void StartVictory()
     {
-        victoryHolder.SetActive(true);
-
-        StartCoroutine(DelayedStartVictorySceneLoad(3f));
+        StartCoroutine(tutoManager2.TutorialAnimation(this));
     }
 
-    private IEnumerator DelayedStartVictorySceneLoad(float delay)
+    public IEnumerator DelayedStartVictorySceneLoad(float delay)
     {
         yield return new WaitForSeconds(delay);
         SceneLoader.GetInstance().StartLoadNormalGame(true);

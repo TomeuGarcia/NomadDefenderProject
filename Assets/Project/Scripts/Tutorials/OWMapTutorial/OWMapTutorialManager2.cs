@@ -82,7 +82,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
             {
                 scriptedSequence.SkipLine();
             }
-            StartCoroutine(TestingTutorial());
+            StartCoroutine(TutorialAnimation());
             yield break;
         }
 
@@ -133,23 +133,12 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.Clear();
         yield return new WaitForSeconds(1.0f);
         
-        EnableLastNodes();
-        yield return new WaitForSeconds(3.0f); //TODO Wait until last node is clicked
-
-        StartCoroutine(TestingTutorial());
-        
-
-        
-
-        yield return new WaitForSeconds(1.0f);
-
-       
-        
+        EnableLastNodes();      
     }
 
-    IEnumerator TestingTutorial()
+    public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
     {
-        animator.Play("TutorialAnimation", 0, 0.0f);
+        animator.SetBool("StartAnim", true);
         NextVolume();
 
         GameAudioManager.GetInstance().PlayDroneBuildUp(25.0f, 0.0f, 0.0f);
@@ -230,6 +219,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.Clear();
         wathcersEyes.SetActive(false);
 
+        yield return new WaitUntil(() => animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 2.0f);
+        if(tutorialGame != null)
+        {
+            StartCoroutine(tutorialGame.DelayedStartVictorySceneLoad(1.0f));
+        }
     }
 
     private void NextVolume()
