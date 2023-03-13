@@ -188,7 +188,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter)
+    public virtual void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
+        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
         attackLvl = newAttackLvl;
         cadenceLvl = newCadenceLvl;
