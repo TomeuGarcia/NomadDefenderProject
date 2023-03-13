@@ -21,6 +21,11 @@ public class OWMapTutorialManager : MonoBehaviour
     private List<OWMap_Node> upgradeNodes;
 
     private List<GameObject> nodesConnections;
+    
+    [Header("Developer Test")] 
+    [SerializeField] private bool testing = false;
+
+    [SerializeField] private OWMapTutorialManager2 owMapTuto2;
 
     private void OnEnable()
     {
@@ -122,6 +127,13 @@ public class OWMapTutorialManager : MonoBehaviour
 
     IEnumerator Tutorial()
     {
+        if (testing)
+        {
+            yield return new WaitForSeconds(2.0f);
+            owMapTuto2.StartTutorial();
+            yield break;
+        }
+
         yield return new WaitForSeconds(5.0f);
 
 
@@ -162,7 +174,7 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
 
-        //Show Upgrade Nodes
+        //Show Batlte Nodes
         foreach (OWMap_Node node in battleNodes)
         {
             node.PlayFadeInAnimation();
@@ -183,6 +195,12 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(2.0f);
         scriptedSequence.Clear();
+
+        //if (testing)
+        //{
+        //    owMapTuto2.StartTutorial();
+        //    yield break;
+        //}
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 
