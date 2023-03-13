@@ -21,6 +21,7 @@ public class BattleTutorialManager2 : MonoBehaviour
     [SerializeField] private DeckCreator deckCreator;
 
     [SerializeField] private Tile watcherCardTile;
+    [SerializeField] private BuildingPlacer buildingPlacer;
 
     [SerializeField] private CurrencyCounter currencyCounter;
 
@@ -208,6 +209,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)
     {
+        /*
         tile.isOccupied = true;
 
         selectedBuildingCard.copyBuildingPrefab.SetActive(true);
@@ -217,6 +219,11 @@ public class BattleTutorialManager2 : MonoBehaviour
         selectedBuilding.ShowRangePlane();
 
         selectedBuilding.GotPlaced();
+        */
+
+        Building selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
+        buildingPlacer.PlaceTutorialBuilding(selectedBuildingCard, selectedBuilding, tile);
+
 
         //Maybe play a special sound
     }

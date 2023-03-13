@@ -265,6 +265,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();//18
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(150) );
+        yield return new WaitForSeconds(1.0f); // Extra wait
         scriptedSequence.Clear();
 
         Time.timeScale = 0.0f;
