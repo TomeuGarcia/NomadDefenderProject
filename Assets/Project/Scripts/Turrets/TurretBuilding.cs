@@ -84,6 +84,8 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
 
@@ -106,7 +108,8 @@ public class TurretBuilding : RangeBuilding
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();

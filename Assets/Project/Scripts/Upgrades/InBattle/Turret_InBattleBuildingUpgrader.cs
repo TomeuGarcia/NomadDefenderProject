@@ -30,12 +30,35 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image rangeBarToCurrencyCost;
 
 
+    [Header("QUICK DISPLAY UI EXTRAS")]
+    [SerializeField] private Image quickHoverBasePassiveImage;
+
+
     protected override void AwakeInit()
     {
         base.AwakeInit();
         attackBarToCurrencyCost.fillAmount = 0f;
         fireBarToCurrencyCost.fillAmount = 0f;
         rangeBarToCurrencyCost.fillAmount = 0f;
+    }
+
+
+    public override void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter,
+        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+    {
+        base.InitTurret(newAttackLvl, newCadenceLvl, newRangeLvl, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
+
+        if (hasPassiveAbility)
+        {
+            quickHoverBasePassiveImage.gameObject.SetActive(true);
+            quickHoverBasePassiveImage.sprite = basePassiveSprite;
+            quickHoverBasePassiveImage.color = basePassiveColor;
+        }
+        else
+        {
+            quickHoverBasePassiveImage.gameObject.SetActive(false);
+        }
+        
     }
 
 
