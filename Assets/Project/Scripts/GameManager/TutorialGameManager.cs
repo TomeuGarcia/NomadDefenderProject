@@ -17,4 +17,9 @@ public class TutorialGameManager : GameManager
         SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
 
+    public void LoadRegularGame()
+    {
+        SceneLoader.GetInstance().LoadNormalGameNoAnim();
+    }
+
 }
