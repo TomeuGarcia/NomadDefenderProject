@@ -40,6 +40,7 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("CARDS PLAYED")]
     [SerializeField] private AudioSource cardPlayedAudioSource;
+    [SerializeField] private AudioSource watcherCardPlayedAudioSource;
 
 
 
@@ -401,6 +402,10 @@ public class GameAudioManager : MonoBehaviour
         cardPlayedAudioSource.pitch = pitch;
 
         cardPlayedAudioSource.Play();
+    }
+    public void PlayWatcherCard()
+    {
+        watcherCardPlayedAudioSource.Play();
     }
 
 
