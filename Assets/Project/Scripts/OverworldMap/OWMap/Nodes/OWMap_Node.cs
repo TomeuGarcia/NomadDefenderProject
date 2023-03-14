@@ -105,7 +105,6 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private Transform particlesHolder;
     [SerializeField] private ParticleSystem destroyedParticles;
     [SerializeField] private MeshRenderer flashMeshRenderer;
-    [SerializeField] private List<GameObject> nodeLegs = new List<GameObject>();
     [SerializeField] private MeshRenderer circuitMesh;
     [SerializeField] private MaterialLerp.FloatData borderLerpData;
     private Material flashMaterial;
@@ -184,13 +183,6 @@ public class OWMap_Node : MonoBehaviour
     public void SetOwMapGameManagerRef(OverworldMapGameManager owMapGameManager) // To be called from OverworldMapGameManager itself
     {
         this.owMapGameManager = owMapGameManager;
-    }
-    public void SetActiveNodeSelection(bool active)
-    {
-        foreach(GameObject obj in nodeLegs)
-        {
-            obj.SetActive(active);
-        }
     }
 
     public MapReferencesData GetMapReferencesData()
