@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum TextTypes { SYSTEM, WATCHER, DRAMATICWATCHER, INSTRUCTION };
+public enum TextTypes { SYSTEM, WATCHER, DRAMATICWATCHER, INSTRUCTION, INFO };
 
 [System.Serializable]
 public class TextType
