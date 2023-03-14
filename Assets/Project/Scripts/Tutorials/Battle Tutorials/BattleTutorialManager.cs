@@ -257,7 +257,8 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //16
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
+        scriptedSequence.Clear();
 
         scriptedSequence.NextLine();//17
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
