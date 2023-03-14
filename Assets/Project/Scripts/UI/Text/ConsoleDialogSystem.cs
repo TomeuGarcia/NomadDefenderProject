@@ -24,18 +24,31 @@ public class ConsoleDialogSystem : MonoBehaviour
     [SerializeField] private bool clearWithTime;
     [SerializeField] private float clearTime;
 
+
+    // Events
+    public delegate void ConsoleDialogSystemAction();
+    public ConsoleDialogSystemAction OnQueryBackgroundFadeIn;
+    public ConsoleDialogSystemAction OnQueryBackgroundFadeOut;
+
+
+
     private void OnValidate()
     {
-        openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
-        closingContext = ">" + "</color>";
+        Init();
     }
     private void Awake()
     {
         textTypeLibrary.Init();
+        Init();
+    }
+
+    private void Init()
+    {
         openingContext = "<color=#" + ColorUtility.ToHtmlStringRGB(contextColor) + ">" + "|:";// + System.Convert.ToChar(92);
         closingContext = ">" + "</color>";
-        
     }
+
+
     public void PrintLine(TextLine textLine)
     {
 
@@ -88,6 +101,11 @@ public class ConsoleDialogSystem : MonoBehaviour
         {
             consoleLines[0].GetComponent<EntryTextLine>().ClearWithTime(clearTime, this);
         }
+
+
+        Debug.Log("OnQueryBackgroundFadeIn");
+        if (OnQueryBackgroundFadeIn != null) OnQueryBackgroundFadeIn();
+        
     }
 
     public void RemoveSpecificLine(EntryTextLine entryLine)
@@ -121,6 +139,9 @@ public class ConsoleDialogSystem : MonoBehaviour
         {
             RemoveLine(consoleLines.Count - 1);
         }
+
+        Debug.Log("OnQueryBackgroundFadeOut");
+        if (OnQueryBackgroundFadeOut != null) OnQueryBackgroundFadeOut();
     }
 
     public bool IsLinePrinted()
@@ -132,4 +153,5 @@ public class ConsoleDialogSystem : MonoBehaviour
 
         return true;
     }
+
 }
