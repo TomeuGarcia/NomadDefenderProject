@@ -13,6 +13,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
     protected override void Init()
     {
+        canDisplayDeck = false;
+
         InitMapGeneration();
         InitMapSceneLoader();
 
