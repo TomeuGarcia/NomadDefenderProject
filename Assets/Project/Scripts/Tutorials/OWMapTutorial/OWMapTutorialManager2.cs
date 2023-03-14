@@ -139,7 +139,10 @@ public class OWMapTutorialManager2 : MonoBehaviour
     public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
     {
         animator.SetBool("StartAnim", true);
-        NextVolume();
+
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, true, 2));
+        StartCoroutine(GlitchScreen(0.4f, 0.1f, false));
+        //yield return StartCoroutine(GlitchScreen(0.0f, 1000.5f, true));
 
         GameAudioManager.GetInstance().PlayDroneBuildUp(25.0f, 0.0f, 0.0f);
 
@@ -163,8 +166,9 @@ public class OWMapTutorialManager2 : MonoBehaviour
         animationCamera.gameObject.SetActive(true);
 
 
-        
+
         //Start animation
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 1));
 
         float currentTime = 0.0f;
         float tParam;
@@ -191,9 +195,9 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1.0f;
 
-
-        yield return new WaitForSeconds(2.0f);
-
+        yield return new WaitForSeconds(1.85f);
+        GameAudioManager.GetInstance().PlayDoorSound(0);
+        yield return new WaitForSeconds(0.15f);
 
         //yield return new WaitForSeconds(1.0f);
         scriptedSequence.NextLine(); //13 -> Be
@@ -209,21 +213,37 @@ public class OWMapTutorialManager2 : MonoBehaviour
         StartCoroutine(CameraShake(doorLerpTime));
         StartCoroutine(LastCameraMovement());
         NextVolume();
+        NextVolume();
         yield return new WaitForSeconds(5.5f);
         
         scriptedSequence.NextLine(); //14 -> Watching
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 0));
         wathcersEyes.SetActive(true);
 
         yield return new WaitForSeconds(2.0f);
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 2));
+        StartCoroutine(GlitchScreen(0.4f, 0.1f, false));
+        StartCoroutine(GlitchScreen(0.6f, 0.1f, false));
         scriptedSequence.Clear();
         wathcersEyes.SetActive(false);
 
         yield return new WaitUntil(() => animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 2.0f);
         if(tutorialGame != null)
         {
-            StartCoroutine(tutorialGame.DelayedStartVictorySceneLoad(1.0f));
+            tutorialGame.LoadRegularGame();
         }
+    }
+
+    private IEnumerator GlitchScreen(float delay, float glitchTime, bool transitionForward, int soundIndex = -2)
+    {
+        if(delay > 0.0f) { yield return new WaitForSeconds(delay); }
+        if (soundIndex == -1) { GameAudioManager.GetInstance().PlayRandomGlitchSound(); }
+        else if (soundIndex >= 0) { GameAudioManager.GetInstance().PlayGlitchSound(soundIndex); }
+        NextVolume();
+        yield return new WaitForSeconds(glitchTime);
+        if(transitionForward) { NextVolume(); }
+        else { PreviousVolume(); }
     }
 
     private void NextVolume()
@@ -240,12 +260,16 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     private IEnumerator CameraShake(float doorOpeningTime)
     {
+        GameAudioManager.GetInstance().PlayDoorSound(1);
+
         float offset = 0.2f;
         CinemachineBasicMultiChannelPerlin shake = animationCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         shake.m_AmplitudeGain = 3.0f;
         yield return new WaitForSeconds(offset);
         shake.m_AmplitudeGain = 0.5f;
-        yield return new WaitForSeconds(doorOpeningTime - offset);
+        yield return new WaitForSeconds(doorOpeningTime - offset * 3.0f);
+        GameAudioManager.GetInstance().PlayDoorSound(2);
+        yield return new WaitForSeconds(offset * 2.0f);
         shake.m_AmplitudeGain = 3.0f;
         yield return new WaitForSeconds(offset);
         shake.m_AmplitudeGain = 2.0f;
