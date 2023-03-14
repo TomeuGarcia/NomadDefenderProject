@@ -22,7 +22,7 @@ public class OverworldCardShower : MonoBehaviour
     private List<BuildingCard> cards;
     private Vector3 prevCameraPos;
     private Quaternion prevCameraRot;
-    private bool showingDeck;
+    private static bool showingDeck;
     Vector3 lastHoveredCardPos = Vector3.zero;
     BuildingCard currentSelectedCard = null;
     BuildingCard cardBeingDeselected = null;

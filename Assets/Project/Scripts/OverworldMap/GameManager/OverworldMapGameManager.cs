@@ -22,6 +22,8 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("DECK DISPLAY")]
     [SerializeField] private OverworldCardShower cardDisplayer;
 
+    protected bool canDisplayDeck = true;
+
     protected OWMap_Node currentNode;
     protected bool moveCameraAfterNodeScene;
 
@@ -183,7 +185,6 @@ public class OverworldMapGameManager : MonoBehaviour
         foreach (OWMap_Node node in mapNodes[currentMapLevelI])
         {
             node.InvokeOnNodeInfoInteractionDisabled();
-            node.SetActiveNodeSelection(false);
         }
     }
 
@@ -207,7 +208,6 @@ public class OverworldMapGameManager : MonoBehaviour
             for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
             {
                 nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
-                nextLevelEnabledNodes[i].SetActiveNodeSelection(true);
                 // TODO set node material for active interaction
             }
         }
@@ -296,7 +296,7 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapPawn.ActivateCamera();
 
         cardDisplayer.ResetAll();
-        cardDisplayer.gameObject.SetActive(true);
+        cardDisplayer.gameObject.SetActive(canDisplayDeck);
 
         EnemyFactory.GetInstance().ResetPools();
         ProjectileParticleFactory.GetInstance().ResetPools();

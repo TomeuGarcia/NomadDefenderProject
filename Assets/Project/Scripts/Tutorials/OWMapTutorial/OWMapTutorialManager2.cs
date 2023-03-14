@@ -129,11 +129,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.NextLine(); //7 -> I won't be always around...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
-        
+
         scriptedSequence.Clear();
         yield return new WaitForSeconds(1.0f);
         
-        EnableLastNodes();      
+        EnableLastNodes();
     }
 
     public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
