@@ -156,7 +156,8 @@ public class EnemyWaveManager : MonoBehaviour
         if (--activeWaves == 0)
         {
             if (OnAllWavesFinished != null) OnAllWavesFinished();
-            debugText.text = "All waves finished";
+            PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
+
         }
     }
 
