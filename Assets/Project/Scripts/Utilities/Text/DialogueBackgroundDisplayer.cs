@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class DialogueBackgroundDisplayer : MonoBehaviour
 {
@@ -20,10 +21,17 @@ public class DialogueBackgroundDisplayer : MonoBehaviour
     private const string FADE_STRENGTH_PROPERTY = "_FadeStrength";
 
 
+    [Header("PREDEFINED BACKGROUND")]
+    [SerializeField] private Image predefinedBackgroundFadeImage;
+
+
     private void Awake()
     {
         backgroundMaterial = backgroundFadeImage.material;
         backgroundMaterial.SetFloat(FADE_STRENGTH_PROPERTY, BACKGROUND_FADE_MIN);
+
+
+        predefinedBackgroundFadeImage.DOFade(0f, 0.01f);
     }
 
     private void OnEnable()
@@ -42,6 +50,11 @@ public class DialogueBackgroundDisplayer : MonoBehaviour
 
     private void StartBackgroundFadeIn()
     {
+        // Do it the scuffed way for now
+        //predefinedBackgroundFadeImage.DOComplete();
+        predefinedBackgroundFadeImage.DOFade(1f, 0.2f);
+        return;
+
         if (backgroundFadeOutCoroutine != null)
         {
             StopCoroutine(backgroundFadeOutCoroutine);
@@ -52,6 +65,11 @@ public class DialogueBackgroundDisplayer : MonoBehaviour
 
     private void StartBackgroundFadeOut()
     {
+        // Do it the scuffed way for now
+        //predefinedBackgroundFadeImage.DOComplete();
+        predefinedBackgroundFadeImage.DOFade(0f, 0.2f);
+        return;
+
         if (backgroundFadeInCoroutine != null)
         {
             StopCoroutine(backgroundFadeInCoroutine);
@@ -97,5 +115,7 @@ public class DialogueBackgroundDisplayer : MonoBehaviour
         backgroundFadeOutCoroutine = null;
 
     }
+
+
 
 }
