@@ -511,6 +511,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     protected void PlayNegativeAnimationTextCostPunch()
     {
         PlayAnimationTextCostPunch(Color.red, Color.white, 0.2f, 0.1f, 10);
+        GameAudioManager.GetInstance().PlayError();
     }
 
 

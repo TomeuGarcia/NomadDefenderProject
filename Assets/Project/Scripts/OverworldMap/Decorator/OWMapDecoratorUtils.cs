@@ -18,6 +18,7 @@ public class OWMapDecoratorUtils : ScriptableObject
     [SerializeField, ColorUsage(true, true)] private Color yellowColor = new Color(190f / 255f, 190f / 255f, 50f / 255f);
     [SerializeField, ColorUsage(true, true)] private Color orangeColor = new Color(190f / 255f, 80f / 255f, 0f / 255f);
     [SerializeField, ColorUsage(true, true)] private Color redColor = new Color(140f / 255f, 7f / 255f, 36f / 255f);
+    [SerializeField, ColorUsage(true, true)] private Color redColor2 = new Color(140f / 255f, 7f / 255f, 36f / 255f);
 
 
 
@@ -29,6 +30,7 @@ public class OWMapDecoratorUtils : ScriptableObject
     public static Color s_yellowColor;
     public static Color s_orangeColor;
     public static Color s_redColor;
+    public static Color s_redColor2;
 
 
     private void Awake()
@@ -49,6 +51,7 @@ public class OWMapDecoratorUtils : ScriptableObject
         s_yellowColor = yellowColor;
         s_orangeColor = orangeColor;
         s_redColor = redColor;
+        s_redColor2 = redColor2;
     }
 
     public Texture GetBattleNodeTexture(NodeEnums.BattleType battleType) 
