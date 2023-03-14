@@ -139,7 +139,10 @@ public class OWMapTutorialManager2 : MonoBehaviour
     public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
     {
         animator.SetBool("StartAnim", true);
-        NextVolume();
+
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, true));
+        StartCoroutine(GlitchScreen(0.4f, 0.1f, false));
+        //yield return StartCoroutine(GlitchScreen(0.0f, 1000.5f, true));
 
         GameAudioManager.GetInstance().PlayDroneBuildUp(25.0f, 0.0f, 0.0f);
 
@@ -163,8 +166,9 @@ public class OWMapTutorialManager2 : MonoBehaviour
         animationCamera.gameObject.SetActive(true);
 
 
-        
+
         //Start animation
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false));
 
         float currentTime = 0.0f;
         float tParam;
@@ -209,13 +213,18 @@ public class OWMapTutorialManager2 : MonoBehaviour
         StartCoroutine(CameraShake(doorLerpTime));
         StartCoroutine(LastCameraMovement());
         NextVolume();
+        NextVolume();
         yield return new WaitForSeconds(5.5f);
         
         scriptedSequence.NextLine(); //14 -> Watching
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false));
         wathcersEyes.SetActive(true);
 
         yield return new WaitForSeconds(2.0f);
+        StartCoroutine(GlitchScreen(0.0f, 0.2f, false));
+        StartCoroutine(GlitchScreen(0.4f, 0.1f, false));
+        StartCoroutine(GlitchScreen(0.6f, 0.1f, false));
         scriptedSequence.Clear();
         wathcersEyes.SetActive(false);
 
@@ -224,6 +233,15 @@ public class OWMapTutorialManager2 : MonoBehaviour
         {
             StartCoroutine(tutorialGame.DelayedStartVictorySceneLoad(1.0f));
         }
+    }
+
+    private IEnumerator GlitchScreen(float delay, float glitchTime, bool transitionForward)
+    {
+        if(delay > 0.0f) { yield return new WaitForSeconds(delay); }
+        NextVolume();
+        yield return new WaitForSeconds(glitchTime);
+        if(transitionForward) { NextVolume(); }
+        else { PreviousVolume(); }
     }
 
     private void NextVolume()
