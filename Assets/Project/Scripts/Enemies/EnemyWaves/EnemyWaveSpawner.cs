@@ -29,19 +29,22 @@ public class EnemyWaveSpawner : ScriptableObject
 
     bool stopForced;
 
-
+    
     private void OnValidate()
     {
-        foreach ( EnemyWave enemyWave in enemyWaves)
+        for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {
-            enemyWave.enemiesInWave = new EnemyWave.EnemyInWave[enemyWave.enemies.Length];
+            enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
 
-            for (int i = 0; i < enemyWave.enemies.Length; i++)
+            for (int i = 0; i < enemyWaves[enemyWaveI].enemies.Length; i++)
             {
-                enemyWave.enemiesInWave[i] = new EnemyWave.EnemyInWave(enemyWave.enemies[i], enemyWave.delayBetweenSpawns);
+                enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
             }
         }
     }
+    
+    
+    
 
     public void Init(PathNode startNode)
     {
@@ -74,7 +77,7 @@ public class EnemyWaveSpawner : ScriptableObject
                 yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
             }
             */
-            foreach (EnemyWave.EnemyInWave enemyInWave in enemyWaves[currentWave].enemiesInWave)
+            foreach (EnemyInWave enemyInWave in enemyWaves[currentWave].enemiesInWave)
             {
                 if (stopForced) break;
 

@@ -1,32 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
+[System.Serializable]
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct EnemyInWave
+{
+    [SerializeField] private Enemy.EnemyType enemyType;
+    [SerializeField] private float delayBeforeSpawn;
+
+    public Enemy.EnemyType EnemyType => enemyType;
+    public float DelayBeforeSpawn => delayBeforeSpawn;
+
+    public EnemyInWave(Enemy.EnemyType enemyType, float delayBeforeSpawn)
+    {
+        this.enemyType = enemyType;
+        this.delayBeforeSpawn = delayBeforeSpawn;
+    }
+}
 
 [System.Serializable]
-public class EnemyWave
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct EnemyWave
 {
-    public float delayBetweenSpawns = 1.0f;
+    public float delayBetweenSpawns;// = 1.0f;
     public Enemy.EnemyType[] enemies;
-    public EnemyInWave[] enemiesInWave;
+    [SerializeField] public EnemyInWave[] enemiesInWave;
 
 
-    [System.Serializable]
-    public struct EnemyInWave
+    public EnemyWave(EnemyWave other)
     {
-        [SerializeField] private Enemy.EnemyType enemyType;
-        [SerializeField] private float delayBeforeSpawn;
-
-        public Enemy.EnemyType EnemyType => enemyType;
-        public float DelayBeforeSpawn => delayBeforeSpawn;
-
-        public EnemyInWave(Enemy.EnemyType enemyType, float delayBeforeSpawn)
-        {
-            this.enemyType = enemyType;
-            this.delayBeforeSpawn = delayBeforeSpawn;
-        }
+        delayBetweenSpawns = other.delayBetweenSpawns;
+        enemies = other.enemies;
+        enemiesInWave = other.enemiesInWave;
     }
-
 
     public int GetEnemyCount()
     {
