@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
+using static Enemy;
 
 
 [CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
@@ -29,6 +30,19 @@ public class EnemyWaveSpawner : ScriptableObject
     bool stopForced;
 
 
+    private void OnValidate()
+    {
+        foreach ( EnemyWave enemyWave in enemyWaves)
+        {
+            enemyWave.enemiesInWave = new EnemyWave.EnemyInWave[enemyWave.enemies.Length];
+
+            for (int i = 0; i < enemyWave.enemies.Length; i++)
+            {
+                enemyWave.enemiesInWave[i] = new EnemyWave.EnemyInWave(enemyWave.enemies[i], enemyWave.delayBetweenSpawns);
+            }
+        }
+    }
+
     public void Init(PathNode startNode)
     {
         currentWave = 0;
@@ -50,6 +64,7 @@ public class EnemyWaveSpawner : ScriptableObject
         }
         else
         {
+            /*
             foreach (Enemy.EnemyType enemyType in enemyWaves[currentWave].enemies)
             {
                 if (stopForced) break;
@@ -57,6 +72,15 @@ public class EnemyWaveSpawner : ScriptableObject
                 SpawnEnemy(enemyType, spawnTransform);
 
                 yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
+            }
+            */
+            foreach (EnemyWave.EnemyInWave enemyInWave in enemyWaves[currentWave].enemiesInWave)
+            {
+                if (stopForced) break;
+
+                SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+
+                yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn);
             }
         }
         
