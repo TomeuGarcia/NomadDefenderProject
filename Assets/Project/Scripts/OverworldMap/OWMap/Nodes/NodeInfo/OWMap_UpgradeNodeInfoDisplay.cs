@@ -11,6 +11,11 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private TextMeshProUGUI rewardsText;
 
+    private static string[] upgardeTypesToText =
+    {
+        "newCard", "projectile", "body", "base"
+    };
+
     private static string[] nodeHealthToText = { "<color=#1DFF5F>INTACT</color>",
                                                  "<color=#FFF345>PLUNDERED</color>",
                                                  "<color=#F5550C>RUINED</color>",
@@ -24,7 +29,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 
     private const string statusStr = "\\status: ";
     private const string rewardsStr = "\\rewards: ";
-    private const string unknownStr = "???";
+    private const string unknownStr = "<color=#8C8C8C>???</color>";
 
 
     private void Awake()
@@ -39,6 +44,10 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight)
     {
         BaseInit(attachedNode, mouseOverNotifier, positionedAtRight);
+    }
+    public void InitUpgradeType(NodeEnums.UpgradeType upgradeType)
+    {
+        nodeTitleText.text = ">UPG-" + upgardeTypesToText[(int)upgradeType];
     }
 
     protected override void SubscriveToAttachedNodeEvents()
