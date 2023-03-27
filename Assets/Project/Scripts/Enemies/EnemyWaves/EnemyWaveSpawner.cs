@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
-using static Enemy;
 
 
 [CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
@@ -22,6 +21,19 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public int numWaves => enemyWaves.Length;
 
+    [Header("JSON")]
+    [SerializeField] private TextAsset enemyWavesJSONfile;
+    private class EnemyWaveList
+    {
+        public EnemyWave[] enemyWaves;
+
+        public EnemyWaveList(EnemyWave[] enemyWaves)
+        {
+            this.enemyWaves = new EnemyWave[enemyWaves.Length];
+            enemyWaves.CopyTo(this.enemyWaves, 0);
+        }
+    }
+
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
     public event EnemyWaveSpawnerAction OnWaveFinished;
@@ -32,6 +44,23 @@ public class EnemyWaveSpawner : ScriptableObject
     
     private void OnValidate()
     {
+        return;
+        if (enemyWavesJSONfile == null) return;
+        //return;
+        EnemyWaveList enemyWavesList_recover = new EnemyWaveList(enemyWaves);
+        string data = JsonUtility.ToJson(enemyWavesList_recover);
+        string filePath = Application.persistentDataPath + "/" + AssetDatabase.GetAssetPath(this);
+        int extension = filePath.LastIndexOf('.');
+        filePath = AssetDatabase.GetAssetPath(this).Substring(0, extension) + ".json";
+
+        Debug.Log(filePath);
+        System.IO.File.WriteAllText(filePath, data);
+        
+        return;
+        EnemyWaveList enemyWavesList = JsonUtility.FromJson<EnemyWaveList>(enemyWavesJSONfile.text);
+        enemyWavesList.enemyWaves.CopyTo(enemyWaves, 0);
+        
+        return;
         for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {
             enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];

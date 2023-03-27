@@ -7,8 +7,8 @@ using UnityEngine;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct EnemyInWave
 {
-    [SerializeField] private Enemy.EnemyType enemyType;
-    [SerializeField] private float delayBeforeSpawn;
+    [SerializeField, SerializeReference] private Enemy.EnemyType enemyType;
+    [SerializeField, SerializeReference] private float delayBeforeSpawn;
 
     public Enemy.EnemyType EnemyType => enemyType;
     public float DelayBeforeSpawn => delayBeforeSpawn;
