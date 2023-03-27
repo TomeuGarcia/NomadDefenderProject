@@ -10,8 +10,8 @@ public class OWMap_EmptyNodeInfoDisplay : OWMap_NodeInfoDisplay
     [SerializeField] private TextMeshProUGUI nodeTitleText;
 
 
-    private const string startNodeStr = ">originNode";
-    private const string endNodeStr = ">endpointNode";
+    private const string startNodeStr = ">ORIGIN";
+    private const string endNodeStr = ">ENDPOINT";
     private const string unknownStr = ">???";
 
 

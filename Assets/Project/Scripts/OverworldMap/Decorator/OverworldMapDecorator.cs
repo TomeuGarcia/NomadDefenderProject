@@ -75,7 +75,7 @@ public class OverworldMapDecorator : MonoBehaviour
             // Spawn EmptyNodeInfoDisplay
             OWMap_EmptyNodeInfoDisplay emptyNodeInfoDisplay = Instantiate(EmptyNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_EmptyNodeInfoDisplay>();
             emptyNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeI, lastLevel.Length), NodeEnums.EmptyType.LAST_LEVEL);
-            emptyNodeInfoDisplay.SetIsInteractableFalse();
+            //emptyNodeInfoDisplay.SetIsInteractableFalse();
         }
     }
     protected void DecorateFirstLevelEmpty(OWMap_Node[] firstLevel)
@@ -95,7 +95,7 @@ public class OverworldMapDecorator : MonoBehaviour
             // Spawn EmptyNodeInfoDisplay
             OWMap_EmptyNodeInfoDisplay emptyNodeInfoDisplay = Instantiate(EmptyNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_EmptyNodeInfoDisplay>();
             emptyNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeI, firstLevel.Length), NodeEnums.EmptyType.FIRST_LEVEL);
-            emptyNodeInfoDisplay.SetIsInteractableFalse();
+            //emptyNodeInfoDisplay.SetIsInteractableFalse();
         }
     }
 
@@ -122,7 +122,7 @@ public class OverworldMapDecorator : MonoBehaviour
         // Spawn BattleNodeInfoDisplay
         OWMap_BattleNodeInfoDisplay battleNodeInfoDisplay = Instantiate(BattleNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_BattleNodeInfoDisplay>();
         battleNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel), battleType);
-        battleNodeInfoDisplay.SetIsInteractableFalse();
+        //battleNodeInfoDisplay.SetIsInteractableFalse();
     }
 
     private void DecorateUpgradeLevel(OWMap_Node[] upgradeLevel, int levelI)
@@ -154,7 +154,8 @@ public class OverworldMapDecorator : MonoBehaviour
         // Spawn UpgradeNodeInfoDisplay
         OWMap_UpgradeNodeInfoDisplay upgradeNodeInfoDisplay = Instantiate(UpgradeNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_UpgradeNodeInfoDisplay>();
         upgradeNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel));
-        upgradeNodeInfoDisplay.SetIsInteractableFalse();
+        upgradeNodeInfoDisplay.InitUpgradeType(upgradeType);
+        //upgradeNodeInfoDisplay.SetIsInteractableFalse();
     }
 
     private bool IsBattleLevel(int levelI)

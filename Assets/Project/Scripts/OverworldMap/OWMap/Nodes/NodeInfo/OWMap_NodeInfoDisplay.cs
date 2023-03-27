@@ -65,13 +65,11 @@ public abstract class OWMap_NodeInfoDisplay : MonoBehaviour
   
     public void SetIsInteractableFalse()
     {
-        //Debug.Log("isInteractable FALSE");
         this.isInteractable = false;
         HideNodeInfo();
     }
     public void SetIsInteractableTrue()
     {
-        //Debug.Log("isInteractable TRUE");
         this.isInteractable = true;
     }
 
@@ -91,12 +89,12 @@ public abstract class OWMap_NodeInfoDisplay : MonoBehaviour
     protected virtual void SubscriveToAttachedNodeEvents()
     {        
         this.attachedNode.OnNodeInfoInteractionEnabled += SetIsInteractableTrue;
-        this.attachedNode.OnNodeInfoInteractionDisabled += SetIsInteractableFalse;
+        //this.attachedNode.OnNodeInfoInteractionDisabled += SetIsInteractableFalse;
     }
     protected virtual void UnsubscriveToAttachedNodeEvents()
     {
         this.attachedNode.OnNodeInfoInteractionEnabled -= SetIsInteractableTrue;
-        this.attachedNode.OnNodeInfoInteractionDisabled -= SetIsInteractableFalse;
+        //this.attachedNode.OnNodeInfoInteractionDisabled -= SetIsInteractableFalse;
     }
 
 
