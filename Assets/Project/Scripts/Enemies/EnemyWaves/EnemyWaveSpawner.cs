@@ -12,7 +12,8 @@ public class EnemyWaveSpawner : ScriptableObject
     private float waveMultiplierCoef = 0.0f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
-    [SerializeField] private EnemyWave[] enemyWaves;
+    private EnemyWave[] enemyWaves;
+    public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
 
@@ -21,30 +22,24 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public int numWaves => enemyWaves.Length;
 
-    [Header("JSON")]
+    [Header("JSON (Display only)")]
     [SerializeField] private string nameLevel;
     [SerializeField] private string nameJSON;
     [SerializeField] private NodeEnums.ProgressionState progressionState;
     [SerializeField, Range(1, 2)] private int numNodes = 1;
     [SerializeField] private bool isTutorial;
     [SerializeField] private bool IS_INCORRECT;
-    private static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
-    private static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
-    private const string PATH_TO_JSON = "/JSONfiles/EnemyWaves/";
 
-    [System.Serializable]
-    private class EnemyWavesWrapper
-    {
-        [SerializeField] public EnemyWave[] enemyWaves;
+    public static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
+    public static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
+    public const string PATH_TO_JSON = "/JSONfiles/EnemyWaves/";
 
-        public EnemyWavesWrapper(EnemyWave[] enemyWaves)
-        {
-            this.enemyWaves = new EnemyWave[enemyWaves.Length];
-            enemyWaves.CopyTo(this.enemyWaves, 0);
-        }
-        
-    }
-
+    public string NameLevel => nameLevel;
+    public string NameJSON => nameJSON;
+    public NodeEnums.ProgressionState ProgressionState => progressionState;
+    public int NumNodes => numNodes;
+    public bool IsTutorial => isTutorial;
+    public bool IsIncorrect => IS_INCORRECT;
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
@@ -53,55 +48,32 @@ public class EnemyWaveSpawner : ScriptableObject
 
     bool stopForced;
 
-    private void SaveToJSON(string path)
-    {        
-        if (nameLevel.Length < 2) return;
-        if (nameLevel[2] != '_') return; // Scuffed, please remove when fixed
 
-        Debug.Log(path);
-
-        EnemyWavesWrapper enemyWavesWrapper = new EnemyWavesWrapper(enemyWaves);
-        string content = JsonUtility.ToJson(enemyWavesWrapper);
-
-        File.WriteAllText(path, content);
-    }
-    
-
-    private void LoadFromJSON(string path)
+    private void OnValidate()
     {
-        string content = File.ReadAllText(path);
+        
+        ValidateJSONFormat();
 
-        EnemyWavesWrapper enemyWavesWrapper = JsonUtility.FromJson<EnemyWavesWrapper>(content);
-        enemyWaves = enemyWavesWrapper.enemyWaves;
-    }
-    private string GetPathJSON()
-    {
-        string pathToJSON =  PATH_TO_JSON;
-        if (IS_INCORRECT) pathToJSON += "INCORRECT/";
-        if (isTutorial) pathToJSON += "Tutorials/";
+        //EnemyWaveJSONManager.SaveEnemyWave(this);
 
-        string progressionStatePath = PROGRESSION_PATHS[(int)progressionState];
-        string numNodesPath = NUM_NODES_PATHS[numNodes - 1];
-        string levelName = nameLevel + "/";
-
-        string directory = Application.persistentDataPath + pathToJSON + progressionStatePath + numNodesPath + levelName;
-        if (!Directory.Exists(directory))
+        return;
+        for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {
-            Directory.CreateDirectory(directory);
+            enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
+
+            for (int i = 0; i < enemyWaves[enemyWaveI].enemies.Length; i++)
+            {
+                enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
+            }
         }
-
-
-        string targetFilePath = nameJSON + ".json";
-
-        return directory + targetFilePath;
     }
 
-    private void ValidateProgressionAndNumNodes()
+    private void ValidateJSONFormat()
     {
         int lastUnderscore = name.LastIndexOf('_');
         nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
         nameJSON = name;
-        
+
 
         //if (nameLevel == null) return;
         //if (nameLevel.Length < 1) return;
@@ -141,35 +113,11 @@ public class EnemyWaveSpawner : ScriptableObject
         isTutorial = name[3] == 'T';
     }
 
-    private void OnValidate()
+
+    public void SetEnemyWaves(EnemyWave[] enemyWaves)
     {
-        
-        ValidateProgressionAndNumNodes();
-
-        /*
-        if (nameLevel == null) return;
-        if (nameLevel.Length < 1) return;
-        */
-        //SaveToJSON(GetPathJSON());
-
-        //LoadFromJSON(GetPathJSON());
-
-
-
-        return;
-        for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
-        {
-            enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
-
-            for (int i = 0; i < enemyWaves[enemyWaveI].enemies.Length; i++)
-            {
-                enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
-            }
-        }
+        this.enemyWaves = enemyWaves;
     }
-    
-    
-    
 
     public void Init(PathNode startNode)
     {
@@ -177,6 +125,8 @@ public class EnemyWaveSpawner : ScriptableObject
         activeEnemies = 0;
         this.startNode = startNode;
         stopForced = false;
+
+        EnemyWaveJSONManager.LoadEnemyWave(this);
     }
 
 
