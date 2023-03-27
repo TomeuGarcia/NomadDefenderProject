@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,10 +22,13 @@ public class EnemyWaveSpawner : ScriptableObject
     public int numWaves => enemyWaves.Length;
 
     [Header("JSON")]
-    [SerializeField] private string enemyWavesJSONname;
+    [SerializeField] private string nameLevel;
+    [SerializeField] private string nameJSON;
     [SerializeField] private NodeEnums.ProgressionState progressionState;
-    private static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
     [SerializeField, Range(1, 2)] private int numNodes = 1;
+    [SerializeField] private bool isTutorial;
+    [SerializeField] private bool IS_INCORRECT;
+    private static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
     private static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
     private const string PATH_TO_JSON = "/JSONfiles/EnemyWaves/";
 
@@ -40,6 +42,7 @@ public class EnemyWaveSpawner : ScriptableObject
             this.enemyWaves = new EnemyWave[enemyWaves.Length];
             enemyWaves.CopyTo(this.enemyWaves, 0);
         }
+        
     }
 
 
@@ -51,7 +54,10 @@ public class EnemyWaveSpawner : ScriptableObject
     bool stopForced;
 
     private void SaveToJSON(string path)
-    {
+    {        
+        if (nameLevel.Length < 2) return;
+        if (nameLevel[2] != '_') return; // Scuffed, please remove when fixed
+
         Debug.Log(path);
 
         EnemyWavesWrapper enemyWavesWrapper = new EnemyWavesWrapper(enemyWaves);
@@ -64,30 +70,90 @@ public class EnemyWaveSpawner : ScriptableObject
     private void LoadFromJSON(string path)
     {
         string content = File.ReadAllText(path);
-        
-        enemyWaves = JsonUtility.FromJson<EnemyWave[]>(content);
+
+        EnemyWavesWrapper enemyWavesWrapper = JsonUtility.FromJson<EnemyWavesWrapper>(content);
+        enemyWaves = enemyWavesWrapper.enemyWaves;
     }
     private string GetPathJSON()
-    {        
+    {
+        string pathToJSON =  PATH_TO_JSON;
+        if (IS_INCORRECT) pathToJSON += "INCORRECT/";
+        if (isTutorial) pathToJSON += "Tutorials/";
+
         string progressionStatePath = PROGRESSION_PATHS[(int)progressionState];
         string numNodesPath = NUM_NODES_PATHS[numNodes - 1];
-        string targetFilePath = enemyWavesJSONname + ".json";
+        string levelName = nameLevel + "/";
 
-        string directory = Application.persistentDataPath + PATH_TO_JSON + progressionStatePath + numNodesPath;
+        string directory = Application.persistentDataPath + pathToJSON + progressionStatePath + numNodesPath + levelName;
         if (!Directory.Exists(directory))
         {
             Directory.CreateDirectory(directory);
         }
 
+
+        string targetFilePath = nameJSON + ".json";
+
         return directory + targetFilePath;
+    }
+
+    private void ValidateProgressionAndNumNodes()
+    {
+        int lastUnderscore = name.LastIndexOf('_');
+        nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
+        nameJSON = name;
+        
+
+        //if (nameLevel == null) return;
+        //if (nameLevel.Length < 1) return;
+
+        char progressionChar = nameLevel[0];
+        if (progressionChar == 'E')
+        {
+            progressionState = NodeEnums.ProgressionState.EARLY;
+        }
+        else if (progressionChar == 'M')
+        {
+            progressionState = NodeEnums.ProgressionState.MID;
+        }
+        else if (progressionChar == 'L')
+        {
+            progressionState = NodeEnums.ProgressionState.LATE;
+        }
+        else
+        {
+            IS_INCORRECT = true;
+        }
+
+        char numNodesChar = nameLevel[1];
+        if (numNodesChar == '1')
+        {
+            numNodes = 1;
+        }
+        else if (numNodesChar == '2')
+        {
+            numNodes = 2;
+        }
+        else
+        {
+            IS_INCORRECT = true;
+        }
+
+        isTutorial = name[3] == 'T';
     }
 
     private void OnValidate()
     {
         
-        if (enemyWavesJSONname == null) return;
-        if (enemyWavesJSONname.Length < 1) return;
-        SaveToJSON(GetPathJSON());
+        ValidateProgressionAndNumNodes();
+
+        /*
+        if (nameLevel == null) return;
+        if (nameLevel.Length < 1) return;
+        */
+        //SaveToJSON(GetPathJSON());
+
+        //LoadFromJSON(GetPathJSON());
+
 
 
         return;

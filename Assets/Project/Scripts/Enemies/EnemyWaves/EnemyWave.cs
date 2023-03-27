@@ -20,7 +20,7 @@ public struct EnemyInWave
 }
 
 [System.Serializable]
-public struct EnemyWave
+public class EnemyWave
 {
     public float delayBetweenSpawns;// = 1.0f;
     public Enemy.EnemyType[] enemies;
