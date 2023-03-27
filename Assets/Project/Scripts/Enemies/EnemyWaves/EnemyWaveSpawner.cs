@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
@@ -22,17 +23,25 @@ public class EnemyWaveSpawner : ScriptableObject
     public int numWaves => enemyWaves.Length;
 
     [Header("JSON")]
-    [SerializeField] private TextAsset enemyWavesJSONfile;
-    private class EnemyWaveList
-    {
-        public EnemyWave[] enemyWaves;
+    [SerializeField] private string enemyWavesJSONname;
+    [SerializeField] private NodeEnums.ProgressionState progressionState;
+    private static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
+    [SerializeField, Range(1, 2)] private int numNodes = 1;
+    private static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
+    private const string PATH_TO_JSON = "/JSONfiles/EnemyWaves/";
 
-        public EnemyWaveList(EnemyWave[] enemyWaves)
+    [System.Serializable]
+    private class EnemyWavesWrapper
+    {
+        [SerializeField] public EnemyWave[] enemyWaves;
+
+        public EnemyWavesWrapper(EnemyWave[] enemyWaves)
         {
             this.enemyWaves = new EnemyWave[enemyWaves.Length];
             enemyWaves.CopyTo(this.enemyWaves, 0);
         }
     }
+
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
@@ -41,25 +50,46 @@ public class EnemyWaveSpawner : ScriptableObject
 
     bool stopForced;
 
+    private void SaveToJSON(string path)
+    {
+        Debug.Log(path);
+
+        EnemyWavesWrapper enemyWavesWrapper = new EnemyWavesWrapper(enemyWaves);
+        string content = JsonUtility.ToJson(enemyWavesWrapper);
+
+        File.WriteAllText(path, content);
+    }
     
+
+    private void LoadFromJSON(string path)
+    {
+        string content = File.ReadAllText(path);
+        
+        enemyWaves = JsonUtility.FromJson<EnemyWave[]>(content);
+    }
+    private string GetPathJSON()
+    {        
+        string progressionStatePath = PROGRESSION_PATHS[(int)progressionState];
+        string numNodesPath = NUM_NODES_PATHS[numNodes - 1];
+        string targetFilePath = enemyWavesJSONname + ".json";
+
+        string directory = Application.persistentDataPath + PATH_TO_JSON + progressionStatePath + numNodesPath;
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        return directory + targetFilePath;
+    }
+
     private void OnValidate()
     {
-        return;
-        if (enemyWavesJSONfile == null) return;
-        //return;
-        EnemyWaveList enemyWavesList_recover = new EnemyWaveList(enemyWaves);
-        string data = JsonUtility.ToJson(enemyWavesList_recover);
-        string filePath = Application.persistentDataPath + "/" + AssetDatabase.GetAssetPath(this);
-        int extension = filePath.LastIndexOf('.');
-        filePath = AssetDatabase.GetAssetPath(this).Substring(0, extension) + ".json";
+        
+        if (enemyWavesJSONname == null) return;
+        if (enemyWavesJSONname.Length < 1) return;
+        SaveToJSON(GetPathJSON());
 
-        Debug.Log(filePath);
-        System.IO.File.WriteAllText(filePath, data);
-        
-        return;
-        EnemyWaveList enemyWavesList = JsonUtility.FromJson<EnemyWaveList>(enemyWavesJSONfile.text);
-        enemyWavesList.enemyWaves.CopyTo(enemyWaves, 0);
-        
+
         return;
         for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {

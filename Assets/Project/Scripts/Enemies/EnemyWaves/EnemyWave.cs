@@ -4,11 +4,10 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 [System.Serializable]
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct EnemyInWave
 {
-    [SerializeField, SerializeReference] private Enemy.EnemyType enemyType;
-    [SerializeField, SerializeReference] private float delayBeforeSpawn;
+    [SerializeField, SerializeReference] public Enemy.EnemyType enemyType;
+    [SerializeField, SerializeReference] public float delayBeforeSpawn;
 
     public Enemy.EnemyType EnemyType => enemyType;
     public float DelayBeforeSpawn => delayBeforeSpawn;
@@ -21,7 +20,6 @@ public struct EnemyInWave
 }
 
 [System.Serializable]
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct EnemyWave
 {
     public float delayBetweenSpawns;// = 1.0f;
