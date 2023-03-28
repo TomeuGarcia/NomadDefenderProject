@@ -73,7 +73,7 @@ public class EnemyWaveSpawner : ScriptableObject
         int lastUnderscore = name.LastIndexOf('_');
         nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
         nameJSON = name;
-
+        IS_INCORRECT = false;
 
         //if (nameLevel == null) return;
         //if (nameLevel.Length < 1) return;
