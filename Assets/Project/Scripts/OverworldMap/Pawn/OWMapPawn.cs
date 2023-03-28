@@ -7,14 +7,12 @@ public class OWMapPawn : MonoBehaviour
 {
 
     [SerializeField] private Transform moveTransform;
-    [SerializeField] private GameObject followCamera;
-    public Transform FollowCameraTransform => followCamera.transform;
+    [SerializeField] private OWCameraMovement followCamera;
+    public Transform FollowCameraTransform => followCamera.gameObject.transform;
 
     private OWMap_Node currentNode;
 
     private OverworldMapGameManager owMapGameManager;
-
-    private Vector3 camDisplacementToNextLevel;
 
     private Quaternion defaultRotation;
     
@@ -30,7 +28,7 @@ public class OWMapPawn : MonoBehaviour
 
         defaultRotation = moveTransform.rotation;
 
-        this.camDisplacementToNextLevel = camDisplacementToNextLevel;
+        this.followCamera.Init(camDisplacementToNextLevel);
     }
 
     public void MoveToNode(OWMap_Node targetNode)
@@ -71,21 +69,16 @@ public class OWMapPawn : MonoBehaviour
 
     public void ActivateCamera()
     {
-        followCamera.SetActive(true);
+        followCamera.gameObject.SetActive(true);
     }
 
     public void DeactivateCamera()
     {
-        followCamera.SetActive(false);
+        followCamera.gameObject.SetActive(false);
     }
 
     public void MoveCameraToNextLevel()
     {
-        StartCoroutine(LateMoveCameraToNextLevel());
-    }
-    private IEnumerator LateMoveCameraToNextLevel()
-    {
-        yield return new WaitForSeconds(1.5f);
-        followCamera.transform.DOMove(followCamera.transform.position + camDisplacementToNextLevel, 2.0f);
+        followCamera.MoveToNextLevel();
     }
 }
