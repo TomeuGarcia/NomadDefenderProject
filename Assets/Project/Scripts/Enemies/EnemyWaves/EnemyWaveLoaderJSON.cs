@@ -61,7 +61,7 @@ public static class EnemyWaveJSONManager
     }
 
 
-    public static string GetPathToDirectoryJSON(EnemyWaveSpawner enemyWaveSpawner, bool usePersistentDirectoryPath)
+    public static string GetPathToDirectoryJSON(EnemyWaveSpawner enemyWaveSpawner, bool usePersistentDirectoryPath, bool createDirectoryIfNonExisting = true)
     {
         string pathToJSON = EnemyWaveSpawner.PATH_TO_JSON;
         if (enemyWaveSpawner.IsIncorrect) pathToJSON += "INCORRECT/";
@@ -74,13 +74,24 @@ public static class EnemyWaveJSONManager
         string rootDirectory = usePersistentDirectoryPath ? Application.persistentDataPath : Application.streamingAssetsPath;
         
         string directory = rootDirectory + pathToJSON + progressionStatePath + numNodesPath + levelName;
-        if (!Directory.Exists(directory))
+        if (createDirectoryIfNonExisting && !Directory.Exists(directory))
         {
             Directory.CreateDirectory(directory);
         }
 
         return directory;
     }
+
+
+    public static bool DoesJSONExist(EnemyWaveSpawner enemyWaveSpawner)
+    {
+        string directory = GetPathToDirectoryJSON(enemyWaveSpawner, false, false);
+        string fileName = GetJSONFileName(enemyWaveSpawner);
+
+        return File.Exists(directory + fileName);
+    }
+
+
 
     public static string GetJSONFileName(EnemyWaveSpawner enemyWaveSpawner)
     {

@@ -13,7 +13,6 @@ public class EnemyWaveSpawner : ScriptableObject
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
-    [SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
@@ -70,24 +69,6 @@ public class EnemyWaveSpawner : ScriptableObject
         */
     }
 
-    public void PassToWorkaround()
-    {
-        enemyWavesWorkaround = new EnemyWaveWorkaround[enemyWaves.Length];
-        for (int i = 0; i < enemyWavesWorkaround.Length; ++i)
-        {
-            enemyWavesWorkaround[i] = new EnemyWaveWorkaround(enemyWaves[i]);
-        }
-    }
-
-    public void PassFromWorkaround()
-    {
-        enemyWaves = new EnemyWave[enemyWavesWorkaround.Length];
-        for (int i = 0; i < enemyWaves.Length; ++i)
-        {
-            enemyWaves[i] = new EnemyWave(enemyWavesWorkaround[i]);
-        }
-    }
-
     public void ValidateJSONFormat()
     {
         int lastUnderscore = name.LastIndexOf('_');
@@ -95,8 +76,8 @@ public class EnemyWaveSpawner : ScriptableObject
         nameJSON = name;
         IS_INCORRECT = false;
 
-        //if (nameLevel == null) return;
-        //if (nameLevel.Length < 1) return;
+        if (nameLevel == null) return;
+        if (nameLevel.Length < 1) return;
 
         char progressionChar = nameLevel[0];
         if (progressionChar == 'E')

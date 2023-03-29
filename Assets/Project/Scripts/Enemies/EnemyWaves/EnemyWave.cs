@@ -50,30 +50,10 @@ public class EnemyWave
         enemiesInWave = other.enemiesInWave;
     }
 
-    public EnemyWave(EnemyWaveWorkaround enemyWaveWorkaround)
-    {
-        enemiesInWave = new EnemyInWave[enemyWaveWorkaround.enemiesInWave.Length];
-
-        enemyWaveWorkaround.enemiesInWave.CopyTo(enemiesInWave, 0);
-    }
 
     public int GetEnemyCount()
     {
         return enemiesInWave.Length;
     }
 
-}
-
-[System.Serializable]
-public class EnemyWaveWorkaround
-{
-    [SerializeField] public EnemyInWave[] enemiesInWave;
-
-    public EnemyWaveWorkaround(EnemyWave enemyWave)
-    {
-        enemiesInWave = new EnemyInWave[enemyWave.enemiesInWave.Length];
-
-        enemyWave.enemiesInWave.CopyTo(enemiesInWave, 0);
-
-    }
 }
