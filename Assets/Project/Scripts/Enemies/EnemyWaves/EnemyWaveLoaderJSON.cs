@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-static class EnemyWaveJSONManager
+public static class EnemyWaveJSONManager
 {
     [System.Serializable]
     private class EnemyWavesWrapper
@@ -22,7 +22,7 @@ static class EnemyWaveJSONManager
 
     public static void SaveEnemyWave(EnemyWaveSpawner enemyWaveSpawner)
     {
-        string path = GetPathJSON(enemyWaveSpawner);
+        string path = GetPathToFileJSON(enemyWaveSpawner);
 
         if (enemyWaveSpawner.NameLevel.Length < 2) return;
         if (enemyWaveSpawner.NameLevel[2] != '_') return; // Scuffed, please remove when fixed
@@ -38,14 +38,15 @@ static class EnemyWaveJSONManager
 
     public static void LoadEnemyWave(EnemyWaveSpawner enemyWaveSpawner)
     {
-        string path = GetPathJSON(enemyWaveSpawner);
+        string path = GetPathToFileJSON(enemyWaveSpawner);
         string content = File.ReadAllText(path);
 
         EnemyWavesWrapper enemyWavesWrapper = JsonUtility.FromJson<EnemyWavesWrapper>(content);
         enemyWaveSpawner.SetEnemyWaves(enemyWavesWrapper.enemyWaves);        
     }
 
-    public static string GetPathJSON(EnemyWaveSpawner enemyWaveSpawner)
+
+    public static string GetPathToDirectoryJSON(EnemyWaveSpawner enemyWaveSpawner)
     {
         string pathToJSON = EnemyWaveSpawner.PATH_TO_JSON;
         if (enemyWaveSpawner.IsIncorrect) pathToJSON += "INCORRECT/";
@@ -61,10 +62,16 @@ static class EnemyWaveJSONManager
             Directory.CreateDirectory(directory);
         }
 
+        return directory;
+    }
 
+    public static string GetPathToFileJSON(EnemyWaveSpawner enemyWaveSpawner)
+    {
         string targetFilePath = enemyWaveSpawner.NameJSON + ".json";
 
-        return directory + targetFilePath;
+        return GetPathToDirectoryJSON(enemyWaveSpawner) + targetFilePath;
     }
+
+
     
 }

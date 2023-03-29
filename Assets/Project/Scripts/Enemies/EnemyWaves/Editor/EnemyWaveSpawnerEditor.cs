@@ -17,18 +17,38 @@ public class EnemyWaveSpawnerEditor : Editor
 
         EnemyWaveSpawner enemyWaveSpawner = target as EnemyWaveSpawner;
 
-        string color = enemyWaveSpawner.IsIncorrect ? "red" : "green";
+        DisplayInfoEnemyWaveSpawnerJSON(enemyWaveSpawner);
+
+        if (GUILayout.Button("Show Folder"))
+        {
+            ShowFolder(enemyWaveSpawner);
+        }
+    }
+
+
+    private void DisplayInfoEnemyWaveSpawnerJSON(EnemyWaveSpawner enemyWaveSpawner)
+    {
+        string[] content = { "yep", "pepe", "yep", "pepe" };
+        
+        GUILayout.SelectionGrid(-1, content, 2);
+        GUILayout.Toolbar(-1, content);
+        GUILayout.Toolbar(-1, content);
 
         GUILayout.Label("\nJSON data");
-        GUILayout.Label("Folder (Level) Name:   " + enemyWaveSpawner.NameLevel, color);
-        GUILayout.Label("JSON Name:             " + enemyWaveSpawner.NameJSON, color);
-        GUILayout.Label("Progression State:     " + enemyWaveSpawner.ProgressionState.ToString(), color);
-        GUILayout.Label("Num nodes:             " + enemyWaveSpawner.NumNodes.ToString(), color);
-        GUILayout.Label("Is Tutorial:           " + enemyWaveSpawner.IsTutorial.ToString(), color);
+        GUILayout.Label("Folder (Level) Name:   " + enemyWaveSpawner.NameLevel);
+        GUILayout.Label("JSON Name:             " + enemyWaveSpawner.NameJSON);
+        GUILayout.Label("Progression State:     " + enemyWaveSpawner.ProgressionState.ToString());
+        GUILayout.Label("Num nodes:             " + enemyWaveSpawner.NumNodes.ToString());
+        GUILayout.Label("Is Tutorial:           " + enemyWaveSpawner.IsTutorial.ToString());
         //GUILayout.Label(enemyWaveSpawner.IsIncorrect);
-
-
     }
+
+    private void ShowFolder(EnemyWaveSpawner enemyWaveSpawner)
+    {
+        string pathToDirectory = EnemyWaveJSONManager.GetPathToDirectoryJSON(enemyWaveSpawner);
+        EditorUtility.RevealInFinder(pathToDirectory);
+    }
+
 
 }
 #endif
