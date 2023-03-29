@@ -28,7 +28,7 @@ public class OWMapPawn : MonoBehaviour
 
         defaultRotation = moveTransform.rotation;
 
-        this.followCamera.Init(camDisplacementToNextLevel);
+        this.followCamera.Init(camDisplacementToNextLevel, owMapGameManager.GetMapNodes()[owMapGameManager.GetMapNodes().Length - 1][0].Position.z);
     }
 
     public void MoveToNode(OWMap_Node targetNode)
@@ -53,6 +53,11 @@ public class OWMapPawn : MonoBehaviour
             .OnComplete(() => moveTransform.DOMove(targetPos, duration)
                 .OnComplete(() => moveTransform.DORotateQuaternion(defaultRotation, 0.25f)
                     .OnComplete(NotifyNodeWasReached)));
+    }
+
+    public void ResetPosition()
+    {
+        followCamera.ResetPosition();
     }
 
 

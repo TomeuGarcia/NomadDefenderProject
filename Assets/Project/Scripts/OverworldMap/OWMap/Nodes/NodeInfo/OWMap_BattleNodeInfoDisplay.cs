@@ -15,8 +15,10 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
                                                  "<color=#F5550C>LATE</color>",
                                                  "<color=#FF003E>BOSS</color>" };
 
-    private const string difficultyStr = "\\stage: ";
+    private const string difficultyStr = "stage: ";
     private const string unknownStr = "???";
+
+    private int nextLevelNodes;
 
 
     private void Awake()
@@ -26,9 +28,10 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
         difficultyText.text = difficultyStr + unknownStr;
     }
 
-    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight, NodeEnums.BattleType battleType)
+    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight, NodeEnums.BattleType battleType, int newNextLevelNodes)
     {
         BaseInit(attachedNode, mouseOverNotifier, positionedAtRight);
+        nextLevelNodes = newNextLevelNodes;
         SetupTexts(battleType);
     }
 
@@ -47,6 +50,8 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
     // Functionality
     private void SetupTexts(NodeEnums.BattleType battleType)
     {
+        Debug.Log(nextLevelNodes);
+        nodeTitleText.text = "\\BATTLE> " + nextLevelNodes + " Loc.";
         difficultyText.text = difficultyStr + nodeDifficultyToText[(int)battleType];
     }
 

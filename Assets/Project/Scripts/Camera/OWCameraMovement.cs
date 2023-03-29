@@ -6,10 +6,6 @@ using Unity.VisualScripting;
 
 public class OWCameraMovement : MonoBehaviour
 {
-    //TODO ACCES LAST NODE POSITION PLS
-    //TODO ACCES LAST NODE POSITION PLS
-    //TODO ACCES LAST NODE POSITION PLS
-
     private Vector2 dragRange;
 
     private Vector3 originalPos;
@@ -45,9 +41,9 @@ public class OWCameraMovement : MonoBehaviour
         }
     }
 
-    public void Init(Vector3 newDistanceToNextLevel)
+    public void Init(Vector3 newDistanceToNextLevel, float maxDistance)
     {
-        dragRange = new Vector2(transform.position.z, 24.0f); //TODO ACCES LAST NODE POSITION PLS
+        dragRange = new Vector2(transform.position.z - 1.0f, maxDistance - 4.0f);
         distanceToNextLevel = newDistanceToNextLevel;
         canDrag = true;
 
@@ -62,25 +58,33 @@ public class OWCameraMovement : MonoBehaviour
 
     public void MoveToNextLevel()
     {
-        Debug.Log("EEAEAEAEAEAE");
         StartCoroutine(LateMoveToNextLevel());
     }
 
     private IEnumerator LateMoveToNextLevel()
     {
-        canDrag = false;
-        transform.DOMove(originalPos, 1.5f);
+        transform.position = originalPos;
         yield return new WaitForSeconds(1.5f);
 
         transform.DOMove(nextLevelPos, 2.0f);
         yield return new WaitForSeconds(2.0f);
 
         SetPositions();
-        //canDrag = true;
+        canDrag = true;
     }
 
     public void ResetPosition()
     {
-        transform.DOMove(originalPos, 2.0f);
+        canDrag = false;
+        float timeToReset = 0.5f;
+
+        transform.DOMove(originalPos, timeToReset);
+        StartCoroutine(ResetDragInTime(timeToReset));
+    }
+
+    private IEnumerator ResetDragInTime(float timeToReset)
+    {
+        yield return new WaitForSeconds(timeToReset);
+        canDrag = true;
     }
 }
