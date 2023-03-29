@@ -22,13 +22,13 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public int numWaves => enemyWaves.Length;
 
-    [Header("JSON (Display only)")]
-    [SerializeField] private string nameLevel;
-    [SerializeField] private string nameJSON;
-    [SerializeField] private NodeEnums.ProgressionState progressionState;
-    [SerializeField, Range(1, 2)] private int numNodes = 1;
-    [SerializeField] private bool isTutorial;
-    [SerializeField] private bool IS_INCORRECT;
+    // JSON 
+    private string nameLevel;
+    private string nameJSON;
+    private NodeEnums.ProgressionState progressionState;
+    private int numNodes = 1;
+    private bool isTutorial;
+    private bool IS_INCORRECT;
 
     public static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
     public static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
@@ -40,6 +40,7 @@ public class EnemyWaveSpawner : ScriptableObject
     public int NumNodes => numNodes;
     public bool IsTutorial => isTutorial;
     public bool IsIncorrect => IS_INCORRECT;
+    //
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
@@ -50,11 +51,9 @@ public class EnemyWaveSpawner : ScriptableObject
 
 
     private void OnValidate()
-    {
-        
-        ValidateJSONFormat();
-
-        //EnemyWaveJSONManager.SaveEnemyWave(this);
+    {        
+        // UNCOMMENT AFTER FIXING
+        //EnemyWaveJSONManager.SaveEnemyWave(this, true);
 
         return;
         for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
@@ -68,7 +67,7 @@ public class EnemyWaveSpawner : ScriptableObject
         }
     }
 
-    private void ValidateJSONFormat()
+    public void ValidateJSONFormat()
     {
         int lastUnderscore = name.LastIndexOf('_');
         nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
@@ -126,7 +125,8 @@ public class EnemyWaveSpawner : ScriptableObject
         this.startNode = startNode;
         stopForced = false;
 
-        EnemyWaveJSONManager.LoadEnemyWave(this);
+        // UNCOMMENT AFTER FIXING
+        //EnemyWaveJSONManager.LoadEnemyWave(this, true);
     }
 
 
