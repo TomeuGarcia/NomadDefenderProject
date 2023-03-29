@@ -12,7 +12,8 @@ public class EnemyWaveSpawner : ScriptableObject
     private float waveMultiplierCoef = 0.0f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
-    private EnemyWave[] enemyWaves;
+    [SerializeField] private EnemyWave[] enemyWaves;
+    [SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
@@ -22,13 +23,13 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public int numWaves => enemyWaves.Length;
 
-    [Header("JSON (Display only)")]
-    [SerializeField] private string nameLevel;
-    [SerializeField] private string nameJSON;
-    [SerializeField] private NodeEnums.ProgressionState progressionState;
-    [SerializeField, Range(1, 2)] private int numNodes = 1;
-    [SerializeField] private bool isTutorial;
-    [SerializeField] private bool IS_INCORRECT;
+    // JSON 
+    private string nameLevel;
+    private string nameJSON;
+    private NodeEnums.ProgressionState progressionState;
+    private int numNodes = 1;
+    private bool isTutorial;
+    private bool IS_INCORRECT;
 
     public static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
     public static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
@@ -40,6 +41,7 @@ public class EnemyWaveSpawner : ScriptableObject
     public int NumNodes => numNodes;
     public bool IsTutorial => isTutorial;
     public bool IsIncorrect => IS_INCORRECT;
+    //
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
@@ -50,13 +52,12 @@ public class EnemyWaveSpawner : ScriptableObject
 
 
     private void OnValidate()
-    {
-        
-        ValidateJSONFormat();
-
-        //EnemyWaveJSONManager.SaveEnemyWave(this);
+    {        
+        // UNCOMMENT AFTER FIXING
+        //EnemyWaveJSONManager.SaveEnemyWave(this, true);
 
         return;
+        /*
         for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {
             enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
@@ -66,14 +67,33 @@ public class EnemyWaveSpawner : ScriptableObject
                 enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
             }
         }
+        */
     }
 
-    private void ValidateJSONFormat()
+    public void PassToWorkaround()
+    {
+        enemyWavesWorkaround = new EnemyWaveWorkaround[enemyWaves.Length];
+        for (int i = 0; i < enemyWavesWorkaround.Length; ++i)
+        {
+            enemyWavesWorkaround[i] = new EnemyWaveWorkaround(enemyWaves[i]);
+        }
+    }
+
+    public void PassFromWorkaround()
+    {
+        enemyWaves = new EnemyWave[enemyWavesWorkaround.Length];
+        for (int i = 0; i < enemyWaves.Length; ++i)
+        {
+            enemyWaves[i] = new EnemyWave(enemyWavesWorkaround[i]);
+        }
+    }
+
+    public void ValidateJSONFormat()
     {
         int lastUnderscore = name.LastIndexOf('_');
         nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
         nameJSON = name;
-
+        IS_INCORRECT = false;
 
         //if (nameLevel == null) return;
         //if (nameLevel.Length < 1) return;
@@ -126,7 +146,9 @@ public class EnemyWaveSpawner : ScriptableObject
         this.startNode = startNode;
         stopForced = false;
 
-        EnemyWaveJSONManager.LoadEnemyWave(this);
+        // UNCOMMENT AFTER FIXING
+        ValidateJSONFormat();
+        EnemyWaveJSONManager.LoadEnemyWave(this, false);
     }
 
 
