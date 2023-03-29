@@ -13,7 +13,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 
     private static string[] upgardeTypesToText =
     {
-        "newCard", "projectile", "body", "base"
+        "NewCard", "Projectile", "Base", "Body"
     };
 
     private static string[] nodeHealthToText = { "<color=#1DFF5F>INTACT</color>",
@@ -27,8 +27,8 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     private const string perfectNodeHealthText = "<color=#439bee>PERFECT</color>";
     private const string perfectRewardText = "<color=#439bee>GREAT+</color>";
 
-    private const string statusStr = "\\status: ";
-    private const string rewardsStr = "\\rewards: ";
+    private const string statusStr = "status: ";
+    private const string rewardsStr = "rewards: ";
     private const string unknownStr = "<color=#8C8C8C>???</color>";
 
 
@@ -47,7 +47,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     }
     public void InitUpgradeType(NodeEnums.UpgradeType upgradeType)
     {
-        nodeTitleText.text = ">UPG-" + upgardeTypesToText[(int)upgradeType];
+        nodeTitleText.text = "\\UPG> " + upgardeTypesToText[(int)upgradeType]; 
     }
 
     protected override void SubscriveToAttachedNodeEvents()
