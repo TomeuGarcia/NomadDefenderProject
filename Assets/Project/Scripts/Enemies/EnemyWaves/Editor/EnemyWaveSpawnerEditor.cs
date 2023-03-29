@@ -57,17 +57,19 @@ public class EnemyWaveSpawnerEditor : Editor
             GUI.color = Color.white;
         }
 
-        GUILayout.Space(40);
-        if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
+        if (jsonExists)
         {
-            EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
+            GUILayout.Space(40);
+            if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
+            }
+            GUILayout.Space(20);
+            if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
+            }
         }
-        GUILayout.Space(20);
-        if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
-        {
-            EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
-        }
-
 
         //GUILayout.Space(40);
         //if (GUILayout.Button("Save to Workaround", GUILayout.Width(200), GUILayout.Height(30)))
