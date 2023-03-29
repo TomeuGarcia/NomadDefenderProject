@@ -13,6 +13,7 @@ public class EnemyWaveSpawner : ScriptableObject
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
+    [SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
@@ -56,6 +57,7 @@ public class EnemyWaveSpawner : ScriptableObject
         //EnemyWaveJSONManager.SaveEnemyWave(this, true);
 
         return;
+        /*
         for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
         {
             enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
@@ -64,6 +66,25 @@ public class EnemyWaveSpawner : ScriptableObject
             {
                 enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
             }
+        }
+        */
+    }
+
+    public void PassToWorkaround()
+    {
+        enemyWavesWorkaround = new EnemyWaveWorkaround[enemyWaves.Length];
+        for (int i = 0; i < enemyWavesWorkaround.Length; ++i)
+        {
+            enemyWavesWorkaround[i] = new EnemyWaveWorkaround(enemyWaves[i]);
+        }
+    }
+
+    public void PassFromWorkaround()
+    {
+        enemyWaves = new EnemyWave[enemyWavesWorkaround.Length];
+        for (int i = 0; i < enemyWaves.Length; ++i)
+        {
+            enemyWaves[i] = new EnemyWave(enemyWavesWorkaround[i]);
         }
     }
 
@@ -126,7 +147,8 @@ public class EnemyWaveSpawner : ScriptableObject
         stopForced = false;
 
         // UNCOMMENT AFTER FIXING
-        //EnemyWaveJSONManager.LoadEnemyWave(this, true);
+        ValidateJSONFormat();
+        EnemyWaveJSONManager.LoadEnemyWave(this, false);
     }
 
 

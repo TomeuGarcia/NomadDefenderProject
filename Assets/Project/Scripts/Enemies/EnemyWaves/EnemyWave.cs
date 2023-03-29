@@ -28,14 +28,14 @@ public class EnemyInWave
 [System.Serializable]
 public class EnemyWave
 {
-    public float delayBetweenSpawns;// = 1.0f;
-    public Enemy.EnemyType[] enemies;
+    //public float delayBetweenSpawns;// = 1.0f;
+    //public Enemy.EnemyType[] enemies;
     [SerializeField] public EnemyInWave[] enemiesInWave;
 
 
     public EnemyWave()
     {
-        delayBetweenSpawns = 1.0f;
+        //delayBetweenSpawns = 1.0f;
         enemiesInWave = new EnemyInWave[2];
         for (int i = 0; i < enemiesInWave.Length; ++i)
         {
@@ -45,14 +45,35 @@ public class EnemyWave
 
     public EnemyWave(EnemyWave other)
     {
-        delayBetweenSpawns = other.delayBetweenSpawns;
-        enemies = other.enemies;
+        //delayBetweenSpawns = other.delayBetweenSpawns;
+        //enemies = other.enemies;
         enemiesInWave = other.enemiesInWave;
+    }
+
+    public EnemyWave(EnemyWaveWorkaround enemyWaveWorkaround)
+    {
+        enemiesInWave = new EnemyInWave[enemyWaveWorkaround.enemiesInWave.Length];
+
+        enemyWaveWorkaround.enemiesInWave.CopyTo(enemiesInWave, 0);
     }
 
     public int GetEnemyCount()
     {
-        return enemies.Length;
+        return enemiesInWave.Length;
     }
 
+}
+
+[System.Serializable]
+public class EnemyWaveWorkaround
+{
+    [SerializeField] public EnemyInWave[] enemiesInWave;
+
+    public EnemyWaveWorkaround(EnemyWave enemyWave)
+    {
+        enemiesInWave = new EnemyInWave[enemyWave.enemiesInWave.Length];
+
+        enemyWave.enemiesInWave.CopyTo(enemiesInWave, 0);
+
+    }
 }

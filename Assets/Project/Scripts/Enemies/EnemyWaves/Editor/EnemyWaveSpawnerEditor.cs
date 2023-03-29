@@ -42,13 +42,25 @@ public class EnemyWaveSpawnerEditor : Editor
         GUILayout.Space(30);
         if (GUILayout.Button("Load data from JSON", GUILayout.Width(200), GUILayout.Height(30)))
         {
-            EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, true);
+            EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
         }
         GUILayout.Space(40);
         if (GUILayout.Button("Save data to JSON", GUILayout.Width(200), GUILayout.Height(30)))
         {
             EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
         }
+
+        //GUILayout.Space(40);
+        //if (GUILayout.Button("Pass TO Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.PassToWorkaround();
+        //}
+
+        //GUILayout.Space(40);
+        //if (GUILayout.Button("Pass FROM Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.PassFromWorkaround();
+        //}
     }
 
 
@@ -75,7 +87,7 @@ public class EnemyWaveSpawnerEditor : Editor
 
     private void ShowJSONInFolder(EnemyWaveSpawner enemyWaveSpawner)
     {
-        string pathToDirectory = EnemyWaveJSONManager.GetPathToDirectoryJSON(enemyWaveSpawner, true);
+        string pathToDirectory = EnemyWaveJSONManager.GetPathToDirectoryJSON(enemyWaveSpawner, false);
 
         if (Directory.Exists(pathToDirectory))
         {
@@ -90,7 +102,7 @@ public class EnemyWaveSpawnerEditor : Editor
 
     private void GenerateNewEmptyJSON(EnemyWaveSpawner enemyWaveSpawner)
     {
-        EnemyWaveJSONManager.GenerateNewEmptyJSON(enemyWaveSpawner, true);
+        EnemyWaveJSONManager.GenerateNewEmptyJSON(enemyWaveSpawner, false);
         ShowJSONInFolder(enemyWaveSpawner);
     }
 
