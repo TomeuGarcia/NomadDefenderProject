@@ -35,6 +35,7 @@ public class EnemyWaveSpawnerEditor : Editor
 
         DisplayInfoEnemyWaveSpawnerJSON(enemyWaveSpawner);
 
+        if (enemyWaveSpawner.IsIncorrect) return;
 
         if (jsonExists)
         {
@@ -56,8 +57,6 @@ public class EnemyWaveSpawnerEditor : Editor
             GUI.color = Color.white;
         }
 
-
-
         GUILayout.Space(40);
         if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
         {
@@ -75,16 +74,30 @@ public class EnemyWaveSpawnerEditor : Editor
     {
         GUILayout.Space(20);       
         
-        GUILayout.Label("JSON data:");
         if (enemyWaveSpawner.IsIncorrect)
         {
             GUI.color = Color.red;
             GUILayout.Label("Incorrect EnemyWaveSpawer Name");
             GUI.color = Color.white;
+
+            GUI.color = Color.cyan;
+            GUILayout.Label("NAMING GUIDE:");
+            GUI.color = Color.white;
+            GUILayout.Label("first char --> E (Early), M (Mid), L (Late)");
+            GUILayout.Label("second char --> 1 (1 Node), 2 (2 Nodes)");
+            GUILayout.Label("follow with --> _PepeSmile (Level Name)");
+            GUILayout.Label("finish with --> _Enemies1 (Spawner n1), _Enemies2 (Spawner n2), etc.");
+            GUILayout.Space(2);
+            GUI.color = Color.cyan;
+            GUILayout.Label("EXAMPLE --> E1_LevelName_Enemies1");
+            GUILayout.Label("                        (Early, 1 Node, Spawner n1)");
+            GUI.color = Color.white;
+            GUILayout.Space(20);
         }
 
-        GUILayout.Space(4);
 
+        GUILayout.Label("JSON data:");
+        GUILayout.Space(4);
         GUILayout.Label("Folder (Level) Name --> " + enemyWaveSpawner.NameLevel);
         GUILayout.Label("JSON Name --> " + enemyWaveSpawner.NameJSON);
         GUILayout.Label("Progression State --> " + enemyWaveSpawner.ProgressionState.ToString());
