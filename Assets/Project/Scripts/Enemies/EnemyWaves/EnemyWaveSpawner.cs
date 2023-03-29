@@ -12,7 +12,7 @@ public class EnemyWaveSpawner : ScriptableObject
     private float waveMultiplierCoef = 0.0f;
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
-    private EnemyWave[] enemyWaves;
+    [SerializeField] private EnemyWave[] enemyWaves;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;

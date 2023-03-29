@@ -38,6 +38,17 @@ public class EnemyWaveSpawnerEditor : Editor
         {
             GenerateNewEmptyJSON(enemyWaveSpawner);
         }
+
+        GUILayout.Space(30);
+        if (GUILayout.Button("Load data from JSON", GUILayout.Width(200), GUILayout.Height(30)))
+        {
+            EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, true);
+        }
+        GUILayout.Space(40);
+        if (GUILayout.Button("Save data to JSON", GUILayout.Width(200), GUILayout.Height(30)))
+        {
+            EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
+        }
     }
 
 
@@ -45,7 +56,7 @@ public class EnemyWaveSpawnerEditor : Editor
     {
         GUILayout.Space(20);       
         
-        GUILayout.Label("JSON data");
+        GUILayout.Label("JSON data:");
         if (enemyWaveSpawner.IsIncorrect)
         {
             GUI.color = Color.red;
@@ -55,11 +66,11 @@ public class EnemyWaveSpawnerEditor : Editor
 
         GUILayout.Space(4);
 
-        GUILayout.Label("Folder (Level) Name: " + enemyWaveSpawner.NameLevel);
-        GUILayout.Label("JSON Name: " + enemyWaveSpawner.NameJSON);
-        GUILayout.Label("Progression State: " + enemyWaveSpawner.ProgressionState.ToString());
-        GUILayout.Label("Num nodes: " + enemyWaveSpawner.NumNodes.ToString());
-        GUILayout.Label("Is Tutorial: " + enemyWaveSpawner.IsTutorial.ToString());      
+        GUILayout.Label("Folder (Level) Name --> " + enemyWaveSpawner.NameLevel);
+        GUILayout.Label("JSON Name --> " + enemyWaveSpawner.NameJSON);
+        GUILayout.Label("Progression State --> " + enemyWaveSpawner.ProgressionState.ToString());
+        GUILayout.Label("Num nodes --> " + enemyWaveSpawner.NumNodes.ToString());
+        GUILayout.Label("Is Tutorial --> " + enemyWaveSpawner.IsTutorial.ToString());      
     }
 
     private void ShowJSONInFolder(EnemyWaveSpawner enemyWaveSpawner)
