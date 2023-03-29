@@ -13,6 +13,7 @@ public class EnemyWaveSpawner : ScriptableObject
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
+    //[SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
@@ -114,6 +115,23 @@ public class EnemyWaveSpawner : ScriptableObject
         isTutorial = name[3] == 'T';
     }
 
+    //public void SaveToWorkaround()
+    //{
+    //    enemyWavesWorkaround = new EnemyWaveWorkaround[enemyWaves.Length];
+    //    for (int i = 0; i < enemyWaves.Length; i++)
+    //    {
+    //        enemyWavesWorkaround[i] = new EnemyWaveWorkaround(enemyWaves[i]);
+    //    }
+    //}
+    //public void LoadFromWorkaround()
+    //{
+    //    enemyWaves = new EnemyWave[enemyWavesWorkaround.Length];
+    //    for (int i = 0; i < enemyWaves.Length; i++)
+    //    {
+    //        enemyWaves[i] = new EnemyWave(enemyWavesWorkaround[i]);
+    //    }
+    //}
+
 
     public void SetEnemyWaves(EnemyWave[] enemyWaves)
     {
@@ -145,23 +163,18 @@ public class EnemyWaveSpawner : ScriptableObject
         }
         else
         {
-            /*
-            foreach (Enemy.EnemyType enemyType in enemyWaves[currentWave].enemies)
-            {
-                if (stopForced) break;
-
-                SpawnEnemy(enemyType, spawnTransform);
-
-                yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
-            }
-            */
             foreach (EnemyInWave enemyInWave in enemyWaves[currentWave].enemiesInWave)
             {
                 if (stopForced) break;
 
-                SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+                for (int i = 0; i < enemyInWave.NumberOfSpawns; ++i)
+                {
+                    if (stopForced) break;
 
-                yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn);
+                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+
+                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn);
+                }                
             }
         }
         
