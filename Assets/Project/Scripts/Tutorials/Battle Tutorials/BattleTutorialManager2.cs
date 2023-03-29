@@ -214,10 +214,12 @@ public class BattleTutorialManager2 : MonoBehaviour
         card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
 
         turretSpawnParticles.Play();
+
+        GameAudioManager.GetInstance().PlayWatcherCard();
         yield return new WaitForSeconds(1.0f);
 
         PlaceSelectedBuilding(watcherCardTile, card);
-
+        
         //Wait until Wathcer's turret is placed
         yield return new WaitForSecondsRealtime(0.25f);
 

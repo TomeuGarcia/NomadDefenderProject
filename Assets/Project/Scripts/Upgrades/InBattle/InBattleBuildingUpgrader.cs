@@ -472,6 +472,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         button.transform.DOScale(Vector3.one * 1.1f, duration);
 
         backFillBar.fillAmount = backFill;
+
+        GameAudioManager.GetInstance().PlayCardInfoShown();
     }
 
     protected void EmptyStatBar(Image bar, Image button, Image backFillBar, float backFill)

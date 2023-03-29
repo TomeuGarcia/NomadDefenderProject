@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameAudioManager : MonoBehaviour
@@ -39,6 +40,7 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("CARDS PLAYED")]
     [SerializeField] private AudioSource cardPlayedAudioSource;
+    [SerializeField] private AudioSource watcherCardPlayedAudioSource;
 
 
 
@@ -81,9 +83,12 @@ public class GameAudioManager : MonoBehaviour
     [Header("OVERWORLD MAP")]
     [SerializeField] private AudioSource nodeAudioSource;
     [SerializeField] private AudioSource sparkAudioSource;
-
     [SerializeField] private AudioSource nodeSpawnAudioSource;
+    [SerializeField] private AudioSource[] doorAudioSources;
 
+
+    [Header("GLITCH")]
+    [SerializeField] private AudioSource[] glitchAudioSoruces;
 
     [Header("BACKGROUND")]
     [SerializeField] private AudioSource droneAudioSource;
@@ -398,6 +403,10 @@ public class GameAudioManager : MonoBehaviour
 
         cardPlayedAudioSource.Play();
     }
+    public void PlayWatcherCard()
+    {
+        watcherCardPlayedAudioSource.Play();
+    }
 
 
     // In-Battle Upgrades
@@ -530,11 +539,37 @@ public class GameAudioManager : MonoBehaviour
         sparkAudioSource.pitch = Random.Range(0.8f, 1.2f);
         sparkAudioSource.Play();
     }
-    
+
     public void PlayNodeSelectedSound()
     {
         nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeAudioSource.Play();
+    }
+
+    public void PlayDoorSound(int soundIndex)
+    {
+        doorAudioSources[soundIndex].Play();
+    }
+
+
+
+
+
+
+
+    // Glitch
+
+    public void PlayRandomGlitchSound()
+    {
+        AudioSource randomGlitch = glitchAudioSoruces[Random.Range(0, glitchAudioSoruces.Count())];
+        randomGlitch.pitch = Random.Range(0.8f, 1.2f);
+        randomGlitch.Play();
+    }
+
+    public void PlayGlitchSound(int index)
+    {
+        glitchAudioSoruces[index].pitch = Random.Range(0.8f, 1.2f);
+        glitchAudioSoruces[index].Play();
     }
 
 

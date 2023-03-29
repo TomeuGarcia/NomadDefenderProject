@@ -542,6 +542,11 @@ PrefabInstance:
       propertyPath: isTutorial
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4948425903104012036, guid: d71f158007282074daee472804ee6638,
+        type: 3}
+      propertyPath: consoleDialogSystem
+      value: 
+      objectReference: {fileID: 1350802309}
     - target: {fileID: 7970320519034075816, guid: d71f158007282074daee472804ee6638,
         type: 3}
       propertyPath: m_IsActive
@@ -778,11 +783,11 @@ MonoBehaviour:
   - textType: 0
     text: Loading new <color=#E36818>Clean Strike</color> base card...
     clearTime: 0
-  - textType: 0
-    text: '/Info> Base cards contain the <color=#1DFF5F>RANGE</color> stat '
+  - textType: 4
+    text: 'Base cards contain the <color=#1DFF5F>RANGE</color> stat '
     clearTime: 0
-  - textType: 0
-    text: /Info> Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
+  - textType: 4
+    text: Base cards can have a <color=#E36818>PASSIVE ABILITY</color>
     clearTime: 0
   - textType: 3
     text: Effectuate replacement
@@ -794,7 +799,7 @@ MonoBehaviour:
     text: Successful card level up
     clearTime: 0
   - textType: 0
-    text: Card already max level
+    text: Card already MAX level
     clearTime: 0
   - textType: 0
     text: Upgrade completed

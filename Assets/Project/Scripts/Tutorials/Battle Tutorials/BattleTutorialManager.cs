@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using static InBattleBuildingUpgrader;
@@ -40,6 +41,11 @@ public class BattleTutorialManager : MonoBehaviour
 
 
     [SerializeField] private TDGameManager tDGameManager;
+
+    [Header("GLITCH")]
+    [SerializeField] private Volume globalVolume;
+    [SerializeField] private VolumeProfile initVol;
+    [SerializeField] private VolumeProfile glitchVol;
 
     private bool waveFinished = false;
 
@@ -257,7 +263,8 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //16
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
+        scriptedSequence.Clear();
 
         scriptedSequence.NextLine();//17
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -303,6 +310,19 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(4.0f);
 
+        yield return new WaitForSecondsRealtime(1.0f);
+        GameAudioManager.GetInstance().PlayGlitchSound(2);
+        globalVolume.profile = glitchVol;
+        yield return new WaitForSecondsRealtime(0.2f);
+        globalVolume.profile = initVol;
+        yield return new WaitForSecondsRealtime(0.2f);
+        globalVolume.profile = glitchVol;
+        yield return new WaitForSecondsRealtime(0.1f);
+        globalVolume.profile = initVol;
+        yield return new WaitForSecondsRealtime(0.1f);
+        globalVolume.profile = glitchVol;
+        yield return new WaitForSecondsRealtime(0.1f);
+        globalVolume.profile = initVol;
 
         scriptedSequence.NextLine(); //24
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
