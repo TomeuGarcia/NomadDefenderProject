@@ -57,16 +57,33 @@ public class EnemyWaveSpawnerEditor : Editor
             GUI.color = Color.white;
         }
 
-        GUILayout.Space(40);
-        if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
+        if (jsonExists)
         {
-            EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
+            GUILayout.Space(40);
+            if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
+            }
+            GUILayout.Space(20);
+            if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
+            }
         }
-        GUILayout.Space(20);
-        if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
-        {
-            EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
-        }
+
+        //GUILayout.Space(40);
+        //if (GUILayout.Button("Save to Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.SaveToWorkaround();
+        //}
+        //GUILayout.Space(20);
+        //if (GUILayout.Button("Load from Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.LoadFromWorkaround();
+        //}
+
+
+        PrintEnemyTypeLegend();
     }
 
 
@@ -124,6 +141,21 @@ public class EnemyWaveSpawnerEditor : Editor
     {
         EnemyWaveJSONManager.GenerateNewEmptyJSON(enemyWaveSpawner, false);
         ShowJSONInFolder(enemyWaveSpawner);
+    }
+
+
+    private void PrintEnemyTypeLegend()
+    {
+        GUILayout.Space(20);
+
+        GUI.color = Color.yellow;
+        GUILayout.Label("ENEMY TYPE LEGEND");
+        GUI.color = Color.white;
+
+        for (int enemyTypeI = 0; enemyTypeI < (int)Enemy.EnemyType.COUNT; ++enemyTypeI)
+        {
+            GUILayout.Label(((Enemy.EnemyType)enemyTypeI).ToString() + " = " + enemyTypeI.ToString());
+        }
     }
 
 }
