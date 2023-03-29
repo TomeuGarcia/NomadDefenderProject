@@ -63,6 +63,7 @@ public class OWCameraMovement : MonoBehaviour
 
     private IEnumerator LateMoveToNextLevel()
     {
+        canDrag = false;
         transform.position = originalPos;
         yield return new WaitForSeconds(1.5f);
 
@@ -79,12 +80,5 @@ public class OWCameraMovement : MonoBehaviour
         float timeToReset = 0.5f;
 
         transform.DOMove(originalPos, timeToReset);
-        StartCoroutine(ResetDragInTime(timeToReset));
-    }
-
-    private IEnumerator ResetDragInTime(float timeToReset)
-    {
-        yield return new WaitForSeconds(timeToReset);
-        canDrag = true;
     }
 }

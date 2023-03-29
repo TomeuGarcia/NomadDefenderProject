@@ -50,7 +50,6 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
     // Functionality
     private void SetupTexts(NodeEnums.BattleType battleType)
     {
-        Debug.Log(nextLevelNodes);
         nodeTitleText.text = "\\BATTLE> " + nextLevelNodes + " Loc.";
         difficultyText.text = difficultyStr + nodeDifficultyToText[(int)battleType];
     }

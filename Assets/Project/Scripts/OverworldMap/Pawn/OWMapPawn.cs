@@ -84,6 +84,7 @@ public class OWMapPawn : MonoBehaviour
 
     public void MoveCameraToNextLevel()
     {
+        ActivateCamera();
         followCamera.MoveToNextLevel();
     }
 }
