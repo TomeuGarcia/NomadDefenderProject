@@ -3789,7 +3789,7 @@ PrefabInstance:
     - target: {fileID: 9127367227775904204, guid: 6f08554c8ef300e4e89253fc6f89afea,
         type: 3}
       propertyPath: testing
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9127367227775904204, guid: 6f08554c8ef300e4e89253fc6f89afea,
         type: 3}
@@ -13020,7 +13020,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622336005}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.05, z: 3.725027}
+  m_LocalPosition: {x: 0, y: -0.3, z: 3.550027}
   m_LocalScale: {x: 0.25, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13212,7 +13212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635268764}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.05, z: 8.75}
+  m_LocalPosition: {x: 0, y: -0.05, z: 7}
   m_LocalScale: {x: 4, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14445,6 +14445,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4267870701329988558, guid: 9170c7e8082a36d42adc57afcac6beb3,
         type: 3}
+      propertyPath: textLines.Array.data[4].text
+      value: Loading <color=#32E8E8>Upgrade Nodes</color>
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267870701329988558, guid: 9170c7e8082a36d42adc57afcac6beb3,
+        type: 3}
+      propertyPath: textLines.Array.data[5].text
+      value: Loading <color=#ff6e1e>Battle Nodes</color>
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267870701329988558, guid: 9170c7e8082a36d42adc57afcac6beb3,
+        type: 3}
       propertyPath: textLines.Array.data[8].text
       value: Select a node connected to yours
       objectReference: {fileID: 0}
@@ -14516,7 +14526,7 @@ PrefabInstance:
     - target: {fileID: 8526640573310045794, guid: 9170c7e8082a36d42adc57afcac6beb3,
         type: 3}
       propertyPath: testing
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8526640573310045794, guid: 9170c7e8082a36d42adc57afcac6beb3,
         type: 3}
@@ -17551,7 +17561,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144565227}
   m_LocalRotation: {x: 0.60876137, y: -0, z: -0, w: 0.7933534}
-  m_LocalPosition: {x: 10052, y: 0, z: 17}
+  m_LocalPosition: {x: 10052, y: -0.35000002, z: 15.749729}
   m_LocalScale: {x: 1, y: 0.9999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17773,6 +17783,36 @@ PrefabInstance:
       propertyPath: owMapTutorial
       value: 
       objectReference: {fileID: 1229604194}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: upgradeLevels.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[0].nodeI
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[1].nodeI
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[0].levelI
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[1].levelI
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: battleLevels.Array.data[2].levelI
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2751831903000843238, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
       propertyPath: m_IsActive
@@ -17957,7 +17997,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5745141275893628020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.35000002, z: -1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
