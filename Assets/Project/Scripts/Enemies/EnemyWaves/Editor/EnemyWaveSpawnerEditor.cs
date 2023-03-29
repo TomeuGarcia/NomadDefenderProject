@@ -67,6 +67,21 @@ public class EnemyWaveSpawnerEditor : Editor
         {
             EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
         }
+
+
+        //GUILayout.Space(40);
+        //if (GUILayout.Button("Save to Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.SaveToWorkaround();
+        //}
+        //GUILayout.Space(20);
+        //if (GUILayout.Button("Load from Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.LoadFromWorkaround();
+        //}
+
+
+        PrintEnemyTypeLegend();
     }
 
 
@@ -124,6 +139,21 @@ public class EnemyWaveSpawnerEditor : Editor
     {
         EnemyWaveJSONManager.GenerateNewEmptyJSON(enemyWaveSpawner, false);
         ShowJSONInFolder(enemyWaveSpawner);
+    }
+
+
+    private void PrintEnemyTypeLegend()
+    {
+        GUILayout.Space(20);
+
+        GUI.color = Color.yellow;
+        GUILayout.Label("ENEMY TYPE LEGEND");
+        GUI.color = Color.white;
+
+        for (int enemyTypeI = 0; enemyTypeI < (int)Enemy.EnemyType.COUNT; ++enemyTypeI)
+        {
+            GUILayout.Label(((Enemy.EnemyType)enemyTypeI).ToString() + " = " + enemyTypeI.ToString());
+        }
     }
 
 }
