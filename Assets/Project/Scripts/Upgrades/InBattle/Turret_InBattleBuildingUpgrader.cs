@@ -11,7 +11,6 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private CanvasGroup cgAttackStat;
     [SerializeField] private Image attackIcon;
     [SerializeField] private Button attackButton;
-    [SerializeField] private Image attackBackgroundButtonImage;
     [SerializeField] private Image attackButtonImage;
     [SerializeField] private Image attackBackFillImage;
     [SerializeField] private Image attackBarToCurrencyCost;
@@ -77,7 +76,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(attackIcon.transform);
         }
 
-        if (IsStatMaxed(attackLvl)) attackButton.interactable = false;
+        if (IsStatMaxed(attackLvl)) DisableButton(attackButton, attackButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
     protected override void UpdateCadenceBar()
@@ -91,7 +90,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(fireRateIcon.transform);
         }
 
-        if (IsStatMaxed(cadenceLvl)) fireRateButton.interactable = false;
+        if (IsStatMaxed(cadenceLvl)) DisableButton(fireRateButton, fireRateButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
     protected override void UpdateRangeBar()
@@ -105,15 +104,20 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(rangeIcon.transform);
         }
 
-        if (IsStatMaxed(rangeLvl)) rangeButton.interactable = false;
+        if (IsStatMaxed(rangeLvl)) DisableButton(rangeButton, rangeButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
 
+    protected void DisableButton(Button button, Image buttonImage)
+    {
+        button.interactable = false;
+        buttonImage.color = new Color(0.3f, 0.3f, 0.3f);
+    }
     protected override void DisableButtons()
     {
-        attackButton.interactable = false;
-        fireRateButton.interactable = false;
-        rangeButton.interactable = false;
+        DisableButton(attackButton, attackButtonImage);
+        DisableButton(fireRateButton, fireRateButtonImage);
+        DisableButton(rangeButton, rangeButtonImage);
     }
 
 
@@ -239,23 +243,23 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
 
 
-    public void FillAttackBar()
+    public void FillAttackBar() // Attack button hovered
     {
+        StopButtonBackgroundFade();
+
         if (!attackButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         FillStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)(attackLvl + 1) * turretFillBarCoef);
-
-        StopButtonBackgroundFade();
     }
-    public void FillFireRateBar()
+    public void FillFireRateBar() // FireRate button hovered
     {
         if (!fireRateButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
 
         FillStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)(cadenceLvl + 1) * turretFillBarCoef);
     }
-    public void FillRangeBar()
+    public void FillRangeBar() // Range button hovered
     {
         if (!rangeButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
@@ -264,7 +268,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
-    public void EmptyAttackBar()
+    public void EmptyAttackBar() // Attack button UN-hovered
     {
         if (!attackButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
@@ -273,14 +277,14 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         ButtonBackgroundFadeIn();
     }
-    public void EmptyFireRateBar()
+    public void EmptyFireRateBar() // FireRate button UN-hovered
     {
         if (!fireRateButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
 
         EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
     }
-    public void EmptyRangeBar()
+    public void EmptyRangeBar() // Range button UN-hovered
     {
         if (!rangeButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
@@ -291,18 +295,18 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void ButtonBackgroundFadeIn()
     {
-        attackBackgroundButtonImage.DOColor(new Color(0.3f, 0.3f, 0.3f, 1.0f), 1f).OnComplete(() => ButtonBackgroundFadeOut());
+        attackButton.transform.DOScale(1.2f, 1.0f).OnComplete(() => ButtonBackgroundFadeOut());
     }
 
     private void ButtonBackgroundFadeOut()
     {
-        attackBackgroundButtonImage.DOColor(Color.black, 1f).OnComplete(() => ButtonBackgroundFadeIn());
+        attackButton.transform.DOScale(1.0f, 1.0f).OnComplete(() => ButtonBackgroundFadeIn());
     }
 
     private void StopButtonBackgroundFade()
     {
-        attackBackgroundButtonImage.DOKill();
-        attackBackgroundButtonImage.color = Color.black;
+        attackButton.transform.DOKill();
+        attackButton.transform.localScale = Vector3.one * 1.1f;
     }
 
 }
