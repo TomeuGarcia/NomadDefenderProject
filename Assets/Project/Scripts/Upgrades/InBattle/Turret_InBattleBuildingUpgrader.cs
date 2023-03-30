@@ -11,6 +11,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private CanvasGroup cgAttackStat;
     [SerializeField] private Image attackIcon;
     [SerializeField] private Button attackButton;
+    [SerializeField] private Image attackBackgroundButtonImage;
     [SerializeField] private Image attackButtonImage;
     [SerializeField] private Image attackBackFillImage;
     [SerializeField] private Image attackBarToCurrencyCost;
@@ -172,9 +173,10 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (!IsStatMaxed(rangeLvl) && !isCardUpgradedToMax) rangeButtonImage.transform.DOPunchScale(Vector3.one * 0.2f, t3, 8);
 
         cgCostText.DOFade(1f, t1);
-        yield return new WaitForSeconds(t1);
+        yield return new WaitForSeconds(t1);        
 
         openAnimationCoroutine = null;
+        ButtonBackgroundFadeIn();
     }
 
 
@@ -231,6 +233,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         //yield return new WaitUntil(() => barImage.fillAmount > 0.001f);
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
+
+        StopButtonBackgroundFade();
     }
 
 
@@ -241,6 +245,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         FillStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)(attackLvl + 1) * turretFillBarCoef);
+
+        StopButtonBackgroundFade();
     }
     public void FillFireRateBar()
     {
@@ -264,6 +270,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
+
+        ButtonBackgroundFadeIn();
     }
     public void EmptyFireRateBar()
     {
@@ -279,4 +287,22 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
     }
+
+
+    private void ButtonBackgroundFadeIn()
+    {
+        attackBackgroundButtonImage.DOColor(new Color(0.3f, 0.3f, 0.3f, 1.0f), 1f).OnComplete(() => ButtonBackgroundFadeOut());
+    }
+
+    private void ButtonBackgroundFadeOut()
+    {
+        attackBackgroundButtonImage.DOColor(Color.black, 1f).OnComplete(() => ButtonBackgroundFadeIn());
+    }
+
+    private void StopButtonBackgroundFade()
+    {
+        attackBackgroundButtonImage.DOKill();
+        attackBackgroundButtonImage.color = Color.black;
+    }
+
 }
