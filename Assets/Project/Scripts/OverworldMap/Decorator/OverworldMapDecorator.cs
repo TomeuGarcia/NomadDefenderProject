@@ -121,7 +121,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
         // Spawn BattleNodeInfoDisplay
         OWMap_BattleNodeInfoDisplay battleNodeInfoDisplay = Instantiate(BattleNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_BattleNodeInfoDisplay>();
-        battleNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel), battleType);
+        battleNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel), battleType, nextLevelNodes);
         //battleNodeInfoDisplay.SetIsInteractableFalse();
     }
 

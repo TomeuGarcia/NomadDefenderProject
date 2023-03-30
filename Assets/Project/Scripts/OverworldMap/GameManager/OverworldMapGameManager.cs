@@ -109,6 +109,8 @@ public class OverworldMapGameManager : MonoBehaviour
         if (wasSelectedByPlayer)
         {
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
+
+            owMapPawn.ResetPosition();
         }
 
         // scuffed camera shake :)
