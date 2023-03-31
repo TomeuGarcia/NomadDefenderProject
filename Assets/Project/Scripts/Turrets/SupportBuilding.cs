@@ -136,9 +136,9 @@ public class SupportBuilding : RangeBuilding
         ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
         particleRenderer.sharedMaterial = buildingsUtils.SupportUpgradeParticleMat;
 
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
-        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
 
 }

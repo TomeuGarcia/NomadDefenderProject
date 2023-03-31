@@ -278,9 +278,9 @@ public class TurretBuilding : RangeBuilding
         }
 
 
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
-        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
 
 }
