@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 {
-
     [Header("Attack")]
     [SerializeField] private CanvasGroup cgAttackStat;
     [SerializeField] private Image attackIcon;
@@ -58,7 +57,10 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         {
             quickHoverBasePassiveImage.gameObject.SetActive(false);
         }
-        
+
+        if (IsStatMaxed(newAttackLvl)) DisableButton(attackButton, attackButtonImage);
+        if (IsStatMaxed(newCadenceLvl)) DisableButton(fireRateButton, fireRateButtonImage);
+        if (IsStatMaxed(newRangeLvl)) DisableButton(rangeButton, rangeButtonImage);
     }
 
 
@@ -76,7 +78,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(attackIcon.transform);
         }
 
-        if (IsStatMaxed(attackLvl)) attackButton.interactable = false;
+        if (IsStatMaxed(attackLvl)) DisableButton(attackButton, attackButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
     protected override void UpdateCadenceBar()
@@ -90,7 +92,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(fireRateIcon.transform);
         }
 
-        if (IsStatMaxed(cadenceLvl)) fireRateButton.interactable = false;
+        if (IsStatMaxed(cadenceLvl)) DisableButton(fireRateButton, fireRateButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
     protected override void UpdateRangeBar()
@@ -104,15 +106,16 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(rangeIcon.transform);
         }
 
-        if (IsStatMaxed(rangeLvl)) rangeButton.interactable = false;
+        if (IsStatMaxed(rangeLvl)) DisableButton(rangeButton, rangeButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
 
+
     protected override void DisableButtons()
     {
-        attackButton.interactable = false;
-        fireRateButton.interactable = false;
-        rangeButton.interactable = false;
+        DisableButton(attackButton, attackButtonImage);
+        DisableButton(fireRateButton, fireRateButtonImage);
+        DisableButton(rangeButton, rangeButtonImage);
     }
 
 
@@ -172,7 +175,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (!IsStatMaxed(rangeLvl) && !isCardUpgradedToMax) rangeButtonImage.transform.DOPunchScale(Vector3.one * 0.2f, t3, 8);
 
         cgCostText.DOFade(1f, t1);
-        yield return new WaitForSeconds(t1);
+        yield return new WaitForSeconds(t1);        
+
+        ButtonFadeIn(attackButton);
+        ButtonFadeIn(fireRateButton);
+        ButtonFadeIn(rangeButton);
 
         openAnimationCoroutine = null;
     }
@@ -231,26 +238,34 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         //yield return new WaitUntil(() => barImage.fillAmount > 0.001f);
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
+
+        StopAllButtonsFade(false, false, false);
     }
 
 
 
-    public void FillAttackBar()
+    public void FillAttackBar() // Attack button hovered
     {
+        StopAllButtonsFade(false, true, true);
+
         if (!attackButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         FillStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)(attackLvl + 1) * turretFillBarCoef);
     }
-    public void FillFireRateBar()
+    public void FillFireRateBar() // FireRate button hovered
     {
+        StopAllButtonsFade(true, false, true);
+
         if (!fireRateButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
 
         FillStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)(cadenceLvl + 1) * turretFillBarCoef);
     }
-    public void FillRangeBar()
+    public void FillRangeBar() // Range button hovered
     {
+        StopAllButtonsFade(true, true, false);
+
         if (!rangeButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
 
@@ -258,25 +273,66 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
-    public void EmptyAttackBar()
+    public void EmptyAttackBar() // Attack button UN-hovered
     {
         if (!attackButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
+
+        AllButtonsFadeIn();
     }
-    public void EmptyFireRateBar()
+    public void EmptyFireRateBar() // FireRate button UN-hovered
     {
         if (!fireRateButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
 
         EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
+
+        AllButtonsFadeIn();
     }
-    public void EmptyRangeBar()
+    public void EmptyRangeBar() // Range button UN-hovered
     {
         if (!rangeButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
 
         EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
+
+        AllButtonsFadeIn();
     }
+
+
+
+    private void AllButtonsFadeIn()
+    {
+        ButtonFadeIn(attackButton);
+        ButtonFadeIn(fireRateButton);
+        ButtonFadeIn(rangeButton);
+    }
+
+    private void StopAllButtonsFade(bool attackFadeOut, bool fireRateFadeOut, bool rangeFadeOut)
+    {
+        attackFadeOut = attackFadeOut && attackButton.interactable;
+        fireRateFadeOut = fireRateFadeOut && attackButton.interactable;
+        rangeFadeOut = rangeFadeOut && attackButton.interactable;
+
+        StopButtonFade(attackButton, attackFadeOut);
+        StopButtonFade(fireRateButton, fireRateFadeOut);
+        StopButtonFade(rangeButton, rangeFadeOut);
+    }
+
+    protected override void OnCanNotUpgradeAttack() 
+    {
+        ButtonPressedErrorFadeInOut(attackButton, attackBarToCurrencyCost);
+    }
+    protected override void OnCanNotUpgradeFireRate() 
+    {
+        ButtonPressedErrorFadeInOut(fireRateButton, fireBarToCurrencyCost);
+    }
+    protected override void OnCanNotUpgradeRange() 
+    {
+        ButtonPressedErrorFadeInOut(rangeButton, rangeBarToCurrencyCost);
+    }
+
+
 }
