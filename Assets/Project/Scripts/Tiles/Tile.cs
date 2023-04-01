@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileType { PATH, GRASS }
+    public enum TileType { PATH, GRASS, OBSTACLE }
 
 
     [SerializeField] public TileType tileType;

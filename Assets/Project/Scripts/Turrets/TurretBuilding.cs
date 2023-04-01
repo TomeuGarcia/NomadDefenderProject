@@ -2,8 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class TurretBuilding : RangeBuilding
 {
@@ -36,7 +34,6 @@ public class TurretBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private ParticleSystem upgradeParticles;
-    [SerializeField] private BuildingsUtils buildingsUtils;
 
 
 
@@ -282,5 +279,25 @@ public class TurretBuilding : RangeBuilding
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
     }
+
+
+    public override void SetBuildingPartsColor(Color color) 
+    {
+        bodyPart.SetMaterialColor(color);
+        basePart.SetMaterialColor(color);
+    }
+
+    public override void SetPreviewCanBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+    }
+
+    public override void SetPreviewCanNOTBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+    }
+
 
 }

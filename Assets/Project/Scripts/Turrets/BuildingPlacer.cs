@@ -9,6 +9,10 @@ public class BuildingPlacer : MonoBehaviour
     private Building selectedBuilding = null;
     private List<Building> placedBuildings = new List<Building>();
 
+    private Tile currentHoveredTile = null;
+    private bool placingEnabled = false;
+    private Coroutine dragAndDropCardCoroutine = null;
+
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
@@ -44,6 +48,9 @@ public class BuildingPlacer : MonoBehaviour
         Tile.OnTileSelected += TryPlaceBuilding;
 
         DisablePlacedBuildingsPlayerInteraction();
+
+        placingEnabled = true;
+        //dragAndDropCardCoroutine = StartCoroutine(ClickDropCoroutine());
     }
 
     public void DisablePlacing()
@@ -58,17 +65,35 @@ public class BuildingPlacer : MonoBehaviour
         }
 
         EnablePlacedBuildingsPlayerInteraction();
+
+        if (dragAndDropCardCoroutine != null) StopCoroutine(dragAndDropCardCoroutine);
+        placingEnabled = false;
+        currentHoveredTile = null;
     }
 
+
+    private IEnumerator ClickDropCoroutine()
+    {                
+        yield return new WaitUntil(() => Input.GetMouseButtonUp(0) || !placingEnabled); 
+
+        if (placingEnabled && currentHoveredTile != null)
+        {
+            TryPlaceBuilding(currentHoveredTile);
+        }
+
+        dragAndDropCardCoroutine = null;
+    }
 
 
     private void ShowBuildingOnTilePreview(Tile tile)
     {
+        currentHoveredTile = tile;
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
     }
 
     private void HideBuildingPreview()
     {
+        currentHoveredTile = null;
         HideSelectedBuilding();
     }
 
@@ -78,6 +103,11 @@ public class BuildingPlacer : MonoBehaviour
         if (CanPlaceSelectedBuildingOnTile(tile))
         {
             PlaceSelectedBuilding(tile);
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayError();
+            selectedBuilding.PlayCanNOTBePlacedColorPunch();
         }
     }
 
@@ -136,16 +166,24 @@ public class BuildingPlacer : MonoBehaviour
 
     private void ShowAndPositionSelectedBuilding(BuildingCard buildingCard, Building building, Tile tile)
     {
-        buildingCard.copyBuildingPrefab.SetActive(true);
-        buildingCard.copyBuildingPrefab.transform.position = tile.buildingPlacePosition;
+        building.gameObject.SetActive(true);
+        building.transform.position = tile.buildingPlacePosition;
         building.ShowRangePlane();
+
+        if (CanPlaceSelectedBuildingOnTile(tile))
+        {
+            building.SetPreviewCanBePlacedColor();
+        }
+        else
+        {
+            building.SetPreviewCanNOTBePlacedColor();
+        }
     }
 
     private void HideSelectedBuilding()
     {
         selectedBuildingCard.copyBuildingPrefab.SetActive(false);
         selectedBuilding.HideRangePlane();
-
     }
 
 
