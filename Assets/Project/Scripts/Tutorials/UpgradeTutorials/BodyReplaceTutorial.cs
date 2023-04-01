@@ -45,18 +45,11 @@ public class BodyReplaceTutorial : MonoBehaviour
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
-        scriptedSequence.Clear();
-
-
-        //Loading deck cards…
-        //[CARDS SHOW UP]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(0.5f);
-        cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
         yield return new WaitForSeconds(1.5f);
 
+        cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
+        yield return new WaitForSeconds(1.5f);
+        scriptedSequence.Clear();
 
         //Loading Spammer body card…
         //[SPAMMER PART SHOWS UP]
