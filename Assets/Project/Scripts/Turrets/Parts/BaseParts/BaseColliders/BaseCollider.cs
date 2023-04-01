@@ -31,5 +31,9 @@ public abstract class BaseCollider : MonoBehaviour
         //rangePlaneMaterial.SetFloat("_StartTimeFadeIn", Time.time);
     }
 
+    public void SetRangeColor(Color color)
+    {
+        rangePlaneMaterial.color = color;
+    }
 
 }
