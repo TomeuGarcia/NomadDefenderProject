@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class PathLocation : MonoBehaviour
 {
+    [Header("HEALTH")]
     [SerializeField] private int health = 3;
     public HealthSystem healthSystem { get; private set; }
 
-    [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material deadMaterial;
-    [SerializeField] private HealthHUD healthHUD;
+    [Header("HUD")]
+    [SerializeField] private LocationHealthHUD healthHUD;
 
     [Header("NODE VISUALS")]
     [SerializeField] private MeshRenderer nodeMesh;
@@ -67,12 +68,12 @@ public class PathLocation : MonoBehaviour
         if (healthSystem.IsDead())
         {
             Die();
-            locationMeshHolder.DOPunchScale(Vector3.up * 0.4f, 0.5f, 8);
+            locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.3f, 0.6f, 8);
             GameAudioManager.GetInstance().PlayLocationDestroyed();
         }
         else
         {
-            locationMeshHolder.DOPunchScale(Vector3.up * 0.6f, 0.6f, 8);
+            locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
             GameAudioManager.GetInstance().PlayLocationTakeDamage();
         }
 
@@ -81,8 +82,6 @@ public class PathLocation : MonoBehaviour
 
     private void Die()
     {
-        meshRenderer.material = deadMaterial;
-
         if (OnDeath != null) OnDeath();
     }
 
