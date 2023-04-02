@@ -9,6 +9,8 @@ public class DeckBuildingCards : MonoBehaviour
     
     private List<BuildingCard> cards;
 
+    public List<BuildingCard> Cards => cards;
+
 
     [Header("DECK")]
     [SerializeField] private Transform cardsHolder;
@@ -66,13 +68,13 @@ public class DeckBuildingCards : MonoBehaviour
 
     public BuildingCard GetTopCard()
     {
-        return GetCard(0);
+        return GetAndRemoveCard(0);
     }
     public BuildingCard GetRandomCard()
     {
-        return GetCard(Random.Range(0, cards.Count));
+        return GetAndRemoveCard(Random.Range(0, cards.Count));
     }
-    public BuildingCard GetCard(int cardI)
+    public BuildingCard GetAndRemoveCard(int cardI)
     {
         BuildingCard topCard = cards[cardI];
 

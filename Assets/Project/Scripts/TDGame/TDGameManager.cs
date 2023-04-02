@@ -8,8 +8,6 @@ public class TDGameManager : MonoBehaviour
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
-    [Header("Base Path Location")]
-    [SerializeField] private PathLocation basePathLocation;
 
     [Header("Canvas")]
     [SerializeField] private GameObject victoryHolder;
@@ -19,6 +17,7 @@ public class TDGameManager : MonoBehaviour
 
 
     public delegate void TDGameManagerAction();
+    public static event TDGameManagerAction OnGameFinishStart;
     public static event TDGameManagerAction OnVictoryComplete;
     public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
@@ -32,6 +31,7 @@ public class TDGameManager : MonoBehaviour
     private BattleStateResult battleStateResult;
     [Header("PATH LOCATIONS")]
     [SerializeField] private PathLocation[] pathLocations;
+    private int numAliveLocations = 0;
 
 
     [SerializeField] private bool hasToSendBattleState = true;
@@ -46,19 +46,56 @@ public class TDGameManager : MonoBehaviour
 
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
+
+        numAliveLocations = pathLocations.Length;        
+
+        InitLocationsVisuals();
     }    
 
 
     private void OnEnable()
     {
-        basePathLocation.OnDeath += GameOver;
         EnemyWaveManager.OnAllWavesFinished += CheckVictory;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            pathLocations[i].OnDeath += DecreaseAliveLocationsAndCheckGameOver;
+        }
     }
 
     private void OnDisable()
     {
-        basePathLocation.OnDeath -= GameOver;
         EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            pathLocations[i].OnDeath -= DecreaseAliveLocationsAndCheckGameOver;
+        }
+    }
+
+    private void InitLocationsVisuals()
+    {
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            OWMap_Node owMapNode = battleStateResult.nodeResults[i].owMapNode;
+            
+            pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
+        }        
+    }
+
+
+    private bool HasAliveLocationsLeft()
+    {
+        return numAliveLocations > 0;
+    }
+
+    private void DecreaseAliveLocationsAndCheckGameOver()
+    {
+        --numAliveLocations;
+        if (!HasAliveLocationsLeft())
+        {
+            GameOver();
+        }
     }
 
     private void GameOver()
@@ -68,14 +105,13 @@ public class TDGameManager : MonoBehaviour
 
         StartCoroutine(GameOverAnimation());
 
-        basePathLocation.OnDeath -= GameOver;
-
         if (OnGameOverStart != null) OnGameOverStart();
+        if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
     private void CheckVictory()
     {
-        if (!basePathLocation.healthSystem.IsDead())
+        if (HasAliveLocationsLeft())
         {
             Victory();
         }
@@ -86,6 +122,7 @@ public class TDGameManager : MonoBehaviour
         SetBattleStateResult();
 
         StartCoroutine(VictoryAnimation());
+        if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
 
@@ -96,8 +133,7 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();
-        //if (OnGameOverComplete != null) OnGameOverComplete();
+        mapSceneNotifier.InvokeOnSceneFinished();        
     }
 
     private IEnumerator VictoryAnimation()
@@ -107,8 +143,7 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();
-        //if (OnVictoryComplete != null) OnVictoryComplete(); // 
+        mapSceneNotifier.InvokeOnSceneFinished();        
     }
 
     public void ForceFinishScene()
@@ -129,7 +164,7 @@ public class TDGameManager : MonoBehaviour
         }
     }
 
-    public NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
+    public static NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
     {
         if (healthSystem.IsDead())
             return NodeEnums.HealthState.DESTROYED;

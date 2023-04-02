@@ -1,8 +1,7 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class TurretBuilding : RangeBuilding
 {
@@ -32,6 +31,12 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
 
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+    [SerializeField] private ParticleSystem upgradeParticles;
+
+
+
     public int CardLevel { get; private set; }
 
 
@@ -45,7 +50,8 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        currentShootTimer = 0.0f;        
+        currentShootTimer = 0.0f;
+        placedParticleSystem.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -67,7 +73,7 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
     }
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
@@ -75,6 +81,8 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
 
@@ -97,7 +105,9 @@ public class TurretBuilding : RangeBuilding
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
     }
@@ -134,7 +144,7 @@ public class TurretBuilding : RangeBuilding
     {
         if (currentShootTimer < stats.cadence)
         {
-            currentShootTimer += Time.deltaTime;
+            currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
 
@@ -173,10 +183,18 @@ public class TurretBuilding : RangeBuilding
     private void Shoot(Enemy enemyTarget)
     {
         TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
-        currentAttack.transform.position = bodyPart.GetNextShootingPoint();
+        Vector3 shootPoint = bodyPart.GetNextShootingPoint();
+        currentAttack.transform.position = shootPoint;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.Init(enemyTarget, this);
+
+
+        // Spawn particle
+        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        temp.gameObject.SetActive(true);
+        temp.transform.parent = gameObject.transform.parent;
+
 
         enemyTarget.ChangeMat();
 
@@ -210,6 +228,76 @@ public class TurretBuilding : RangeBuilding
     {
         HideRangePlane();
         EnableFunctionality();
+
+        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
+     
+        placedParticleSystem.gameObject.SetActive(true);
+        placedParticleSystem.Play();
+
+        upgrader.OnBuildingOwnerPlaced();
+
+        InvokeOnBuildingPlaced();
     }
+
+
+    public override void ShowQuickLevelUI()
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI()
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+    
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        
+
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        if (upgradeType == TurretUpgradeType.ATTACK)
+        {            
+            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.CADENCE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
+        }
+        else //(upgradeType == TurretUpgradeType.RANGE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
+        }
+
+
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+    }
+
+
+    public override void SetBuildingPartsColor(Color color) 
+    {
+        bodyPart.SetMaterialColor(color);
+        basePart.SetMaterialColor(color);
+    }
+
+    public override void SetPreviewCanBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+    }
+
+    public override void SetPreviewCanNOTBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+    }
+
 
 }

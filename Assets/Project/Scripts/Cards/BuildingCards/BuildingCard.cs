@@ -54,6 +54,12 @@ public abstract class BuildingCard : MonoBehaviour
     private Vector3 startRotation_euler;
     private Vector3 local_standardRotation_euler;
 
+    private Vector3 hiddenRootPosition;
+    private Vector3 shownRootPosition;
+    public Vector3 ShownRootPosition => shownRootPosition;
+    public Vector3 HiddenRootPosition => hiddenRootPosition;
+
+
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
     private Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
@@ -85,18 +91,29 @@ public abstract class BuildingCard : MonoBehaviour
     private const float canNotBePlayedAnimDuration = 0.5f;
 
 
+
+    [HideInInspector] public bool isMissingDefaultCallbacks = false;
     public delegate void BuildingCardAction(BuildingCard buildingCard);
     public event BuildingCardAction OnCardHovered;
     public event BuildingCardAction OnCardUnhovered;
     public event BuildingCardAction OnCardSelected;
     public event BuildingCardAction OnCardInfoSelected;
 
+    public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
+
     public event BuildingCardAction OnCardSelectedNotHovered;
     public event BuildingCardAction OnGetSaved;
+
+
+    public delegate void BuildingCardAction2();
+    public static event BuildingCardAction2 OnInfoShown;
 
     public delegate void CardFunctionPtr();
 
     public bool AlreadyCanBeHovered => OnCardHovered != null;
+
+    [HideInInspector] public bool isInteractable = true;
+    [HideInInspector] public bool canBeHovered = true;
 
 
     // MonoBehaviour methods
@@ -117,6 +134,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
 
@@ -127,6 +145,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
 
@@ -137,7 +156,9 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseDown() // only called by Left Click
     {
+        if (!canBeHovered) return;
         if (isRepositioning) return;
+        if (!isInteractable) return;
         if (isPlayingDrawAnimation) return;
         
         if (cardState == CardStates.HOVERED)
@@ -152,7 +173,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void Update()
     {
-        if (canInfoInteract && Input.GetMouseButtonDown(1))
+        if (canBeHovered && canInfoInteract && Input.GetMouseButtonDown(1) && isInteractable)
         {
             if (cardState == CardStates.HOVERED)
             {
@@ -193,6 +214,8 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
 
         isShowingInfo = false;
+
+        isInteractable = true;
     }
 
 
@@ -237,19 +260,28 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = Vector3.zero;
     }
 
-    public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement)
+    public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
+    {
+        InitPositions(CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition);
+    }
+    public void InitPositions(Vector3 standardLocalPosition, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
     {
         //ResetCardPosition();
 
-        local_standardPosition = CardTransform.localPosition;
-        local_hoveredPosition = CardTransform.localPosition + HoveredTranslation;
+        local_standardPosition = standardLocalPosition;
+        local_hoveredPosition = local_standardPosition + HoveredTranslation;
         //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
         startRotation_euler = transform.rotation.eulerAngles;
         local_standardRotation_euler = transform.rotation.eulerAngles;
         this.hiddenDisplacement = hiddenDisplacement;
 
+        shownRootPosition = finalPosition;
+        //shownRootPosition = RootCardTransform.position;
+        hiddenRootPosition = shownRootPosition + hiddenDisplacement;
+                
         standardPosition = CardTransform.position;
-        hoveredPosition = CardTransform.position + HoveredTranslation;
+        hoveredPosition = standardPosition + HoveredTranslation;
+
         this.selectedPosition = selectedPosition;
     }
 
@@ -283,7 +315,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
     }
 
-    public void SelectedState(bool repositionColliderOnEnd = false)
+    public void SelectedState(bool repositionColliderOnEnd = false, bool enableInteractionOnEnd = false)
     {
         cardState = CardStates.SELECTED;
 
@@ -292,7 +324,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
         CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => { EnableMouseInteraction(); 
+            .OnComplete(() => { if (enableInteractionOnEnd) EnableMouseInteraction(); 
                                 if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
             });
     }
@@ -325,12 +357,18 @@ public abstract class BuildingCard : MonoBehaviour
     public void EnableMouseInteraction()
     {
         cardCollider.enabled = true;
+        //Debug.Log("Interaction ON");
     }
     public void DisableMouseInteraction()
     {
         cardCollider.enabled = false;
+        //Debug.Log("Interaction OFF");
     }
 
+    public void ReenableMouseInteraction()
+    {
+        StartCoroutine(ScuffedreinableMouseInteraction());
+    }
     private IEnumerator ScuffedreinableMouseInteraction()
     {
         DisableMouseInteraction();
@@ -347,6 +385,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
+        if (OnInfoShown != null) OnInfoShown();
     }
     public virtual void HideInfo()
     {

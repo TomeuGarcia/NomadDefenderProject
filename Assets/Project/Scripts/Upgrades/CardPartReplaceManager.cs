@@ -20,6 +20,8 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
+    public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
+    public CardPartHolder CardPartHolder => cardPartHolder;
 
     private enum PartType { ATTACK, BODY, BASE }
     [Header("TYPE")]
@@ -36,21 +38,30 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+    private TurretPartAttack[] tutorialTurretPartAttacks;
+    private TurretPartBody[] tutorialTurretPartBodies;
+    private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
+
 
     [Header("SUBTRACT CARD PLAY COST")]
     [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
 
 
     [Header("COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
     [SerializeField] private Animator buttonAnimator;
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
 
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+    [SerializeField] TextLine textLine;
+    [SerializeField] bool isTutorial;
+
     private bool replacementDone = false;
+    public bool ReplacementDone => replacementDone;
 
     private bool cardIsReady = false;
     private bool partIsReady = false;
+    [HideInInspector] public bool canFinalRetrieveCard = true;
 
     [Header("MATERIALS")]
     [SerializeField] private MeshRenderer buttonMeshRenderer;
@@ -66,6 +77,10 @@ public class CardPartReplaceManager : MonoBehaviour
     public static event CarPartReplaceManagerAction OnReplacementStart;
     public static event CarPartReplaceManagerAction OnReplacementDone;
 
+
+    // TUTORIAL
+    private bool partsCreatedByTutorial = false;
+
     
 
     private void Start()
@@ -76,6 +91,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
         SetButtonNotReady();
         Init();
+
+        PlayCardAndCardPartsAppearAnimation();
     }
 
     private void OnEnable()
@@ -129,10 +146,19 @@ public class CardPartReplaceManager : MonoBehaviour
             }
         }
 
+        if (!partsCreatedByTutorial)
+        {
+            if (partType == PartType.ATTACK) InitAttacksRandom();
+            else if (partType == PartType.BODY) InitBodiesRandom();
+            else if (partType == PartType.BASE) InitBasesRandom();
+        }
+        else
+        {
+            if (partType == PartType.ATTACK) InitAttacksTutorial();
+            else if (partType == PartType.BODY) InitBodiesTutorial();
+            else if (partType == PartType.BASE) InitBasesTutorial();
+        }
 
-        if (partType == PartType.ATTACK) InitAttacks();
-        else if (partType == PartType.BODY) InitBodies();
-        else if (partType == PartType.BASE) InitBases();
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
         for (int i = 0; i < deckCards.Count; ++i)
@@ -146,51 +172,87 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.Init(randomCards.ToArray());
     }
 
-    private void InitAttacks()
-    {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
 
+    public void AwakeSetupTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    {
+        partsCreatedByTutorial = true;
+        tutorialTurretPartAttacks = turretPartAttacks;
+    }
+    private void InitAttacksTutorial()
+    {
+        numParts = tutorialTurretPartAttacks.Length;
+        InitAttacks(tutorialTurretPartAttacks);
+    }
+    private void InitAttacksRandom()
+    {
+        InitAttacks(partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitAttacks(TurretPartAttack[] attacks)
+    {
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].turretPartAttack = randomAttacks[i];
+            parts[i].turretPartAttack = attacks[i];
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's ATTACK with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true, 2f);
     }
 
-    private void InitBodies()
-    {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
 
+    public void AwakeSetupTutorialBodies(TurretPartBody[] turretPartBodies)
+    {
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBodies = turretPartBodies;
+    }
+    private void InitBodiesTutorial()
+    {
+        numParts = tutorialTurretPartBodies.Length;
+        InitBodies(tutorialTurretPartBodies);
+    }
+    private void InitBodiesRandom()
+    {
+        InitBodies(partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBodies(TurretPartBody[] bodies)
+    {
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBodyPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBody>();
-            parts[i].turretPartBody = randomBodies[i];
+            parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-
-        uiDescriptionText.text = "Replace a turret's BODY with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true, 2f);
     }
 
-    private void InitBases()
+    public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
-        PartsLibrary.BaseAndPassive[] randomBasesAndPassives = 
-            partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState);
-
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBases = basesAndPassives;
+    }
+    private void InitBasesTutorial()
+    {
+        numParts = tutorialTurretPartBases.Length;
+        InitBases(tutorialTurretPartBases);
+    }
+    private void InitBasesRandom()
+    {
+        InitBases(partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    {
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBasesAndPassives[i].turretPartBase;
-            parts[i].turretPassiveBase = randomBasesAndPassives[i].turretPassiveBase;
+            parts[i].turretPartBase = basesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = basesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's BASE with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true, 2f);
     }
 
 
@@ -336,9 +398,16 @@ public class CardPartReplaceManager : MonoBehaviour
 
         if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
 
+
+        yield return new WaitUntil(() => canFinalRetrieveCard);
+
         // Enable FINAL retreieve card
         //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
         upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
+
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+        
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
@@ -396,6 +465,7 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
 
         mapSceneNotifier.InvokeOnSceneFinished();
+        consoleDialog.Clear();
 
         if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
     }
@@ -422,4 +492,62 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         return replacementDone;
     }
+
+
+    private void PlayCardAndCardPartsAppearAnimation()
+    {
+        StartCoroutine(upgradeCardHolder.AppearAnimation(1f));
+        StartCoroutine(cardPartHolder.AppearAnimation(2.5f));
+    }
+
+    public void PauseCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = true;
+    }
+
+    public void PauseCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = true;
+    }
+
+
+
+
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        StartCoroutine(DoPrintConsoleLine(type, text, clearBeforeWritting, delay));
+    }
+
+    private IEnumerator DoPrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (!isTutorial)
+        {
+
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
+
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);            
+        }
+    }
+
+
+    void PrintConsoleLine(TextTypes type, string text)
+    {
+        textLine.textType = type;
+        textLine.text = text;
+        consoleDialog.PrintLine(textLine);
+    }
+
 }

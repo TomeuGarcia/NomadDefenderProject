@@ -23,6 +23,8 @@ public class CardPartBase : CardPart
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image basePassiveImage;
+    [SerializeField] private CanvasGroup cgRange;
+    [SerializeField] private CanvasGroup cgPassive;
 
     [Header("PART")]
     [SerializeField] public TurretPartBase turretPartBase;
@@ -188,5 +190,41 @@ public class CardPartBase : CardPart
 
         canInfoInteract = true;
     }
+
+
+    public void PlayTutorialBlinkAnimation(float delayBeforeAbility)
+    {
+        StartCoroutine(TutorialBlinkAnimation(delayBeforeAbility));
+    }
+    private IEnumerator TutorialBlinkAnimation(float delayBeforeAbility)
+    {
+        float t1 = 0.1f;
+
+        for (int i = 0; i < 8; ++i)
+        {
+            cgRange.DOFade(0f, t1);
+            yield return new WaitForSeconds(t1);
+
+            cgRange.DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+
+
+        yield return new WaitForSeconds(delayBeforeAbility);
+        
+
+        for (int i = 0; i < 8; ++i)
+        {
+            cgPassive.DOFade(0f, t1);
+            yield return new WaitForSeconds(t1);
+
+            cgPassive.DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }
+
+    }
+
 
 }

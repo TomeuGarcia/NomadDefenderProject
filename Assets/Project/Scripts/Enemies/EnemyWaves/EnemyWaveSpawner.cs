@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,6 +13,8 @@ public class EnemyWaveSpawner : ScriptableObject
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
+    //[SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
+    public EnemyWave[] EnemyWaves => enemyWaves;
 
     private PathNode startNode;
 
@@ -20,6 +22,26 @@ public class EnemyWaveSpawner : ScriptableObject
     public int activeEnemies { get; private set; }
 
     public int numWaves => enemyWaves.Length;
+
+    // JSON 
+    private string nameLevel;
+    private string nameJSON;
+    private NodeEnums.ProgressionState progressionState;
+    private int numNodes = 1;
+    private bool isTutorial;
+    private bool IS_INCORRECT;
+
+    public static string[] PROGRESSION_PATHS = { "EarlyLevels/", "MidLevels/", "LateLevels/" };
+    public static string[] NUM_NODES_PATHS = { "1Node/", "2Nodes/" };
+    public const string PATH_TO_JSON = "/JSONfiles/EnemyWaves/";
+
+    public string NameLevel => nameLevel;
+    public string NameJSON => nameJSON;
+    public NodeEnums.ProgressionState ProgressionState => progressionState;
+    public int NumNodes => numNodes;
+    public bool IsTutorial => isTutorial;
+    public bool IsIncorrect => IS_INCORRECT;
+    //
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
@@ -29,12 +51,103 @@ public class EnemyWaveSpawner : ScriptableObject
     bool stopForced;
 
 
+    private void OnValidate()
+    {        
+        // UNCOMMENT AFTER FIXING
+        //EnemyWaveJSONManager.SaveEnemyWave(this, true);
+
+        return;
+        /*
+        for (int enemyWaveI = 0; enemyWaveI < enemyWaves.Length; ++enemyWaveI)
+        {
+            enemyWaves[enemyWaveI].enemiesInWave = new EnemyInWave[enemyWaves[enemyWaveI].enemies.Length];
+
+            for (int i = 0; i < enemyWaves[enemyWaveI].enemies.Length; i++)
+            {
+                enemyWaves[enemyWaveI].enemiesInWave[i] = new EnemyInWave(enemyWaves[enemyWaveI].enemies[i], enemyWaves[enemyWaveI].delayBetweenSpawns);
+            }
+        }
+        */
+    }
+
+    public void ValidateJSONFormat()
+    {
+        int lastUnderscore = name.LastIndexOf('_');
+        nameLevel = name.Substring(0, lastUnderscore != -1 ? lastUnderscore : name.Length);
+        nameJSON = name;
+        IS_INCORRECT = false;
+
+        if (nameLevel == null) return;
+        if (nameLevel.Length < 1) return;
+
+        char progressionChar = nameLevel[0];
+        if (progressionChar == 'E')
+        {
+            progressionState = NodeEnums.ProgressionState.EARLY;
+        }
+        else if (progressionChar == 'M')
+        {
+            progressionState = NodeEnums.ProgressionState.MID;
+        }
+        else if (progressionChar == 'L')
+        {
+            progressionState = NodeEnums.ProgressionState.LATE;
+        }
+        else
+        {
+            IS_INCORRECT = true;
+        }
+
+        char numNodesChar = nameLevel[1];
+        if (numNodesChar == '1')
+        {
+            numNodes = 1;
+        }
+        else if (numNodesChar == '2')
+        {
+            numNodes = 2;
+        }
+        else
+        {
+            IS_INCORRECT = true;
+        }
+
+        isTutorial = name[3] == 'T';
+    }
+
+    //public void SaveToWorkaround()
+    //{
+    //    enemyWavesWorkaround = new EnemyWaveWorkaround[enemyWaves.Length];
+    //    for (int i = 0; i < enemyWaves.Length; i++)
+    //    {
+    //        enemyWavesWorkaround[i] = new EnemyWaveWorkaround(enemyWaves[i]);
+    //    }
+    //}
+    //public void LoadFromWorkaround()
+    //{
+    //    enemyWaves = new EnemyWave[enemyWavesWorkaround.Length];
+    //    for (int i = 0; i < enemyWaves.Length; i++)
+    //    {
+    //        enemyWaves[i] = new EnemyWave(enemyWavesWorkaround[i]);
+    //    }
+    //}
+
+
+    public void SetEnemyWaves(EnemyWave[] enemyWaves)
+    {
+        this.enemyWaves = enemyWaves;
+    }
+
     public void Init(PathNode startNode)
     {
         currentWave = 0;
         activeEnemies = 0;
         this.startNode = startNode;
         stopForced = false;
+
+        // UNCOMMENT AFTER FIXING
+        ValidateJSONFormat();
+        EnemyWaveJSONManager.LoadEnemyWave(this, false);
     }
 
 
@@ -50,13 +163,18 @@ public class EnemyWaveSpawner : ScriptableObject
         }
         else
         {
-            foreach (Enemy.EnemyType enemyType in enemyWaves[currentWave].enemies)
+            foreach (EnemyInWave enemyInWave in enemyWaves[currentWave].enemiesInWave)
             {
                 if (stopForced) break;
 
-                SpawnEnemy(enemyType, spawnTransform);
+                for (int i = 0; i < enemyInWave.NumberOfSpawns; ++i)
+                {
+                    if (stopForced) break;
 
-                yield return new WaitForSeconds(enemyWaves[currentWave].delayBetweenSpawns);
+                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+
+                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn);
+                }                
             }
         }
         

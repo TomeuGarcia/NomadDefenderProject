@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TurretPartBase_Prefab : MonoBehaviour
 {
+    [SerializeField] private Transform meshTransform;
+    public Transform MeshTransform => meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material previewMaterial;
     private Material[] defaultMaterials;
@@ -13,6 +15,12 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [Header("BASE COLLIDER")]
     [SerializeField] public BaseCollider baseCollider;
     [SerializeField] GameObject[] visualUpgrades;
+
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+    public ParticleSystem PlacedParticleSystem => placedParticleSystem;
+
+
     private void Awake()
     {
         foreach (GameObject go in visualUpgrades)
@@ -60,6 +68,12 @@ public class TurretPartBase_Prefab : MonoBehaviour
     public virtual void OnGetPlaced()
     {
 
+    }
+
+    public void SetMaterialColor(Color color)
+    {
+        previewMaterial.color = color;
+        baseCollider.SetRangeColor(color);
     }
 
 }

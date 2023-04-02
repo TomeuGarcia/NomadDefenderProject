@@ -11,7 +11,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
-    [SerializeField] private GameObject redrawCanvasGameObject; // works for 1 waveSpawner
+    [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
     [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
     [SerializeField] private CanvasGroup finishRedrawsButtonCG;
 
@@ -24,6 +24,10 @@ public class CardDrawer : MonoBehaviour
     public static event CardDrawerAction OnStartSetupBattleCanvases;
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
+    [HideInInspector] public bool canRedraw = true;
+    [SerializeField]  public bool canDisplaySpeedUp = true;
+    [SerializeField] public bool displayRedrawsOnGameStart = true;
+    [SerializeField] public bool finishRedrawSetup = true;
 
 
     private void OnEnable()
@@ -31,7 +35,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard += TryDrawCardAndUpdateHand;
 
         HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing += SetupUIBattleCanvases;
+        HandBuildingCards.OnFinishRedrawing += FinishRedrawSetupUI;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
 
         EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
@@ -43,7 +47,7 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
 
         HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing -= SetupUIBattleCanvases;
+        HandBuildingCards.OnFinishRedrawing -= FinishRedrawSetupUI;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
 
         EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
@@ -51,15 +55,15 @@ public class CardDrawer : MonoBehaviour
 
     private void Start()
     {
-        GameStartSetup();
+        GameStartSetup(2.5f, displayRedrawsOnGameStart, finishRedrawSetup);
     }
 
-    protected void GameStartSetup()
+    protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
         SetupRedraws();
         SetupDeck();
 
-        DrawStartHand();
+        DrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup);
 
         hand.Init();
 
@@ -71,7 +75,9 @@ public class CardDrawer : MonoBehaviour
     private void SetupRedraws()
     {
         redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
-        StartRedrawButtonAnimation();
+        finishRedrawsButtonCG.alpha = 0f;
+        finishRedrawsButtonCG.blocksRaycasts = false;
+        redrawCanvasGameObject.SetActive(false);
     }
     protected virtual void SetupDeck()
     {
@@ -88,7 +94,7 @@ public class CardDrawer : MonoBehaviour
     }
     public void TryRedrawCard()
     {
-        if (deck.HasCardsLeft()) 
+        if (deck.HasCardsLeft() && canRedraw) 
         {
             DrawTopCard();
             
@@ -108,9 +114,13 @@ public class CardDrawer : MonoBehaviour
     {
         hand.FinishedRedrawing();
     }
-    private void SetupUIBattleCanvases()
+    public void FinishRedrawSetupUI()
     {
         redrawCanvasGameObject.SetActive(false);
+
+        battleHUD.PlayDeckUIHideStartGameAnimation(0.5f); // DECK UI ANIM - PART 2        
+        if (canDisplaySpeedUp) battleHUD.PlaySpeedUpUIStartGameAnimation();
+
         if (OnStartSetupBattleCanvases != null) OnStartSetupBattleCanvases();
     }
     public void TryDrawCardAndUpdateHand()
@@ -125,12 +135,12 @@ public class CardDrawer : MonoBehaviour
     private void DrawTopCard()
     {
         AddCardToHand(deck.GetTopCard());
-        TryHideDeckHUD();
+        //TryHideDeckHUD();        
     }
     private void DrawRandomCard()
     {
         AddCardToHand(deck.GetRandomCard());
-        TryHideDeckHUD();
+        //TryHideDeckHUD();
     }
 
     private void AddCardToHand(BuildingCard card)
@@ -161,43 +171,41 @@ public class CardDrawer : MonoBehaviour
     }
 
     private IEnumerator DoDrawCardAfterWave()
-    {
+    {        
         if (deck.HasCardsLeft())
         {
-            for (int i = 0; i < cardsToDrawPerWave; i++)
+            battleHUD.canInteractWithDeckUI = false;
+            battleHUD.canShowDrawCardButton = false;
+            battleHUD.ShowDeckUI();
+            yield return new WaitForSeconds(0.5f);
+
+            int numCardsDrawn = 0;
+            while (numCardsDrawn < cardsToDrawPerWave && deck.HasCardsLeft())
             {
                 yield return new WaitForSeconds(0.5f);
-                TryDrawCard();
+                DrawRandomCard();
                 hand.InitCardsInHand();
+                ++numCardsDrawn;
             }
-        }
-    }
 
-
-    private void DrawStartHand()
-    {
-        StartCoroutine(DoDrawStartHand());
-    }
-
-    private IEnumerator DoDrawStartHand()
-    {
-        yield return new WaitForSeconds(1f);
-
-        DrawTopCard();
-        hand.InitCardsInHandForRedraw();
-
-        if (deck.HasCardsLeft())
-        {
-            for (int i = 1; i < numCardsHandStart; i++)
+            if (numCardsDrawn < cardsToDrawPerWave)
+            {
+                battleHUD.PlayDeckNoCardsLeftAnimation(2);
+            }
+            else
             {
                 yield return new WaitForSeconds(0.5f);
-                TryDrawCard();
-                hand.InitCardsInHandForRedraw();
+                battleHUD.HideDeckUI();
+                yield return new WaitForSeconds(0.5f);
+                battleHUD.canInteractWithDeckUI = true;
+                battleHUD.canShowDrawCardButton = true;
             }
         }
-        
+        else
+        {
+            battleHUD.PlayDeckNoCardsLeftAnimation(4);
+        }
     }
-
 
     public void ReturnCardToDeck(BuildingCard card)
     {
@@ -210,7 +218,49 @@ public class CardDrawer : MonoBehaviour
         battleHUD.AddHasDeckCardIcon();
     }
 
-    private void StartRedrawButtonAnimation()
+
+    private void DrawStartHand(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
+    {
+        StartCoroutine(DoDrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup));
+    }
+
+    private IEnumerator DoDrawStartHand(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
+    {
+        yield return new WaitForSeconds(startDelay);
+
+        battleHUD.PlayDeckUIShowStartGameAnimation(); // DECK UI ANIM - PART 1  
+        yield return new WaitForSeconds(3f);
+
+        DrawTopCard();
+
+        hand.InitCardsInHandForRedraw();
+
+
+        if (deck.HasCardsLeft())
+        {
+            for (int i = 1; i < numCardsHandStart; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                TryDrawCard();
+                hand.InitCardsInHandForRedraw();
+            }
+        }
+
+        if (displayRedrawsOnEnd)
+        {
+            StartRedrawButtonAnimation();
+        }
+        else
+        {
+            if (finishRedrawSetup)
+            {
+                Debug.Log("finish redraw xd");
+                FinishRedrawSetupUI();
+            }            
+        }
+    }
+
+    public void StartRedrawButtonAnimation()
     {
         StartCoroutine(PlayStartRedrawButtonAnimation());
     }
@@ -219,7 +269,10 @@ public class CardDrawer : MonoBehaviour
         finishRedrawsButtonCG.alpha = 0f;
         finishRedrawsButtonCG.blocksRaycasts = false;
 
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        redrawCanvasGameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
 
         float t = 0.1f;
         finishRedrawsButtonCG.DOFade(1f, t);
@@ -232,32 +285,5 @@ public class CardDrawer : MonoBehaviour
         finishRedrawsButtonCG.blocksRaycasts = true;
     }
 
-
-    /*private void StartDrawOverTime()
-    {
-        HandBuildingCards.OnCardPlayed -= StartDrawOverTime;
-        StartCoroutine(DrawOverTime());
-    }
-
-    private IEnumerator DrawOverTime()
-    {
-        drawCooldownImage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-
-        while (deck.HasCardsLeft())
-        {
-            while (drawCountdown > 0)
-            {
-                drawCountdown -= Time.deltaTime;
-                drawCountdown = Mathf.Clamp(drawCountdown, 0f, drawTimeCooldown);
-                drawCooldownImage.fillAmount = drawCountdown / drawTimeCooldown;
-
-                yield return null;
-            }
-            drawCountdown = drawTimeCooldown;
-            TryDrawCard();
-        }
-        drawCooldownImage.gameObject.SetActive(false);
-    }*/
 
 }

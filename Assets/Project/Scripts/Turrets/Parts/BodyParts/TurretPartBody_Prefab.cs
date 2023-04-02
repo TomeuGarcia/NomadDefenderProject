@@ -76,6 +76,13 @@ public class TurretPartBody_Prefab : MonoBehaviour
         for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
         {
             meshRenderers[meshI].materials = previewMaterials[meshI];
-        }        
+        }
     }
+
+
+    public void SetMaterialColor(Color color)
+    {
+        previewMaterial.color = color;
+    }
+
 }

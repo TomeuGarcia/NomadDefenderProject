@@ -188,7 +188,7 @@ public abstract class RangeBuilding : Building
 
     public void ShowUpgrades()
     {
-        upgrader.OpenWindow();
+        if (upgrader.CanOpenWindow()) upgrader.OpenWindow();
     }
     public void HideUpgrades()
     {
@@ -216,6 +216,9 @@ public abstract class RangeBuilding : Building
 
         meshMouseNotifier.OnMousePressed += ShowUpgrades;
         //TODO : HideUpgrades
+
+        meshMouseNotifier.OnMouseEntered += ShowQuickLevelUI;
+        meshMouseNotifier.OnMouseExited += HideQuickLevelUI;
     }
     public override void DisablePlayerInteraction()
     {
@@ -223,6 +226,9 @@ public abstract class RangeBuilding : Building
         meshMouseNotifier.OnMouseExited -= HideRangePlane;
 
         meshMouseNotifier.OnMousePressed -= ShowUpgrades;
+
+        meshMouseNotifier.OnMouseEntered -= ShowQuickLevelUI;
+        meshMouseNotifier.OnMouseExited -= HideQuickLevelUI;
     }
 
 

@@ -590,6 +590,8 @@ MonoBehaviour:
   distanceBetweenCards: 0.98
   cardParts: []
   placerMeshRenderer: {fileID: 1984330660085692956}
+  appearAnimationCanStartMoving: 1
+  canSelectCard: 1
 --- !u!1 &1984330660337757588
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +740,8 @@ MonoBehaviour:
   distanceBetweenCards: 1
   cards: []
   placerMeshRenderer: {fileID: 1984330659892671714}
+  appearAnimationCanStartMoving: 1
+  canSelectCard: 1
 --- !u!1 &1984330660496437083
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,6 +1319,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PartReplaceManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295452663846789674, guid: 1e98db00f4cfa0848aa6505a856edcf2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e98db00f4cfa0848aa6505a856edcf2, type: 3}

@@ -33,7 +33,9 @@ public class GatherNewCardManager : MonoBehaviour
     public delegate void GatherNewCardManagerAction();
     public static event GatherNewCardManagerAction OnCardGatherDone;
 
-
+    [Header("Console Log")]
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+    [SerializeField] TextLine textLine;
 
     private void Awake()
     {
@@ -175,7 +177,7 @@ public class GatherNewCardManager : MonoBehaviour
             cards[i].transform.position += startDisplacement + widthDisplacement;
             cards[i].transform.localRotation = Quaternion.identity;
 
-            cards[i].InitPositions(cards[i].transform.position, Vector3.zero);
+            cards[i].InitPositions(cards[i].transform.position, Vector3.zero, cards[i].transform.position);
         }
     }
 
@@ -263,8 +265,6 @@ public class GatherNewCardManager : MonoBehaviour
     private void SetCardHideInfo(BuildingCard card)
     {
         card.HideInfo();
-
-
         card.OnCardInfoSelected += SetCardShowInfo;
         card.OnCardInfoSelected -= SetCardHideInfo;
     }
@@ -313,6 +313,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             itCard.OnCardHovered += SetHoveredCard;
         }
+        PrintConsoleLine(TextTypes.INSTRUCTION, "choose a new CARD for your deck",true);
 
         // scuffed fix, allow mouse interaction if already hovering the cards
         foreach (BuildingCard itCard in cards)
@@ -368,10 +369,21 @@ public class GatherNewCardManager : MonoBehaviour
         //Debug.Log("FINISH");
         yield return new WaitForSeconds(1f);
         //if (OnCardGatherDone != null) OnCardGatherDone();
+        consoleDialog.Clear();
 
         mapSceneNotifier.InvokeOnSceneFinished();
     }
 
 
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting)
+    {
 
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
+
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);
+        
+    }
 }

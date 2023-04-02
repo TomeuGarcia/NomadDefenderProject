@@ -18,6 +18,8 @@ public class CardPartBody : CardPart
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private Image damageFillImage;
     [SerializeField] private Image cadenceFillImage;
+    [SerializeField] private CanvasGroup cgCadence;
+    [SerializeField] private CanvasGroup cgDamage;
 
     [Header("PART")]
     [SerializeField] public TurretPartBody turretPartBody;
@@ -149,4 +151,28 @@ public class CardPartBody : CardPart
 
         canInfoInteract = true;
     }
+
+
+    public void PlayTutorialBlinkAnimation()
+    {
+        StartCoroutine(TutorialBlinkAnimation());
+    }
+    private IEnumerator TutorialBlinkAnimation()
+    {
+        float t1 = 0.1f;
+
+        for (int i = 0; i < 8; ++i)
+        {
+            cgDamage.DOFade(0f, t1);
+            cgCadence.DOFade(0f, t1);
+            yield return new WaitForSeconds(t1);
+
+            cgDamage.DOFade(1f, t1);
+            cgCadence.DOFade(1f, t1);
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            yield return new WaitForSeconds(t1);
+        }        
+    }
+
+
 }

@@ -180,7 +180,9 @@ public class TurretBuildingCard : BuildingCard
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
     {
-        ReplacedWithSamePart = turretCardParts.turretPassiveBase == newTurretPassiveBase; // Check replaced with same part
+        ReplacedWithSamePart = turretCardParts.turretPartBase == newTurretPartBase &&
+                               turretCardParts.turretPassiveBase == newTurretPassiveBase &&
+                               turretCardParts.turretPartBase.rangeLvl == newTurretPartBase.rangeLvl; // Check replaced with same part
 
         //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
         int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
@@ -362,7 +364,7 @@ public class TurretBuildingCard : BuildingCard
         turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
     }
 
-    private bool IsCardLevelMaxed()
+    public bool IsCardLevelMaxed()
     {
         return turretCardParts.cardLevel == TurretCardParts.MAX_CARD_LEVEL;
     }

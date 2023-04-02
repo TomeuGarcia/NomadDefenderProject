@@ -6,17 +6,18 @@ using static SupportBuilding;
 
 public class CurrencyBase : TurretPartBase_Prefab
 {
-
-    [SerializeField] private int quantityToIncreaseCurrencyDrop;
+    [Header("CURRENCY BASE")]
+    [SerializeField] private List<int> quantityToIncreaseCurrencyDrop;
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
     private Material topCubeMaterial;
     [SerializeField] private GameObject currencyPlane;
     private Material currencyPlaneMaterial;
     [SerializeField] private float duration;
-
+    private List<Enemy> enemies = new List<Enemy>();
     private float positionMovement = 0;
 
+    private int currentLvl = 0;
     private void Awake()
     {
         currencyPlane.SetActive(false);
@@ -54,15 +55,30 @@ public class CurrencyBase : TurretPartBase_Prefab
     {
         currencyPlane.SetActive(true);
     }
-
+    override public void Upgrade(int newStatnewStatLevel)
+    {
+        base.Upgrade(newStatnewStatLevel);
+        foreach (Enemy e in enemies)
+        {
+            e.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
+        }
+        currentLvl = newStatnewStatLevel;
+        Debug.Log(currentLvl);
+        foreach (Enemy e in enemies)
+        {
+            e.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
+        }
+    }
     private void increaseCurrencyDrop(Enemy enemy)
     {
-        enemy.currencyDrop += quantityToIncreaseCurrencyDrop;
+        enemy.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
+        enemies.Add(enemy);
     }
 
     private void decreaseCurrencyDrop(Enemy enemy)
     {
-        enemy.currencyDrop -= quantityToIncreaseCurrencyDrop;
+        enemy.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
+        enemies.Remove(enemy);
     }
 
     public override void SetDefaultMaterial()

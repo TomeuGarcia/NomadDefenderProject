@@ -6,8 +6,14 @@ public abstract class BaseCollider : MonoBehaviour
 {
     [SerializeField] public TriggerNotifier triggerNotifier;
 
-    [SerializeField] protected GameObject rangePlaneMeshObject;
+    [SerializeField] protected MeshRenderer rangePlaneMesh;
     protected Material rangePlaneMaterial;
+
+    private void Awake()
+    {
+        rangePlaneMaterial = rangePlaneMesh.material;        
+    }
+
 
     public abstract void UpdateRange(float statsRange);
     public abstract void EnableCollisions();
@@ -16,12 +22,18 @@ public abstract class BaseCollider : MonoBehaviour
 
     public void HideRange()
     {
-        rangePlaneMeshObject.SetActive(false);
+        rangePlaneMesh.gameObject.SetActive(false);
     }
 
     public void ShowRange()
     {
-        rangePlaneMeshObject.SetActive(true);
+        rangePlaneMesh.gameObject.SetActive(true);
+        //rangePlaneMaterial.SetFloat("_StartTimeFadeIn", Time.time);
+    }
+
+    public void SetRangeColor(Color color)
+    {
+        rangePlaneMaterial.color = color;
     }
 
 }

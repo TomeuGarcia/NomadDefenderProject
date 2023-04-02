@@ -41,4 +41,9 @@ public class TextManager : MonoBehaviour
             yield return new WaitForSeconds(0.6f);
         }
     }
+
+    public void SetTextDecoders(List<TextDecoder> newTextDecoders)
+    {
+        texts = newTextDecoders;
+    }
 }
