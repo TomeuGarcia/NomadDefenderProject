@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OWMapPawn : MonoBehaviour
@@ -49,15 +50,22 @@ public class OWMapPawn : MonoBehaviour
         float distance = Vector3.Distance(moveTransform.position, targetPos);
         float duration = distance * 0.5f;
 
+        followCamera.CanDrag(false);
         moveTransform.DORotateQuaternion(Quaternion.FromToRotation(startFwd, endFwd), 0.25f)
             .OnComplete(() => moveTransform.DOMove(targetPos, duration)
-                .OnComplete(() => moveTransform.DORotateQuaternion(defaultRotation, 0.25f)
-                    .OnComplete(NotifyNodeWasReached)));
+                .OnComplete(() => followCamera.CanDrag(true))
+                    .OnComplete(() => moveTransform.DORotateQuaternion(defaultRotation, 0.25f)
+                        .OnComplete(NotifyNodeWasReached)));
     }
 
     public void ResetPosition()
     {
         followCamera.ResetPosition();
+    }
+    public void NodeSelected()
+    {
+        ResetPosition();
+        followCamera.NodeSelected(true);
     }
 
 
@@ -84,6 +92,14 @@ public class OWMapPawn : MonoBehaviour
 
     public void MoveCameraToNextLevel()
     {
+        followCamera.NodeSelected(false);
+        followCamera.LockCamera();
+        StartCoroutine(LateMoveToNextLevel());
+    }
+
+    private IEnumerator LateMoveToNextLevel()
+    {
+        yield return new WaitForSeconds(1.5f);
         ActivateCamera();
         followCamera.MoveToNextLevel();
     }
