@@ -161,7 +161,7 @@ public class UpgradeCardHolder : MonoBehaviour
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
-        selectedCard.SelectedState(true, true);
+        selectedCard.SelectedState(false, repositionColliderOnEnd: true, enableInteractionOnEnd: true);
 
         cardWasSelected = true;
 
@@ -183,6 +183,7 @@ public class UpgradeCardHolder : MonoBehaviour
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
+
 
 
     private void SetCardShowInfo(BuildingCard card)

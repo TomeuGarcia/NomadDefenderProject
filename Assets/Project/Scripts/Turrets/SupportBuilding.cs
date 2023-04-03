@@ -21,7 +21,7 @@ public class SupportBuilding : RangeBuilding
 
     [Header("PARTICLES")]
     [SerializeField] private ParticleSystem upgradeParticles;
-    [SerializeField] private BuildingsUtils buildingsUtils;
+    
 
 
 
@@ -136,9 +136,27 @@ public class SupportBuilding : RangeBuilding
         ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
         particleRenderer.sharedMaterial = buildingsUtils.SupportUpgradeParticleMat;
 
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
-        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
     }
+
+
+    public override void SetBuildingPartsColor(Color color)
+    {
+        basePart.SetMaterialColor(color);
+    }
+    public override void SetPreviewCanBePlacedColor()
+    {
+        previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+    }
+
+    public override void SetPreviewCanNOTBePlacedColor()
+    {
+        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+    }
+
 
 }

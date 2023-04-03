@@ -70,4 +70,10 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
     }
 
+    public void SetMaterialColor(Color color)
+    {
+        previewMaterial.color = color;
+        baseCollider.SetRangeColor(color);
+    }
+
 }

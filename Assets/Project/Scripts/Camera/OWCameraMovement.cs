@@ -17,6 +17,8 @@ public class OWCameraMovement : MonoBehaviour
     private float speed = 0.008f;
 
     private bool canDrag = false;
+    private bool moving = false;
+    private bool nodeSelected = false;
 
     void Update()
     {
@@ -45,7 +47,7 @@ public class OWCameraMovement : MonoBehaviour
     {
         dragRange = new Vector2(transform.position.z - 1.0f, maxDistance - 4.0f);
         distanceToNextLevel = newDistanceToNextLevel;
-        canDrag = true;
+        CanDrag(true);
 
         SetPositions();
     }
@@ -56,6 +58,13 @@ public class OWCameraMovement : MonoBehaviour
         nextLevelPos = originalPos + distanceToNextLevel;
     }
 
+    public void LockCamera()
+    {
+        moving = true;
+        CanDrag(false);
+        transform.position = originalPos;
+    }
+
     public void MoveToNextLevel()
     {
         StartCoroutine(LateMoveToNextLevel());
@@ -63,22 +72,37 @@ public class OWCameraMovement : MonoBehaviour
 
     private IEnumerator LateMoveToNextLevel()
     {
-        canDrag = false;
-        transform.position = originalPos;
-        yield return new WaitForSeconds(1.5f);
-
         transform.DOMove(nextLevelPos, 2.0f);
         yield return new WaitForSeconds(2.0f);
 
+        moving = false;
         SetPositions();
-        canDrag = true;
+        if(!nodeSelected)
+        {
+            CanDrag(true);
+        }
     }
 
     public void ResetPosition()
     {
-        canDrag = false;
+        if (moving)
+        {
+            return;
+        }
+        CanDrag(false);
         float timeToReset = 0.5f;
 
         transform.DOMove(originalPos, timeToReset);
     }
+
+    public void CanDrag(bool _canDrag)
+    {
+        canDrag = _canDrag;
+    }
+    public void NodeSelected(bool _nodeSelected)
+    {
+        nodeSelected = _nodeSelected;
+    }
+
+
 }

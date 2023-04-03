@@ -54,6 +54,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     protected Coroutine openAnimationCoroutine = null;
     protected Coroutine closeAnimationCoroutine = null;
 
+    protected static Color fadedInColor = Color.white;
+    protected static Color fadedOutColor = new Color(0.7f, 0.7f, 0.7f);
+    protected static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
+
 
     private bool buildingOwnerWasPlaced = false;
 
@@ -303,6 +307,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         else
         {
             PlayNegativeAnimationTextCostPunch();
+            OnCanNotUpgradeAttack();
         }
     }
 
@@ -328,6 +333,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         else
         {
             PlayNegativeAnimationTextCostPunch();
+            OnCanNotUpgradeFireRate();
         }
     }
 
@@ -353,6 +359,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         else
         {
             PlayNegativeAnimationTextCostPunch();
+            OnCanNotUpgradeRange();
         }
     }
 
@@ -378,6 +385,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         else
         {
             PlayNegativeAnimationTextCostPunch();
+            OnCanNotUpgradeSupport();
         }
     }
 
@@ -470,6 +478,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         button.transform.DOComplete();
         button.transform.DOScale(Vector3.one * 1.1f, duration);
+        button.DOBlendableColor(fadedInColor, duration*0.5f);
 
         backFillBar.fillAmount = backFill;
 
@@ -574,6 +583,52 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             canUpgardeParticlesAreActive = false;
         }
 
-    }    
+    }
+
+
+    protected virtual void OnCanNotUpgradeAttack() { }
+    protected virtual void OnCanNotUpgradeFireRate() { }
+    protected virtual void OnCanNotUpgradeRange() { }
+    protected virtual void OnCanNotUpgradeSupport() { }
+
+    protected void ButtonPressedErrorFadeInOut(Button button, Image bar)
+    {
+        button.image.DOBlendableColor(Color.red, 0.1f).OnComplete(() => button.image.DOBlendableColor(fadedInColor, 0.1f));
+        bar.DOBlendableColor(Color.red, 0.1f).OnComplete(() => bar.DOBlendableColor(Color.white, 0.1f));
+    }
+
+    protected void DisableButton(Button button, Image buttonImage)
+    {
+        button.interactable = false;
+        buttonImage.color = disabledColor;
+
+        button.DOKill();
+        button.image.DOKill();
+    }
+
+    protected void ButtonFadeIn(Button button, bool onEndFadeOut = true)
+    {
+        if (!button.interactable) { return; }
+
+        button.transform.DOScale(1.2f, 1.0f).OnComplete(() => { if (onEndFadeOut) ButtonFadeOut(button); });
+        button.image.DOBlendableColor(fadedInColor, 1.0f);
+    }
+
+    protected void ButtonFadeOut(Button button, bool onEndFadeIn = true)
+    {
+        button.transform.DOScale(1.0f, 1.0f).OnComplete(() => { if (onEndFadeIn) ButtonFadeIn(button); });
+        button.image.DOBlendableColor(fadedOutColor, 1.0f);
+    }
+
+    protected void StopButtonFade(Button button, bool goToFadedOut)
+    {
+        button.transform.DOKill();
+        button.image.DOKill();
+
+        if (goToFadedOut && button.interactable)
+        {
+            ButtonFadeOut(button, false);
+        }
+    }
 
 }

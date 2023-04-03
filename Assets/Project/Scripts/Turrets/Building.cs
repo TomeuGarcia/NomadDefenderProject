@@ -7,8 +7,11 @@ using UnityEngine;
 
 public abstract class Building : MonoBehaviour
 {
+    [Header("Tile Type")]
     [SerializeField] public Tile.TileType validTileType;
 
+    [Header("Building Utils")]
+    [SerializeField] protected BuildingsUtils buildingsUtils;
 
     protected bool isFunctional = false;
 
@@ -35,6 +38,8 @@ public abstract class Building : MonoBehaviour
     //{
     //}
 
+
+
     public abstract void ShowRangePlane();
 
     public abstract void HideRangePlane();
@@ -46,5 +51,43 @@ public abstract class Building : MonoBehaviour
     public virtual void ShowQuickLevelUI() { }
 
     public virtual void HideQuickLevelUI() { }
+
+
+    protected Color previewColorInUse;
+    public virtual void SetBuildingPartsColor(Color color) { }
+    public virtual void SetPreviewCanBePlacedColor() { }
+    public virtual void SetPreviewCanNOTBePlacedColor() { }
+
+    public void PlayCanNOTBePlacedColorPunch()
+    {
+        StartCoroutine(CanNOTBePlacedColorPunch(previewColorInUse, buildingsUtils.PreviewPunchCanNOTBePlacedColor, 0.05f, 2));
+    }
+
+    private IEnumerator CanNOTBePlacedColorPunch(Color startColor, Color punchColor, float duration, int times)
+    {
+        Color currentColor;
+
+        for (int i = 0; i < times; ++i)
+        {
+            for (float t = 0f; t < duration; t += Time.deltaTime)
+            {
+                currentColor = Color.Lerp(startColor, punchColor, t / duration);
+                SetBuildingPartsColor(currentColor);
+
+                yield return new WaitForSecondsRealtime(Time.deltaTime);
+            }
+
+            for (float t = 0f; t < duration; t += Time.deltaTime)
+            {
+                currentColor = Color.Lerp(punchColor, startColor, t / duration);
+                SetBuildingPartsColor(currentColor);
+
+                yield return new WaitForSecondsRealtime(Time.deltaTime);
+            }
+        }
+
+        SetBuildingPartsColor(previewColorInUse);
+    }
+
 
 }

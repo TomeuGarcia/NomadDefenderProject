@@ -40,13 +40,13 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayAnimationIconPunch(supportIcon.transform);
         }
 
-        if (IsStatMaxed(attackLvl)) abilityButton.interactable = false;
+        if (IsStatMaxed(attackLvl)) DisableButton(abilityButton, abilityButtonImage);
         if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
     }
 
     protected override void DisableButtons()
     {
-        abilityButton.interactable = false;
+        DisableButton(abilityButton, abilityButtonImage);
     }
 
 
@@ -98,6 +98,9 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         yield return new WaitForSeconds(t1);
 
         openAnimationCoroutine = null;
+
+        ButtonFadeIn(abilityButton);
+
     }
 
 
@@ -148,12 +151,16 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         //yield return new WaitUntil(() => barImage.fillAmount > 0.001f);
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
+
+        StopButtonFade(abilityButton, false);
     }
 
 
 
     public void FillAbilityBar()
     {
+        StopButtonFade(abilityButton, false);
+
         if (!abilityButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
 
@@ -166,6 +173,13 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
 
         EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * supportFillBarCoef);
+
+        ButtonFadeIn(abilityButton);
+    }
+
+    protected override void OnCanNotUpgradeSupport()
+    {
+        ButtonPressedErrorFadeInOut(abilityButton, abilityBarToCurrencyCost);
     }
 
 }
