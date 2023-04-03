@@ -168,7 +168,7 @@ public abstract class BuildingCard : MonoBehaviour
         if (isRepositioning) return;
         if (!isInteractable) return;
         if (isPlayingDrawAnimation) return;
-        
+
         if (cardState == CardStates.HOVERED)
         {
             if (OnCardSelected != null) OnCardSelected(this);
@@ -331,11 +331,11 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardState = CardStates.SELECTED;
 
+        this.repositionColliderOnEnd = repositionColliderOnEnd;
+        this.enableInteractionOnEnd = enableInteractionOnEnd;
+
         if (useDragAndDrop)
         {
-            this.repositionColliderOnEnd = repositionColliderOnEnd;
-            this.enableInteractionOnEnd = enableInteractionOnEnd;
-
             isDraggingToSelect = true;
         }
         else

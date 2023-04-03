@@ -185,6 +185,7 @@ public class UpgradeCardHolder : MonoBehaviour
     }
 
 
+
     private void SetCardShowInfo(BuildingCard card)
     {
         card.ShowInfo();
