@@ -13,9 +13,13 @@ public class BuildingPlacer : MonoBehaviour
     private bool placingEnabled = false;
     private Coroutine dragAndDropCardCoroutine = null;
 
+    private bool isDisablePlacingDelayed = false;
+
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+    public delegate void BuildingPlacerAction2(BuildingCard buildingCard); 
+    public event BuildingPlacerAction2 OnBuildingCantBePlaced;
 
     private bool SelectedBuildingIsBeingShown => selectedBuilding != null;
 
@@ -45,19 +49,19 @@ public class BuildingPlacer : MonoBehaviour
 
         Tile.OnTileUnhovered += HideBuildingPreview;
         Tile.OnTileHovered += ShowBuildingOnTilePreview;
-        Tile.OnTileSelected += TryPlaceBuilding;
+        //Tile.OnTileSelected += TryPlaceBuilding;
 
         DisablePlacedBuildingsPlayerInteraction();
 
         placingEnabled = true;
-        //dragAndDropCardCoroutine = StartCoroutine(ClickDropCoroutine());
+        dragAndDropCardCoroutine = StartCoroutine(ClickDropCoroutine());
     }
 
     public void DisablePlacing()
     {
         Tile.OnTileUnhovered -= HideBuildingPreview;
         Tile.OnTileHovered -= ShowBuildingOnTilePreview;
-        Tile.OnTileSelected -= TryPlaceBuilding;
+        //Tile.OnTileSelected -= TryPlaceBuilding;
 
         if (SelectedBuildingIsBeingShown)
         {
@@ -70,7 +74,13 @@ public class BuildingPlacer : MonoBehaviour
         placingEnabled = false;
         currentHoveredTile = null;
     }
-
+    private IEnumerator DelayedDisablePlacing(float duration)
+    {
+        isDisablePlacingDelayed = true;
+        yield return new WaitForSeconds(duration);
+        isDisablePlacingDelayed = false;
+        DisablePlacing();
+    }
 
     private IEnumerator ClickDropCoroutine()
     {                
@@ -80,6 +90,11 @@ public class BuildingPlacer : MonoBehaviour
         {
             TryPlaceBuilding(currentHoveredTile);
         }
+        else
+        {
+            DisablePlacing();
+            if (OnBuildingCantBePlaced != null) OnBuildingCantBePlaced(selectedBuildingCard);
+        }
 
         dragAndDropCardCoroutine = null;
     }
@@ -87,12 +102,16 @@ public class BuildingPlacer : MonoBehaviour
 
     private void ShowBuildingOnTilePreview(Tile tile)
     {
+        if (isDisablePlacingDelayed) return;
+
         currentHoveredTile = tile;
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
     }
 
     private void HideBuildingPreview()
     {
+        if (isDisablePlacingDelayed) return;
+
         currentHoveredTile = null;
         HideSelectedBuilding();
     }
@@ -108,6 +127,9 @@ public class BuildingPlacer : MonoBehaviour
         {
             GameAudioManager.GetInstance().PlayError();
             selectedBuilding.PlayCanNOTBePlacedColorPunch();
+            
+            StartCoroutine(DelayedDisablePlacing(0.4f));
+            if (OnBuildingCantBePlaced != null) OnBuildingCantBePlaced(selectedBuildingCard);
         }
     }
 
@@ -201,5 +223,7 @@ public class BuildingPlacer : MonoBehaviour
             building.DisablePlayerInteraction();
         }
     }
+
+
 
 }
