@@ -10,6 +10,12 @@ public abstract class CardPart : MonoBehaviour
     public enum CardPartStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardPartStates cardState = CardPartStates.STANDARD;
 
+    [Header("DRAG & DROP")]
+    [SerializeField] private LayerMask layerMaskMouseDragPlane;
+    private bool isDraggingToSelect = false;
+    public static Camera MouseDragCamera;
+    public static Bounds DragStartBounds;
+
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
     private Vector3 cardColliderOffset;
@@ -48,6 +54,9 @@ public abstract class CardPart : MonoBehaviour
     public event BuildingCardPartAction OnCardInfoSelected;
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
+
+    public event BuildingCardPartAction OnDragOutsideDragBounds;
+    public event BuildingCardPartAction OnDragMouseUp;
 
 
     public delegate void BuildingCardPartAction2();
@@ -123,24 +132,77 @@ public abstract class CardPart : MonoBehaviour
     {
         cardState = CardPartStates.STANDARD;
 
-        CardTransform.DOMove(standardPosition, BuildingCard.unhoverTime)
-            .OnComplete( () => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
+        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, BuildingCard.hoverTime)
+            .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
 
     public void HoveredState()
     {
         cardState = CardPartStates.HOVERED;
 
-        CardTransform.DOMove(hoveredPosition, BuildingCard.hoverTime);
+        CardTransform.DOBlendableMoveBy(hoveredPosition - CardTransform.position, BuildingCard.hoverTime);
     }
 
-    public void SelectedState(bool repositionColliderOnEnd = false)
+    bool repositionColliderOnEnd = false;
+    public void SelectedState(bool useDragAndDrop, bool repositionColliderOnEnd = false)
     {
         cardState = CardPartStates.SELECTED;
 
-        CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime)
+        this.repositionColliderOnEnd = repositionColliderOnEnd;
+        
+        if (useDragAndDrop)
+        {
+            isDraggingToSelect = true;
+        }
+        else
+        {
+            GoToSelectedPosition();
+        }
+    }
+
+    public void GoToSelectedPosition()
+    {
+        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, BuildingCard.selectedTime)
             .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
+
+    private void OnMouseDrag()
+    {
+        if (isDraggingToSelect)
+        {
+            Ray ray = MouseDragCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane))
+            {
+                //Debug.Log(hit.point);
+                CardTransform.position = hit.point;
+                if (DragStartBounds.Contains(hit.point))
+                {
+                    //Debug.Log("inside bounds");
+                    //if (Vector3.Distance())
+                }
+                else
+                {
+                    Debug.Log("outside bounds");
+                    isDraggingToSelect = false;
+                    GoToSelectedPosition();
+                    if (OnDragOutsideDragBounds != null) OnDragOutsideDragBounds(this);
+                }
+            }
+        }
+
+    }
+    private void OnMouseUp()
+    {
+        if (isDraggingToSelect)
+        {
+            //Debug.Log("STOPPED Dragging");
+            isDraggingToSelect = false;
+            if (OnDragMouseUp != null) OnDragMouseUp(this);
+        }
+    }
+
+
+
 
     public void RepositionColliderToCardTransform()
     {
@@ -181,6 +243,9 @@ public abstract class CardPart : MonoBehaviour
         DisableMouseInteraction();
         yield return null;
         EnableMouseInteraction();
+
+        if (cardState == CardPartStates.HOVERED)
+            if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
 }
