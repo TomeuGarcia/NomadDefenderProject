@@ -9,7 +9,6 @@ public class HandBuildingCards : MonoBehaviour
     [Header("CAMERA")]
     [SerializeField] private Camera handCamera;
     [SerializeField] private Transform handCameraTransform;
-    public static Camera HandCamera { get; private set; }
 
     [Header("HAND")]
     [SerializeField] private Transform cardHolder;
@@ -20,9 +19,7 @@ public class HandBuildingCards : MonoBehaviour
 
     [SerializeField] private Transform handSideBlockerLeft;
     [SerializeField] private Transform handSideBlockerRight;
-    //[SerializeField] private BoxCollider cardsBoundsCollider;
-    //public static BoxCollider CardsBoundsCollider { get; private set; }
-    public static Bounds CardBounds { get; private set; }
+
 
     [SerializeField] private CurrencyCounter currencyCounter;
     [SerializeField] private BuildingPlacer buildingPlacer;
@@ -83,8 +80,8 @@ public class HandBuildingCards : MonoBehaviour
     }
 
     private void Awake()
-    {
-        HandCamera = handCamera;
+    {        
+        BuildingCard.MouseDragCamera = handCamera;
 
         cards = new List<BuildingCard>();
         redrawsLeft = initialRedraws;
@@ -120,7 +117,7 @@ public class HandBuildingCards : MonoBehaviour
         //FinishedRedrawing();
 
         buildingPlacer.OnBuildingCantBePlaced += ResetToStandardWhenPlacingCancelled;
-        BuildingCard.OnDragIntoSelectedPosition += EnablePlacingAfterDragged;
+        BuildingCard.OnDragOutsideDragBounds += EnablePlacingAfterDragged;
     }
     private void OnDisable()
     {
@@ -136,7 +133,7 @@ public class HandBuildingCards : MonoBehaviour
         currencyCounter.OnCurrencySpent -= CheckCardsCost;
 
         buildingPlacer.OnBuildingCantBePlaced -= ResetToStandardWhenPlacingCancelled;
-        BuildingCard.OnDragIntoSelectedPosition -= EnablePlacingAfterDragged;
+        BuildingCard.OnDragOutsideDragBounds -= EnablePlacingAfterDragged;
     }
 
     private void Update()
@@ -536,7 +533,7 @@ public class HandBuildingCards : MonoBehaviour
     }
     private void ResetAndSetStandardCardAfterDragBack(BuildingCard card)
     {
-        card.OnDragBackToStartPosition -= ResetAndSetStandardCardAfterDragBack;
+        card.OnDragMouseUp -= ResetAndSetStandardCardAfterDragBack;
         if (selectedCard != null) ResetAndSetStandardCard(card);
         ShowHand();
         
@@ -595,7 +592,7 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard = card;
         selectedCard.SelectedState(true);
         selectedCard.DisableMouseInteraction(); // Do this to prevent collider in the way to place turrets
-        selectedCard.OnDragBackToStartPosition += ResetAndSetStandardCardAfterDragBack;
+        selectedCard.OnDragMouseUp += ResetAndSetStandardCardAfterDragBack;
 
         if (selectedCard.isShowingInfo)
         {
@@ -864,10 +861,12 @@ public class HandBuildingCards : MonoBehaviour
         handSideBlockerLeft.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerLeft.position).normalized, handCameraTransform.up);
         handSideBlockerRight.rotation = Quaternion.LookRotation((handCameraTransform.position - handSideBlockerRight.position).normalized, handCameraTransform.up);
 
+
         Vector3 boundsCenter = (handSideBlockerLeft.position + handSideBlockerRight.position) / 2f;
         boundsCenter -= handSideBlockerLeft.up * 0.5f;
         float boundsWidth = Vector3.Distance(handSideBlockerLeft.position, handSideBlockerRight.position) + 0.5f;
-        CardBounds = new Bounds(boundsCenter, new Vector3(boundsWidth, 1.5f, 2f));
+
+        BuildingCard.DragStartBounds = new Bounds(boundsCenter, new Vector3(boundsWidth, 1.5f, 2f));
     }
 
     public List<BuildingCard> GetCards()

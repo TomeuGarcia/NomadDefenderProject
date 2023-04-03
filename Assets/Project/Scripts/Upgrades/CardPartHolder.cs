@@ -12,6 +12,12 @@ public class CardPartHolder : MonoBehaviour
     // Serialize for now
     [SerializeField] private CardPart[] cardParts;
 
+
+    [Header("CARD DRAG & DROP")]
+    [SerializeField] private BoxCollider cardDragBoundsCollider;
+    [SerializeField] private Transform cardDragBoundsTargetTransform;
+    private Bounds cardDragBoundsTarget;
+
     [Header("Materials")]
     [SerializeField] private MeshRenderer placerMeshRenderer;
     private Material placerMaterial;
@@ -43,6 +49,14 @@ public class CardPartHolder : MonoBehaviour
     }
     private void Awake()
     {
+        CardPart.DragStartBounds = cardDragBoundsCollider.bounds;
+        CardPart.DragStartBounds.extents *= 2f;
+
+        Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
+        boundsSize.z += 1f;
+        cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
+
+
         cardsHolderTransform = transform;
         //Init(cardParts);
         CardPart.OnCardHovered += SetHoveredCard;
@@ -137,7 +151,10 @@ public class CardPartHolder : MonoBehaviour
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
-        selectedCardPart.SelectedState(true);
+        selectedCardPart.SelectedState(true, repositionColliderOnEnd: true);
+
+        selectedCardPart.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
+
         cardWasSelected = true;
 
         if (selectedCardPart.isShowingInfo)
@@ -151,11 +168,31 @@ public class CardPartHolder : MonoBehaviour
         CardPart.OnCardSelected -= SetSelectedCard;
         selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
 
-        if (OnPartSelected != null) OnPartSelected();
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
+
+    private void CheckSnapCardAtSelectedPosition(CardPart cardPart)
+    {
+        cardPart.OnDragMouseUp -= CheckSnapCardAtSelectedPosition;
+
+
+        if (cardDragBoundsTarget.Contains(cardPart.CardTransform.position))
+        {
+            //Debug.Log("YEP drop here");
+            cardPart.GoToSelectedPosition();
+            if (OnPartSelected != null) OnPartSelected();
+        }
+        else
+        {
+            RetrieveCard(cardPart);
+            cardPart.ReenableMouseInteraction();
+        }
+    }
+
+
+
 
     private void SetCardPartShowInfo(CardPart cardPart)
     {
