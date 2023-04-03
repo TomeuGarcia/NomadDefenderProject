@@ -55,7 +55,7 @@ public class CardDrawer : MonoBehaviour
 
     private void Start()
     {
-        GameStartSetup(2.5f, displayRedrawsOnGameStart, finishRedrawSetup);
+        GameStartSetup(2f, displayRedrawsOnGameStart, finishRedrawSetup);
     }
 
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
@@ -229,7 +229,7 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(startDelay);
 
         battleHUD.PlayDeckUIShowStartGameAnimation(); // DECK UI ANIM - PART 1  
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         DrawTopCard();
 
