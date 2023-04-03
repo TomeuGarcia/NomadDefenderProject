@@ -65,6 +65,12 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
+
+    [Header("DRAG & DROP")]
+    [SerializeField] private LayerMask layerMaskMouseDragPlane;
+    private bool isDraggingToSelect = false;    
+
+
     [HideInInspector] public bool isShowingInfo = false;
     protected bool canInfoInteract = true;
 
@@ -98,6 +104,8 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnCardUnhovered;
     public event BuildingCardAction OnCardSelected;
     public event BuildingCardAction OnCardInfoSelected;
+    public event BuildingCardAction OnDragBackToStartPosition;
+    public static event BuildingCardAction OnDragIntoSelectedPosition;
 
     public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
 
@@ -313,22 +321,74 @@ public abstract class BuildingCard : MonoBehaviour
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
+
+        CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
     }
 
-    public void SelectedState(bool repositionColliderOnEnd = false, bool enableInteractionOnEnd = false)
+
+    bool repositionColliderOnEnd, enableInteractionOnEnd = false;
+    public void SelectedState(bool useDragAndDrop, bool repositionColliderOnEnd = false, bool enableInteractionOnEnd = false)
     {
         cardState = CardStates.SELECTED;
 
+        if (useDragAndDrop)
+        {
+            this.repositionColliderOnEnd = repositionColliderOnEnd;
+            this.enableInteractionOnEnd = enableInteractionOnEnd;
+
+            isDraggingToSelect = true;
+        }
+        else
+        {
+            GoToSelectedPosition();
+        }
+    }
+    private void GoToSelectedPosition()
+    {
         DisableMouseInteraction();
 
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime);
-        CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime)
-            .OnComplete(() => { if (enableInteractionOnEnd) EnableMouseInteraction(); 
-                                if (repositionColliderOnEnd) RepositionColliderToCardTransform(); 
-            });
+        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime).OnComplete(() => {
+            if (enableInteractionOnEnd) EnableMouseInteraction();
+            if (repositionColliderOnEnd) RepositionColliderToCardTransform();
+        });
+        //CardTransform.DOBlendableLocalRotateBy(startRotation_euler - CardTransform.rotation.eulerAngles, selectedTime);
     }
 
+    private void OnMouseDrag()
+    {
+        if (isDraggingToSelect)
+        {
+            Ray ray = HandBuildingCards.HandCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane)) 
+            {
+                //Debug.Log(hit.point);
+                CardTransform.position = hit.point;
+                if (HandBuildingCards.CardBounds.Contains(hit.point))
+                {
+                    //Debug.Log("inside bounds");
+                    //if (Vector3.Distance())
+                }
+                else
+                {
+                    //Debug.Log("outside bounds");
+                    isDraggingToSelect = false;
+                    GoToSelectedPosition();
+                    if (OnDragIntoSelectedPosition != null) OnDragIntoSelectedPosition(this);
+                }
+            }
+        }
+
+    }
+    private void OnMouseUp()
+    {
+        if (isDraggingToSelect)
+        {
+            //Debug.Log("STOPPED Dragging");
+            isDraggingToSelect = false;
+            if (OnDragBackToStartPosition != null) OnDragBackToStartPosition(this);
+        }
+    }
 
     public void RepositionColliderToCardTransform()
     {

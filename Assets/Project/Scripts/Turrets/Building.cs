@@ -89,4 +89,5 @@ public abstract class Building : MonoBehaviour
         SetBuildingPartsColor(previewColorInUse);
     }
 
+
 }
