@@ -63,7 +63,7 @@ public class PathStart : MonoBehaviour
         }
 
         HomingProjectile projectile = Instantiate(projectilePrefab, startNode.Position, Quaternion.identity);
-        projectile.Init(topEnemy, null);
+        projectile.ProjectileShotInit(topEnemy, null);
     }
 
 }

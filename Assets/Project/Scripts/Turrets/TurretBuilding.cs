@@ -187,7 +187,7 @@ public class TurretBuilding : RangeBuilding
         currentAttack.transform.position = shootPoint;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, this);
+        currentAttack.ProjectileShotInit(enemyTarget, this);
 
 
         // Spawn particle

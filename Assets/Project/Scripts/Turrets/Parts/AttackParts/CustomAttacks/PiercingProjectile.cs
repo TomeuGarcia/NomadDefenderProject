@@ -20,7 +20,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     private bool hitTargetEnemy;
     private int queueDamageAmount;
 
-    public override void Init(Enemy targetEnemy, TurretBuilding owner)
+    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         hitTargetEnemy = false;
         trailRenderer.Clear();

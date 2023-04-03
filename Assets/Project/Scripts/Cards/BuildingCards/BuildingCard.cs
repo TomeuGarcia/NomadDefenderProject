@@ -40,6 +40,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     public const float unhoverTime = 0.05f;
     public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
+    public const float toStandardTime = 0.1f;
     public const float selectedTime = 0.3f;
 
     private Vector3 initialPosition;
@@ -302,7 +303,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = local_standardPosition;
         //CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
-    public void StandardState(bool repositionColliderOnEnd = false)
+    public void StandardState(bool repositionColliderOnEnd = false, float duration = BuildingCard.unhoverTime)
     {
         cardState = CardStates.STANDARD;
 

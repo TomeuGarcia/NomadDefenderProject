@@ -16,6 +16,8 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     [SerializeField] public Material materialForTurret;
 
+    public Vector3 Position => transform.position;
+
 
     protected PassiveDamageModifier passiveDamageModifier;
 
@@ -36,7 +38,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         passiveDamageModifier = newPassiveDamageModifier;
     }
 
-    public virtual void Init(Enemy targetEnemy, TurretBuilding owner)
+    public virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
     }
 
