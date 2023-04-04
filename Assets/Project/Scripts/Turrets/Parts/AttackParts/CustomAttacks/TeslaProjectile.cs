@@ -7,32 +7,37 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 {
     [SerializeField] private Lerp lerp;
 
+    [Header("STATS")]
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.5f;
-    [SerializeField] private int maxTargetAmount = 2;
-    [SerializeField] private float range;
-    private int currentTarget;
-    private Enemy[] targetedEnemies;
+    [SerializeField, Min(1)] private int maxChainedTargets = 1;
+    [SerializeField, Min(0f)] private float chainRadius;
+    [SerializeField, Min(0f)] private float stunDuration;
+
+    private int currentChainedTarget;
+    private Enemy[] chainTargetedEnemies;
     private bool attackChained = false;
+
+    private TurretBuilding owner;
 
     protected override void DoUpdate()
     {
     }
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
-    {      
+    {
+        this.owner = owner;
+
         this.damage = owner.stats.damage;
         this.damage = (int)((float)this.damage * damageMultiplier);
 
-        attackChained = false;
+        this.attackChained = false;
 
-        targetedEnemies = owner.GetNearestEnemies(maxTargetAmount, range);
-        for (int i = 0; i < targetedEnemies.Length; i++)
-        {
-            targetedEnemies[i].QueueDamage(damage, passiveDamageModifier);
-        }
-        currentTarget = 0;
-        this.targetEnemy = targetedEnemies[currentTarget];
+
+        this.targetEnemy = targetEnemy;
+        targetEnemy.QueueDamage(this.damage, passiveDamageModifier);
+
+        this.currentChainedTarget = 0;
 
         if (owner.baseDamagePassive != null)
             SetPassiveDamageModifier(owner.baseDamagePassive);
@@ -49,19 +54,41 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
     void EnemyHit()
     {
-        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
-        temp.gameObject.SetActive(true);
-        temp.transform.parent = gameObject.transform.parent;
+        GameObject hitParticles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+        hitParticles.gameObject.SetActive(true);
+        hitParticles.transform.parent = gameObject.transform.parent;
 
         targetEnemy.TakeDamage(damage, passiveDamageModifier);
+        targetEnemy.GetStunned(stunDuration);
 
-        if (++currentTarget < targetedEnemies.Length)
+        if (!attackChained)
         {
-            Debug.Log(currentTarget);
-            targetEnemy = targetedEnemies[currentTarget];
+            chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
+            for (int i = 0; i < chainTargetedEnemies.Length; i++)
+            {
+                chainTargetedEnemies[i].QueueDamage(this.damage, passiveDamageModifier);
+            }
 
-            lerp.LerpPosition(targetedEnemies[currentTarget].MeshTransform, bulletSpeed / 2.0f);
+            attackChained = true;
+            
+            Vector3 wavePosition = Position;
+            wavePosition.y = owner.Position.y;
+
+            GameObject waveParticles = ProjectileParticleFactory.GetInstance()
+                .GetAttackParticlesGameObject(ProjectileParticleFactory.ProjectileParticleType.TESLA_WAVE, wavePosition, Quaternion.identity);
+            waveParticles.gameObject.SetActive(true);
+            waveParticles.transform.parent = gameObject.transform.parent;
+            waveParticles.transform.localScale = Vector3.one * (chainRadius * 2f);
+        }
+
+        if (currentChainedTarget < chainTargetedEnemies.Length)
+        {
+            targetEnemy = chainTargetedEnemies[currentChainedTarget];
+
+            lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());
+
+            ++currentChainedTarget;
         }
         else
         {
@@ -71,37 +98,5 @@ public class TeslaProjectile : TurretPartAttack_Prefab
     }
 
 
-    Enemy[] GetNearestEnemiesToTargetedEnemy(Enemy targetedEnemy, int maxEnemies, float radius)
-    {       
-        Collider[]  colliders = Physics.OverlapSphere(targetedEnemy.Position, radius, enemyLayerMask, QueryTriggerInteraction.Collide);
-
-        if (colliders.Length == 0) return new Enemy[0];
-
-
-        List<Enemy> enemies = new List<Enemy>(colliders.Length);
-
-        for (int collidersI = 0; collidersI < colliders.Length; ++collidersI)
-        {
-            Enemy enemy = colliders[collidersI].gameObject.GetComponent<Enemy>();
-            enemies.Add(enemy);
-        }
-
-
-        enemies.Sort(SortByClosestToProjectile);
-
-        Enemy[] nearestEnemies = new Enemy[Mathf.Min(maxEnemies, enemies.Count)];
-        for (int i = 0; i < nearestEnemies.Length; ++i)
-        {
-            nearestEnemies[i] = enemies[i];
-        }
-
-        return nearestEnemies;
-    }
-    
-    
-    public int SortByClosestToProjectile(Enemy e1, Enemy e2)
-    {        
-        return Vector3.Distance(e1.Position, Position).CompareTo(Vector3.Distance(e2.Position, Position));
-    }
 
 }

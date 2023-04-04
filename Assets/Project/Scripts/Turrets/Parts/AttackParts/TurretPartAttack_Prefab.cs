@@ -79,4 +79,42 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
         disappearing = false;
     }
+
+
+    protected Enemy[] GetNearestEnemiesToTargetedEnemy(Enemy targetedEnemy, int maxEnemies, float radius, LayerMask enemyLayerMask)
+    {
+        Collider[] colliders = Physics.OverlapSphere(targetedEnemy.Position, radius, enemyLayerMask, QueryTriggerInteraction.Collide);
+
+
+        List<Enemy> enemies = new List<Enemy>(colliders.Length);
+
+        for (int collidersI = 0; collidersI < colliders.Length; ++collidersI)
+        {
+            Enemy enemy = colliders[collidersI].gameObject.GetComponent<Enemy>();
+
+            if (enemy != targetedEnemy && !enemy.DiesFromQueuedDamage())
+            {
+                enemies.Add(enemy);
+            }
+        }
+
+        if (enemies.Count == 0) return enemies.ToArray();
+
+        enemies.Sort(SortByClosestToProjectile);
+
+        Enemy[] nearestEnemies = new Enemy[Mathf.Min(maxEnemies, enemies.Count)];
+        for (int i = 0; i < nearestEnemies.Length; ++i)
+        {
+            nearestEnemies[i] = enemies[i];
+        }
+
+        return nearestEnemies;
+    }
+
+
+    public int SortByClosestToProjectile(Enemy e1, Enemy e2)
+    {
+        return Vector3.Distance(e1.Position, Position).CompareTo(Vector3.Distance(e2.Position, Position));
+    }
+
 }

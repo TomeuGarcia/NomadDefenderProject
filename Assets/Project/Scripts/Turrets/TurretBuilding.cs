@@ -24,6 +24,7 @@ public class TurretBuilding : RangeBuilding
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
+    public Vector3 Position => transform.position;
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
 

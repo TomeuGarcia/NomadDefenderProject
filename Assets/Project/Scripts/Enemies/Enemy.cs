@@ -164,6 +164,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void GetStunned(float duration)
+    {
+        if (IsDead()) return;
+        pathFollower.PauseForDuration(duration);
+    }
+
     private void Suicide()
     {
         Deactivation();
@@ -180,6 +186,7 @@ public class Enemy : MonoBehaviour
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
+        pathFollower.CheckDeactivateCoroutines();
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
