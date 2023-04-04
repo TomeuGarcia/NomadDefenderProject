@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileParticleFactory : MonoBehaviour
 {
-    public enum ProjectileParticleType { BASIC, TESLA, TESLA_WAVE, LONG_RANGE, PIERCING }
+    public enum ProjectileParticleType { BASIC, TESLA, TESLA_WAVE, LONG_RANGE, CLOSE_RANGE, PIERCING }
 
     [System.Serializable]
     private struct AttackTypeParticleToPool
@@ -93,6 +93,10 @@ public class ProjectileParticleFactory : MonoBehaviour
         else if (attackType == TurretPartAttack_Prefab.AttackType.LONG_RANGE)
         {
             projectileParticleType = ProjectileParticleType.LONG_RANGE;
+        }
+        else if (attackType == TurretPartAttack_Prefab.AttackType.CLOSE_RANGE)
+        {
+            projectileParticleType = ProjectileParticleType.CLOSE_RANGE;
         }
         else if (attackType == TurretPartAttack_Prefab.AttackType.PIERCING)
         {

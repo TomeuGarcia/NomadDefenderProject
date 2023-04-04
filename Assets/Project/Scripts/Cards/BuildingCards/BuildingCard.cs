@@ -318,14 +318,17 @@ public abstract class BuildingCard : MonoBehaviour
             });
     }
 
-    public void HoveredState()
+    public void HoveredState(bool rotate = true)
     {
         cardState = CardStates.HOVERED;
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
 
-        CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
+        if (rotate)
+        {
+            CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
+        }
     }
 
 

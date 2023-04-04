@@ -483,7 +483,7 @@ public class HandBuildingCards : MonoBehaviour
         if (isHandHidden && !isHandBeingShown) ShowHand();
 
         hoveredCard = card;
-        card.HoveredState();
+        card.HoveredState(rotate: false);
 
         foreach (BuildingCard itCard in cards)
         {
