@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4207083098588260928}
   - component: {fileID: 6767760847628538}
+  - component: {fileID: 6882417781251141008}
   - component: {fileID: 762682954504709822}
   m_Layer: 8
   m_Name: PathEnd
@@ -47,6 +48,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
+--- !u!114 &6882417781251141008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141818259572173214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289df757d4d32fd4b96f74afe7075a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileType: 0
+  buildingPlaceOffset: {x: 0, y: 0.2, z: 0}
+  isOccupied: 0
 --- !u!65 &762682954504709822
 BoxCollider:
   m_ObjectHideFlags: 0
