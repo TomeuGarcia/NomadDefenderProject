@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class EnemyWaveManager : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class EnemyWaveManager : MonoBehaviour
     
 
     [SerializeField] TextLine textLine;
+
+    [Header("FEEDBACK")]
+    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
 
     private void Awake()
@@ -155,10 +159,18 @@ public class EnemyWaveManager : MonoBehaviour
 
         if (--activeWaves == 0)
         {
-            if (OnAllWavesFinished != null) OnAllWavesFinished();
-            PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
-
+            StartCoroutine(LastWaveAnimation());
         }
+    }
+
+    private IEnumerator LastWaveAnimation()
+    {
+        if (OnAllWavesFinished != null) OnAllWavesFinished();
+
+        yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation());
+
+        if (OnAllWavesFinished != null) OnAllWavesFinished();
+        PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
     }
 
 
