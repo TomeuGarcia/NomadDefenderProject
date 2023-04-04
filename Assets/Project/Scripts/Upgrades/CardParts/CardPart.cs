@@ -128,11 +128,11 @@ public abstract class CardPart : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    public void StandardState(bool repositionColliderOnEnd = false)
+    public void StandardState(bool repositionColliderOnEnd = false, float duration = BuildingCard.toStandardTime)
     {
         cardState = CardPartStates.STANDARD;
 
-        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, BuildingCard.hoverTime)
+        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, duration)
             .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
 

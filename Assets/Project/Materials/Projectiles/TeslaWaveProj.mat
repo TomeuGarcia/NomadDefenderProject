@@ -20,22 +20,17 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PiercingProjHit
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_ValidKeywords:
-  - _EMISSION
-  - _RECEIVE_SHADOWS_OFF
-  - _SURFACE_TYPE_TRANSPARENT
+  m_Name: TeslaWaveProj
+  m_Shader: {fileID: -6465566751694194690, guid: 3bef39dce418ddb4a94910f83a95c06f,
+    type: 3}
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
-  disabledShaderPasses:
-  - DepthOnly
-  - SHADOWCASTER
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -107,6 +102,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
+    - _Emissiveness: 0.6
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -114,18 +110,24 @@ Material:
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 0
+    - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
     - _Surface: 1
+    - _WaveHeightDisplacement: -0.3
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 2.1185474, g: 0.29948053, b: 1.6526889, a: 1}
+    - _BaseColor: {r: 0, g: 0.9909527, b: 1, a: 0.2}
+    - _Color: {r: 0, g: 0.9909527, b: 1, a: 0.2}
+    - _ColorA: {r: 0.47209853, g: 0.9716981, b: 0.9224353, a: 1}
+    - _ColorB: {r: 0, g: 0.03450871, b: 1, a: 1}
+    - _ColorEdges: {r: 0.30258632, g: 0.0990566, b: 1, a: 1}
+    - _ColorInterior: {r: 0, g: 0.9500499, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0.7490196, b: 0.74509805, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

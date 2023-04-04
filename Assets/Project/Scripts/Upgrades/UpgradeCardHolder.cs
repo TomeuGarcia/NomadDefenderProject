@@ -146,7 +146,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        card.StandardState(cardWasSelected);
+        card.StandardState(cardWasSelected, duration: BuildingCard.toStandardTime);
         cardWasSelected = false; // reset
 
         if (card.isShowingInfo)

@@ -8,7 +8,6 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     [SerializeField] private Lerp lerp;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private Collider damageCollider;
-    [SerializeField] private float damageMultiplier;
     [SerializeField] private float extraDistanceCoef;
     [SerializeField] private float travelTime;
 
@@ -16,19 +15,30 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject disableParticles;
 
+    [Header("STATS")]
+    [SerializeField, Min(0)] private float startDamageMultiplier = 0.5f;
+    [SerializeField, Min(1)] private float maxDamageMultiplier = 2.0f;
+    [SerializeField, Min(0)] private float damageMultiplierIncrement = 0.25f;
+    private float currentDamageMultiplier = 0f;
+    private TurretBuilding owner;
+
+
     private Vector3 goalPos;
     private bool hitTargetEnemy;
     private int queueDamageAmount;
 
-    public override void Init(Enemy targetEnemy, TurretBuilding owner)
+    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         hitTargetEnemy = false;
         trailRenderer.Clear();
         arrow.SetActive(true);
         damageCollider.enabled = true;
 
+        this.owner = owner;
         this.targetEnemy = targetEnemy;
-        this.damage = (int)((float)owner.stats.damage * damageMultiplier);
+
+        this.currentDamageMultiplier = startDamageMultiplier;
+        this.damage = (int)((float)owner.stats.damage * currentDamageMultiplier);
 
         queueDamageAmount = targetEnemy.QueueDamage(damage, passiveDamageModifier);
 
@@ -82,5 +92,10 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         temp.transform.parent = gameObject.transform.parent;
 
         enemy.TakeDamage(damage, passiveDamageModifier);
+
+        currentDamageMultiplier += damageMultiplierIncrement;
+        currentDamageMultiplier = Mathf.Min(currentDamageMultiplier, maxDamageMultiplier);
+
+        this.damage = (int)((float)owner.stats.damage * currentDamageMultiplier);
     }
 }

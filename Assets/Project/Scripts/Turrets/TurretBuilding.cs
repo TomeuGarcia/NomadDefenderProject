@@ -24,6 +24,7 @@ public class TurretBuilding : RangeBuilding
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
+    public Vector3 Position => transform.position;
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
 
@@ -187,7 +188,7 @@ public class TurretBuilding : RangeBuilding
         currentAttack.transform.position = shootPoint;
         currentAttack.transform.parent = attackPool.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, this);
+        currentAttack.ProjectileShotInit(enemyTarget, this);
 
 
         // Spawn particle
