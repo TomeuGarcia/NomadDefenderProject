@@ -48,10 +48,8 @@ public class EnemyWaveManager : MonoBehaviour
         StartCoroutine(WaitForStart());
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
-        
-
-
     }
+
     private void OnEnable()
     {
         CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
@@ -180,5 +178,17 @@ public class EnemyWaveManager : MonoBehaviour
         {
             enemyWaveSpawners[i].ForceStopWave();
         }
+    }
+
+    public bool IsLastEnemy()
+    {
+        int totalEnemyCount = 0;
+
+        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        {
+            totalEnemyCount += enemyWaveSpawners[i].activeEnemies;
+        }
+
+        return totalEnemyCount == 1;
     }
 }
