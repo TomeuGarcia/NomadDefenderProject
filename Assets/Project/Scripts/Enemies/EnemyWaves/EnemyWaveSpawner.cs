@@ -238,4 +238,9 @@ public class EnemyWaveSpawner : ScriptableObject
 
     }
 
+    public int SetToLastWave()
+    {
+        currentWave = enemyWaves.Length - 2;
+        return currentWave;
+    }
 }

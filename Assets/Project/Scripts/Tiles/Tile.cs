@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -17,6 +19,9 @@ public class Tile : MonoBehaviour
     public static event TileAction OnTileHovered;
     public delegate void TileAction2();
     public static event TileAction2 OnTileUnhovered;
+
+
+    [HideInInspector] public bool falling = false;
 
 
     private void OnMouseDown()
@@ -40,4 +45,25 @@ public class Tile : MonoBehaviour
         if (OnTileUnhovered != null) OnTileUnhovered();
     }
 
+
+    public IEnumerator FallDown()
+    {
+        falling = true;
+        gameObject.GetComponent<Collider>().enabled = false;
+        transform.DOMoveY(-2.0f, 6.0f, false);
+        yield return new WaitForSeconds(1.0f);
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, 1.5f);
+        foreach (Collider col in hits)
+        {
+            if (col.gameObject.GetComponent<PathTile>() != null)
+            {
+                if (!col.gameObject.GetComponent<PathTile>().falling) StartCoroutine(col.gameObject.GetComponent<PathTile>().FallDown());
+            }
+            if (col.gameObject.GetComponent<Tile>() != null)
+            {
+                if (!col.gameObject.GetComponent<Tile>().falling) StartCoroutine(col.gameObject.GetComponent<Tile>().FallDown());
+            }
+        }
+    }
 }

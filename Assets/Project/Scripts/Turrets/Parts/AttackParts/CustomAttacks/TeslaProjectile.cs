@@ -74,11 +74,11 @@ public class TeslaProjectile : TurretPartAttack_Prefab
             Vector3 wavePosition = Position;
             wavePosition.y = owner.Position.y;
 
-            GameObject waveParticles = ProjectileParticleFactory.GetInstance()
-                .GetAttackParticlesGameObject(ProjectileParticleFactory.ProjectileParticleType.TESLA_WAVE, wavePosition, Quaternion.identity);
-            waveParticles.gameObject.SetActive(true);
-            waveParticles.transform.parent = gameObject.transform.parent;
-            waveParticles.transform.localScale = Vector3.one * (chainRadius * 2f);
+            //GameObject waveParticles = ProjectileParticleFactory.GetInstance()
+            //    .GetAttackParticlesGameObject(ProjectileParticleFactory.ProjectileParticleType.TESLA_WAVE, wavePosition, Quaternion.identity);
+            //waveParticles.gameObject.SetActive(true);
+            //waveParticles.transform.parent = gameObject.transform.parent;
+            //waveParticles.transform.localScale = Vector3.one * (chainRadius * 2f);
         }
 
         if (currentChainedTarget < chainTargetedEnemies.Length)
