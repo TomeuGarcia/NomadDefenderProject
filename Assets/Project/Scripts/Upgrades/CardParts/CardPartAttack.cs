@@ -150,8 +150,6 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     {
         ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
 
-        Debug.Log("WTFFFFFFFF");
-
         setupData[0] = new ICardDescriptionProvider.SetupData(
             turretPartAttack.abilityName,
             turretPartAttack.abilityDescription,
@@ -159,7 +157,7 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
             turretPartAttack.materialColor
         );
 
-        setupData[0] = null;
+        setupData[1] = null;
 
         return setupData;
     }

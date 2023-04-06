@@ -173,8 +173,15 @@ public abstract class CardPart : MonoBehaviour
             Ray ray = MouseDragCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane))
             {
-                //Debug.Log(hit.point);
-                CardTransform.position = hit.point;
+                float distance = Vector3.Distance(CardTransform.position, hit.point);
+                if (distance > 0.05f)
+                {
+                    float speed = 10f * Mathf.Clamp(distance * 2f, 0.1f, 10f);
+                    Vector3 dir = (hit.point - CardTransform.position).normalized;
+                    CardTransform.position = CardTransform.position + (dir * Time.deltaTime * speed);
+                }
+
+
                 if (DragStartBounds.Contains(hit.point))
                 {
                     //Debug.Log("inside bounds");
