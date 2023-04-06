@@ -15,8 +15,7 @@ public class PathTile : MonoBehaviour
 
     [HideInInspector] public bool falling = false;
     [SerializeField] GameObject cube;
-    [SerializeField] AnimationCurve activateCurve;
-    [SerializeField] AnimationCurve deactivateCurve;
+    [SerializeField] GameObject holeFill;
 
     public IEnumerator Deactivate()
     {
@@ -48,8 +47,11 @@ public class PathTile : MonoBehaviour
         newCube.transform.SetParent(transform.parent);
         yield return new WaitForSeconds(0.25f);
 
+        GameObject newFill = Instantiate(holeFill, transform.parent);
+        newFill.transform.position = transform.position;
+        newFill.transform.SetParent(transform.parent);
         transform.DOMoveY(-100.0f, 50.0f, false);
-        yield return new WaitForSeconds(0.75f);
+        //yield return new WaitForSeconds(0.75f);
 
         newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
         yield return new WaitForSeconds(0.75f);
