@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardPartBody : CardPart
+public class CardPartBody : CardPart, ICardDescriptionProvider
 {
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -28,6 +28,7 @@ public class CardPartBody : CardPart
     //[SerializeField] private MeshRenderer bodyMeshRenderer;
     [SerializeField] private Image bodyImage;
     private Material bodyMaterial;
+    [SerializeField] private TurretPartAttack defaultColorTurretPartAttack;
 
 
 
@@ -47,6 +48,7 @@ public class CardPartBody : CardPart
     {
         bodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
         //bodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color     ???? WHAT TO DO ????
+        bodyMaterial.SetColor("_PaintColor", defaultColorTurretPartAttack.materialColor);
 
         damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
         cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
@@ -74,15 +76,21 @@ public class CardPartBody : CardPart
     public override void ShowInfo()
     {
         base.ShowInfo();
+        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        return;
+
 
         showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
 
     public override void HideInfo()
     {
+        base.HideInfo();
+        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        return;
+
         if (isHideInfoAnimationPlaying) return;
 
-        base.HideInfo();
 
         if (isShowInfoAnimationPlaying)
         {
@@ -174,5 +182,23 @@ public class CardPartBody : CardPart
         }        
     }
 
+
+
+    // ICardDescriptionProvider OVERLOADS
+    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    {
+        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+
+        setupData[0] = new ICardDescriptionProvider.SetupData();
+        setupData[1] = null;
+
+
+        return setupData;
+    }
+
+    public Vector3 GetCenterPosition()
+    {
+        return CardTransform.position;
+    }
 
 }

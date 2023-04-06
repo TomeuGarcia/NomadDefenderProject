@@ -343,6 +343,7 @@ public abstract class BuildingCard : MonoBehaviour
         if (useDragAndDrop)
         {
             isDraggingToSelect = true;
+            //Debug.Log("isDraggingToSelect");
         }
         else
         {
@@ -377,7 +378,7 @@ public abstract class BuildingCard : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("outside bounds");
+                    //Debug.Log("outside bounds");
                     isDraggingToSelect = false;
                     GoToSelectedPosition();
                     if (OnDragOutsideDragBounds != null) OnDragOutsideDragBounds(this);

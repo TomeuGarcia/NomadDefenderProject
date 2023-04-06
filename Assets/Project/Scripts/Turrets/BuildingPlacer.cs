@@ -119,7 +119,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private void TryPlaceBuilding(Tile tile)
     {
-        if (CanPlaceSelectedBuildingOnTile(tile))
+        if (CanPlaceBuildingOnTile(selectedBuilding, tile))
         {
             PlaceSelectedBuilding(tile);
         }
@@ -133,9 +133,9 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    private bool CanPlaceSelectedBuildingOnTile(Tile tile)
+    private bool CanPlaceBuildingOnTile(Building building, Tile tile)
     {
-        return selectedBuilding.validTileType == tile.tileType;
+        return building.validTileType == tile.tileType;
     }
 
     private void PlaceSelectedBuilding(Tile tile)
@@ -192,7 +192,7 @@ public class BuildingPlacer : MonoBehaviour
         building.transform.position = tile.buildingPlacePosition;
         building.ShowRangePlane();
 
-        if (CanPlaceSelectedBuildingOnTile(tile))
+        if (CanPlaceBuildingOnTile(building, tile))
         {
             building.SetPreviewCanBePlacedColor();
         }

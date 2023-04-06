@@ -30,7 +30,7 @@ public class EditorTurretCardParts : Editor
         if (turretPartAttack != null)
         {
             GUILayout.Label(" - " + turretPartAttack.abilityName);            
-            GUILayout.Box(turretPartAttack.materialTexture,
+            GUILayout.Box(turretPartAttack.texture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
         else
