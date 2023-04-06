@@ -40,6 +40,7 @@ public class GatherNewCardManager : MonoBehaviour
     private void Awake()
     {
         Init();
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
     }
 
     private void Init()

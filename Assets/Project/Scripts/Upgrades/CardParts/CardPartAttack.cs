@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static TurretBuildingCard;
 
-public class CardPartAttack : CardPart
+public class CardPartAttack : CardPart, ICardDescriptionProvider
 {
     [Header("CARD INFO")]
     //[SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -28,24 +28,20 @@ public class CardPartAttack : CardPart
     [Header("VISUALS")]
     //[SerializeField] private MeshRenderer attackMeshRenderer;
     [SerializeField] private Image attackImage;
-    private Material attackMaterial;
 
 
 
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        //attackMaterial = attackMeshRenderer.material;
-        attackMaterial = new Material(attackImage.material);
-        attackImage.material = attackMaterial;
 
         SetupCardInfo();
     }
 
     public override void Init()
     {
-        attackMaterial.SetTexture("_Texture", turretPartAttack.materialTexture);
-        attackMaterial.SetColor("_Color", turretPartAttack.materialColor);
+        attackImage.sprite = turretPartAttack.abilitySprite;
+        attackImage.color = turretPartAttack.materialColor;
 
         InitInfoVisuals();
     }
@@ -72,15 +68,21 @@ public class CardPartAttack : CardPart
     public override void ShowInfo()
     {
         base.ShowInfo();
+        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        return;
+
 
         showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
 
     public override void HideInfo()
     {
+        base.HideInfo();
+        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        return;
+
         if (isHideInfoAnimationPlaying) return;
 
-        base.HideInfo();
 
         if (isShowInfoAnimationPlaying)
         {
@@ -88,6 +90,7 @@ public class CardPartAttack : CardPart
         }
 
         StartCoroutine(HideInfoAnimation());
+
     }
 
     private IEnumerator ShowInfoAnimation()
@@ -138,6 +141,32 @@ public class CardPartAttack : CardPart
 
 
         canInfoInteract = true;
+    }
+
+
+
+    // ICardDescriptionProvider OVERLOADS
+    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    {
+        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+
+        Debug.Log("WTFFFFFFFF");
+
+        setupData[0] = new ICardDescriptionProvider.SetupData(
+            turretPartAttack.abilityName,
+            turretPartAttack.abilityDescription,
+            turretPartAttack.abilitySprite,
+            turretPartAttack.materialColor
+        );
+
+        setupData[0] = null;
+
+        return setupData;
+    }
+
+    public Vector3 GetCenterPosition()
+    {
+        return CardTransform.position;
     }
 
 }
