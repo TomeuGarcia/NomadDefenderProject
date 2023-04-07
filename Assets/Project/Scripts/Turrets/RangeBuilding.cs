@@ -174,7 +174,6 @@ public abstract class RangeBuilding : Building
         return enemyList.ToArray();
     }
 
-
     public override void ShowRangePlane()
     {
         basePart.baseCollider.ShowRange();

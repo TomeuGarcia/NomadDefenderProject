@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ProjectileParticleFactory : MonoBehaviour
 {
+    public enum ProjectileParticleType { BASIC, TESLA, TESLA_WAVE, LONG_RANGE, PIERCING }
+
     [System.Serializable]
     private struct AttackTypeParticleToPool
     {
-        public TurretPartAttack_Prefab.AttackType type;
+        public ProjectileParticleType type;
         public Pool pool;
     }
 
@@ -16,7 +18,7 @@ public class ProjectileParticleFactory : MonoBehaviour
     private static ProjectileParticleFactory instance;
 
     [SerializeField] private AttackTypeParticleToPool[] particleToPool;
-    private Dictionary<TurretPartAttack_Prefab.AttackType, Pool> sortedAttacks;
+    private Dictionary<ProjectileParticleType, Pool> sortedAttacks;
 
 
 
@@ -51,7 +53,7 @@ public class ProjectileParticleFactory : MonoBehaviour
 
     private void Init()
     {
-        sortedAttacks = new Dictionary<TurretPartAttack_Prefab.AttackType, Pool>();
+        sortedAttacks = new Dictionary<ProjectileParticleType, Pool>();
         foreach (AttackTypeParticleToPool attackTypeToPool in particleToPool)
         {
             sortedAttacks[attackTypeToPool.type] = attackTypeToPool.pool;
@@ -60,7 +62,12 @@ public class ProjectileParticleFactory : MonoBehaviour
 
     public GameObject GetAttackParticlesGameObject(TurretPartAttack_Prefab.AttackType attackType, Vector3 position, Quaternion rotation)
     {
-        return sortedAttacks[attackType].GetObject(position, rotation);
+        return GetAttackParticlesGameObject(AttackTypeToProjectileParticleType(attackType), position, rotation);
+    }
+
+    public GameObject GetAttackParticlesGameObject(ProjectileParticleType projectileParticleType, Vector3 position, Quaternion rotation)
+    {
+        return sortedAttacks[projectileParticleType].GetObject(position, rotation);
     }
 
     public void ResetPools()
@@ -70,4 +77,29 @@ public class ProjectileParticleFactory : MonoBehaviour
             attackTypeParticleToPool.pool.ResetObjectsList();
         }
     }
+
+    private ProjectileParticleType AttackTypeToProjectileParticleType(TurretPartAttack_Prefab.AttackType attackType)
+    {
+        ProjectileParticleType projectileParticleType = ProjectileParticleType.BASIC;
+
+        if (attackType == TurretPartAttack_Prefab.AttackType.BASIC)
+        {
+            projectileParticleType = ProjectileParticleType.BASIC;
+        }
+        else if (attackType == TurretPartAttack_Prefab.AttackType.TESLA)
+        {
+            projectileParticleType = ProjectileParticleType.TESLA;
+        }
+        else if (attackType == TurretPartAttack_Prefab.AttackType.LONG_RANGE)
+        {
+            projectileParticleType = ProjectileParticleType.LONG_RANGE;
+        }
+        else if (attackType == TurretPartAttack_Prefab.AttackType.PIERCING)
+        {
+            projectileParticleType = ProjectileParticleType.PIERCING;
+        }
+
+        return projectileParticleType;
+    }
+
 }
