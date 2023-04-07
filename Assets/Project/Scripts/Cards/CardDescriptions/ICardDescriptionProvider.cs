@@ -11,7 +11,7 @@ public interface ICardDescriptionProvider
 
         public SetupData()
         {
-            this.abilityName = "Empty";
+            this.abilityName = "none";
             this.abilityDescription = "No ability.";
             this.icon = null;
             this.iconColor = Color.black;

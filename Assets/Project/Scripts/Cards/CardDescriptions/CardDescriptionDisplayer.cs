@@ -6,12 +6,18 @@ public class CardDescriptionDisplayer : MonoBehaviour
 {
     private static CardDescriptionDisplayer instance;
 
-    [SerializeField] private RectTransform parentUI;
-
-
-    [SerializeField] private CardAbilityDescriptionBox attackDescriptionBox;
-    [SerializeField] private CardAbilityDescriptionBox baseDescriptionBox;
     private Camera displayCamera;
+
+    [SerializeField] private CardAbilityDescriptionBoxPack[] descriptionBoxPacks;
+    private int currentDescriptionBoxPackI = 0;
+
+    [System.Serializable]
+    private struct CardAbilityDescriptionBoxPack
+    {
+        [SerializeField] public RectTransform parentUI;
+        [SerializeField] public CardAbilityDescriptionBox attackDescriptionBox;
+        [SerializeField] public CardAbilityDescriptionBox baseDescriptionBox;
+    }
 
 
     private void Awake()
@@ -38,6 +44,28 @@ public class CardDescriptionDisplayer : MonoBehaviour
     {
     }
 
+    private void IncrementCurrentDescriptionBoxPackI()
+    {
+        currentDescriptionBoxPackI = ++currentDescriptionBoxPackI % descriptionBoxPacks.Length;
+    }
+    private CardAbilityDescriptionBoxPack GetDescriptionBoxPack()
+    {
+        return descriptionBoxPacks[currentDescriptionBoxPackI];
+    }
+    private RectTransform GetParentUIDescriptionBox()
+    {
+        return GetDescriptionBoxPack().parentUI;
+    }
+    private CardAbilityDescriptionBox GetAttackDescriptionBox()
+    {
+        return GetDescriptionBoxPack().attackDescriptionBox;
+    }
+    private CardAbilityDescriptionBox GetBaseDescriptionBox()
+    {
+        return GetDescriptionBoxPack().baseDescriptionBox;
+    }
+
+
     public void SetCamera(Camera camera)
     {
         displayCamera = camera;
@@ -54,14 +82,22 @@ public class CardDescriptionDisplayer : MonoBehaviour
 
     private void DoShowCardDescription()
     {
+        CardAbilityDescriptionBox attackDescriptionBox = GetAttackDescriptionBox();
+        CardAbilityDescriptionBox baseDescriptionBox = GetBaseDescriptionBox();
+
         if (attackDescriptionBox.gameObject.activeInHierarchy) attackDescriptionBox.Show();
         if (baseDescriptionBox.gameObject.activeInHierarchy) baseDescriptionBox.Show();
     }
 
     public void HideCardDescription()
     {
+        CardAbilityDescriptionBox attackDescriptionBox = GetAttackDescriptionBox();
+        CardAbilityDescriptionBox baseDescriptionBox = GetBaseDescriptionBox();
+
         if (attackDescriptionBox.gameObject.activeInHierarchy) attackDescriptionBox.Hide();
         if (baseDescriptionBox.gameObject.activeInHierarchy) baseDescriptionBox.Hide();
+
+        IncrementCurrentDescriptionBoxPackI();
     }
 
 
@@ -81,12 +117,17 @@ public class CardDescriptionDisplayer : MonoBehaviour
             positionOffset = Vector3.left * xDisplacement; // Display left
         }
 
+
+        RectTransform parentUI = GetParentUIDescriptionBox();
         parentUI.position = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition() + positionOffset);
     }
 
     private void SetupCardInfo(ICardDescriptionProvider descriptionProvider)
     {
         ICardDescriptionProvider.SetupData[] setupData = descriptionProvider.GetAbilityDescriptionSetupData();
+
+        CardAbilityDescriptionBox attackDescriptionBox = GetAttackDescriptionBox();
+        CardAbilityDescriptionBox baseDescriptionBox = GetBaseDescriptionBox();
 
         if (setupData[0] != null) 
         {
