@@ -23,13 +23,17 @@ public class CardAbilityDescriptionBox : MonoBehaviour
     private Coroutine activeAnimationCoroutine;
     private bool isHiding = false;
 
+    private static Quaternion rotationPositionedAtRight = Quaternion.Euler(0f, 180f, 0f);
+    private static Quaternion rotationPositionedAtLeft= Quaternion.identity;
+
+
 
     private void Awake()
     {
         backgroundImage.fillAmount = 0f;
         cgNameAndIcon.alpha = 0f;
         cgDescription.alpha = 0f;
-        parentHolder.SetActive(false);
+        parentHolder.SetActive(false);        
     }
 
     public void SetupTextsAndIcon(ICardDescriptionProvider.SetupData cardDescriptionSetupData)
@@ -45,7 +49,7 @@ public class CardAbilityDescriptionBox : MonoBehaviour
 
 
 
-    public void Show()
+    public void Show(bool positionAtTheRight)
     {
         if (activeAnimationCoroutine != null)
         {
@@ -53,10 +57,10 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         }
 
         isHiding = false;
-        activeAnimationCoroutine = StartCoroutine(PlayShowAnimation());
+        activeAnimationCoroutine = StartCoroutine(PlayShowAnimation(positionAtTheRight));
     }
 
-    private IEnumerator PlayShowAnimation()
+    private IEnumerator PlayShowAnimation(bool positionAtTheRight)
     {        
         parentHolder.SetActive(true);
         backgroundImage.DOComplete();
@@ -67,6 +71,8 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         float t1 = 0.1f;
         float t2 = 0.2f;
 
+        backgroundImage.fillOrigin = positionAtTheRight ? 0 : 1;
+        backgroundImage.rectTransform.rotation = positionAtTheRight ? rotationPositionedAtRight : rotationPositionedAtLeft;
 
         backgroundImage.DOFillAmount(1f, t2);
         yield return new WaitForSeconds(t1);
