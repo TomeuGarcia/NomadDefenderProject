@@ -110,13 +110,13 @@ public class CameraMovement : MonoBehaviour
 
 
 
-    public void CameraShake()
+    public void CameraShake(float duration, int vibrato)
     {
         transform.DOComplete();
 
         float randomY = Random.Range(0, 2) > 0 ? Random.Range(0.3f, 0.5f) : Random.Range(-0.5f, -0.3f);
-        Vector3 shakePunch = new Vector3(Random.Range(0.1f, 0.2f), Random.Range(0.1f, 0.2f), Random.Range(0.1f, 0.2f)) * 1.5f;
-        transform.DOPunchRotation(shakePunch, 0.5f, 10);
+        Vector3 shakePunch = new Vector3(Random.Range(0.1f, 0.2f), randomY, Random.Range(0.1f, 0.2f));
+        transform.DOPunchRotation(shakePunch, 0.5f, vibrato, 0.0f);
         //transform.DOShakePosition(1.0f, 100.0f, 10, 90, false, true, ShakeRandomnessMode.Full);
     }
 

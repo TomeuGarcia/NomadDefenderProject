@@ -13,7 +13,6 @@ public class PathTile : MonoBehaviour
     [SerializeField] Material deactivatedMat;
     [SerializeField] List<int> matToChange = new List<int>();
 
-    [HideInInspector] public bool falling = false;
     [SerializeField] GameObject cube;
     [SerializeField] GameObject holeFill;
 
@@ -57,26 +56,5 @@ public class PathTile : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(0.0f, 100.0f, 0.0f), 1.25f);
-    }
-
-    public IEnumerator FallDown()
-    {
-        falling = true;
-        gameObject.GetComponent<Collider>().enabled = false;
-        transform.DOMoveY(-100.0f, 50.0f, false);
-        yield return new WaitForSeconds(1.0f);
-
-        Collider[] hits = Physics.OverlapSphere(transform.position, 2f);
-        foreach (Collider col in hits)
-        {
-            if (col.gameObject.GetComponent<PathTile>() != null)
-            {
-                if(!col.gameObject.GetComponent<PathTile>().falling) StartCoroutine(col.gameObject.GetComponent<PathTile>().FallDown());
-            }
-            if (col.gameObject.GetComponent<Tile>() != null)
-            {
-                if (!col.gameObject.GetComponent<Tile>().falling) StartCoroutine(col.gameObject.GetComponent<Tile>().FallDown());
-            }
-        }
     }
 }

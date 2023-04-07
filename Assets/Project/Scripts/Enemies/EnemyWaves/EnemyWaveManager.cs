@@ -177,6 +177,9 @@ public class EnemyWaveManager : MonoBehaviour
         yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
 
         if (OnAllWavesFinished != null) OnAllWavesFinished();
+
+        yield return new WaitForSeconds(2.5f);
+
         PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
     }
 
