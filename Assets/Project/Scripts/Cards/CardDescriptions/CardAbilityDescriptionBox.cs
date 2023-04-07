@@ -71,7 +71,7 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         float t1 = 0.1f;
         float t2 = 0.2f;
 
-        backgroundImage.fillOrigin = positionAtTheRight ? 0 : 1;
+
         backgroundImage.rectTransform.rotation = positionAtTheRight ? rotationPositionedAtRight : rotationPositionedAtLeft;
 
         backgroundImage.DOFillAmount(1f, t2);
