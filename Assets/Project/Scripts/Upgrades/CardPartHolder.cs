@@ -36,6 +36,9 @@ public class CardPartHolder : MonoBehaviour
     [HideInInspector] public bool canSelectCard = true;
 
 
+    private bool cardsInteractionEnabled = true;
+
+
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
     public event CardPartHolderAction OnPartUnselected;
@@ -70,11 +73,17 @@ public class CardPartHolder : MonoBehaviour
     private void OnEnable()
     {
         CardPartReplaceManager.OnReplacementStart += StopAnimationCompletely;
+        
+        BuildingCard.OnMouseDragStart += DisableCardsInteraction;
+        BuildingCard.OnMouseDragEnd += EnableCardsInteraction;
     }
 
     private void OnDisable()
     {
         CardPartReplaceManager.OnReplacementStart -= StopAnimationCompletely;
+
+        BuildingCard.OnMouseDragStart -= DisableCardsInteraction;
+        BuildingCard.OnMouseDragEnd -= EnableCardsInteraction;
     }
 
 
@@ -111,6 +120,24 @@ public class CardPartHolder : MonoBehaviour
             cardParts[i].Init();
         }
 
+    }
+
+
+    private void EnableCardsInteraction()
+    {
+        cardsInteractionEnabled = true;
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.EnableMouseInteraction();
+        }
+    }
+    private void DisableCardsInteraction()
+    {
+        cardsInteractionEnabled = false;
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.DisableMouseInteraction();
+        }
     }
 
 
@@ -297,7 +324,7 @@ public class CardPartHolder : MonoBehaviour
         {
             yield return new WaitForSeconds(moveDuration - delayBetweenCards);
             cardPart.isInteractable = true;
-            cardPart.ReenableMouseInteraction();
+            if (cardsInteractionEnabled) cardPart.ReenableMouseInteraction();
         }
     }
 

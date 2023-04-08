@@ -23,18 +23,22 @@ public class CardAbilityDescriptionBox : MonoBehaviour
     private Coroutine activeAnimationCoroutine;
     private bool isHiding = false;
 
+    private static Quaternion rotationPositionedAtRight = Quaternion.Euler(0f, 180f, 0f);
+    private static Quaternion rotationPositionedAtLeft= Quaternion.identity;
+
+
 
     private void Awake()
     {
         backgroundImage.fillAmount = 0f;
         cgNameAndIcon.alpha = 0f;
         cgDescription.alpha = 0f;
-        parentHolder.SetActive(false);
+        parentHolder.SetActive(false);        
     }
 
     public void SetupTextsAndIcon(ICardDescriptionProvider.SetupData cardDescriptionSetupData)
     {
-        nameText.text = "/" + cardDescriptionSetupData.abilityName;
+        nameText.text = "/" + cardDescriptionSetupData.abilityName + ":";
         descriptionText.text = cardDescriptionSetupData.abilityDescription;
 
         iconImage.sprite = cardDescriptionSetupData.icon;
@@ -45,7 +49,7 @@ public class CardAbilityDescriptionBox : MonoBehaviour
 
 
 
-    public void Show()
+    public void Show(bool positionAtTheRight)
     {
         if (activeAnimationCoroutine != null)
         {
@@ -53,10 +57,10 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         }
 
         isHiding = false;
-        activeAnimationCoroutine = StartCoroutine(PlayShowAnimation());
+        activeAnimationCoroutine = StartCoroutine(PlayShowAnimation(positionAtTheRight));
     }
 
-    private IEnumerator PlayShowAnimation()
+    private IEnumerator PlayShowAnimation(bool positionAtTheRight)
     {        
         parentHolder.SetActive(true);
         backgroundImage.DOComplete();
@@ -68,13 +72,18 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         float t2 = 0.2f;
 
 
+        backgroundImage.rectTransform.rotation = positionAtTheRight ? rotationPositionedAtRight : rotationPositionedAtLeft;
+
         backgroundImage.DOFillAmount(1f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         yield return new WaitForSeconds(t1);
 
         cgNameAndIcon.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
 
         cgDescription.DOFade(1f, t1);
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
 
         activeAnimationCoroutine = null;
@@ -101,16 +110,21 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         cgDescription.DOComplete();
 
 
+        float t0 = 0.05f;
         float t1 = 0.1f;
+        float t2 = 0.2f;
 
-        cgDescription.DOFade(0f, t1);
-        yield return new WaitForSeconds(t1);
+        cgDescription.DOFade(0f, t0);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
+        yield return new WaitForSeconds(t0);
 
-        cgNameAndIcon.DOFade(0f, t1);
-        yield return new WaitForSeconds(t1);
+        backgroundImage.DOFillAmount(0f, t2);
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
+        yield return new WaitForSeconds(t0);
 
-        backgroundImage.DOFillAmount(0f, t1);
-        yield return new WaitForSeconds(t1);
+        cgNameAndIcon.DOFade(0f, t0);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        yield return new WaitForSeconds(t1+t0);
 
 
 

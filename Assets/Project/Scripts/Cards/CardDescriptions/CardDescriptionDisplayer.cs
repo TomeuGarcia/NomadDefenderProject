@@ -74,19 +74,19 @@ public class CardDescriptionDisplayer : MonoBehaviour
 
     public void ShowCardDescription(ICardDescriptionProvider descriptionProvider)
     {
-        PositionCardInfo(descriptionProvider);
+        bool positionedAtTheRight = PositionCardInfo(descriptionProvider);
         SetupCardInfo(descriptionProvider);
 
-        DoShowCardDescription();
+        DoShowCardDescription(positionedAtTheRight);
     }
 
-    private void DoShowCardDescription()
+    private void DoShowCardDescription(bool positionedAtTheRight)
     {
         CardAbilityDescriptionBox attackDescriptionBox = GetAttackDescriptionBox();
         CardAbilityDescriptionBox baseDescriptionBox = GetBaseDescriptionBox();
 
-        if (attackDescriptionBox.gameObject.activeInHierarchy) attackDescriptionBox.Show();
-        if (baseDescriptionBox.gameObject.activeInHierarchy) baseDescriptionBox.Show();
+        if (attackDescriptionBox.gameObject.activeInHierarchy) attackDescriptionBox.Show(positionedAtTheRight);
+        if (baseDescriptionBox.gameObject.activeInHierarchy) baseDescriptionBox.Show(positionedAtTheRight);
     }
 
     public void HideCardDescription()
@@ -101,14 +101,17 @@ public class CardDescriptionDisplayer : MonoBehaviour
     }
 
 
-    private void PositionCardInfo(ICardDescriptionProvider descriptionProvider)
+    // true if positioned at right, false if left
+    private bool PositionCardInfo(ICardDescriptionProvider descriptionProvider)
     {
         Vector3 cardPositionInScreen = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition());
 
         float xDisplacement = 1.0f;
-        Vector3 positionOffset;
+        Vector3 positionOffset = Vector3.zero;
 
-        if (cardPositionInScreen.x < displayCamera.pixelWidth * 0.25f)
+        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.85f;
+
+        if (positionAtTheRight)
         {            
             positionOffset = Vector3.right * xDisplacement; // Display right
         }
@@ -120,6 +123,8 @@ public class CardDescriptionDisplayer : MonoBehaviour
 
         RectTransform parentUI = GetParentUIDescriptionBox();
         parentUI.position = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition() + positionOffset);
+
+        return positionAtTheRight;
     }
 
     private void SetupCardInfo(ICardDescriptionProvider descriptionProvider)

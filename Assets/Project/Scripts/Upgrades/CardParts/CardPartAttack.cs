@@ -163,8 +163,9 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     }
 
     public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position;
+    {        
+        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
     }
+
 
 }

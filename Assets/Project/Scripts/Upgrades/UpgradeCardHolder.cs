@@ -39,6 +39,8 @@ public class UpgradeCardHolder : MonoBehaviour
 
     [HideInInspector] public bool canSelectCard = true;
 
+    private bool cardsInteractionEnabled = true;
+
 
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnCardSelected;
@@ -76,11 +78,17 @@ public class UpgradeCardHolder : MonoBehaviour
     private void OnEnable()
     {
         CardPartReplaceManager.OnReplacementDone += StopAnimationCompletely;
+
+        CardPart.OnMouseDragStart += DisableCardsInteraction;
+        CardPart.OnMouseDragEnd += EnableCardsInteraction;
     }
 
     private void OnDisable()
     {
         CardPartReplaceManager.OnReplacementDone -= StopAnimationCompletely;
+
+        CardPart.OnMouseDragStart -= DisableCardsInteraction;
+        CardPart.OnMouseDragEnd -= EnableCardsInteraction;
     }
 
 
@@ -124,6 +132,26 @@ public class UpgradeCardHolder : MonoBehaviour
             cards[i].InitPositions(selectedTransform.position, Vector3.zero, cards[i].transform.position);
         }
     }
+
+
+    private void EnableCardsInteraction()
+    {
+        cardsInteractionEnabled = true;
+        foreach (BuildingCard card in cards)
+        {
+            card.EnableMouseInteraction();
+        }
+    }
+    private void DisableCardsInteraction()
+    {
+        cardsInteractionEnabled = false;
+        foreach (BuildingCard card in cards)
+        {
+            card.DisableMouseInteraction();
+        }
+    }
+
+
 
 
     private void SetHoveredCard(BuildingCard card)
@@ -369,7 +397,7 @@ public class UpgradeCardHolder : MonoBehaviour
         {
             yield return new WaitForSeconds(moveDuration - delayBetweenCards);
             card.canBeHovered = true;
-            card.ReenableMouseInteraction();
+            if (cardsInteractionEnabled) card.ReenableMouseInteraction();
         }
     }
 
