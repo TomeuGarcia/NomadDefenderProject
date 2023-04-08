@@ -26,6 +26,9 @@ public class TurretBuilding : RangeBuilding
     private Vector3 lastTargetedPosition;
     public Vector3 Position => transform.position;
 
+    private Enemy targetedEnemy;
+
+
     private TurretPartBody.BodyType bodyType; // Used to play sound
 
     [Header("HOLDERS")]
@@ -59,12 +62,14 @@ public class TurretBuilding : RangeBuilding
     {
         if (!isFunctional) return;
 
+        ComputeNextTargetedEnemy();
+
         UpdateShoot();
         if (bodyPart.lookAtTarget)
         {
-            if (enemies.Count > 0)
+            if (TargetEnemyExists())
             {
-                lastTargetedPosition = enemies[0].transform.position;
+                lastTargetedPosition = targetedEnemy.transformToMove.position;
             }
             LookAtTarget();
         }
@@ -149,11 +154,11 @@ public class TurretBuilding : RangeBuilding
             return;
         }
 
-        if (enemies.Count <= 0) return;
+        if (!TargetEnemyExists()) return;
 
         currentShootTimer = 0.0f;
 
-        DoShootEnemyLogic(enemies[0]);
+        DoShootEnemyLogic(targetedEnemy);
 
 
         //// Code used when turrets used to have targetAmount stat:
@@ -167,6 +172,29 @@ public class TurretBuilding : RangeBuilding
         }
         */
     }
+
+
+    private void ComputeNextTargetedEnemy()
+    {
+        targetedEnemy = null;
+
+        int enemyI = 0;
+        while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
+        {
+            ++enemyI;
+        }
+
+        if (enemyI < enemies.Count)
+        {
+            targetedEnemy = enemies[enemyI];
+        }       
+    }
+
+    private bool TargetEnemyExists()
+    {
+        return targetedEnemy != null;
+    }
+
 
     private void DoShootEnemyLogic(Enemy enemyTarget)
     {
@@ -196,8 +224,6 @@ public class TurretBuilding : RangeBuilding
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-
-        enemyTarget.ChangeMat();
 
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(bodyType);

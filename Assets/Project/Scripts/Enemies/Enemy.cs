@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
-    [SerializeField] public Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
     [SerializeField] private EnemyFeedback enemyFeedback;
@@ -139,6 +139,15 @@ public class Enemy : MonoBehaviour
     }
 
 
+    public virtual bool CanBeTargeted()
+    {
+        return true;
+    }
+    public virtual float GetTargetPriorityBonus()
+    {
+        return 10000f;
+    }
+
 
     private void Attack()
     {
@@ -189,15 +198,6 @@ public class Enemy : MonoBehaviour
         pathFollower.CheckDeactivateCoroutines();
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
-    }
-
-    public void ChangeMat()
-    {
-        //meshRenderer.material = selectedMaterial;
-    }
-    public void ChangeToBaseMat()
-    {
-        //meshRenderer.material = baseMaterial;
     }
 
 
