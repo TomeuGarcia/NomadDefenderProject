@@ -245,5 +245,4 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         return CardTransform.position;
     }
 
-
 }

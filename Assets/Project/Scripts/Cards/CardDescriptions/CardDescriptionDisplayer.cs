@@ -107,9 +107,9 @@ public class CardDescriptionDisplayer : MonoBehaviour
         Vector3 cardPositionInScreen = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition());
 
         float xDisplacement = 1.0f;
-        Vector3 positionOffset;
+        Vector3 positionOffset = Vector3.zero;
 
-        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.25f;
+        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.85f;
 
         if (positionAtTheRight)
         {            

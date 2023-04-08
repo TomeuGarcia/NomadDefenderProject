@@ -31,5 +31,6 @@ public interface ICardDescriptionProvider
     /// </summary>
     /// <returns>Element 0 = Projectile Attack, Element 1 = Base Passive</returns>
     public abstract SetupData[] GetAbilityDescriptionSetupData();
+
     public abstract Vector3 GetCenterPosition();
 }
