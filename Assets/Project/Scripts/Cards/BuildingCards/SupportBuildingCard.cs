@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using static TurretBuildingCard;
 
 
-public class SupportBuildingCard : BuildingCard
+public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 {
     public SupportCardParts supportCardParts { get; private set; }
 
@@ -93,6 +93,8 @@ public class SupportBuildingCard : BuildingCard
         // Ability Info
         InitInfoVisuals();
     }
+
+
     public void SetNewPartBase(TurretPartBase newPartBase)
     {
         int costHolder = supportCardParts.turretPartBase.cost;
@@ -112,7 +114,7 @@ public class SupportBuildingCard : BuildingCard
         infoInterface.SetActive(true);
         isShowInfoAnimationPlaying = false;
 
-        // attack
+        // base passive
         infoShownPassiveIconPos = infoShownPassiveIcon.localPosition;
         infoHiddenPassiveIconPos = defaultPassiveIcon.localPosition;
         passiveNameText.alpha = 0;
@@ -122,15 +124,21 @@ public class SupportBuildingCard : BuildingCard
     public override void ShowInfo()
     {
         base.ShowInfo();
+        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        return;
+        
 
-        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
+        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());       
     }
 
     public override void HideInfo()
     {
+        base.HideInfo();
+        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        return;
+
         if (isHideInfoAnimationPlaying) return;
 
-        base.HideInfo();
 
         if (isShowInfoAnimationPlaying)
         {
@@ -209,4 +217,32 @@ public class SupportBuildingCard : BuildingCard
 
         canInfoInteract = true;
     }
+
+
+
+
+
+
+    // ICardDescriptionProvider OVERLOADS
+    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    {
+        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+
+        setupData[0] = null;
+
+        TurretPartBase turretPartBase = supportCardParts.turretPartBase;
+        setupData[1] = new ICardDescriptionProvider.SetupData(
+            turretPartBase.abilityName,
+            turretPartBase.abilityDescription,
+            turretPartBase.abilitySprite,
+            turretPartBase.materialColor
+        );
+
+        return setupData;
+    }
+    public Vector3 GetCenterPosition()
+    {
+        return CardTransform.position;
+    }
+
 }

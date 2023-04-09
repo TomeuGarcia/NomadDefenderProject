@@ -103,7 +103,6 @@ public class ConsoleDialogSystem : MonoBehaviour
         }
 
 
-        Debug.Log("OnQueryBackgroundFadeIn");
         if (OnQueryBackgroundFadeIn != null) OnQueryBackgroundFadeIn();
         
     }
@@ -140,7 +139,6 @@ public class ConsoleDialogSystem : MonoBehaviour
             RemoveLine(consoleLines.Count - 1);
         }
 
-        Debug.Log("OnQueryBackgroundFadeOut");
         if (OnQueryBackgroundFadeOut != null) OnQueryBackgroundFadeOut();
     }
 

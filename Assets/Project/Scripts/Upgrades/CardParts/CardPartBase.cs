@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static TurretBuildingCard;
 
-public class CardPartBase : CardPart
+public class CardPartBase : CardPart, ICardDescriptionProvider
 {
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -96,15 +96,21 @@ public class CardPartBase : CardPart
     public override void ShowInfo()
     {
         base.ShowInfo();
+        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        return;
+
 
         showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
 
     public override void HideInfo()
     {
+        base.HideInfo();
+        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        return;
+
         if (isHideInfoAnimationPlaying) return;
 
-        base.HideInfo();
 
         if (isShowInfoAnimationPlaying)
         {
@@ -226,5 +232,36 @@ public class CardPartBase : CardPart
 
     }
 
+
+
+    // ICardDescriptionProvider OVERLOADS
+    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    {
+        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        
+        setupData[0] = null;
+
+        if (hasBasePassiveAbility)
+        {
+            setupData[1] = new ICardDescriptionProvider.SetupData(
+                turretPassiveBase.passive.abilityName,
+                turretPassiveBase.passive.abilityDescription,
+                turretPassiveBase.visualInformation.sprite,
+                turretPassiveBase.visualInformation.color
+            );
+        }
+        else
+        {
+            setupData[1] = new ICardDescriptionProvider.SetupData();
+        }
+                    
+
+        return setupData;
+    }
+
+    public Vector3 GetCenterPosition()
+    {
+        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
+    }
 
 }

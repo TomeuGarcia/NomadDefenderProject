@@ -86,6 +86,8 @@ public class HandBuildingCards : MonoBehaviour
         cards = new List<BuildingCard>();
         redrawsLeft = initialRedraws;
         isPlayerHoveringTheCards = false;
+
+        CardDescriptionDisplayer.GetInstance().SetCamera(handCamera);
     }
 
     public void Init()
@@ -483,7 +485,7 @@ public class HandBuildingCards : MonoBehaviour
         if (isHandHidden && !isHandBeingShown) ShowHand();
 
         hoveredCard = card;
-        card.HoveredState();
+        card.HoveredState(rotate: false);
 
         foreach (BuildingCard itCard in cards)
         {

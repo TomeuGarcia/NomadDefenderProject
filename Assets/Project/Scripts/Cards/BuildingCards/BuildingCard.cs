@@ -38,8 +38,8 @@ public abstract class BuildingCard : MonoBehaviour
     public Transform RootCardTransform => transform;
     public Transform CardTransform => cardHolder;
 
-    public const float unhoverTime = 0.05f;
-    public const float hoverTime = 0.02f; // This numebr needs to be VERY SMALL
+    public const float unhoverTime = 0.1f;
+    public const float hoverTime = 0.05f; // This numebr needs to be VERY SMALL
     public const float toStandardTime = 0.1f;
     public const float selectedTime = 0.3f;
 
@@ -110,6 +110,7 @@ public abstract class BuildingCard : MonoBehaviour
     public event BuildingCardAction OnDragMouseUp;
     public static event BuildingCardAction OnDragOutsideDragBounds;
 
+
     public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
 
     public event BuildingCardAction OnCardSelectedNotHovered;
@@ -118,6 +119,10 @@ public abstract class BuildingCard : MonoBehaviour
 
     public delegate void BuildingCardAction2();
     public static event BuildingCardAction2 OnInfoShown;
+
+    public static event BuildingCardAction2 OnMouseDragStart;
+    public static event BuildingCardAction2 OnMouseDragEnd;
+
 
     public delegate void CardFunctionPtr();
 
@@ -318,14 +323,17 @@ public abstract class BuildingCard : MonoBehaviour
             });
     }
 
-    public void HoveredState()
+    public void HoveredState(bool rotate = true)
     {
         cardState = CardStates.HOVERED;
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
 
-        CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
+        if (rotate)
+        {
+            CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
+        }
     }
 
 
@@ -340,6 +348,8 @@ public abstract class BuildingCard : MonoBehaviour
         if (useDragAndDrop)
         {
             isDraggingToSelect = true;
+            //Debug.Log("isDraggingToSelect");
+            if (OnMouseDragStart != null) OnMouseDragStart();
         }
         else
         {
@@ -365,19 +375,27 @@ public abstract class BuildingCard : MonoBehaviour
             Ray ray = MouseDragCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane)) 
             {
-                //Debug.Log(hit.point);
-                CardTransform.position = hit.point;
-                if (DragStartBounds.Contains(hit.point))
+                Vector3 goalPosition = hit.point + (hit.normal * 0.1f);
+                float distance = Vector3.Distance(CardTransform.position, goalPosition);
+                if (distance > 0.05f)
+                {
+                    float speed = 10f * Mathf.Clamp(distance * 2f, 0.1f, 10f);
+                    Vector3 dir = (goalPosition - CardTransform.position).normalized;
+                    CardTransform.position = CardTransform.position + (dir * Time.deltaTime * speed);
+                }
+          
+                
+                if (DragStartBounds.Contains(goalPosition))
                 {
                     //Debug.Log("inside bounds");
-                    //if (Vector3.Distance())
                 }
                 else
                 {
-                    Debug.Log("outside bounds");
+                    //Debug.Log("outside bounds");
                     isDraggingToSelect = false;
                     GoToSelectedPosition();
                     if (OnDragOutsideDragBounds != null) OnDragOutsideDragBounds(this);
+                    if (OnMouseDragEnd != null) OnMouseDragEnd();
                 }
             }
         }
@@ -390,6 +408,7 @@ public abstract class BuildingCard : MonoBehaviour
             //Debug.Log("STOPPED Dragging");
             isDraggingToSelect = false;
             if (OnDragMouseUp != null) OnDragMouseUp(this);
+            if (OnMouseDragEnd != null) OnMouseDragEnd();
         }
     }
 

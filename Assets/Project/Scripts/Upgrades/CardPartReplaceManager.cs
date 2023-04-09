@@ -88,7 +88,10 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         BuildingCard.MouseDragCamera = mouseDragCamera;
         CardPart.MouseDragCamera = mouseDragCamera;
+
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
     }
+    
 
     private void Start()
     {

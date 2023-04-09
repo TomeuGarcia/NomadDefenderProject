@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6902519860833660422}
   - component: {fileID: 6902519860833660423}
+  - component: {fileID: 6815670382449694173}
   - component: {fileID: 5867307279719858417}
   - component: {fileID: 2878955286119705563}
   m_Layer: 8
@@ -48,6 +49,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
+--- !u!114 &6815670382449694173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6902519860833660420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289df757d4d32fd4b96f74afe7075a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileType: 0
+  buildingPlaceOffset: {x: 0, y: 0.2, z: 0}
+  isOccupied: 0
 --- !u!65 &5867307279719858417
 BoxCollider:
   m_ObjectHideFlags: 0

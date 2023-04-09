@@ -62,6 +62,10 @@ public abstract class CardPart : MonoBehaviour
     public delegate void BuildingCardPartAction2();
     public static event BuildingCardPartAction2 OnInfoShown;
 
+    public static event BuildingCardPartAction2 OnMouseDragStart;
+    public static event BuildingCardPartAction2 OnMouseDragEnd;
+
+
 
     private void Awake()
     {
@@ -153,6 +157,7 @@ public abstract class CardPart : MonoBehaviour
         if (useDragAndDrop)
         {
             isDraggingToSelect = true;
+            if (OnMouseDragStart != null) OnMouseDragStart();
         }
         else
         {
@@ -173,19 +178,28 @@ public abstract class CardPart : MonoBehaviour
             Ray ray = MouseDragCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane))
             {
-                //Debug.Log(hit.point);
-                CardTransform.position = hit.point;
-                if (DragStartBounds.Contains(hit.point))
+                Vector3 goalPosition = hit.point + (hit.normal * 0.1f);
+                float distance = Vector3.Distance(CardTransform.position, goalPosition);
+                if (distance > 0.05f)
+                {
+                    float speed = 10f * Mathf.Clamp(distance * 2f, 0.1f, 10f);
+                    Vector3 dir = (goalPosition - CardTransform.position).normalized;
+                    CardTransform.position = CardTransform.position + (dir * Time.deltaTime * speed);
+                }
+
+
+                if (DragStartBounds.Contains(goalPosition))
                 {
                     //Debug.Log("inside bounds");
                     //if (Vector3.Distance())
                 }
                 else
                 {
-                    Debug.Log("outside bounds");
+                    //Debug.Log("outside bounds");
                     isDraggingToSelect = false;
                     GoToSelectedPosition();
                     if (OnDragOutsideDragBounds != null) OnDragOutsideDragBounds(this);
+                    if (OnMouseDragEnd != null) OnMouseDragEnd();
                 }
             }
         }
@@ -198,6 +212,7 @@ public abstract class CardPart : MonoBehaviour
             //Debug.Log("STOPPED Dragging");
             isDraggingToSelect = false;
             if (OnDragMouseUp != null) OnDragMouseUp(this);
+            if (OnMouseDragEnd != null) OnMouseDragEnd();
         }
     }
 

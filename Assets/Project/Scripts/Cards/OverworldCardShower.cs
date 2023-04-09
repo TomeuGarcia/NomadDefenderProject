@@ -11,7 +11,10 @@ public class OverworldCardShower : MonoBehaviour
 
     [Header("DEPENDENCIES")]
     [SerializeField] private DeckCreator deckCreator;
-    [SerializeField] private GameObject followCamera;
+    [SerializeField] private Camera followCamera;
+
+    [Header("CAMERA")]
+    [SerializeField] private Camera cardShowerCamera;
 
     [Header("BUTTONS")]
     [SerializeField] private Button showDeckButton;
@@ -140,13 +143,15 @@ public class OverworldCardShower : MonoBehaviour
     }
     public void OnShowDeck()
     {
+        CardDescriptionDisplayer.GetInstance().SetCamera(cardShowerCamera);
+
         showingDeck = true;
 
         prevCameraPos = followCamera.transform.position;
         prevCameraRot = followCamera.transform.rotation;
         //followCamera.transform.position = transform.position + Vector3.up * 5;
         //followCamera.transform.rotation = Quaternion.Euler(90, 0, 0);
-        followCamera.SetActive(false);
+        followCamera.gameObject.SetActive(false);
         transform.GetChild(0).gameObject.SetActive(true);
 
         showDeckButton.gameObject.SetActive(false);
@@ -164,9 +169,9 @@ public class OverworldCardShower : MonoBehaviour
         //followCamera.transform.rotation = prevCameraRot;
         
 
-         followCamera.SetActive(true);
+        followCamera.gameObject.SetActive(true);
         transform.GetChild(0).gameObject.SetActive(false);
-         backToMapButton.gameObject.SetActive(false);
+        backToMapButton.gameObject.SetActive(false);
         showDeckButton.gameObject.SetActive(true);
     }
 
@@ -180,7 +185,7 @@ public class OverworldCardShower : MonoBehaviour
         lastHoveredCardPos = buildingCard.transform.position;
 
         GameAudioManager.GetInstance().PlayCardHovered();
-        buildingCard.HoveredState();
+        buildingCard.HoveredState(rotate: false);
     }
     void SelectCard(BuildingCard buildingCard)
     {
