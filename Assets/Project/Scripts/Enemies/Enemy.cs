@@ -21,8 +21,6 @@ public class Enemy : MonoBehaviour
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material baseMaterial;
-    [SerializeField] private Material selectedMaterial;
     public Transform MeshTransform => meshRenderer.transform;
     private Vector3 originalMeshLocalScale;
 
@@ -50,7 +48,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    private HealthSystem healthSystem;
+    protected HealthSystem healthSystem;
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
@@ -143,9 +141,9 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
-    public virtual float GetTargetPriorityBonus()
+    public virtual float GetTargetNegativePriorityBonus()
     {
-        return 10000f;
+        return 0f;
     }
 
 
@@ -155,7 +153,7 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int damageAmount, PassiveDamageModifier modifier)
+    public virtual void TakeDamage(TurretPartAttack_Prefab projectileDamageDealer_Ref, int damageAmount, PassiveDamageModifier modifier)
     {
         healthHUD.Show();
 
@@ -173,7 +171,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void GetStunned(float duration)
+    public virtual void GetStunned(float duration)
     {
         if (IsDead()) return;
         pathFollower.PauseForDuration(duration);
@@ -201,7 +199,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public int QueueDamage(int amount, PassiveDamageModifier modifier)
+    public virtual int QueueDamage(int amount, PassiveDamageModifier modifier)
     {
         amount = modifier(amount, healthSystem);
         queuedDamage += amount;
@@ -221,22 +219,22 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    public void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
         queuedDamage -= amount;
     }
 
-    public bool DiesFromQueuedDamage()
+    public virtual bool DiesFromQueuedDamage()
     {
         return queuedDamage >= healthSystem.health;
     }
 
-    public void SetMoveSpeed(float speedCoef)
+    public virtual void SetMoveSpeed(float speedCoef)
     {
         pathFollower.SetMoveSpeed(speedCoef);
     }
 
-    public void ApplyWaveStatMultiplier(float multiplier)
+    public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
         damage = (float)baseDamage * multiplier;
         health = (float)baseHealth * multiplier;
@@ -244,12 +242,12 @@ public class Enemy : MonoBehaviour
         healthSystem.UpdateHealth((int)health);
     }
 
-    public bool IsDead()
+    public virtual bool IsDead()
     {
         return healthSystem.IsDead();
     }
 
-    public void AddHealth(int healthToAdd)
+    public virtual void AddHealth(int healthToAdd)
     {
         
         healthSystem.Heal(healthToAdd);
@@ -257,7 +255,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void AddArmor(int armorToAdd)
+    public virtual void AddArmor(int armorToAdd)
     {
         
         healthSystem.AddArmor(armorToAdd);

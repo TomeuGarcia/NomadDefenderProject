@@ -18,7 +18,6 @@ public class TeslaProjectile : TurretPartAttack_Prefab
     private Enemy[] chainTargetedEnemies;
     private bool attackChained = false;
 
-    private TurretBuilding owner;
 
     protected override void DoUpdate()
     {
@@ -26,7 +25,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-        this.owner = owner;
+        base.ProjectileShotInit(targetEnemy, owner);
 
         this.damage = owner.stats.damage;
         this.damage = (int)((float)this.damage * damageMultiplier);
@@ -58,7 +57,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         hitParticles.gameObject.SetActive(true);
         hitParticles.transform.parent = gameObject.transform.parent;
 
-        targetEnemy.TakeDamage(damage, passiveDamageModifier);
+        targetEnemy.TakeDamage(this, damage, passiveDamageModifier);
         targetEnemy.GetStunned(stunDuration);
 
         if (!attackChained)
@@ -72,7 +71,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
             attackChained = true;
             
             Vector3 wavePosition = Position;
-            wavePosition.y = owner.Position.y;
+            wavePosition.y = turretOwner.Position.y;
 
             GameObject waveParticles = ProjectileParticleFactory.GetInstance()
                 .GetAttackParticlesGameObject(ProjectileParticleFactory.ProjectileParticleType.TESLA_WAVE, wavePosition, Quaternion.identity);

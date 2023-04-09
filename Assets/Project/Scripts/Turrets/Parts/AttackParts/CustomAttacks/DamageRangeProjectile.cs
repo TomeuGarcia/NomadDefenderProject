@@ -11,6 +11,8 @@ public class DamageRangeProjectile : HomingProjectile
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
+        base.ProjectileShotInit(targetEnemy, owner);
+
         float distance = Vector3.Distance(targetEnemy.Position, transform.position);
 
         int baseDamage = (int)(owner.stats.damage * baseDamagePer1);

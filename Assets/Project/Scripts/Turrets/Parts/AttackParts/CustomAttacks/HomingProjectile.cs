@@ -13,6 +13,8 @@ public class HomingProjectile : TurretPartAttack_Prefab
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
+        base.ProjectileShotInit(targetEnemy, owner);
+
         this.targetEnemy = targetEnemy;
         this.damage = owner.stats.damage;
 
@@ -37,7 +39,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        targetEnemy.TakeDamage(damage, passiveDamageModifier);
+        targetEnemy.TakeDamage(this, damage, passiveDamageModifier);
         //StopAllCoroutines();
         Disappear();
     }

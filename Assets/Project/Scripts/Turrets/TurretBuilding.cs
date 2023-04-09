@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TurretBuilding : RangeBuilding
@@ -15,10 +16,9 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
-    [Header("ATTACK POOL")]
-    [SerializeField] private Pool attackPool;
 
     private TurretPartBody_Prefab bodyPart;
+    public Transform BodyPartTransform => bodyPart.transform;
 
     public PassiveDamageModifier baseDamagePassive;
 
@@ -30,6 +30,7 @@ public class TurretBuilding : RangeBuilding
 
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
+    private TurretPartAttack_Prefab turretAttack;
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -38,7 +39,6 @@ public class TurretBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private ParticleSystem upgradeParticles;
-
 
 
     public int CardLevel { get; private set; }
@@ -96,8 +96,7 @@ public class TurretBuilding : RangeBuilding
         bodyType = turretCardParts.turretPartBody.bodyType;
 
 
-        TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-        attackPool.SetPooledObject(turretPartAttack.prefab);
+        this.turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
@@ -211,18 +210,19 @@ public class TurretBuilding : RangeBuilding
 
     private void Shoot(Enemy enemyTarget)
     {
-        TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
         Vector3 shootPoint = bodyPart.GetNextShootingPoint();
-        currentAttack.transform.position = shootPoint;
-        currentAttack.transform.parent = attackPool.transform;
+        TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(turretAttack.GetAttackType, shootPoint, Quaternion.identity)
+            .GetComponent<TurretPartAttack_Prefab>();
+
+        currentAttack.transform.parent = BodyPartTransform;
         currentAttack.gameObject.SetActive(true);
         currentAttack.ProjectileShotInit(enemyTarget, this);
 
 
         // Spawn particle
-        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
-        temp.gameObject.SetActive(true);
-        temp.transform.parent = gameObject.transform.parent;
+        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        particles.SetActive(true);
+        particles.transform.parent = gameObject.transform.parent;
 
 
         // Audio

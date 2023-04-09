@@ -10,6 +10,8 @@ public class CloseRangeDamageProjectile : HomingProjectile
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
+        base.ProjectileShotInit(targetEnemy, owner);
+
         float distance = Vector3.Distance(targetEnemy.Position, transform.position);
         float distanceInverse = 1f / distance;
 
