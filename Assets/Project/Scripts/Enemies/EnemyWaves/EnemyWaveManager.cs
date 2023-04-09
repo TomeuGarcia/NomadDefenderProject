@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
+using System;
 
 public class EnemyWaveManager : MonoBehaviour
 {
@@ -19,6 +21,9 @@ public class EnemyWaveManager : MonoBehaviour
     private int activeWaves = 0;
     private bool started = false;
 
+    private IEnumerator[] waveCoroutines;
+    private Vector3 lastEnemyPos;
+
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
@@ -28,6 +33,9 @@ public class EnemyWaveManager : MonoBehaviour
     
 
     [SerializeField] TextLine textLine;
+
+    [Header("FEEDBACK")]
+    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
 
     private void Awake()
@@ -40,14 +48,15 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished += FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
-        
+        waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
+
+
         StartCoroutine(WaitForStart());
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
-        
-
-
+        Enemy.OnEnemyDeathDropCurrency += OnEnemyDeath;
     }
+
     private void OnEnable()
     {
         CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
@@ -81,15 +90,16 @@ public class EnemyWaveManager : MonoBehaviour
         // Start all parallel waves at once
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
         {
-            StartWave(enemyWaveSpawners[i], enemySpawnTransform);
+            StartWave(enemyWaveSpawners[i], enemySpawnTransform, i);
         }
     }
 
 
-    private void StartWave(EnemyWaveSpawner enemyWaveSpawner, Transform enemySpawnTransform)
+    private void StartWave(EnemyWaveSpawner enemyWaveSpawner, Transform enemySpawnTransform, int index)
     {
         ++currentWaves;
-        StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform));
+        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform);
+        StartCoroutine(waveCoroutines[index]);
 
 
         //set the textline.text to the needed string and call dialog system.printLine
@@ -120,13 +130,13 @@ public class EnemyWaveManager : MonoBehaviour
             consoleDialog.PrintLine(textLine);
         }
     }
-    private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner)
+    private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner, int index)
     {
         if(OnWaveFinished != null) OnWaveFinished();
 
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
-        StartWave(enemyWaveSpawner, enemySpawnTransform);
+        StartWave(enemyWaveSpawner, enemySpawnTransform, index);
     }
 
     private void FinishWave(EnemyWaveSpawner enemyWaveSpawner)
@@ -138,10 +148,11 @@ public class EnemyWaveManager : MonoBehaviour
             if (OnStartNewWaves != null) OnStartNewWaves();
             ////////
 
-            foreach (EnemyWaveSpawner enemyWaveSpawnerI in enemyWaveSpawners)
+
+            for (int i = 0; i < enemyWaveSpawners.Length; i++)
             {
-                StartCoroutine(StartNextWave(enemyWaveSpawnerI));
-            }  
+                StartCoroutine(StartNextWave(enemyWaveSpawners[i], i));
+            }
             PrintConsoleLine(TextTypes.SYSTEM, "Waiting for new wave...");
             
         }
@@ -155,10 +166,21 @@ public class EnemyWaveManager : MonoBehaviour
 
         if (--activeWaves == 0)
         {
-            if (OnAllWavesFinished != null) OnAllWavesFinished();
-            PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
-
+            StartCoroutine(LastWaveAnimation());
         }
+    }
+
+    private IEnumerator LastWaveAnimation()
+    {
+        if (OnAllWavesFinished != null) OnAllWavesFinished();
+
+        yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+
+        if (OnAllWavesFinished != null) OnAllWavesFinished();
+
+        yield return new WaitForSeconds(2.5f);
+
+        PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
     }
 
 
@@ -167,6 +189,25 @@ public class EnemyWaveManager : MonoBehaviour
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
         {
             enemyWaveSpawners[i].ForceStopWave();
+        }
+    }
+
+    private void OnEnemyDeath(Enemy enemy)
+    {
+        lastEnemyPos = enemy.Position;
+    }
+
+    private void Update()
+    {
+        // TO DELETE
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            for (int i = 0; i < enemyWaveSpawners.Length; i++)
+            {
+                StopCoroutine(waveCoroutines[i]);
+                currentWaves = enemyWaveSpawners[i].SetToLastWave();
+                StartNextWave(enemyWaveSpawners[i], i);
+            }
         }
     }
 }

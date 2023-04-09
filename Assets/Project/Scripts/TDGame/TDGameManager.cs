@@ -138,7 +138,7 @@ public class TDGameManager : MonoBehaviour
 
     private IEnumerator VictoryAnimation()
     {
-        victoryHolder.SetActive(true);
+        //victoryHolder.SetActive(true);
         yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();

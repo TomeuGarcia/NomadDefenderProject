@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4675701781462021929}
   - component: {fileID: 4675701781462021934}
+  - component: {fileID: 579128861109980953}
   m_Layer: 8
   m_Name: PathTile
   m_TagString: Untagged
@@ -46,6 +47,73 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &579128861109980953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675701781462021928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74027e67dcf08b54aa96d99e4108aeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 6278853916597042883}
+  deactivatedMat: {fileID: 2100000, guid: e5e43bef96192704aa6c58b455ef4343, type: 2}
+  matToChange: 01000000
+  falling: 0
+  cube: {fileID: 3473474193955431661, guid: 8da5233f093cf62418cbe0ce20e3d03e, type: 3}
+  holeFill: {fileID: 5967231113958032833, guid: d3e8d3c482ef5b84284f2bcac769183d,
+    type: 3}
+  activateCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  deactivateCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &4675701780627366471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,6 +206,12 @@ PrefabInstance:
 --- !u!4 &5145877705724118444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5ee1948addcc4e41a98f769e79bcb0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4675701780627366471}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6278853916597042883 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d5ee1948addcc4e41a98f769e79bcb0e,
     type: 3}
   m_PrefabInstance: {fileID: 4675701780627366471}
   m_PrefabAsset: {fileID: 0}
