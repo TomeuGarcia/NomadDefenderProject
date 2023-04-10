@@ -9,6 +9,9 @@ public class FakeEnemy : Enemy
     public delegate void FakeEnemyAction(TurretPartAttack_Prefab projectile);
     public event FakeEnemyAction OnAttackedByProjectile;
 
+    public delegate void FakeEnemyDamagedAction(TurretPartAttack_Prefab projectile, int baseDamage, PassiveDamageModifier modifier, out int finalDamage);
+    public event FakeEnemyDamagedAction OnDamageQueued;
+
 
     private void Awake()
     {
@@ -49,7 +52,10 @@ public class FakeEnemy : Enemy
 
     public override int QueueDamage(int amount, PassiveDamageModifier modifier)
     {
-        return amount;
+        int finalDamage = amount;
+        if (OnDamageQueued != null) OnDamageQueued(null, amount, modifier, out finalDamage);
+
+        return finalDamage;
     }
 
     public override void RemoveQueuedDamage(int amount)

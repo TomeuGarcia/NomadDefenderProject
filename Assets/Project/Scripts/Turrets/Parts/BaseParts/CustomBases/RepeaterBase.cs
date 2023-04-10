@@ -18,6 +18,21 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private int currentLvl = 0;
 
+    private struct EnemyInDamageQueue
+    {
+        public EnemyInDamageQueue(TurretPartAttack_Prefab projectile, Enemy enemy, int damage)
+        {
+            this.projectile = projectile;
+            this.enemy = enemy;
+            this.damage = damage;
+        }
+
+        public TurretPartAttack_Prefab projectile;
+        public Enemy enemy;
+        public int damage;
+    }
+    private Queue<EnemyInDamageQueue> enemyDamageQueue = new Queue<EnemyInDamageQueue>();
+
 
     private void Awake()
     {
@@ -108,12 +123,28 @@ public class RepeaterBase : TurretPartBase_Prefab
         Shoot(targetedEnemy, projectile);
     }
 
+    private void PrecomputeProjectileBounce(TurretPartAttack_Prefab projectile, int baseDamage, PassiveDamageModifier modifier, out int finalDamage)
+    {
+        ComputeNextTargetedEnemy();
+        
+        if (targetedEnemy != null)
+        {
+            finalDamage = targetedEnemy.QueueDamage(baseDamage, modifier);
+            enemyDamageQueue.Enqueue(new EnemyInDamageQueue(projectile, targetedEnemy, finalDamage));
+        }
+        else
+        {
+            finalDamage = -1;
+        }
+        
+    }
+
     private void ComputeNextTargetedEnemy()
     {
         targetedEnemy = null;
 
         int enemyI = 0;
-        while (enemyI < repeatTargetEnemies.Count && !repeatTargetEnemies[enemyI].CanBeTargeted())
+        while (enemyI < repeatTargetEnemies.Count && (!repeatTargetEnemies[enemyI].CanBeTargeted() || repeatTargetEnemies[enemyI].DiesFromQueuedDamage()) )
         {
             ++enemyI;
         }
