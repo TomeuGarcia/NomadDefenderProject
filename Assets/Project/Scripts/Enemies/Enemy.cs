@@ -21,15 +21,13 @@ public class Enemy : MonoBehaviour
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material baseMaterial;
-    [SerializeField] private Material selectedMaterial;
     public Transform MeshTransform => meshRenderer.transform;
     private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
-    [SerializeField] public Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
     [SerializeField] private EnemyFeedback enemyFeedback;
@@ -50,7 +48,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    private HealthSystem healthSystem;
+    protected HealthSystem healthSystem;
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
@@ -139,6 +137,15 @@ public class Enemy : MonoBehaviour
     }
 
 
+    public virtual bool CanBeTargeted()
+    {
+        return true;
+    }
+    public virtual float GetTargetNegativePriorityBonus()
+    {
+        return 0f;
+    }
+
 
     private void Attack()
     {
@@ -146,11 +153,15 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int damageAmount, PassiveDamageModifier modifier)
+    public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
+    {
+        return modifier(damageAmount, healthSystem);
+    }
+
+    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
         healthHUD.Show();
 
-        damageAmount = modifier(damageAmount, healthSystem);
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
 
@@ -164,7 +175,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void GetStunned(float duration)
+    public virtual void GetStunned(float duration)
     {
         if (IsDead()) return;
         pathFollower.PauseForDuration(duration);
@@ -191,26 +202,10 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void ChangeMat()
-    {
-        //meshRenderer.material = selectedMaterial;
-    }
-    public void ChangeToBaseMat()
-    {
-        //meshRenderer.material = baseMaterial;
-    }
 
-
-    public int QueueDamage(int amount, PassiveDamageModifier modifier)
+    public virtual int QueueDamage(int amount)
     {
-        amount = modifier(amount, healthSystem);
         queuedDamage += amount;
-
-        //if (queuedDamage >= healthSystem.health)
-        //{
-        //    StartCoroutine(TimedDeath());
-        //}
-
         return amount;
     }
 
@@ -221,22 +216,22 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    public void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
         queuedDamage -= amount;
     }
 
-    public bool DiesFromQueuedDamage()
+    public virtual bool DiesFromQueuedDamage()
     {
         return queuedDamage >= healthSystem.health;
     }
 
-    public void SetMoveSpeed(float speedCoef)
+    public virtual void SetMoveSpeed(float speedCoef)
     {
         pathFollower.SetMoveSpeed(speedCoef);
     }
 
-    public void ApplyWaveStatMultiplier(float multiplier)
+    public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
         damage = (float)baseDamage * multiplier;
         health = (float)baseHealth * multiplier;
@@ -244,12 +239,12 @@ public class Enemy : MonoBehaviour
         healthSystem.UpdateHealth((int)health);
     }
 
-    public bool IsDead()
+    public virtual bool IsDead()
     {
         return healthSystem.IsDead();
     }
 
-    public void AddHealth(int healthToAdd)
+    public virtual void AddHealth(int healthToAdd)
     {
         
         healthSystem.Heal(healthToAdd);
@@ -257,7 +252,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void AddArmor(int armorToAdd)
+    public virtual void AddArmor(int armorToAdd)
     {
         
         healthSystem.AddArmor(armorToAdd);

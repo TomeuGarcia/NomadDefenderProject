@@ -103,10 +103,6 @@ public class BattleTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
 
-        scriptedSequence.NextLine(); //1 -> Activating...
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
-
         //Activate redraw
 
         //redrawInterface.SetActive(true);
@@ -119,26 +115,26 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //Redraw shown
 
-        scriptedSequence.NextLine(); //2 -> Successfully showing
+        scriptedSequence.NextLine(); //1 -> Successfully showing
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         //yield return new WaitUntil(() => redrawInterface.GetComponent<CanvasGroup>().alpha >= 0.95f);
         yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();
 
-        scriptedSequence.NextLine(); //3 -> Generating info...
+        scriptedSequence.NextLine(); //2 -> Generating info...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
 
-        scriptedSequence.NextLine(); //4 -> Click a Card to redraw it
+        scriptedSequence.NextLine(); //3 -> Click a Card to redraw it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
 
-        scriptedSequence.NextLine(); //5 -> Redraw ends when no redraws left or finish button clicked
+        scriptedSequence.NextLine(); //4 -> Redraw ends when no redraws left or finish button clicked
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
 
-        scriptedSequence.NextLine(); //6 -> /Redraw> Waiting to finish Redraw...
+        scriptedSequence.NextLine(); //5 -> /Redraw> Waiting to finish Redraw...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted()); //Wait until button clicked
         yield return new WaitUntil(() => !hand.isInRedrawPhase); //Wait until button clicked
 
@@ -150,7 +146,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         scriptedSequence.Clear();
 
 
-        scriptedSequence.NextLine(); //7 -> /Redraw> Finished
+        scriptedSequence.NextLine(); //6 -> /Redraw> Finished
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.5f);
         scriptedSequence.Clear();
@@ -159,10 +155,10 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         
         yield return new WaitUntil(() => waveStarted);
-        scriptedSequence.NextLine(); //8 -> Initializing Enemy Waves
+        scriptedSequence.NextLine(); //7 -> Initializing Enemy Waves
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
-        scriptedSequence.NextLine(); //9 -> Wave 1 / 3
+        scriptedSequence.NextLine(); //8 -> Wave 1 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
         //After losing 1 base!!
@@ -178,15 +174,15 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         GameTime.SetTimeScale(0.0f);
 
-        scriptedSequence.NextLine(); //10 -> I see you are struggling
+        scriptedSequence.NextLine(); //9 -> I see you are struggling
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //11 -> One of the nodes got destroyed
+        scriptedSequence.NextLine(); //10 -> One of the nodes got destroyed
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //12 -> Let me help you with this gift
+        scriptedSequence.NextLine(); //11 -> Let me help you with this gift
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSecondsRealtime(1.5f);
 
@@ -223,7 +219,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         //Wait until Wathcer's turret is placed
         yield return new WaitForSecondsRealtime(0.25f);
 
-        scriptedSequence.NextLine(); //13 -> Don't get used to it
+        scriptedSequence.NextLine(); //12 -> Don't get used to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
 
@@ -231,12 +227,12 @@ public class BattleTutorialManager2 : MonoBehaviour
         
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
-        scriptedSequence.NextLine(); //14 -> Wave 2 / 3
+        scriptedSequence.NextLine(); //13 -> Wave 2 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         
         yield return new WaitUntil(() => wavesCounter > 2);
         scriptedSequence.Clear();
-        scriptedSequence.NextLine(); //15 -> Wave 3 / 3
+        scriptedSequence.NextLine(); //14 -> Wave 3 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
     }
