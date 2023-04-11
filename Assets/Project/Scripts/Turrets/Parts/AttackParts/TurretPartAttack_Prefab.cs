@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static TurretPartAttack_Prefab;
 
 public delegate int PassiveDamageModifier(int damage, HealthSystem healthSystem);
 public class TurretPartAttack_Prefab : MonoBehaviour
 {
+    protected TurretBuilding turretOwner;
+    public TurretBuilding GetTurretOwner()
+    {
+        return turretOwner;
+    }
+
+
     public enum AttackType { BASIC, TESLA, LONG_RANGE, CLOSE_RANGE, PIERCING }
 
     protected Enemy targetEnemy;
@@ -40,6 +46,12 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     public virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
+        turretOwner = owner;
+    }
+
+    public virtual void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
+    {
+        turretOwner = owner;
     }
 
     protected virtual void DoUpdate()
