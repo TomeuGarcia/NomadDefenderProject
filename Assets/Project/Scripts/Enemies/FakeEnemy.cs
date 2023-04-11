@@ -9,8 +9,9 @@ public class FakeEnemy : Enemy
     public delegate void FakeEnemyAction(TurretPartAttack_Prefab projectile);
     public event FakeEnemyAction OnAttackedByProjectile;
 
-    public delegate void FakeEnemyDamagedAction(TurretPartAttack_Prefab projectile, int baseDamage, PassiveDamageModifier modifier, out int finalDamage);
-    public event FakeEnemyDamagedAction OnDamageQueued;
+    public delegate void FakeEnemyComputeDamageAction(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource);
+    public event FakeEnemyComputeDamageAction OnDamageCompute;
+
 
 
     private void Awake()
@@ -38,24 +39,29 @@ public class FakeEnemy : Enemy
         return 10000f;
     }
 
-
-    public override void TakeDamage(TurretPartAttack_Prefab projectileDamageDealer_Ref, int damageAmount, PassiveDamageModifier modifier)
-    {
-        if (projectileDamageDealer_Ref != null && OnAttackedByProjectile != null) OnAttackedByProjectile(projectileDamageDealer_Ref);
-        return;
-    }
-
     public override void GetStunned(float duration)
     {
         return;
     }
 
-    public override int QueueDamage(int amount, PassiveDamageModifier modifier)
+    public override int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
     {
-        int finalDamage = amount;
-        if (OnDamageQueued != null) OnDamageQueued(null, amount, modifier, out finalDamage);
+        int resultDamage = 0;
+        if (OnDamageCompute != null) OnDamageCompute(damageAmount, modifier, out resultDamage, projectileSource);
+        
+        return resultDamage;
+    }
 
-        return finalDamage;
+    public override void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    {
+        if (projectileSource != null && OnAttackedByProjectile != null) OnAttackedByProjectile(projectileSource);
+        return;
+    }
+
+
+    public override int QueueDamage(int amount)
+    {
+        return amount;
     }
 
     public override void RemoveQueuedDamage(int amount)

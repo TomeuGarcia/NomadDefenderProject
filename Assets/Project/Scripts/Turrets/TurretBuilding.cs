@@ -35,6 +35,7 @@ public class TurretBuilding : RangeBuilding
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
+    public Transform BaseHolder => baseHolder;
 
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
@@ -214,7 +215,7 @@ public class TurretBuilding : RangeBuilding
         TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(turretAttack.GetAttackType, shootPoint, Quaternion.identity)
             .GetComponent<TurretPartAttack_Prefab>();
 
-        currentAttack.transform.parent = BodyPartTransform;
+        currentAttack.transform.parent = BaseHolder;
         currentAttack.gameObject.SetActive(true);
         currentAttack.ProjectileShotInit(enemyTarget, this);
 
@@ -222,7 +223,7 @@ public class TurretBuilding : RangeBuilding
         // Spawn particle
         GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
         particles.SetActive(true);
-        particles.transform.parent = gameObject.transform.parent;
+        particles.transform.parent = BaseHolder;
 
 
         // Audio

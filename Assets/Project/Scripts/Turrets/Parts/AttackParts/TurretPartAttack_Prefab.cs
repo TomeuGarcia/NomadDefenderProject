@@ -12,7 +12,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     }
 
 
-
     public enum AttackType { BASIC, TESLA, LONG_RANGE, CLOSE_RANGE, PIERCING }
 
     protected Enemy targetEnemy;
@@ -46,6 +45,11 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     }
 
     public virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
+    {
+        turretOwner = owner;
+    }
+
+    public virtual void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
     {
         turretOwner = owner;
     }

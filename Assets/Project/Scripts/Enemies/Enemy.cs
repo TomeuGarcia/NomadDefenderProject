@@ -153,11 +153,15 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public virtual void TakeDamage(TurretPartAttack_Prefab projectileDamageDealer_Ref, int damageAmount, PassiveDamageModifier modifier)
+    public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
+    {
+        return modifier(damageAmount, healthSystem);
+    }
+
+    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
         healthHUD.Show();
 
-        damageAmount = modifier(damageAmount, healthSystem);
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
 
@@ -199,16 +203,9 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public virtual int QueueDamage(int amount, PassiveDamageModifier modifier)
+    public virtual int QueueDamage(int amount)
     {
-        amount = modifier(amount, healthSystem);
         queuedDamage += amount;
-
-        //if (queuedDamage >= healthSystem.health)
-        //{
-        //    StartCoroutine(TimedDeath());
-        //}
-
         return amount;
     }
 
