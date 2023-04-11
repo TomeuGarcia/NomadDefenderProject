@@ -137,19 +137,11 @@ public class OWMapTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.5f);
 
         scriptedSequence.Clear();
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine(); //Rendering Map...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
