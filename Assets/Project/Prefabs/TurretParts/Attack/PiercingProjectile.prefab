@@ -4919,18 +4919,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32aee746d4742f146b9c7e69d5d72b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 3
+  attackType: 4
   bulletSpeed: 2
   materialForTurret: {fileID: 2100000, guid: d8dd886f8eb10f843b61b2f57073a73a, type: 2}
   lerp: {fileID: 3876527974923763685}
   trailRenderer: {fileID: 1197175851975916224}
   damageCollider: {fileID: 4806232799590981710}
-  damageMultiplier: 1
   extraDistanceCoef: 0.5
   travelTime: 0.5
   projectile: {fileID: 4033769943740171574}
   arrow: {fileID: 8565247250592976179}
   disableParticles: {fileID: 5441583890708131692}
+  startDamageMultiplier: 0.5
+  maxDamageMultiplier: 2
+  damageMultiplierIncrement: 0.25
 --- !u!96 &1197175851975916224
 TrailRenderer:
   serializedVersion: 2
