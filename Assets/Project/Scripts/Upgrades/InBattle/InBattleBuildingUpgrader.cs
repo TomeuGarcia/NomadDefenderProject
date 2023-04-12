@@ -37,6 +37,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     [Header("FEEDBACK")]
     [SerializeField] private ParticleSystem canUpgradeParticles;
     private bool canUpgardeParticlesAreActive = false;
+    [SerializeField] private Transform canUpgradeTextHolder;
+    private Vector3 canUpgradeTextHolderStartPosition;
 
 
     [Header("QUICK LEVEL DISPLAY UI")]
@@ -116,6 +118,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         canUpgradeParticles.gameObject.SetActive(false);
         canUpgardeParticlesAreActive = false;
+        canUpgradeTextHolder.gameObject.SetActive(false);
+        canUpgradeTextHolderStartPosition = Vector3.up * 1.25f;
 
         buildingOwnerWasPlaced = false;
     }
@@ -571,8 +575,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             canUpgradeParticles.gameObject.SetActive(true);
             canUpgradeParticles.Play();
             canUpgardeParticlesAreActive = true;
-        }        
 
+            canUpgradeTextHolder.gameObject.SetActive(true);
+            canUpgradeTextHolder.localPosition = canUpgradeTextHolderStartPosition;
+            MoveUpCanUpgradeText();
+        }        
     }
 
     private void CheckStopParticlesCanUpgrade()
@@ -581,9 +588,25 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         {
             canUpgradeParticles.Stop();
             canUpgardeParticlesAreActive = false;
-        }
 
+            canUpgradeTextHolder.DOComplete(false);
+            canUpgradeTextHolder.gameObject.SetActive(false);
+        }
     }
+
+    private void MoveUpCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y + 0.5f, 1f)
+            .OnComplete( () => MoveDownCanUpgradeText() );
+    }
+
+    private void MoveDownCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y, 1f)
+            .OnComplete(() => MoveUpCanUpgradeText());
+    }
+
+
 
 
     protected virtual void OnCanNotUpgradeAttack() { }
