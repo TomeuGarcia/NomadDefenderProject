@@ -44,8 +44,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
-    private int queuedDamage = 0;   
+    private int queuedDamage = 0;
 
+    public bool IsFakeEnemy { get; protected set; } = false;    
 
 
     protected HealthSystem healthSystem;
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour
         originalMeshLocalScale = MeshTransform.localScale;
 
         healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
+        IsFakeEnemy = false;
     }
 
     private void OnValidate()

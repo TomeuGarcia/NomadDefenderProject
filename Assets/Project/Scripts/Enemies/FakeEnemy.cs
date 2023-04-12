@@ -22,6 +22,8 @@ public class FakeEnemy : Enemy
         pathFollower.enabled = false;
 
         MeshTransform.gameObject.SetActive(false);
+
+        IsFakeEnemy = true;
     }
 
 
