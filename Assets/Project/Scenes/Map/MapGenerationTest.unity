@@ -2803,12 +2803,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3525e41dc816bf4b8cdc3d2e43fa7db, type: 3}
---- !u!1 &399295464 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7459440337270203656, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 4525846866438920759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &406649419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12390,7 +12384,7 @@ PrefabInstance:
         type: 3}
       propertyPath: followCamera
       value: 
-      objectReference: {fileID: 399295464}
+      objectReference: {fileID: 4525846866438920763}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d57e5a24a344da45b4374983235efe7, type: 3}
 --- !u!114 &1498611505 stripped
@@ -14387,6 +14381,12 @@ PrefabInstance:
       propertyPath: mapSceneLoader
       value: 
       objectReference: {fileID: 4525846866438920760}
+    - target: {fileID: 3905232227646747025, guid: 330075aa64881914585c989efb51e3b0,
+        type: 3}
+      propertyPath: starterDeckData
+      value: 
+      objectReference: {fileID: 11400000, guid: ca160598d130c794c9282e28ac471adb,
+        type: 2}
     - target: {fileID: 3905232227646747025, guid: 330075aa64881914585c989efb51e3b0,
         type: 3}
       propertyPath: overworldMapGameManager
@@ -16628,6 +16628,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4525846866438920759}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &4525846866438920763 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5885324495781172519, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4525846866438920759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4756271349926928986
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16635,6 +16641,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1709635821}
     m_Modifications:
+    - target: {fileID: 4525846865304159890, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4756271349304155937, guid: 7217a23b2e7c74a4f9276c622bdf5dc8,
         type: 3}
       propertyPath: m_Name
@@ -16804,11 +16815,6 @@ PrefabInstance:
         type: 3}
       propertyPath: clearWithTime
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525846865304159890, guid: bea90a63c4431e143a62fe3e27dfe2f3,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7217a23b2e7c74a4f9276c622bdf5dc8, type: 3}

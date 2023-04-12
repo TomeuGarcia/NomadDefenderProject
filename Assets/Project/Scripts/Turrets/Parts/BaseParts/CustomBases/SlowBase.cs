@@ -43,10 +43,10 @@ public class SlowBase : TurretPartBase_Prefab
         slowPlaneMaterial.SetFloat("_TileNum", planeRange);
     }
 
-    override public void Upgrade(int newStatnewStatLevel)
+    override public void Upgrade(int newStatLevel)
     {
-        base.Upgrade(newStatnewStatLevel);
-        currentLvl = newStatnewStatLevel;
+        base.Upgrade(newStatLevel);
+        currentLvl = newStatLevel;
 
         foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
         {

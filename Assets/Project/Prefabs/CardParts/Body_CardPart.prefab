@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5697916112995126904
 RectTransform:
   m_ObjectHideFlags: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: e3890181b6181434bbee8434d2d8392f, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -605,6 +605,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardState: 0
+  layerMaskMouseDragPlane:
+    serializedVersion: 2
+    m_Bits: 4096
   cardCollider: {fileID: 3900070926476808968}
   cardHolder: {fileID: 6171406187309365499}
   interfaceCanvasGroup: {fileID: 3900070926281709077}
@@ -623,6 +626,8 @@ MonoBehaviour:
   cgDamage: {fileID: 3533933747120650431}
   turretPartBody: {fileID: 11400000, guid: a8aa9735ae873ff4d9e97a6c48225ac7, type: 2}
   bodyImage: {fileID: 4325153615280990351}
+  defaultColorTurretPartAttack: {fileID: 11400000, guid: 7ff34f80b8ce6ca499ee9191de9a753a,
+    type: 2}
 --- !u!1 &3900070927855245638
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,8 +797,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: No ability.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 081f6d9fc8608474386885eda8218569, type: 2}
-  m_sharedMaterial: {fileID: 6456808893600034581, guid: 081f6d9fc8608474386885eda8218569,
+  m_fontAsset: {fileID: 11400000, guid: a8f1b48ede947894c8933c70722abfa1, type: 2}
+  m_sharedMaterial: {fileID: 952946246467952937, guid: a8f1b48ede947894c8933c70722abfa1,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1159,8 +1164,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '/sentry:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 081f6d9fc8608474386885eda8218569, type: 2}
-  m_sharedMaterial: {fileID: 6456808893600034581, guid: 081f6d9fc8608474386885eda8218569,
+  m_fontAsset: {fileID: 11400000, guid: a8f1b48ede947894c8933c70722abfa1, type: 2}
+  m_sharedMaterial: {fileID: 952946246467952937, guid: a8f1b48ede947894c8933c70722abfa1,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

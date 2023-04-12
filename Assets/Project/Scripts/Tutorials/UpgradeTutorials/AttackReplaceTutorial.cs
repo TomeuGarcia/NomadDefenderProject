@@ -55,19 +55,15 @@ public class AttackReplaceTutorial : MonoBehaviour
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
-        scriptedSequence.Clear();
+        yield return new WaitForSeconds(1.5f);
 
 
-        //Loading deck cards…
         //[CARDS SHOW UP]
         //[CLEAR]
-        scriptedSequence.NextLine();
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(0.5f);
+
         cardPartReplaceManager.UpgradeCardHolder.appearAnimationCanStartMoving = true;
         yield return new WaitForSeconds(1.5f);
-        //scriptedSequence.Clear();
+        scriptedSequence.Clear();
 
 
         //Loading High Voltage projectile card…

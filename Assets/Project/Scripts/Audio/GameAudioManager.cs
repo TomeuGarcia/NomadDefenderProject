@@ -60,6 +60,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip enemyDeath;
     [SerializeField] private AudioClip enemySpawn;
 
+    [SerializeField] private AudioSource enemyLastDeathAudioSource;
     [SerializeField] private AudioSource enemyArmorBreakAudioSource;
 
 
@@ -462,6 +463,14 @@ public class GameAudioManager : MonoBehaviour
     public void PlayEnemySpawn()
     {
         LoopAudioSources(enemiesAudioSources, enemySpawn, Random.Range(0.9f, 1.1f));
+    }
+
+    public void PlayEnemyLastDeathHit()
+
+    {
+        //StartCoroutine(LerpVolume(enemyLastDeathAudioSource, 0.05f, enemyLastDeathAudioSource.volume, 2.0f));
+        enemyLastDeathAudioSource.Play();
+
     }
 
     public void PlayEnemyArmorBreak()

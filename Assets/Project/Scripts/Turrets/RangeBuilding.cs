@@ -118,7 +118,7 @@ public abstract class RangeBuilding : Building
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
         if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
-        enemyToDelete.ChangeToBaseMat();
+
         enemies.Remove(enemyToDelete);
 
         enemies.Sort(SortEnemies);
@@ -131,7 +131,9 @@ public abstract class RangeBuilding : Building
 
     public static int SortByDistanceLeftToEnd(Enemy e1, Enemy e2)
     {
-        return e1.pathFollower.DistanceLeftToEnd.CompareTo(e2.pathFollower.DistanceLeftToEnd);
+        float enemy1Value = e1.pathFollower.DistanceLeftToEnd + e1.GetTargetNegativePriorityBonus();
+        float enemy2Value = e2.pathFollower.DistanceLeftToEnd + e2.GetTargetNegativePriorityBonus();
+        return enemy1Value.CompareTo(enemy2Value);
     }
 
     public void SetEnemySortFunction(EnemySortFunction newEnemySortFunction)
@@ -173,7 +175,6 @@ public abstract class RangeBuilding : Building
 
         return enemyList.ToArray();
     }
-
 
     public override void ShowRangePlane()
     {

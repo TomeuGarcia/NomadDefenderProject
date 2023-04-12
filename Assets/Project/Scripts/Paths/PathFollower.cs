@@ -31,6 +31,7 @@ public class PathFollower : MonoBehaviour
     // Position
     public Vector3 Position => transformToMove.position;
 
+    private Coroutine pauseCoroutine = null;
 
 
     // Actions
@@ -121,6 +122,27 @@ public class PathFollower : MonoBehaviour
         {
             transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime * GameTime.TimeScale);
         }
+    }
+
+
+    
+    public void PauseForDuration(float duration)
+    {
+        if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
+        pauseCoroutine = StartCoroutine(DoPauseForDuration(duration));
+    }
+
+    private IEnumerator DoPauseForDuration(float duration)
+    {
+        paused = true;
+        yield return new WaitForSeconds(duration);
+        paused = false;
+        pauseCoroutine = null;
+    }
+
+    public void CheckDeactivateCoroutines()
+    {
+        if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
     }
 
 }

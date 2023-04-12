@@ -10,6 +10,12 @@ public abstract class CardPart : MonoBehaviour
     public enum CardPartStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardPartStates cardState = CardPartStates.STANDARD;
 
+    [Header("DRAG & DROP")]
+    [SerializeField] private LayerMask layerMaskMouseDragPlane;
+    private bool isDraggingToSelect = false;
+    public static Camera MouseDragCamera;
+    public static Bounds DragStartBounds;
+
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
     private Vector3 cardColliderOffset;
@@ -49,9 +55,16 @@ public abstract class CardPart : MonoBehaviour
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
 
+    public event BuildingCardPartAction OnDragOutsideDragBounds;
+    public event BuildingCardPartAction OnDragMouseUp;
+
 
     public delegate void BuildingCardPartAction2();
     public static event BuildingCardPartAction2 OnInfoShown;
+
+    public static event BuildingCardPartAction2 OnMouseDragStart;
+    public static event BuildingCardPartAction2 OnMouseDragEnd;
+
 
 
     private void Awake()
@@ -119,28 +132,92 @@ public abstract class CardPart : MonoBehaviour
         this.selectedPosition = selectedPosition;
     }
 
-    public void StandardState(bool repositionColliderOnEnd = false)
+    public void StandardState(bool repositionColliderOnEnd = false, float duration = BuildingCard.toStandardTime)
     {
         cardState = CardPartStates.STANDARD;
 
-        CardTransform.DOMove(standardPosition, BuildingCard.unhoverTime)
-            .OnComplete( () => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
+        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, duration)
+            .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
 
     public void HoveredState()
     {
         cardState = CardPartStates.HOVERED;
 
-        CardTransform.DOMove(hoveredPosition, BuildingCard.hoverTime);
+        CardTransform.DOBlendableMoveBy(hoveredPosition - CardTransform.position, BuildingCard.hoverTime);
     }
 
-    public void SelectedState(bool repositionColliderOnEnd = false)
+    bool repositionColliderOnEnd = false;
+    public void SelectedState(bool useDragAndDrop, bool repositionColliderOnEnd = false)
     {
         cardState = CardPartStates.SELECTED;
 
-        CardTransform.DOMove(selectedPosition, BuildingCard.selectedTime)
+        this.repositionColliderOnEnd = repositionColliderOnEnd;
+        
+        if (useDragAndDrop)
+        {
+            isDraggingToSelect = true;
+            if (OnMouseDragStart != null) OnMouseDragStart();
+        }
+        else
+        {
+            GoToSelectedPosition();
+        }
+    }
+
+    public void GoToSelectedPosition()
+    {
+        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, BuildingCard.selectedTime)
             .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
+
+    private void OnMouseDrag()
+    {
+        if (isDraggingToSelect)
+        {
+            Ray ray = MouseDragCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMaskMouseDragPlane))
+            {
+                Vector3 goalPosition = hit.point + (hit.normal * 0.1f);
+                float distance = Vector3.Distance(CardTransform.position, goalPosition);
+                if (distance > 0.05f)
+                {
+                    float speed = 10f * Mathf.Clamp(distance * 2f, 0.1f, 10f);
+                    Vector3 dir = (goalPosition - CardTransform.position).normalized;
+                    CardTransform.position = CardTransform.position + (dir * Time.deltaTime * speed);
+                }
+
+
+                if (DragStartBounds.Contains(goalPosition))
+                {
+                    //Debug.Log("inside bounds");
+                    //if (Vector3.Distance())
+                }
+                else
+                {
+                    //Debug.Log("outside bounds");
+                    isDraggingToSelect = false;
+                    GoToSelectedPosition();
+                    if (OnDragOutsideDragBounds != null) OnDragOutsideDragBounds(this);
+                    if (OnMouseDragEnd != null) OnMouseDragEnd();
+                }
+            }
+        }
+
+    }
+    private void OnMouseUp()
+    {
+        if (isDraggingToSelect)
+        {
+            //Debug.Log("STOPPED Dragging");
+            isDraggingToSelect = false;
+            if (OnDragMouseUp != null) OnDragMouseUp(this);
+            if (OnMouseDragEnd != null) OnMouseDragEnd();
+        }
+    }
+
+
+
 
     public void RepositionColliderToCardTransform()
     {
@@ -181,6 +258,9 @@ public abstract class CardPart : MonoBehaviour
         DisableMouseInteraction();
         yield return null;
         EnableMouseInteraction();
+
+        if (cardState == CardPartStates.HOVERED)
+            if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
 }

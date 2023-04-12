@@ -13,7 +13,8 @@ public class TurretPartAttack : ScriptableObject
     [SerializeField] public GameObject prefab;
 
     [Header("VISUALS")]
-    [SerializeField] public Texture2D materialTexture;
+    [SerializeField] public Texture texture;
+    [SerializeField] public Sprite abilitySprite;
     [SerializeField] public Color materialColor;
 
     [Header("ABILITY INFO")]
@@ -26,7 +27,8 @@ public class TurretPartAttack : ScriptableObject
     {
         this.cost = other.cost;
         this.prefab = other.prefab;
-        this.materialTexture = other.materialTexture;
+        this.texture = other.texture;
+        this.abilitySprite = other.abilitySprite;
         this.materialColor = other.materialColor;
 
         this.abilityName = other.abilityName;

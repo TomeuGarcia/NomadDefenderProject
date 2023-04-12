@@ -11,23 +11,42 @@ public class HomingProjectile : TurretPartAttack_Prefab
     {
     }
 
-    public override void Init(Enemy targetEnemy, TurretBuilding owner)
+    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-        this.targetEnemy = targetEnemy;
-        this.damage = owner.stats.damage;
-
-        targetEnemy.QueueDamage(damage, passiveDamageModifier);
+        turretOwner = owner;
 
         if(owner.baseDamagePassive != null)
             SetPassiveDamageModifier(owner.baseDamagePassive);
+
+        this.targetEnemy = targetEnemy;
+
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, owner.stats.damage, passiveDamageModifier);
+
+        targetEnemy.QueueDamage(damage);
+
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
     }
 
+    public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
+    {
+        turretOwner = owner;
+
+        if (owner.baseDamagePassive != null)
+            SetPassiveDamageModifier(owner.baseDamagePassive);
+
+        this.targetEnemy = targetEnemy;
+        this.damage = precomputedDamage;
+
+        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        StartCoroutine(WaitForLerpFinish());
+    }
+
+
     protected IEnumerator WaitForLerpFinish()
     {
-        yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
+        yield return new WaitUntil(() => lerp.finishedPositionLerp);
         EnemyHit();
     }
 
@@ -37,8 +56,8 @@ public class HomingProjectile : TurretPartAttack_Prefab
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        targetEnemy.TakeDamage(damage, passiveDamageModifier);
-        //StopAllCoroutines();
+        targetEnemy.TakeDamage(this, damage);
+
         Disappear();
     }
 }

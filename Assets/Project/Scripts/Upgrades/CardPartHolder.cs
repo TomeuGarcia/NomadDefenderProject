@@ -12,6 +12,12 @@ public class CardPartHolder : MonoBehaviour
     // Serialize for now
     [SerializeField] private CardPart[] cardParts;
 
+
+    [Header("CARD DRAG & DROP")]
+    [SerializeField] private BoxCollider cardDragBoundsCollider;
+    [SerializeField] private Transform cardDragBoundsTargetTransform;
+    private Bounds cardDragBoundsTarget;
+
     [Header("Materials")]
     [SerializeField] private MeshRenderer placerMeshRenderer;
     private Material placerMaterial;
@@ -30,6 +36,9 @@ public class CardPartHolder : MonoBehaviour
     [HideInInspector] public bool canSelectCard = true;
 
 
+    private bool cardsInteractionEnabled = true;
+
+
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
     public event CardPartHolderAction OnPartUnselected;
@@ -43,6 +52,14 @@ public class CardPartHolder : MonoBehaviour
     }
     private void Awake()
     {
+        CardPart.DragStartBounds = cardDragBoundsCollider.bounds;
+        CardPart.DragStartBounds.extents *= 2f;
+
+        Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
+        boundsSize.z += 1f;
+        cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
+
+
         cardsHolderTransform = transform;
         //Init(cardParts);
         CardPart.OnCardHovered += SetHoveredCard;
@@ -56,11 +73,17 @@ public class CardPartHolder : MonoBehaviour
     private void OnEnable()
     {
         CardPartReplaceManager.OnReplacementStart += StopAnimationCompletely;
+        
+        BuildingCard.OnMouseDragStart += DisableCardsInteraction;
+        BuildingCard.OnMouseDragEnd += EnableCardsInteraction;
     }
 
     private void OnDisable()
     {
         CardPartReplaceManager.OnReplacementStart -= StopAnimationCompletely;
+
+        BuildingCard.OnMouseDragStart -= DisableCardsInteraction;
+        BuildingCard.OnMouseDragEnd -= EnableCardsInteraction;
     }
 
 
@@ -97,6 +120,24 @@ public class CardPartHolder : MonoBehaviour
             cardParts[i].Init();
         }
 
+    }
+
+
+    private void EnableCardsInteraction()
+    {
+        cardsInteractionEnabled = true;
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.EnableMouseInteraction();
+        }
+    }
+    private void DisableCardsInteraction()
+    {
+        cardsInteractionEnabled = false;
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.DisableMouseInteraction();
+        }
     }
 
 
@@ -137,7 +178,10 @@ public class CardPartHolder : MonoBehaviour
         if (AlreadyHasSelectedPart) return;
 
         selectedCardPart = card;
-        selectedCardPart.SelectedState(true);
+        selectedCardPart.SelectedState(true, repositionColliderOnEnd: true);
+
+        selectedCardPart.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
+
         cardWasSelected = true;
 
         if (selectedCardPart.isShowingInfo)
@@ -151,11 +195,31 @@ public class CardPartHolder : MonoBehaviour
         CardPart.OnCardSelected -= SetSelectedCard;
         selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
 
-        if (OnPartSelected != null) OnPartSelected();
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
+
+    private void CheckSnapCardAtSelectedPosition(CardPart cardPart)
+    {
+        cardPart.OnDragMouseUp -= CheckSnapCardAtSelectedPosition;
+
+
+        if (cardDragBoundsTarget.Contains(cardPart.CardTransform.position))
+        {
+            //Debug.Log("YEP drop here");
+            cardPart.GoToSelectedPosition();
+            if (OnPartSelected != null) OnPartSelected();
+        }
+        else
+        {
+            RetrieveCard(cardPart);
+            cardPart.ReenableMouseInteraction();
+        }
+    }
+
+
+
 
     private void SetCardPartShowInfo(CardPart cardPart)
     {
@@ -260,7 +324,7 @@ public class CardPartHolder : MonoBehaviour
         {
             yield return new WaitForSeconds(moveDuration - delayBetweenCards);
             cardPart.isInteractable = true;
-            cardPart.ReenableMouseInteraction();
+            if (cardsInteractionEnabled) cardPart.ReenableMouseInteraction();
         }
     }
 

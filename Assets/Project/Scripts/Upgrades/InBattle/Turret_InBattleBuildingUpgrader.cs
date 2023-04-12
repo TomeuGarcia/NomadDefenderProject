@@ -30,6 +30,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
 
     [Header("QUICK DISPLAY UI EXTRAS")]
+    [SerializeField] private GameObject quickHoverBasePassiveImageHolder;
     [SerializeField] private Image quickHoverBasePassiveImage;
 
 
@@ -49,13 +50,13 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         if (hasPassiveAbility)
         {
-            quickHoverBasePassiveImage.gameObject.SetActive(true);
+            quickHoverBasePassiveImageHolder.gameObject.SetActive(true);
             quickHoverBasePassiveImage.sprite = basePassiveSprite;
             quickHoverBasePassiveImage.color = basePassiveColor;
         }
         else
         {
-            quickHoverBasePassiveImage.gameObject.SetActive(false);
+            quickHoverBasePassiveImageHolder.gameObject.SetActive(false);
         }
 
         if (IsStatMaxed(newAttackLvl)) DisableButton(attackButton, attackButtonImage);

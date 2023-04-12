@@ -153,7 +153,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
     {
-        yield return new WaitForSeconds(delayWaveStart);
+        yield return new WaitForSeconds(delayWaveStart * GameTime.TimeScale);
 
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
@@ -173,7 +173,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
                     SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
 
-                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn);
+                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
                 }                
             }
         }
@@ -238,4 +238,9 @@ public class EnemyWaveSpawner : ScriptableObject
 
     }
 
+    public int SetToLastWave()
+    {
+        currentWave = enemyWaves.Length - 2;
+        return currentWave;
+    }
 }

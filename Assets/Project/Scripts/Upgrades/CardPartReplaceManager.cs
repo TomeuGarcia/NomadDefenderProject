@@ -7,6 +7,9 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("CAMERA")]
+    [SerializeField] private Camera mouseDragCamera;
+
     [Header("UPGRADE SETUP")]
     [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
 
@@ -81,6 +84,13 @@ public class CardPartReplaceManager : MonoBehaviour
     // TUTORIAL
     private bool partsCreatedByTutorial = false;
 
+    private void Awake()
+    {
+        BuildingCard.MouseDragCamera = mouseDragCamera;
+        CardPart.MouseDragCamera = mouseDragCamera;
+
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
+    }
     
 
     private void Start()
@@ -274,7 +284,7 @@ public class CardPartReplaceManager : MonoBehaviour
         foreach (int index in randomIndices)
         {
             chosenCards[i] = deckCards[index];
-            chosenCards[i].transform.SetParent(upgradeCardHolder.transform, false);
+            chosenCards[i].transform.SetParent(upgradeCardHolder.CardsHolder, false);
             ++i;
         }
 

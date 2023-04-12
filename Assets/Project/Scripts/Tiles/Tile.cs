@@ -1,8 +1,10 @@
+using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileType { PATH, GRASS }
+    public enum TileType { PATH, GRASS, OBSTACLE }
 
 
     [SerializeField] public TileType tileType;
@@ -39,5 +41,4 @@ public class Tile : MonoBehaviour
 
         if (OnTileUnhovered != null) OnTileUnhovered();
     }
-
 }

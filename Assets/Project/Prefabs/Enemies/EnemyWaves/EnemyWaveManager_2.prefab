@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4485851064566330640}
   - component: {fileID: 4485851064566330647}
+  - component: {fileID: 6267600204110586935}
   m_Layer: 0
   m_Name: EnemyWaveManager_2
   m_TagString: Untagged
@@ -269,10 +270,55 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   consoleDialog: {fileID: 5326053019949012135}
+  isTutorial: 0
   textLine:
     textType: 0
     text: 
     clearTime: 0
+  lastEnemyKIllAnimation: {fileID: 6267600204110586935}
+--- !u!114 &6267600204110586935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485851064566330646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a16b7cf1c3105d4e8510b0e1ca75aaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationTime: 0.75
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  p_Particles: {fileID: 5059489745176266983, guid: 005e2f764ea5eed48bcd9bba49dcfafd,
+    type: 3}
+  p_screenFlash: {fileID: 1205922572471073699, guid: d046ad848097ef741823ee0bdb6fe233,
+    type: 3}
+  p_flashingLight: {fileID: 5916530116075802491, guid: 9d70aef1305c0e5468b782e1cd2657d2,
+    type: 3}
 --- !u!1 &5322127762132719498
 GameObject:
   m_ObjectHideFlags: 0

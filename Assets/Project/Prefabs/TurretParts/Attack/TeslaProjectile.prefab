@@ -53,8 +53,13 @@ MonoBehaviour:
   bulletSpeed: 2
   materialForTurret: {fileID: 2100000, guid: ed1b3ee6878fb8a419814854c3a263d3, type: 2}
   lerp: {fileID: 4376590595653548842}
-  maxTargetAmount: 2
-  range: 2
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  damageMultiplier: 0.5
+  maxChainedTargets: 2
+  chainRadius: 1.5
+  stunDuration: 0.2
 --- !u!96 &2080374624328513536
 TrailRenderer:
   serializedVersion: 2

@@ -40,6 +40,7 @@ public class GatherNewCardManager : MonoBehaviour
     private void Awake()
     {
         Init();
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
     }
 
     private void Init()
@@ -57,10 +58,6 @@ public class GatherNewCardManager : MonoBehaviour
         bool lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
         ////
 
-        Debug.Log("Draw card data:");
-        Debug.Log(progressionState);
-        Debug.Log(currentNodeHealthState);
-        Debug.Log(lastBattleWasDefendedPerfectly);
 
         int numSupportCards = 0;
         turretCardsLevel = 1;
@@ -184,7 +181,7 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void SetHoveredCard(BuildingCard card)
     {
-        card.HoveredState();
+        card.HoveredState(rotate: false);
 
         card.OnCardInfoSelected += SetCardShowInfo;
 
@@ -318,9 +315,7 @@ public class GatherNewCardManager : MonoBehaviour
         // scuffed fix, allow mouse interaction if already hovering the cards
         foreach (BuildingCard itCard in cards)
         {
-            itCard.DisableMouseInteraction();
-            yield return null;
-            itCard.EnableMouseInteraction();
+            itCard.ReenableMouseInteraction();
         }
 
     }

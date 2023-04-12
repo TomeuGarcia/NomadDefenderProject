@@ -1,9 +1,8 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class TurretBuilding : RangeBuilding
 {
@@ -17,27 +16,30 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
-    [Header("ATTACK POOL")]
-    [SerializeField] private Pool attackPool;
 
     private TurretPartBody_Prefab bodyPart;
+    public Transform BodyPartTransform => bodyPart.transform;
 
     public PassiveDamageModifier baseDamagePassive;
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
+    public Vector3 Position => transform.position;
+
+    private Enemy targetedEnemy;
+
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
+    private TurretPartAttack_Prefab turretAttack;
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
+    public Transform BaseHolder => baseHolder;
 
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private ParticleSystem upgradeParticles;
-    [SerializeField] private BuildingsUtils buildingsUtils;
-
 
 
     public int CardLevel { get; private set; }
@@ -61,12 +63,14 @@ public class TurretBuilding : RangeBuilding
     {
         if (!isFunctional) return;
 
+        ComputeNextTargetedEnemy();
+
         UpdateShoot();
         if (bodyPart.lookAtTarget)
         {
-            if (enemies.Count > 0)
+            if (TargetEnemyExists())
             {
-                lastTargetedPosition = enemies[0].transform.position;
+                lastTargetedPosition = targetedEnemy.transformToMove.position;
             }
             LookAtTarget();
         }
@@ -93,8 +97,7 @@ public class TurretBuilding : RangeBuilding
         bodyType = turretCardParts.turretPartBody.bodyType;
 
 
-        TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-        attackPool.SetPooledObject(turretPartAttack.prefab);
+        this.turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
@@ -151,11 +154,11 @@ public class TurretBuilding : RangeBuilding
             return;
         }
 
-        if (enemies.Count <= 0) return;
+        if (!TargetEnemyExists()) return;
 
         currentShootTimer = 0.0f;
 
-        DoShootEnemyLogic(enemies[0]);
+        DoShootEnemyLogic(targetedEnemy);
 
 
         //// Code used when turrets used to have targetAmount stat:
@@ -169,6 +172,29 @@ public class TurretBuilding : RangeBuilding
         }
         */
     }
+
+
+    private void ComputeNextTargetedEnemy()
+    {
+        targetedEnemy = null;
+
+        int enemyI = 0;
+        while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
+        {
+            ++enemyI;
+        }
+
+        if (enemyI < enemies.Count)
+        {
+            targetedEnemy = enemies[enemyI];
+        }       
+    }
+
+    private bool TargetEnemyExists()
+    {
+        return targetedEnemy != null;
+    }
+
 
     private void DoShootEnemyLogic(Enemy enemyTarget)
     {
@@ -185,21 +211,20 @@ public class TurretBuilding : RangeBuilding
 
     private void Shoot(Enemy enemyTarget)
     {
-        TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
         Vector3 shootPoint = bodyPart.GetNextShootingPoint();
-        currentAttack.transform.position = shootPoint;
-        currentAttack.transform.parent = attackPool.transform;
+        TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(turretAttack.GetAttackType, shootPoint, Quaternion.identity)
+            .GetComponent<TurretPartAttack_Prefab>();
+
+        currentAttack.transform.parent = BaseHolder;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, this);
+        currentAttack.ProjectileShotInit(enemyTarget, this);
 
 
         // Spawn particle
-        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
-        temp.gameObject.SetActive(true);
-        temp.transform.parent = gameObject.transform.parent;
+        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        particles.SetActive(true);
+        particles.transform.parent = BaseHolder;
 
-
-        enemyTarget.ChangeMat();
 
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
@@ -282,5 +307,25 @@ public class TurretBuilding : RangeBuilding
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
     }
+
+
+    public override void SetBuildingPartsColor(Color color) 
+    {
+        bodyPart.SetMaterialColor(color);
+        basePart.SetMaterialColor(color);
+    }
+
+    public override void SetPreviewCanBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+    }
+
+    public override void SetPreviewCanNOTBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+    }
+
 
 }

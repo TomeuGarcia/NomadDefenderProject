@@ -170,11 +170,11 @@ public class BattleHUD : MonoBehaviour
     {
         // Start wait
         cgCurrencyUI.alpha = 0f;
-        if (startWithDelay) yield return new WaitForSeconds(1.0f);
+        if (startWithDelay) yield return new WaitForSeconds(1f);
 
 
         // Appear
-        float t1 = 0.1f;
+        float t1 = 0.1f /4;
 
         currencyCounter.PlayTextAppearAnimation(t1 * 4f);
 
@@ -192,10 +192,10 @@ public class BattleHUD : MonoBehaviour
     {
         // Start wait
         cgSpeedUpUI.alpha = 0f;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         // Appear
-        float t1 = 0.1f;
+        float t1 = 0.1f / 4;
         cgSpeedUpUI.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
@@ -232,7 +232,7 @@ public class BattleHUD : MonoBehaviour
         deckText.DOFade(0f, 0.01f);
 
         // Appear
-        float t1 = 0.1f;
+        float t1 = 0.1f / 4;
         cgDeckUI.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
@@ -242,7 +242,7 @@ public class BattleHUD : MonoBehaviour
         yield return new WaitForSeconds(t1);
         GameAudioManager.GetInstance().PlayCardInfoShown();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(t1*2);/////////before rework it was 0.2
 
         deckText.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
@@ -256,7 +256,7 @@ public class BattleHUD : MonoBehaviour
 
         // Show up
         ShowDeckUI();
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(t1 * 4);/////////before rework it was 0.4
 
         float pitch = 0.9f;
         float pitchIncrement = 0.05f;
@@ -265,7 +265,7 @@ public class BattleHUD : MonoBehaviour
             icon.DOFade(1f, 0.25f);
             GameAudioManager.GetInstance().PlayCardUIInfoShown(pitch);
             pitch += pitchIncrement;
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(t1 * 2.5f);//////////before rework it was 0.25
         }
 
     }

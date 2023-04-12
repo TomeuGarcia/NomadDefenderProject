@@ -105,7 +105,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
 
         owMapPawn.MoveToNode(owMapNode);
-        
+
         if (wasSelectedByPlayer)
         {
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
