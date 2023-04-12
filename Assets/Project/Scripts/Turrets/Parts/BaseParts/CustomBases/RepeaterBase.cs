@@ -17,6 +17,8 @@ public class RepeaterBase : TurretPartBase_Prefab
     private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
+    bool allEnemiesInRangeAreFake = false;
+
     private int currentLvl = 0;
 
     private class EnemyInDamageQueue
@@ -111,7 +113,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
     {
-        if (enemy == fakeEnemy) return;
+        if (enemy.IsFakeEnemy) return;
 
         repeatTargetEnemies.Add(enemy);
         fakeEnemy.SetCanBeTargeted(true);
@@ -124,7 +126,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (repeatTargetEnemies.Count == 0)
         {
             fakeEnemy.SetCanBeTargeted(false);
-        }
+        }        
     }
 
 
@@ -175,15 +177,13 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         targetedEnemy = null;
 
-        int enemyI = 0;
-        while (enemyI < repeatTargetEnemies.Count && (!repeatTargetEnemies[enemyI].CanBeTargeted() || repeatTargetEnemies[enemyI].DiesFromQueuedDamage()) )
+        for (int i = 0; i < repeatTargetEnemies.Count; ++i)
         {
-            ++enemyI;
-        }
-
-        if (enemyI < repeatTargetEnemies.Count)
-        {
-            targetedEnemy = repeatTargetEnemies[enemyI];
+            if (repeatTargetEnemies[i].CanBeTargeted() && !repeatTargetEnemies[i].DiesFromQueuedDamage())
+            {
+                targetedEnemy = repeatTargetEnemies[i];
+                break;
+            }
         }
     }
 
