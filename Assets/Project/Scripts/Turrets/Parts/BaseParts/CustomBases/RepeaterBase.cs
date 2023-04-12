@@ -113,7 +113,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
     {
-        if (enemy == fakeEnemy) return;
+        if (enemy.IsFakeEnemy) return;
 
         repeatTargetEnemies.Add(enemy);
         fakeEnemy.SetCanBeTargeted(true);
@@ -179,22 +179,12 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         for (int i = 0; i < repeatTargetEnemies.Count; ++i)
         {
-            if (IsEnemyValidRepeatTarget(repeatTargetEnemies[i]))
+            if (repeatTargetEnemies[i].CanBeTargeted() && !repeatTargetEnemies[i].DiesFromQueuedDamage())
             {
                 targetedEnemy = repeatTargetEnemies[i];
                 break;
             }
         }
-
-        //allEnemiesInRangeAreFake = true;
-        //for (int enemyI = 0; enemyI < repeatTargetEnemies.Count; enemyI++)
-        //{
-        //    allEnemiesInRangeAreFake = allEnemiesInRangeAreFake && repeatTargetEnemies[enemyI].IsFakeEnemy;
-        //}
-    }
-    private bool IsEnemyValidRepeatTarget(Enemy enemy)
-    {
-        return enemy.CanBeTargeted() && !enemy.DiesFromQueuedDamage() && !enemy.IsFakeEnemy;
     }
 
 

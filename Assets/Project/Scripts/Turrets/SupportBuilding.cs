@@ -130,7 +130,7 @@ public class SupportBuilding : RangeBuilding
 
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
     {
-        baseHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        basePart.MeshTransform.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
 
 
         ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();

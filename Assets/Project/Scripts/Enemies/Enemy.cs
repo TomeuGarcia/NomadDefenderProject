@@ -157,6 +157,7 @@ public class Enemy : MonoBehaviour
 
     public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
     {
+        Debug.Log("ComputeDamageWithPassive " + name);
         return modifier(damageAmount, healthSystem);
     }
 
@@ -198,6 +199,8 @@ public class Enemy : MonoBehaviour
     private void Deactivation()
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
+
+        enemyFeedback.FinishCoroutines();
 
         pathFollower.CheckDeactivateCoroutines();
         rb.velocity = Vector3.zero;

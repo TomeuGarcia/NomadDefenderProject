@@ -11,7 +11,7 @@ public class FakeEnemy : Enemy
 
     public delegate void FakeEnemyComputeDamageAction(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource);
     public event FakeEnemyComputeDamageAction OnDamageCompute;
-
+    
 
 
     private void Awake()

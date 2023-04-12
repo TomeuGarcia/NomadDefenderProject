@@ -5,8 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("DECK DATA")]
-    [SerializeField] protected DeckData starterDeckData;
-    [SerializeField] protected DeckData gameDeckData;
+    [SerializeField] protected DecksLibrary decksLibrary;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
@@ -32,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        gameDeckData.ReplaceFor(starterDeckData);
+        decksLibrary.InitGameDeck();
 
         victoryHolder.SetActive(false);
         gameOverHolder.SetActive(false);
