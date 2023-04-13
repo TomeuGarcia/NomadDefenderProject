@@ -37,6 +37,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     [Header("FEEDBACK")]
     [SerializeField] private ParticleSystem canUpgradeParticles;
     private bool canUpgardeParticlesAreActive = false;
+    [SerializeField] private Transform canUpgradeTextHolder;
+    private Vector3 canUpgradeTextHolderStartPosition;
 
 
     [Header("QUICK LEVEL DISPLAY UI")]
@@ -116,6 +118,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         canUpgradeParticles.gameObject.SetActive(false);
         canUpgardeParticlesAreActive = false;
+        canUpgradeTextHolder.gameObject.SetActive(false);
+        canUpgradeTextHolderStartPosition = Vector3.up * 1.25f;
 
         buildingOwnerWasPlaced = false;
     }
@@ -554,36 +558,76 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         quickLevelDisplay.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.down * 35.0f;
         quickLevelDisplay.gameObject.SetActive(true);
         cgQuickLevelDisplay.DOFade(1f, 0.1f);
+
+        //ShowCanUpgradeText();
     }
     public void HideQuickLevelDisplay()
     {
         cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
+
+        //HideCanUpgradeText();
     }
 
 
 
 
-
+    private bool IsBuildingUpgradeAvailable()
+    {
+        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp();
+    }
     private void CheckStartParticlesCanUpgrade()
     {
-        if (buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp())
+        if (IsBuildingUpgradeAvailable())
         {
             canUpgradeParticles.gameObject.SetActive(true);
             canUpgradeParticles.Play();
             canUpgardeParticlesAreActive = true;
-        }        
 
+            ShowCanUpgradeText();
+        }        
     }
 
+    private bool IsBuildingUpgradeNotAvailable()
+    {
+        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp());
+    }
     private void CheckStopParticlesCanUpgrade()
     {
-        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp()))
+        if (IsBuildingUpgradeNotAvailable())
         {
             canUpgradeParticles.Stop();
             canUpgardeParticlesAreActive = false;
-        }
 
+            HideCanUpgradeText();
+        }
     }
+
+
+    private void ShowCanUpgradeText()
+    {
+        canUpgradeTextHolder.gameObject.SetActive(true);
+        canUpgradeTextHolder.localPosition = canUpgradeTextHolderStartPosition;
+        MoveUpCanUpgradeText();
+    }
+    private void HideCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOComplete(false);
+        canUpgradeTextHolder.gameObject.SetActive(false);
+    }
+
+    private void MoveUpCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y + 0.5f, 1f)
+            .OnComplete( () => MoveDownCanUpgradeText() );
+    }
+
+    private void MoveDownCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y, 1f)
+            .OnComplete(() => MoveUpCanUpgradeText());
+    }
+
+
 
 
     protected virtual void OnCanNotUpgradeAttack() { }

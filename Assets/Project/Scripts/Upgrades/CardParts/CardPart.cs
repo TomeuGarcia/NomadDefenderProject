@@ -136,7 +136,8 @@ public abstract class CardPart : MonoBehaviour
     {
         cardState = CardPartStates.STANDARD;
 
-        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, duration)
+        CardTransform.DOComplete(true);
+        CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, duration)        
             .OnComplete(() => { if (repositionColliderOnEnd) RepositionColliderToCardTransform(); });
     }
 
@@ -144,7 +145,7 @@ public abstract class CardPart : MonoBehaviour
     {
         cardState = CardPartStates.HOVERED;
 
-        CardTransform.DOBlendableMoveBy(hoveredPosition - CardTransform.position, BuildingCard.hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * BuildingCard.HoveredTranslationWorld, BuildingCard.hoverTime);
     }
 
     bool repositionColliderOnEnd = false;

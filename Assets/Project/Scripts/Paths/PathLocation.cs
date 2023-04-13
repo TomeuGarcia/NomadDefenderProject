@@ -63,7 +63,8 @@ public class PathLocation : MonoBehaviour
     {
         healthSystem.TakeDamage(damageAmount);
 
-        SetDamagedVisuals();      
+        SetDamagedVisuals();
+        locationMeshHolder.DOComplete();
 
         if (healthSystem.IsDead())
         {
