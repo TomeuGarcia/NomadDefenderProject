@@ -558,40 +558,61 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         quickLevelDisplay.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.down * 35.0f;
         quickLevelDisplay.gameObject.SetActive(true);
         cgQuickLevelDisplay.DOFade(1f, 0.1f);
+
+        //ShowCanUpgradeText();
     }
     public void HideQuickLevelDisplay()
     {
         cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
+
+        //HideCanUpgradeText();
     }
 
 
 
 
-
+    private bool IsBuildingUpgradeAvailable()
+    {
+        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp();
+    }
     private void CheckStartParticlesCanUpgrade()
     {
-        if (buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp())
+        if (IsBuildingUpgradeAvailable())
         {
             canUpgradeParticles.gameObject.SetActive(true);
             canUpgradeParticles.Play();
             canUpgardeParticlesAreActive = true;
 
-            canUpgradeTextHolder.gameObject.SetActive(true);
-            canUpgradeTextHolder.localPosition = canUpgradeTextHolderStartPosition;
-            MoveUpCanUpgradeText();
+            ShowCanUpgradeText();
         }        
     }
 
+    private bool IsBuildingUpgradeNotAvailable()
+    {
+        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp());
+    }
     private void CheckStopParticlesCanUpgrade()
     {
-        if (buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp()))
+        if (IsBuildingUpgradeNotAvailable())
         {
             canUpgradeParticles.Stop();
             canUpgardeParticlesAreActive = false;
 
-            canUpgradeTextHolder.DOComplete(false);
-            canUpgradeTextHolder.gameObject.SetActive(false);
+            HideCanUpgradeText();
         }
+    }
+
+
+    private void ShowCanUpgradeText()
+    {
+        canUpgradeTextHolder.gameObject.SetActive(true);
+        canUpgradeTextHolder.localPosition = canUpgradeTextHolderStartPosition;
+        MoveUpCanUpgradeText();
+    }
+    private void HideCanUpgradeText()
+    {
+        canUpgradeTextHolder.DOComplete(false);
+        canUpgradeTextHolder.gameObject.SetActive(false);
     }
 
     private void MoveUpCanUpgradeText()

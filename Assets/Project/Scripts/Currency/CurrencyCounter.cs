@@ -133,13 +133,16 @@ public class CurrencyCounter : MonoBehaviour
         currencyCountText.DOColor(startColorAddedCurrencyText, delay * amount + 1.5f);
         currencyCountText.transform.DOPunchPosition(Vector3.down * 40f, 0.5f, 6);
 
-        for (int i = 0; i < amount; ++i)
+        int subtractAmountPerTick = 5;
+
+        for (int i = 0; i < amount; i += subtractAmountPerTick)
         {
-            --initialCurrencyCount;
-            --remainingAmountToSubtract;
+            initialCurrencyCount -= subtractAmountPerTick;
+            remainingAmountToSubtract -= subtractAmountPerTick;
             UpdateCurrencyCountText(initialCurrencyCount);
             yield return null;
         }
+        UpdateCurrencyCountText(currencyCount);
 
         isSubtracting = false;
     }
