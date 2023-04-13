@@ -492,7 +492,6 @@ public class HandBuildingCards : MonoBehaviour
             itCard.OnCardHovered -= SetHoveredCard;
         }
 
-
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
     }
@@ -663,7 +662,7 @@ public class HandBuildingCards : MonoBehaviour
     
     private void ComputeHiddenPosition()
     {
-        hiddenDisplacement = -1.15f * HandTransform.up;
+        hiddenDisplacement = (-1.15f * HandTransform.up);// + (HandTransform.forward * 3f);
 
         defaultHandPosition = HandTransform.position;
         hiddenHandPosition = HandTransform.position + hiddenDisplacement;

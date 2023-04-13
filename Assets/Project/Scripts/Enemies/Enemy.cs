@@ -44,8 +44,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
-    private int queuedDamage = 0;   
+    private int queuedDamage = 0;
 
+    public bool IsFakeEnemy { get; protected set; } = false;    
 
 
     protected HealthSystem healthSystem;
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour
         originalMeshLocalScale = MeshTransform.localScale;
 
         healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
+        IsFakeEnemy = false;
     }
 
     private void OnValidate()
@@ -155,6 +157,7 @@ public class Enemy : MonoBehaviour
 
     public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
     {
+        Debug.Log("ComputeDamageWithPassive " + name);
         return modifier(damageAmount, healthSystem);
     }
 
@@ -196,6 +199,8 @@ public class Enemy : MonoBehaviour
     private void Deactivation()
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
+
+        enemyFeedback.FinishCoroutines();
 
         pathFollower.CheckDeactivateCoroutines();
         rb.velocity = Vector3.zero;

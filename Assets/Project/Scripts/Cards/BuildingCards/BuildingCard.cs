@@ -60,9 +60,10 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 ShownRootPosition => shownRootPosition;
     public Vector3 HiddenRootPosition => hiddenRootPosition;
 
+    public Vector3 hoverAdditionalOffset = Vector3.zero;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
-    private Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
+    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
@@ -157,6 +158,11 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState != CardStates.STANDARD) return;
 
         if (OnCardHovered != null) OnCardHovered(this);
+
+        if (cardState == CardStates.HOVERED)
+        {
+            StartShowInfoWithDelay();
+        }
     }
 
     private void OnMouseExit()
@@ -168,6 +174,8 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState != CardStates.HOVERED) return;
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
+
+        DoHideInfo();
     }
 
     private void OnMouseDown() // only called by Left Click
@@ -185,6 +193,8 @@ public abstract class BuildingCard : MonoBehaviour
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
+
+        DoHideInfo();
     }
 
     private void Update()
@@ -323,12 +333,15 @@ public abstract class BuildingCard : MonoBehaviour
             });
     }
 
-    public void HoveredState(bool rotate = true)
+    public void HoveredState(bool rotate = true, bool useAdditionalOffset = false)
     {
         cardState = CardStates.HOVERED;
 
+        Vector3 moveBy = (CardTransform.localRotation * HoveredTranslationWorld);
+        if (useAdditionalOffset) moveBy += hoverAdditionalOffset;
+
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(moveBy, hoverTime);
 
         if (rotate)
         {
@@ -473,6 +486,24 @@ public abstract class BuildingCard : MonoBehaviour
     {
         isShowingInfo = false;
         //Debug.Log("HideInfo");
+    }
+
+
+    private Coroutine showInfoDelayCoroutine = null;
+    private void StartShowInfoWithDelay()
+    {
+        showInfoDelayCoroutine = StartCoroutine(ShowInfoWithDelay());
+    }
+    private IEnumerator ShowInfoWithDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ShowInfo();
+        showInfoDelayCoroutine = null;
+    }
+    private void DoHideInfo()
+    {
+        if (showInfoDelayCoroutine != null) StopCoroutine(showInfoDelayCoroutine);
+        HideInfo();
     }
 
 

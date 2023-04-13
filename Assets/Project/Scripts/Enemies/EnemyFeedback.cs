@@ -80,7 +80,7 @@ public class EnemyFeedback : MonoBehaviour
         {
             armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], mesh.materials);
             StartCoroutine(armorBrightnesLerp);
-        }
+        }        
     }
     private void GainArmor()
     {
@@ -121,5 +121,11 @@ public class EnemyFeedback : MonoBehaviour
         areaMatLerpData.time = lerpTime;
         areaCooldownLerp = MaterialLerp.FloatLerp(areaMatLerpData, areaMeshIndicator.materials);
         StartCoroutine(areaCooldownLerp);
+    }
+
+
+    public void FinishCoroutines()
+    {
+        StopAllCoroutines();
     }
 }
