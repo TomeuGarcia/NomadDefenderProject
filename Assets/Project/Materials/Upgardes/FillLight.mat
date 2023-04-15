@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7341445009897103553
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UpgardePlacer_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 65b67c7b794ee704f914e952a6b28eab,
+  m_Name: FillLight
+  m_Shader: {fileID: -6465566751694194690, guid: 752ba6eaff2659941870394af7465392,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -48,11 +35,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _IsAlwaysOn: 0
-    - _IsOn: 0
+    - _FillCoef: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _ColorOff: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 0.627451}
-    - _ColorOn: {r: 0, g: 0.4527561, b: 0.5471698, a: 0.627451}
+    - _LightColor: {r: 0.20710589, g: 2.0907834, b: 2.0118856, a: 1}
+    - _SurfaceColor: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &1231349107513641293
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
