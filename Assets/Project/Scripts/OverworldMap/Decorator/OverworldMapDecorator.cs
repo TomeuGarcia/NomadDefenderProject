@@ -8,6 +8,7 @@ public class OverworldMapDecorator : MonoBehaviour
 {
     [Header("DECORATOR SETTINGS")]
     [SerializeField] OWMapDecoratorSettings dSettings;
+    private int alternateBattleAfterNLevelsI = 0;
     [Header("DECORATOR UTILS")]
     [SerializeField] OWMapDecoratorUtils dUtils;
 
@@ -18,6 +19,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private int firstDecoratedLevel;
     private int firstBattleLevel;
+    private int lastIteratedBattleLevel;
 
     private List<NodeEnums.UpgradeType> availableUpgradeTypes = new List<UpgradeType>();
 
@@ -45,11 +47,17 @@ public class OverworldMapDecorator : MonoBehaviour
             DecorateUpgradeLevel(mapNodes[levelI], levelI);
         }
 
+        lastIteratedBattleLevel = firstBattleLevel;
+        bool hasDecoratedFirstBattle = false;
         for (int levelI = firstBattleLevel; levelI < lastIteratedLevel; ++levelI)
         {
             if (IsBattleLevel(levelI))
             {
                 DecorateBattleLevel(mapNodes[levelI], levelI);
+
+                lastIteratedBattleLevel = levelI;
+                if (hasDecoratedFirstBattle) LoopIncrementAlternateBattleAfterNLevelsI();
+                else hasDecoratedFirstBattle = true;
             }
             else
             {
@@ -162,8 +170,19 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         if (levelI > dSettings.lastLevelWithBattles) return false;
 
-        return (levelI - firstBattleLevel) % dSettings.battleAfterNLevels == 0;
+        Debug.Log(GetBattleAfterNNodes());
+        return ((levelI - lastIteratedBattleLevel) % GetBattleAfterNNodes()) == 0;
     }
+    private int GetBattleAfterNNodes()
+    {
+        return dSettings.alternateBattleAfterNLevels[alternateBattleAfterNLevelsI];
+    }
+    private void LoopIncrementAlternateBattleAfterNLevelsI()
+    {
+        ++alternateBattleAfterNLevelsI;
+        alternateBattleAfterNLevelsI %= dSettings.alternateBattleAfterNLevels.Length;
+    }
+
 
     private NodeEnums.BattleType GetLevelBattleType(int levelI)
     {
