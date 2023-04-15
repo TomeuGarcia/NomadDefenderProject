@@ -170,7 +170,6 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         if (levelI > dSettings.lastLevelWithBattles) return false;
 
-        Debug.Log(GetBattleAfterNNodes());
         return ((levelI - lastIteratedBattleLevel) % GetBattleAfterNNodes()) == 0;
     }
     private int GetBattleAfterNNodes()
