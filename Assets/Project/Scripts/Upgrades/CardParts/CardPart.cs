@@ -29,6 +29,7 @@ public abstract class CardPart : MonoBehaviour
     protected Coroutine showInfoCoroutine = null;
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
+    [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
 
 
     private Vector3 standardPosition;
@@ -78,20 +79,39 @@ public abstract class CardPart : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            StartShowInfoWithDelay();
+            return;
+        }
+
         if (!isInteractable) return;
 
         if (cardState != CardPartStates.STANDARD) return;
 
         if (OnCardHovered != null) OnCardHovered(this);
+
+        if (cardState == CardPartStates.HOVERED)
+        {
+            StartShowInfoWithDelay();
+        }
     }
 
     private void OnMouseExit()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            DoHideInfo();
+            return;
+        }
+
         if (!isInteractable) return;
 
         if (cardState != CardPartStates.HOVERED) return;
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
+
+        DoHideInfo();
     }
 
     private void OnMouseDown()
@@ -106,7 +126,8 @@ public abstract class CardPart : MonoBehaviour
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
-        
+
+        DoHideInfo();
     }
 
     private void Update()
@@ -238,6 +259,23 @@ public abstract class CardPart : MonoBehaviour
     {
         isShowingInfo = false;
         //Debug.Log("HideInfo");
+    }
+
+    private Coroutine showInfoDelayCoroutine = null;
+    private void StartShowInfoWithDelay()
+    {
+        showInfoDelayCoroutine = StartCoroutine(ShowInfoWithDelay());
+    }
+    private IEnumerator ShowInfoWithDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ShowInfo();
+        showInfoDelayCoroutine = null;
+    }
+    private void DoHideInfo()
+    {
+        if (showInfoDelayCoroutine != null) StopCoroutine(showInfoDelayCoroutine);
+        HideInfo();
     }
 
 
