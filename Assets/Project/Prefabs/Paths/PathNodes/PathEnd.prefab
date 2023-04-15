@@ -10,7 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4207083098588260928}
   - component: {fileID: 6767760847628538}
+  - component: {fileID: 6882417781251141008}
   - component: {fileID: 762682954504709822}
+  - component: {fileID: -1523957410293457751}
   m_Layer: 8
   m_Name: PathEnd
   m_TagString: Untagged
@@ -47,6 +49,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
+--- !u!114 &6882417781251141008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141818259572173214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289df757d4d32fd4b96f74afe7075a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileType: 0
+  buildingPlaceOffset: {x: 0, y: 0.2, z: 0}
+  isOccupied: 0
 --- !u!65 &762682954504709822
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60,6 +77,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &-1523957410293457751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141818259572173214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74027e67dcf08b54aa96d99e4108aeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 5469692450311309027}
+  deactivatedMat: {fileID: 2100000, guid: e5e43bef96192704aa6c58b455ef4343, type: 2}
+  matToChange: 01000000
+  falling: 0
+  cube: {fileID: 3473474193955431661, guid: 8da5233f093cf62418cbe0ce20e3d03e, type: 3}
+  holeFill: {fileID: 5967231113958032833, guid: d3e8d3c482ef5b84284f2bcac769183d,
+    type: 3}
+  activateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  deactivateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &6641074335556803175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -149,6 +197,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21e4f12598674cb46bf022eeb17285a5, type: 3}
+--- !u!23 &5469692450311309027 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 21e4f12598674cb46bf022eeb17285a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6641074335556803175}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6603240850416663948 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 21e4f12598674cb46bf022eeb17285a5,

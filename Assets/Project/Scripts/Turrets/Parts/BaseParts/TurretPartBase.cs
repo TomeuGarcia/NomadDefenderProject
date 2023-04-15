@@ -23,6 +23,12 @@ public class TurretPartBase : ScriptableObject
     [SerializeField] public Sprite abilitySprite;
     [SerializeField] public Color32 spriteColor;
 
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string abilityName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription;
+
 
     public int Range { get => rangePerLvl[rangeLvl-1]; }
 
@@ -48,6 +54,31 @@ public class TurretPartBase : ScriptableObject
         this.materialColor = other.materialColor;
         this.abilitySprite = other.abilitySprite;
         this.spriteColor = other.spriteColor;
+
+        this.abilityName = other.abilityName;
+        this.abilityDescription = other.abilityDescription;
     }
 
+
+    // Operator Overloads
+    public static bool operator ==(TurretPartBase obj1, TurretPartBase obj2)
+    {
+        if (!obj1 || !obj2) return false;
+        return obj1.prefab == obj2.prefab;
+    }
+
+    public static bool operator !=(TurretPartBase obj1, TurretPartBase obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }

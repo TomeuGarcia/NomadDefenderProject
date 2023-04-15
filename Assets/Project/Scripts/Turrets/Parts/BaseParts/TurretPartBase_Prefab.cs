@@ -5,23 +5,43 @@ using UnityEngine;
 
 public class TurretPartBase_Prefab : MonoBehaviour
 {
+    [SerializeField] private Transform meshTransform;
+    public Transform MeshTransform => meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material previewMaterial;
     private Material[] defaultMaterials;
     protected Material[] previewMaterials;
 
+    [Header("BASE COLLIDER")]
+    [SerializeField] public BaseCollider baseCollider;
+    [SerializeField] GameObject[] visualUpgrades;
+
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+    public ParticleSystem PlacedParticleSystem => placedParticleSystem;
 
 
+    private void Awake()
+    {
+        foreach (GameObject go in visualUpgrades)
+        {
+            go.SetActive(false);
+        }
+    }
     virtual public void Init(TurretBuilding turretOwner, float turretRange)
     {
         InitMaterials();
+        
     }
     virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding,float supportRange)
     {
         InitMaterials();
     }
 
-    virtual public void Upgrade(int newStatLevel) { }
+    virtual public void Upgrade(int newStatLevel) 
+    {
+        if (newStatLevel < visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
+    }
 
     private void InitMaterials()
     {
@@ -49,4 +69,11 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+
+    public void SetMaterialColor(Color color)
+    {
+        previewMaterial.color = color;
+        baseCollider.SetRangeColor(color);
+    }
+
 }

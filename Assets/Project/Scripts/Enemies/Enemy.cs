@@ -9,36 +9,47 @@ using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { BASIC, FAST, TANK }
+    public enum EnemyType { 
+        BASIC, // 0
+        FAST,  // 1
+        TANK,BASIC_ARMORED, // 2
+        FAST_ARMORED,TANK_ARMORED, // 3
+        ARMOR_TRUCK,  // 4
+        HEALTH_TRUCK, // 5
+        COUNT
+    }
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material baseMaterial;
-    [SerializeField] private Material selectedMaterial;
     public Transform MeshTransform => meshRenderer.transform;
     private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
     [SerializeField] public PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
-    [SerializeField] public Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
+    [SerializeField] private EnemyFeedback enemyFeedback;
+    //[SerializeField] private MeshRenderer armorCover;
 
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
     [SerializeField] private int baseHealth = 2;
+    [SerializeField] private int baseArmor = 0;
     private float damage;
+    private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
     [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
-    private int queuedDamage = 0;   
+    private int queuedDamage = 0;
+
+    public bool IsFakeEnemy { get; protected set; } = false;    
 
 
-
-    private HealthSystem healthSystem;
+    protected HealthSystem healthSystem;
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
@@ -52,10 +63,21 @@ public class Enemy : MonoBehaviour
     {
         ResetStats();
 
-        healthSystem = new HealthSystem((int)health);
+        if(armor == 0)
+        {
+            healthSystem = new HealthSystem((int)health);
+        }
+        else
+        {
+            healthSystem = new HealthSystem((int)health, (int)armor);
+        }
+
         healthHUD.Init(healthSystem);
 
         originalMeshLocalScale = MeshTransform.localScale;
+
+        healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
+        IsFakeEnemy = false;
     }
 
     private void OnValidate()
@@ -82,18 +104,23 @@ public class Enemy : MonoBehaviour
 
         //ChangeToBaseMat();
         healthSystem.HealToMax();
+        healthSystem.ResetArmor();
 
         queuedDamage = 0;
 
         ResetStats();
 
         healthHUD.Hide();
+
+        enemyFeedback.ResetEnemy(healthSystem.HasArmor());
     }
 
     private void ResetStats()
     {
         damage = baseDamage;
         health = baseHealth;
+        armor = baseArmor;
+
         currencyDrop = baseCurrencyDrop;
     }
 
@@ -102,11 +129,24 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PathLocation"))
         {
-            other.gameObject.GetComponent<PathLocation>().TakeDamage((int)damage);
+            PathLocation pathLocation = other.gameObject.GetComponent<PathLocation>();
+            if (!pathLocation.IsDead)
+            {
+                pathLocation.TakeDamage((int)damage);
+            }
             Suicide();
         }
     }
 
+
+    public virtual bool CanBeTargeted()
+    {
+        return true;
+    }
+    public virtual float GetTargetNegativePriorityBonus()
+    {
+        return 0f;
+    }
 
 
     private void Attack()
@@ -115,11 +155,16 @@ public class Enemy : MonoBehaviour
         rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int damageAmount, PassiveDamageModifier modifier)
+    public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
+    {
+        Debug.Log("ComputeDamageWithPassive " + name);
+        return modifier(damageAmount, healthSystem);
+    }
+
+    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
         healthHUD.Show();
 
-        damageAmount = modifier(damageAmount, healthSystem);
         healthSystem.TakeDamage(damageAmount);
         RemoveQueuedDamage(damageAmount);
 
@@ -131,6 +176,12 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public virtual void GetStunned(float duration)
+    {
+        if (IsDead()) return;
+        pathFollower.PauseForDuration(duration);
     }
 
     private void Suicide()
@@ -149,29 +200,18 @@ public class Enemy : MonoBehaviour
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
+        enemyFeedback.FinishCoroutines();
+
+        pathFollower.CheckDeactivateCoroutines();
         rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 
-    public void ChangeMat()
-    {
-        //meshRenderer.material = selectedMaterial;
-    }
-    public void ChangeToBaseMat()
-    {
-        //meshRenderer.material = baseMaterial;
-    }
 
-
-    public void QueueDamage(int amount, PassiveDamageModifier modifier)
+    public virtual int QueueDamage(int amount)
     {
-        amount = modifier(amount, healthSystem);
         queuedDamage += amount;
-
-        //if (queuedDamage >= healthSystem.health)
-        //{
-        //    StartCoroutine(TimedDeath());
-        //}
+        return amount;
     }
 
     IEnumerator TimedDeath()
@@ -181,26 +221,46 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    private void RemoveQueuedDamage(int amount) // use if enemy is ever healed
+    public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
         queuedDamage -= amount;
     }
 
-    public bool DiesFromQueuedDamage()
+    public virtual bool DiesFromQueuedDamage()
     {
         return queuedDamage >= healthSystem.health;
     }
 
-    public void SetMoveSpeed(float speedCoef)
+    public virtual void SetMoveSpeed(float speedCoef)
     {
         pathFollower.SetMoveSpeed(speedCoef);
     }
 
-    public void ApplyWaveStatMultiplier(float multiplier)
+    public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
         damage = (float)baseDamage * multiplier;
         health = (float)baseHealth * multiplier;
 
         healthSystem.UpdateHealth((int)health);
+    }
+
+    public virtual bool IsDead()
+    {
+        return healthSystem.IsDead();
+    }
+
+    public virtual void AddHealth(int healthToAdd)
+    {
+        
+        healthSystem.Heal(healthToAdd);
+        healthHUD.Show();
+
+    }
+
+    public virtual void AddArmor(int armorToAdd)
+    {
+        
+        healthSystem.AddArmor(armorToAdd);
+        healthHUD.Show();
     }
 }

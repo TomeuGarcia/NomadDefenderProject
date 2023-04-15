@@ -1,0 +1,550 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7308264895389281438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895389281424}
+  - component: {fileID: 7308264895389281425}
+  m_Layer: 5
+  m_Name: ScriptedSequence
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264895389281424
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895389281438}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4723245421914710138}
+  m_Father: {fileID: 7308264896860769001}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7308264895389281425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895389281438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91da1e024f5815f419393df38278d075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogSystem: {fileID: 4723245421914710139}
+  textLines:
+  - textType: 0
+    text: Starting Simulation 0...
+    clearTime: 0
+  - textType: 0
+    text: Rendering Level...
+    clearTime: 0
+  - textType: 0
+    text: Level Loaded
+    clearTime: 0
+  - textType: 0
+    text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+    clearTime: 0
+  - textType: 0
+    text: Connecting to server
+    clearTime: 0
+  - textType: 0
+    text: Recovering User currency
+    clearTime: 0
+  - textType: 0
+    text: Loading User Currency...
+    clearTime: 0
+  - textType: 0
+    text: Currency Loaded Successfully
+    clearTime: 0
+  - textType: 0
+    text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+    clearTime: 0
+  - textType: 0
+    text: Initializing User's Deck
+    clearTime: 0
+  - textType: 0
+    text: Creating First Card...
+    clearTime: 0
+  - textType: 0
+    text: Creating Card Visuals
+    clearTime: 0
+  - textType: 0
+    text: 'Creating Card Stats:'
+    clearTime: 0
+  - textType: 0
+    text: '/Card Stats: <color=#FF003E>ATTACK</color>'
+    clearTime: 0
+  - textType: 0
+    text: '/Card Stats: <color=#FFF345>CADENCY</color>'
+    clearTime: 0
+  - textType: 0
+    text: '/Card Stats: <color=#1DFF5F>RANGE</color>'
+    clearTime: 0
+  - textType: 0
+    text: '/Card Stats: COST'
+    clearTime: 0
+  - textType: 0
+    text: Card Stats Created Successfully
+    clearTime: 0
+  - textType: 0
+    text: Redraw Initializing
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw: Activating...'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw: Successfully showing'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw: Generating Info...'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw/Info: Click a Card to redraw it'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw/Info: Redraw ends when no redraws left or finish button clicked'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw: Waiting User to finish Redraw...'
+    clearTime: 0
+  - textType: 0
+    text: '/Redraw: Finished'
+    clearTime: 0
+  - textType: 0
+    text: Initializing Defense...
+    clearTime: 0
+  - textType: 0
+    text: '/Defense/Info: Select a Card'
+    clearTime: 0
+  - textType: 0
+    text: '/Defense/Info: Then place it in an available position in world'
+    clearTime: 0
+  - textType: 0
+    text: '/Defense: Waiting for User to place a Turret...'
+    clearTime: 0
+  - textType: 0
+    text: Turret placed Correctly
+    clearTime: 0
+  - textType: 0
+    text: Generating Enemies...
+    clearTime: 0
+  - textType: 0
+    text: Wave 1/2
+    clearTime: 0
+  - textType: 0
+    text: DEFENSE PAUSED
+    clearTime: 0
+  - textType: 0
+    text: Click on the placed turret
+    clearTime: 0
+  - textType: 0
+    text: And upgrade one stat
+    clearTime: 0
+  - textType: 0
+    text: Waiting User to Upgrade Turret...
+    clearTime: 0
+  - textType: 0
+    text: Turret upgraded 1 lvl
+    clearTime: 0
+  - textType: 0
+    text: This turret has reached its maximum upgrades in this battle
+    clearTime: 0
+  - textType: 0
+    text: Turret Max Upgrades = Turret Card Level
+    clearTime: 0
+  - textType: 0
+    text: DEFENSE RESUMED
+    clearTime: 0
+  - textType: 0
+    text: Wave 2/2
+    clearTime: 0
+  - textType: 0
+    text: Defense <color=#FF003E>Finished?</color>
+    clearTime: 0
+  - textType: 0
+    text: Wave 3/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 4/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 5/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 6/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 7/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 8/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 9/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 10/2
+    clearTime: 0
+  - textType: 0
+    text: Wave 11/2
+    clearTime: 0
+  - textType: 0
+    text: defend
+    clearTime: 0
+  - textType: 0
+    text: Defend
+    clearTime: 0
+  - textType: 0
+    text: DEFEND
+    clearTime: 0
+  - textType: 1
+    text: DEFENCK
+    clearTime: 0
+  - textType: 1
+    text: ATENCK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+  - textType: 1
+    text: ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK ATTACK
+      ATTACK ATTACK ATTACK ATTACK ATTACK
+    clearTime: 0
+--- !u!1 &7308264895925660343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264895925660297}
+  - component: {fileID: 1502475401564033126}
+  m_Layer: 0
+  m_Name: TutorialManager 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7308264895925660297
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895925660343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1084.5289, y: 462.87485, z: 5704.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264896860769001}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1502475401564033126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264895925660343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae34d9b502c48744825ff67ab50bd2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 0}
+  cardDrawer: {fileID: 0}
+  firstBase: {fileID: 0}
+  watcherCardScriptableObject: {fileID: 0}
+  obstacleTile: {fileID: 0}
+  deckCreator: {fileID: 0}
+  watcherCardTile: {fileID: 0}
+  buildingPlacer: {fileID: 0}
+  currencyCounter: {fileID: 0}
+  speedUpButton: {fileID: 0}
+  redrawInterface: {fileID: 0}
+  scriptedSequence: {fileID: 7308264895389281425}
+  turretSpawnParticles: {fileID: 0}
+--- !u!1 &7308264896860768790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7308264896860769001}
+  - component: {fileID: 7308264896860769002}
+  - component: {fileID: 7308264896860769003}
+  - component: {fileID: 7308264896860769000}
+  m_Layer: 5
+  m_Name: CanvasDialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7308264896860769001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7308264895389281424}
+  m_Father: {fileID: 7308264895925660297}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!223 &7308264896860769002
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &7308264896860769003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!114 &7308264896860769000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308264896860768790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!1001 &4350069107908003662
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7308264895389281424}
+    m_Modifications:
+    - target: {fileID: 9066549113980888875, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1c2bd284d35f234db234b9444d06b50, type: 3}
+--- !u!224 &4723245421914710138 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 9066549113980888884, guid: d1c2bd284d35f234db234b9444d06b50,
+    type: 3}
+  m_PrefabInstance: {fileID: 4350069107908003662}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4723245421914710139 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9066549113980888885, guid: d1c2bd284d35f234db234b9444d06b50,
+    type: 3}
+  m_PrefabInstance: {fileID: 4350069107908003662}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a247cde68abe4549aa29006c5e5aa14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -30,6 +30,12 @@ public class TurretPartBody : ScriptableObject
     [Header("VISUALS")]
     [SerializeField] public Texture2D materialTextureMap;
 
+    [Header("ABILITY INFO")]
+    [Header("Name")]
+    [SerializeField] public string partName;
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
+
 
     public int Damage { get => damagePerLvl[damageLvl-1]; }
     public float Cadence { get => cadencePerLvl[cadenceLvl-1]; }
@@ -51,6 +57,33 @@ public class TurretPartBody : ScriptableObject
         this.cadenceLvl = other.cadenceLvl;
         this.prefab = other.prefab;
         this.materialTextureMap = other.materialTextureMap;
+
+        this.partName = other.partName;
+        this.abilityDescription = other.abilityDescription;
+
+        this.bodyType = other.bodyType;
     }
 
+
+    // Operator Overloads
+    public static bool operator ==(TurretPartBody obj1, TurretPartBody obj2)
+    {
+        if (!obj1 || !obj2) return false;
+        return obj1.prefab == obj2.prefab;
+    }
+
+    public static bool operator !=(TurretPartBody obj1, TurretPartBody obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }

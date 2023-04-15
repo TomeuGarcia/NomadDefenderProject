@@ -1,19 +1,21 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OWMapPawn : MonoBehaviour
 {
 
     [SerializeField] private Transform moveTransform;
-    [SerializeField] private GameObject followCamera;
+    [SerializeField] private OWCameraMovement followCamera;
+    public Transform FollowCameraTransform => followCamera.gameObject.transform;
 
     private OWMap_Node currentNode;
 
     private OverworldMapGameManager owMapGameManager;
 
-    private Vector3 camDisplacementToNextLevel;
+    private Quaternion defaultRotation;
     
 
 
@@ -25,19 +27,45 @@ public class OWMapPawn : MonoBehaviour
         moveTransform.position = GetNodePos(startNode);
         moveTransform.rotation = Quaternion.LookRotation(startNode.Forward, startNode.Up);
 
-        this.camDisplacementToNextLevel = camDisplacementToNextLevel;
+        defaultRotation = moveTransform.rotation;
+
+        this.followCamera.Init(camDisplacementToNextLevel, owMapGameManager.GetMapNodes()[owMapGameManager.GetMapNodes().Length - 1][0].Position.z);
     }
 
     public void MoveToNode(OWMap_Node targetNode)
     {
+        if (currentNode == null)
+        {
+            currentNode = targetNode;
+            return;
+        }
+
+
+        Vector3 startFwd = moveTransform.forward;
+        Vector3 endFwd = (targetNode.Position - currentNode.Position).normalized;
+
         currentNode = targetNode;
-        
-        Vector3 targetPos = GetNodePos(targetNode);
+
+        Vector3 targetPos = GetNodePos(currentNode);
         float distance = Vector3.Distance(moveTransform.position, targetPos);
         float duration = distance * 0.5f;
 
-        moveTransform.DOMove(targetPos, duration)
-            .OnComplete(NotifyNodeWasReached);
+        followCamera.CanDrag(false);
+        moveTransform.DORotateQuaternion(Quaternion.FromToRotation(startFwd, endFwd), 0.25f)
+            .OnComplete(() => moveTransform.DOMove(targetPos, duration)
+                .OnComplete(() => followCamera.CanDrag(true))
+                    .OnComplete(() => moveTransform.DORotateQuaternion(defaultRotation, 0.25f)
+                        .OnComplete(NotifyNodeWasReached)));
+    }
+
+    public void ResetPosition()
+    {
+        followCamera.ResetPosition();
+    }
+    public void NodeSelected()
+    {
+        ResetPosition();
+        followCamera.NodeSelected(true);
     }
 
 
@@ -54,21 +82,25 @@ public class OWMapPawn : MonoBehaviour
 
     public void ActivateCamera()
     {
-        followCamera.SetActive(true);
+        followCamera.gameObject.SetActive(true);
     }
 
     public void DeactivateCamera()
     {
-        followCamera.SetActive(false);
+        followCamera.gameObject.SetActive(false);
     }
 
     public void MoveCameraToNextLevel()
     {
-        StartCoroutine(LateMoveCameraToNextLevel());
+        followCamera.NodeSelected(false);
+        followCamera.LockCamera();
+        StartCoroutine(LateMoveToNextLevel());
     }
-    private IEnumerator LateMoveCameraToNextLevel()
+
+    private IEnumerator LateMoveToNextLevel()
     {
         yield return new WaitForSeconds(1.5f);
-        followCamera.transform.DOMove(followCamera.transform.position + camDisplacementToNextLevel, 2.0f);
+        ActivateCamera();
+        followCamera.MoveToNextLevel();
     }
 }

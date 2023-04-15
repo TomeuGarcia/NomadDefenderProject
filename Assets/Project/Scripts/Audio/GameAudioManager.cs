@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameAudioManager : MonoBehaviour
@@ -14,7 +15,12 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource uiAudioSource;
     [SerializeField] private AudioClip uiButtonPressed;
     [SerializeField] private AudioClip screenShut;
+    [SerializeField] private AudioSource errorSource;
     //[SerializeField] private AudioClip screenOpen;
+
+    [Header("TEXT")]
+    [SerializeField] private AudioSource textConsoleTypingSource;
+    [SerializeField] private AudioClip[] textConsoleTyping;
 
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
@@ -25,7 +31,23 @@ public class GameAudioManager : MonoBehaviour
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
 
-    [Header("UPGRADES")]
+    [Header("CARDS INFO")]
+    [SerializeField] private AudioSource cardsInfoAudioSource;
+    [SerializeField] private AudioClip cardInfoElement;
+    [SerializeField] private AudioClip cardInfoElementMoves;
+
+
+
+    [Header("CARDS PLAYED")]
+    [SerializeField] private AudioSource cardPlayedAudioSource;
+    [SerializeField] private AudioSource watcherCardPlayedAudioSource;
+
+
+
+    [Header("IN-BATTLE UPGRADES")]
+    [SerializeField] private AudioSource inBattleBuildingUpgradeAudioSource;
+
+    [Header("UPGRADE SCENES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
     [SerializeField] private AudioClip upgradeButtonPressed;
@@ -37,6 +59,14 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip enemyTakeDamage;
     [SerializeField] private AudioClip enemyDeath;
     [SerializeField] private AudioClip enemySpawn;
+
+    [SerializeField] private AudioSource enemyLastDeathAudioSource;
+    [SerializeField] private AudioSource enemyArmorBreakAudioSource;
+
+
+    [Header("BATTLE SCENES")]
+    [SerializeField] private AudioSource battleAudioSource;
+    [SerializeField] private AudioClip locationTakeDamage;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -51,6 +81,21 @@ public class GameAudioManager : MonoBehaviour
 
 
 
+    [Header("OVERWORLD MAP")]
+    [SerializeField] private AudioSource nodeAudioSource;
+    [SerializeField] private AudioSource sparkAudioSource;
+    [SerializeField] private AudioSource nodeSpawnAudioSource;
+    [SerializeField] private AudioSource[] doorAudioSources;
+
+
+    [Header("GLITCH")]
+    [SerializeField] private AudioSource[] glitchAudioSoruces;
+
+    [Header("BACKGROUND")]
+    [SerializeField] private AudioSource droneAudioSource;
+    private float droneBuildUpInitVolume;
+    private IEnumerator droneBuildUp;
+    private IEnumerator droneLerpBuildUp;
 
 
 
@@ -60,11 +105,13 @@ public class GameAudioManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this);
+
+            InitVariables();
         }
         else
         {
             Destroy(this);
-        }
+        }        
     }
 
     public static GameAudioManager GetInstance()
@@ -72,6 +119,14 @@ public class GameAudioManager : MonoBehaviour
         return instance;
     }
 
+
+    private void InitVariables()
+
+    {
+
+        droneBuildUpInitVolume = droneAudioSource.volume;
+
+    }
 
     // Helpers
     private void LoopAudioSources(AudioSource[] audioSources, AudioClip clip, float pitch)
@@ -90,6 +145,76 @@ public class GameAudioManager : MonoBehaviour
 
             ++i;
         }
+    }
+    private IEnumerator BuildUp(AudioSource source, float initVol, float endVol, float attackTime, float sustainTime, float releaseTime)
+
+    {
+
+        if(attackTime > 0.0f)
+
+        {
+
+            droneLerpBuildUp = LerpVolume(source, initVol, endVol, attackTime);
+
+            yield return StartCoroutine(droneLerpBuildUp);
+
+        }
+
+        else
+
+            source.volume = endVol;
+
+
+
+        if (sustainTime > 0.0f)
+
+            yield return new WaitForSeconds(sustainTime);
+
+
+
+        if (releaseTime > 0.0f)
+
+        {
+
+            droneLerpBuildUp = LerpVolume(source, endVol, initVol, releaseTime);
+
+            yield return StartCoroutine(droneLerpBuildUp);
+
+        }
+
+    }
+    private IEnumerator LerpVolume(AudioSource source, float initVol, float endVol, float lerpTime)
+
+    {
+
+        float currentTime = 0.0f;
+
+        float tParam;
+
+
+
+        float diff = endVol - initVol;
+
+
+
+        while (currentTime < lerpTime)
+
+        {
+
+            currentTime += Time.deltaTime;
+
+            tParam = currentTime / lerpTime;
+
+            source.volume = tParam * diff + initVol;
+
+            yield return null;
+
+        }
+
+
+
+        source.volume = endVol;
+
     }
 
 
@@ -128,6 +253,25 @@ public class GameAudioManager : MonoBehaviour
         uiAudioSource.pitch = Random.Range(1.0f, 1.05f);
 
         uiAudioSource.Play();
+    }
+
+    public void PlayError()
+    {
+        errorSource.pitch = Random.Range(1.25f, 1.35f);
+        errorSource.Play();
+    }
+
+
+    // Text
+    public void PlayConsoleTyping(int textType)
+    {
+        if(textConsoleTyping.Length <= textType)
+            textType = 0;
+
+        textConsoleTypingSource.clip = textConsoleTyping[textType];
+        textConsoleTypingSource.pitch = Random.Range(0.9f, 1.1f);
+
+        textConsoleTypingSource.Play();
     }
 
 
@@ -180,7 +324,105 @@ public class GameAudioManager : MonoBehaviour
     }
 
 
-    // Upgrades
+    // Cards Info
+    public void PlayCardInfoShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveShown()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
+    }
+
+    public void PlayCardInfoHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+    public void PlayCardInfoMoveHidden()
+    {
+        cardsInfoAudioSource.clip = cardInfoElementMoves;
+        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        cardsInfoAudioSource.volume = 0.08f;
+
+        cardsInfoAudioSource.Play();
+    }
+
+    public void PlayCardUIInfoShown(float pitch)
+    {
+        cardsInfoAudioSource.clip = cardInfoElement;
+        cardsInfoAudioSource.pitch = pitch;
+        cardsInfoAudioSource.volume = 0.05f;
+
+        cardsInfoAudioSource.Play();
+    }
+
+
+
+
+
+    // Cards played
+
+    public void PlayTurretCardPlaced(TurretPartBody.BodyType bodyType)
+    {
+
+        float pitch = 1f;
+        if (bodyType == TurretPartBody.BodyType.SENTRY)
+
+        {
+
+            pitch = 1f;
+
+        }
+        else if (bodyType == TurretPartBody.BodyType.BLASTER)
+
+        {
+
+            pitch = 0.8f;
+
+        }
+        else if (bodyType == TurretPartBody.BodyType.SPAMMER)
+
+        {
+
+            pitch = 1.3f;
+
+        }
+
+        cardPlayedAudioSource.pitch = pitch;
+
+        cardPlayedAudioSource.Play();
+    }
+    public void PlayWatcherCard()
+    {
+        watcherCardPlayedAudioSource.Play();
+    }
+
+
+    // In-Battle Upgrades
+    public void PlayInBattleBuildingUpgrade()
+
+    {
+
+        inBattleBuildingUpgradeAudioSource.pitch = Random.Range(0.9f, 1.1f);
+
+        inBattleBuildingUpgradeAudioSource.Play();
+
+    }
+
+
+    // Upgrade Scenes
     public void PlayCardPartSwap()
     {
         upgradesAudioSource.clip = cardPartSwap;
@@ -223,6 +465,49 @@ public class GameAudioManager : MonoBehaviour
         LoopAudioSources(enemiesAudioSources, enemySpawn, Random.Range(0.9f, 1.1f));
     }
 
+    public void PlayEnemyLastDeathHit()
+
+    {
+        //StartCoroutine(LerpVolume(enemyLastDeathAudioSource, 0.05f, enemyLastDeathAudioSource.volume, 2.0f));
+        enemyLastDeathAudioSource.Play();
+
+    }
+
+    public void PlayEnemyArmorBreak()
+
+    {
+
+        enemyArmorBreakAudioSource.pitch = Random.Range(0.9f, 1.1f);
+
+        enemyArmorBreakAudioSource.Play();
+
+    }
+
+
+    // Battle
+    public void PlayLocationTakeDamage()
+
+    {
+
+        battleAudioSource.clip = locationTakeDamage;
+        battleAudioSource.pitch = Random.Range(0.8f, 0.9f);
+
+        battleAudioSource.Play();
+
+    }
+
+    public void PlayLocationDestroyed()
+
+    {
+
+        battleAudioSource.clip = locationTakeDamage;
+        battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
+
+        battleAudioSource.Play();
+
+    }
+
+
 
     // Currency
     public void PlayCurrencyDropped()
@@ -242,15 +527,113 @@ public class GameAudioManager : MonoBehaviour
     // Projectiles
     public void PlayProjectileShot(TurretPartBody.BodyType bodyType)
     {
-        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.85f, 1.15f));
+        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.8f, 1.2f));
     }
 
     public void PlayZapProjectileShot()
     {
-        LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.85f, 1.15f));
+        LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.8f, 1.2f));
     }
 
 
 
+
+
+
+
+    // Environment
+
+    public void PlaySparksSound()
+    {
+        sparkAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        sparkAudioSource.Play();
+    }
+
+    public void PlayNodeSelectedSound()
+    {
+        nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        nodeAudioSource.Play();
+    }
+
+    public void PlayDoorSound(int soundIndex)
+    {
+        doorAudioSources[soundIndex].Play();
+    }
+
+
+
+
+
+
+
+    // Glitch
+
+    public void PlayRandomGlitchSound()
+    {
+        AudioSource randomGlitch = glitchAudioSoruces[Random.Range(0, glitchAudioSoruces.Count())];
+        randomGlitch.pitch = Random.Range(0.8f, 1.2f);
+        randomGlitch.Play();
+    }
+
+    public void PlayGlitchSound(int index)
+    {
+        glitchAudioSoruces[index].pitch = Random.Range(0.8f, 1.2f);
+        glitchAudioSoruces[index].Play();
+    }
+
+
+
+
+
+
+
+    // Background
+
+    public void PlayDroneBuildUp(float attackTime, float sustainTime, float releaseTime)
+    {
+        if(!droneAudioSource.isPlaying)
+
+        {
+
+            droneAudioSource.Play();
+
+        } else {
+
+            droneAudioSource.volume = droneBuildUpInitVolume;
+
+            StopCoroutine(droneBuildUp);
+
+            StopCoroutine(droneLerpBuildUp);
+
+        }
+
+
+
+        droneBuildUp = BuildUp(droneAudioSource, 0.0f, droneAudioSource.volume, attackTime, sustainTime, releaseTime);
+
+        StartCoroutine(droneBuildUp);
+    }
+    
+    public void PlayUpgradeNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(1.15f, 1.3f);
+        nodeSpawnAudioSource.Play();
+    }
+
+
+
+    public void PlayBattleNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(0.6f, 0.75f);
+        nodeSpawnAudioSource.Play();
+    }
+
+
+
+    public void PlayConnectionsNodeSpawnSound()
+    {
+        nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        nodeSpawnAudioSource.Play();
+    }
 
 }

@@ -14,9 +14,14 @@ public class DeckCreator : MonoBehaviour
 
     private void Awake()
     {
+        SpawnCardsAndResetDeckData();
+    }
+
+    public void SpawnCardsAndResetDeckData()
+    {
         int turretCardNum = deckData.starterTurretCardsComponents.Count;
         int supportCardNum = deckData.starterSupportCardsComponents.Count;
-        starterCards = new BuildingCard[ turretCardNum+supportCardNum];
+        starterCards = new BuildingCard[turretCardNum + supportCardNum];
 
         for (int i = 0; i < turretCardNum; ++i)
         {
@@ -36,6 +41,7 @@ public class DeckCreator : MonoBehaviour
         }
 
         deckData.Init(starterCards);
+        Debug.Log("Spawn Cards");
     }
 
     private void OnDisable()
@@ -43,6 +49,7 @@ public class DeckCreator : MonoBehaviour
         deckData.Save();
     }
 
+    
     public TurretBuildingCard GetUninitializedNewTurretCard()
     {
         return Instantiate(turretCardPrefab, spawnTransform).GetComponent<TurretBuildingCard>();
@@ -64,6 +71,5 @@ public class DeckCreator : MonoBehaviour
         deckData.AddSupportCard(supportCard);
         deckData.SetStarterCardComponentsAsSaved();
     }
-
 
 }

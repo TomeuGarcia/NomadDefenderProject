@@ -11,6 +11,7 @@ public class TurretPassiveBase : ScriptableObject
     public struct VisualInformation
     {
         public Sprite sprite;
+        public Texture2D spriteAsTexture;
         public Color32 color;
 
         [TextArea] public String description;
@@ -25,10 +26,35 @@ public class TurretPassiveBase : ScriptableObject
     [Header("VISUALS")]
     public VisualInformation visualInformation;
 
+
     public void InitAsCopy(TurretPassiveBase other)
     {
         this.cost = other.cost;
         this.passive = other.passive;
         this.visualInformation = other.visualInformation;
     }
+
+
+    // Operator Overloads
+    public static bool operator ==(TurretPassiveBase obj1, TurretPassiveBase obj2)
+    {
+        if (!obj1 || !obj2) return false;
+        return obj1.passive.abilityName == obj2.passive.abilityName;
+    }
+
+    public static bool operator !=(TurretPassiveBase obj1, TurretPassiveBase obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
+    public override bool Equals(object o)
+    {
+        return base.Equals(o);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
 }

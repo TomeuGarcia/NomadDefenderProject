@@ -33,18 +33,6 @@ public class SceneLoader : MonoBehaviour
     public static event SceneLoaderAction OnSceneForceQuit;
 
 
-    int init = 0;
-    int menu = 1;
-    int td1 = 2;
-    int td2 = 3;
-    int newCard = 4;
-    int upgrade1 = 5;
-    int upgrade2 = 6;
-    int upgrade3 = 7;
-
-    bool lastWasTD2 = false;
-
-
     private static SceneLoader instance;
     public static SceneLoader GetInstance()
     {
@@ -77,10 +65,9 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone += StartLoadNextScene; // not called, remove after check
+        //GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart += StartLoadMainMenu;
-        MainMenu.OnPlayStart += StartLoadNextScene; // TODO change to load map scene
     }
 
     private void OnDisable()
@@ -90,28 +77,20 @@ public class SceneLoader : MonoBehaviour
 
         //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
 
-        GatherNewCardManager.OnCardGatherDone -= StartLoadNextScene; // not called, remove after check
+        //GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
 
         InitScene.OnStart -= StartLoadMainMenu;
-        MainMenu.OnPlayStart -= StartLoadNextScene; // TODO change to load map scene
+
     }
 
     private void Update()
     {
         if (alreadyLoadingNextScene) return;
 
-        //if (Input.GetKeyDown(KeyCode.O)) OpenAnimation(openAnimDuration);
-        //else if (Input.GetKeyDown(KeyCode.P)) ShutAnimation(shutAnimDuration);
-
         if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
         {
             if (OnSceneForceQuit != null) OnSceneForceQuit();
             StartLoadMainMenu();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(Random.Range(0, 3) + upgrade1);
         }
     }
 
@@ -128,11 +107,6 @@ public class SceneLoader : MonoBehaviour
         topBlackScreen.DOLocalMove(topOpenPosition, duration);
         bottomBlackScreen.DOLocalMove(bottomOpenPosition, duration);
         backgroundImage.DOColor(openColor, duration * 1.2f);
-    }
-
-    private void StartLoadNextScene()
-    {
-        StartCoroutine(DoLoadScene(LoadNextScene));
     }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
     {
@@ -152,35 +126,51 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = false;
     }
 
+    public void StartLoadNormalGame(bool loadUsingSceneName = false)
+    {
+        if (loadUsingSceneName)
+            StartCoroutine(DoLoadScene(LoadMapScene));
+        else
+            StartCoroutine(DoLoadScene(LoadNextScene));
+    }
+
+    public void LoadNormalGameNoAnim(bool loadUsingSceneName = false)
+    {
+        LoadMapScene();
+    }
+    public void StartLoadTutorialGame()
+    {
+        StartCoroutine(DoLoadScene(LoadTutorialScene));
+    }
+
+    //public void StartLoadTutorialScene()
+    //{
+    //    StartCoroutine(DoLoadSceneWithoutAnimation(LoadNextScene));
+    //}
+    //private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
+    //{
+    //    alreadyLoadingNextScene = true;
+
+        
+    //    loadSceneFunction();
+    //    yield return new WaitForSeconds(loadSceneDuration);
+
+    //    alreadyLoadingNextScene = false;
+    //}
+
 
 
     private void LoadNextScene()
     {
-        int nextSceneI = SceneManager.GetActiveScene().buildIndex;
-        int current = SceneManager.GetActiveScene().buildIndex;
-
-        
-
-        if (current <= menu)
-        {
-            nextSceneI++;
-        }
-        else if(current <= td2)
-        {
-            nextSceneI = Random.Range(0, 3) + upgrade1;
-
-            lastWasTD2 = (current == td2);
-        }
-        else if(current == newCard)
-        {
-            nextSceneI = (lastWasTD2) ? td1 : td2;
-        }
-        else
-        {
-            nextSceneI = newCard;
-        }
-
-        SceneManager.LoadScene(nextSceneI);        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
+    }
+    private void LoadMapScene()
+    {
+        SceneManager.LoadScene("MapGenerationTest");
+    }
+    private void LoadTutorialScene()
+    {
+        SceneManager.LoadScene("TutorialMap");
     }
 
     public void StartLoadMainMenu()
@@ -204,29 +194,37 @@ public class SceneLoader : MonoBehaviour
 
 
 
-    public void LoadMapScene(string sceneName)
+    public void LoadMapScene(string sceneName, bool playAnimations)
     {
-        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName));
-    }
-    public void UnloadMapScene(string sceneName)
-    {
-        StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName));
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName, playAnimations));
     }
 
-    private IEnumerator DoLoadSceneByName(LoadSceneByNameFunction loadSceneByNameFunction, string sceneName)
+    public void UnloadMapScene(string sceneName, bool playAnimations)
+    {
+        StartCoroutine(DoLoadSceneByName(UnloadSceneAsyncByName, sceneName, playAnimations));
+    }
+
+    private IEnumerator DoLoadSceneByName(LoadSceneByNameFunction loadSceneByNameFunction, string sceneName, bool playAnimations)
     {
         alreadyLoadingNextScene = true;
 
-        ShutAnimation(shutAnimDuration);
-        GameAudioManager.GetInstance().PlayScreenShut();
-        yield return new WaitForSeconds(shutAnimDuration);
+        if(playAnimations)
+        {
+            ShutAnimation(shutAnimDuration);
+            GameAudioManager.GetInstance().PlayScreenShut();
+            yield return new WaitForSeconds(shutAnimDuration);
+        }
 
         loadSceneByNameFunction(sceneName);
         yield return new WaitForSeconds(loadSceneDuration);
 
-        OpenAnimation(openAnimDuration);
-        GameAudioManager.GetInstance().PlayScreenOpen();
-        yield return new WaitForSeconds(openAnimDuration);
+        if(playAnimations)
+        {
+            OpenAnimation(openAnimDuration);
+            GameAudioManager.GetInstance().PlayScreenOpen();
+            yield return new WaitForSeconds(openAnimDuration);
+        }
+
 
         alreadyLoadingNextScene = false;
     }
@@ -238,6 +236,11 @@ public class SceneLoader : MonoBehaviour
     private void UnloadSceneAsyncByName(string sceneName)
     {
         SceneManager.UnloadSceneAsync(sceneName);
+    }
+
+    public void LoadNextScene(string sceneName)
+    {
+        StartCoroutine(DoLoadSceneByName(LoadSceneAsyncByName, sceneName, true));
     }
 
 }

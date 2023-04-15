@@ -1,8 +1,8 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class TurretBuilding : RangeBuilding
 {
@@ -16,25 +16,37 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
-    [Header("COLLIDER")]
-    [SerializeField] private CapsuleCollider rangeCollider; // Might want to make this depend on BasePart in the future
-
-    [Header("ATTACK POOL")]
-    [SerializeField] private Pool attackPool;
 
     private TurretPartBody_Prefab bodyPart;
-    private TurretPartBase_Prefab basePart;
+    public Transform BodyPartTransform => bodyPart.transform;
 
     public PassiveDamageModifier baseDamagePassive;
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
+    public Vector3 Position => transform.position;
+
+    private Enemy targetedEnemy;
+
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
+    private TurretPartAttack_Prefab turretAttack;
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
     [SerializeField] protected Transform baseHolder;
+    public Transform BaseHolder => baseHolder;
+
+    [Header("PARTICLES")]
+    [SerializeField] protected ParticleSystem placedParticleSystem;
+    [SerializeField] private ParticleSystem upgradeParticles;
+
+
+    public int CardLevel { get; private set; }
+
+
+    public const int MIN_PLAY_COST = 50;
+
 
     void Awake()
     {
@@ -43,19 +55,22 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        currentShootTimer = 0.0f;        
+        currentShootTimer = 0.0f;
+        placedParticleSystem.gameObject.SetActive(false);
     }
 
     private void Update()
     {
         if (!isFunctional) return;
 
+        ComputeNextTargetedEnemy();
+
         UpdateShoot();
         if (bodyPart.lookAtTarget)
         {
-            if (enemies.Count > 0)
+            if (TargetEnemyExists())
             {
-                lastTargetedPosition = enemies[0].transform.position;
+                lastTargetedPosition = targetedEnemy.transformToMove.position;
             }
             LookAtTarget();
         }
@@ -65,22 +80,24 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
     }
 
-    public void Init(TurretBuildingStats turretStats, TurretBuildingCard.TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
+    public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
         TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
+
+        CardLevel = turretCardParts.cardLevel;
 
         InitStats(turretStats);
         bodyType = turretCardParts.turretPartBody.bodyType;
 
-        UpdateRange();
 
-        TurretPartAttack_Prefab turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-        attackPool.SetPooledObject(turretPartAttack.prefab);
+        this.turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
@@ -88,24 +105,24 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, stats.range);
 
+        UpdateRange();
+        SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
+
         //PASSIVE
         turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
 
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter);
+        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
+        upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
     }
 
-    private void UpdateRange()
+    protected override void UpdateRange()
     {
-        float planeRange = stats.range * 2 + 1; //only for square
-        float range = stats.range;
-
-        rangeCollider.radius = range + 0.5f;
-        rangePlaneMeshObject.transform.localScale = Vector3.one * (planeRange / 10f);
-        rangePlaneMaterial = rangePlaneMeshObject.GetComponent<MeshRenderer>().materials[0];
-        rangePlaneMaterial.SetFloat("_TileNum", planeRange);
+        basePart.baseCollider.UpdateRange(stats.range);
     }
+
 
     public void InitStats(TurretBuildingStats stats)
     {
@@ -133,15 +150,15 @@ public class TurretBuilding : RangeBuilding
     {
         if (currentShootTimer < stats.cadence)
         {
-            currentShootTimer += Time.deltaTime;
+            currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
 
-        if (enemies.Count <= 0) return;
+        if (!TargetEnemyExists()) return;
 
         currentShootTimer = 0.0f;
 
-        DoShootEnemyLogic(enemies[0]);
+        DoShootEnemyLogic(targetedEnemy);
 
 
         //// Code used when turrets used to have targetAmount stat:
@@ -155,6 +172,29 @@ public class TurretBuilding : RangeBuilding
         }
         */
     }
+
+
+    private void ComputeNextTargetedEnemy()
+    {
+        targetedEnemy = null;
+
+        int enemyI = 0;
+        while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
+        {
+            ++enemyI;
+        }
+
+        if (enemyI < enemies.Count)
+        {
+            targetedEnemy = enemies[enemyI];
+        }       
+    }
+
+    private bool TargetEnemyExists()
+    {
+        return targetedEnemy != null;
+    }
+
 
     private void DoShootEnemyLogic(Enemy enemyTarget)
     {
@@ -171,13 +211,20 @@ public class TurretBuilding : RangeBuilding
 
     private void Shoot(Enemy enemyTarget)
     {
-        TurretPartAttack_Prefab currentAttack = attackPool.GetObject().gameObject.GetComponent<TurretPartAttack_Prefab>();
-        currentAttack.transform.position = bodyPart.GetNextShootingPoint();
-        currentAttack.transform.parent = attackPool.transform;
-        currentAttack.gameObject.SetActive(true);
-        currentAttack.Init(enemyTarget, this);
+        Vector3 shootPoint = bodyPart.GetNextShootingPoint();
+        TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(turretAttack.GetAttackType, shootPoint, Quaternion.identity)
+            .GetComponent<TurretPartAttack_Prefab>();
 
-        enemyTarget.ChangeMat();
+        currentAttack.transform.parent = BaseHolder;
+        currentAttack.gameObject.SetActive(true);
+        currentAttack.ProjectileShotInit(enemyTarget, this);
+
+
+        // Spawn particle
+        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
+        particles.SetActive(true);
+        particles.transform.parent = BaseHolder;
+
 
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
@@ -189,7 +236,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.DisableFunctionality();
 
-        rangeCollider.enabled = false;
+        basePart.baseCollider.DisableCollisions();
 
         bodyPart.SetPreviewMaterial();
         basePart.SetPreviewMaterial();
@@ -199,7 +246,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.EnableFunctionality();
 
-        rangeCollider.enabled = true;
+        basePart.baseCollider.EnableCollisions();
 
         bodyPart.SetDefaultMaterial();
         basePart.SetDefaultMaterial();
@@ -209,6 +256,76 @@ public class TurretBuilding : RangeBuilding
     {
         HideRangePlane();
         EnableFunctionality();
+
+        bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
+     
+        placedParticleSystem.gameObject.SetActive(true);
+        placedParticleSystem.Play();
+
+        upgrader.OnBuildingOwnerPlaced();
+
+        InvokeOnBuildingPlaced();
     }
+
+
+    public override void ShowQuickLevelUI()
+    {
+        upgrader.ShowQuickLevelDisplay();
+    }
+
+    public override void HideQuickLevelUI()
+    {
+        upgrader.HideQuickLevelDisplay();
+    }
+
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        StartCoroutine(UpgradeAnimation(upgradeType));
+    }
+    
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    {
+        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
+        
+
+        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
+        if (upgradeType == TurretUpgradeType.ATTACK)
+        {            
+            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.CADENCE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
+        }
+        else //(upgradeType == TurretUpgradeType.RANGE)
+        {
+            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
+        }
+
+
+        GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
+        yield return new WaitForSeconds(0.25f);
+        upgradeParticles.Play();
+    }
+
+
+    public override void SetBuildingPartsColor(Color color) 
+    {
+        bodyPart.SetMaterialColor(color);
+        basePart.SetMaterialColor(color);
+    }
+
+    public override void SetPreviewCanBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+    }
+
+    public override void SetPreviewCanNOTBePlacedColor() 
+    {
+        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+    }
+
 
 }

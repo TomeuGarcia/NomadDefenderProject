@@ -31,6 +31,7 @@ public class PathFollower : MonoBehaviour
     // Position
     public Vector3 Position => transformToMove.position;
 
+    private Coroutine pauseCoroutine = null;
 
 
     // Actions
@@ -59,6 +60,8 @@ public class PathFollower : MonoBehaviour
         this.positionOffset = positionOffset;
         currentStartPosition = transformToMove.position + positionOffset;
         currentEndPosition = targetNode.Position + positionOffset;
+
+        this.transformToMove.rotation = Quaternion.LookRotation((currentEndPosition - currentStartPosition).normalized, targetNode.Up);
 
         startToEndT = 0f;
 
@@ -108,7 +111,7 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        float iterationStep = Time.deltaTime * step;
+        float iterationStep = Time.deltaTime * step * GameTime.TimeScale;
         travelledDistance += iterationStep * distanceStartToEnd;
 
         startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
@@ -117,8 +120,29 @@ public class PathFollower : MonoBehaviour
 
         if (Vector3.Dot(transformToMove.forward, moveDirection) < 1f)
         {
-            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime);
+            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime * GameTime.TimeScale);
         }
+    }
+
+
+    
+    public void PauseForDuration(float duration)
+    {
+        if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
+        pauseCoroutine = StartCoroutine(DoPauseForDuration(duration));
+    }
+
+    private IEnumerator DoPauseForDuration(float duration)
+    {
+        paused = true;
+        yield return new WaitForSeconds(duration);
+        paused = false;
+        pauseCoroutine = null;
+    }
+
+    public void CheckDeactivateCoroutines()
+    {
+        if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
     }
 
 }
