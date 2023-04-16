@@ -87,9 +87,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     public delegate void TurretUpgradeEvent(int newLevel);
     public static TurretUpgradeEvent OnTurretUpgrade;
 
-    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType);
+    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType, int upgradeLevel);
     public BuildingUpgraderEvent OnUpgrade;
-    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType); }
+    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType, currentLevel); }
 
 
     private void Awake()
