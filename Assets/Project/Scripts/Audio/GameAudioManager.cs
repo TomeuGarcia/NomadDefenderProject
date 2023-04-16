@@ -224,11 +224,22 @@ public class GameAudioManager : MonoBehaviour
     public void PlayMusic1()
     {
         musicAudioSource.clip = music1;
-
         musicAudioSource.Play();
     }
-
-
+    public void PauseMusic1()
+    {
+        musicAudioSource.Stop();
+    }
+    public void PausedMusicPitch()
+    {
+        musicAudioSource.pitch = 0.85f;
+        musicAudioSource.volume = 0.05f;
+    }
+    public void NormalMusicPitch()
+    {
+        musicAudioSource.pitch = 1f;
+        musicAudioSource.volume = 0.1f;
+    }
     // UI
     public void PlayUiButtonPressed()
     {

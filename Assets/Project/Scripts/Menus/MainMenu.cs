@@ -33,6 +33,10 @@ public class MainMenu : MonoBehaviour
 
         SetupTextDecoderManager();
     }
+    private void Start()
+    {
+        PauseMenu.GetInstance().gameCanBePaused = false;
+    }
 
     private void SetupTextDecoderManager()
     {
@@ -62,7 +66,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        
+        PauseMenu.GetInstance().gameCanBePaused = true;
 
         if (skipFirstBattle)
         {
@@ -89,6 +93,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
+        PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
     }

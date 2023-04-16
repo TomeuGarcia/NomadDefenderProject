@@ -8,17 +8,17 @@ public class TextManager : MonoBehaviour
     [SerializeField] private List<TextDecoder> texts = new List<TextDecoder>();
     [SerializeField] private float startDelay;
     [SerializeField] private float delay;
-
+    bool secondTime = false;
     // Start is called before the first frame update
     void Start()
     {
+        secondTime = true;
         StartCoroutine(DecodeTexts());
     }
 
     IEnumerator DecodeTexts()
     {
         yield return new WaitForSeconds(startDelay);
-
         StartCoroutine(LinearDecode());
         //StartCoroutine(SimultaneousDecode(delay));
     }
@@ -38,7 +38,7 @@ public class TextManager : MonoBehaviour
         {
             text.Activate();
             yield return new WaitUntil(() => text.IsDoneDecoding() == true);
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSecondsRealtime(delay);
         }
     }
 
