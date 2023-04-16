@@ -487,6 +487,11 @@ public abstract class BuildingCard : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+    public virtual int GetCardLevel()
+    { 
+        return 0;
+    }
+
     protected abstract void InitInfoVisuals();
     protected abstract void SetupCardInfo();
     public virtual void ShowInfo()
