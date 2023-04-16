@@ -167,7 +167,6 @@ public class CardPartHolder : MonoBehaviour
         //card.OnCardInfoSelected -= SetCardPartShowInfo;
 
 
-        selectedCardPart.canDisplayInfoIfNotInteractable = false;
         foreach (CardPart itCardPart in cardParts)
         {
             itCardPart.canDisplayInfoIfNotInteractable = false;
