@@ -219,7 +219,7 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardHovered += SetHoveredCard;
             card.OnCardSelected += CheckSelectCard;
 
-            card.OnCardInfoSelected += SetCardShowInfo;
+            //card.OnCardInfoSelected += SetCardShowInfo;
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
@@ -325,7 +325,7 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
 
-            card.OnCardInfoSelected += SetCardShowInfo;
+            //card.OnCardInfoSelected += SetCardShowInfo;
 
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
@@ -367,11 +367,11 @@ public class HandBuildingCards : MonoBehaviour
         card.OnCardUnhovered -= SetStandardCard;
         card.OnCardSelected -= Redraw;
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);
-        }
-        card.OnCardInfoSelected -= SetCardShowInfo;
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
+        //card.OnCardInfoSelected -= SetCardShowInfo;
 
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
@@ -409,10 +409,10 @@ public class HandBuildingCards : MonoBehaviour
                 cards[i].ImmediateStandardState();
                 corrected = true;
 
-                if (cards[i].isShowingInfo)
-                {
-                    SetCardHideInfo(cards[i]);
-                }
+                //if (cards[i].isShowingInfo)
+                //{
+                //    SetCardHideInfo(cards[i]);
+                //}
             }
         }
 
@@ -511,10 +511,10 @@ public class HandBuildingCards : MonoBehaviour
         card.StandardState();
 
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);            
-        }
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);            
+        //}
 
 
         foreach (BuildingCard itCard in cards)
@@ -560,7 +560,9 @@ public class HandBuildingCards : MonoBehaviour
 
         //selectedCard.RootCardTransform.DOMove(selectedCard.HiddenRootPosition, 0.1f);
 
-        selectedCard.OnCardInfoSelected += SetCardShowInfo;
+
+
+        //selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
         //if (!isBeingShown) ShowHand();
@@ -595,11 +597,11 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.DisableMouseInteraction(); // Do this to prevent collider in the way to place turrets
         selectedCard.OnDragMouseUp += ResetAndSetStandardCardAfterDragBack;
 
-        if (selectedCard.isShowingInfo)
-        {
-            SetCardHideInfo(selectedCard);
-        }
-        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);
+        //}
+        //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
 
 
         //buildingPlacer.EnablePlacing(card);
@@ -798,23 +800,23 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
-    private void SetCardShowInfo(BuildingCard card)
-    {
-        if (AlreadyHasSelectedCard) return;
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    if (AlreadyHasSelectedCard) return;
 
-        card.ShowInfo();
+    //    card.ShowInfo();
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
-        card.OnCardInfoSelected += SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
 
-    private void SetCardHideInfo(BuildingCard card)
-    {
-        card.HideInfo();
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
 
-        card.OnCardInfoSelected += SetCardShowInfo;
-        card.OnCardInfoSelected -= SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
     
 
     private void EnableHandSideBlockers()

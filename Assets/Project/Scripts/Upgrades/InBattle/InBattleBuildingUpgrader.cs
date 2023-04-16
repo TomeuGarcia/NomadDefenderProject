@@ -39,6 +39,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private bool canUpgardeParticlesAreActive = false;
     [SerializeField] private Transform canUpgradeTextHolder;
     private Vector3 canUpgradeTextHolderStartPosition;
+    [SerializeField] private CanvasGroup cgCanUpgradeText;
 
 
     [Header("QUICK LEVEL DISPLAY UI")]
@@ -86,9 +87,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     public delegate void TurretUpgradeEvent(int newLevel);
     public static TurretUpgradeEvent OnTurretUpgrade;
 
-    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType);
+    public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType, int upgradeLevel);
     public BuildingUpgraderEvent OnUpgrade;
-    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType); }
+    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType, currentLevel); }
 
 
     private void Awake()
@@ -120,6 +121,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         canUpgardeParticlesAreActive = false;
         canUpgradeTextHolder.gameObject.SetActive(false);
         canUpgradeTextHolderStartPosition = Vector3.up * 1.25f;
+        cgCanUpgradeText.alpha = 0f;
 
         buildingOwnerWasPlaced = false;
     }
@@ -220,9 +222,13 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     public void OnBuildingOwnerPlaced()
     {
         buildingOwnerWasPlaced = true;
+        StartCoroutine(DelayedOnBuildingOwnerPlaced(0.5f));
+    }
+    private IEnumerator DelayedOnBuildingOwnerPlaced(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         CheckStartParticlesCanUpgrade();
     }
-
 
     private void SetHasGameFinishedTrueAndCloseWindow()
     {
@@ -607,17 +613,20 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         canUpgradeTextHolder.gameObject.SetActive(true);
         canUpgradeTextHolder.localPosition = canUpgradeTextHolderStartPosition;
+        cgCanUpgradeText.DOFade(1f, 0.3f);
         MoveUpCanUpgradeText();
     }
     private void HideCanUpgradeText()
     {
         canUpgradeTextHolder.DOComplete(false);
-        canUpgradeTextHolder.gameObject.SetActive(false);
+        cgCanUpgradeText.DOComplete(false);
+        cgCanUpgradeText.DOFade(0f, 0.1f).OnComplete(
+            () => canUpgradeTextHolder.gameObject.SetActive(false) );
     }
 
     private void MoveUpCanUpgradeText()
     {
-        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y + 0.5f, 1f)
+        canUpgradeTextHolder.DOLocalMoveY(canUpgradeTextHolderStartPosition.y + 0.25f, 1f)
             .OnComplete( () => MoveDownCanUpgradeText() );
     }
 

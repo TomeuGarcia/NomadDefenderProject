@@ -123,7 +123,7 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
         StartCoroutine(UpgradeAnimation(upgradeType));
     }

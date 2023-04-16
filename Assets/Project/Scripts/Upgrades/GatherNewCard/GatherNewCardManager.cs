@@ -183,7 +183,7 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.HoveredState(rotate: false);
 
-        card.OnCardInfoSelected += SetCardShowInfo;
+        //card.OnCardInfoSelected += SetCardShowInfo;
 
         foreach (BuildingCard itCard in cards)
         {
@@ -200,13 +200,13 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.StandardState();
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);
-        }
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
 
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
+        //card.OnCardInfoSelected -= SetCardShowInfo;
 
         foreach (BuildingCard itCard in cards)
         {
@@ -226,11 +226,11 @@ public class GatherNewCardManager : MonoBehaviour
 
         selectedCard = card;
 
-        if (selectedCard.isShowingInfo)
-        {
-            SetCardHideInfo(selectedCard);
-        }
-        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);
+        //}
+        //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
 
 
         if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
@@ -250,21 +250,21 @@ public class GatherNewCardManager : MonoBehaviour
     }
 
 
-    private void SetCardShowInfo(BuildingCard card)
-    {
-        card.ShowInfo();
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    card.ShowInfo();
 
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
-        card.OnCardInfoSelected += SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
 
-    private void SetCardHideInfo(BuildingCard card)
-    {
-        card.HideInfo();
-        card.OnCardInfoSelected += SetCardShowInfo;
-        card.OnCardInfoSelected -= SetCardHideInfo;
-    }
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
 
 
 

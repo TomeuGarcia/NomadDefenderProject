@@ -88,14 +88,15 @@ public abstract class BuildingCard : MonoBehaviour
     protected Coroutine showInfoCoroutine = null;
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
+    [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
     protected bool isPlayingDrawAnimation = false;
-    protected const float drawAnimLoopDuration = 0.75f;
-    protected const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    protected const float drawAnimBlinkDuration = 0.3f;
-    protected const float drawAnimNumBlinks = 3f;
+    protected const float drawAnimLoopDuration = 0.4f;
+    protected const float drawAnimWaitDurationBeforeBlink = 0.1f;
+    protected const float drawAnimBlinkDuration = 0.2f;
+    protected const float drawAnimNumBlinks = 2f;
 
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
@@ -151,6 +152,12 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            StartShowInfoWithDelay();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -167,6 +174,12 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            DoHideInfo();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -554,7 +567,7 @@ public abstract class BuildingCard : MonoBehaviour
         }
 
 
-        float t1 = 0.1f;
+        float t1 = 0.05f;
         for (int i = cgsInfoHide.Length-1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t1);
