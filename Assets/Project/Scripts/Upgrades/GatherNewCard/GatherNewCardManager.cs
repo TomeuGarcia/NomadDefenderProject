@@ -65,12 +65,12 @@ public class GatherNewCardManager : MonoBehaviour
         if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
         {
             numCards = 2;
-            numSupportCards = 0;
+            numSupportCards = Random.Range(0, 2); // 50%
         }
         else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
         {
             numCards = 3;
-            numSupportCards = Random.Range(0,2); // 50%
+            numSupportCards = 1;
         }
         else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
         {
