@@ -17,6 +17,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     [SerializeField] private MeshRenderer screen;
     [SerializeField] private MeshRenderer screenButton;
+    [SerializeField] private MeshRenderer screenButtonOutline;
     [SerializeField] private MeshRenderer screenCardSlot;
 
 
