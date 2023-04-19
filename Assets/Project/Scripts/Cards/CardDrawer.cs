@@ -8,11 +8,16 @@ using DG.Tweening;
 
 public class CardDrawer : MonoBehaviour
 {
+    [Header("REFERENCES")]
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
+
+    [Header("REDRAWS")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
-    [SerializeField] private TextMeshProUGUI redrawingText; // works for 1 waveSpawner
+    [SerializeField] private TextMeshProUGUI redrawingText; 
+    [SerializeField] private TextMeshProUGUI redrawsLeftCounterText;
+    [SerializeField] private Image[] redrawsLeftWireImages;
     [SerializeField] private CanvasGroup finishRedrawsButtonCG;
 
     [SerializeField, Min(1)] private int numCardsHandStart = 2;
@@ -25,6 +30,7 @@ public class CardDrawer : MonoBehaviour
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
     [HideInInspector] public bool canRedraw = true;
+    [Header("FLAGS")]
     [SerializeField]  public bool canDisplaySpeedUp = true;
     [SerializeField] public bool displayRedrawsOnGameStart = true;
     [SerializeField] public bool finishRedrawSetup = true;
@@ -74,7 +80,8 @@ public class CardDrawer : MonoBehaviour
 
     private void SetupRedraws()
     {
-        redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
+        UpdateRedrawsLeftText();
+        
         finishRedrawsButtonCG.alpha = 0f;
         finishRedrawsButtonCG.blocksRaycasts = false;
         redrawCanvasGameObject.SetActive(false);
@@ -97,9 +104,9 @@ public class CardDrawer : MonoBehaviour
         if (deck.HasCardsLeft() && canRedraw) 
         {
             DrawTopCard();
-            
-            redrawingText.text = "Redraws Left: " + hand.GetRedrawsLeft();
 
+            UpdateRedrawsLeftText();
+            
             if (hand.HasRedrawsLeft())
             {
                 hand.InitCardsInHandForRedraw();
@@ -285,5 +292,18 @@ public class CardDrawer : MonoBehaviour
         finishRedrawsButtonCG.blocksRaycasts = true;
     }
 
+
+    private void UpdateRedrawsLeftText()
+    {
+        int redrawsLeft = hand.GetRedrawsLeft();
+        redrawingText.text = "Redraws Left: " + redrawsLeft;
+        redrawsLeftCounterText.text = redrawsLeft.ToString();
+        
+        if (redrawsLeft > 0 && redrawsLeftWireImages.Length >= redrawsLeft)
+        {
+            redrawsLeftWireImages[redrawsLeft - 1].DOFillAmount(0f, 0.25f);
+        }
+        
+    }
 
 }
