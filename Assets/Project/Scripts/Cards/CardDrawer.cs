@@ -13,16 +13,22 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
 
-    [Header("REDRAWS")]
+    [Header("REDRAWS UI")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
-    [SerializeField] private TextMeshProUGUI redrawingText; 
     [SerializeField] private TextMeshProUGUI redrawsLeftCounterText;
+    [SerializeField] private CanvasGroup cgRedrawsLeftText;
+    [SerializeField] private CanvasGroup cgFinishRedrawsButton;
+    [SerializeField] private Button finishRedrawsButton;
+    [SerializeField] private TextMeshProUGUI finishRedrawsButtonText;
     [SerializeField] private Image[] redrawsLeftWireImages;
-    [SerializeField] private CanvasGroup finishRedrawsButtonCG;
+    [SerializeField] private Image leftWireImage;
+    [SerializeField] private Image rightWireImage;
+    private static Color fadedInColor = Color.white;
+    private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);
+    private static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
 
-    [SerializeField, Min(1)] private int numCardsHandStart = 2;
-
-    
+    [Header("REDRAWS STATS")]
+    [SerializeField, Min(1)] private int numCardsHandStart = 2;    
     [SerializeField] private int cardsToDrawPerWave;
 
     public delegate void CardDrawerAction();
@@ -82,8 +88,8 @@ public class CardDrawer : MonoBehaviour
     {
         UpdateRedrawsLeftText();
         
-        finishRedrawsButtonCG.alpha = 0f;
-        finishRedrawsButtonCG.blocksRaycasts = false;
+        cgFinishRedrawsButton.alpha = 0f;
+        cgFinishRedrawsButton.blocksRaycasts = false;
         redrawCanvasGameObject.SetActive(false);
     }
     protected virtual void SetupDeck()
@@ -123,7 +129,7 @@ public class CardDrawer : MonoBehaviour
     }
     public void FinishRedrawSetupUI()
     {
-        redrawCanvasGameObject.SetActive(false);
+        PlayEndRedrawHUDAnimation();
 
         battleHUD.PlayDeckUIHideStartGameAnimation(0.5f); // DECK UI ANIM - PART 2        
         if (canDisplaySpeedUp) battleHUD.PlaySpeedUpUIStartGameAnimation();
@@ -269,12 +275,13 @@ public class CardDrawer : MonoBehaviour
 
     public void StartRedrawButtonAnimation()
     {
-        StartCoroutine(PlayStartRedrawButtonAnimation());
+        //StartCoroutine(PlayStartRedrawButtonAnimation());
+        PlayStartRedrawHUDAnimation();
     }
     private IEnumerator PlayStartRedrawButtonAnimation()
     {
-        finishRedrawsButtonCG.alpha = 0f;
-        finishRedrawsButtonCG.blocksRaycasts = false;
+        cgFinishRedrawsButton.alpha = 0f;
+        cgFinishRedrawsButton.blocksRaycasts = false;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -282,23 +289,99 @@ public class CardDrawer : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         float t = 0.1f;
-        finishRedrawsButtonCG.DOFade(1f, t);
+        cgFinishRedrawsButton.DOFade(1f, t);
         yield return new WaitForSeconds(t);
-        finishRedrawsButtonCG.DOFade(0f, t);
+        cgFinishRedrawsButton.DOFade(0f, t);
         yield return new WaitForSeconds(t);
-        finishRedrawsButtonCG.DOFade(1f, t);
+        cgFinishRedrawsButton.DOFade(1f, t);
         yield return new WaitForSeconds(t);
 
-        finishRedrawsButtonCG.blocksRaycasts = true;
+        cgFinishRedrawsButton.blocksRaycasts = true;
+    }
+
+    private void PlayStartRedrawHUDAnimation()
+    {
+        // Setup
+        redrawCanvasGameObject.SetActive(true);
+
+        cgFinishRedrawsButton.alpha = 0f;
+        cgFinishRedrawsButton.blocksRaycasts = false;
+        cgFinishRedrawsButton.gameObject.SetActive(false);
+
+        cgRedrawsLeftText.alpha = 0f;
+        leftWireImage.fillAmount = 0f;
+        rightWireImage.fillAmount = 0f;
+        for (int i = 0; i < redrawsLeftWireImages.Length; ++i)
+        {
+            redrawsLeftWireImages[i].fillAmount = 0f;
+        }
+
+        float t3 = 0.3f;
+        float t2 = 0.2f;
+        float t1 = 0.1f;
+
+        Sequence appearSequence = DOTween.Sequence();
+        appearSequence.Append(leftWireImage.DOFillAmount(1.0f, t3));
+        appearSequence.Join(cgRedrawsLeftText.DOFade(1f, t1));
+        appearSequence.Join(cgFinishRedrawsButton.DOFade(1.0f, t2));
+        appearSequence.Join(rightWireImage.DOFillAmount(1.0f, t3));
+        
+        for (int i = 0; i < redrawsLeftWireImages.Length; ++i)
+        {
+            appearSequence.Append(redrawsLeftWireImages[i].DOFillAmount(1.0f, t1));
+        }
+
+
+
+                
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.gameObject.SetActive(true) );
+        appearSequence.AppendInterval(t1);
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.gameObject.SetActive(false));
+        appearSequence.AppendInterval(t1);
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.gameObject.SetActive(true));
+        appearSequence.AppendInterval(t1);
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.gameObject.SetActive(false));
+        appearSequence.AppendInterval(t1);
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.gameObject.SetActive(true));
+        appearSequence.AppendInterval(t1);
+
+        appearSequence.AppendCallback(() => cgFinishRedrawsButton.blocksRaycasts = true);
+        appearSequence.AppendCallback(() => ButtonFadeIn(finishRedrawsButton, finishRedrawsButtonText, true) );
+        
+    }
+
+    private void PlayEndRedrawHUDAnimation()
+    {
+        float t1 = 0.1f;
+        float t3 = 0.3f;
+
+        Sequence disappearSequence = DOTween.Sequence();
+
+
+        int redrawsLeft = hand.GetRedrawsLeft();
+        for (int i = redrawsLeft - 1; i >= 0 && i < redrawsLeftWireImages.Length; --i)
+        {
+            disappearSequence.Append(redrawsLeftWireImages[i].DOFillAmount(0f, t1));
+        }
+
+        disappearSequence.Append(cgFinishRedrawsButton.DOFade(0f, t1));
+
+        disappearSequence.Append(leftWireImage.DOFillAmount(0f, t3));
+        disappearSequence.Join(cgRedrawsLeftText.DOFade(0f, t1));
+        disappearSequence.Join(rightWireImage.DOFillAmount(0f, t3));
+
+        disappearSequence.AppendCallback( () => redrawCanvasGameObject.SetActive(false) );
     }
 
 
     private void UpdateRedrawsLeftText()
     {
         int redrawsLeft = hand.GetRedrawsLeft();
-        redrawingText.text = "Redraws Left: " + redrawsLeft;
         redrawsLeftCounterText.text = redrawsLeft.ToString();
-        
+        redrawsLeftCounterText.rectTransform.DOPunchScale(Vector3.one * -0.8f, 0.7f, 7);
+        redrawsLeftCounterText.DOBlendableColor(Color.cyan, 0.35f).OnComplete(() => redrawsLeftCounterText.DOBlendableColor(Color.white, 0.35f));
+
+
         if (redrawsLeft > 0 && redrawsLeftWireImages.Length >= redrawsLeft)
         {
             redrawsLeftWireImages[redrawsLeft - 1].DOFillAmount(0f, 0.25f);
@@ -306,4 +389,49 @@ public class CardDrawer : MonoBehaviour
         
     }
 
+    private void ButtonFadeIn(Button button, TextMeshProUGUI buttonText, bool onEndFadeOut = true)
+    {
+        if (!button.interactable) { return; }
+
+        button.transform.DOScale(1.1f, 1.0f).OnComplete(() => { if (onEndFadeOut) ButtonFadeOut(button, buttonText); });
+        button.image.DOBlendableColor(fadedInColor, 1.0f);
+        buttonText.DOBlendableColor(fadedInColor, 1.0f);
+    }
+
+    private void ButtonFadeOut(Button button, TextMeshProUGUI buttonText, bool onEndFadeIn = true)
+    {
+        button.transform.DOScale(1.0f, 1.0f).OnComplete(() => { if (onEndFadeIn) ButtonFadeIn(button, buttonText); });
+        button.image.DOBlendableColor(fadedOutColor, 1.0f);
+        buttonText.DOBlendableColor(fadedOutColor, 1.0f);
+    }
+
+    private void StopButtonFade(Button button, TextMeshProUGUI buttonText, bool goToFadedOut)
+    {
+        button.transform.DOKill();
+        button.image.DOKill();
+        buttonText.DOKill();        
+
+        if (goToFadedOut && button.interactable)
+        {
+            ButtonFadeOut(button, buttonText, false);
+        }
+    }
+
+    public void FinishRedrawsButtonHovered()
+    {
+        StopButtonFade(finishRedrawsButton, finishRedrawsButtonText, false);
+        finishRedrawsButton.image.DOBlendableColor(Color.cyan, 0.1f);
+        finishRedrawsButtonText.DOBlendableColor(Color.cyan, 0.1f);
+        finishRedrawsButtonText.rectTransform.DOScale(Vector3.one * 1.1f, 0.1f);
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+    }
+    public void FinishRedrawsButtonUnhovered()
+    {
+        finishRedrawsButton.image.color = fadedInColor;
+        finishRedrawsButtonText.color = fadedInColor;
+        finishRedrawsButtonText.rectTransform.DOScale(Vector3.one, 0.1f);
+
+        ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+    }
 }

@@ -97,7 +97,8 @@ public class HandBuildingCards : MonoBehaviour
         ComputeHiddenPosition();
 
         isInRedrawPhase = true;
-        InitCardsInHandForRedraw();        
+        InitCardsInHandForRedraw();      
+        //StartCoroutine(ScuffedCardsNoInfoDisplayDelay());
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -105,6 +106,21 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         CheckCardsCost();
+    }
+
+    private IEnumerator ScuffedCardsNoInfoDisplayDelay()
+    {
+        foreach (BuildingCard buildingCard in cards)
+        {
+            buildingCard.canDisplayInfoIfWhileInteractable = false;
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        foreach (BuildingCard buildingCard in cards)
+        {
+            buildingCard.canDisplayInfoIfWhileInteractable = true;
+        }
     }
 
     private void OnEnable()

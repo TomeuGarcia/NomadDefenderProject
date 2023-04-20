@@ -60,7 +60,7 @@ public class GatherNewCardManager : MonoBehaviour
 
 
         int numSupportCards = 0;
-        turretCardsLevel = 1;
+        turretCardsLevel = -1;
 
         if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
         {
@@ -136,7 +136,10 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            turretCardPartsSet[i].cardLevel = turretCardsLevel;
+            if (turretCardsLevel > 0)
+            {
+                turretCardPartsSet[i].cardLevel = turretCardsLevel;
+            }
 
             turretCard.ResetParts(turretCardPartsSet[i]);
 

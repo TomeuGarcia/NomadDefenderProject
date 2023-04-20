@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 489221016501342099}
   - component: {fileID: 3997130783284760297}
   - component: {fileID: 6671050564560241266}
+  - component: {fileID: 4036766757838660702}
   m_Layer: 5
   m_Name: RedrawsLeft_Text
   m_TagString: Untagged
@@ -137,6 +138,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &4036766757838660702
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271238810575864768}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &655187802534680293
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &34546205034886052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -469,11 +482,15 @@ MonoBehaviour:
   deck: {fileID: 0}
   battleHUD: {fileID: 0}
   redrawCanvasGameObject: {fileID: 3376237377653174981}
-  redrawingText: {fileID: 63260217138928213}
   redrawsLeftCounterText: {fileID: 6510053883380323359}
+  cgRedrawsLeftText: {fileID: 4036766757838660702}
+  cgFinishRedrawsButton: {fileID: 5607707862234327247}
+  finishRedrawsButton: {fileID: 3545456782365283044}
+  finishRedrawsButtonText: {fileID: 7107287128533910757}
   redrawsLeftWireImages:
   - {fileID: 4367022413801474288}
-  finishRedrawsButtonCG: {fileID: 3673725965755943319}
+  leftWireImage: {fileID: 2895229233581026855}
+  rightWireImage: {fileID: 6045285961151147884}
   numCardsHandStart: 3
   cardsToDrawPerWave: 2
   cheatDrawCardActivated: 1
@@ -575,8 +592,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -719,6 +736,43 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &3842551601248348027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3600112272717368576}
+  m_Layer: 5
+  m_Name: ButtonHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3600112272717368576
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842551601248348027}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 778788269092130703}
+  m_Father: {fileID: 1131638496478884108}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 76.120605, y: -18.6}
+  m_SizeDelta: {x: 152.2412, y: -48.5108}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4740095776875082276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,6 +1208,8 @@ GameObject:
   - component: {fileID: 9199050817552291484}
   - component: {fileID: 2752995325052895191}
   - component: {fileID: 3545456782365283044}
+  - component: {fileID: 5607707862234327247}
+  - component: {fileID: 3966501249913477970}
   m_Layer: 5
   m_Name: FinishRedraws_Button
   m_TagString: Untagged
@@ -1174,14 +1230,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3796923498608620366}
-  m_Father: {fileID: 1131638496478884108}
+  m_Father: {fileID: 3600112272717368576}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 26.200012, y: -79}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 165.3397, y: 115}
-  m_Pivot: {x: 0.5, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9199050817552291484
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1239,7 +1295,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1276,6 +1332,63 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!225 &5607707862234327247
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6069634204577542761}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &3966501249913477970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6069634204577542761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2683057792737234630}
+          m_TargetAssemblyTypeName: CardDrawer, Assembly-CSharp
+          m_MethodName: FinishRedrawsButtonHovered
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2683057792737234630}
+          m_TargetAssemblyTypeName: CardDrawer, Assembly-CSharp
+          m_MethodName: FinishRedrawsButtonUnhovered
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7764855005644628939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,7 +1555,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 778788269092130703}
+  - {fileID: 3600112272717368576}
   m_Father: {fileID: 7591856260195576309}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

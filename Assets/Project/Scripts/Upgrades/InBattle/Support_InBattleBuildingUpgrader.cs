@@ -152,19 +152,21 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
 
-        StopButtonFade(abilityButton, false);
+        StopButtonFade(abilityButton, false, false);
     }
 
 
 
     public void FillAbilityBar()
     {
-        StopButtonFade(abilityButton, false);
+        bool highlight = CanUpgrade(supportLvl);
+
+        StopButtonFade(abilityButton, false, highlight);
 
         if (!abilityButton.interactable) return;
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
 
-        FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef);
+        FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef, highlight);
     }
 
     public void EmptyAbilityBar()

@@ -89,6 +89,7 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
+    [HideInInspector] public bool canDisplayInfoIfWhileInteractable = true;
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
@@ -166,7 +167,7 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (OnCardHovered != null) OnCardHovered(this);
 
-        if (cardState == CardStates.HOVERED)
+        if (cardState == CardStates.HOVERED && canDisplayInfoIfWhileInteractable)
         {
             StartShowInfoWithDelay();
         }
@@ -188,7 +189,10 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
 
-        DoHideInfo();
+        if (canDisplayInfoIfWhileInteractable)
+        {
+            DoHideInfo();
+        }
     }
 
     private void OnMouseDown() // only called by Left Click

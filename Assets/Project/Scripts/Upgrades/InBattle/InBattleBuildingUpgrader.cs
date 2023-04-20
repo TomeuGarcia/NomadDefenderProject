@@ -479,12 +479,16 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     
 
 
-    protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill)
+    protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill, bool highlight)
     {
         float duration = 0.2f;
 
         bar.DOComplete();
         bar.DOFillAmount(1f, duration);
+        if (highlight)
+        {
+            bar.color = Color.cyan;
+        }
 
         button.transform.DOComplete();
         button.transform.DOScale(Vector3.one * 1.1f, duration);
@@ -501,6 +505,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         bar.DOComplete();
         bar.DOFillAmount(0f, duration);
+        bar.color = Color.white;
+
+        button.color = Color.white;
 
         button.transform.DOComplete();
         button.transform.DOScale(Vector3.one, duration);
@@ -673,10 +680,16 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         button.image.DOBlendableColor(fadedOutColor, 1.0f);
     }
 
-    protected void StopButtonFade(Button button, bool goToFadedOut)
+    protected void StopButtonFade(Button button, bool goToFadedOut, bool highlight)
     {
         button.transform.DOKill();
         button.image.DOKill();
+        
+        if (highlight)
+        {
+            button.image.DOKill();
+            button.image.DOBlendableColor(Color.cyan, 0.1f);
+        }        
 
         if (goToFadedOut && button.interactable)
         {
