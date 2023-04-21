@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
-using UnityEngine.UI;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -613,4 +612,22 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
     }
 
+
+    public void StartDisableInfoDisplayForDuration(float duration)
+    {
+        StartCoroutine(DisableInfoDisplayForDuration(duration));
+    }
+    private IEnumerator DisableInfoDisplayForDuration(float duration)
+    {
+        canDisplayInfoIfWhileInteractable = false;
+
+        yield return new WaitForSeconds(duration);
+
+        canDisplayInfoIfWhileInteractable = true;
+
+        if (cardState == CardStates.HOVERED)
+        {
+            StartShowInfoWithDelay();
+        }
+    }
 }

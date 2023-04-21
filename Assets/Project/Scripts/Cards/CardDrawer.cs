@@ -73,7 +73,7 @@ public class CardDrawer : MonoBehaviour
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
         SetupRedraws();
-        SetupDeck();
+        SetupDeck();        
 
         DrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup);
 
@@ -125,7 +125,14 @@ public class CardDrawer : MonoBehaviour
     }
     public void OnFinishRedrawsButtonPressed()
     {
+        FinishRedraws();
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        finishRedrawsButton.transform.DOPunchScale(Vector3.one * -0.2f, 0.4f, 8);
+    }
+    public void FinishRedraws()
+    {
         hand.FinishedRedrawing();
+        cgFinishRedrawsButton.interactable = false;
     }
     public void FinishRedrawSetupUI()
     {
@@ -161,6 +168,8 @@ public class CardDrawer : MonoBehaviour
         hand.CorrectCardsBeforeAddingCard();
         hand.HintedCardWillBeAdded();
         hand.AddCard(card);
+
+        card.StartDisableInfoDisplayForDuration(1.5f);
 
         battleHUD.SubtractHasDeckCardIcon();
     }
@@ -278,7 +287,7 @@ public class CardDrawer : MonoBehaviour
         //StartCoroutine(PlayStartRedrawButtonAnimation());
         PlayStartRedrawHUDAnimation();
     }
-    private IEnumerator PlayStartRedrawButtonAnimation()
+    private IEnumerator PlayStartRedrawButtonAnimation() // Old
     {
         cgFinishRedrawsButton.alpha = 0f;
         cgFinishRedrawsButton.blocksRaycasts = false;
@@ -364,6 +373,7 @@ public class CardDrawer : MonoBehaviour
             disappearSequence.Append(redrawsLeftWireImages[i].DOFillAmount(0f, t1));
         }
 
+        disappearSequence.AppendInterval(0.3f);
         disappearSequence.Append(cgFinishRedrawsButton.DOFade(0f, t1));
 
         disappearSequence.Append(leftWireImage.DOFillAmount(0f, t3));
@@ -423,7 +433,7 @@ public class CardDrawer : MonoBehaviour
         finishRedrawsButton.image.DOBlendableColor(Color.cyan, 0.1f);
         finishRedrawsButtonText.DOBlendableColor(Color.cyan, 0.1f);
         finishRedrawsButtonText.rectTransform.DOScale(Vector3.one * 1.1f, 0.1f);
-        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        GameAudioManager.GetInstance().PlayCardInfoShown();
     }
     public void FinishRedrawsButtonUnhovered()
     {
@@ -432,6 +442,6 @@ public class CardDrawer : MonoBehaviour
         finishRedrawsButtonText.rectTransform.DOScale(Vector3.one, 0.1f);
 
         ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
-        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
 }

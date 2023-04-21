@@ -14,6 +14,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image abilityButtonImage;
     [SerializeField] private Image abilityBackFillImage;
     [SerializeField] private Image abilityBarToCurrencyCost;
+    private bool isAbilityButtonHovered = false;
 
 
     protected override void AwakeInit()
@@ -111,6 +112,11 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             StopCoroutine(openAnimationCoroutine);
         }
 
+        if (isAbilityButtonHovered)
+        {
+            EmptyAbilityBar();
+        }
+
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
     }
     private IEnumerator CloseAnimation()
@@ -167,6 +173,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
 
         FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef, highlight);
+
+        isAbilityButtonHovered = true;
     }
 
     public void EmptyAbilityBar()
@@ -177,6 +185,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * supportFillBarCoef);
 
         ButtonFadeIn(abilityButton);
+
+        isAbilityButtonHovered = false;
     }
 
     protected override void OnCanNotUpgradeSupport()

@@ -13,6 +13,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image attackButtonImage;
     [SerializeField] private Image attackBackFillImage;
     [SerializeField] private Image attackBarToCurrencyCost;
+    private bool isAttackButtonHovered = false;
     [Header("Fire Rate")]
     [SerializeField] private CanvasGroup cgFireRateStat;
     [SerializeField] private Image fireRateIcon; 
@@ -20,6 +21,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image fireRateButtonImage;
     [SerializeField] private Image fireRateBackFillImage;
     [SerializeField] private Image fireBarToCurrencyCost;
+    private bool isFireRateButtonHovered = false;
     [Header("Range")]
     [SerializeField] private CanvasGroup cgRangeStat;
     [SerializeField] private Image rangeIcon;
@@ -27,6 +29,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image rangeButtonImage;
     [SerializeField] private Image rangeBackFillImage;
     [SerializeField] private Image rangeBarToCurrencyCost;
+    private bool isRangeButtonHovered = false;
 
 
     [Header("QUICK DISPLAY UI EXTRAS")]
@@ -193,6 +196,10 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             StopCoroutine(openAnimationCoroutine);
         }
 
+        if (isAttackButtonHovered) EmptyAttackBar();
+        if (isFireRateButtonHovered) EmptyFireRateBar();
+        if (isRangeButtonHovered) EmptyRangeBar();
+
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
     }
     private IEnumerator CloseAnimation()
@@ -255,6 +262,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
 
         FillStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)(attackLvl + 1) * turretFillBarCoef, highlight);
+
+        isAttackButtonHovered = true;
     }
     public void FillFireRateBar() // FireRate button hovered
     {
@@ -266,6 +275,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
 
         FillStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)(cadenceLvl + 1) * turretFillBarCoef, highlight);
+
+        isFireRateButtonHovered = true;
     }
     public void FillRangeBar() // Range button hovered
     {
@@ -277,6 +288,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
 
         FillStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)(rangeLvl + 1) * turretFillBarCoef, highlight);
+
+        isRangeButtonHovered = true;
     }
 
 
@@ -288,6 +301,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
 
         AllButtonsFadeIn();
+
+        isAttackButtonHovered = false;
     }
     public void EmptyFireRateBar() // FireRate button UN-hovered
     {
@@ -297,6 +312,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
 
         AllButtonsFadeIn();
+
+        isFireRateButtonHovered = false;
     }
     public void EmptyRangeBar() // Range button UN-hovered
     {
@@ -306,6 +323,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
 
         AllButtonsFadeIn();
+
+        isRangeButtonHovered = false;
     }
 
 
