@@ -487,6 +487,10 @@ public abstract class BuildingCard : MonoBehaviour
         {
             StopCoroutine(decreaseBorderFillCoroutine);            
         }
+        else
+        {
+            borderFillValue01 = 0f;
+        }
     }
     public void StartDecreaseBorderFill()
     {

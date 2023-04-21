@@ -365,15 +365,18 @@ public class CardDrawer : MonoBehaviour
         float t3 = 0.3f;
 
         Sequence disappearSequence = DOTween.Sequence();
+        disappearSequence.AppendInterval(0.3f);
 
 
         int redrawsLeft = hand.GetRedrawsLeft();
-        for (int i = redrawsLeft - 1; i >= 0 && i < redrawsLeftWireImages.Length; --i)
+        for (int i = redrawsLeftWireImages.Length-1; i >= 0; --i)
         {
-            disappearSequence.Append(redrawsLeftWireImages[i].DOFillAmount(0f, t1));
+            if (redrawsLeftWireImages[i].fillAmount > 0.5f)
+            {
+                disappearSequence.Append(redrawsLeftWireImages[i].DOFillAmount(0f, t1));                
+            }            
         }
 
-        disappearSequence.AppendInterval(0.3f);
         disappearSequence.Append(cgFinishRedrawsButton.DOFade(0f, t1));
 
         disappearSequence.Append(leftWireImage.DOFillAmount(0f, t3));

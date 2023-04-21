@@ -395,12 +395,13 @@ public class HandBuildingCards : MonoBehaviour
     }
     private IEnumerator RedrawHold(BuildingCard card)
     {
+        card.SetBorderFillEnabled(true);
+        card.ResetBorderFill();
+
         float redrawHoldDuration = BuildingCard.redrawHoldDuration;
         float redrawHoldTime = card.borderFillValue01 * redrawHoldDuration;
         float t = card.borderFillValue01;
 
-        card.SetBorderFillEnabled(true);
-        card.ResetBorderFill();
 
         while (redrawHoldTime < redrawHoldDuration && Input.GetMouseButton(0) && card.cardState == BuildingCard.CardStates.HOVERED)
         {

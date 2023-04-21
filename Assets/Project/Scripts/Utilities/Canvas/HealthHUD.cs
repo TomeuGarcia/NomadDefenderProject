@@ -37,7 +37,7 @@ public class HealthHUD : MonoBehaviour
     }
     private void UpdateArmorImage(HealthSystem.UpdateType updateType)
     {
-        Debug.Log(healthSystem.GetArmorRatio());
+        //Debug.Log(healthSystem.GetArmorRatio());
         armorImage.fillAmount = healthSystem.GetArmorRatio();
         if (!healthSystem.HasArmor())
         {
