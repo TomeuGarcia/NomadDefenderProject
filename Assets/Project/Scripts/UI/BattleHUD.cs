@@ -221,6 +221,7 @@ public class BattleHUD : MonoBehaviour
     {
         canInteractWithDeckUI = false;
         canShowDrawCardButton = false;
+        cgDeckUI.blocksRaycasts = false;
 
         // Start
         drawButtonHolder.gameObject.SetActive(false);
@@ -282,6 +283,7 @@ public class BattleHUD : MonoBehaviour
         drawButtonHolder.gameObject.SetActive(true);
         canShowDrawCardButton = true;
         canInteractWithDeckUI = true;
+        cgDeckUI.blocksRaycasts = true;
     }
 
 

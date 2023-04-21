@@ -97,7 +97,7 @@ public class HandBuildingCards : MonoBehaviour
         ComputeHiddenPosition();
 
         isInRedrawPhase = true;
-        InitCardsInHandForRedraw();        
+        InitCardsInHandForRedraw();      
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -106,6 +106,8 @@ public class HandBuildingCards : MonoBehaviour
 
         CheckCardsCost();
     }
+
+
 
     private void OnEnable()
     {
@@ -352,10 +354,17 @@ public class HandBuildingCards : MonoBehaviour
 
         if (OnFinishRedrawing != null) OnFinishRedrawing();
 
+        CheckCardsCost();
+
         isInRedrawPhase = false;
     }
 
     private void Redraw(BuildingCard card)
+    {
+        StartCoroutine(RedrawHold(card));
+        //EffectuateRedraw(card);
+    }
+    private void EffectuateRedraw(BuildingCard card)
     {
         foreach (BuildingCard itCard in cards)
         {
@@ -384,6 +393,39 @@ public class HandBuildingCards : MonoBehaviour
             FinishedRedrawing();
         }
     }
+    private IEnumerator RedrawHold(BuildingCard card)
+    {
+        card.SetBorderFillEnabled(true);
+        card.ResetBorderFill();
+
+        float redrawHoldDuration = BuildingCard.redrawHoldDuration;
+        float redrawHoldTime = card.borderFillValue01 * redrawHoldDuration;
+        float t = card.borderFillValue01;
+
+
+        while (redrawHoldTime < redrawHoldDuration && Input.GetMouseButton(0) && card.cardState == BuildingCard.CardStates.HOVERED)
+        {
+            redrawHoldTime += Time.deltaTime;
+            t = Mathf.Clamp01(redrawHoldTime / redrawHoldDuration);
+
+            card.SetBorderFillValue(t);
+            card.borderFillValue01 = t;
+
+            yield return null;
+        }  
+
+        if (redrawHoldTime >= redrawHoldDuration)
+        {
+            EffectuateRedraw(card);
+            card.SetBorderFillEnabled(false);
+        }
+        else
+        {
+            card.StartDecreaseBorderFill();
+        }        
+    }
+
+
     public bool HasRedrawsLeft()
     {
         return redrawsLeft > 0;
@@ -462,7 +504,10 @@ public class HandBuildingCards : MonoBehaviour
                 --numCardsBeingAdded;
             } );
 
-        CheckCardsCost();
+        if (!isInRedrawPhase)
+        {
+            CheckCardsCost();
+        }
 
         if (HasPreviouslySelectedCard)
         {
