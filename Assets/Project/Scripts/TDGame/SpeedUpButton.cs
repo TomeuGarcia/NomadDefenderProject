@@ -51,6 +51,7 @@ public class SpeedUpButton : MonoBehaviour
 
         UpdateTimeSpeed();
         IncrementButtonPressed();
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
     }
     public void DecrementTime()
     {
@@ -58,12 +59,13 @@ public class SpeedUpButton : MonoBehaviour
 
         UpdateTimeSpeed();
         DecrementButtonPressed();
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
     }
 
     private void ButtonPressed(Button button)
     {
         button.transform.DOComplete();
-        button.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 5).SetUpdate(UpdateType.Late, true);
+        button.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 5).SetUpdate(UpdateType.Late, true);        
     }
 
     private void IncrementButtonPressed()
@@ -72,6 +74,7 @@ public class SpeedUpButton : MonoBehaviour
 
         float t = 0.2f;
 
+        incrementButton.image.DOComplete(true);
         incrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => { 
             if (isIncrementButtonHovered) {
                 incrementButton.image.DOBlendableColor(Color.cyan, t); 
@@ -84,6 +87,7 @@ public class SpeedUpButton : MonoBehaviour
 
         float t = 0.2f;
 
+        decrementButton.image.DOComplete(true);
         decrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => {
             if (isDecrementButtonHovered)
             {

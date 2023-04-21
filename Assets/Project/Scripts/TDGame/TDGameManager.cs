@@ -83,8 +83,12 @@ public class TDGameManager : MonoBehaviour
             pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
         }
 
-        obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+
+        obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        obstaclesTilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+
         obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
         obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
     }
@@ -109,6 +113,7 @@ public class TDGameManager : MonoBehaviour
         {
             obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            StartCoroutine(FirstLocationDestroyedAnimation());
         }
     }
 
@@ -139,6 +144,16 @@ public class TDGameManager : MonoBehaviour
         if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
+    private IEnumerator FirstLocationDestroyedAnimation()
+    {
+        for (float t = 0f; t < 2.4f; t += Time.deltaTime)
+        {
+            float errorWiresStep = t * t;
+            obstaclesTilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            tilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            yield return null;
+        }
+    }
 
     private IEnumerator GameOverAnimation()
     {
@@ -147,7 +162,7 @@ public class TDGameManager : MonoBehaviour
         //yield return new WaitForSeconds(5f);
         for (float t = 0f; t < 5f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t * 2f;
+            float errorWiresStep = t * t * 1.5f;
             obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             yield return null;

@@ -38,7 +38,9 @@ public class MainMenu : MonoBehaviour
         SetupTextDecoderManager();
 
         obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
     }
 
     private void SetupTextDecoderManager()
