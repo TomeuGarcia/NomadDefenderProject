@@ -101,6 +101,8 @@ public abstract class BuildingCard : MonoBehaviour
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
 
+    public const float redrawHoldDuration = 0.65f;
+
 
 
     [HideInInspector] public bool isMissingDefaultCallbacks = false;
@@ -254,6 +256,9 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
+
+        SetBorderFillValue(0f);
+        SetBorderFillEnabled(false);
 
         isShowingInfo = false;
 
@@ -464,6 +469,47 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardMaterial.SetFloat("_CanBePlayed", 0f);
     }
+
+
+    public float borderFillValue01 = 0f;
+    private Coroutine decreaseBorderFillCoroutine;
+    public void SetBorderFillEnabled(bool isEnabled)
+    {
+        cardMaterial.SetFloat("_IsBorderFillEnabled", isEnabled ? 1f : 0f);
+    }
+    public void SetBorderFillValue(float fillValue01)
+    {
+        cardMaterial.SetFloat("_BorderFillValue", fillValue01);
+    }
+    public void ResetBorderFill()
+    {
+        if (decreaseBorderFillCoroutine != null)
+        {
+            StopCoroutine(decreaseBorderFillCoroutine);            
+        }
+    }
+    public void StartDecreaseBorderFill()
+    {
+        decreaseBorderFillCoroutine = StartCoroutine(DecreaseBorderFill());
+    }
+    private IEnumerator DecreaseBorderFill()
+    {
+        while (borderFillValue01 > 0f)
+        {
+            borderFillValue01 -= Time.deltaTime * (2.0f / redrawHoldDuration );
+            SetBorderFillValue(borderFillValue01);
+
+            yield return null;
+        }
+
+        borderFillValue01 = 0f;
+
+        SetBorderFillValue(borderFillValue01);
+        SetBorderFillEnabled(false);
+
+        decreaseBorderFillCoroutine = null;
+    }
+
 
     public void EnableMouseInteraction()
     {
