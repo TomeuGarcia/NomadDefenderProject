@@ -33,10 +33,11 @@ public class TDGameManager : MonoBehaviour
     [SerializeField] private PathLocation[] pathLocations;
     private int numAliveLocations = 0;
 
-
     [SerializeField] private bool hasToSendBattleState = true;
 
-
+    [Header("TILES MATERIAL")]
+    [SerializeField] private Material obstaclesTilesMaterial;
+    [SerializeField] private Material tilesMaterial;
 
 
     private void Awake()
@@ -49,7 +50,7 @@ public class TDGameManager : MonoBehaviour
 
         numAliveLocations = pathLocations.Length;        
 
-        InitLocationsVisuals();
+        InitLocationsVisuals();        
     }    
 
 
@@ -80,7 +81,12 @@ public class TDGameManager : MonoBehaviour
             OWMap_Node owMapNode = battleStateResult.nodeResults[i].owMapNode;
             
             pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
-        }        
+        }
+
+        obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
     }
 
 
@@ -89,12 +95,20 @@ public class TDGameManager : MonoBehaviour
         return numAliveLocations > 0;
     }
 
-    private void DecreaseAliveLocationsAndCheckGameOver()
+    private void DecreaseAliveLocationsAndCheckGameOver(PathLocation destroyedPathLocation)
     {
         --numAliveLocations;
         if (!HasAliveLocationsLeft())
         {
+            obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
+            tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);            
+
             GameOver();
+        }
+        else
+        {
+            obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
         }
     }
 
@@ -129,7 +143,16 @@ public class TDGameManager : MonoBehaviour
     private IEnumerator GameOverAnimation()
     {
         defeatHolder.SetActive(true);
-        yield return new WaitForSeconds(5f);
+
+        //yield return new WaitForSeconds(5f);
+        for (float t = 0f; t < 5f; t += Time.deltaTime)
+        {
+            float errorWiresStep = t * t * 2f;
+            obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            yield return null;
+        }
+
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
