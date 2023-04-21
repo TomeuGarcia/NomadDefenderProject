@@ -42,7 +42,7 @@ public class PathLocation : MonoBehaviour
     public bool IsDead => healthSystem.IsDead();
 
 
-    public delegate void PathLocationAction();
+    public delegate void PathLocationAction(PathLocation thisPathLocation);
     public event PathLocationAction OnDeath;
     public static event PathLocationAction OnTakeDamage;
 
@@ -78,12 +78,12 @@ public class PathLocation : MonoBehaviour
             GameAudioManager.GetInstance().PlayLocationTakeDamage();
         }
 
-        if (OnTakeDamage != null) OnTakeDamage();
+        if (OnTakeDamage != null) OnTakeDamage(this);
     }
 
     private void Die()
     {
-        if (OnDeath != null) OnDeath();
+        if (OnDeath != null) OnDeath(this);
     }
 
 

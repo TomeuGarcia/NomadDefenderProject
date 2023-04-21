@@ -14,6 +14,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
+    [Header("MATERIALS SETUP")]
+    [SerializeField] private Material obstacleTilesMaterial;
+    [SerializeField] private Material tilesMaterial;
+
 
     private bool canInteract = true;
 
@@ -32,6 +36,9 @@ public class MainMenu : MonoBehaviour
         }
 
         SetupTextDecoderManager();
+
+        obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
     }
 
     private void SetupTextDecoderManager()
