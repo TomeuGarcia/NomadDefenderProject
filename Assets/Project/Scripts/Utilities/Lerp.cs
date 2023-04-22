@@ -264,6 +264,44 @@ public class Lerp : MonoBehaviour
         //rb.velocity = Vector2.zero;
     }
 
+    //LOCAL
+    public void LerpLocalPosition(Vector3 positionToGo, float lTime)
+    {
+        posLerpTime = lTime;
+
+        TrueLocalLerpPosition(positionToGo);
+    }
+
+    void TrueLocalLerpPosition(Vector3 positionToGo)
+    {
+        startingVect = transform.localPosition;
+        dirPosVect = positionToGo - startingVect;
+        finishedPositionLerp = false;
+
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine("LocalRearrangeNow");
+        }
+    }
+    IEnumerator LocalRearrangeNow()
+    {
+        posCurrentTime = 0.0f;
+
+        while (posCurrentTime < posLerpTime)
+        {
+            posCurrentTime += Time.deltaTime;
+
+            float tParam = positionLerpFunction.Evaluate(posCurrentTime / posLerpTime);
+
+            //rb.MovePosition(startingVect + dirPosVect * tParam);
+            transform.localPosition = startingVect + (dirPosVect * tParam);
+
+            yield return null;
+        }
+
+        finishedPositionLerp = true;
+    }
+
     //Scale lerp functions
     public void LerpScale(Vector3 scaleToGo, float lTime)
     {
