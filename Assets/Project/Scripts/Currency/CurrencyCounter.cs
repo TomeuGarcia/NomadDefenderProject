@@ -125,21 +125,22 @@ public class CurrencyCounter : MonoBehaviour
         isSubtracting = true;
         remainingAmountToSubtract = amount;
 
-        float delay = 0.05f;
-
         currencyCountText.DOComplete();
         currencyCountText.transform.DOComplete();
         currencyCountText.color = colorSpentCurrencyText;
-        currencyCountText.DOColor(startColorAddedCurrencyText, delay * amount + 1.5f);
+        currencyCountText.DOBlendableColor(startColorAddedCurrencyText, amount * Time.deltaTime * 0.9f);
         currencyCountText.transform.DOPunchPosition(Vector3.down * 40f, 0.5f, 6);
 
-        for (int i = 0; i < amount; ++i)
+        int subtractAmountPerTick = 5;
+
+        for (int i = 0; i < amount; i += subtractAmountPerTick)
         {
-            --initialCurrencyCount;
-            --remainingAmountToSubtract;
+            initialCurrencyCount -= subtractAmountPerTick;
+            remainingAmountToSubtract -= subtractAmountPerTick;
             UpdateCurrencyCountText(initialCurrencyCount);
             yield return null;
         }
+        UpdateCurrencyCountText(currencyCount);
 
         isSubtracting = false;
     }
@@ -174,7 +175,7 @@ public class CurrencyCounter : MonoBehaviour
         currencyCountTextHolder.DOPunchScale(Vector3.one * 0.8f, 0.25f, 4);
         yield return new WaitForSeconds(0.25f);
 
-        addedCurrencyText.DOColor(endColorAddedCurrencyText, 1f);
+        addedCurrencyText.DOBlendableColor(endColorAddedCurrencyText, 1f);
         yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.gameObject.SetActive(false);

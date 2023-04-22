@@ -10,8 +10,8 @@ public class TurretPartBody_Prefab : MonoBehaviour
     private int currentShootingPoint = 0;
 
 
-    [SerializeField] private MeshRenderer[] meshRenderers;
     [SerializeField] private Material previewMaterial;
+    [SerializeField] private MeshRenderer[] meshRenderers;
     private Material[][] defaultMaterials;
     private Material[][] previewMaterials;
 
@@ -23,11 +23,15 @@ public class TurretPartBody_Prefab : MonoBehaviour
     }
     [SerializeField] MeshAndMaterialI[] projectileMaterialIndices;
 
+    [Header("TURRET UPGRADE VISUALS")]
+    [SerializeField] private GameObject[] turretUpgradeVisuals;
 
 
     public virtual void Init(Material projectileMaterial)
     {
         InitMaterials(projectileMaterial);
+
+        InitTurretUpgradeVisuals(0);
     }
 
     private void InitMaterials(Material projectileMaterial)
@@ -85,4 +89,21 @@ public class TurretPartBody_Prefab : MonoBehaviour
         previewMaterial.color = color;
     }
 
+    private void InitTurretUpgradeVisuals(int level)
+    {
+        for (int i = 0; i < level; ++i)
+        {
+            turretUpgradeVisuals[i].SetActive(true);
+        }
+        for (int i = level; i < turretUpgradeVisuals.Length; ++i)
+        {
+            turretUpgradeVisuals[i].SetActive(false);
+        }
+    }
+
+    public void PlayUpgradeAnimation(int level)
+    {
+        if (level > turretUpgradeVisuals.Length) return;
+        turretUpgradeVisuals[level-1].SetActive(true);
+    }
 }

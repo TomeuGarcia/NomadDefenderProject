@@ -193,7 +193,8 @@ public class OverworldCardShower : MonoBehaviour
             return;
 
         //buildingCard.StandardState();
-        buildingCard.OnCardInfoSelected += ShowCardInfo;
+
+        //buildingCard.OnCardInfoSelected += ShowCardInfo;
         DeselectCard();
         currentSelectedCard = buildingCard;
         buildingCard.RootCardTransform.DOMove(Vector3.zero - Vector3.up * -2.5f, 0.35f);
@@ -205,7 +206,7 @@ public class OverworldCardShower : MonoBehaviour
 
         if (currentSelectedCard == buildingCard && buildingCard.isShowingInfo)
         {
-            HideCardInfo(buildingCard);
+            //HideCardInfo(buildingCard);
             return;
         }
         else if (currentSelectedCard == buildingCard)
@@ -223,31 +224,31 @@ public class OverworldCardShower : MonoBehaviour
 
 
 
-        if (currentSelectedCard.isShowingInfo)
-            HideCardInfo(currentSelectedCard);
+        //if (currentSelectedCard.isShowingInfo)
+        //    HideCardInfo(currentSelectedCard);
 
         cardBeingDeselected = currentSelectedCard;
         currentSelectedCard.RootCardTransform.DOMove(positions[currentSelectedCard], 0.35f);
         currentSelectedCard.StandardState();
-        currentSelectedCard.OnCardInfoSelected -= ShowCardInfo;
+        //currentSelectedCard.OnCardInfoSelected -= ShowCardInfo;
         currentSelectedCard = null;
         cardBeingDeselected = null;
 
     }
 
   
-    void ShowCardInfo(BuildingCard buildingCard)
-    {
-        buildingCard.ShowInfo();
-        buildingCard.OnCardInfoSelected -= ShowCardInfo;
-        buildingCard.OnCardInfoSelected += HideCardInfo;
-    }
-    void HideCardInfo(BuildingCard buildingCard)
-    {
-        buildingCard.HideInfo();
-        buildingCard.OnCardInfoSelected += ShowCardInfo;
-        buildingCard.OnCardInfoSelected -= HideCardInfo;
-    }
+    //void ShowCardInfo(BuildingCard buildingCard)
+    //{
+    //    buildingCard.ShowInfo();
+    //    buildingCard.OnCardInfoSelected -= ShowCardInfo;
+    //    buildingCard.OnCardInfoSelected += HideCardInfo;
+    //}
+    //void HideCardInfo(BuildingCard buildingCard)
+    //{
+    //    buildingCard.HideInfo();
+    //    buildingCard.OnCardInfoSelected += ShowCardInfo;
+    //    buildingCard.OnCardInfoSelected -= HideCardInfo;
+    //}
 
     IEnumerator setCardsInPlace()
     {

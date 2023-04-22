@@ -368,6 +368,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     // Card Level
+    public override int GetCardLevel()
+    {
+        return turretCardParts.cardLevel;
+    }
+
     public void IncrementCardLevel(int levelIncrement)
     {
         cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
