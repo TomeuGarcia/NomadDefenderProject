@@ -237,7 +237,7 @@ public class BattleTutorialManager : MonoBehaviour
         
         //Skips Redraw
         scriptedSequence.Clear();
-        tutoCardDrawer.OnFinishRedrawsButtonPressed();
+        tutoCardDrawer.FinishRedraws();
         tutoCardDrawer.tutorialCard.isInteractable = true;
 
         yield return new WaitForSeconds(1.0f);

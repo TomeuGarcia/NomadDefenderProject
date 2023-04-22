@@ -10,6 +10,6 @@ public class InBattleTutorialMid : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         Debug.Log("Skip Redraw");
-        cardDrawer.OnFinishRedrawsButtonPressed();
+        cardDrawer.FinishRedraws();
     }
 }

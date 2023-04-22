@@ -19,6 +19,7 @@ public class DroppedCurrency : MonoBehaviour
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private TMP_Text text;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private ParticleSystem shatterParticles;
 
 
     public delegate void CurrencyAction(int value);
@@ -59,7 +60,7 @@ public class DroppedCurrency : MonoBehaviour
         if (beeingPickedUp) return;
 
         if (OnCurrencyGathered != null) OnCurrencyGathered(value);
-        StartCoroutine(GotPickedUp());
+        GotPickedUp();
 
         GameAudioManager.GetInstance().PlayCurrencyDropped();
     }
@@ -73,7 +74,7 @@ public class DroppedCurrency : MonoBehaviour
         meshTransform.localScale = minScale + ((value -1) * 0.02f * minScale);
     }
 
-    private IEnumerator GotPickedUp()
+    private void GotPickedUp()
     {
         beeingPickedUp = true;
 
@@ -86,10 +87,26 @@ public class DroppedCurrency : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         meshTransform.localPosition = Vector3.zero;
         meshTransform.rotation = Quaternion.identity;
-
-        yield return new WaitForSeconds(indicatorTime);
-        gameObject.SetActive(false);
     }
 
+
+    public void Collided(Collision collision)
+    {
+        StartCoroutine(TouchedFloor());
+    }
+
+    private IEnumerator TouchedFloor()
+    {
+        meshRenderer.enabled = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        shatterParticles.Play();
+
+        yield return new WaitUntil(() => shatterParticles.gameObject.activeInHierarchy == false);
+
+        meshRenderer.enabled = true;
+        shatterParticles.gameObject.SetActive(true);
+        rb.constraints = RigidbodyConstraints.None;
+        gameObject.SetActive(false);
+    }
 
 }

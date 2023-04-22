@@ -4922,6 +4922,7 @@ GameObject:
   - component: {fileID: 6573683290837287984}
   - component: {fileID: 7384287070393292178}
   - component: {fileID: -1741320412870381496}
+  - component: {fileID: -7177610917525028402}
   m_Layer: 8
   m_Name: PathStart
   m_TagString: Untagged
@@ -4988,6 +4989,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &-7177610917525028402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6573683290837287986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74027e67dcf08b54aa96d99e4108aeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 4771915012647768951}
+  deactivatedMat: {fileID: 2100000, guid: e5e43bef96192704aa6c58b455ef4343, type: 2}
+  matToChange: 01000000
+  falling: 0
+  cube: {fileID: 3473474193955431661, guid: 8da5233f093cf62418cbe0ce20e3d03e, type: 3}
+  holeFill: {fileID: 5967231113958032833, guid: d3e8d3c482ef5b84284f2bcac769183d,
+    type: 3}
+  activateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  deactivateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &6194889072169439219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5077,6 +5109,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d61a4c894c57be544923e28773acf42c, type: 3}
+--- !u!23 &4771915012647768951 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d61a4c894c57be544923e28773acf42c,
+    type: 3}
+  m_PrefabInstance: {fileID: 6194889072169439219}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5940832537154070552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d61a4c894c57be544923e28773acf42c,

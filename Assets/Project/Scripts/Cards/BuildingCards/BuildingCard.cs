@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
-using UnityEngine.UI;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -60,9 +59,10 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 ShownRootPosition => shownRootPosition;
     public Vector3 HiddenRootPosition => hiddenRootPosition;
 
+    public Vector3 hoverAdditionalOffset = Vector3.zero;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
-    private Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
+    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
@@ -87,17 +87,21 @@ public abstract class BuildingCard : MonoBehaviour
     protected Coroutine showInfoCoroutine = null;
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
+    [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
+    [HideInInspector] public bool canDisplayInfoIfWhileInteractable = true;
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
     protected bool isPlayingDrawAnimation = false;
-    protected const float drawAnimLoopDuration = 0.75f;
-    protected const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    protected const float drawAnimBlinkDuration = 0.3f;
-    protected const float drawAnimNumBlinks = 3f;
+    protected const float drawAnimLoopDuration = 0.4f;
+    protected const float drawAnimWaitDurationBeforeBlink = 0.1f;
+    protected const float drawAnimBlinkDuration = 0.2f;
+    protected const float drawAnimNumBlinks = 2f;
 
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
+
+    public const float redrawHoldDuration = 0.5f;
 
 
 
@@ -150,6 +154,12 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            StartShowInfoWithDelay();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -157,10 +167,21 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState != CardStates.STANDARD) return;
 
         if (OnCardHovered != null) OnCardHovered(this);
+
+        if (cardState == CardStates.HOVERED && canDisplayInfoIfWhileInteractable)
+        {
+            StartShowInfoWithDelay();
+        }
     }
 
     private void OnMouseExit()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            DoHideInfo();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -168,6 +189,11 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState != CardStates.HOVERED) return;
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
+
+        if (canDisplayInfoIfWhileInteractable)
+        {
+            DoHideInfo();
+        }
     }
 
     private void OnMouseDown() // only called by Left Click
@@ -185,6 +211,8 @@ public abstract class BuildingCard : MonoBehaviour
         {
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
+
+        DoHideInfo();
     }
 
     private void Update()
@@ -228,6 +256,9 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
+
+        SetBorderFillValue(0f);
+        SetBorderFillEnabled(false);
 
         isShowingInfo = false;
 
@@ -323,12 +354,15 @@ public abstract class BuildingCard : MonoBehaviour
             });
     }
 
-    public void HoveredState(bool rotate = true)
+    public void HoveredState(bool rotate = true, bool useAdditionalOffset = false)
     {
         cardState = CardStates.HOVERED;
 
+        Vector3 moveBy = (CardTransform.localRotation * HoveredTranslationWorld);
+        if (useAdditionalOffset) moveBy += hoverAdditionalOffset;
+
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(moveBy, hoverTime);
 
         if (rotate)
         {
@@ -436,6 +470,51 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_CanBePlayed", 0f);
     }
 
+
+    public float borderFillValue01 = 0f;
+    private Coroutine decreaseBorderFillCoroutine;
+    public void SetBorderFillEnabled(bool isEnabled)
+    {
+        cardMaterial.SetFloat("_IsBorderFillEnabled", isEnabled ? 1f : 0f);
+    }
+    public void SetBorderFillValue(float fillValue01)
+    {
+        cardMaterial.SetFloat("_BorderFillValue", fillValue01);
+    }
+    public void ResetBorderFill()
+    {
+        if (decreaseBorderFillCoroutine != null)
+        {
+            StopCoroutine(decreaseBorderFillCoroutine);            
+        }
+        else
+        {
+            borderFillValue01 = 0f;
+        }
+    }
+    public void StartDecreaseBorderFill()
+    {
+        decreaseBorderFillCoroutine = StartCoroutine(DecreaseBorderFill());
+    }
+    private IEnumerator DecreaseBorderFill()
+    {
+        while (borderFillValue01 > 0f)
+        {
+            borderFillValue01 -= Time.deltaTime * (2.0f / redrawHoldDuration );
+            SetBorderFillValue(borderFillValue01);
+
+            yield return null;
+        }
+
+        borderFillValue01 = 0f;
+
+        SetBorderFillValue(borderFillValue01);
+        SetBorderFillEnabled(false);
+
+        decreaseBorderFillCoroutine = null;
+    }
+
+
     public void EnableMouseInteraction()
     {
         cardCollider.enabled = true;
@@ -461,6 +540,11 @@ public abstract class BuildingCard : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+    public virtual int GetCardLevel()
+    { 
+        return 0;
+    }
+
     protected abstract void InitInfoVisuals();
     protected abstract void SetupCardInfo();
     public virtual void ShowInfo()
@@ -473,6 +557,24 @@ public abstract class BuildingCard : MonoBehaviour
     {
         isShowingInfo = false;
         //Debug.Log("HideInfo");
+    }
+
+
+    private Coroutine showInfoDelayCoroutine = null;
+    private void StartShowInfoWithDelay()
+    {
+        showInfoDelayCoroutine = StartCoroutine(ShowInfoWithDelay());
+    }
+    private IEnumerator ShowInfoWithDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ShowInfo();
+        showInfoDelayCoroutine = null;
+    }
+    private void DoHideInfo()
+    {
+        if (showInfoDelayCoroutine != null) StopCoroutine(showInfoDelayCoroutine);
+        HideInfo();
     }
 
 
@@ -523,7 +625,7 @@ public abstract class BuildingCard : MonoBehaviour
         }
 
 
-        float t1 = 0.1f;
+        float t1 = 0.05f;
         for (int i = cgsInfoHide.Length-1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t1);
@@ -560,4 +662,22 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
     }
 
+
+    public void StartDisableInfoDisplayForDuration(float duration)
+    {
+        StartCoroutine(DisableInfoDisplayForDuration(duration));
+    }
+    private IEnumerator DisableInfoDisplayForDuration(float duration)
+    {
+        canDisplayInfoIfWhileInteractable = false;
+
+        yield return new WaitForSeconds(duration);
+
+        canDisplayInfoIfWhileInteractable = true;
+
+        if (cardState == CardStates.HOVERED)
+        {
+            StartShowInfoWithDelay();
+        }
+    }
 }

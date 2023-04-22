@@ -4527,6 +4527,11 @@ PrefabInstance:
       propertyPath: canDisplaySpeedUp
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7982427645377297919, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: numCardsHandStart
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8859183146045818370, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4546,7 +4551,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: ac4314825bb9b65479c003072040fe74, type: 3}
 --- !u!1 &314651046 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5094152541944548896, guid: ac4314825bb9b65479c003072040fe74,
+  m_CorrespondingSourceObject: {fileID: 5921418635030177213, guid: ac4314825bb9b65479c003072040fe74,
     type: 3}
   m_PrefabInstance: {fileID: 314651045}
   m_PrefabAsset: {fileID: 0}
@@ -25584,7 +25589,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.size
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
@@ -25594,77 +25599,82 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.data[1].text
-      value: Activating...
-      objectReference: {fileID: 0}
-    - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
-        type: 3}
-      propertyPath: textLines.Array.data[2].text
       value: Successfully showing
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[3].text
+      propertyPath: textLines.Array.data[2].text
       value: Generating Info...
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[4].text
+      propertyPath: textLines.Array.data[3].text
       value: Click a Card to Redraw it
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[5].text
+      propertyPath: textLines.Array.data[4].text
       value: Redraw ends when no redraws left or finish button clicked
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[6].text
+      propertyPath: textLines.Array.data[5].text
       value: Waiting to finish Redraw...
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[7].text
+      propertyPath: textLines.Array.data[6].text
       value: Redraw finished
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[8].text
+      propertyPath: textLines.Array.data[7].text
       value: Initializing Enemy Waves...
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[9].text
+      propertyPath: textLines.Array.data[8].text
       value: Wave 1/3
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[10].text
+      propertyPath: textLines.Array.data[9].text
       value: I see you are struggling
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[11].text
+      propertyPath: textLines.Array.data[10].text
       value: One of the nodes got destroyed
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[12].text
+      propertyPath: textLines.Array.data[11].text
       value: Let me help you with this gift
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[13].text
+      propertyPath: textLines.Array.data[12].text
       value: Don't get used to it
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
-      propertyPath: textLines.Array.data[14].text
+      propertyPath: textLines.Array.data[13].text
       value: Wave 2/3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
+        type: 3}
+      propertyPath: textLines.Array.data[14].text
+      value: Wave 3/3
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.data[15].text
       value: Wave 3/3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
+        type: 3}
+      propertyPath: textLines.Array.data[3].textType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
@@ -25674,7 +25684,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.data[5].textType
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
@@ -25689,7 +25699,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.data[9].textType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
@@ -25709,7 +25719,7 @@ PrefabInstance:
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}
       propertyPath: textLines.Array.data[13].textType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895389281425, guid: dfde26954f543794ca0a0db4e9cf6a32,
         type: 3}

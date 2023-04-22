@@ -60,17 +60,17 @@ public class GatherNewCardManager : MonoBehaviour
 
 
         int numSupportCards = 0;
-        turretCardsLevel = 1;
+        turretCardsLevel = -1;
 
         if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
         {
             numCards = 2;
-            numSupportCards = 0;
+            numSupportCards = Random.Range(0, 2); // 50%
         }
         else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
         {
             numCards = 3;
-            numSupportCards = Random.Range(0,2); // 50%
+            numSupportCards = 1;
         }
         else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
         {
@@ -136,7 +136,10 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
 
-            turretCardPartsSet[i].cardLevel = turretCardsLevel;
+            if (turretCardsLevel > 0)
+            {
+                turretCardPartsSet[i].cardLevel = turretCardsLevel;
+            }
 
             turretCard.ResetParts(turretCardPartsSet[i]);
 
@@ -183,7 +186,7 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.HoveredState(rotate: false);
 
-        card.OnCardInfoSelected += SetCardShowInfo;
+        //card.OnCardInfoSelected += SetCardShowInfo;
 
         foreach (BuildingCard itCard in cards)
         {
@@ -200,13 +203,13 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.StandardState();
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);
-        }
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
 
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
+        //card.OnCardInfoSelected -= SetCardShowInfo;
 
         foreach (BuildingCard itCard in cards)
         {
@@ -226,11 +229,11 @@ public class GatherNewCardManager : MonoBehaviour
 
         selectedCard = card;
 
-        if (selectedCard.isShowingInfo)
-        {
-            SetCardHideInfo(selectedCard);
-        }
-        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);
+        //}
+        //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
 
 
         if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
@@ -250,21 +253,21 @@ public class GatherNewCardManager : MonoBehaviour
     }
 
 
-    private void SetCardShowInfo(BuildingCard card)
-    {
-        card.ShowInfo();
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    card.ShowInfo();
 
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
-        card.OnCardInfoSelected += SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
 
-    private void SetCardHideInfo(BuildingCard card)
-    {
-        card.HideInfo();
-        card.OnCardInfoSelected += SetCardShowInfo;
-        card.OnCardInfoSelected -= SetCardHideInfo;
-    }
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
 
 
 

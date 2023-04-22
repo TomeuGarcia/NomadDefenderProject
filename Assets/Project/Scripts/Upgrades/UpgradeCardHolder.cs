@@ -158,7 +158,7 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         card.HoveredState();
 
-        card.OnCardInfoSelected += SetCardShowInfo;
+        //card.OnCardInfoSelected += SetCardShowInfo;
 
 
         foreach (BuildingCard itCard in cards)
@@ -177,11 +177,11 @@ public class UpgradeCardHolder : MonoBehaviour
         card.StandardState(cardWasSelected, duration: BuildingCard.toStandardTime);
         cardWasSelected = false; // reset
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);
-        }
-        card.OnCardInfoSelected -= SetCardShowInfo;
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
+        //card.OnCardInfoSelected -= SetCardShowInfo;
 
         if (canInteract)
         {
@@ -191,10 +191,12 @@ public class UpgradeCardHolder : MonoBehaviour
             }
         }
 
+        card.canDisplayInfoIfNotInteractable = false;
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardUnhovered -= SetStandardCard;
             itCard.OnCardSelected -= SetSelectedCard;
+            itCard.canDisplayInfoIfNotInteractable = false;
         }
     }
 
@@ -210,16 +212,17 @@ public class UpgradeCardHolder : MonoBehaviour
 
         cardWasSelected = true;
 
-        if (selectedCard.isShowingInfo)
-        {
-            SetCardHideInfo(selectedCard);            
-        }
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);            
+        //}
 
-
+        selectedCard.canDisplayInfoIfNotInteractable = true;
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardHovered -= SetHoveredCard;
             itCard.OnCardSelected -= SetSelectedCard;
+            itCard.canDisplayInfoIfNotInteractable = true;
         }
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
@@ -246,22 +249,22 @@ public class UpgradeCardHolder : MonoBehaviour
     }
 
 
-    private void SetCardShowInfo(BuildingCard card)
-    {
-        card.ShowInfo();
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    card.ShowInfo();
 
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
-        card.OnCardInfoSelected += SetCardHideInfo;
-    }
-    private void SetCardHideInfo(BuildingCard card)
-    {
-        card.HideInfo();
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
 
 
-        card.OnCardInfoSelected += SetCardShowInfo;
-        card.OnCardInfoSelected -= SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
 
 
     public void RetrieveCard(BuildingCard card)
@@ -282,6 +285,11 @@ public class UpgradeCardHolder : MonoBehaviour
         canInteract = false;
 
         selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+
+        foreach (BuildingCard card in cards)
+        {
+            card.canDisplayInfoIfNotInteractable = false;
+        }
     }
 
 
@@ -289,7 +297,7 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         this.startDelay = startDelay;
         this.duration = duration;
-        this.delayBetweenCards = delayBetweenCards;
+        this.delayBetweenCards = delayBetweenCards;        
 
         placerMaterial.SetFloat("_IsAlwaysOn", 0f);
         placerMaterial.SetFloat("_IsOn", 1f);

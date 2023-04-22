@@ -79,11 +79,11 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         yield return new WaitForSeconds(t1);
 
         cgNameAndIcon.DOFade(1f, t1);
-        GameAudioManager.GetInstance().PlayCardInfoShown();
+        //GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
 
         cgDescription.DOFade(1f, t1);
-        GameAudioManager.GetInstance().PlayCardInfoShown();
+        //GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(t1);
 
         activeAnimationCoroutine = null;
@@ -115,17 +115,16 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         float t2 = 0.2f;
 
         cgDescription.DOFade(0f, t0);
-        GameAudioManager.GetInstance().PlayCardInfoHidden();
+        //GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t0);
 
         backgroundImage.DOFillAmount(0f, t2);
-        GameAudioManager.GetInstance().PlayCardInfoHidden();
+        //GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t0);
-
+        
         cgNameAndIcon.DOFade(0f, t0);
-        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        //GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         yield return new WaitForSeconds(t1+t0);
-
 
 
         activeAnimationCoroutine = null;

@@ -45,7 +45,6 @@ public class ProjectileParticleFactory : MonoBehaviour
         TDGameManager.OnEndGameResetPools -= ResetPools;
     }
 
-
     public static ProjectileParticleFactory GetInstance()
     {
         return instance;
