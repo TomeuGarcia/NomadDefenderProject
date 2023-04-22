@@ -295,7 +295,7 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardSelected()
     {
-        //if (!canPlayCardAudio) return;
+        if (!canPlayCardAudio) return;
 
         cardsAudioSource.clip = cardHovered;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
@@ -306,7 +306,7 @@ public class GameAudioManager : MonoBehaviour
     }
 
     public void PlayCardHoverExit()
-    {
+    {        
         if (cardsAudioSource2.isPlaying) return;
 
         cardsAudioSource2.clip = cardHoverExit;

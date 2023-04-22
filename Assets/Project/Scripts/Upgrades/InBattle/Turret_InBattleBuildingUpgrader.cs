@@ -76,42 +76,54 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         attackIcon.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 7);
 
         // Update UI
-        if (!CanUpgrade(attackLvl))
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(attackLvl))
         {
             EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
-            PlayAnimationIconPunch(attackIcon.transform);
         }
+        else if (!HasEnoughCurrencyToLevelUp())
+        {
+            ResetStatBarColor(attackBarToCurrencyCost, attackButtonImage);
+        }
+        PlayAnimationIconPunch(attackIcon.transform);
 
         if (IsStatMaxed(attackLvl)) DisableButton(attackButton, attackButtonImage);
-        if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
+        if (IsCardUpgradedToMax(currentBuildingLevel)) DisableButtons();
     }
     protected override void UpdateCadenceBar()
     {
         fillBars[(int)TurretUpgradeType.CADENCE].fillAmount = (float)cadenceLvl * turretFillBarCoef;
 
         // Update UI
-        if (!CanUpgrade(cadenceLvl))
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(cadenceLvl))
         {
             EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
-            PlayAnimationIconPunch(fireRateIcon.transform);
         }
+        else if (!HasEnoughCurrencyToLevelUp())
+        {
+            ResetStatBarColor(fireBarToCurrencyCost, fireRateButtonImage);
+        }
+        PlayAnimationIconPunch(fireRateIcon.transform);
 
         if (IsStatMaxed(cadenceLvl)) DisableButton(fireRateButton, fireRateButtonImage);
-        if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
+        if (IsCardUpgradedToMax(currentBuildingLevel)) DisableButtons();
     }
     protected override void UpdateRangeBar()
     {
         fillBars[(int)TurretUpgradeType.RANGE].fillAmount = (float)rangeLvl * turretFillBarCoef;
 
         // Update UI
-        if (!CanUpgrade(rangeLvl))
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(rangeLvl))
         {
             EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
-            PlayAnimationIconPunch(rangeIcon.transform);
         }
+        else if (!HasEnoughCurrencyToLevelUp())
+        {
+            ResetStatBarColor(rangeBarToCurrencyCost, rangeButtonImage);
+        }
+        PlayAnimationIconPunch(rangeIcon.transform);
 
         if (IsStatMaxed(rangeLvl)) DisableButton(rangeButton, rangeButtonImage);
-        if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
+        if (IsCardUpgradedToMax(currentBuildingLevel)) DisableButtons();
     }
 
 
@@ -122,6 +134,13 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         DisableButton(rangeButton, rangeButtonImage);
     }
 
+
+    protected override void CheckHoveredButtonsCanNowUpgrade()
+    {
+        if (isAttackButtonHovered && CanUpgrade(attackLvl)) SetBarAndButtonHighlighted(attackBarToCurrencyCost, attackButton.image);
+        if (isFireRateButtonHovered && CanUpgrade(cadenceLvl)) SetBarAndButtonHighlighted(fireBarToCurrencyCost, fireRateButton.image);
+        if (isRangeButtonHovered && CanUpgrade(rangeLvl)) SetBarAndButtonHighlighted(rangeBarToCurrencyCost, rangeButton.image);
+    }
 
 
 
@@ -156,7 +175,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         float t1 = 0.075f;
         float t3 = t1 * 3;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -259,7 +278,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         StopAllButtonsFade(false, true, true, highlight);
 
         if (!attackButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(attackLvl)) return;
 
         FillStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)(attackLvl + 1) * turretFillBarCoef, highlight);
 
@@ -272,7 +291,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         StopAllButtonsFade(true, false, true, highlight);
 
         if (!fireRateButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(cadenceLvl)) return;
 
         FillStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)(cadenceLvl + 1) * turretFillBarCoef, highlight);
 
@@ -285,7 +304,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         StopAllButtonsFade(true, true, false, highlight);
 
         if (!rangeButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(rangeLvl)) return;
 
         FillStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)(rangeLvl + 1) * turretFillBarCoef, highlight);
 
@@ -296,7 +315,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public void EmptyAttackBar() // Attack button UN-hovered
     {
         if (!attackButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(attackLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(attackLvl)) return;
 
         EmptyStatBar(attackBarToCurrencyCost, attackButtonImage, attackBackFillImage, (float)attackLvl * turretFillBarCoef);
 
@@ -307,7 +326,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public void EmptyFireRateBar() // FireRate button UN-hovered
     {
         if (!fireRateButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(cadenceLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(cadenceLvl)) return;
 
         EmptyStatBar(fireBarToCurrencyCost, fireRateButtonImage, fireRateBackFillImage, (float)cadenceLvl * turretFillBarCoef);
 
@@ -318,7 +337,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public void EmptyRangeBar() // Range button UN-hovered
     {
         if (!rangeButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(rangeLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(rangeLvl)) return;
 
         EmptyStatBar(rangeBarToCurrencyCost, rangeButtonImage, rangeBackFillImage, (float)rangeLvl * turretFillBarCoef);
 

@@ -35,14 +35,18 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
 
         // Update UI
-        if (!CanUpgrade(supportLvl))
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl))
         {
-            EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)attackLvl * turretFillBarCoef);
-            PlayAnimationIconPunch(supportIcon.transform);
+            EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * turretFillBarCoef);
         }
+        else if (!HasEnoughCurrencyToLevelUp())
+        {
+            ResetStatBarColor(abilityBarToCurrencyCost, abilityButtonImage);
+        }
+        PlayAnimationIconPunch(supportIcon.transform);
 
-        if (IsStatMaxed(attackLvl)) DisableButton(abilityButton, abilityButtonImage);
-        if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
+        if (IsStatMaxed(supportLvl)) DisableButton(abilityButton, abilityButtonImage);
+        if (IsCardUpgradedToMax(currentBuildingLevel)) DisableButtons();
     }
 
     protected override void DisableButtons()
@@ -51,6 +55,10 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
+    protected override void CheckHoveredButtonsCanNowUpgrade()
+    {
+        if (isAbilityButtonHovered && CanUpgrade(supportLvl)) SetBarAndButtonHighlighted(abilityBarToCurrencyCost, abilityButton.image);
+    }
 
 
     // Animations
@@ -80,7 +88,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         float t1 = 0.1f;
         float t3 = 0.3f;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -170,7 +178,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         StopButtonFade(abilityButton, false, highlight);
 
         if (!abilityButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl)) return;
 
         FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef, highlight);
 
@@ -180,7 +188,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public void EmptyAbilityBar()
     {
         if (!abilityButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl)) return;
 
         EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * supportFillBarCoef);
 

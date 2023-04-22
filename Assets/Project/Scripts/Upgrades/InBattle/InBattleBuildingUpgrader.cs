@@ -70,7 +70,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     private const int maxStatLevel = 5;
     private const int maxSupportStatLevel = 3;
     private const int maxUpgradeCount = 3;
-    protected int currentLevel = 0;
+    protected int currentBuildingLevel = 0;
 
     protected int attackLvl;
     protected int cadenceLvl;
@@ -89,7 +89,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType, int upgradeLevel);
     public BuildingUpgraderEvent OnUpgrade;
-    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType, currentLevel); }
+    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType, currentBuildingLevel); }
 
 
     private void Awake()
@@ -152,6 +152,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         if (currencyCounter != null)
         {
+            currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
             currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
             currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
         }        
@@ -162,6 +163,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         if (currencyCounter != null)
         {
+            currencyCounter.OnCurrencyAdded -= CheckHoveredButtonsCanNowUpgrade;
             currencyCounter.OnCurrencyAdded -= CheckStartParticlesCanUpgrade;
             currencyCounter.OnCurrencySpent -= CheckStopParticlesCanUpgrade;
         }        
@@ -206,6 +208,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         rangeLvl = newRangeLvl;
 
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
@@ -215,6 +218,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;
+        currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
@@ -299,7 +303,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         if(CanUpgrade(attackLvl))
         {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
+            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
 
             NextLevel();
 
@@ -325,7 +329,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         if (CanUpgrade(cadenceLvl))
         {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
+            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
 
             NextLevel();
 
@@ -351,7 +355,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         if (CanUpgrade(rangeLvl))
         {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
+            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
 
             NextLevel();
 
@@ -377,7 +381,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         if (CanUpgrade(supportLvl))
         {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentLevel]);
+            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
 
             NextLevel();
 
@@ -401,9 +405,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     protected bool CanUpgrade(int levelToCheck)
     {
-        if (IsCardUpgradedToMax(currentLevel)) return false;
+        if (IsCardUpgradedToMax(currentBuildingLevel)) return false;
 
-        return currentLevel < maxUpgradeCount && !IsStatMaxed(levelToCheck) && HasEnoughCurrencyToLevelUp();
+        return currentBuildingLevel < maxUpgradeCount && !IsStatMaxed(levelToCheck) && HasEnoughCurrencyToLevelUp();
     }
     protected bool IsCardUpgradedToMax(int levelToCheck)
     {
@@ -415,27 +419,27 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     }
     protected bool HasEnoughCurrencyToLevelUp()
     {
-        return currencyCounter.HasEnoughCurrency(upgradeCosts[currentLevel]);
+        return currencyCounter.HasEnoughCurrency(upgradeCosts[currentBuildingLevel]);
     }
 
     private void NextLevel()
     {
-        currentLevel++;
+        currentBuildingLevel++;
         UpdateLevelText();
 
-        if(OnTurretUpgrade != null) { OnTurretUpgrade(currentLevel); }
+        if(OnTurretUpgrade != null) { OnTurretUpgrade(currentBuildingLevel); }
     }
 
     private void UpdateLevelText()
     {
-        lvlText.text = currentLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
-        quickLevelDisplayText.text = currentLevel + "/" + maxLevels;
+        lvlText.text = currentBuildingLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
+        quickLevelDisplayText.text = currentBuildingLevel + "/" + maxLevels;
 
         //if (currentLevel < maxUpgradeCount)
-        if (currentLevel < maxLevels)
+        if (currentBuildingLevel < maxLevels)
         {
             //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // A
-            costText.text = upgradeCosts[currentLevel].ToString();
+            costText.text = upgradeCosts[currentBuildingLevel].ToString();
         }
         else
         {
@@ -505,9 +509,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         bar.DOComplete();
         bar.DOFillAmount(0f, duration);
-        bar.color = Color.white;
-
-        button.color = Color.white;
+        
+        ResetStatBarColor(bar, button);
 
         button.transform.DOComplete();
         button.transform.DOScale(Vector3.one, duration);
@@ -515,6 +518,12 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         backFillBar.fillAmount = backFill;
     }
 
+    protected void ResetStatBarColor(Image bar, Image button)
+    {
+        bar.color = Color.white;
+
+        button.color = Color.white;
+    }
 
     protected void PlayAnimationIconPunch(Transform iconTransform)
     {
@@ -534,7 +543,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     }
     protected void PlayPositiveAnimationTextCostPunch()
     {
-        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
+        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentBuildingLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
     }
     protected void PlayNegativeAnimationTextCostPunch()
     {
@@ -586,7 +595,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     private bool IsBuildingUpgradeAvailable()
     {
-        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentLevel) && HasEnoughCurrencyToLevelUp();
+        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentBuildingLevel) && HasEnoughCurrencyToLevelUp();
     }
     private void CheckStartParticlesCanUpgrade()
     {
@@ -599,10 +608,13 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             ShowCanUpgradeText();
         }        
     }
+    protected virtual void CheckHoveredButtonsCanNowUpgrade()
+    {
+    }
 
     private bool IsBuildingUpgradeNotAvailable()
     {
-        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentLevel) || !HasEnoughCurrencyToLevelUp());
+        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentBuildingLevel) || !HasEnoughCurrencyToLevelUp());
     }
     private void CheckStopParticlesCanUpgrade()
     {
@@ -697,4 +709,12 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         }
     }
 
+    protected void SetBarAndButtonHighlighted(Image bar, Image button)
+    {
+        bar.DOComplete();
+        bar.DOBlendableColor(Color.cyan, 0.1f);
+
+        button.DOComplete();
+        button.DOBlendableColor(Color.cyan, 0.1f);
+    }
 }

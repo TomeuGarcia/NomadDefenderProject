@@ -146,9 +146,9 @@ public class TDGameManager : MonoBehaviour
 
     private IEnumerator FirstLocationDestroyedAnimation()
     {
-        for (float t = 0f; t < 2.4f; t += Time.deltaTime)
+        for (float t = 0f; t < 2.3f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t;
+            float errorWiresStep = (t * t * 0.3f) + 1.0f;
             obstaclesTilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
             tilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
             yield return null;
@@ -162,7 +162,7 @@ public class TDGameManager : MonoBehaviour
         //yield return new WaitForSeconds(5f);
         for (float t = 0f; t < 5f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t * 1.5f;
+            float errorWiresStep = t * t * 0.9f;
             obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             yield return null;
