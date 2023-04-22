@@ -101,7 +101,7 @@ public abstract class BuildingCard : MonoBehaviour
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
 
-    public const float redrawHoldDuration = 0.65f;
+    public const float redrawHoldDuration = 0.5f;
 
 
 
