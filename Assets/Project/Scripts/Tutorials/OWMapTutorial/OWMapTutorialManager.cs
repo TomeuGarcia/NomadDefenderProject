@@ -15,6 +15,8 @@ public class OWMapTutorialManager : MonoBehaviour
 
     [SerializeField] private OverworldMapGameManager owMapGameManager;
 
+    [SerializeField] private OWCameraMovement cameraMovement;
+
 
     private List<OWMap_Node> battleNodes;
 
@@ -53,6 +55,7 @@ public class OWMapTutorialManager : MonoBehaviour
     {
         OWMap_Node[][] tempOWMapNodes = owMapGameManager.GetMapNodes();
 
+        cameraMovement.CanDrag(false);
 
         //Initializing battle Nodes and upgrade nodes
         battleNodes = new List<OWMap_Node>();
@@ -204,6 +207,8 @@ public class OWMapTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //Select a node to go to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+
+        cameraMovement.CanDrag(true);
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
