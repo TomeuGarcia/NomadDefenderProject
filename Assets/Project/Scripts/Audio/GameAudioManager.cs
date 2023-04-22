@@ -25,6 +25,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
+    [SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
     [SerializeField] private AudioClip cardHoverExit;
     [SerializeField] private AudioClip cardPlayed;
@@ -297,7 +298,7 @@ public class GameAudioManager : MonoBehaviour
     {
         if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardHovered;
+        cardsAudioSource.clip = cardSelected;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
 
         cardsAudioSource.Play();
