@@ -21,6 +21,7 @@ public class SpeedUpButton : MonoBehaviour
     private int current = 0;
     private int numSpeeds = 0;
 
+
     private void Awake()
     {
         numSpeeds = timeScales.Count;
@@ -31,11 +32,29 @@ public class SpeedUpButton : MonoBehaviour
         Time.timeScale = 1.0f;
     }
 
+    private void OnEnable()
+    {
+        TDGameManager.OnGameFinishStart += ResetTimeOnGameEnd;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnGameFinishStart -= ResetTimeOnGameEnd;
+    }
+
     public void ChangeTimeSpeed()
     {
         current = (current + 1) % numSpeeds;
 
         UpdateTimeSpeed();
+    }
+
+    private void ResetTimeOnGameEnd()
+    {
+        current = 0;
+        UpdateTimeSpeed();
+
+        incrementButton.enabled = false;
+        decrementButton.enabled = false;
     }
 
     private void UpdateTimeSpeed()
