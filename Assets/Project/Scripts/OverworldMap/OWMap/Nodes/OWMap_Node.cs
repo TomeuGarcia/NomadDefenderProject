@@ -422,6 +422,26 @@ public class OWMap_Node : MonoBehaviour
         return nextLevelEnabledNodes.ToArray();
     }
 
+    public OWMap_Node[] EnableAllNextLevelNodesInteraction(out int aliveNodesCount)
+    {
+        List<OWMap_Node> nextLevelEnabledNodes = new List<OWMap_Node>();
+        aliveNodesCount = 0;
+
+        for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
+        {
+            OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
+            nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
+
+            if (!nextLevelNode.IsDestroyed()) ++aliveNodesCount;
+            else nextLevelNode.SetDestroyedVisuals();
+
+            nextLevelNode.EnableInteraction();            
+            nextLevelEnabledNodes.Add(nextLevelNode);
+        }
+
+        return nextLevelEnabledNodes.ToArray();
+    }
+
     private void DisableNeighborLevelNodesInteraction()
     {
         foreach (OWMap_Node node in mapReferencesData.levelNeighbourNodes)
@@ -459,6 +479,14 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_IsDamaged", 1f);
         material.SetFloat("_IsDestroyed", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
+    }
+    public void SetResurrectedVisuals()
+    {
+        SetIconColor(OWMapDecoratorUtils.s_orangeColor);
+        //SetCameFromColor(destroyed: false);
+        material.SetFloat("_IsDamaged", 1f);
+        material.SetFloat("_IsDestroyed", 0f);
+        material.SetFloat("_NoiseTwitchingEnabled", 0f);
     }
 
 
@@ -498,6 +526,11 @@ public class OWMap_Node : MonoBehaviour
             }
             yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
         }
+    }
+
+    public void ClearCameFromConnection()
+    {
+        cameFromConnection.UnfillCable();
     }
 
 }

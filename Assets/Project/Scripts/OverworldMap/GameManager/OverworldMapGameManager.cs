@@ -22,6 +22,9 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("DECK DISPLAY")]
     [SerializeField] private OverworldCardShower cardDisplayer;
 
+    [Header("OTHER")]
+    [SerializeField] private GameObject mapEventSystemGO;
+
     protected bool canDisplayDeck = true;
 
     protected OWMap_Node currentNode;
@@ -191,7 +194,7 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    public void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
+    public virtual void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
 
@@ -294,11 +297,13 @@ public class OverworldMapGameManager : MonoBehaviour
 
 
     private void DoOnSceneFromMapUnloaded()
-    {
+    {       
         owMapPawn.ActivateCamera();
 
         cardDisplayer.ResetAll();
         cardDisplayer.gameObject.SetActive(canDisplayDeck);
+
+        mapEventSystemGO.SetActive(true);
 
         EnemyFactory.GetInstance().ResetPools();
         ProjectileParticleFactory.GetInstance().ResetPools();
@@ -309,16 +314,18 @@ public class OverworldMapGameManager : MonoBehaviour
 
         cardDisplayer.DestroyAllCards();
         cardDisplayer.gameObject.SetActive(false);
+
+        mapEventSystemGO.SetActive(false);
     }
 
 
 
-    private void InvokeOnGameOver()
+    protected void InvokeOnGameOver()
     {
         if (OnGameOver != null) OnGameOver();
     }
 
-    private void InvokeOnVictory()
+    protected void InvokeOnVictory()
     {
         if (OnVictory != null) OnVictory();
     }

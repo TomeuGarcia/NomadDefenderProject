@@ -34,6 +34,15 @@ public class CardDescriptionDisplayer : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        MapSceneNotifier.OnMapSceneFinished += HideCardDescription;
+    }
+    private void OnDisable()
+    {
+        MapSceneNotifier.OnMapSceneFinished -= HideCardDescription;
+    }
+
     public static CardDescriptionDisplayer GetInstance()
     {
         return instance;

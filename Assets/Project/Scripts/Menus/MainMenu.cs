@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour
     [Header("MATERIALS SETUP")]
     [SerializeField] private Material obstacleTilesMaterial;
     [SerializeField] private Material tilesMaterial;
+    [SerializeField] private Material outerPlanesMaterial;
 
 
     private bool canInteract = true;
@@ -41,6 +42,8 @@ public class MainMenu : MonoBehaviour
         obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         tilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
+        outerPlanesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);        
     }
 
     private void SetupTextDecoderManager()
