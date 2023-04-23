@@ -9,7 +9,8 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioClip music1;
+    [SerializeField] private AudioClip[] musics1;
+    private int currentMusic1 = 0;
     private bool musicPaused = false;
 
     [Header("UI")]
@@ -115,6 +116,24 @@ public class GameAudioManager : MonoBehaviour
             Destroy(this);
         }        
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            NextMusic1();
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
+            musicAudioSource.volume = volume;
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
+            musicAudioSource.volume = volume;
+        }
+
+    }
 
     public static GameAudioManager GetInstance()
     {
@@ -123,11 +142,8 @@ public class GameAudioManager : MonoBehaviour
 
 
     private void InitVariables()
-
     {
-
         droneBuildUpInitVolume = droneAudioSource.volume;
-
     }
 
     // Helpers
@@ -223,9 +239,14 @@ public class GameAudioManager : MonoBehaviour
 
 
     // Music
+    private void NextMusic1()
+    {
+        currentMusic1 = ++currentMusic1 % musics1.Length;
+        PlayMusic1();
+    }
     public void PlayMusic1()
     {
-        musicAudioSource.clip = music1;
+        musicAudioSource.clip = musics1[currentMusic1];
         musicAudioSource.loop = true;
         musicAudioSource.Play();
         musicPaused = false;
