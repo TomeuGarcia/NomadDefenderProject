@@ -85,13 +85,13 @@ public class SceneLoader : MonoBehaviour
 
     private void Update()
     {
-        if (alreadyLoadingNextScene) return;
+        //if (alreadyLoadingNextScene) return;
 
-        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
-        {
-            if (OnSceneForceQuit != null) OnSceneForceQuit();
-            StartLoadMainMenu();
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
+        //{
+        //    if (OnSceneForceQuit != null) OnSceneForceQuit();
+        //    StartLoadMainMenu();
+        //}
     }
 
 

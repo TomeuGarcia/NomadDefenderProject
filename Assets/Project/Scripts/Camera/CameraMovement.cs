@@ -120,7 +120,7 @@ public class CameraMovement : MonoBehaviour
         //transform.DOShakePosition(1.0f, 100.0f, 10, 90, false, true, ShakeRandomnessMode.Full);
     }
 
-    private void CameraShakeLocationTakeDamage()
+    private void CameraShakeLocationTakeDamage(PathLocation pathLocationThatTookDamage)
     {
         transform.DOComplete();
 

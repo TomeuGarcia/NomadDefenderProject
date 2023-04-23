@@ -237,7 +237,11 @@ public class TextDecoder : MonoBehaviour
         ClearText();
         InitDecodingVariables();
     }
-
+    public void ClearDecoder()
+    {
+        ClearText();
+        InitDecodingVariables();
+    }
 
     /*
     // Tomeu: I did this for Card Level

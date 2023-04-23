@@ -14,6 +14,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
+    [Header("MATERIALS SETUP")]
+    [SerializeField] private Material obstacleTilesMaterial;
+    [SerializeField] private Material tilesMaterial;
+    [SerializeField] private Material outerPlanesMaterial;
+
 
     private bool canInteract = true;
 
@@ -32,6 +37,17 @@ public class MainMenu : MonoBehaviour
         }
 
         SetupTextDecoderManager();
+
+        obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
+        tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
+        outerPlanesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);        
+    }
+    private void Start()
+    {
+        PauseMenu.GetInstance().gameCanBePaused = false;
     }
 
     private void SetupTextDecoderManager()
@@ -62,7 +78,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        
+        PauseMenu.GetInstance().gameCanBePaused = true;
 
         if (skipFirstBattle)
         {
@@ -89,6 +105,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
+        PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
     }

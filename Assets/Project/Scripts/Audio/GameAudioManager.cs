@@ -10,6 +10,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip music1;
+    private bool musicPaused = false;
 
     [Header("UI")]
     [SerializeField] private AudioSource uiAudioSource;
@@ -25,6 +26,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
+    [SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
     [SerializeField] private AudioClip cardHoverExit;
     [SerializeField] private AudioClip cardPlayed;
@@ -224,11 +226,29 @@ public class GameAudioManager : MonoBehaviour
     public void PlayMusic1()
     {
         musicAudioSource.clip = music1;
-
+        musicAudioSource.loop = true;
         musicAudioSource.Play();
+        musicPaused = false;
     }
-
-
+    public void PauseMusic1()
+    {
+        musicAudioSource.Stop();
+        musicPaused = true;
+    }
+    public bool isMusicPaused()
+    {
+        return musicPaused;
+    }
+    public void PausedMusicPitch()
+    {
+        musicAudioSource.pitch = 0.85f;
+        musicAudioSource.volume = 0.05f;
+    }
+    public void NormalMusicPitch()
+    {
+        musicAudioSource.pitch = 1f;
+        musicAudioSource.volume = 0.1f;
+    }
     // UI
     public void PlayUiButtonPressed()
     {
@@ -295,9 +315,9 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardSelected()
     {
-        //if (!canPlayCardAudio) return;
+        if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardHovered;
+        cardsAudioSource.clip = cardSelected;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
 
         cardsAudioSource.Play();
@@ -306,7 +326,7 @@ public class GameAudioManager : MonoBehaviour
     }
 
     public void PlayCardHoverExit()
-    {
+    {        
         if (cardsAudioSource2.isPlaying) return;
 
         cardsAudioSource2.clip = cardHoverExit;

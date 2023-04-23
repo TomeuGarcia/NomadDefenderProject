@@ -45,8 +45,6 @@ public class EnemyWaveManager : MonoBehaviour
         for (int i = 0; i< enemyWaveSpawners.Length; i++)
         {
             enemyWaveSpawners[i].Init(startPathNodes[i]);
-            enemyWaveSpawners[i].OnWaveFinished += FinishWave;
-            enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
         waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
 
@@ -62,12 +60,24 @@ public class EnemyWaveManager : MonoBehaviour
         CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
         TDGameManager.OnGameOverStart += ForceStopWaves;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
+
+        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        {
+            enemyWaveSpawners[i].OnWaveFinished += FinishWave;
+            enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
+        }
     }
     private void OnDisable()
     {
         CardDrawer.OnStartSetupBattleCanvases -= ActivateCanvas;
         TDGameManager.OnGameOverStart -= ForceStopWaves;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
+
+        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        {
+            enemyWaveSpawners[i].OnWaveFinished -= FinishWave;
+            enemyWaveSpawners[i].OnLastWaveFinished -= FinishLastWave;
+        }
     }
 
     private void ActivateCanvas()
@@ -161,9 +171,6 @@ public class EnemyWaveManager : MonoBehaviour
     private void FinishLastWave(EnemyWaveSpawner enemyWaveSpawner)
     {
         // Unsubscribe events
-        enemyWaveSpawner.OnWaveFinished -= FinishWave;
-        enemyWaveSpawner.OnLastWaveFinished -= FinishLastWave;
-
         if (--activeWaves == 0)
         {
             StartCoroutine(LastWaveAnimation());
