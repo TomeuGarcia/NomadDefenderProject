@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2080374624328513537}
   - component: {fileID: 8154096177577850823}
   - component: {fileID: 2080374624328513536}
-  - component: {fileID: 2080374624328513539}
+  - component: {fileID: 4376590595653548842}
   m_Layer: 0
   m_Name: TeslaProjectile
   m_TagString: Untagged
@@ -50,14 +50,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
-  moveSpeed: 30
-  rotationSpeed: 1
-  lifetime: 10
+  bulletSpeed: 2
   materialForTurret: {fileID: 2100000, guid: ed1b3ee6878fb8a419814854c3a263d3, type: 2}
-  attackCollider: {fileID: 2080374624328513539}
-  hitParticles: {fileID: 652111113423113906}
-  maxTargetAmount: 2
-  range: 2
+  lerp: {fileID: 4376590595653548842}
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  damageMultiplier: 0.5
+  maxChainedTargets: 2
+  chainRadius: 1.5
+  stunDuration: 0.2
 --- !u!96 &2080374624328513536
 TrailRenderer:
   serializedVersion: 2
@@ -100,7 +102,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.06
+  m_Time: 0.15
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -172,22 +174,60 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.05
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!135 &2080374624328513539
-SphereCollider:
+--- !u!114 &4376590595653548842
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080374624328513538}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c673a9b2aaafb4580791540711ee64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  positionLerpFunction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleLerpFunction:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  finishedColorLerp: 0
+  finishedPositionLerp: 0
+  finishedScaleLerp: 0
 --- !u!1 &2377080223365859326
 GameObject:
   m_ObjectHideFlags: 0

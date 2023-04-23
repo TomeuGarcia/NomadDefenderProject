@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class UpgradeCardHolder : MonoBehaviour
@@ -8,11 +9,17 @@ public class UpgradeCardHolder : MonoBehaviour
     [SerializeField] private AnimationCurve cardsHeightCurve;
     [SerializeField] private AnimationCurve cardsRotationCurve;
 
+    public Transform CardsHolder => transform;
     [SerializeField] private Transform selectedTransform;
     [SerializeField, Min(0f)] private float distanceBetweenCards = 0.8f;
 
     // Serialize for now
     [SerializeField] private BuildingCard[] cards;
+
+    [Header("CARD DRAG & DROP")]
+    [SerializeField] private BoxCollider cardDragBoundsCollider;
+    [SerializeField] private Transform cardDragBoundsTargetTransform;
+    private Bounds cardDragBoundsTarget;
 
     public BuildingCard selectedCard { get; private set; }
 
@@ -20,12 +27,19 @@ public class UpgradeCardHolder : MonoBehaviour
     [SerializeField] private MeshRenderer placerMeshRenderer;
     private Material placerMaterial;
 
+    [HideInInspector] public bool appearAnimationCanStartMoving = true;
+
     public bool AlreadyHasSelectedCard => selectedCard != null;
 
     private bool canInteract;
 
     private float startDelay, duration, delayBetweenCards; // Animation variables
 
+    private bool cardWasSelected = false;
+
+    [HideInInspector] public bool canSelectCard = true;
+
+    private bool cardsInteractionEnabled = true;
 
 
     public delegate void CardPartHolderAction();
@@ -41,8 +55,20 @@ public class UpgradeCardHolder : MonoBehaviour
     }
     private void Awake()
     {
+        BuildingCard.DragStartBounds = cardDragBoundsCollider.bounds;
+        BuildingCard.DragStartBounds.extents *= 2f;
+
+        Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
+        boundsSize.z += 3f;
+        cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
+
+
         //Init(cards);
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+
         canInteract = true;
 
         placerMaterial = placerMeshRenderer.material;
@@ -52,11 +78,17 @@ public class UpgradeCardHolder : MonoBehaviour
     private void OnEnable()
     {
         CardPartReplaceManager.OnReplacementDone += StopAnimationCompletely;
+
+        CardPart.OnMouseDragStart += DisableCardsInteraction;
+        CardPart.OnMouseDragEnd += EnableCardsInteraction;
     }
 
     private void OnDisable()
     {
         CardPartReplaceManager.OnReplacementDone -= StopAnimationCompletely;
+
+        CardPart.OnMouseDragStart -= DisableCardsInteraction;
+        CardPart.OnMouseDragEnd -= EnableCardsInteraction;
     }
 
 
@@ -66,6 +98,11 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard = null;
         this.cards = cards;
         InitCardsInHand();
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
     }
 
 
@@ -92,18 +129,44 @@ public class UpgradeCardHolder : MonoBehaviour
             cards[i].transform.position += startDisplacement + widthDisplacement + heightDisplacement;
             cards[i].transform.localRotation = rotation;
 
-            cards[i].InitPositions(selectedTransform.position);
+            cards[i].InitPositions(selectedTransform.position, Vector3.zero, cards[i].transform.position);
         }
     }
+
+
+    private void EnableCardsInteraction()
+    {
+        cardsInteractionEnabled = true;
+        foreach (BuildingCard card in cards)
+        {
+            card.EnableMouseInteraction();
+        }
+    }
+    private void DisableCardsInteraction()
+    {
+        cardsInteractionEnabled = false;
+        foreach (BuildingCard card in cards)
+        {
+            card.DisableMouseInteraction();
+        }
+    }
+
+
 
 
     private void SetHoveredCard(BuildingCard card)
     {
         card.HoveredState();
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardUnhovered += SetStandardCard;
-        BuildingCard.OnCardSelected += SetSelectedCard;
+        //card.OnCardInfoSelected += SetCardShowInfo;
+
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered += SetStandardCard;
+            itCard.OnCardSelected += SetSelectedCard;
+        }
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -111,29 +174,97 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private void SetStandardCard(BuildingCard card)
     {
-        card.StandardState();
-  
-        if (canInteract) BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SetSelectedCard;
+        card.StandardState(cardWasSelected, duration: BuildingCard.toStandardTime);
+        cardWasSelected = false; // reset
+
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
+        //card.OnCardInfoSelected -= SetCardShowInfo;
+
+        if (canInteract)
+        {
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.OnCardHovered += SetHoveredCard;
+            }
+        }
+
+        card.canDisplayInfoIfNotInteractable = false;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SetSelectedCard;
+            itCard.canDisplayInfoIfNotInteractable = false;
+        }
     }
 
     private void SetSelectedCard(BuildingCard card)
     {
+        if (!canSelectCard) return;
         if (AlreadyHasSelectedCard) return;
 
         selectedCard = card;
-        selectedCard.SelectedState();
+        selectedCard.SelectedState(true, repositionColliderOnEnd: true, enableInteractionOnEnd: true);
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardSelected -= SetSelectedCard;
+        selectedCard.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
+
+        cardWasSelected = true;
+
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);            
+        //}
+
+        selectedCard.canDisplayInfoIfNotInteractable = true;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardSelected -= SetSelectedCard;
+            itCard.canDisplayInfoIfNotInteractable = true;
+        }
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
-
-        if (OnCardSelected != null) OnCardSelected();
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
+
+    private void CheckSnapCardAtSelectedPosition(BuildingCard card)
+    {
+        card.OnDragMouseUp -= CheckSnapCardAtSelectedPosition;
+
+        
+        if (cardDragBoundsTarget.Contains(card.CardTransform.position))
+        {
+            //Debug.Log("YEP drop here");
+            card.GoToSelectedPosition();
+            if (OnCardSelected != null) OnCardSelected();
+        }
+        else
+        {
+            RetrieveCard(card);
+            card.ReenableMouseInteraction();
+        }
+    }
+
+
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    card.ShowInfo();
+
+
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
+
+
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
 
 
     public void RetrieveCard(BuildingCard card)
@@ -154,8 +285,25 @@ public class UpgradeCardHolder : MonoBehaviour
         canInteract = false;
 
         selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+
+        foreach (BuildingCard card in cards)
+        {
+            card.canDisplayInfoIfNotInteractable = false;
+        }
     }
 
+
+    public void StartFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    {
+        this.startDelay = startDelay;
+        this.duration = duration;
+        this.delayBetweenCards = delayBetweenCards;        
+
+        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        placerMaterial.SetFloat("_IsOn", 1f);
+        
+        FinalRetrieveCard(selectedCard);
+    }
 
     public void EnableFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
     {
@@ -229,5 +377,36 @@ public class UpgradeCardHolder : MonoBehaviour
         placerMaterial.SetFloat("_IsOn", 0f);
     }
 
+
+    public IEnumerator AppearAnimation(float delayBeforeStartMoving)
+    {
+        Vector3 moveOffset = Vector3.forward * -2f;
+
+        foreach (BuildingCard card in cards)
+        {
+            card.RootCardTransform.position = card.RootCardTransform.position + moveOffset;
+            card.canBeHovered = false;
+        }
+
+        yield return new WaitForSeconds(delayBeforeStartMoving);
+        yield return new WaitUntil(() => appearAnimationCanStartMoving);
+
+
+        float moveDuration = 0.7f;
+        float delayBetweenCards = 0.3f;
+        foreach (BuildingCard card in cards)
+        {
+            card.RootCardTransform.DOMove(card.RootCardTransform.position - moveOffset, moveDuration);
+            yield return new WaitForSeconds(delayBetweenCards);
+        }
+
+        
+        foreach (BuildingCard card in cards)
+        {
+            yield return new WaitForSeconds(moveDuration - delayBetweenCards);
+            card.canBeHovered = true;
+            if (cardsInteractionEnabled) card.ReenableMouseInteraction();
+        }
+    }
 
 }

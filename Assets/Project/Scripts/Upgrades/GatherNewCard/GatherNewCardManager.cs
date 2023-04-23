@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
 {
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
+    [Header("SCENE MANAGEMENT")]
+    [SerializeField] private MapSceneNotifier mapSceneNotifier;
+
+    [SerializeField] private CardsLibrary cardsLibrary;
     [SerializeField] private PartsLibrary partsLibrary;
     [SerializeField] private DeckCreator deckCreator;
 
@@ -15,38 +22,145 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField, Min(0f)] private float distanceBetweenCards = 1.2f;
     [SerializeField] private Transform cardHolder;
 
-
     // Animations
     Vector3[] startPositions;
+
+
+    // Card Generation Constants and Variables
+    private static int turretCardsLevel = 1;
 
 
     public delegate void GatherNewCardManagerAction();
     public static event GatherNewCardManagerAction OnCardGatherDone;
 
-
+    [Header("Console Log")]
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+    [SerializeField] TextLine textLine;
 
     private void Awake()
     {
         Init();
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
     }
 
     private void Init()
     {
-        cards = new BuildingCard[numCards];
+        cardsLibrary.InitSetup();
 
-        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numCards);
-        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numCards);
-        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numCards);
+        // NodeEnums.HealthState.GREATLY_DAMAGED        --> 2 Turret Cards
+        // NodeEnums.HealthState.SLIGHTLY_DAMAGED       --> 2-3 Turret Cards + 50% 0-1 Support Cards
+        // NodeEnums.HealthState.UNDAMAGED              --> 2 Turret Cards + 1 Support Cards
+        // NodeEnums.HealthState.UNDAMAGED + perfect    --> 2 Turret Cards + 1 Support Cards + Lvl3 Turrets + Reroll
 
-        for (int i = 0; i < numCards; i++)
+        //// TODO read from data instead
+        NodeEnums.ProgressionState progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+        bool lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        ////
+
+
+        int numSupportCards = 0;
+        turretCardsLevel = -1;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
         {
-            cards[i] = deckCreator.GetUninitializedNewCard();
-            cards[i].ResetParts(attacks[i], bodies[i], bases[i]);
+            numCards = 2;
+            numSupportCards = Random.Range(0, 2); // 50%
         }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numSupportCards = 1;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numSupportCards = 1;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                turretCardsLevel = TurretCardParts.MAX_CARD_LEVEL;
+            }
+        }
+
+
+
+        cards = new BuildingCard[numCards];
+        int numTurretCards = numCards - numSupportCards;
+
+
+        CreateNTurretCards(numTurretCards, 1, lastBattleWasDefendedPerfectly, progressionState); // Get Random Turrets
+
+        if (numSupportCards > 0)
+        {
+            CreateNSupportCards(numTurretCards, numSupportCards, GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS); // Get Random Supports
+        }
+
+
         InitCardsPlacement();
 
         StartCoroutine(InitCardsAnimation());
     }
+
+
+    /*
+    private void CreateNTurretCards(int numTurretCards)
+    {
+        // Get Random Turrets
+        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numTurretCards);
+        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numTurretCards);
+        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numTurretCards);
+        TurretPassiveBase[] passives = partsLibrary.GetRandomTurretPassiveBases(numTurretCards);
+
+
+        for (int i = 0; i < numTurretCards; i++)
+        {
+            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+
+            TurretCardParts cardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+            cardParts.Init(1, attacks[i], bodies[i], bases[i], passives[i]);
+
+            turretCard.ResetParts(cardParts);
+
+            cards[i] = turretCard;
+        }
+    }
+    */
+
+    private void CreateNTurretCards(int totalAmount, int perfectAmount, bool perfect, NodeEnums.ProgressionState progressionState)
+    {
+        TurretCardParts[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(totalAmount, perfectAmount, perfect, progressionState); // Generate 
+        turretCardPartsSet = cardsLibrary.GetConsumableTurretCardPartsSet(turretCardPartsSet); // Setup to create new cards
+
+        for (int i = 0; i < totalAmount; i++)
+        {
+            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+
+            if (turretCardsLevel > 0)
+            {
+                turretCardPartsSet[i].cardLevel = turretCardsLevel;
+            }
+
+            turretCard.ResetParts(turretCardPartsSet[i]);
+
+            cards[i] = turretCard;
+        }
+    }
+
+    private void CreateNSupportCards(int startIndex, int numSupportCards, int minPowerfulness, int maxPowerfulness)
+    {
+        SupportCardParts[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(numSupportCards, minPowerfulness, maxPowerfulness); // Generate 
+        supportCardPartsSet = cardsLibrary.GetConsumableSupportCardPartsSet(supportCardPartsSet); // Setup to create new cards
+
+        for (int i = 0; i < numSupportCards; i++)
+        {
+            SupportBuildingCard turretCard = deckCreator.GetUninitializedNewSupportCard();
+            turretCard.ResetParts(supportCardPartsSet[i]);
+
+            cards[i + startIndex] = turretCard;
+        }
+    }
+
 
     private void InitCardsPlacement()
     {
@@ -63,18 +177,23 @@ public class GatherNewCardManager : MonoBehaviour
             cards[i].transform.position += startDisplacement + widthDisplacement;
             cards[i].transform.localRotation = Quaternion.identity;
 
-            cards[i].InitPositions(cards[i].transform.position);
+            cards[i].InitPositions(cards[i].transform.position, Vector3.zero, cards[i].transform.position);
         }
     }
 
 
     private void SetHoveredCard(BuildingCard card)
     {
-        card.HoveredState();
+        card.HoveredState(rotate: false);
 
-        BuildingCard.OnCardHovered -= SetHoveredCard;
-        BuildingCard.OnCardUnhovered += SetStandardCard;
-        BuildingCard.OnCardSelected += SelectCard;
+        //card.OnCardInfoSelected += SetCardShowInfo;
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered -= SetHoveredCard;
+            itCard.OnCardUnhovered += SetStandardCard;
+            itCard.OnCardSelected += SelectCard;
+        }
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -84,19 +203,48 @@ public class GatherNewCardManager : MonoBehaviour
     {
         card.StandardState();
 
-        BuildingCard.OnCardHovered += SetHoveredCard;
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SelectCard;
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
+
+
+        //card.OnCardInfoSelected -= SetCardShowInfo;
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SelectCard;
+        }
     }
 
     private void SelectCard(BuildingCard card)
     {
-        BuildingCard.OnCardUnhovered -= SetStandardCard;
-        BuildingCard.OnCardSelected -= SelectCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardUnhovered -= SetStandardCard;
+            itCard.OnCardSelected -= SelectCard;
+        }
 
         selectedCard = card;
 
-        deckCreator.AddNewCardToDeck(selectedCard);
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);
+        //}
+        //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+
+
+        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
+        {
+            deckCreator.AddNewTurretCardToDeck(selectedCard as TurretBuildingCard);
+        }
+        else if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
+        {            
+            deckCreator.AddNewSupportCardToDeck(selectedCard as SupportBuildingCard);
+        }
+        
 
         StartCoroutine(SelectCardAnimation());
 
@@ -105,18 +253,36 @@ public class GatherNewCardManager : MonoBehaviour
     }
 
 
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    card.ShowInfo();
+
+
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
+
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
+
+
+
     private IEnumerator InitCardsAnimation()
     {
         Vector3[] endPositions = new Vector3[numCards];
         startPositions = new Vector3[numCards];
 
-        Quaternion upsideDown = Quaternion.AngleAxis(180f, cards[0].transform.forward);
+        Quaternion upsideDown = Quaternion.AngleAxis(180f, cards[0].RootCardTransform.forward);
         for (int i = 0; i < numCards; ++i)
         {
-            endPositions[i] = cards[i].transform.localPosition;
-            startPositions[i] = cards[i].transform.localPosition + (cards[i].transform.forward * -3f);
-            cards[i].transform.localPosition = startPositions[i];
-            cards[i].transform.localRotation = upsideDown;
+            endPositions[i] = cards[i].RootCardTransform.localPosition;
+            startPositions[i] = cards[i].RootCardTransform.localPosition + (cards[i].RootCardTransform.forward * -3f);
+            cards[i].RootCardTransform.localPosition = startPositions[i];
+            cards[i].RootCardTransform.localRotation = upsideDown;
         }
 
         yield return new WaitForSeconds(1f); // start delay
@@ -125,7 +291,7 @@ public class GatherNewCardManager : MonoBehaviour
         float moveDuration = 1.5f;
         for (int i = 0; i < numCards; ++i)
         {
-            cards[i].transform.DOLocalMove(endPositions[i], moveDuration);
+            cards[i].RootCardTransform.DOLocalMove(endPositions[i], moveDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -136,20 +302,31 @@ public class GatherNewCardManager : MonoBehaviour
         float rotationDuration = 0.5f;
         foreach (BuildingCard card in cards)
         {
-            card.transform.DOLocalRotate(Vector3.zero, rotationDuration);
+            card.RootCardTransform.DOLocalRotate(Vector3.zero, rotationDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
-        yield return new WaitForSeconds(rotationDuration);
+        yield return new WaitForSeconds(delayBetweenCards); // extra wait
 
 
-        BuildingCard.OnCardHovered += SetHoveredCard;
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.OnCardHovered += SetHoveredCard;
+        }
+        PrintConsoleLine(TextTypes.INSTRUCTION, "choose a new CARD for your deck",true);
+
+        // scuffed fix, allow mouse interaction if already hovering the cards
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.ReenableMouseInteraction();
+        }
+
     }
 
     private IEnumerator SelectCardAnimation()
     {
         float shakeDuration = 0.5f;
-        selectedCard.transform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 6);
+        selectedCard.RootCardTransform.DOPunchScale(Vector3.one * 0.2f, shakeDuration, 6);
 
         yield return new WaitForSeconds(shakeDuration);
 
@@ -159,7 +336,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             if (cards[i] == selectedCard) continue;
 
-            cards[i].transform.DOLocalMove(startPositions[i], moveDuration);
+            cards[i].RootCardTransform.DOLocalMove(startPositions[i], moveDuration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -168,28 +345,43 @@ public class GatherNewCardManager : MonoBehaviour
 
         float centerMoveDuration = 0.15f;
         Vector3 centerPos = cardHolder.transform.position;
-        centerPos.y += 1f;
-        centerPos += selectedCard.transform.up * 0.4f;
+        centerPos.y += 0.5f;
+        centerPos += selectedCard.RootCardTransform.up * 0.4f;
 
-        selectedCard.transform.DOMove(centerPos, centerMoveDuration);
+        selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
         yield return new WaitForSeconds(centerMoveDuration);
 
         // smooth move up
         centerMoveDuration = 1f - centerMoveDuration;
-        centerPos += selectedCard.transform.up * 0.05f;
-        selectedCard.transform.DOMove(centerPos, centerMoveDuration);
+        centerPos += selectedCard.RootCardTransform.up * 0.05f;
+        selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
         yield return new WaitForSeconds(centerMoveDuration);
 
 
-        Vector3 endPos = selectedCard.transform.localPosition + (selectedCard.transform.forward * 3f);
-        selectedCard.transform.DOLocalMove(endPos, moveDuration);
-        selectedCard.transform.DOLocalRotate(selectedCard.transform.up * 15f, 0.5f);
+        Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
+        selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
+        selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 1.5f);
         yield return new WaitForSeconds(moveDuration);
 
 
         //Debug.Log("FINISH");
         yield return new WaitForSeconds(1f);
-        if (OnCardGatherDone != null) OnCardGatherDone();
+        //if (OnCardGatherDone != null) OnCardGatherDone();
+        consoleDialog.Clear();
+
+        mapSceneNotifier.InvokeOnSceneFinished();
     }
 
+
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting)
+    {
+
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
+
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);
+        
+    }
 }

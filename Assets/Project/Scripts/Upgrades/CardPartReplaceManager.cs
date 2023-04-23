@@ -7,6 +7,15 @@ using System.Linq;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
+    [Header("CAMERA")]
+    [SerializeField] private Camera mouseDragCamera;
+
+    [Header("UPGRADE SETUP")]
+    [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
+    [Header("SCENE MANAGEMENT")]
+    [SerializeField] private MapSceneNotifier mapSceneNotifier;
+
     [Header("DECK DATA")]
     [SerializeField] private DeckData deckData;
     private List<BuildingCard> deckCards;
@@ -14,6 +23,8 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
+    public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
+    public CardPartHolder CardPartHolder => cardPartHolder;
 
     private enum PartType { ATTACK, BODY, BASE }
     [Header("TYPE")]
@@ -30,28 +41,56 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
 
+    private TurretPartAttack[] tutorialTurretPartAttacks;
+    private TurretPartBody[] tutorialTurretPartBodies;
+    private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
+
+
+    [Header("SUBTRACT CARD PLAY COST")]
+    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
+
+
     [Header("COMPONENTS")]
-    [SerializeField] private TextMeshProUGUI uiDescriptionText;
     [SerializeField] private GameObject buttonText;
     [SerializeField] private Animator buttonAnimator;
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
 
+    [SerializeField] ConsoleDialogSystem consoleDialog;
+    [SerializeField] TextLine textLine;
+    [SerializeField] bool isTutorial;
+
     private bool replacementDone = false;
+    public bool ReplacementDone => replacementDone;
 
     private bool cardIsReady = false;
     private bool partIsReady = false;
+    [HideInInspector] public bool canFinalRetrieveCard = true;
 
     [Header("MATERIALS")]
     [SerializeField] private MeshRenderer buttonMeshRenderer;
     private Material buttonMaterial;
 
-    
+
+    private int numPartsIfPerfect = 1;
+    private bool lastBattleWasDefendedPerfectly = false;
+    NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
 
 
     public delegate void CarPartReplaceManagerAction();
     public static event CarPartReplaceManagerAction OnReplacementStart;
     public static event CarPartReplaceManagerAction OnReplacementDone;
 
+
+    // TUTORIAL
+    private bool partsCreatedByTutorial = false;
+
+    private void Awake()
+    {
+        BuildingCard.MouseDragCamera = mouseDragCamera;
+        CardPart.MouseDragCamera = mouseDragCamera;
+
+        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
+    }
     
 
     private void Start()
@@ -62,6 +101,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
         SetButtonNotReady();
         Init();
+
+        PlayCardAndCardPartsAppearAnimation();
     }
 
     private void OnEnable()
@@ -88,9 +129,46 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Init()
     {
-        if (partType == PartType.ATTACK) InitAttacks();
-        else if (partType == PartType.BODY) InitBodies();
-        else if (partType == PartType.BASE) InitBases();
+        // TODO
+        numPartsIfPerfect = 1;
+        progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
+        lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
+        NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
+
+        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        {
+            numCards = 2;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
+        {
+            numCards = 3;
+            numParts = 2;
+        }
+        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
+        {
+            numCards = 3;
+            numParts = 3;
+
+            if (lastBattleWasDefendedPerfectly)
+            {
+                // level up card to max
+            }
+        }
+
+        if (!partsCreatedByTutorial)
+        {
+            if (partType == PartType.ATTACK) InitAttacksRandom();
+            else if (partType == PartType.BODY) InitBodiesRandom();
+            else if (partType == PartType.BASE) InitBasesRandom();
+        }
+        else
+        {
+            if (partType == PartType.ATTACK) InitAttacksTutorial();
+            else if (partType == PartType.BODY) InitBodiesTutorial();
+            else if (partType == PartType.BASE) InitBasesTutorial();
+        }
+
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
         for (int i = 0; i < deckCards.Count; ++i)
@@ -104,68 +182,156 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.Init(randomCards.ToArray());
     }
 
-    private void InitAttacks()
+
+    public void AwakeSetupTutorialAttacks(TurretPartAttack[] turretPartAttacks)
     {
-        TurretPartAttack[] randomAttacks = partsLibrary.GetRandomTurretPartAttacks(numParts);
+        partsCreatedByTutorial = true;
+        tutorialTurretPartAttacks = turretPartAttacks;
+    }
+    private void InitAttacksTutorial()
+    {
+        numParts = tutorialTurretPartAttacks.Length;
+        InitAttacks(tutorialTurretPartAttacks);
+    }
+    private void InitAttacksRandom()
+    {
+        InitAttacks(partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitAttacks(TurretPartAttack[] attacks)
+    {
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].turretPartAttack = randomAttacks[i];
+            parts[i].turretPartAttack = attacks[i];
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's ATTACK with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true, 2f);
     }
 
-    private void InitBodies()
+
+    public void AwakeSetupTutorialBodies(TurretPartBody[] turretPartBodies)
     {
-        TurretPartBody[] randomBodies = partsLibrary.GetRandomTurretPartBodies(numParts);
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBodies = turretPartBodies;
+    }
+    private void InitBodiesTutorial()
+    {
+        numParts = tutorialTurretPartBodies.Length;
+        InitBodies(tutorialTurretPartBodies);
+    }
+    private void InitBodiesRandom()
+    {
+        InitBodies(partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBodies(TurretPartBody[] bodies)
+    {
         CardPartBody[] parts = new CardPartBody[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBodyPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBody>();
-            parts[i].turretPartBody = randomBodies[i];
+            parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-
-        uiDescriptionText.text = "Replace a turret's BODY with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true, 2f);
     }
 
-    private void InitBases()
+    public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
-        TurretPartBase[] randomBases = partsLibrary.GetRandomTurretPartBases(numParts);
+        partsCreatedByTutorial = true;
+        tutorialTurretPartBases = basesAndPassives;
+    }
+    private void InitBasesTutorial()
+    {
+        numParts = tutorialTurretPartBases.Length;
+        InitBases(tutorialTurretPartBases);
+    }
+    private void InitBasesRandom()
+    {
+        InitBases(partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+    }
+    private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    {
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = randomBases[i];
+            parts[i].turretPartBase = basesAndPassives[i].turretPartBase;
+            parts[i].turretPassiveBase = basesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
 
-        uiDescriptionText.text = "Replace a turret's BASE with a new one";
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true, 2f);
     }
 
 
 
     private BuildingCard[] GetRandomDeckCards()
     {
-        HashSet<int> randomIndices = new HashSet<int>();
-        while (randomIndices.Count < numCards)
+        // Separate MAXed cards from NON-MAXed cards
+        List<BuildingCard> maxLevelCards = new List<BuildingCard>();
+        List<BuildingCard> notMaxLevelCards = new List<BuildingCard>();
+        
+        for (int cardI = 0; cardI < deckCards.Count; ++cardI)
         {
-            randomIndices.Add(Random.Range(0, deckCards.Count));
+            if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+            {
+                if (deckCards[cardI].GetCardLevel() < 3)
+                {
+                    notMaxLevelCards.Add(deckCards[cardI]);
+                }
+                else
+                {
+                    maxLevelCards.Add(deckCards[cardI]);
+                }
+            }            
         }
 
         BuildingCard[] chosenCards = new BuildingCard[numCards];
-        int i = 0;
-        foreach (int index in randomIndices)
-        {
-            chosenCards[i] = deckCards[index];
-            chosenCards[i].transform.SetParent(upgradeCardHolder.transform, false);
-            ++i;
+        int chosenCardI = 0;
+
+        int numMaxedCardsToAdd = numCards - notMaxLevelCards.Count;
+        numMaxedCardsToAdd = numMaxedCardsToAdd < 0 ? 0 : numMaxedCardsToAdd;
+
+        // If not enough NON-MAXed cards, add MAXed cards
+        if (numMaxedCardsToAdd > 0)
+        {            
+            HashSet<int> randomMaxedCardsIndices = new HashSet<int>();
+
+            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd)
+            {
+                int randomIndex = Random.Range(0, maxLevelCards.Count);
+                randomMaxedCardsIndices.Add(randomIndex);
+            }
+            foreach (int index in randomMaxedCardsIndices)
+            {
+                chosenCards[chosenCardI] = maxLevelCards[index]; 
+                ++chosenCardI;
+            }
         }
 
-        return chosenCards;
+        // Add NON-MAXed cards
+        int numRemainingCards = numCards - numMaxedCardsToAdd;
+        HashSet<int> randomNotMaxedCardsIndices = new HashSet<int>();
+        while (randomNotMaxedCardsIndices.Count < numRemainingCards)
+        {
+            int randomIndex = Random.Range(0, notMaxLevelCards.Count);
+            randomNotMaxedCardsIndices.Add(randomIndex);
+        }
+        foreach (int index in randomNotMaxedCardsIndices)
+        {
+            chosenCards[chosenCardI] = notMaxLevelCards[index];
+            ++chosenCardI;
+        }
+
+        // Set parent
+        for (int cardI = 0; cardI < numCards; ++cardI)
+        {
+            chosenCards[cardI].transform.SetParent(upgradeCardHolder.CardsHolder, false);
+        }
+
+        return chosenCards.ToArray();
     }
 
 
@@ -199,26 +365,30 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
     
-    private void ReplacePartInCard()
+    private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
+        selectedCard.IncrementCardLevel(1);
+
         switch (partType)
         {
             case PartType.ATTACK:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
+                    selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
                 }
                 break;
             case PartType.BODY:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
+                    selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
                 }
                 break;
             case PartType.BASE:
                 {
-                    upgradeCardHolder.selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase);
+                    selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase,
+                                                cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase);
                 }
                 break;
-            default: break;
+            default: 
+                break;
         }
     }
 
@@ -232,9 +402,9 @@ public class CardPartReplaceManager : MonoBehaviour
         float flipDuration = 0.4f;
         float moveDuration = 0.5f;
 
-        Transform upgradedCardTransform = upgradeCardHolder.selectedCard.transform;
+        Transform upgradedCardTransform = upgradeCardHolder.selectedCard.CardTransform;
         Vector3 upgradedCardStartPos = upgradedCardTransform.position;
-        Transform partTransform = cardPartHolder.selectedCardPart.transform;
+        Transform partTransform = cardPartHolder.selectedCardPart.CardTransform;
 
 
         yield return new WaitForSeconds(0.1f);
@@ -256,10 +426,16 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradedCardTransform.DOLocalRotate(Vector3.up * 180f, flipDuration);
         yield return new WaitForSeconds(flipDuration + 0.1f);
 
-        
+
         // EXECUTE REPLACEMENT
-        ReplacePartInCard();
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+        ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
+
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayLevelUpAnimation();
+
 
         // Flip up
         upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
@@ -273,8 +449,18 @@ public class CardPartReplaceManager : MonoBehaviour
         cardPartHolder.Hide(0.5f, 0.2f);
         yield return new WaitForSeconds(1f);
 
+        if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
+
+
+        yield return new WaitUntil(() => canFinalRetrieveCard);
+
         // Enable FINAL retreieve card
-        upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
+
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+        
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
@@ -331,6 +517,9 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         upgradeCardHolder.OnFinalRetrieve -= InvokeReplacementDone;
 
+        mapSceneNotifier.InvokeOnSceneFinished();
+        consoleDialog.Clear();
+
         if (OnReplacementDone != null) OnReplacementDone(); // Subscribe to this event to load NEXT SCENE
     }
 
@@ -342,5 +531,76 @@ public class CardPartReplaceManager : MonoBehaviour
         buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
+    public bool GetPartIsReady()
+    {
+        return partIsReady;
+    }
+
+    public bool GetCardIsReady()
+    {
+        return cardIsReady;
+    }
+
+    public bool GetReplacementDone()
+    {
+        return replacementDone;
+    }
+
+
+    private void PlayCardAndCardPartsAppearAnimation()
+    {
+        StartCoroutine(upgradeCardHolder.AppearAnimation(1f));
+        StartCoroutine(cardPartHolder.AppearAnimation(2.5f));
+    }
+
+    public void PauseCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardsAppearAnimation()
+    {
+        upgradeCardHolder.appearAnimationCanStartMoving = true;
+    }
+
+    public void PauseCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = false;
+    }
+    public void ResumeCardPartsAppearAnimation()
+    {
+        cardPartHolder.appearAnimationCanStartMoving = true;
+    }
+
+
+
+
+    void PrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        StartCoroutine(DoPrintConsoleLine(type, text, clearBeforeWritting, delay));
+    }
+
+    private IEnumerator DoPrintConsoleLine(TextTypes type, string text, bool clearBeforeWritting, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (!isTutorial)
+        {
+
+            if (clearBeforeWritting)
+                consoleDialog.Clear();
+
+            textLine.textType = type;
+            textLine.text = text;
+            consoleDialog.PrintLine(textLine);            
+        }
+    }
+
+
+    void PrintConsoleLine(TextTypes type, string text)
+    {
+        textLine.textType = type;
+        textLine.text = text;
+        consoleDialog.PrintLine(textLine);
+    }
 
 }

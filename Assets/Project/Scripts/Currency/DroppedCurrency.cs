@@ -14,12 +14,12 @@ public class DroppedCurrency : MonoBehaviour
     [SerializeField] private float indicatorTime;
 
     [Header("COMPONENTS")]
-    [SerializeField] private MouseOverNotifier mouseOverNotifier;
     [SerializeField] private Transform meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private TMP_Text text;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private ParticleSystem shatterParticles;
 
 
     public delegate void CurrencyAction(int value);
@@ -29,7 +29,6 @@ public class DroppedCurrency : MonoBehaviour
 
     private void OnEnable()
     {
-        //mouseOverNotifier.OnMouseEntered += StartGotPickedUp;
         StartGotPickedUp();
 
         beeingPickedUp = false;
@@ -49,12 +48,6 @@ public class DroppedCurrency : MonoBehaviour
         rb.AddForce(forceDir, ForceMode.Impulse);
     }
 
-    private void OnDisable()
-    {
-        mouseOverNotifier.OnMouseEntered -= StartGotPickedUp;
-    }
-
-
     private void Update()
     {
         Vector3 cameraDirection = Camera.main.transform.forward;
@@ -67,7 +60,7 @@ public class DroppedCurrency : MonoBehaviour
         if (beeingPickedUp) return;
 
         if (OnCurrencyGathered != null) OnCurrencyGathered(value);
-        StartCoroutine(GotPickedUp());
+        GotPickedUp();
 
         GameAudioManager.GetInstance().PlayCurrencyDropped();
     }
@@ -78,10 +71,10 @@ public class DroppedCurrency : MonoBehaviour
 
         //value = Random.Range(1, 4); // Just for testing
         Vector3 minScale = Vector3.one * 0.1f;
-        meshTransform.localScale = minScale + ((value -1) * 0.2f * minScale);
+        meshTransform.localScale = minScale + ((value -1) * 0.02f * minScale);
     }
 
-    private IEnumerator GotPickedUp()
+    private void GotPickedUp()
     {
         beeingPickedUp = true;
 
@@ -94,10 +87,26 @@ public class DroppedCurrency : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         meshTransform.localPosition = Vector3.zero;
         meshTransform.rotation = Quaternion.identity;
-
-        yield return new WaitForSeconds(indicatorTime);
-        gameObject.SetActive(false);
     }
 
+
+    public void Collided(Collision collision)
+    {
+        StartCoroutine(TouchedFloor());
+    }
+
+    private IEnumerator TouchedFloor()
+    {
+        meshRenderer.enabled = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        shatterParticles.Play();
+
+        yield return new WaitUntil(() => shatterParticles.gameObject.activeInHierarchy == false);
+
+        meshRenderer.enabled = true;
+        shatterParticles.gameObject.SetActive(true);
+        rb.constraints = RigidbodyConstraints.None;
+        gameObject.SetActive(false);
+    }
 
 }

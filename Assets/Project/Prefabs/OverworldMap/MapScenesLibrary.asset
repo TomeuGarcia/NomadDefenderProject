@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b9755f0d4bd2f40bbe7563077d0214, type: 3}
+  m_Name: MapScenesLibrary
+  m_EditorClassIdentifier: 
+  newTurretCard: NewTurretCardScene
+  replaceAttackPart: UpgrageArtScene
+  replaceBodyPart: BaseReplaceScene
+  replaceBasePart: BodyReplaceScene
+  early1Defense:
+  - E1_CshapedPath
+  early2Defense:
+  - E2_CshapedPath
+  - E2_spiral
+  mid1Defense:
+  - M1_sharpTurns
+  - M1_FastLap
+  mid2Defenses:
+  - M2_prototypeLvl1
+  - L2_isaac
+  late1Defense:
+  - M1_sharpTurns
+  late2Defenses:
+  - M2_prototypeLvl1
+  - L2_isaac
+  boss1Defense:
+  - M1_sharpTurns
+  boss2Defenses:
+  - M2_prototypeLvl1
+  - L2_isaac
+  useTestingScenes: 0
+  testing1Defense:
+  - ArmorTruckTesting
+  testing2Defenses: []
