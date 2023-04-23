@@ -28,14 +28,14 @@ public class UpgradeMachineControl : MonoBehaviour
     [SerializeField] private MeshRenderer screen;
     [SerializeField] private MeshRenderer screenButton;
     [SerializeField] private MeshRenderer screenButtonOutline;
-    [SerializeField] private TMP_Text screenButtonText;
+    [SerializeField] private SpriteRenderer screenButtonText;
     [SerializeField] private Color32 screenButtonActiveTextColor;
     private Color32 screenButtonUnactiveTextColor;
-    [SerializeField] private Material offScreenMat;
 
 
 
     [Header("MATERIAL LERP DATA")]
+    [SerializeField] private MaterialLerp.FloatData screenTransitionFD;
     [SerializeField] private MaterialLerp.FloatData armOnFD;
     [SerializeField] private MaterialLerp.FloatData armOffFD;
     [SerializeField] private MaterialLerp.FloatData screenFD;
@@ -54,7 +54,7 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         RenderSettings.reflectionIntensity = 0.0f;
 
-        StartCoroutine(ActivateSlots());
+        StartCoroutine(Activate());
         StartCoroutine(LightBlink(rightLight));
         //SCREEN TURN ON
     }
@@ -63,11 +63,14 @@ public class UpgradeMachineControl : MonoBehaviour
         RenderSettings.reflectionIntensity = 1.0f;
     }
 
-    private IEnumerator ActivateSlots()
+    private IEnumerator Activate()
     {
         yield return new WaitForSeconds(2.0f);
+
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         StartCoroutine(leftCardSlot.Activate());
         yield return new WaitForSeconds(0.5f);
+
         StartCoroutine(rightCardSlot.Activate());
     }
 
@@ -128,6 +131,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void SelectLeftCard()
     {
+        leftCardSlot.PulsePanel(1);
         StartCoroutine(MaterialLerp.FloatLerp(armOffFD, new Material[1] { leftArm.materials[1] }));
 
         screenFD.variableReference = "_FirstFillCoef";
@@ -146,6 +150,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void RetrieveLeftCard()
     {
+        leftCardSlot.PulsePanel(0);
         StartCoroutine(MaterialLerp.FloatLerp(armOnFD, new Material[1] { leftArm.materials[1] }));
 
         screenFD.variableReference = "_FirstFillCoef";
@@ -164,6 +169,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void SelectRightCard()
     {
+        rightCardSlot.PulsePanel(1);
         StartCoroutine(MaterialLerp.FloatLerp(armOffFD, new Material[1] { rightArm.materials[1] }));
 
         screenFD.variableReference = "_SecondFillCoef";
@@ -182,6 +188,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void RetrieveRightCard()
     {
+        rightCardSlot.PulsePanel(0);
         StartCoroutine(MaterialLerp.FloatLerp(armOnFD, new Material[1] { rightArm.materials[1] }));
 
         screenFD.variableReference = "_SecondFillCoef";
@@ -200,7 +207,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void ActivateButton()
     {
-        screenButtonText.color = screenButtonActiveTextColor;
+        screenButtonText.material.SetFloat("_ReplaceCoef", 1.0f);
 
         //lerp button out
         screenButton.transform.DOLocalMoveY(0.0f, 0.2f);
@@ -210,7 +217,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void DeactivateButton()
     {
-        screenButtonText.color = screenButtonUnactiveTextColor;
+        screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
 
         //lerp button in
         screenButton.transform.DOLocalMoveY(-0.082f, 0.2f);
@@ -220,7 +227,11 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void Replace()
     {
-        screenButtonText.color = screenButtonUnactiveTextColor;
+        rightCardSlot.PulsePanel(0);
+        leftCardSlot.PulsePanel(0);
+        screenCardSlot.PulsePanel(0);
+        screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
+
         //Button disappear
         screenButton.transform.DOLocalMoveY(-0.3f, 0.25f);
         screenButtonOutline.transform.DOLocalMoveY(-0.3f, 0.6f);
@@ -240,7 +251,6 @@ public class UpgradeMachineControl : MonoBehaviour
 
     private IEnumerator EnergyFill()
     {
-        //yield return new WaitForSeconds(0.75f);
         //Cable TransitionCoef a 1
         tempMaterials.Clear();
         foreach (MeshRenderer mesh in rightCables)
@@ -252,6 +262,7 @@ public class UpgradeMachineControl : MonoBehaviour
             tempMaterials.Add(mesh.material);
         }
         StartCoroutine(MaterialLerp.FloatLerp(cableTransitionCoefFD, tempMaterials.ToArray()));
+        //yield return new WaitForSeconds(0.75f);
 
         //Cable Energy a 1
         yield return new WaitForSeconds(cableTransitionCoefFD.time);
@@ -267,7 +278,10 @@ public class UpgradeMachineControl : MonoBehaviour
         }
         StartCoroutine(MaterialLerp.FloatLerp(cableEnergyCoefFD, tempMaterials.ToArray()));
         
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
+        screenTransitionFD.invert = true;
+        screenTransitionFD.time = 0.25f;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         screenCardSlot.Extract();
     }
 }

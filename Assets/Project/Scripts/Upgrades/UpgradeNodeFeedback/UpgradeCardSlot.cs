@@ -5,6 +5,7 @@ using UnityEngine;
 public class UpgradeCardSlot : MonoBehaviour
 {
     public bool startActivated;
+    private bool active;
 
     [Header("SLOT")]
     [Header("References")]
@@ -52,5 +53,10 @@ public class UpgradeCardSlot : MonoBehaviour
     public void Extract()
     {
         panelLerp.LerpLocalPosition(new Vector3(panel.localPosition.x, panel.localPosition.y, extractHeight), extractTime);
+    }
+
+    public void PulsePanel(int pulse)
+    {
+        panel.gameObject.GetComponent<MeshRenderer>().materials[0].SetFloat("_IsOn", pulse);
     }
 }

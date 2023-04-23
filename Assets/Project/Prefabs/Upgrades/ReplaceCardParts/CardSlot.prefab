@@ -519,9 +519,9 @@ MonoBehaviour:
   deactivatedHeight: 0.5
   panelLerp: {fileID: 99568472380335014}
   panel: {fileID: 99568472380335010}
-  insertTime: 0.75
+  insertTime: 0.5
   insertHeight: -0.025
-  extractTime: 0.75
+  extractTime: 0.5
   extractHeight: 0.057
 --- !u!114 &6902200902612891143
 MonoBehaviour:
@@ -542,6 +542,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   positionLerpFunction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleLerpFunction:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -598,12 +622,6 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  scaleLerpFunction:
-    serializedVersion: 2
-    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
