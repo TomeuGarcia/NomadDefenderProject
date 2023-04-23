@@ -20,16 +20,16 @@ public class OWMapTutorialManagerOptional : MonoBehaviour
         
     }
 
-    IEnumerator Tutorial()
+    public IEnumerator Tutorial()
     {
         cameraMovement.CanDrag(false);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(3.5f);
 
-        scriptedSequence.NextLine(); //0 -> Computing Battle Result...
+        scriptedSequence.NextLine(); //0 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
-        scriptedSequence.NextLine(); //0 -> Computing Battle Result...
+        scriptedSequence.NextLine(); //1 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
 

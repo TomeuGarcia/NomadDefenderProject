@@ -232,8 +232,14 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PauseMusic1()
     {
-        musicAudioSource.Stop();
+        musicAudioSource.Pause();
         musicPaused = true;
+    }
+
+    public void ResumeMusic1()
+    {
+        musicAudioSource.UnPause();
+        musicPaused = false;
     }
     public bool isMusicPaused()
     {
