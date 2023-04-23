@@ -7,6 +7,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     [Header("TUTORIAL")]
     [SerializeField] protected OWMapTutorialManager owMapTutorial;
     [SerializeField] protected OWMapTutorialManager2 owMapTutorial2;
+    [SerializeField] protected OWMapTutorialManagerOptional owMapTutorialOptional;
     bool firstBattleResultApplied = false;
     int battleCounter = 1;
 
@@ -144,11 +145,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             nextLevelEnabledNodes[i].isInteractable = false;
         }
 
-        yield return new WaitForSeconds(3f);
-        Debug.Log("WATCHER: what the fuck are you doing!? get good for fuck sake");
-        yield return new WaitForSeconds(3f);
-        Debug.Log("WATCHER: I'll let you through... only this time you fuckhead");
-
+        yield return (StartCoroutine(owMapTutorialOptional.Tutorial()));
+        
 
         for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
         {
@@ -157,17 +155,6 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             nextLevelEnabledNodes[i].ClearCameFromConnection();
             nextLevelEnabledNodes[i].isInteractable = true;
         }
-
-
-        /*
-        OWMap_Node[] nextLevelEnabledNodes = currentNode.EnableAllNextLevelNodesInteraction();
-        for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
-        {
-            nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
-            nextLevelEnabledNodes[i].SetResurrectedVisuals();
-            // TODO set node material for active interaction
-        }
-        */
     }
 
 
