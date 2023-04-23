@@ -43,9 +43,12 @@ public class TextManager : MonoBehaviour
     {
         foreach (TextDecoder text in texts)
         {
-            text.Activate();
-            yield return new WaitUntil(() => text.IsDoneDecoding() == true);
-            yield return new WaitForSecondsRealtime(delay);
+            if (text.isActiveAndEnabled)
+            {
+                text.Activate();
+                yield return new WaitUntil(() => text.IsDoneDecoding() == true);
+                yield return new WaitForSecondsRealtime(delay);
+            }
         }
     }
 
