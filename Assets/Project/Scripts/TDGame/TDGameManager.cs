@@ -131,8 +131,6 @@ public class TDGameManager : MonoBehaviour
         Debug.Log("GameOver");
         SetBattleStateResult();
 
-        Time.timeScale = 1f;
-
         StartCoroutine(GameOverAnimation());
 
         if (OnGameOverStart != null) OnGameOverStart();
@@ -150,8 +148,6 @@ public class TDGameManager : MonoBehaviour
     {
         Debug.Log("Victory");
         SetBattleStateResult();
-
-        Time.timeScale = 1f;
 
         StartCoroutine(VictoryAnimation());
         if (OnGameFinishStart != null) OnGameFinishStart();
