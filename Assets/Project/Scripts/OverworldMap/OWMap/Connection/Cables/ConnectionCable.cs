@@ -26,8 +26,23 @@ public abstract class ConnectionCable : MonoBehaviour
 
     public virtual void FillCable(bool destroyed)
     {
+        lerpData.invert = false;
         if (destroyed) { foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 1.0f); mat.SetFloat("_ConnectionCoef", 0.0f); } }
     }
+
+    public virtual void UnfillCable()
+    {
+        StartCoroutine(DoUnfillCable());
+    }
+
+    private IEnumerator DoUnfillCable()
+    {
+        lerpData.invert = true;
+        yield return StartCoroutine(MaterialLerp.FloatLerp(lerpData, cableMaterials.ToArray()));
+
+        foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 0.0f); }
+    }
+
 
     public virtual void HoverCable() { }
 

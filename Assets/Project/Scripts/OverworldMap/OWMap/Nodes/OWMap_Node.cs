@@ -483,7 +483,7 @@ public class OWMap_Node : MonoBehaviour
     public void SetResurrectedVisuals()
     {
         SetIconColor(OWMapDecoratorUtils.s_orangeColor);
-        SetCameFromColor(destroyed: false);
+        //SetCameFromColor(destroyed: false);
         material.SetFloat("_IsDamaged", 1f);
         material.SetFloat("_IsDestroyed", 0f);
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
@@ -526,6 +526,11 @@ public class OWMap_Node : MonoBehaviour
             }
             yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
         }
+    }
+
+    public void ClearCameFromConnection()
+    {
+        cameFromConnection.UnfillCable();
     }
 
 }
