@@ -139,6 +139,11 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
     private IEnumerator ResurrectDestroyedCurrentNode(OWMap_Node[] nextLevelEnabledNodes)
     {
+        for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
+        {
+            nextLevelEnabledNodes[i].isInteractable = false;
+        }
+
         yield return new WaitForSeconds(3f);
         Debug.Log("WATCHER: what the fuck are you doing!? get good for fuck sake");
         yield return new WaitForSeconds(3f);
@@ -150,6 +155,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             nextLevelEnabledNodes[i].SetHealthState(NodeEnums.HealthState.GREATLY_DAMAGED, false, true);
             nextLevelEnabledNodes[i].SetResurrectedVisuals();
             nextLevelEnabledNodes[i].ClearCameFromConnection();
+            nextLevelEnabledNodes[i].isInteractable = true;
         }
 
 

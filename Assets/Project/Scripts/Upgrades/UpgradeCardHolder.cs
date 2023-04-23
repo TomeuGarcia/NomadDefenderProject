@@ -59,7 +59,7 @@ public class UpgradeCardHolder : MonoBehaviour
         BuildingCard.DragStartBounds.extents *= 2f;
 
         Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
-        boundsSize.z += 1f;
+        boundsSize.z += 3f;
         cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
 
 

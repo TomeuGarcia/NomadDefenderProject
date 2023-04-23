@@ -43,10 +43,10 @@ public static class MaterialLerp
             yield return null;
         }
 
+        float endGoal = lerpData.invert == false ? lerpData.endGoal : lerpData.min;
+        
         foreach (Material material in materials)
-        {
-            material.SetFloat(lerpData.variableReference, lerpData.endGoal);
-        }
+                material.SetFloat(lerpData.variableReference, endGoal);
     }
     //////// FLOAT
 }
