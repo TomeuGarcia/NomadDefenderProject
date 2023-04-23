@@ -141,6 +141,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
     {
+        GameAudioManager.GetInstance().PauseMusic1();
+
         animator.SetBool("StartAnim", true);
 
         StartCoroutine(GlitchScreen(0.0f, 0.2f, true, 2));
@@ -233,6 +235,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         yield return new WaitUntil(() => animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 2.0f);
         cameraMovement.CanDrag(true);
+
+        GameAudioManager.GetInstance().ResumeMusic1();
 
         if (tutorialGame != null)
         {
