@@ -148,8 +148,7 @@ public class OverworldMapGameManager : MonoBehaviour
             }
 
             currentNode.nodeClass.StartLevel(this);
-        }      
-        
+        }
     }
 
     private void ResumeMapAfterNodeScene() // called from event
