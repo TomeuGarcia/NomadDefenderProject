@@ -10,6 +10,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip music1;
+    private bool musicPaused = false;
 
     [Header("UI")]
     [SerializeField] private AudioSource uiAudioSource;
@@ -224,11 +225,18 @@ public class GameAudioManager : MonoBehaviour
     public void PlayMusic1()
     {
         musicAudioSource.clip = music1;
+        musicAudioSource.loop = true;
         musicAudioSource.Play();
+        musicPaused = false;
     }
     public void PauseMusic1()
     {
         musicAudioSource.Stop();
+        musicPaused = true;
+    }
+    public bool isMusicPaused()
+    {
+        return musicPaused;
     }
     public void PausedMusicPitch()
     {

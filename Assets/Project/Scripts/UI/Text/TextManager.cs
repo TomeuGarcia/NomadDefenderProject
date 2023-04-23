@@ -16,9 +16,9 @@ public class TextManager : MonoBehaviour
         StartCoroutine(DecodeTexts());
     }
 
-    IEnumerator DecodeTexts()
+    public IEnumerator DecodeTexts()
     {
-        yield return new WaitForSeconds(startDelay);
+        yield return new WaitForSecondsRealtime(startDelay);
         StartCoroutine(LinearDecode());
         //StartCoroutine(SimultaneousDecode(delay));
     }
@@ -29,6 +29,13 @@ public class TextManager : MonoBehaviour
         {
             text.Activate();
             yield return new WaitForSeconds(delay);
+        }
+    }
+    public void ResetTexts()
+    {
+        foreach (TextDecoder text in texts)
+        {
+            text.ClearDecoder();
         }
     }
 
