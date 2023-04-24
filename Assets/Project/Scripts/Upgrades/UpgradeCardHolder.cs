@@ -23,9 +23,12 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public BuildingCard selectedCard { get; private set; }
 
-    [Header("Materials")]
-    [SerializeField] private MeshRenderer placerMeshRenderer;
-    private Material placerMaterial;
+    //[Header("Materials")]
+    //[SerializeField] private MeshRenderer placerMeshRenderer;
+    //private Material placerMaterial;
+    [Header("MACHINE")]
+    [SerializeField] private UpgradeMachineControl upgradeMachineControl;
+
 
     [HideInInspector] public bool appearAnimationCanStartMoving = true;
 
@@ -71,8 +74,8 @@ public class UpgradeCardHolder : MonoBehaviour
 
         canInteract = true;
 
-        placerMaterial = placerMeshRenderer.material;
-        placerMaterial.SetFloat("_IsOn", 1f);
+        //placerMaterial = placerMeshRenderer.material;
+        //placerMaterial.SetFloat("_IsOn", 1f);
     }
 
     private void OnEnable()
@@ -297,11 +300,11 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         this.startDelay = startDelay;
         this.duration = duration;
-        this.delayBetweenCards = delayBetweenCards;        
+        this.delayBetweenCards = delayBetweenCards;
 
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 1f);
-        
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 1f);       
+
         FinalRetrieveCard(selectedCard);
     }
 
@@ -313,8 +316,8 @@ public class UpgradeCardHolder : MonoBehaviour
         this.duration = duration;
         this.delayBetweenCards = delayBetweenCards;
 
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 1f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 1f);
     }
 
     public void FinalRetrieveCard(BuildingCard card)
@@ -363,18 +366,20 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public void StartAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+        upgradeMachineControl.SelectLeftCard();
     }
 
     public void FinishAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        upgradeMachineControl.RetrieveLeftCard();
     }
 
     public void StopAnimationCompletely()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 0f);
     }
 
 

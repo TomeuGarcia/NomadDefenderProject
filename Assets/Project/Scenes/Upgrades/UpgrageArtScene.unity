@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 53035529}
   - component: {fileID: 53035532}
   - component: {fileID: 53035531}
-  - component: {fileID: 53035530}
   m_Layer: 0
   m_Name: BackPilar
   m_TagString: Untagged
@@ -157,19 +156,6 @@ Transform:
   m_Father: {fileID: 1410799148}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &53035530
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 53035528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &53035531
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -436,7 +422,6 @@ GameObject:
   - component: {fileID: 166104405}
   - component: {fileID: 166104408}
   - component: {fileID: 166104407}
-  - component: {fileID: 166104406}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -459,19 +444,6 @@ Transform:
   m_Father: {fileID: 2000370641}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &166104406
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 166104404}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &166104407
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3608,6 +3580,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc58e6d30fdf1354b8a85f3bb855ae2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &880608480 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 99568472380335010, guid: 2fc925dfefa192d44a7d1865bf1bdb5d,
+    type: 3}
+  m_PrefabInstance: {fileID: 880608477}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &881657956
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,7 +3717,6 @@ GameObject:
   - component: {fileID: 935545579}
   - component: {fileID: 935545582}
   - component: {fileID: 935545581}
-  - component: {fileID: 935545580}
   m_Layer: 0
   m_Name: BackPilar
   m_TagString: Untagged
@@ -3762,19 +3739,6 @@ Transform:
   m_Father: {fileID: 2000370641}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &935545580
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 935545578}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &935545581
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4004,8 +3968,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 983382153}
-  - component: {fileID: 983382155}
-  - component: {fileID: 983382154}
   m_Layer: 10
   m_Name: BrokenCards
   m_TagString: Untagged
@@ -4030,80 +3992,6 @@ Transform:
   m_Father: {fileID: 784651704}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 89.926, y: 0, z: 0}
---- !u!65 &983382154
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983382152}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.9, z: 0.2}
-  m_Center: {x: 0, y: -0.25, z: 0}
---- !u!114 &983382155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983382152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 843f7b7d7a786eb4c88e34f78a561211, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardLocation: 0
-  cardState: 0
-  buildingPrefab: {fileID: 5698239489495674828, guid: da7a74ed2ca99ab4b9118acd96a8f3ba,
-    type: 3}
-  copyBuildingPrefab: {fileID: 0}
-  playCostText: {fileID: 0}
-  cardCollider: {fileID: 983382154}
-  cardHolder: {fileID: 1941813798}
-  hoverAdditionalOffset: {x: 0, y: 0, z: 0}
-  layerMaskMouseDragPlane:
-    serializedVersion: 2
-    m_Bits: 4096
-  isShowingInfo: 0
-  cardMeshRenderer: {fileID: 397429062}
-  interfaceCanvasGroup: {fileID: 0}
-  cgsInfoHide:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  canDisplayInfoIfNotInteractable: 0
-  canDisplayInfoIfWhileInteractable: 1
-  otherCfDrawAnimation:
-  - {fileID: 0}
-  - {fileID: 0}
-  isMissingDefaultCallbacks: 0
-  isInteractable: 1
-  canBeHovered: 1
-  borderFillValue01: 0
-  infoInterface: {fileID: 0}
-  infoShownAttackIcon: {fileID: 0}
-  defaultAttackIcon: {fileID: 0}
-  attackNameText: {fileID: 0}
-  attackDescriptionText: {fileID: 0}
-  infoShownBaseIcon: {fileID: 0}
-  defaultBaseIcon: {fileID: 0}
-  baseNameText: {fileID: 0}
-  baseDescriptionText: {fileID: 0}
-  attackImage: {fileID: 0}
-  bodyImage: {fileID: 0}
-  baseImage: {fileID: 0}
-  damageFillImage: {fileID: 0}
-  cadenceFillImage: {fileID: 0}
-  rangeFillImage: {fileID: 0}
-  basePassiveImage: {fileID: 0}
-  cardLevelText: {fileID: 0}
-  cardLevelTextDecoder: {fileID: 0}
 --- !u!1001 &1004317207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4303,7 +4191,6 @@ GameObject:
   - component: {fileID: 1101476294}
   - component: {fileID: 1101476297}
   - component: {fileID: 1101476296}
-  - component: {fileID: 1101476295}
   m_Layer: 0
   m_Name: Fill_L
   m_TagString: Untagged
@@ -4326,19 +4213,6 @@ Transform:
   m_Father: {fileID: 792403828}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1101476295
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101476293}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1101476296
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4932,7 +4806,6 @@ GameObject:
   - component: {fileID: 1268344783}
   - component: {fileID: 1268344786}
   - component: {fileID: 1268344785}
-  - component: {fileID: 1268344784}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -4955,19 +4828,6 @@ Transform:
   m_Father: {fileID: 1410799148}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1268344784
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1268344782}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1268344785
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7709,7 +7569,6 @@ GameObject:
   - component: {fileID: 2071494076}
   - component: {fileID: 2071494079}
   - component: {fileID: 2071494078}
-  - component: {fileID: 2071494077}
   m_Layer: 0
   m_Name: Fill_R
   m_TagString: Untagged
@@ -7732,19 +7591,6 @@ Transform:
   m_Father: {fileID: 792403828}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2071494077
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071494075}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &2071494078
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8209,7 +8055,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 872332617246898943}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: -1}
-  m_LocalPosition: {x: 0, y: 1.417, z: -1.2000008}
+  m_LocalPosition: {x: 0, y: 0.91, z: -1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9011,7 +8857,7 @@ MonoBehaviour:
   distanceBetweenCards: 0.98
   cardParts: []
   cardDragBoundsCollider: {fileID: 7707319918459231347}
-  cardDragBoundsTargetTransform: {fileID: 829586097}
+  cardDragBoundsTargetTransform: {fileID: 880608480}
   placerMeshRenderer: {fileID: 0}
   appearAnimationCanStartMoving: 1
   canSelectCard: 1
@@ -9299,7 +9145,7 @@ MonoBehaviour:
   distanceBetweenCards: 1
   cards: []
   cardDragBoundsCollider: {fileID: 7707319918459231347}
-  cardDragBoundsTargetTransform: {fileID: 0}
+  cardDragBoundsTargetTransform: {fileID: 829586097}
   placerMeshRenderer: {fileID: 0}
   appearAnimationCanStartMoving: 1
   canSelectCard: 1
