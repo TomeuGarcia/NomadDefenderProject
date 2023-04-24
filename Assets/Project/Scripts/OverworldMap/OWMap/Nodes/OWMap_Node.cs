@@ -223,6 +223,8 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
 
         InvokeOnNodeInfoInteractionEnabled();
+
+        if(cameFromConnection != null) { cameFromConnection.StartIndicaton(); }
     }
 
     public void DisableInteraction()
@@ -233,6 +235,8 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
 
         InvokeOnNodeInfoInteractionDisabled();
+
+        if (cameFromConnection != null) { cameFromConnection.StopIndication(); }
     }
 
 
