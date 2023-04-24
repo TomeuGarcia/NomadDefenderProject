@@ -53,9 +53,10 @@ public class TextDecoder : MonoBehaviour
 
     public void Activate()
     {
-        doneDecoding = false;
-        StartCoroutine(Decode());
-        textComponent.enabled = true;
+            doneDecoding = false;
+            StartCoroutine(Decode());
+            textComponent.enabled = true;
+        
     }
 
     private void InitDecodingVariables()
