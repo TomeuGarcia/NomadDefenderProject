@@ -18,9 +18,9 @@ public class CardPartHolder : MonoBehaviour
     [SerializeField] private Transform cardDragBoundsTargetTransform;
     private Bounds cardDragBoundsTarget;
 
-    [Header("Materials")]
-    [SerializeField] private MeshRenderer placerMeshRenderer;
-    private Material placerMaterial;
+    //[Header("Materials")]
+    //[SerializeField] private MeshRenderer placerMeshRenderer;
+    //private Material placerMaterial;
 
     [HideInInspector] public bool appearAnimationCanStartMoving = true;
 
@@ -56,7 +56,8 @@ public class CardPartHolder : MonoBehaviour
         CardPart.DragStartBounds.extents *= 2f;
 
         Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
-        boundsSize.z += 1f;
+        boundsSize.x += 1f;
+        boundsSize.z += 3f;
         cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
 
 
@@ -66,8 +67,13 @@ public class CardPartHolder : MonoBehaviour
 
         canInteract = true;
 
-        placerMaterial = placerMeshRenderer.material;
-        placerMaterial.SetFloat("_IsOn", 1f);
+        //placerMaterial = placerMeshRenderer.material;
+        //placerMaterial.SetFloat("_IsOn", 1f);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(cardDragBoundsTarget.center, cardDragBoundsTarget.size);
     }
 
     private void OnEnable()
@@ -182,6 +188,8 @@ public class CardPartHolder : MonoBehaviour
         if (!canSelectCard) return;
         if (AlreadyHasSelectedPart) return;
 
+        cardDragBoundsCollider.gameObject.SetActive(true);
+
         selectedCardPart = card;
         selectedCardPart.SelectedState(true, repositionColliderOnEnd: true);
 
@@ -219,13 +227,15 @@ public class CardPartHolder : MonoBehaviour
         {
             //Debug.Log("YEP drop here");
             cardPart.GoToSelectedPosition();
-            if (OnPartSelected != null) OnPartSelected();
+            if (OnPartSelected != null) OnPartSelected();            
         }
         else
         {
             RetrieveCard(cardPart);
             cardPart.ReenableMouseInteraction();
         }
+
+        cardDragBoundsCollider.gameObject.SetActive(false);
     }
 
 
@@ -279,6 +289,7 @@ public class CardPartHolder : MonoBehaviour
     public void Hide(float duration, float delayBetweenCards)
     {
         StartCoroutine(DoHide(duration, delayBetweenCards));
+        CardPart.OnCardSelected -= SetSelectedCard;
     }
 
     private IEnumerator DoHide(float duration, float delayBetweenCards)
@@ -288,7 +299,7 @@ public class CardPartHolder : MonoBehaviour
             if (cardParts[i] == selectedCardPart) continue;
 
             Transform cardPartTransform = cardParts[i].transform;
-            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.5f), duration);
+            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.7f), duration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -297,25 +308,25 @@ public class CardPartHolder : MonoBehaviour
 
     public void StartAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 1f);
     }
 
     public void FinishAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
     private void StopAnimationCompletely()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 0f);
     }
 
 
 
     public IEnumerator AppearAnimation(float delayBeforeStartMoving)
     {
-        Vector3 moveOffset = Vector3.forward * -2f;
+        Vector3 moveOffset = Vector3.forward * -3f;
 
         foreach (CardPart cardPart in cardParts)
         {
@@ -362,5 +373,6 @@ public class CardPartHolder : MonoBehaviour
             cardPartBase.PlayTutorialBlinkAnimation(delayBeforeAbility);
         }
     }
+
 
 }

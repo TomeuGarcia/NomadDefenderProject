@@ -147,7 +147,8 @@ public class OverworldMapDecorator : MonoBehaviour
 
             NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
 
-            DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
+            DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, NodeEnums.UpgradeType.REPLACE_ATTACK_PART, progressionState);
+            //DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
         }
     }
     protected void DecorateUpgradeNode(OWMap_Node node, int nextLevelNodes, int nodeIndexInLevel, int totalNodesInLevel, 
