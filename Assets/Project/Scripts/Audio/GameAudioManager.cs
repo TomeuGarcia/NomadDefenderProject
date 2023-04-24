@@ -9,7 +9,8 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioClip music1;
+    [SerializeField] private AudioClip[] musics1;
+    private int currentMusic1 = 0;
     private bool musicPaused = false;
 
     [Header("UI")]
@@ -26,6 +27,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
+    [SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
     [SerializeField] private AudioClip cardHoverExit;
     [SerializeField] private AudioClip cardPlayed;
@@ -114,6 +116,24 @@ public class GameAudioManager : MonoBehaviour
             Destroy(this);
         }        
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            NextMusic1();
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
+            musicAudioSource.volume = volume;
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
+            musicAudioSource.volume = volume;
+        }
+
+    }
 
     public static GameAudioManager GetInstance()
     {
@@ -122,11 +142,8 @@ public class GameAudioManager : MonoBehaviour
 
 
     private void InitVariables()
-
     {
-
         droneBuildUpInitVolume = droneAudioSource.volume;
-
     }
 
     // Helpers
@@ -222,17 +239,28 @@ public class GameAudioManager : MonoBehaviour
 
 
     // Music
+    private void NextMusic1()
+    {
+        currentMusic1 = ++currentMusic1 % musics1.Length;
+        PlayMusic1();
+    }
     public void PlayMusic1()
     {
-        musicAudioSource.clip = music1;
+        musicAudioSource.clip = musics1[currentMusic1];
         musicAudioSource.loop = true;
         musicAudioSource.Play();
         musicPaused = false;
     }
     public void PauseMusic1()
     {
-        musicAudioSource.Stop();
+        musicAudioSource.Pause();
         musicPaused = true;
+    }
+
+    public void ResumeMusic1()
+    {
+        musicAudioSource.UnPause();
+        musicPaused = false;
     }
     public bool isMusicPaused()
     {
@@ -316,7 +344,7 @@ public class GameAudioManager : MonoBehaviour
     {
         if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardHovered;
+        cardsAudioSource.clip = cardSelected;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
 
         cardsAudioSource.Play();

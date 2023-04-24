@@ -54,8 +54,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 4982204146917144296}
-  baseMaterial: {fileID: 2100000, guid: 8f6ffbed5dd8ade4ca2040ac8c49d558, type: 2}
-  selectedMaterial: {fileID: 2100000, guid: 56b4ac52e13655949b72bd7c2ea3a894, type: 2}
   pathFollower: {fileID: 1626341512122004569}
   transformToMove: {fileID: 163396529507246381}
   rb: {fileID: 4650990172065204862}
@@ -187,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3700909352eed4eb96f4961b828321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
+  moveSpeed: 0.75
   paused: 0
 --- !u!65 &6458616864240699446
 BoxCollider:
@@ -232,8 +230,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   areaType: 0
   spawnType: 1
-  spawnRate: 7.5
-  armorAmount: 5
+  spawnRate: 2.5
+  armorAmount: 10
   enemyFeedback: {fileID: 7253815764504096979}
 --- !u!1001 &215680629243131439
 PrefabInstance:
