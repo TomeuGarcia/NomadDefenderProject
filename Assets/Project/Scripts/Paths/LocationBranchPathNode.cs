@@ -15,7 +15,6 @@ public class LocationBranchPathNode : PathNode
     {
         holderNextNode = nextNode;
         nextNode = locationEndNode;
-
         StartCoroutine(LocationDeadResetNextNode());
     }
 
