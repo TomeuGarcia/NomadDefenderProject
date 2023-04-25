@@ -22,6 +22,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     [Header("MACHINE")]
     [SerializeField] private UpgradeMachineControl upgradeMachineControl;
+    [SerializeField] private GameObject incompletePreviewCard;
 
     [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
@@ -700,6 +701,8 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         previewCard.RootCardTransform.gameObject.SetActive(true);
 
+        incompletePreviewCard.SetActive(false);
+
         TurretPartAttack turretPartAttack = null;
         TurretPartBody turretPartBody = null;
         TurretPartBase turretPartBase = null;
@@ -726,6 +729,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)
     {
         previewCard.RootCardTransform.gameObject.SetActive(false);
+
+        incompletePreviewCard.SetActive(true);
 
         if (cardIsMissing)
         {

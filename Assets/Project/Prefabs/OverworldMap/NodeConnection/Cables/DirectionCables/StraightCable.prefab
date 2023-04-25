@@ -53,7 +53,7 @@ MonoBehaviour:
   cableBones:
   - {fileID: 553347135521568427}
   - {fileID: 8071403791462847910}
-  lerpData:
+  fillLerpData:
     time: 1.5
     min: 0
     max: 0.75
@@ -83,6 +83,37 @@ MonoBehaviour:
       m_RotationOrder: 4
     invert: 0
     variableReference: _ConnectionCoef
+    endGoal: 1
+  indLerpData:
+    time: 0.75
+    min: 0
+    max: 1
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    invert: 0
+    variableReference: _IndicationCoef
     endGoal: 1
 --- !u!1001 &292017117876381749
 PrefabInstance:

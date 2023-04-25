@@ -21,35 +21,56 @@ public class LastEnemyKIllAnimation : MonoBehaviour
 
     public IEnumerator StartAnimation(Vector3 lastEnemyPos)
     {
-        Vector3 tilePos;
-        RaycastHit hit;
-        Physics.Raycast(lastEnemyPos, Vector3.down, out hit, 10.0f);
-        tilePos = new Vector3(hit.transform.position.x, lastEnemyPos.y, hit.transform.position.z);
-        StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Deactivate());
-        StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Animation());
-
-        GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
-        StartCoroutine(Particles(tilePos));
-
-        yield return null;
-
-        StartCoroutine(FlashingLight(tilePos));
-        StartCoroutine(CameraShake());
-        StartCoroutine(ScreenFlash());
-        Time.timeScale = 0.0f;
-        float currentTime = 0.0f;
-        yield return new WaitForSecondsRealtime(0.0f);
-
-        
-        while (currentTime < animationTime)
+        bool doAnimation = false;
+        Vector3 tilePos = Vector3.zero;
+        RaycastHit[] allHits;
+        allHits = Physics.RaycastAll(lastEnemyPos + Vector3.up * 10.0f, Vector3.down, 100.0f);
+        foreach(RaycastHit hit in allHits)
         {
-            currentTime += Time.unscaledDeltaTime;
-            Time.timeScale = animationCurve.Evaluate(currentTime / animationTime);
+            if (hit.transform.gameObject.GetComponent<PathTile>() != null)
+            {
+                tilePos = new Vector3(hit.transform.position.x, 0.4f, hit.transform.position.z);
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Deactivate());
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Animation());
+                doAnimation = true;
+
+                break;
+            }
+            else if(hit.transform.gameObject.GetComponent<PathLocation>() != null)
+            {
+                tilePos = new Vector3(hit.transform.GetChild(0).position.x, 0.4f, hit.transform.GetChild(0).position.z);
+                hit.transform.gameObject.GetComponent<PathLocation>().Deactivate();
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathLocation>().Animation());
+                doAnimation = true;
+                break;
+            }
+        }
+        
+        if(doAnimation)
+        {
+            GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
+            StartCoroutine(Particles(tilePos));
 
             yield return null;
-        }
 
-        Time.timeScale = 1.0f;
+            StartCoroutine(FlashingLight(tilePos));
+            StartCoroutine(CameraShake());
+            StartCoroutine(ScreenFlash());
+            Time.timeScale = 0.0f;
+            float currentTime = 0.0f;
+            yield return new WaitForSecondsRealtime(0.0f);
+
+
+            while (currentTime < animationTime)
+            {
+                currentTime += Time.unscaledDeltaTime;
+                Time.timeScale = animationCurve.Evaluate(currentTime / animationTime);
+
+                yield return null;
+            }
+
+            Time.timeScale = 1.0f;
+        }
     }
 
     private IEnumerator FlashingLight(Vector3 tilePos)
