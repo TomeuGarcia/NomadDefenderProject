@@ -648,8 +648,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
         Sequence selectedCardSequence = DOTween.Sequence();
         selectedCardSequence.AppendInterval(0.3f);
-        float endY = upgradeCardHolder.selectedCard.RootCardTransform.position.y - 2.0f;
-        selectedCardSequence.Append(upgradeCardHolder.selectedCard.RootCardTransform.DOMoveY(endY, 0.3f));
+        float endY = upgradeCardHolder.selectedCard.RootCardTransform.position.y - 1.8f;
+        selectedCardSequence.Append(upgradeCardHolder.selectedCard.RootCardTransform.DOMoveY(endY, 0.65f));
     }
 
     private void AttachResultCardToMachine()
@@ -672,6 +672,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         Sequence selectedCardSequence = DOTween.Sequence();
+        selectedCardSequence.AppendCallback(() => cardPartHolder.ReplaceStartStopInteractions());
+        selectedCardSequence.AppendCallback(() => upgradeCardHolder.StopInteractions());
         selectedCardSequence.AppendInterval(1.7f);
 
         selectedCardSequence.AppendCallback(() => cardPartHolder.Hide(0.5f, 0.2f));

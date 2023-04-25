@@ -63,7 +63,7 @@ public class CardPartHolder : MonoBehaviour
 
         cardsHolderTransform = transform;
         //Init(cardParts);
-        CardPart.OnCardHovered += SetHoveredCard;
+  
 
         canInteract = true;
 
@@ -98,6 +98,11 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart = null;
         this.cardParts = cardsParts;
         InitCardsInHand();
+
+        foreach (CardPart itCardPart in cardParts)
+        {
+            itCardPart.OnCardHovered += SetHoveredCard;
+        }
     }
 
 
@@ -151,9 +156,13 @@ public class CardPartHolder : MonoBehaviour
     {
         card.HoveredState();
 
-        CardPart.OnCardHovered -= SetHoveredCard;
-        CardPart.OnCardUnhovered += SetStandardCard;
-        CardPart.OnCardSelected += SetSelectedCard;
+        foreach (CardPart itCardPart in cardParts)
+        {
+            itCardPart.OnCardHovered -= SetHoveredCard;
+            itCardPart.OnCardUnhovered += SetStandardCard;
+            itCardPart.OnCardSelected += SetSelectedCard;
+        }
+        
 
         //card.OnCardInfoSelected += SetCardPartShowInfo;
 
@@ -176,11 +185,12 @@ public class CardPartHolder : MonoBehaviour
         foreach (CardPart itCardPart in cardParts)
         {
             itCardPart.canDisplayInfoIfNotInteractable = false;
-        }
 
-        if (canInteract) CardPart.OnCardHovered += SetHoveredCard;
-        CardPart.OnCardUnhovered -= SetStandardCard;
-        CardPart.OnCardSelected -= SetSelectedCard;
+            if (canInteract) itCardPart.OnCardHovered += SetHoveredCard;
+            itCardPart.OnCardUnhovered -= SetStandardCard;
+            itCardPart.OnCardSelected -= SetSelectedCard;
+        }
+                
     }
 
     private void SetSelectedCard(CardPart card)
@@ -206,11 +216,12 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart.canDisplayInfoIfNotInteractable = true;
         foreach (CardPart itCardPart in cardParts)
         {
-            itCardPart.canDisplayInfoIfNotInteractable = true;
-        }
+            itCardPart.canDisplayInfoIfNotInteractable = false;
 
-        CardPart.OnCardHovered -= SetHoveredCard;
-        CardPart.OnCardSelected -= SetSelectedCard;
+            itCardPart.OnCardHovered -= SetHoveredCard;
+            itCardPart.OnCardSelected -= SetSelectedCard;
+        }
+            
         selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
 
 
@@ -227,7 +238,12 @@ public class CardPartHolder : MonoBehaviour
         {
             //Debug.Log("YEP drop here");
             cardPart.GoToSelectedPosition();
-            if (OnPartSelected != null) OnPartSelected();            
+            if (OnPartSelected != null) OnPartSelected();
+
+            foreach (CardPart itCardPart in cardParts)
+            {
+                itCardPart.canDisplayInfoIfNotInteractable = true;
+            }
         }
         else
         {
@@ -285,11 +301,20 @@ public class CardPartHolder : MonoBehaviour
     }
 
 
+    public void ReplaceStartStopInteractions()
+    {
+        foreach (CardPart itCardPart in cardParts)
+        {
+            itCardPart.OnCardSelected -= SetSelectedCard;
+        }
+
+        StopInteractions();
+    }
+
 
     public void Hide(float duration, float delayBetweenCards)
     {
-        StartCoroutine(DoHide(duration, delayBetweenCards));
-        CardPart.OnCardSelected -= SetSelectedCard;
+        StartCoroutine(DoHide(duration, delayBetweenCards));        
     }
 
     private IEnumerator DoHide(float duration, float delayBetweenCards)

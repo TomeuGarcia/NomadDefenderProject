@@ -96,6 +96,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
         CardPart.OnMouseDragStart -= DisableCardsInteraction;
         CardPart.OnMouseDragEnd -= EnableCardsInteraction;
+
     }
 
 
@@ -231,7 +232,7 @@ public class UpgradeCardHolder : MonoBehaviour
         {
             itCard.OnCardHovered -= SetHoveredCard;
             itCard.OnCardSelected -= SetSelectedCard;
-            itCard.canDisplayInfoIfNotInteractable = true;
+            itCard.canDisplayInfoIfNotInteractable = false;
         }
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
@@ -249,12 +250,18 @@ public class UpgradeCardHolder : MonoBehaviour
             //Debug.Log("YEP drop here");
             card.GoToSelectedPosition();
             if (OnCardSelected != null) OnCardSelected();
+
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.canDisplayInfoIfNotInteractable = true;
+            }
         }
         else
         {
             RetrieveCard(card);
             card.ReenableMouseInteraction();
         }
+
 
         cardDragBoundsCollider.gameObject.SetActive(false);
     }
@@ -345,7 +352,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards, BuildingCard selectedCard)
     {
-        selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.8f, 1.0f);
+        selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.0f, 0.75f);
         yield return new WaitForSeconds(startDelay);
 
         Hide(duration, delayBetweenCards);
