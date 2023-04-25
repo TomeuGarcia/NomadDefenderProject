@@ -655,7 +655,10 @@ public class CardPartReplaceManager : MonoBehaviour
     private void AttachResultCardToMachine()
     {
         upgradeCardHolder.selectedCard.RootCardTransform.SetParent(resultCardPlacerToParent);
-        upgradeCardHolder.selectedCard.RootCardTransform.localPosition = new Vector3(-7f, 1, 10.78f);
+        upgradeCardHolder.selectedCard.RootCardTransform.localPosition = Vector3.zero;
+        upgradeCardHolder.selectedCard.ResetCardPosition();
+
+        //upgradeCardHolder.selectedCard.RootCardTransform.localPosition = new Vector3(-7f, 1, 10.78f);
         //upgradeCardHolder.selectedCard.RootCardTransform.position = resultCardPlacerToParent.position;
 
 

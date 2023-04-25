@@ -333,18 +333,19 @@ public class UpgradeCardHolder : MonoBehaviour
         selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
 
         selectedCard.RootCardTransform.SetParent(transform);
-        SetStandardCard(card);
+        SetStandardCard(card);   
 
+
+        StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards, selectedCard));
         selectedCard = null;
-
-        StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards));
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
 
-    private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards, BuildingCard selectedCard)
     {
+        selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.8f, 1.0f);
         yield return new WaitForSeconds(startDelay);
 
         Hide(duration, delayBetweenCards);
@@ -366,8 +367,10 @@ public class UpgradeCardHolder : MonoBehaviour
         {
             if (cards[i] == selectedCard) continue;
 
-            Transform cardPartTransform = cards[i].transform;
-            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.8f), duration);
+            Transform cardPartTransform = cards[i].RootCardTransform;
+            Vector3 moveBy = cardPartTransform.up * -2.2f;
+            //cardPartTransform.DOMove(cardPartTransform.position + moveBy, duration);
+            cardPartTransform.DOBlendableMoveBy(moveBy, duration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
