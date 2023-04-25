@@ -34,6 +34,15 @@ public class CardDescriptionDisplayer : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        MapSceneNotifier.OnMapSceneFinished += HideCardDescription;
+    }
+    private void OnDisable()
+    {
+        MapSceneNotifier.OnMapSceneFinished -= HideCardDescription;
+    }
+
     public static CardDescriptionDisplayer GetInstance()
     {
         return instance;
@@ -109,7 +118,7 @@ public class CardDescriptionDisplayer : MonoBehaviour
         float xDisplacement = 1.0f;
         Vector3 positionOffset = Vector3.zero;
 
-        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.85f;
+        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.80f;
 
         if (positionAtTheRight)
         {            

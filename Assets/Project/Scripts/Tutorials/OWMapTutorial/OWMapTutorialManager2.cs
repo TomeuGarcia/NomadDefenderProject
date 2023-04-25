@@ -15,6 +15,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
     [SerializeField] private GameObject mainCamera;
     [SerializeField] private CinemachineVirtualCamera animationCamera;
 
+    [SerializeField] private OWCameraMovement cameraMovement;
+
     [Header("Animations")]
     [SerializeField] [Range(0.0f, 10.0f)] private float animation1Time;
     [SerializeField] [Range(0.0f, 10.0f)] private float animation2Time;
@@ -73,6 +75,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
     }
     IEnumerator Tutorial()
     {
+        cameraMovement.CanDrag(false);
         yield return new WaitForSeconds(2.0f);
 
         if (testing)
@@ -138,6 +141,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
     public IEnumerator TutorialAnimation(TutorialGameManager tutorialGame = null)
     {
+        GameAudioManager.GetInstance().PauseMusic1();
+
         animator.SetBool("StartAnim", true);
 
         StartCoroutine(GlitchScreen(0.0f, 0.2f, true, 2));
@@ -229,7 +234,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
         wathcersEyes.SetActive(false);
 
         yield return new WaitUntil(() => animationCamera.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 2.0f);
-        if(tutorialGame != null)
+        cameraMovement.CanDrag(true);
+
+        GameAudioManager.GetInstance().ResumeMusic1();
+
+        if (tutorialGame != null)
         {
             tutorialGame.LoadRegularGame();
         }

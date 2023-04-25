@@ -57,5 +57,8 @@ public class OWMap_Connection : MonoBehaviour
         cable.HoverCable();
     }
 
-
+    public void UnfillCable()
+    {
+        cable.UnfillCable();
+    }
 }

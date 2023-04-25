@@ -53,9 +53,10 @@ public class TextDecoder : MonoBehaviour
 
     public void Activate()
     {
-        doneDecoding = false;
-        StartCoroutine(Decode());
-        textComponent.enabled = true;
+            doneDecoding = false;
+            StartCoroutine(Decode());
+            textComponent.enabled = true;
+        
     }
 
     private void InitDecodingVariables()
@@ -237,7 +238,11 @@ public class TextDecoder : MonoBehaviour
         ClearText();
         InitDecodingVariables();
     }
-
+    public void ClearDecoder()
+    {
+        ClearText();
+        InitDecodingVariables();
+    }
 
     /*
     // Tomeu: I did this for Card Level

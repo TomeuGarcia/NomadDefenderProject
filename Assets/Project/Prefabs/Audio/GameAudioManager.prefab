@@ -2792,7 +2792,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicAudioSource: {fileID: 4191515421600717575}
-  music1: {fileID: 0}
+  musics1:
+  - {fileID: 8300000, guid: 2a4db6d54d2b73f44b7bfb7b1520a6c7, type: 3}
+  - {fileID: 8300000, guid: 12bdda986bce31348ab7fc2ee3bf30bf, type: 3}
+  - {fileID: 8300000, guid: bddb7bd14258291448ca05581715900c, type: 3}
+  - {fileID: 8300000, guid: 0da7e6aba361fbf4da1aa66dc1c55758, type: 3}
   uiAudioSource: {fileID: 4191515419929208543}
   uiButtonPressed: {fileID: 0}
   screenShut: {fileID: 8300000, guid: a1df210e917233641b66f56a687f0939, type: 3}
@@ -2805,6 +2809,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a60f16fcbba41804c95add8d860745f7, type: 3}
   cardsAudioSource: {fileID: 2496475220979664275}
   cardsAudioSource2: {fileID: 948794188011862264}
+  cardSelected: {fileID: 8300000, guid: 3eefe56c9ef9cb44e97c33b80e8377f1, type: 3}
   cardHovered: {fileID: 8300000, guid: 550aa308e22038749ad9478124afe76a, type: 3}
   cardHoverExit: {fileID: 8300000, guid: dc85bdf28cdbfbd42ad1f059c54ad3d1, type: 3}
   cardPlayed: {fileID: 0}
@@ -4100,7 +4105,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0

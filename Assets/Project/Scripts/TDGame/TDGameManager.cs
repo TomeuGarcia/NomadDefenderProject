@@ -38,6 +38,7 @@ public class TDGameManager : MonoBehaviour
     [Header("TILES MATERIAL")]
     [SerializeField] private Material obstaclesTilesMaterial;
     [SerializeField] private Material tilesMaterial;
+    [SerializeField] private Material outerPlanesMaterial;
 
 
     private void Awake()
@@ -85,12 +86,18 @@ public class TDGameManager : MonoBehaviour
 
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         tilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+        tilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        tilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
 
         obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         obstaclesTilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
-
         obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
         obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
+
+        outerPlanesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        outerPlanesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+        outerPlanesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        outerPlanesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
     }
 
 
@@ -105,7 +112,8 @@ public class TDGameManager : MonoBehaviour
         if (!HasAliveLocationsLeft())
         {
             obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
-            tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);            
+            tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);            
 
             GameOver();
         }
@@ -113,6 +121,7 @@ public class TDGameManager : MonoBehaviour
         {
             obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             StartCoroutine(FirstLocationDestroyedAnimation());
         }
     }
@@ -151,6 +160,7 @@ public class TDGameManager : MonoBehaviour
             float errorWiresStep = (t * t * 0.3f) + 1.0f;
             obstaclesTilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
             tilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
             yield return null;
         }
     }
@@ -162,9 +172,10 @@ public class TDGameManager : MonoBehaviour
         //yield return new WaitForSeconds(5f);
         for (float t = 0f; t < 5f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t * 0.9f;
+            float errorWiresStep = t * t * 0.5f;
             obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            outerPlanesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             yield return null;
         }
 

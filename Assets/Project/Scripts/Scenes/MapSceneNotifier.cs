@@ -8,7 +8,6 @@ public class MapSceneNotifier : MonoBehaviour
     public delegate void MapSceneNotifierAction();
     public static event MapSceneNotifierAction OnMapSceneFinished;
 
-
     public void InvokeOnSceneFinished()
     {
         if (OnMapSceneFinished != null) OnMapSceneFinished();
