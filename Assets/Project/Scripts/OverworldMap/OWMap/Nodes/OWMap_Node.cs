@@ -228,7 +228,6 @@ public class OWMap_Node : MonoBehaviour
         {
             cameFromConnection.StartIndicaton();
             UpdateBorderMaterial(true);
-            Debug.Log("ENABLED     " + Time.time);
         }
     }
 
@@ -245,7 +244,6 @@ public class OWMap_Node : MonoBehaviour
         {
             cameFromConnection.StopIndication();
             UpdateBorderMaterial(false);
-            Debug.Log("DISABLED     " + Time.time);
         }
     }
 
