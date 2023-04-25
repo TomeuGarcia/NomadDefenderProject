@@ -6,7 +6,7 @@ public class IncompleteCard : MonoBehaviour
 {
     [SerializeField] private List<TextDecoder> decoders = new List<TextDecoder>();
 
-    private void Start()
+    private void OnEnable()
     {
         foreach(TextDecoder d in decoders)
         {
