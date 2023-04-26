@@ -23,9 +23,10 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public BuildingCard selectedCard { get; private set; }
 
-    [Header("Materials")]
-    [SerializeField] private MeshRenderer placerMeshRenderer;
-    private Material placerMaterial;
+    //[Header("Materials")]
+    //[SerializeField] private MeshRenderer placerMeshRenderer;
+    //private Material placerMaterial;
+
 
     [HideInInspector] public bool appearAnimationCanStartMoving = true;
 
@@ -59,6 +60,7 @@ public class UpgradeCardHolder : MonoBehaviour
         BuildingCard.DragStartBounds.extents *= 2f;
 
         Vector3 boundsSize = cardDragBoundsTargetTransform.lossyScale;
+        boundsSize.x += 1f;
         boundsSize.z += 3f;
         cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, boundsSize);
 
@@ -71,8 +73,13 @@ public class UpgradeCardHolder : MonoBehaviour
 
         canInteract = true;
 
-        placerMaterial = placerMeshRenderer.material;
-        placerMaterial.SetFloat("_IsOn", 1f);
+        //placerMaterial = placerMeshRenderer.material;
+        //placerMaterial.SetFloat("_IsOn", 1f);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(cardDragBoundsTarget.center, cardDragBoundsTarget.size);
     }
 
     private void OnEnable()
@@ -89,6 +96,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
         CardPart.OnMouseDragStart -= DisableCardsInteraction;
         CardPart.OnMouseDragEnd -= EnableCardsInteraction;
+
     }
 
 
@@ -205,6 +213,8 @@ public class UpgradeCardHolder : MonoBehaviour
         if (!canSelectCard) return;
         if (AlreadyHasSelectedCard) return;
 
+        cardDragBoundsCollider.gameObject.SetActive(true);
+
         selectedCard = card;
         selectedCard.SelectedState(true, repositionColliderOnEnd: true, enableInteractionOnEnd: true);
 
@@ -222,7 +232,7 @@ public class UpgradeCardHolder : MonoBehaviour
         {
             itCard.OnCardHovered -= SetHoveredCard;
             itCard.OnCardSelected -= SetSelectedCard;
-            itCard.canDisplayInfoIfNotInteractable = true;
+            itCard.canDisplayInfoIfNotInteractable = false;
         }
         selectedCard.OnCardSelectedNotHovered += RetrieveCard;
 
@@ -240,12 +250,20 @@ public class UpgradeCardHolder : MonoBehaviour
             //Debug.Log("YEP drop here");
             card.GoToSelectedPosition();
             if (OnCardSelected != null) OnCardSelected();
+
+            foreach (BuildingCard itCard in cards)
+            {
+                itCard.canDisplayInfoIfNotInteractable = true;
+            }
         }
         else
         {
             RetrieveCard(card);
             card.ReenableMouseInteraction();
         }
+
+
+        cardDragBoundsCollider.gameObject.SetActive(false);
     }
 
 
@@ -297,11 +315,11 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         this.startDelay = startDelay;
         this.duration = duration;
-        this.delayBetweenCards = delayBetweenCards;        
+        this.delayBetweenCards = delayBetweenCards;
 
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 1f);
-        
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 1f);       
+
         FinalRetrieveCard(selectedCard);
     }
 
@@ -313,25 +331,28 @@ public class UpgradeCardHolder : MonoBehaviour
         this.duration = duration;
         this.delayBetweenCards = delayBetweenCards;
 
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 1f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 1f);
     }
 
     public void FinalRetrieveCard(BuildingCard card)
     {
         selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
-        SetStandardCard(card);
 
+        selectedCard.RootCardTransform.SetParent(transform);
+        SetStandardCard(card);   
+
+
+        StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards, selectedCard));
         selectedCard = null;
-
-        StartCoroutine(DoFinalRetrieve(startDelay, duration, delayBetweenCards));
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
     }
 
-    private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards)
+    private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards, BuildingCard selectedCard)
     {
+        selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.0f, 0.75f);
         yield return new WaitForSeconds(startDelay);
 
         Hide(duration, delayBetweenCards);
@@ -353,8 +374,10 @@ public class UpgradeCardHolder : MonoBehaviour
         {
             if (cards[i] == selectedCard) continue;
 
-            Transform cardPartTransform = cards[i].transform;
-            cardPartTransform.DOMove(cardPartTransform.position + (cardPartTransform.up * -1.5f), duration);
+            Transform cardPartTransform = cards[i].RootCardTransform;
+            Vector3 moveBy = cardPartTransform.up * -2.2f;
+            //cardPartTransform.DOMove(cardPartTransform.position + moveBy, duration);
+            cardPartTransform.DOBlendableMoveBy(moveBy, duration);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -363,24 +386,24 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public void StartAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 1f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 1f);        
     }
 
     public void FinishAnimation()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);        
     }
 
     public void StopAnimationCompletely()
     {
-        placerMaterial.SetFloat("_IsAlwaysOn", 0f);
-        placerMaterial.SetFloat("_IsOn", 0f);
+        //placerMaterial.SetFloat("_IsAlwaysOn", 0f);
+        //placerMaterial.SetFloat("_IsOn", 0f);
     }
 
 
     public IEnumerator AppearAnimation(float delayBeforeStartMoving)
     {
-        Vector3 moveOffset = Vector3.forward * -2f;
+        Vector3 moveOffset = Vector3.forward * -3f;
 
         foreach (BuildingCard card in cards)
         {
@@ -408,5 +431,6 @@ public class UpgradeCardHolder : MonoBehaviour
             if (cardsInteractionEnabled) card.ReenableMouseInteraction();
         }
     }
+
 
 }

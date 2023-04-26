@@ -101,11 +101,12 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
-        currentNode.UpdateBorderMaterial();
-        if(currentNode != owMapNode)
-        {
-            owMapNode.UpdateBorderMaterial();
-        }
+        //TODO
+        //currentNode.UpdateBorderMaterial();
+        //if(currentNode != owMapNode)
+        //{
+        //    owMapNode.UpdateBorderMaterial();
+        //}
 
         owMapPawn.MoveToNode(owMapNode);
 
@@ -148,8 +149,7 @@ public class OverworldMapGameManager : MonoBehaviour
             }
 
             currentNode.nodeClass.StartLevel(this);
-        }      
-        
+        }
     }
 
     private void ResumeMapAfterNodeScene() // called from event

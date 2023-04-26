@@ -49,9 +49,9 @@ public abstract class CardPart : MonoBehaviour
 
 
     public delegate void BuildingCardPartAction(CardPart cardPart);
-    public static event BuildingCardPartAction OnCardHovered;
-    public static event BuildingCardPartAction OnCardUnhovered;
-    public static event BuildingCardPartAction OnCardSelected;
+    public event BuildingCardPartAction OnCardHovered;
+    public event BuildingCardPartAction OnCardUnhovered;
+    public event BuildingCardPartAction OnCardSelected;
     public event BuildingCardPartAction OnCardInfoSelected;
 
     public event BuildingCardPartAction OnCardSelectedNotHovered;
