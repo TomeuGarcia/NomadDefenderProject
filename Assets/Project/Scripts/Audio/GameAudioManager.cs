@@ -10,8 +10,16 @@ public class GameAudioManager : MonoBehaviour
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip[] musics1;
+    [SerializeField] private AudioClip menuMusic;
+    [SerializeField] private AudioClip OWMapMusic;
+    [SerializeField] private AudioClip fightMusic;
+    [SerializeField] private TempMusicClips[] tempMusicClips;
+    private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
     private int currentMusic1 = 0;
     private bool musicPaused = false;
+    private static bool keepFadingIn;
+    private static bool keepFadingOut;
+
 
     [Header("UI")]
     [SerializeField] private AudioSource uiAudioSource;
@@ -101,7 +109,13 @@ public class GameAudioManager : MonoBehaviour
     private IEnumerator droneLerpBuildUp;
 
 
-
+    public enum MusicType {NONE,MENU,OWMAP,BATTLE}
+    [System.Serializable]
+    struct TempMusicClips
+    {
+        public MusicType type;
+        public AudioClip clip;
+    }
     private void Awake()
     {
         if (instance == null)
@@ -114,7 +128,8 @@ public class GameAudioManager : MonoBehaviour
         else
         {
             Destroy(this);
-        }        
+        }
+        initMusicDictionary();
     }
     private void Update()
     {
@@ -234,11 +249,51 @@ public class GameAudioManager : MonoBehaviour
         source.volume = endVol;
 
     }
-
-
-
-
     // Music
+    private void initMusicDictionary()
+    {
+        foreach(TempMusicClips clips in tempMusicClips)
+        {
+            musicClips.Add(clips.type, clips.clip);
+        }
+    }
+    IEnumerator FadeIn(MusicType type,float speed,float maxVolume)
+    {
+        AudioClip clip = musicClips[type];
+        musicAudioSource.clip = clip;
+        float audioVolume = 0;
+        musicAudioSource.volume = audioVolume;
+        musicAudioSource.loop = true;
+        musicAudioSource.Play();
+        while (musicAudioSource.volume < maxVolume)
+        {
+            Debug.Log("Fading in");
+            audioVolume += speed;
+            musicAudioSource.volume = audioVolume;
+            yield return new WaitForSecondsRealtime(0.1f);
+
+        }
+    }
+    IEnumerator FadeOut(MusicType type, float speed)
+    {
+        
+        float audioVolume = musicAudioSource.volume;
+        float maxVolume = musicAudioSource.volume;
+        while (musicAudioSource.volume > 0)
+        {
+            Debug.Log("Fading out");
+            audioVolume -= speed;
+            musicAudioSource.volume = audioVolume;
+            yield return new WaitForSecondsRealtime(0.1f);
+
+        }
+        StartCoroutine(FadeIn(type, speed, maxVolume));
+    }
+
+    public void ChangeMusic(MusicType newMusicType, float speed)
+    {
+        StartCoroutine(FadeOut(newMusicType, speed));
+    }
     private void NextMusic1()
     {
         currentMusic1 = ++currentMusic1 % musics1.Length;
