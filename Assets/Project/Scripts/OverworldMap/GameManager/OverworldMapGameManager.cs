@@ -24,6 +24,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
+    [SerializeField] private AmbienceAudio ambienceAudio;
 
     protected bool canDisplayDeck = true;
 
@@ -73,7 +74,7 @@ public class OverworldMapGameManager : MonoBehaviour
         StartCommunicationWithNextNodes(currentNode);
         DisableCurrentLevelNodesInfoDisplay();
 
-        moveCameraAfterNodeScene = true;
+        moveCameraAfterNodeScene = true;        
     }
 
     protected void InitMapGeneration()
@@ -95,8 +96,10 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode.SetOwMapGameManagerRef(this);
         currentNode.SetSelected(false); // Simulate node is clicked
 
-        owMapPawn.Init(this, currentNode, OverworldMapCreator.DisplacementBetweenLevels);        
+        owMapPawn.Init(this, currentNode, OverworldMapCreator.DisplacementBetweenLevels);
 
+
+        ambienceAudio.Play();
     }
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
@@ -307,6 +310,9 @@ public class OverworldMapGameManager : MonoBehaviour
 
         EnemyFactory.GetInstance().ResetPools();
         ProjectileParticleFactory.GetInstance().ResetPools();
+
+        // MAP AMBIENCE
+        ambienceAudio.Play();
     }
     private void DoOnSceneFromMapLoaded()
     {
@@ -316,6 +322,9 @@ public class OverworldMapGameManager : MonoBehaviour
         cardDisplayer.gameObject.SetActive(false);
 
         mapEventSystemGO.SetActive(false);
+
+        // MAP AMBIENCE
+        ambienceAudio.Stop();
     }
 
 
