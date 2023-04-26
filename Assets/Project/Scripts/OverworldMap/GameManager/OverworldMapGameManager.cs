@@ -22,9 +22,11 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("DECK DISPLAY")]
     [SerializeField] private OverworldCardShower cardDisplayer;
 
+    [Header("AUDIO (Ambience)")]
+    [SerializeField] private AmbienceAudio ambienceAudio;
+
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
-    [SerializeField] private AmbienceAudio ambienceAudio;
 
     protected bool canDisplayDeck = true;
 
@@ -74,7 +76,10 @@ public class OverworldMapGameManager : MonoBehaviour
         StartCommunicationWithNextNodes(currentNode);
         DisableCurrentLevelNodesInfoDisplay();
 
-        moveCameraAfterNodeScene = true;        
+        moveCameraAfterNodeScene = true;
+
+        // MAP AMBIENCE
+        ambienceAudio.Play();
     }
 
     protected void InitMapGeneration()
@@ -97,9 +102,6 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode.SetSelected(false); // Simulate node is clicked
 
         owMapPawn.Init(this, currentNode, OverworldMapCreator.DisplacementBetweenLevels);
-
-
-        ambienceAudio.Play();
     }
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
