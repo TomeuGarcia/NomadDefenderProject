@@ -8,11 +8,8 @@ using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] private Transform topBlackScreen;
-    private Vector3 topOpenPosition;
-
-    [SerializeField] private Transform bottomBlackScreen;
-    private Vector3 bottomOpenPosition;
+    [SerializeField] private Image topBlackImage;
+    [SerializeField] private Image bottomBlackImage;
 
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Color shutColor;
@@ -51,9 +48,11 @@ public class SceneLoader : MonoBehaviour
             Destroy(this);
         }
 
-        topOpenPosition = topBlackScreen.localPosition;
-        bottomOpenPosition = bottomBlackScreen.localPosition;
+
         backgroundImage.color = openColor;
+
+        topBlackImage.fillAmount = 0f;
+        bottomBlackImage.fillAmount = 0f;
 
         alreadyLoadingNextScene = false;
     }
@@ -97,15 +96,17 @@ public class SceneLoader : MonoBehaviour
 
     private void ShutAnimation(float duration)
     {
-        topBlackScreen.DOLocalMove(Vector3.zero, duration);
-        bottomBlackScreen.DOLocalMove(Vector3.zero, duration);
+        topBlackImage.DOFillAmount(1f, duration);
+        bottomBlackImage.DOFillAmount(1f, duration);
+
         backgroundImage.DOColor(shutColor, duration * 0.8f);
     }
 
     private void OpenAnimation(float duration)
     {
-        topBlackScreen.DOLocalMove(topOpenPosition, duration);
-        bottomBlackScreen.DOLocalMove(bottomOpenPosition, duration);
+        topBlackImage.DOFillAmount(0f, duration);
+        bottomBlackImage.DOFillAmount(0f, duration);
+
         backgroundImage.DOColor(openColor, duration * 1.2f);
     }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
