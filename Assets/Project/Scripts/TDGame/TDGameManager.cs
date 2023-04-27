@@ -182,7 +182,8 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
     }
 
     private IEnumerator VictoryAnimation()
@@ -192,7 +193,8 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
     }
 
     public void ForceFinishScene()
