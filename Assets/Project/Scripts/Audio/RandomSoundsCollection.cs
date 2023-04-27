@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EnemyWaveManager;
 
 public class RandomSoundsCollection : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class RandomSoundsCollection : MonoBehaviour
 
 
     private delegate void PlayRandomSoundsFunction();
+
+    public delegate void RandomSoundPlayed();
+    public event RandomSoundPlayed OnRandomSoundPlayed;
+
     private enum RandomMode { RANDOM, POOLED_RANDOM }
 
 
@@ -54,6 +59,7 @@ public class RandomSoundsCollection : MonoBehaviour
         while (keepPlaying)
         {            
             playRandomSoundsFunction();
+            if(OnRandomSoundPlayed != null) { OnRandomSoundPlayed(); } 
 
             yield return new WaitForSeconds(Random.Range(minDelayBetweenSounds, maxDelayBetweenSounds));
         }
