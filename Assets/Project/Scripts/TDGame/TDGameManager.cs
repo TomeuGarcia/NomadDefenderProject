@@ -113,8 +113,9 @@ public class TDGameManager : MonoBehaviour
         {
             obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
             tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
-            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);            
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
 
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, true);
             GameOver();
         }
         else
@@ -123,6 +124,9 @@ public class TDGameManager : MonoBehaviour
             //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             outerPlanesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             StartCoroutine(FirstLocationDestroyedAnimation());
+
+            //destroyAnim
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, false);
         }
     }
 
@@ -170,9 +174,9 @@ public class TDGameManager : MonoBehaviour
         defeatHolder.SetActive(true);
 
         //yield return new WaitForSeconds(5f);
-        for (float t = 0f; t < 5f; t += Time.deltaTime)
+        for (float t = 1f; t < 5f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t * 0.5f;
+            float errorWiresStep = t * t * 1.0f;
             obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             outerPlanesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);

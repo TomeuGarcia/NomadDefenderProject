@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.ProBuilder.Shapes;
+using Unity.VisualScripting;
 
 public class PathLocation : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PathLocation : MonoBehaviour
 
     [Header("NODE VISUALS")]
     [SerializeField] private MeshRenderer nodeMesh;
+    [SerializeField] Material lostMaterial;
     [SerializeField] GameObject animationCube;
     private Material nodeMeshMaterial;
 
@@ -179,11 +181,19 @@ public class PathLocation : MonoBehaviour
         }
     }
 
-    public IEnumerator Animation()
+    public IEnumerator Animation(bool lost = false)
     {
+        if(animationCube == null)
+        {
+            yield break;
+        }
         GameObject newCube = Instantiate(animationCube, transform.parent);
         newCube.transform.position = transform.GetChild(0).position;
         newCube.transform.SetParent(transform.parent);
+        if(lost)
+        {
+            newCube.GetComponent<MeshRenderer>().material = lostMaterial;
+        }
         yield return new WaitForSeconds(0.25f);
 
         newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
