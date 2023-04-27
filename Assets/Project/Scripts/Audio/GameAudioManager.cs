@@ -87,6 +87,9 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("PROJECTILES")]
     [SerializeField] private AudioSource[] projectilesAudioSources;
+    [SerializeField] private AudioClip[] spammerProjectilesAudioSources;
+    [SerializeField] private AudioClip[] sentryProjectilesAudioSources;
+    [SerializeField] private AudioClip[] blasterProjectilesAudioSources;
     [SerializeField] private AudioClip[] projectileShots;
     [SerializeField] private AudioClip zapProjectileShot;
 
@@ -629,7 +632,22 @@ public class GameAudioManager : MonoBehaviour
     // Projectiles
     public void PlayProjectileShot(TurretPartBody.BodyType bodyType)
     {
-        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.8f, 1.2f));
+        switch (bodyType)
+        {
+            case TurretPartBody.BodyType.SENTRY:
+                LoopAudioSources(projectilesAudioSources, blasterProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
+                break;
+
+            case TurretPartBody.BodyType.BLASTER:
+                LoopAudioSources(projectilesAudioSources, sentryProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
+                break;
+            case TurretPartBody.BodyType.SPAMMER:
+                LoopAudioSources(projectilesAudioSources, spammerProjectilesAudioSources[(int)Random.Range(0, 2)], Random.Range(0.8f, 1.2f));
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void PlayZapProjectileShot()
