@@ -79,6 +79,7 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
         PauseMenu.GetInstance().gameCanBePaused = true;
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
 
         if (skipFirstBattle)
         {
@@ -112,7 +113,7 @@ public class MainMenu : MonoBehaviour
     private IEnumerator DoPlay()
     {
         yield return new WaitForSeconds(0.3f);
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BATTLE,0.01f);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP,0.01f);
         //Load First Scene
         SceneLoader.GetInstance().StartLoadNormalGame(false);
     }

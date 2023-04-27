@@ -291,6 +291,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BATTLE, 0.01f);
         mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
         if (OnMapNodeSceneStartsLoading != null) OnMapNodeSceneStartsLoading();
     }

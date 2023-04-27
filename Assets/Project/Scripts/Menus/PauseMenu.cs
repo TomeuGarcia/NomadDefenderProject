@@ -113,6 +113,7 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.01f);
         Time.timeScale = 1;
         SceneLoader.GetInstance().StartLoadMainMenu();
         pauseMenuUI.SetActive(false);
