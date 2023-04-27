@@ -61,4 +61,14 @@ public class OWMap_Connection : MonoBehaviour
     {
         cable.UnfillCable();
     }
+
+    public void StartIndicaton()
+    {
+        cable.StartIndication();
+    }
+
+    public void StopIndication()
+    {
+        cable.StopIndication();
+    }
 }

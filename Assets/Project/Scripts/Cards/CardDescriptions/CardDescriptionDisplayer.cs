@@ -118,15 +118,19 @@ public class CardDescriptionDisplayer : MonoBehaviour
         float xDisplacement = 1.0f;
         Vector3 positionOffset = Vector3.zero;
 
-        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.85f;
-
+        bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.80f;
         if (positionAtTheRight)
         {            
-            positionOffset = Vector3.right * xDisplacement; // Display right
+            positionOffset += Vector3.right * xDisplacement; // Display right
         }
         else
         {            
-            positionOffset = Vector3.left * xDisplacement; // Display left
+            positionOffset += Vector3.left * xDisplacement; // Display left
+        }
+        bool positionUpper = cardPositionInScreen.y < displayCamera.pixelHeight * 0.85f;
+        if (positionUpper)
+        {
+            positionOffset += Vector3.up * 0.1f; // Display right
         }
 
 

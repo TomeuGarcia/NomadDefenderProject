@@ -146,7 +146,7 @@ public class OverworldMapDecorator : MonoBehaviour
             upgradesAlreadyInLevel.Add(upgradeType);
 
             NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
-
+            
             DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
         }
     }

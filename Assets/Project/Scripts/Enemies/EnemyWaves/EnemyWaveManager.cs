@@ -53,6 +53,7 @@ public class EnemyWaveManager : MonoBehaviour
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
         Enemy.OnEnemyDeathDropCurrency += OnEnemyDeath;
+        Enemy.OnEnemySuicide += OnEnemyDeath;
     }
 
     private void OnEnable()
@@ -202,19 +203,5 @@ public class EnemyWaveManager : MonoBehaviour
     private void OnEnemyDeath(Enemy enemy)
     {
         lastEnemyPos = enemy.Position;
-    }
-
-    private void Update()
-    {
-        // TO DELETE
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            for (int i = 0; i < enemyWaveSpawners.Length; i++)
-            {
-                StopCoroutine(waveCoroutines[i]);
-                currentWaves = enemyWaveSpawners[i].SetToLastWave();
-                StartNextWave(enemyWaveSpawners[i], i);
-            }
-        }
     }
 }
