@@ -39,6 +39,9 @@ public class PathFollower : MonoBehaviour
     public PathFollowerAction OnPathFollowStart;
     public PathFollowerAction OnPathEndReached;
 
+    public delegate void PathFollowerAction2(PathFollower thisPathFollower);
+    public PathFollowerAction2 OnPathEndReached2;
+
 
 
     public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, Transform transformToMove = null)
@@ -95,6 +98,7 @@ public class PathFollower : MonoBehaviour
             {
                 finished = true;
                 if (OnPathEndReached != null) OnPathEndReached();
+                if (OnPathEndReached2 != null) OnPathEndReached2(this);
             }
             else
             {

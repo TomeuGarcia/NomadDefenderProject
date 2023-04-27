@@ -24,6 +24,17 @@ public class EnemyWaveManager : MonoBehaviour
     private IEnumerator[] waveCoroutines;
     private Vector3 lastEnemyPos;
 
+    [SerializeField] TextLine textLine;
+
+    [Header("FEEDBACK")]
+    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
+
+
+    [Header("ENEMY PATH TRAIL")]
+    [SerializeField] private GameObject enemyPathTrailPrefab;
+    private PathFollower[] enemyPathFollowerTrails;
+    private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.up * 0.5f;
+
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
@@ -32,10 +43,6 @@ public class EnemyWaveManager : MonoBehaviour
 
     
 
-    [SerializeField] TextLine textLine;
-
-    [Header("FEEDBACK")]
-    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
 
     private void Awake()
@@ -48,6 +55,9 @@ public class EnemyWaveManager : MonoBehaviour
         }
         waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
 
+
+        StartCoroutine(SetupEnemyPathFollowerTrails());
+        
 
         StartCoroutine(WaitForStart());
 
@@ -67,6 +77,14 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished += FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
+
+        if (enemyPathFollowerTrails != null)
+        {
+            for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+            {
+                enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
+            }
+        }        
     }
     private void OnDisable()
     {
@@ -79,6 +97,14 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished -= FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished -= FinishLastWave;
         }
+
+        if (enemyPathFollowerTrails != null)
+        {
+            for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+            {
+                enemyPathFollowerTrails[i].OnPathEndReached2 -= ResetEnemyPathFollowerTrailToStart;
+            }
+        }        
     }
 
     private void ActivateCanvas()
@@ -103,6 +129,8 @@ public class EnemyWaveManager : MonoBehaviour
         {
             StartWave(enemyWaveSpawners[i], enemySpawnTransform, i);
         }
+
+        StopEnemyPathFollowerTrails();
     }
 
 
@@ -203,5 +231,71 @@ public class EnemyWaveManager : MonoBehaviour
     private void OnEnemyDeath(Enemy enemy)
     {
         lastEnemyPos = enemy.Position;
+    }
+
+
+
+
+
+    private IEnumerator SetupEnemyPathFollowerTrails()
+    {
+        yield return new WaitForSeconds(2f);
+
+        enemyPathFollowerTrails = new PathFollower[startPathNodes.Length];
+        for (int i = 0; i < startPathNodes.Length; ++i)
+        {
+            enemyPathFollowerTrails[i] = Instantiate(enemyPathTrailPrefab, startPathNodes[i].Position + enemyPathFollowerTrailsPositionOffset, Quaternion.identity,
+                enemySpawnTransform).GetComponent<PathFollower>();
+
+            enemyPathFollowerTrails[i].Init(startPathNodes[i].GetNextNode(), startPathNodes[i].GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, 
+                enemyPathFollowerTrails[i].transform);
+            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+            enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
+        }
+
+        StartEnemyPathFollowerTrails();
+    }
+
+    private void StartEnemyPathFollowerTrails()
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i) 
+        {
+            enemyPathFollowerTrails[i].SetMoveSpeed(1f);
+        }
+    }
+
+    private void StopEnemyPathFollowerTrails()
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+        {
+            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+        }
+    }
+
+    private void ResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail)
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+        {
+            if (enemyPathFollowerTrails[i] == enemyPathFollowerTrail)
+            {
+                StartCoroutine(DoResetEnemyPathFollowerTrailToStart(enemyPathFollowerTrail, startPathNodes[i]));
+                return;
+            }
+        }
+    }
+
+    private IEnumerator DoResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail, PathNode startNode)
+    {
+        enemyPathFollowerTrail.SetMoveSpeed(0f);
+        yield return new WaitForSeconds(0.5f);
+        enemyPathFollowerTrail.gameObject.SetActive(false);
+
+
+        enemyPathFollowerTrail.transform.position = startNode.Position + enemyPathFollowerTrailsPositionOffset;
+        enemyPathFollowerTrail.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+
+        enemyPathFollowerTrail.SetMoveSpeed(1f);
+        enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, enemyPathFollowerTrail.transform);
     }
 }
