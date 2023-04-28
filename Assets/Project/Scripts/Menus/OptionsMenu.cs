@@ -10,6 +10,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void Show()
     {
+        textManager.ResetTexts();
         StartCoroutine(textManager.DecodeTexts());
     }
     public void Hide()
