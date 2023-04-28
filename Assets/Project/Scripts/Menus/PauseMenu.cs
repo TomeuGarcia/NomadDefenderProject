@@ -141,6 +141,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         surrenderText.gameObject.SetActive(false);
 
+        OWMap_Node.isGlobalInteractable = true;
+
         SceneLoader.GetInstance().StartLoadMainMenu();
     }
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)

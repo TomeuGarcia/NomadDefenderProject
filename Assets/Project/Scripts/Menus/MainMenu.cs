@@ -37,6 +37,7 @@ public class MainMenu : MonoBehaviour
         }
 
         SetupTextDecoderManager();
+        //textDecoderManager.ResetTexts();
 
         obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
