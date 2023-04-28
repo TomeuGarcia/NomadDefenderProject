@@ -23,6 +23,7 @@ public class OWMap_Node : MonoBehaviour
     // is interactable      ->  player can interact and travel there
     // is NOT interactable  ->  player can't interact nor travel there
     [HideInInspector] public bool isInteractable = false;
+    public static bool isGlobalInteractable = true;
 
 
     // NODE INTERACT STATE
@@ -193,14 +194,14 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         SetHovered();
     }
 
     private void OnMouseExit()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         if (interactState == NodeInteractState.HOVERED)
         {
@@ -210,7 +211,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         SetSelected(true);
     }

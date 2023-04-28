@@ -12,12 +12,19 @@ public class PauseMenu : MonoBehaviour
     float lastTimeScale;
     [SerializeField] GameObject pauseMenuUI;
     public bool gameCanBePaused;
-    [SerializeField] GameObject textManager;
-    // Update is called once per frame
+    [SerializeField] TextManager textManager;
 
     private Button button;
     private TextMeshProUGUI buttonText;
     [SerializeField] private TextMeshProUGUI titleText;
+
+    [SerializeField] private TextMeshProUGUI mainMenuButtonText;
+    [SerializeField] private TextMeshProUGUI surrenderText;
+
+
+    [SerializeField] private OptionsMenu optionsMenuUI;
+    
+
 
     private static Color fadedInColor = Color.white;
     private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);
@@ -27,7 +34,11 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         //textManager.SetActive(false);
+        optionsMenuUI.gameObject.SetActive(false);
         pauseMenuUI.SetActive(false);
+
+        surrenderText.gameObject.SetActive(false);
+
         GameAudioManager.GetInstance().PlayMusic1();
     }
     private void Awake()
@@ -82,41 +93,55 @@ public class PauseMenu : MonoBehaviour
         // textManager.SetActive(false);
         //Camera.main.GetComponent<OWCameraMovement>().CanDrag(true);
         pauseMenuUI.SetActive(false);
-        GameAudioManager.GetInstance().NormalMusicPitch();
+        
+        if (optionsMenuUI.gameObject.activeInHierarchy)
+        {
+            optionsMenuUI.Hide();
+            optionsMenuUI.gameObject.SetActive(false);
+        }
+
+
+        //GameAudioManager.GetInstance().NormalMusicPitch();
         Time.timeScale = 1;   //segurament s ha de fer d un altre manera
         GameIsPaused = false;
-        textManager.GetComponent<TextManager>().ResetTexts();
+        textManager.ResetTexts();        
+
+        OWMap_Node.isGlobalInteractable = true;
     }
 
     void Pause()
     {
-        if (gameCanBePaused)
+        if (!gameCanBePaused) return;
+        
+        if (button != null)
         {
-            if (button != null)
-            {
-                buttonText.rectTransform.DOScale(Vector3.one, 0f).SetUpdate(true);
-                button.image.color = fadedInColor;
-                buttonText.color = fadedInColor;
-            }
-            //Camera.main.GetComponent<OWCameraMovement>().CanDrag(false);//accedir a cameraMovement per quan estic en batalla
-            StartCoroutine(textManager.GetComponent<TextManager>().DecodeTexts());
-            EventSystem.current.SetSelectedGameObject(null);
-            GameAudioManager.GetInstance().PausedMusicPitch();
-            //textManager.SetActive(true);
-            pauseMenuUI.SetActive(true);
-            lastTimeScale = Time.timeScale;
-            Time.timeScale = 0;   //segurament s ha de fer d un altre manera
-            GameIsPaused = true;
-            TextFadeIn(titleText);
+            buttonText.rectTransform.DOScale(Vector3.one, 0f).SetUpdate(true);
+            button.image.color = fadedInColor;
+            buttonText.color = fadedInColor;
         }
+        //Camera.main.GetComponent<OWCameraMovement>().CanDrag(false);//accedir a cameraMovement per quan estic en batalla
+        StartCoroutine(textManager.DecodeTexts());
+        EventSystem.current.SetSelectedGameObject(null);
+        //GameAudioManager.GetInstance().PausedMusicPitch();
+        //textManager.SetActive(true);
+        pauseMenuUI.SetActive(true);
+        lastTimeScale = Time.timeScale;
+        Time.timeScale = 0;   //segurament s ha de fer d un altre manera
+        GameIsPaused = true;
+        TextFadeIn(titleText);
+
+        OWMap_Node.isGlobalInteractable = false;        
     }
 
     public void LoadMenu()
     {
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.01f);
         Time.timeScale = 1;
-        SceneLoader.GetInstance().StartLoadMainMenu();
+
         pauseMenuUI.SetActive(false);
+        surrenderText.gameObject.SetActive(false);
+
+        SceneLoader.GetInstance().StartLoadMainMenu();
     }
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)
     {
@@ -164,4 +189,30 @@ public class PauseMenu : MonoBehaviour
         //ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
+
+
+    public void MainMenuHoverShowSurrender()
+    {
+        mainMenuButtonText.gameObject.SetActive(false);
+        surrenderText.gameObject.SetActive(true);
+    }
+    public void MainMenuUnhoverHideSurrender()
+    {
+        mainMenuButtonText.gameObject.SetActive(true);
+        surrenderText.gameObject.SetActive(false);
+    }
+
+    public void GoToOptionsMenu()
+    {
+        optionsMenuUI.gameObject.SetActive(true);
+        optionsMenuUI.Show();
+    }
+
+    public void LeaveOptionsMenu()
+    {
+        ButtonUnhovered();
+        optionsMenuUI.Hide();
+        optionsMenuUI.gameObject.SetActive(false);
+    }
+
 }
