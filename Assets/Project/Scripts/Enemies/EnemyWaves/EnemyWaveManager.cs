@@ -33,6 +33,7 @@ public class EnemyWaveManager : MonoBehaviour
     [Header("ENEMY PATH TRAIL")]
     [SerializeField] private GameObject enemyPathTrailPrefab;
     private PathFollower[] enemyPathFollowerTrails;
+    private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.up * 0.5f;
 
 
@@ -240,7 +241,7 @@ public class EnemyWaveManager : MonoBehaviour
     private IEnumerator SetupEnemyPathFollowerTrails()
     {
         yield return new WaitForSeconds(2f);
-
+        
         enemyPathFollowerTrails = new PathFollower[startPathNodes.Length];
         for (int i = 0; i < startPathNodes.Length; ++i)
         {
@@ -262,6 +263,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             enemyPathFollowerTrails[i].SetMoveSpeed(1f);
         }
+        enemyPathFollowerTrailsEnabled = true;
     }
 
     private void StopEnemyPathFollowerTrails()
@@ -270,6 +272,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             enemyPathFollowerTrails[i].SetMoveSpeed(0f);
         }
+        enemyPathFollowerTrailsEnabled = false;
     }
 
     private void ResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail)
@@ -290,10 +293,19 @@ public class EnemyWaveManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         enemyPathFollowerTrail.gameObject.SetActive(false);
 
+        if (!enemyPathFollowerTrailsEnabled)
+        {
+            yield break;
+        }
 
         enemyPathFollowerTrail.transform.position = startNode.Position + enemyPathFollowerTrailsPositionOffset;
         enemyPathFollowerTrail.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
+
+        if (!enemyPathFollowerTrailsEnabled)
+        {            
+            yield break;
+        }
 
         enemyPathFollowerTrail.SetMoveSpeed(1f);
         enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, enemyPathFollowerTrail.transform);
