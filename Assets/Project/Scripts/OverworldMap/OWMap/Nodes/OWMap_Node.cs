@@ -23,6 +23,7 @@ public class OWMap_Node : MonoBehaviour
     // is interactable      ->  player can interact and travel there
     // is NOT interactable  ->  player can't interact nor travel there
     [HideInInspector] public bool isInteractable = false;
+    public static bool isGlobalInteractable = true;
 
 
     // NODE INTERACT STATE
@@ -193,14 +194,14 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         SetHovered();
     }
 
     private void OnMouseExit()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         if (interactState == NodeInteractState.HOVERED)
         {
@@ -210,7 +211,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !isGlobalInteractable) return;
 
         SetSelected(true);
     }
@@ -223,6 +224,12 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
 
         InvokeOnNodeInfoInteractionEnabled();
+
+        if(cameFromConnection != null)
+        {
+            cameFromConnection.StartIndicaton();
+            UpdateBorderMaterial(true);
+        }
     }
 
     public void DisableInteraction()
@@ -233,6 +240,12 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
 
         InvokeOnNodeInfoInteractionDisabled();
+
+        if (cameFromConnection != null)
+        {
+            cameFromConnection.StopIndication();
+            UpdateBorderMaterial(false);
+        }
     }
 
 
@@ -293,19 +306,15 @@ public class OWMap_Node : MonoBehaviour
             owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
 
-        //Debug.Log("2");
-        //UpdateBorderMaterial();
-
         flashMeshRenderer.gameObject.SetActive(true);
         flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
     }
 
-    public void UpdateBorderMaterial()
+    public void UpdateBorderMaterial(bool enabled)
     {
-        borderLerpData.invert = !borderLerpData.invert;
-        borderLerpData.endGoal = 1.0f - borderLerpData.endGoal;
+        borderLerpData.invert = !enabled;
         StartCoroutine(MaterialLerp.FloatLerp(borderLerpData, new Material[1] { circuitMesh.materials[1] }));
     }
 
@@ -494,7 +503,7 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 0f);
-            }
+    }
 
 
     public void PlayFadeOutAnimation()
