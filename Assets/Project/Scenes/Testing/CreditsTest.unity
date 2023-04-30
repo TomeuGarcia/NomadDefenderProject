@@ -490,8 +490,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e16ae4e6177f89b4387f7062952b09c4, type: 2}
-  m_sharedMaterial: {fileID: -444729395873240529, guid: e16ae4e6177f89b4387f7062952b09c4,
+  m_fontAsset: {fileID: 11400000, guid: 9137f9f1050efdc408763f58ca6c8923, type: 2}
+  m_sharedMaterial: {fileID: -8397721410776992557, guid: 9137f9f1050efdc408763f58ca6c8923,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -610,9 +610,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
+    bigTitleColor: {r: 1, g: 1, b: 1, a: 1}
+    bigTitleFont: {fileID: 11400000, guid: 9137f9f1050efdc408763f58ca6c8923, type: 2}
+    bigTitleFontSize: 80
+    bigTitleHeightGap: 2
+    titleColor: {r: 0.90588236, g: 0.35967904, b: 0.23529409, a: 1}
     titleFont: {fileID: 11400000, guid: 081f6d9fc8608474386885eda8218569, type: 2}
     titleFontSize: 40
     titleHeightGap: 2
+    itemsColor: {r: 1, g: 1, b: 1, a: 1}
     itemsFont: {fileID: 11400000, guid: e16ae4e6177f89b4387f7062952b09c4, type: 2}
     itemsFontSize: 30
     itemHeightGap: 1.6
@@ -620,42 +626,56 @@ MonoBehaviour:
     scrollSpeed: 100
     textObjectReference: {fileID: 1109007522}
     parentTransform: {fileID: 667620736}
-  blocks:
-  - title: NOMAD DEFENDER
-    preSpawnHeightGap: 0
-    items: []
-  - title: /teamRocketowl
-    preSpawnHeightGap: 100
-    items:
-    - Roger Aguilar Emanuel
-    - "Tomeu Garcia Pint\xF3"
-    - "Isaac Medina Rodr\xEDguez"
-    - "\xC8ric Ruiz Cusc\xF3"
-  - title: /music
-    preSpawnHeightGap: 0
-    items:
-    - El pive Raul
-  - title: /art
-    preSpawnHeightGap: 0
-    items:
-    - Kenney (3D assets)
-    - Lorc (icons)
-  - title: /playtesters
-    preSpawnHeightGap: 0
-    items:
-    - Arnau Aguilar
-    - Aniol Barnada
-    - "Adri\xE0 Campos"
-    - "Adri\xE0 l'amic de l'Isaac"
-    - "David Le\xF3n"
-    - "H\xE9ctor fuster el good vibes"
-    - Richard Herbert
-    - Pere Rius
-    - Pol Valverde
-  - title: THANKS FOR PLAYING
-    preSpawnHeightGap: 200
-    items:
-    - <3
+  content:
+    bigTitleText: NOMAD DEFENDER
+    blocks:
+    - title: /dhelpraGames
+      preSpawnHeightGap: 300
+      items:
+      - Roger Aguilar Emanuel
+      - "Tomeu Garcia Pint\xF3"
+      - "Isaac Medina Rodr\xEDguez"
+      - "\xC8ric Ruiz Cusc\xF3"
+    - title: /music
+      preSpawnHeightGap: 0
+      items:
+      - Raul Castro
+    - title: /art
+      preSpawnHeightGap: 0
+      items:
+      - Kenney (3D assets)
+      - Lorc (icons)
+    - title: /fonts
+      preSpawnHeightGap: 0
+      items:
+      - Monoid-Bold SDF
+      - Lato-Regular SDF
+      - Optimus-Bold SDF
+    - title: /specialThanks
+      preSpawnHeightGap: 0
+      items:
+      - "David Le\xF3n"
+      - Richard Herbert
+      - Pere Rius
+    - title: /playtesters
+      preSpawnHeightGap: 0
+      items:
+      - Arnau Aguilar
+      - Aniol Barnada
+      - "Adri\xE0 Campos"
+      - "Adri\xE0 Herrera"
+      - "David Le\xF3n"
+      - "Gen\xEDs Garcia"
+      - "H\xE9ctor Fuster"
+      - "Isaac Tom\xE0s"
+      - Richard Herbert
+      - Pere Rius
+      - Pol Valverde
+    - title: <color=#00FFE9>THANK YOU FOR PLAYING</color>
+      preSpawnHeightGap: 300
+      items:
+      - from all the team
+      - (defenk)
 --- !u!4 &1337987320
 Transform:
   m_ObjectHideFlags: 0
