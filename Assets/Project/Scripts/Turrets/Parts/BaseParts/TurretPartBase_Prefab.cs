@@ -8,7 +8,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [SerializeField] private Transform meshTransform;
     public Transform MeshTransform => meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material previewMaterial;
+    [SerializeField] protected Material previewMaterial;
     private Material[] defaultMaterials;
     protected Material[] previewMaterials;
 
@@ -43,7 +43,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
         if (newStatLevel < visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
     }
 
-    private void InitMaterials()
+    protected virtual void InitMaterials()
     {
         defaultMaterials = new Material[meshRenderer.materials.Length];
         previewMaterials = new Material[meshRenderer.materials.Length];

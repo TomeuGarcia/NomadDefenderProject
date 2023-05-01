@@ -14,6 +14,11 @@ public class RepeaterBase : TurretPartBase_Prefab
     [SerializeField] private Transform shootPoint;
     [SerializeField] private Transform rotateTransform;
 
+    [Header("ADDITIONAL MESHES")]
+    [SerializeField] private MeshRenderer[] extraMeshes;
+    private List<Material>[] extraMeshesDefaultMaterials;
+    private List<Material>[] extraMeshesPreviewMaterials;
+
     private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
@@ -109,6 +114,49 @@ public class RepeaterBase : TurretPartBase_Prefab
         //    }
         //}
     }
+
+
+
+    protected override void InitMaterials()
+    {
+        base.InitMaterials();
+
+        extraMeshesDefaultMaterials = new List<Material>[extraMeshes.Length];
+        extraMeshesPreviewMaterials = new List<Material>[extraMeshes.Length];
+
+        for (int extraMeshI = 0; extraMeshI < extraMeshes.Length; ++extraMeshI) 
+        {
+            extraMeshesDefaultMaterials[extraMeshI] = new List<Material>();
+            extraMeshesPreviewMaterials[extraMeshI] = new List<Material>();
+
+            for (int materialI = 0; materialI < extraMeshes[extraMeshI].materials.Length; ++materialI)
+            {
+                extraMeshesDefaultMaterials[extraMeshI].Add(extraMeshes[extraMeshI].materials[materialI]);
+                extraMeshesPreviewMaterials[extraMeshI].Add(previewMaterial);
+            }
+
+        }
+    }
+    public override void SetDefaultMaterial()
+    {
+        base.SetDefaultMaterial();
+
+        for (int i = 0; i< extraMeshes.Length; ++i)
+        {
+            extraMeshes[i].materials = extraMeshesDefaultMaterials[i].ToArray();
+        }
+    }
+
+    public override void SetPreviewMaterial()
+    {
+        base.SetPreviewMaterial();
+        
+        for (int i = 0; i < extraMeshes.Length; ++i)
+        {
+            extraMeshes[i].materials = extraMeshesPreviewMaterials[i].ToArray();
+        }
+    }
+
 
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
