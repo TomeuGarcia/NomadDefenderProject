@@ -19,6 +19,9 @@ public class RepeaterBase : TurretPartBase_Prefab
     private List<Material>[] extraMeshesDefaultMaterials;
     private List<Material>[] extraMeshesPreviewMaterials;
 
+    [Header("REPEAT PARTICLES")]
+    [SerializeField] private ParticleSystem repeatParticles;
+
     private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
@@ -219,6 +222,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (enemyInDamageQueue == null) return;
 
         Shoot(enemyInDamageQueue.enemy, enemyInDamageQueue.projectile, enemyInDamageQueue.damage);
+
+        repeatParticles.Play();
     }
 
     private void ComputeNextTargetedEnemy()

@@ -23,6 +23,11 @@ public class LastEnemyKIllAnimation : MonoBehaviour
     private GameObject flashingLight;
     private GameObject particles;
 
+
+    public delegate void LastEnemyKIllAnimationAction();
+    public static event LastEnemyKIllAnimationAction OnQueryResumeTimescale;
+
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -93,8 +98,9 @@ public class LastEnemyKIllAnimation : MonoBehaviour
                 yield return null;
             }
 
-            Time.timeScale = 1.0f;
+
         }
+        if (OnQueryResumeTimescale != null) OnQueryResumeTimescale();
     }
 
     private IEnumerator FlashingLight(Vector3 tilePos, bool lost = false)
