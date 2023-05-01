@@ -839,7 +839,7 @@ public class HandBuildingCards : MonoBehaviour
             }
             else
             {
-                cards[i].SetCannotBePlayedAnimation();
+                cards[i].SetCannotBePlayedAnimation(true);
             }
         }
     }

@@ -108,6 +108,8 @@ public class TDGameManager : MonoBehaviour
 
     private void DecreaseAliveLocationsAndCheckGameOver(PathLocation destroyedPathLocation)
     {
+        if (!HasAliveLocationsLeft()) return;
+
         --numAliveLocations;
         if (!HasAliveLocationsLeft())
         {
