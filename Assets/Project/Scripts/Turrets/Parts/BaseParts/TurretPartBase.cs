@@ -29,6 +29,11 @@ public class TurretPartBase : ScriptableObject
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] public string abilityDescription;
 
+    [Header("UPGRADE DESCRIPTIONS")]
+    [SerializeField, TextArea(2, 5)] public string upgrade1Description;
+    [SerializeField, TextArea(2, 5)] public string upgrade2Description;
+    [SerializeField, TextArea(2, 5)] public string upgrade3Description;
+
 
     public int Range { get => rangePerLvl[rangeLvl-1]; }
 

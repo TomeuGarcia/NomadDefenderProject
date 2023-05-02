@@ -14,6 +14,10 @@ public class RepeaterBase : TurretPartBase_Prefab
     [SerializeField] private Transform shootPoint;
     [SerializeField] private Transform rotateTransform;
 
+    [Header("REPEATER UPGRADES")]
+    [SerializeField] private float[] damagePer1Increments;
+    private float currentDamagePer1Increment;
+
     [Header("ADDITIONAL MESHES")]
     [SerializeField] private MeshRenderer[] extraMeshes;
     private List<Material>[] extraMeshesDefaultMaterials;
@@ -134,14 +138,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         base.Upgrade(newStatLevel);
         currentLvl = newStatLevel;
 
-        //foreach (KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
-        //{
-        //    if (slowedEnemy.Value.slowCoefApplied > slowSpeedCoefs[currentLvl])
-        //    {
-        //        slowedEnemy.Key.SetMoveSpeed(slowSpeedCoefs[currentLvl]);
-        //        slowedEnemy.Value.slowCoefApplied = slowSpeedCoefs[currentLvl];
-        //    }
-        //}
+        currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];
     }
 
 
@@ -218,6 +215,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         }
 
         resultDamage = targetedEnemy.ComputeDamageWithPassive(projectileSource, damageAmount, modifier);
+        resultDamage += (int)(resultDamage * currentDamagePer1Increment);
+
         targetedEnemy.QueueDamage(resultDamage);
 
         enemiesInDamageQueue.Add(new EnemyInDamageQueue(projectileSource, targetedEnemy, resultDamage));
