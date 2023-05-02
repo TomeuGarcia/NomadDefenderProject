@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.UI;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] protected TextMeshProUGUI playCostText;
+    [SerializeField] protected Image playCostCurrencyIcon;
+    private static Color s_canNotPlayCardTextColor = new Color(202f/255f, 35f/255f, 54f/255f);
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
@@ -244,7 +247,7 @@ public abstract class BuildingCard : MonoBehaviour
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
-        SetCannotBePlayedAnimation();
+        SetCannotBePlayedAnimation(false);
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
 
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
@@ -463,11 +466,19 @@ public abstract class BuildingCard : MonoBehaviour
     public void SetCanBePlayedAnimation()
     {
         cardMaterial.SetFloat("_CanBePlayed", 1f);
+        playCostText.DOBlendableColor(Color.white, 0.2f);
+        playCostCurrencyIcon.DOBlendableColor(Color.white, 0.2f);
     }
 
-    public void SetCannotBePlayedAnimation()
+    public void SetCannotBePlayedAnimation(bool updatePlayCostText)
     {
         cardMaterial.SetFloat("_CanBePlayed", 0f);
+
+        if (updatePlayCostText)
+        {
+            playCostText.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
+            playCostCurrencyIcon.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
+        }        
     }
 
 
@@ -655,7 +666,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void PlayCanNotBePlayedAnimation()
     {
-        SetCannotBePlayedAnimation();
+        SetCannotBePlayedAnimation(true);
         cardMaterial.SetFloat("_TimeStartCanNotBePlayed", Time.time);
 
         CardTransform.DOComplete(true);

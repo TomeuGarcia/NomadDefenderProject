@@ -14,6 +14,21 @@ public class RepeaterBase : TurretPartBase_Prefab
     [SerializeField] private Transform shootPoint;
     [SerializeField] private Transform rotateTransform;
 
+    [Header("ADDITIONAL MESHES")]
+    [SerializeField] private MeshRenderer[] extraMeshes;
+    private List<Material>[] extraMeshesDefaultMaterials;
+    private List<Material>[] extraMeshesPreviewMaterials;
+
+    [Header("REPEAT PARTICLES")]
+    [SerializeField] private ParticleSystem repeatParticles;
+
+    [Header("REPEAT TURRET BINDER")]
+    [SerializeField] private Transform bindOriginTransform;
+    [SerializeField] private MeshRenderer turretBinderMesh;
+    [SerializeField] private Material withinRangeMaterial;
+    [SerializeField] private Material outsideRangeMaterial;
+
+
     private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
@@ -40,20 +55,25 @@ public class RepeaterBase : TurretPartBase_Prefab
     private void Awake()
     {
         fakeEnemy.gameObject.SetActive(false);
+        HideTurretBinder();
     }
 
     private void OnEnable()
     {
-        fakeEnemy.OnDamageCompute += FindTargetAndComputeDamage;
-        
+        fakeEnemy.OnDamageCompute += FindTargetAndComputeDamage;        
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
+
+        BuildingPlacer.OnPlacingBuildingsDisabled += HideTurretBinder;
+        BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectBinderWithBuilding;
     }
 
     private void OnDisable()
     {
         fakeEnemy.OnDamageCompute -= FindTargetAndComputeDamage;
-
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
+
+        BuildingPlacer.OnPlacingBuildingsDisabled -= HideTurretBinder;
+        BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectBinderWithBuilding;
     }
 
     private void Update()
@@ -109,6 +129,49 @@ public class RepeaterBase : TurretPartBase_Prefab
         //    }
         //}
     }
+
+
+
+    protected override void InitMaterials()
+    {
+        base.InitMaterials();
+
+        extraMeshesDefaultMaterials = new List<Material>[extraMeshes.Length];
+        extraMeshesPreviewMaterials = new List<Material>[extraMeshes.Length];
+
+        for (int extraMeshI = 0; extraMeshI < extraMeshes.Length; ++extraMeshI) 
+        {
+            extraMeshesDefaultMaterials[extraMeshI] = new List<Material>();
+            extraMeshesPreviewMaterials[extraMeshI] = new List<Material>();
+
+            for (int materialI = 0; materialI < extraMeshes[extraMeshI].materials.Length; ++materialI)
+            {
+                extraMeshesDefaultMaterials[extraMeshI].Add(extraMeshes[extraMeshI].materials[materialI]);
+                extraMeshesPreviewMaterials[extraMeshI].Add(previewMaterial);
+            }
+
+        }
+    }
+    public override void SetDefaultMaterial()
+    {
+        base.SetDefaultMaterial();
+
+        for (int i = 0; i< extraMeshes.Length; ++i)
+        {
+            extraMeshes[i].materials = extraMeshesDefaultMaterials[i].ToArray();
+        }
+    }
+
+    public override void SetPreviewMaterial()
+    {
+        base.SetPreviewMaterial();
+        
+        for (int i = 0; i < extraMeshes.Length; ++i)
+        {
+            extraMeshes[i].materials = extraMeshesPreviewMaterials[i].ToArray();
+        }
+    }
+
 
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
@@ -171,6 +234,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (enemyInDamageQueue == null) return;
 
         Shoot(enemyInDamageQueue.enemy, enemyInDamageQueue.projectile, enemyInDamageQueue.damage);
+
+        repeatParticles.Play();
     }
 
     private void ComputeNextTargetedEnemy()
@@ -217,6 +282,99 @@ public class RepeaterBase : TurretPartBase_Prefab
         Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : repeatTargetEnemies[0].Position;    
 
         Quaternion targetRot = Quaternion.LookRotation((lookPosition - rotateTransform.position).normalized, rotateTransform.up);
-        rotateTransform.rotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
+
+        Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
+        Vector3 endEuler = endRotation.eulerAngles;
+
+        rotateTransform.rotation = Quaternion.Euler(0f, endEuler.y, 0f);
+    }
+
+
+
+    private void HideTurretBinder()
+    {
+        turretBinderMesh.gameObject.SetActive(false);
+    }
+    private void ShowTurretBinder()
+    {
+        turretBinderMesh.gameObject.SetActive(true);
+    }
+
+    private void ConnectWithAlreadyPlacedBuildings() // TODO Call this when trying to play
+    {
+        Building[] currentPlacedBuildings = BuildingPlacer.GetCurrentPlacedBuildings();
+
+        for (int i = 0; i < currentPlacedBuildings.Length; ++i)
+        {
+            // TODO
+        }
+    }
+
+    private void ConnectBinderWithBuilding(Building building)
+    {
+        MeshRenderer binderMesh = turretBinderMesh;
+
+        if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            ShowTurretBinder();
+            ConnectBinderWithTurretBuilding(binderMesh, building as TurretBuilding);
+        }        
+    }
+
+    private void ConnectBinderWithTurretBuilding(MeshRenderer binderMesh, TurretBuilding turretBuilding)
+    {
+        UpdateTurretBinder(binderMesh.transform, turretBuilding.BodyPartTransform);
+
+        float turretRange = ((turretBuilding.stats.range + 0.5f) / 2f) + 0.2f; // Weird formula...
+        if (IsBinderTargetWithinRange(binderMesh.transform, turretBuilding.BodyPartTransform, turretRange))
+        {
+            binderMesh.material = withinRangeMaterial;
+        }
+        else
+        {
+            binderMesh.material = outsideRangeMaterial;
+        }
+    }
+        
+
+
+    private void UpdateTurretBinder(Transform binderTransform, Transform targetTransform)
+    {       
+        // Find scale
+        float distance = Vector3.Distance(bindOriginTransform.position, targetTransform.position);
+        Vector3 binderScale = binderTransform.lossyScale;
+        float scaleFactor = 1f;
+        binderScale.z = distance * scaleFactor;
+
+
+        // Find center position
+        Vector3 centerPosition = Vector3.Lerp(bindOriginTransform.position, targetTransform.position, 0.5f);
+
+
+        // Find rotation
+        Vector3 directionToTarget = (targetTransform.position - bindOriginTransform.position).normalized;
+        Quaternion binderRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
+
+
+        // Apply changes
+        binderTransform.localScale = binderScale;
+        binderTransform.position = centerPosition;
+        binderTransform.rotation = binderRotation;
+    }
+
+    private bool IsBinderTargetWithinRange(Transform binderTransform, Transform targetTransform, float range)
+    {       
+        Vector3 binderPosition = binderTransform.position;
+        binderPosition.y = 0f;
+
+        Vector3 targetPosition = targetTransform.position;
+        targetPosition.y = 0f;
+
+        float distance = Vector3.Distance(binderPosition, targetPosition);
+
+        //range /= 2f;
+        Debug.Log("D-" + distance + " <= R-" + range);
+
+        return distance <= range;
     }
 }

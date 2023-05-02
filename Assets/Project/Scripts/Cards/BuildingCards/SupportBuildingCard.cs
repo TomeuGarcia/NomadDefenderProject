@@ -235,7 +235,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
             turretPartBase.abilityName,
             turretPartBase.abilityDescription,
             turretPartBase.abilitySprite,
-            turretPartBase.materialColor
+            turretPartBase.spriteColor
         );
 
         return setupData;

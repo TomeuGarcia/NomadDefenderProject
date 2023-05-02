@@ -231,7 +231,7 @@ public class CardDrawer : MonoBehaviour
 
     public void ReturnCardToDeck(BuildingCard card)
     {
-        card.SetCannotBePlayedAnimation();
+        card.SetCannotBePlayedAnimation(true);
 
         hand.RemoveCard(card);
         //hand.InitCardsInHand();

@@ -37,6 +37,7 @@ public class SupportBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
+        CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
     }
 
 
