@@ -105,7 +105,20 @@ public class EnemyWaveManager : MonoBehaviour
             {
                 enemyPathFollowerTrails[i].OnPathEndReached2 -= ResetEnemyPathFollowerTrailToStart;
             }
-        }        
+        }
+
+        if (activeWaves > 0)
+        {
+            for (int waveCoroutineI = 0; waveCoroutineI < waveCoroutines.Length; ++waveCoroutineI)
+            {
+                if (waveCoroutines[waveCoroutineI] != null)
+                {
+                    StopCoroutine(waveCoroutines[waveCoroutineI]);
+                }
+            }
+            // TODO fix enemy Factory
+        }       
+        
     }
 
     private void ActivateCanvas()

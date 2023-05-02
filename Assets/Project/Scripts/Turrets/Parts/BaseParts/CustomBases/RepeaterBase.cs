@@ -24,7 +24,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     [Header("REPEAT TURRET BINDER")]
     [SerializeField] private Transform bindOriginTransform;
-    [SerializeField] private MeshRenderer turretBinderMesh;
+    [SerializeField] private MeshRenderer[] turretBinderMeshes;
     [SerializeField] private Material withinRangeMaterial;
     [SerializeField] private Material outsideRangeMaterial;
 
@@ -55,7 +55,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     private void Awake()
     {
         fakeEnemy.gameObject.SetActive(false);
-        HideTurretBinder();
+        HideAllTurretBinders();
     }
 
     private void OnEnable()
@@ -64,7 +64,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
 
         BuildingPlacer.OnPlacingBuildingsDisabled += HideTurretBinder;
-        BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectBinderWithBuilding;
+        BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectFirstBinderWithBuilding;
     }
 
     private void OnDisable()
@@ -73,7 +73,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
 
         BuildingPlacer.OnPlacingBuildingsDisabled -= HideTurretBinder;
-        BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectBinderWithBuilding;
+        BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectFirstBinderWithBuilding;
     }
 
     private void Update()
@@ -113,6 +113,20 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         fakeEnemy.gameObject.SetActive(true);
         fakeEnemy.SetCanBeTargeted(false);
+        HideAllTurretBinders();
+    }
+
+    public override void GotEnabledPlacing()
+    {
+        ConnectWithAlreadyPlacedBuildings();
+    }
+    public override void GotDisabledPlacing()
+    {
+        HideAllTurretBinders();
+    }
+    public override void GotMovedWhenPlacing()
+    {
+        ConnectWithAlreadyPlacedBuildings();
     }
 
     public override void Upgrade(int newStatLevel)
@@ -291,32 +305,47 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
+
+
+
     private void HideTurretBinder()
     {
-        turretBinderMesh.gameObject.SetActive(false);
+        turretBinderMeshes[0].gameObject.SetActive(false);
     }
-    private void ShowTurretBinder()
+    private void ShowTurretBinder(MeshRenderer binderMesh)
     {
-        turretBinderMesh.gameObject.SetActive(true);
+        binderMesh.gameObject.SetActive(true);
     }
+
+    private void HideAllTurretBinders()
+    {
+        foreach (MeshRenderer turretBinderMesh in turretBinderMeshes)
+        {
+            turretBinderMesh.gameObject.SetActive(false);
+        }        
+    }
+
 
     private void ConnectWithAlreadyPlacedBuildings() // TODO Call this when trying to play
     {
         Building[] currentPlacedBuildings = BuildingPlacer.GetCurrentPlacedBuildings();
 
-        for (int i = 0; i < currentPlacedBuildings.Length; ++i)
+        for (int i = 0; i < currentPlacedBuildings.Length && i < turretBinderMeshes.Length; ++i)
         {
-            // TODO
+            ConnectBinderWithBuilding(currentPlacedBuildings[i], turretBinderMeshes[i]);
         }
     }
 
-    private void ConnectBinderWithBuilding(Building building)
+    private void ConnectFirstBinderWithBuilding(Building building)
     {
-        MeshRenderer binderMesh = turretBinderMesh;
+        ConnectBinderWithBuilding(building, turretBinderMeshes[0]);
+    }
 
+    private void ConnectBinderWithBuilding(Building building, MeshRenderer binderMesh)
+    {
         if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            ShowTurretBinder();
+            ShowTurretBinder(binderMesh);
             ConnectBinderWithTurretBuilding(binderMesh, building as TurretBuilding);
         }        
     }
@@ -372,8 +401,8 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         float distance = Vector3.Distance(binderPosition, targetPosition);
 
-        //range /= 2f;
-        Debug.Log("D-" + distance + " <= R-" + range);
+        
+        //Debug.Log("D-" + distance + " <= R-" + range);
 
         return distance <= range;
     }

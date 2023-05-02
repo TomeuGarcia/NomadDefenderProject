@@ -38,17 +38,18 @@ public class BuildingPlacer : MonoBehaviour
 
     private bool SelectedBuildingIsBeingShown => selectedBuilding != null;
 
-    private void Awake()
-    {
-        s_currentBuildingPlacer = this;
-    }
+    
     private void OnEnable()
     {
+        s_currentBuildingPlacer = this;
+
         TDGameManager.OnEndGameResetPools += RemoveInteractions;
     }
 
     private void OnDisable()
     {
+        s_currentBuildingPlacer = null;
+
         TDGameManager.OnEndGameResetPools -= RemoveInteractions;
     }
 
@@ -65,6 +66,8 @@ public class BuildingPlacer : MonoBehaviour
         this.selectedBuildingCard = selectedBuildingCard;
         selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
 
+        selectedBuilding.GotEnabledPlacing();
+
         Tile.OnTileUnhovered += HideBuildingPreview;
         Tile.OnTileHovered += ShowBuildingOnTilePreview;
         //Tile.OnTileSelected += TryPlaceBuilding;
@@ -77,6 +80,11 @@ public class BuildingPlacer : MonoBehaviour
 
     public void DisablePlacing()
     {
+        if ( selectedBuilding != null)
+        {
+            selectedBuilding.GotDisabledPlacing();
+        }
+
         Tile.OnTileUnhovered -= HideBuildingPreview;
         Tile.OnTileHovered -= ShowBuildingOnTilePreview;
         //Tile.OnTileSelected -= TryPlaceBuilding;
@@ -126,6 +134,8 @@ public class BuildingPlacer : MonoBehaviour
 
         currentHoveredTile = tile;
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
+
+        selectedBuilding.GotMovedWhenPlacing();
 
 
         if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)

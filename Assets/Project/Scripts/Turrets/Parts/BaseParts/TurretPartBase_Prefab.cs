@@ -69,6 +69,18 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+    public virtual void GotEnabledPlacing()
+    {
+
+    }
+    public virtual void GotDisabledPlacing()
+    {
+
+    }
+    public virtual void GotMovedWhenPlacing()
+    {
+
+    }
 
     public void SetMaterialColor(Color color)
     {
