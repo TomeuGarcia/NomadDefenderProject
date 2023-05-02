@@ -112,6 +112,18 @@ public class SupportBuilding : RangeBuilding
         InvokeOnBuildingPlaced();
     }
 
+    public override void GotEnabledPlacing()
+    {
+        basePart.GotEnabledPlacing();
+    }
+    public override void GotDisabledPlacing()
+    {
+        basePart.GotDisabledPlacing();
+    }
+    public override void GotMovedWhenPlacing()
+    {
+        basePart.GotMovedWhenPlacing();
+    }
 
     public override void ShowQuickLevelUI() 
     {
