@@ -213,8 +213,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public virtual void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
+        rangeLvl = newRangeLvl;
+
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;

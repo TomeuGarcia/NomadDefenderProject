@@ -12,6 +12,7 @@ public class SupportBuilding : RangeBuilding
     }
 
     [HideInInspector] public SupportBuildingStats stats;
+    private TurretPartBase turretPartBase;
 
 
     [SerializeField]GameObject[] visualUpgrades;
@@ -46,13 +47,15 @@ public class SupportBuilding : RangeBuilding
     {
         InitStats(stats);
 
+        this.turretPartBase = turretPartBase;
+
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.InitAsSupportBuilding(this,stats.range);
+        basePart.InitAsSupportBuilding(this, stats.range);
 
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        upgrader.InitSupport(currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        upgrader.InitSupport(turretPartBase.rangeLvl, currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -71,10 +74,17 @@ public class SupportBuilding : RangeBuilding
 
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
-        basePart.Upgrade(newStatLevel);
+        basePart.Upgrade(this, newStatLevel);
 
         if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+    }
+    public void UpgradeRangeIncrementingLevel()
+    {
+        int newStatLevel = turretPartBase.rangeLvl + 1;
+
+        stats.range = TurretPartBase.rangePerLvl[newStatLevel - 1];
+        UpdateRange();
     }
 
     protected override void DisableFunctionality()

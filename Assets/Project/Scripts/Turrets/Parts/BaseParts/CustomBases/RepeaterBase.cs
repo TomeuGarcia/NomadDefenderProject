@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor;
 using UnityEngine;
 using static SlowBase;
@@ -17,6 +19,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     [Header("REPEATER UPGRADES")]
     [SerializeField] private float[] damagePer1Increments;
     private float currentDamagePer1Increment;
+    [SerializeField] private Transform upgradeVisualsHolder;
 
     [Header("ADDITIONAL MESHES")]
     [SerializeField] private MeshRenderer[] extraMeshes;
@@ -58,8 +61,10 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Awake()
     {
+        AwakeInit();
         fakeEnemy.gameObject.SetActive(false);
         HideAllTurretBinders();
+        currentDamagePer1Increment = 0f;
     }
 
     private void OnEnable()
@@ -105,6 +110,10 @@ public class RepeaterBase : TurretPartBase_Prefab
         supportOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         supportOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
+        UpdateRepeatAreaPlaneSize(supportOwner);
+    }
+    private void UpdateRepeatAreaPlaneSize(SupportBuilding supportOwner)
+    {
         float planeRange = supportOwner.stats.range * 2 + 1; //only for square
         float range = supportOwner.stats.range;
 
@@ -142,12 +151,18 @@ public class RepeaterBase : TurretPartBase_Prefab
         HideAllTurretBinders();
     }
 
-    public override void Upgrade(int newStatLevel)
+    public override void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {
-        base.Upgrade(newStatLevel);
+        base.Upgrade(ownerSupportBuilding, newStatLevel);
         currentLvl = newStatLevel;
 
-        currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];
+        if (newStatLevel == 3)
+        {
+            ownerSupportBuilding.UpgradeRangeIncrementingLevel();
+            UpdateRepeatAreaPlaneSize(ownerSupportBuilding);
+        }
+
+        currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];        
     }
 
 
@@ -256,6 +271,13 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (enemyInDamageQueue == null) return;
 
         Shoot(enemyInDamageQueue.enemy, enemyInDamageQueue.projectile, enemyInDamageQueue.damage);
+
+        /*
+        if (currentLvl > 0)
+        {
+            upgradeVisualsHolder.DOBlendableLocalRotateBy(180f * Vector3.up, 0.2f);
+        }
+        */
 
         repeatParticles.Play();
     }
@@ -376,20 +398,22 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
     private void UpdateTurretBinder(Transform binderTransform, Transform targetTransform)
-    {       
+    {
+        Vector3 targetPosition = targetTransform.position + Vector3.up * 0.2f;
+
         // Find scale
-        float distance = Vector3.Distance(bindOriginTransform.position, targetTransform.position);
+        float distance = Vector3.Distance(bindOriginTransform.position, targetPosition);
         Vector3 binderScale = binderTransform.lossyScale;
         float scaleFactor = 1f;
         binderScale.z = distance * scaleFactor;
 
 
         // Find center position
-        Vector3 centerPosition = Vector3.Lerp(bindOriginTransform.position, targetTransform.position, 0.5f);
+        Vector3 centerPosition = Vector3.Lerp(bindOriginTransform.position, targetPosition, 0.5f);
 
 
         // Find rotation
-        Vector3 directionToTarget = (targetTransform.position - bindOriginTransform.position).normalized;
+        Vector3 directionToTarget = (targetPosition - bindOriginTransform.position).normalized;
         Quaternion binderRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
 
 
