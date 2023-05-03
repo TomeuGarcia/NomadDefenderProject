@@ -894,6 +894,7 @@ RectTransform:
   - {fileID: 7130951419656677069}
   - {fileID: 3012349540690231608}
   - {fileID: 2916163245773725560}
+  - {fileID: 6100100847119356231}
   m_Father: {fileID: 5785735617340322286}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1213,6 +1214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6100100847119356231}
+  - component: {fileID: 6356008619956218507}
   m_Layer: 2
   m_Name: UpgradeDescriptionHolder
   m_TagString: Untagged
@@ -1227,21 +1229,33 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4220159797344126474}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7150758818378090752}
   - {fileID: 1450012239141552186}
-  m_Father: {fileID: 5785735617340322286}
-  m_RootOrder: 1
+  m_Father: {fileID: 5064862206369721900}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 27.05, y: -46.005}
-  m_SizeDelta: {x: -54.1, y: 92.01}
+  m_AnchoredPosition: {x: -0.000045776367, y: 2.199997}
+  m_SizeDelta: {x: 0, y: 4.4}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &6356008619956218507
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4220159797344126474}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &4640399468478235336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,7 +2662,11 @@ MonoBehaviour:
   abilityButton: {fileID: 5158762366424784774}
   abilityButtonImage: {fileID: 3884455685682371913}
   abilityBackFillImage: {fileID: 978626464433244098}
+  abilityFillImage: {fileID: 224811513802325311}
   abilityBarToCurrencyCost: {fileID: 3608863954960894756}
+  nextUpgradeText: {fileID: 6487634958968427735}
+  nextUpgradeDescriptionText: {fileID: 1594727545630101294}
+  cgNextUpgradeDescription: {fileID: 6356008619956218507}
 --- !u!1 &7535537883487314392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2756,7 +2774,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5064862206369721900}
-  - {fileID: 6100100847119356231}
   m_Father: {fileID: 2059286006871173381}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

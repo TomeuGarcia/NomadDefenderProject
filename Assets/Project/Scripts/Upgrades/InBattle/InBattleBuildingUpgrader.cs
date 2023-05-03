@@ -213,7 +213,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
+    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
         supportLvl = 0;
 
@@ -395,12 +395,18 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             PlayPositiveAnimationTextCostPunch();
 
             InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
+
+            DoUpgradeSupport();
         }
         else
         {
             PlayNegativeAnimationTextCostPunch();
             OnCanNotUpgradeSupport();
         }
+    }
+
+    protected virtual void DoUpgradeSupport()
+    {
     }
 
     protected bool CanUpgrade(int levelToCheck)

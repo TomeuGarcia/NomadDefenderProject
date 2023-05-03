@@ -23,7 +23,12 @@ public class OWMap_Node : MonoBehaviour
     // is interactable      ->  player can interact and travel there
     // is NOT interactable  ->  player can't interact nor travel there
     [HideInInspector] public bool isInteractable = false;
-    public static bool isGlobalInteractable = true;
+    private static bool isGlobalInteractable = true;
+    public static bool IsGlobalInteractable
+    {
+        get { return isGlobalInteractable; }
+        set { isGlobalInteractable = value; }
+    }
 
 
     // NODE INTERACT STATE
@@ -38,6 +43,9 @@ public class OWMap_Node : MonoBehaviour
 
     //NODE CLASS
     [HideInInspector] public OWMap_NodeClass nodeClass;
+
+    [Header("MOUSE COLLIDER")]
+    [SerializeField] private Collider mouseCollider;
     
 
     // OW Node Data
@@ -194,14 +202,14 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!isInteractable || !isGlobalInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable)  return;
 
         SetHovered();
     }
 
     private void OnMouseExit()
     {
-        if (!isInteractable || !isGlobalInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable) return;
 
         if (interactState == NodeInteractState.HOVERED)
         {
@@ -211,7 +219,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isInteractable || !isGlobalInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable) return;
 
         SetSelected(true);
     }
@@ -540,6 +548,17 @@ public class OWMap_Node : MonoBehaviour
     public void ClearCameFromConnection()
     {
         cameFromConnection.UnfillCable();
+    }
+
+    public void ReenableMouseCollider()
+    {
+        StartCoroutine(DoReenableMouseCollider());
+    }
+    private IEnumerator DoReenableMouseCollider()
+    {
+        mouseCollider.enabled = false;
+        yield return null;
+        mouseCollider.enabled = true;
     }
 
 }

@@ -128,6 +128,8 @@ public class OWMapTutorialManager : MonoBehaviour
 
     IEnumerator Tutorial()
     {
+        OWMap_Node.IsGlobalInteractable = false;
+
         if (testing)
         {
             yield return new WaitForSeconds(2.0f);
@@ -136,7 +138,6 @@ public class OWMapTutorialManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(5.0f);
-
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
@@ -209,6 +210,18 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
 
         cameraMovement.CanDrag(true);
+        OWMap_Node.IsGlobalInteractable = true;
+
+
+        foreach (OWMap_Node node in battleNodes)
+        {
+            node.ReenableMouseCollider();
+        }
+        foreach (OWMap_Node node in upgradeNodes)
+        {
+            node.ReenableMouseCollider();
+        }
+
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);

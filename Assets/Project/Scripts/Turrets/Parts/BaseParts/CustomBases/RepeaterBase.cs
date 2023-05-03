@@ -133,6 +133,15 @@ public class RepeaterBase : TurretPartBase_Prefab
         ConnectWithAlreadyPlacedBuildings();
     }
 
+    public override void GotHoveredWhenPlaced()
+    {
+        ConnectWithAlreadyPlacedBuildings();
+    }
+    public override void GotUnoveredWhenPlaced()
+    {
+        HideAllTurretBinders();
+    }
+
     public override void Upgrade(int newStatLevel)
     {
         base.Upgrade(newStatLevel);
@@ -353,7 +362,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         UpdateTurretBinder(binderMesh.transform, turretBuilding.BodyPartTransform);
 
-        float turretRange = ((turretBuilding.stats.range + 0.5f) / 2f) + 0.2f; // Weird formula...
+        float turretRange = ((turretBuilding.stats.range + 0.5f) / 2f) + 0.15f; // Weird formula...
         if (IsBinderTargetWithinRange(binderMesh.transform, turretBuilding.BodyPartTransform, turretRange))
         {
             binderMesh.material = withinRangeMaterial;
