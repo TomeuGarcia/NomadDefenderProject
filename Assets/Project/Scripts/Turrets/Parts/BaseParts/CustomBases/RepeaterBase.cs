@@ -1,10 +1,5 @@
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor;
 using UnityEngine;
-using static SlowBase;
 using static TurretPartBody;
 
 public class RepeaterBase : TurretPartBase_Prefab
@@ -69,8 +64,9 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnEnable()
     {
-        fakeEnemy.OnDamageCompute += FindTargetAndComputeDamage;        
+        fakeEnemy.OnDamageCompute += ComputeTargetAndComputeDamage;        
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
+        fakeEnemy.OnGetPosition += ComputeTargetAndAssignFakeEnemyPosition;
 
         BuildingPlacer.OnPlacingBuildingsDisabled += HideTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectFirstBinderWithBuilding;
@@ -78,8 +74,9 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnDisable()
     {
-        fakeEnemy.OnDamageCompute -= FindTargetAndComputeDamage;
+        fakeEnemy.OnDamageCompute -= ComputeTargetAndComputeDamage;
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
+        fakeEnemy.OnGetPosition -= ComputeTargetAndAssignFakeEnemyPosition;
 
         BuildingPlacer.OnPlacingBuildingsDisabled -= HideTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectFirstBinderWithBuilding;
@@ -228,7 +225,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void FindTargetAndComputeDamage(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource)
+    private void ComputeTargetAndComputeDamage(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource)
     {
         ComputeNextTargetedEnemy();
 
@@ -334,6 +331,20 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
+    private void ComputeTargetAndAssignFakeEnemyPosition(out Vector3 enemyPosition, out bool foundTarget)
+    {
+        ComputeNextTargetedEnemy();
+
+        foundTarget = targetedEnemy != null;
+
+        if (!foundTarget)
+        {
+            enemyPosition = Vector3.zero;
+            return;
+        }
+
+        enemyPosition = targetedEnemy.GetPosition();
+    }
 
 
 

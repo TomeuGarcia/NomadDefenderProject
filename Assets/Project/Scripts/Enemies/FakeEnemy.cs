@@ -11,7 +11,10 @@ public class FakeEnemy : Enemy
 
     public delegate void FakeEnemyComputeDamageAction(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource);
     public event FakeEnemyComputeDamageAction OnDamageCompute;
-    
+
+    public delegate void FakeEnemyGetPositionAction(out Vector3 position, out bool foundTarget);
+    public event FakeEnemyGetPositionAction OnGetPosition;
+
 
 
     private void Awake()
@@ -99,5 +102,20 @@ public class FakeEnemy : Enemy
     public override void AddArmor(int armorToAdd)
     {
         return;
+    }
+
+    public override Vector3 GetPosition()
+    {
+        Vector3 delegatedPosition = Vector3.zero;
+        bool foundTarget = false;
+
+        if (OnGetPosition != null) OnGetPosition(out delegatedPosition, out foundTarget);
+
+        if (!foundTarget)
+        {
+            return base.GetPosition();
+        }
+
+        return delegatedPosition;
     }
 }
