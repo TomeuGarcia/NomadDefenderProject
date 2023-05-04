@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +7,22 @@ public class MainMenuBackground : MonoBehaviour
 {
     [Header("BACKGROUND CAMERA")]
     [SerializeField] private Transform mapCameraParent;
-    [SerializeField] private float mapCameraSpeed;
+    [SerializeField] private Vector3 mapCameraRotationGoal;
+    [SerializeField] private float cycleTime;
+    [SerializeField] private float cyclePauseTime;
 
-    private void Update()
+    private void Start()
     {
-        //Move background camera
-        mapCameraParent.Rotate(new Vector3(0, mapCameraSpeed * Time.deltaTime, 0));
+        StartCoroutine(MapCameraRotation(0.5f));
+    }
+
+    IEnumerator MapCameraRotation(float cycleCoef)
+    {
+        mapCameraParent.DORotate(mapCameraRotationGoal, cycleTime);
+        yield return new WaitForSeconds(cycleTime * cycleCoef);
+        yield return new WaitForSeconds(cyclePauseTime);
+
+        mapCameraRotationGoal *= -1.0f;
+        StartCoroutine(MapCameraRotation(1.0f));
     }
 }
