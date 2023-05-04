@@ -265,4 +265,10 @@ public class Enemy : MonoBehaviour
         healthSystem.AddArmor(armorToAdd);
         healthHUD.Show();
     }
+
+
+    public virtual Vector3 GetPosition()
+    {
+        return Position;
+    }
 }

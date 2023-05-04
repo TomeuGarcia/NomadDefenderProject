@@ -46,7 +46,7 @@ public class DamageRangeProjectile : HomingProjectile
 
     private int ComputeDamage()
     {
-        float distance = Vector3.Distance(targetEnemy.Position, transform.position);
+        float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
 
         int baseDamage = (int)(turretOwner.stats.damage * baseDamagePer1);
         int baseDamageRemaining = (int)(turretOwner.stats.damage * (1f - baseDamagePer1));
