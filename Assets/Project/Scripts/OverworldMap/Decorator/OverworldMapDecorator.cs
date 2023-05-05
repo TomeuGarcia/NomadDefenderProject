@@ -33,13 +33,13 @@ public class OverworldMapDecorator : MonoBehaviour
             DecorateFirstLevelEmpty(mapNodes[0]);
         }
 
-        int lastIteratedLevel = mapNodes.Length;
+        int lastIteratedLevel = mapNodes.Length - 1;
         if (dSettings.battleBeforeLastNode)
         {
-            lastIteratedLevel -= 2;
+            lastIteratedLevel -= 1;
             DecorateBattleLevel(mapNodes[mapNodes.Length - 2], lastIteratedLevel); // Boss
-            DecorateLastLevelEmpty(mapNodes[mapNodes.Length - 1]); // Finale
         }
+        DecorateLastLevelEmpty(mapNodes[mapNodes.Length - 1]); // Finale
 
         firstBattleLevel = firstDecoratedLevel + dSettings.numStartUpgradesLevels;
         for (int levelI = firstDecoratedLevel; levelI < firstBattleLevel; ++levelI)

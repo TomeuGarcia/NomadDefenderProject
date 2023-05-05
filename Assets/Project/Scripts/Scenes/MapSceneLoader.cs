@@ -92,6 +92,7 @@ public class MapSceneLoader : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         SceneLoader.GetInstance().StartLoadMainMenu();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
     }
 
 
