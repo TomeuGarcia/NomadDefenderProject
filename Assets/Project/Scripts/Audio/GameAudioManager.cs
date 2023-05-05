@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ public class GameAudioManager : MonoBehaviour
     private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
     private int currentMusic1 = 0;
     private bool musicPaused = false;
+    private float musicDefaultVolume;
     private static bool keepFadingIn;
     private static bool keepFadingOut;
 
@@ -133,6 +135,7 @@ public class GameAudioManager : MonoBehaviour
             Destroy(this);
         }
         initMusicDictionary();
+        musicDefaultVolume = musicAudioSource.volume;
     }
     private void Update()
     {
@@ -260,42 +263,35 @@ public class GameAudioManager : MonoBehaviour
             musicClips.Add(clips.type, clips.clip);
         }
     }
-    IEnumerator FadeIn(MusicType type,float speed,float maxVolume)
+
+
+    private void MusicFadeIn(MusicType type, float duration, float maxVolume)
     {
         AudioClip clip = musicClips[type];
         musicAudioSource.clip = clip;
-        float audioVolume = 0;
-        musicAudioSource.volume = audioVolume;
+        musicAudioSource.volume = 0f;
         musicAudioSource.loop = true;
         musicAudioSource.Play();
-        while (musicAudioSource.volume < maxVolume)
-        {
-            Debug.Log("Fading in");
-            audioVolume += speed;
-            musicAudioSource.volume = audioVolume;
-            yield return new WaitForSecondsRealtime(0.1f);
 
-        }
+        musicAudioSource.DOFade(maxVolume, duration);
     }
-    IEnumerator FadeOut(MusicType type, float speed)
+    private void MusicFadeOut(float duration)
     {
-        
-        float audioVolume = musicAudioSource.volume;
-        float maxVolume = musicAudioSource.volume;
-        while (musicAudioSource.volume > 0)
-        {
-            Debug.Log("Fading out");
-            audioVolume -= speed;
-            musicAudioSource.volume = audioVolume;
-            yield return new WaitForSecondsRealtime(0.1f);
+        musicAudioSource.DOFade(0f, duration);
+    }
+    private void MusicFadeOutThenIn(MusicType type, float duration)
+    {
+        Sequence fadeSequence = DOTween.Sequence();
 
-        }
-        StartCoroutine(FadeIn(type, speed, maxVolume));
+        fadeSequence.AppendCallback(() => MusicFadeOut(duration));
+        fadeSequence.AppendInterval(duration);
+        fadeSequence.AppendCallback(() => MusicFadeIn(type, duration, musicDefaultVolume));
     }
 
-    public void ChangeMusic(MusicType newMusicType, float speed)
+
+    public void ChangeMusic(MusicType newMusicType, float duration)
     {
-        StartCoroutine(FadeOut(newMusicType, speed));
+        MusicFadeOutThenIn(newMusicType, duration);
     }
     private void NextMusic1()
     {

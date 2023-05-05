@@ -59,39 +59,14 @@ public class SceneLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        //TDGameManager.OnVictoryComplete += StartLoadNextScene; // not called, remove after check
-        //TDGameManager.OnGameOverComplete += StartReloadCurrentScene; // not called, remove after check
-
-        //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
-
-        //GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
-
         InitScene.OnStart += StartLoadMainMenu;
     }
 
     private void OnDisable()
     {
-        //TDGameManager.OnVictoryComplete -= StartLoadNextScene; // not called, remove after check
-        //TDGameManager.OnGameOverComplete -= StartReloadCurrentScene; // not called, remove after check
-
-        //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
-
-        //GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
-
         InitScene.OnStart -= StartLoadMainMenu;
-
     }
 
-    private void Update()
-    {
-        //if (alreadyLoadingNextScene) return;
-
-        //if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
-        //{
-        //    if (OnSceneForceQuit != null) OnSceneForceQuit();
-        //    StartLoadMainMenu();
-        //}
-    }
 
 
     private void ShutAnimation(float duration)
@@ -143,21 +118,15 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(DoLoadScene(LoadTutorialScene));
     }
+    public void StartLoadGameEndCredits()
+    {
+        StartCoroutine(DoLoadScene(LoadGameEndCreditsScene));
+    }
+    public void StartLoadMainMenuCredits()
+    {
+        StartCoroutine(DoLoadScene(LoadMainMenuCreditsScene));
+    }
 
-    //public void StartLoadTutorialScene()
-    //{
-    //    StartCoroutine(DoLoadSceneWithoutAnimation(LoadNextScene));
-    //}
-    //private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
-    //{
-    //    alreadyLoadingNextScene = true;
-
-        
-    //    loadSceneFunction();
-    //    yield return new WaitForSeconds(loadSceneDuration);
-
-    //    alreadyLoadingNextScene = false;
-    //}
 
 
 
@@ -172,6 +141,14 @@ public class SceneLoader : MonoBehaviour
     private void LoadTutorialScene()
     {
         SceneManager.LoadScene("TutorialMap");
+    }
+    private void LoadGameEndCreditsScene()
+    {
+        SceneManager.LoadScene("GameEndCredits");
+    }
+    private void LoadMainMenuCreditsScene()
+    {
+        SceneManager.LoadScene("MainMenuCredits");
     }
 
     public void StartLoadMainMenu()
