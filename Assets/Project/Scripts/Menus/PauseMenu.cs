@@ -106,7 +106,7 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = false;
         textManager.ResetTexts();        
 
-        OWMap_Node.isGlobalInteractable = true;
+        OWMap_Node.IsGlobalInteractable = true;
     }
 
     void Pause()
@@ -130,7 +130,7 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
         TextFadeIn(titleText);
 
-        OWMap_Node.isGlobalInteractable = false;        
+        OWMap_Node.IsGlobalInteractable = false;        
     }
 
     public void LoadMenu()
@@ -141,7 +141,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         surrenderText.gameObject.SetActive(false);
 
-        OWMap_Node.isGlobalInteractable = true;
+        OWMap_Node.IsGlobalInteractable = true;
 
         SceneLoader.GetInstance().StartLoadMainMenu();
     }

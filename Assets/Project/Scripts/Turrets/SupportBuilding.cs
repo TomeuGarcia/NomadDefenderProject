@@ -12,6 +12,7 @@ public class SupportBuilding : RangeBuilding
     }
 
     [HideInInspector] public SupportBuildingStats stats;
+    private TurretPartBase turretPartBase;
 
 
     [SerializeField]GameObject[] visualUpgrades;
@@ -42,17 +43,19 @@ public class SupportBuilding : RangeBuilding
 
 
 
-    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter, Sprite abilitySprite)
+    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
         InitStats(stats);
 
+        this.turretPartBase = turretPartBase;
+
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.InitAsSupportBuilding(this,stats.range);
+        basePart.InitAsSupportBuilding(this, stats.range);
 
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        upgrader.InitSupport(currencyCounter, abilitySprite); //TODO: change range for the actual level
+        upgrader.InitSupport(turretPartBase.rangeLvl, currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -71,10 +74,17 @@ public class SupportBuilding : RangeBuilding
 
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
     {
-        basePart.Upgrade(newStatLevel);
+        basePart.Upgrade(this, newStatLevel);
 
         if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+    }
+    public void UpgradeRangeIncrementingLevel()
+    {
+        int newStatLevel = turretPartBase.rangeLvl + 1;
+
+        stats.range = TurretPartBase.rangePerLvl[newStatLevel - 1];
+        UpdateRange();
     }
 
     protected override void DisableFunctionality()
@@ -112,15 +122,29 @@ public class SupportBuilding : RangeBuilding
         InvokeOnBuildingPlaced();
     }
 
+    public override void GotEnabledPlacing()
+    {
+        basePart.GotEnabledPlacing();
+    }
+    public override void GotDisabledPlacing()
+    {
+        basePart.GotDisabledPlacing();
+    }
+    public override void GotMovedWhenPlacing()
+    {
+        basePart.GotMovedWhenPlacing();
+    }
 
     public override void ShowQuickLevelUI() 
     {
         upgrader.ShowQuickLevelDisplay();
+        basePart.GotHoveredWhenPlaced();
     }
 
     public override void HideQuickLevelUI() 
     {
         upgrader.HideQuickLevelDisplay();
+        basePart.GotUnoveredWhenPlaced();
     }
 
 

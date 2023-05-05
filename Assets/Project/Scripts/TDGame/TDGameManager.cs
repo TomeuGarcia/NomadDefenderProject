@@ -34,6 +34,7 @@ public class TDGameManager : MonoBehaviour
     private int numAliveLocations = 0;
 
     [SerializeField] private bool hasToSendBattleState = true;
+    private bool alreadyPlayedVictoryOrGameOver = false;
 
     [Header("TILES MATERIAL")]
     [SerializeField] private Material obstaclesTilesMaterial;
@@ -134,6 +135,9 @@ public class TDGameManager : MonoBehaviour
 
     private void GameOver()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("GameOver");
         SetBattleStateResult();
 
@@ -152,6 +156,9 @@ public class TDGameManager : MonoBehaviour
     }
     private void Victory()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
         SetBattleStateResult();
 

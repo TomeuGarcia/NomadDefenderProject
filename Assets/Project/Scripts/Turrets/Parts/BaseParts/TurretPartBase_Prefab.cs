@@ -23,11 +23,16 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
     private void Awake()
     {
+        AwakeInit();
+    }
+    protected void AwakeInit()
+    {
         foreach (GameObject go in visualUpgrades)
         {
             go.SetActive(false);
         }
     }
+
     virtual public void Init(TurretBuilding turretOwner, float turretRange)
     {
         InitMaterials();
@@ -38,9 +43,9 @@ public class TurretPartBase_Prefab : MonoBehaviour
         InitMaterials();
     }
 
-    virtual public void Upgrade(int newStatLevel) 
+    virtual public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel) 
     {
-        if (newStatLevel < visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
+        if (newStatLevel <= visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
     }
 
     protected virtual void InitMaterials()
@@ -69,6 +74,26 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+    public virtual void GotEnabledPlacing()
+    {
+
+    }
+    public virtual void GotDisabledPlacing()
+    {
+
+    }
+    public virtual void GotMovedWhenPlacing()
+    {
+
+    }
+    
+    public virtual void GotHoveredWhenPlaced()
+    {
+    }
+    public virtual void GotUnoveredWhenPlaced()
+    {
+    }
+
 
     public void SetMaterialColor(Color color)
     {

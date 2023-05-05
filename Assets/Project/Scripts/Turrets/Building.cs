@@ -35,6 +35,9 @@ public abstract class Building : MonoBehaviour
 
     protected abstract void AwakeInit();
     public abstract void GotPlaced();
+    public abstract void GotEnabledPlacing();
+    public abstract void GotDisabledPlacing();
+    public abstract void GotMovedWhenPlacing();
 
     //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
     //{
