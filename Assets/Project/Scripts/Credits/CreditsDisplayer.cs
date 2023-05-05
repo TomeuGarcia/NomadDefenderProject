@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -47,37 +48,94 @@ public class CreditsDisplayer : MonoBehaviour
     }
 
 
+    [SerializeField] private KeyCode creditsSpeedUpButton = KeyCode.Mouse0;
     [SerializeField] private CreditsSettings settings;
     [SerializeField] private CreditsContent content;
 
     private RectTransform lastSpawnedTransform;
+    private bool hasReachedEndPosition;
     private bool hasFinished;
+    private bool textsAlreadySpawned;
+    private Vector3 textsHolderStartPosition;
+    private float defaultCreditsScrollSpeed;
+
+    private Coroutine checkCreditsFinishedCoroutine = null;
+    private Coroutine moveCreditsCoroutine = null;
+
+    private Transform lastTitleTransform;
+
+    public delegate void CreditsDisplayerAction();
+    public event CreditsDisplayerAction OnCreditsFinished;
+
 
 
     private void Awake()
     {
-        settings.textObjectReference.SetActive(false);
-        hasFinished = false;
+        settings.textObjectReference.SetActive(false);        
+        textsAlreadySpawned = false;
+        textsHolderStartPosition = settings.parentTransform.position;
+        defaultCreditsScrollSpeed = settings.scrollSpeed;
 
-        SpawnCredits(content.blocks, content.bigTitleText);
-        StartCoroutine(FinishCredits());
+        //StartCredits(); /////////
     }
-
-
     private void Update()
     {
-        if (hasFinished) return;
-
-        Vector3 textsHolderPosition = settings.parentTransform.position;
-        textsHolderPosition.y += Time.deltaTime * settings.scrollSpeed;
-        settings.parentTransform.position = textsHolderPosition;
+        if (Input.GetKeyDown(creditsSpeedUpButton)) settings.scrollSpeed = defaultCreditsScrollSpeed * 4f;
+        else if (Input.GetKeyUp(creditsSpeedUpButton)) settings.scrollSpeed = defaultCreditsScrollSpeed;
     }
 
-    private IEnumerator FinishCredits()
+    public void ResetCredits() // Call this to reset credits if already playing
+    {
+        if (!hasFinished)
+        {
+            ForceFinish(true);
+        }
+        StartCredits();
+    }
+
+    public void ForceFinish(bool invokeFinishEvents) // Call this if you want to quit credits
+    {
+        if (checkCreditsFinishedCoroutine != null) StopCoroutine(checkCreditsFinishedCoroutine);
+        if (moveCreditsCoroutine != null) StopCoroutine(moveCreditsCoroutine);
+        
+        if (invokeFinishEvents)
+        {
+            Finish();
+        }
+        else
+        {
+            hasFinished = true;
+        }
+    }
+
+    public void StartCredits()
+    {
+        hasFinished = false;
+        hasReachedEndPosition = false;
+        settings.parentTransform.position = textsHolderStartPosition;
+
+        if (!textsAlreadySpawned)
+        {
+            SpawnCredits(content.blocks, content.bigTitleText);
+        }
+
+        checkCreditsFinishedCoroutine = StartCoroutine(CheckCreditsHaveFinished());
+        moveCreditsCoroutine = StartCoroutine(MoveTexts());
+    }
+
+    private IEnumerator CheckCreditsHaveFinished()
     {
         yield return new WaitUntil(() => CreditsReachedEnd());
+        checkCreditsFinishedCoroutine = null;
+        hasReachedEndPosition = true;
+        //Finish();
+        CreditsEndAnimation();
+    }
+    private void Finish()
+    {
         hasFinished = true;
         Debug.Log("CREDITS FINISHED");
+        if (OnCreditsFinished != null) OnCreditsFinished();
     }
 
     private bool CreditsReachedEnd()
@@ -105,6 +163,8 @@ public class CreditsDisplayer : MonoBehaviour
 
             accomulatedDistance += settings.heightGapBetweenBlocks;
         }
+
+        textsAlreadySpawned = true;
     }
 
 
@@ -144,6 +204,8 @@ public class CreditsDisplayer : MonoBehaviour
         titleText.color = settings.titleColor;
 
         lastSpawnedTransform = titleText.rectTransform;
+
+        lastTitleTransform = titleText.rectTransform;
     }
 
     private void SpawnItemText(CreditsBlock[] blocks, int blockI, int itemI, ref float accomulatedDistance)
@@ -163,6 +225,27 @@ public class CreditsDisplayer : MonoBehaviour
         itemText.color = settings.itemsColor;
 
         lastSpawnedTransform = itemText.rectTransform;
+    }
+
+
+    private IEnumerator MoveTexts()
+    {
+        while (!hasReachedEndPosition)
+        {
+            Vector3 textsHolderPosition = settings.parentTransform.position;
+            textsHolderPosition.y += Time.deltaTime * settings.scrollSpeed;
+            settings.parentTransform.position = textsHolderPosition;
+            yield return null;
+        }
+
+        moveCreditsCoroutine = null;
+    }
+
+
+    private void CreditsEndAnimation()
+    {
+        GameAudioManager.GetInstance().PlayCardSelected();
+        lastTitleTransform.DOPunchScale(Vector3.one * 0.1f, 1.5f, 4).OnComplete(() => Finish() );
     }
 
 }
