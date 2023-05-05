@@ -139,6 +139,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
 
         pauseMenuUI.SetActive(false);
+        mainMenuButtonText.gameObject.SetActive(true);
         surrenderText.gameObject.SetActive(false);
 
         OWMap_Node.IsGlobalInteractable = true;

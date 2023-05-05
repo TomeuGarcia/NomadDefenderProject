@@ -80,6 +80,8 @@ public class GameAudioManager : MonoBehaviour
     [Header("BATTLE SCENES")]
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
+    [SerializeField] private AudioSource battleCursedWiresAudioSource;
+    [SerializeField] private AudioClip cursedWiresWave;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -587,25 +589,27 @@ public class GameAudioManager : MonoBehaviour
 
     // Battle
     public void PlayLocationTakeDamage()
-
     {
-
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(0.8f, 0.9f);
 
         battleAudioSource.Play();
-
     }
 
     public void PlayLocationDestroyed()
-
     {
-
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
 
         battleAudioSource.Play();
+    }
 
+    public void PlayWiresCursedWave()
+    {
+        battleCursedWiresAudioSource.clip = cursedWiresWave;
+        battleCursedWiresAudioSource.pitch = 1.0f;
+
+        battleCursedWiresAudioSource.Play();
     }
 
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,14 @@ public class MainMenu : MonoBehaviour
     [Header("PLAY BUTTON")]
     [SerializeField] private GameObject playButtonGO;
     [SerializeField] private GameObject newGameButton;
+
+    [Header("BUTTONS")]
+    [SerializeField] private RectTransform playButtonTransform;
+    [SerializeField] private RectTransform newGameButtonTransform;
+    [SerializeField] private RectTransform creditsButtonTransform;
+    [SerializeField] private RectTransform quitButtonTransform;
+
+
 
     [Header("TEXT DECODERS")]
     [SerializeField] private TextManager textDecoderManager;
@@ -95,6 +104,10 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
         PauseMenu.GetInstance().gameCanBePaused = true;
+
+        GameAudioManager.GetInstance().PlayNodeSelectedSound();
+        ButtonClickedPunch(newGameButtonTransform);
+
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
 
         if (skipFirstBattle)
@@ -122,6 +135,10 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
+
+        GameAudioManager.GetInstance().PlayNodeSelectedSound();
+        ButtonClickedPunch(playButtonTransform);
+
         PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
@@ -131,14 +148,20 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         //Load First Scene        
-        SceneLoader.GetInstance().StartLoadMainMenuCredits();
+        SceneLoader.GetInstance().StartLoadNormalGame();
     }
 
     public void Credits()
     {
         if (!canInteract) return;
 
-        //TODO: LOAD CREDITS SCENE
+        canInteract = false;
+
+        GameAudioManager.GetInstance().PlayNodeSelectedSound();
+        ButtonClickedPunch(creditsButtonTransform);
+
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
+        SceneLoader.GetInstance().StartLoadMainMenuCredits();
     }
 
     public void Title()
@@ -175,6 +198,8 @@ public class MainMenu : MonoBehaviour
     {
         if (!canInteract) return;
 
+        ButtonClickedPunch(quitButtonTransform);
+
         Application.Quit();
     }
 
@@ -187,6 +212,12 @@ public class MainMenu : MonoBehaviour
     {
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
+
+    private void ButtonClickedPunch(RectTransform buttonTransform)
+    {
+        buttonTransform.DOPunchScale(Vector3.one * 0.004f, 0.5f, 6);
+    }
+
 
     private void OnDisable()
     {
