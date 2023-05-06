@@ -35,10 +35,14 @@ public class SpeedUpButton : MonoBehaviour
     private void OnEnable()
     {
         TDGameManager.OnGameFinishStart += ResetTimeOnGameEnd;
+
+        LastEnemyKIllAnimation.OnQueryResumeTimescale += UpdateTimeSpeed;
     }
     private void OnDisable()
     {
         TDGameManager.OnGameFinishStart -= ResetTimeOnGameEnd;
+
+        LastEnemyKIllAnimation.OnQueryResumeTimescale -= UpdateTimeSpeed;
     }
 
     public void ChangeTimeSpeed()

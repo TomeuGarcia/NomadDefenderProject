@@ -86,12 +86,20 @@ public class Pool : MonoBehaviour
         {
             for (int i = 0; i < objects.Count; i++)
             {
-                if (!objects[i].activeInHierarchy)
+                if (objects[i] == null)
                 {
-                    objects[i].gameObject.transform.position = position;
-                    objects[i].gameObject.transform.rotation = rotation;
-                    return objects[i];
+                    objects.RemoveAt(i);
+                    i = 0;
                 }
+                else
+                {
+                    if (!objects[i].activeInHierarchy)
+                    {
+                        objects[i].gameObject.transform.position = position;
+                        objects[i].gameObject.transform.rotation = rotation;
+                        return objects[i];
+                    }
+                }                
             }
         }
 

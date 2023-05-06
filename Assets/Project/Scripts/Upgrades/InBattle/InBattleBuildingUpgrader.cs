@@ -120,7 +120,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         canUpgradeParticles.gameObject.SetActive(false);
         canUpgardeParticlesAreActive = false;
         canUpgradeTextHolder.gameObject.SetActive(false);
-        canUpgradeTextHolderStartPosition = Vector3.up * 1.25f;
+        canUpgradeTextHolderStartPosition = canUpgradeTextHolder.position;
         cgCanUpgradeText.alpha = 0f;
 
         buildingOwnerWasPlaced = false;
@@ -213,8 +213,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
+    public virtual void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
+        rangeLvl = newRangeLvl;
+
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;
@@ -395,12 +397,18 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             PlayPositiveAnimationTextCostPunch();
 
             InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
+
+            DoUpgradeSupport();
         }
         else
         {
             PlayNegativeAnimationTextCostPunch();
             OnCanNotUpgradeSupport();
         }
+    }
+
+    protected virtual void DoUpgradeSupport()
+    {
     }
 
     protected bool CanUpgrade(int levelToCheck)
@@ -536,10 +544,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         costText.transform.DOComplete();
         costCurrencyImage.DOComplete();
 
-        costText.DOColor(flashColor, duration).OnComplete(() => costText.DOColor(endColor, duration));
+        //costText.DOColor(flashColor, duration).OnComplete(() => costText.DOColor(endColor, duration));
         costText.transform.DOPunchScale(Vector3.one * punchScale, duration * 2, punchVibrato);
 
-        costCurrencyImage.DOColor(flashColor, duration).OnComplete(() => costCurrencyImage.DOColor(endColor, duration));
+        //costCurrencyImage.DOColor(flashColor, duration).OnComplete(() => costCurrencyImage.DOColor(endColor, duration));
     }
     protected void PlayPositiveAnimationTextCostPunch()
     {
@@ -604,9 +612,21 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             canUpgradeParticles.gameObject.SetActive(true);
             canUpgradeParticles.Play();
             canUpgardeParticlesAreActive = true;
-
+            
             ShowCanUpgradeText();
-        }        
+        }
+
+        if (!IsCardUpgradedToMax(currentBuildingLevel))
+        {
+            if (HasEnoughCurrencyToLevelUp())
+            {
+                costText.color = costCurrencyImage.color = fadedInColor;
+            }
+            else
+            {
+                costText.color = costCurrencyImage.color = Color.red;
+            }
+        }
     }
     protected virtual void CheckHoveredButtonsCanNowUpgrade()
     {
@@ -624,6 +644,18 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
             canUpgardeParticlesAreActive = false;
 
             HideCanUpgradeText();
+        }
+
+        if (!IsCardUpgradedToMax(currentBuildingLevel))
+        {
+            if (HasEnoughCurrencyToLevelUp())
+            {
+                costText.color = costCurrencyImage.color = fadedInColor;
+            }
+            else
+            {
+                costText.color = costCurrencyImage.color = Color.red;
+            }
         }
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,7 @@ public class TDGameManager : MonoBehaviour
     private int numAliveLocations = 0;
 
     [SerializeField] private bool hasToSendBattleState = true;
+    private bool alreadyPlayedVictoryOrGameOver = false;
 
     [Header("TILES MATERIAL")]
     [SerializeField] private Material obstaclesTilesMaterial;
@@ -108,13 +110,16 @@ public class TDGameManager : MonoBehaviour
 
     private void DecreaseAliveLocationsAndCheckGameOver(PathLocation destroyedPathLocation)
     {
+        if (!HasAliveLocationsLeft()) return;
+
         --numAliveLocations;
         if (!HasAliveLocationsLeft())
         {
             obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
             tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
-            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);            
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
 
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, true);
             GameOver();
         }
         else
@@ -123,15 +128,25 @@ public class TDGameManager : MonoBehaviour
             //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             outerPlanesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
             StartCoroutine(FirstLocationDestroyedAnimation());
+
+            //destroyAnim
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, false);
         }
     }
 
     private void GameOver()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("GameOver");
         SetBattleStateResult();
 
         StartCoroutine(GameOverAnimation());
+        Sequence audioSequence = DOTween.Sequence();
+        audioSequence.AppendInterval(0.35f);
+        audioSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayWiresCursedWave());
+
 
         if (OnGameOverStart != null) OnGameOverStart();
         if (OnGameFinishStart != null) OnGameFinishStart();
@@ -146,6 +161,9 @@ public class TDGameManager : MonoBehaviour
     }
     private void Victory()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
         SetBattleStateResult();
 
@@ -167,12 +185,12 @@ public class TDGameManager : MonoBehaviour
 
     private IEnumerator GameOverAnimation()
     {
-        defeatHolder.SetActive(true);
+        //defeatHolder.SetActive(true);
 
         //yield return new WaitForSeconds(5f);
-        for (float t = 0f; t < 5f; t += Time.deltaTime)
+        for (float t = 1f; t < 5f; t += Time.deltaTime)
         {
-            float errorWiresStep = t * t * 0.5f;
+            float errorWiresStep = t * t * 1.0f;
             obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
             outerPlanesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
@@ -182,7 +200,8 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     private IEnumerator VictoryAnimation()
@@ -192,7 +211,8 @@ public class TDGameManager : MonoBehaviour
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     public void ForceFinishScene()

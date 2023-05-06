@@ -29,6 +29,7 @@ public class TextDecoder : MonoBehaviour
 
     [Header("PARAMETERS")]
     public DecodingParameters decodingParameters;
+    public bool advanceDecoding = true;
 
     [Header("STRINGS")]
     [SerializeField] public List<string> textStrings;
@@ -53,14 +54,19 @@ public class TextDecoder : MonoBehaviour
 
     public void Activate()
     {
-            doneDecoding = false;
-            StartCoroutine(Decode());
-            textComponent.enabled = true;
-        
+        doneDecoding = false;
+        StartCoroutine(Decode());
+        textComponent.enabled = true;
     }
 
     private void InitDecodingVariables()
     {
+        //TODO: CAREFUL
+        if(decodingParameters != null)
+        {
+            decodingParameters.startDecodingIndex = 0;
+        }
+
         nextLine = false;
         if(textComponent != null)
         {
@@ -136,9 +142,11 @@ public class TextDecoder : MonoBehaviour
             }
             //
 
-            GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
-
-            indexChar++;
+            if (advanceDecoding)
+            {
+                GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
+                indexChar++;
+            }
             yield return new WaitForSecondsRealtime(decodingParameters.updateCharIndexTime);
         }
     }
