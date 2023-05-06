@@ -16,7 +16,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private RectTransform quitButtonTransform;
 
 
-
     [Header("TEXT DECODERS")]
     [SerializeField] private TextManager textDecoderManager;
     [SerializeField] private TextDecoder titleTextDecoder;

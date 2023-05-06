@@ -43,6 +43,11 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip cardPlayed;
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
+    [SerializeField] private AudioSource cardsAudioLoopSource;
+    [SerializeField] private AudioClip cardRedrawConfirmation;
+    [SerializeField] private AudioClip cardRedrawIncreasing;
+    private float cardAudioLoopStartVolume;
+    private bool playingRedrawsIncrease;
 
     [Header("CARDS INFO")]
     [SerializeField] private AudioSource cardsInfoAudioSource;
@@ -138,6 +143,7 @@ public class GameAudioManager : MonoBehaviour
         }
         initMusicDictionary();
         musicDefaultVolume = musicAudioSource.volume;
+        cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
     private void Update()
     {
@@ -424,6 +430,39 @@ public class GameAudioManager : MonoBehaviour
         cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
         cardsAudioSource.Play();
+    }
+
+    public void PlayRedrawConfirmation()
+    {
+        cardsAudioSource.clip = cardRedrawConfirmation;
+        cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
+
+        cardsAudioSource.Play();
+    }
+
+    public void PlayRedrawIncreasing(float startPitch, float endPitch, float duration)
+    {
+        playingRedrawsIncrease = true;
+
+        cardsAudioLoopSource.DOComplete(false);
+
+        cardsAudioLoopSource.clip = cardRedrawIncreasing;
+        cardsAudioLoopSource.volume = cardAudioLoopStartVolume;
+        cardsAudioLoopSource.pitch = startPitch;
+        cardsAudioLoopSource.DOPitch(endPitch, duration);
+
+        cardsAudioLoopSource.Play();
+    }
+    public void StopRedrawIncreasing()
+    {
+        playingRedrawsIncrease = false;
+
+        float duration = 0.08f;
+        cardsAudioLoopSource.DOFade(0f, duration);
+        cardsAudioLoopSource.DOPitch(0.5f, duration).OnComplete(() =>
+        {
+            if (!playingRedrawsIncrease) cardsAudioLoopSource.Stop();
+        });       
     }
 
 
