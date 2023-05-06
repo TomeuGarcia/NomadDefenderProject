@@ -66,6 +66,10 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] TextLine textLine;
     [SerializeField] bool isTutorial;
 
+    [Header("PARTICLES")]
+    [SerializeField] private ParticleSystem printParticles_PS;
+
+
     private bool replacementDone = false;
     public bool ReplacementDone => replacementDone;
 
@@ -675,6 +679,9 @@ public class CardPartReplaceManager : MonoBehaviour
         Sequence selectedCardSequence = DOTween.Sequence();
         selectedCardSequence.AppendCallback(() => cardPartHolder.ReplaceStartStopInteractions());
         selectedCardSequence.AppendCallback(() => upgradeCardHolder.StopInteractions());
+        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader());
+        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlaySmokeBurst());
+        selectedCardSequence.AppendCallback(() => printParticles_PS.Play() );
         selectedCardSequence.AppendInterval(1.7f);
 
         selectedCardSequence.AppendCallback(() => cardPartHolder.Hide(0.5f, 0.2f));

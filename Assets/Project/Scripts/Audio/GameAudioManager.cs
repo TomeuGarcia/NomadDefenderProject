@@ -37,6 +37,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
+    [SerializeField] private AudioSource cardsAudioSource3;
     [SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
     [SerializeField] private AudioClip cardHoverExit;
@@ -68,9 +69,13 @@ public class GameAudioManager : MonoBehaviour
     [Header("UPGRADE SCENES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
+    [SerializeField] private AudioSource upgradesAudioSource3;
     [SerializeField] private AudioClip upgradeButtonPressed;
     [SerializeField] private AudioClip upgradeButtonCantBePressed;
     [SerializeField] private AudioClip cardPartSwap;
+    [SerializeField] private AudioClip cardPlacedOnUpgradeHolder;
+    [SerializeField] private AudioClip cardRetreivedFromUpgradeHolder;
+    [SerializeField] private AudioClip cardFinalRetreivedFromUpgrader;
 
     [Header("ENEMIES")]
     [SerializeField] private AudioSource[] enemiesAudioSources;
@@ -87,6 +92,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip locationTakeDamage;
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
+    [SerializeField] private AudioClip stageVictory;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -119,6 +125,11 @@ public class GameAudioManager : MonoBehaviour
     private float droneBuildUpInitVolume;
     private IEnumerator droneBuildUp;
     private IEnumerator droneLerpBuildUp;
+
+    [Header("OTHER EFFECTS")]
+    [SerializeField] private AudioSource effectsAudioSource;
+    [SerializeField] private AudioClip smokeBurst;
+    [SerializeField] private AudioClip replaceMachineLoad;
 
 
     public enum MusicType {NONE,MENU,OWMAP,BATTLE}
@@ -434,10 +445,11 @@ public class GameAudioManager : MonoBehaviour
 
     public void PlayRedrawConfirmation()
     {
-        cardsAudioSource.clip = cardRedrawConfirmation;
-        cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        //cardsAudioSource3.clip = cardRedrawConfirmation;
+        cardsAudioSource3.clip = cardSelected;
+        cardsAudioSource3.pitch = Random.Range(1.5f, 1.7f);
 
-        cardsAudioSource.Play();
+        cardsAudioSource3.Play();
     }
 
     public void PlayRedrawIncreasing(float startPitch, float endPitch, float duration)
@@ -589,6 +601,33 @@ public class GameAudioManager : MonoBehaviour
         upgradesAudioSource2.Play();
     }
 
+    public void PlayCardPlacedOnUpgradeHolder()
+    {
+        upgradesAudioSource3.clip = cardPlacedOnUpgradeHolder;
+        upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.volume = 0.1f;
+
+        upgradesAudioSource3.Play();
+    }
+    public void PlayCardRetreivedFromUpgradeHolder()
+    {
+        upgradesAudioSource3.clip = cardRetreivedFromUpgradeHolder;
+        upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.volume = 0.1f;
+
+        upgradesAudioSource3.Play();
+    }
+    public void PlayCardFinalRetreivedFromUpgrader()
+    {
+        //upgradesAudioSource3.clip = cardFinalRetreivedFromUpgrader;
+        //upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.clip = cardHovered;
+        upgradesAudioSource3.volume = 1f;
+        upgradesAudioSource3.pitch = 0.4f;
+
+        upgradesAudioSource3.Play();
+    }
+
 
 
     // Enemies
@@ -646,6 +685,14 @@ public class GameAudioManager : MonoBehaviour
     public void PlayWiresCursedWave()
     {
         battleCursedWiresAudioSource.clip = cursedWiresWave;
+        battleCursedWiresAudioSource.pitch = 1.0f;
+
+        battleCursedWiresAudioSource.Play();
+    }
+
+    public void PlayBattleStageVictory()
+    {
+        battleCursedWiresAudioSource.clip = stageVictory;
         battleCursedWiresAudioSource.pitch = 1.0f;
 
         battleCursedWiresAudioSource.Play();
@@ -793,6 +840,25 @@ public class GameAudioManager : MonoBehaviour
     {
         nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeSpawnAudioSource.Play();
+    }
+
+
+    // OTHER EFFECTS
+    public void PlaySmokeBurst()
+    {
+        effectsAudioSource.clip = smokeBurst;
+        effectsAudioSource.volume = 0.1f;
+        effectsAudioSource.pitch = 1.0f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayReplaceMachineLoad()
+    {
+        effectsAudioSource.clip = replaceMachineLoad;
+        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.pitch = 1.3f;
+
+        effectsAudioSource.Play();
     }
 
 }
