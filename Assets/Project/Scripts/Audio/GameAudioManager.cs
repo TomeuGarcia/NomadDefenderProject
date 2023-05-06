@@ -447,7 +447,7 @@ public class GameAudioManager : MonoBehaviour
     {
         //cardsAudioSource3.clip = cardRedrawConfirmation;
         cardsAudioSource3.clip = cardSelected;
-        cardsAudioSource3.pitch = Random.Range(1.5f, 1.7f);
+        cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
 
         cardsAudioSource3.Play();
     }
