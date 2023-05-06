@@ -71,7 +71,6 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
 
-        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         StartCoroutine(leftCardSlot.Activate());
         yield return new WaitForSeconds(0.5f);
 
@@ -211,6 +210,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void ActivateButton()
     {
+        screenTransitionFD.invert = false;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         screenButtonText.material.SetFloat("_ReplaceCoef", 1.0f);
 
         //lerp button out
@@ -221,6 +222,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void DeactivateButton()
     {
+        screenTransitionFD.invert = true;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
 
         //lerp button in
