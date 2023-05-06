@@ -9,11 +9,16 @@ public class CardContainer : MonoBehaviour
     [SerializeField] Transform botDoor;
     [SerializeField] Transform seal;
 
-    [SerializeField] MeshRenderer lights;
-    [SerializeField] Transform pistons;
+    [SerializeField] List<MeshRenderer> lights = new List<MeshRenderer>();
+    [SerializeField] List<Transform> pistons = new List<Transform>();
+
+    [SerializeField] Material offLightMat;
+    [SerializeField] Material onLightMat;
 
     public IEnumerator Activate()
     {
+        StartCoroutine(Pistons(-0.55f));
+        StartCoroutine(Lights(true));
         seal.DORotate(new Vector3(seal.rotation.eulerAngles.x, seal.rotation.eulerAngles.y, -180), 0.25f);
         yield return new WaitForSeconds(0.25f);
 
@@ -40,9 +45,31 @@ public class CardContainer : MonoBehaviour
         botDoor.DOLocalMoveY(0.15f, 0.4f);
         yield return new WaitForSeconds(0.75f);
 
+        StartCoroutine(Lights(false));
         seal.DORotate(new Vector3(seal.rotation.eulerAngles.x, seal.rotation.eulerAngles.y, 180), 0.25f);
         yield return new WaitForSeconds(0.25f);
+        StartCoroutine(Pistons(-0.5f));
     }
 
+    private IEnumerator Lights(bool open)
+    {
+        Material matToChange;
+        if (open) { matToChange = onLightMat; }
+        else { matToChange = offLightMat; }
 
+        foreach (MeshRenderer mesh in lights)
+        {
+            mesh.material = matToChange;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private IEnumerator Pistons(float goalPos)
+    {
+        foreach (Transform p in pistons)
+        {
+            p.DOLocalMoveZ(goalPos, 0.5f);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
 }
