@@ -37,7 +37,7 @@ public class EnemyWave
 
     public EnemyWave()
     {
-        enemiesInWave = new EnemyInWave[2];
+        enemiesInWave = new EnemyInWave[0];
         for (int i = 0; i < enemiesInWave.Length; ++i)
         {
             enemiesInWave[i] = new EnemyInWave();

@@ -208,10 +208,10 @@ public class TDGameManager : MonoBehaviour
     {
         //victoryHolder.SetActive(true);
 
-        yield return new WaitForSeconds(1f);
         GameAudioManager.GetInstance().PlayBattleStageVictory();
+        //yield return new WaitForSeconds(1f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
