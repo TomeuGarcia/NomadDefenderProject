@@ -270,6 +270,8 @@ public class UpgradeMachineControl : MonoBehaviour
         StartCoroutine(MaterialLerp.FloatLerp(cableTransitionCoefFD, tempMaterials.ToArray()));
         //yield return new WaitForSeconds(0.75f);
 
+        GameAudioManager.GetInstance().PlayReplaceMachineLoad();
+
         //Cable Energy a 1
         yield return new WaitForSeconds(cableTransitionCoefFD.time);
         //cableIndAlphaFD.invert = false;
@@ -283,7 +285,8 @@ public class UpgradeMachineControl : MonoBehaviour
             tempMaterials.Add(mesh.material);
         }
         StartCoroutine(MaterialLerp.FloatLerp(cableEnergyCoefFD, tempMaterials.ToArray()));
-        
+
+
         yield return new WaitForSeconds(1.5f);
         screenTransitionFD.invert = true;
         screenTransitionFD.time = 0.25f;

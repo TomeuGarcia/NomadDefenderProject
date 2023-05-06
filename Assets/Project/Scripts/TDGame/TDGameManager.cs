@@ -207,7 +207,11 @@ public class TDGameManager : MonoBehaviour
     private IEnumerator VictoryAnimation()
     {
         //victoryHolder.SetActive(true);
-        yield return new WaitForSeconds(5f);
+
+        yield return new WaitForSeconds(1f);
+        GameAudioManager.GetInstance().PlayBattleStageVictory();
+
+        yield return new WaitForSeconds(4f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -10,10 +11,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject newGameButton;
 
     [Header("BUTTONS")]
-    [SerializeField] private RectTransform playButtonTransform;
-    [SerializeField] private RectTransform newGameButtonTransform;
-    [SerializeField] private RectTransform creditsButtonTransform;
-    [SerializeField] private RectTransform quitButtonTransform;
+    [SerializeField] private TextMeshProUGUI playButtonText;
+    [SerializeField] private TextMeshProUGUI newGameButtonText;
+    [SerializeField] private TextMeshProUGUI creditsButtonText;
+    [SerializeField] private TextMeshProUGUI quitButtonText;
 
 
     [Header("TEXT DECODERS")]
@@ -104,8 +105,7 @@ public class MainMenu : MonoBehaviour
         canInteract = false;
         PauseMenu.GetInstance().gameCanBePaused = true;
 
-        GameAudioManager.GetInstance().PlayNodeSelectedSound();
-        ButtonClickedPunch(newGameButtonTransform);
+        ButtonClickedPunch(newGameButtonText);
 
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
 
@@ -135,8 +135,7 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
 
-        GameAudioManager.GetInstance().PlayNodeSelectedSound();
-        ButtonClickedPunch(playButtonTransform);
+        ButtonClickedPunch(playButtonText);
 
         PauseMenu.GetInstance().gameCanBePaused = true;
 
@@ -156,8 +155,8 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
 
-        GameAudioManager.GetInstance().PlayNodeSelectedSound();
-        ButtonClickedPunch(creditsButtonTransform);
+        
+        ButtonClickedPunch(creditsButtonText);
 
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         SceneLoader.GetInstance().StartLoadMainMenuCredits();
@@ -197,7 +196,7 @@ public class MainMenu : MonoBehaviour
     {
         if (!canInteract) return;
 
-        ButtonClickedPunch(quitButtonTransform);
+        ButtonClickedPunch(quitButtonText);
 
         Application.Quit();
     }
@@ -212,9 +211,26 @@ public class MainMenu : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
 
-    private void ButtonClickedPunch(RectTransform buttonTransform)
+    private void ButtonClickedPunch(TextMeshProUGUI buttonText)
     {
-        buttonTransform.DOPunchScale(Vector3.one * 0.004f, 0.5f, 6);
+        float duration = 0.5f;
+
+        Sequence punchSequence = DOTween.Sequence();
+        punchSequence.Append(buttonText.rectTransform.DOPunchScale(Vector3.one * 0.4f, duration, 6));
+
+        //int numBlinks = 3;
+        //float blinkDuration = duration / (numBlinks*10f);
+        //for (int i = 0; i < numBlinks; ++i)
+        //{
+        //    punchSequence.Join(buttonText.DOFade(0.0f, blinkDuration));
+        //    punchSequence.AppendInterval(blinkDuration);
+        //    punchSequence.Join(buttonText.DOFade(1.0f, blinkDuration));
+        //    punchSequence.AppendInterval(blinkDuration);
+        //}
+        
+
+
+        GameAudioManager.GetInstance().PlayCardSelected();
     }
 
 

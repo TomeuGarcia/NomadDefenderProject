@@ -234,7 +234,7 @@ public class UpgradeCardHolder : MonoBehaviour
             itCard.OnCardSelected -= SetSelectedCard;
             itCard.canDisplayInfoIfNotInteractable = false;
         }
-        selectedCard.OnCardSelectedNotHovered += RetrieveCard;
+        selectedCard.OnCardSelectedNotHovered += RetrieveCardWithSound;
 
         // Audio
         GameAudioManager.GetInstance().PlayCardSelected();
@@ -255,6 +255,8 @@ public class UpgradeCardHolder : MonoBehaviour
             {
                 itCard.canDisplayInfoIfNotInteractable = true;
             }
+
+            GameAudioManager.GetInstance().PlayCardPlacedOnUpgradeHolder();
         }
         else
         {
@@ -285,9 +287,14 @@ public class UpgradeCardHolder : MonoBehaviour
     //}
 
 
+    public void RetrieveCardWithSound(BuildingCard card)
+    {
+        RetrieveCard(card);
+        GameAudioManager.GetInstance().PlayCardRetreivedFromUpgradeHolder();
+    }
     public void RetrieveCard(BuildingCard card)
     {
-        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         SetStandardCard(card);
 
         selectedCard = null;
@@ -298,11 +305,12 @@ public class UpgradeCardHolder : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardHoverExit();
     }
 
+
     public void StopInteractions()
     {
         canInteract = false;
 
-        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCardWithSound;
 
         foreach (BuildingCard card in cards)
         {
@@ -337,7 +345,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
     public void FinalRetrieveCard(BuildingCard card)
     {
-        selectedCard.OnCardSelectedNotHovered -= RetrieveCard;
+        selectedCard.OnCardSelectedNotHovered -= RetrieveCardWithSound;
 
         selectedCard.RootCardTransform.SetParent(transform);
         SetStandardCard(card);   
@@ -357,7 +365,9 @@ public class UpgradeCardHolder : MonoBehaviour
 
         Hide(duration, delayBetweenCards);
 
+
         yield return new WaitForSeconds(duration * cards.Length + delayBetweenCards * cards.Length);
+
 
         if (OnFinalRetrieve != null) OnFinalRetrieve();
     }
