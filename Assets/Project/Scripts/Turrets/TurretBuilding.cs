@@ -55,6 +55,7 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
+        CardBuildingType = BuildingCard.CardBuildingType.TURRET;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
     }
@@ -266,7 +267,18 @@ public class TurretBuilding : RangeBuilding
 
         InvokeOnBuildingPlaced();
     }
-
+    public override void GotEnabledPlacing()
+    {
+        basePart.GotEnabledPlacing();
+    }
+    public override void GotDisabledPlacing()
+    {
+        basePart.GotDisabledPlacing();
+    }
+    public override void GotMovedWhenPlacing()
+    {
+        basePart.GotMovedWhenPlacing();
+    }
 
     public override void ShowQuickLevelUI()
     {

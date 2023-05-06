@@ -49,6 +49,10 @@ public class UpgradeMachineControl : MonoBehaviour
     private List<Material> tempMaterials = new List<Material>();
 
 
+    public delegate void UpgradeMachineControlAction();
+    public event UpgradeMachineControlAction OnReplaceStart;
+    public event UpgradeMachineControlAction OnReplaceCardPrinted;
+
 
     private void Awake()
     {
@@ -227,6 +231,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void Replace()
     {
+        if (OnReplaceStart != null) OnReplaceStart();
+
         rightCardSlot.PulsePanel(0);
         leftCardSlot.PulsePanel(0);
         screenCardSlot.PulsePanel(0);
@@ -264,6 +270,8 @@ public class UpgradeMachineControl : MonoBehaviour
         StartCoroutine(MaterialLerp.FloatLerp(cableTransitionCoefFD, tempMaterials.ToArray()));
         //yield return new WaitForSeconds(0.75f);
 
+        GameAudioManager.GetInstance().PlayReplaceMachineLoad();
+
         //Cable Energy a 1
         yield return new WaitForSeconds(cableTransitionCoefFD.time);
         //cableIndAlphaFD.invert = false;
@@ -277,11 +285,14 @@ public class UpgradeMachineControl : MonoBehaviour
             tempMaterials.Add(mesh.material);
         }
         StartCoroutine(MaterialLerp.FloatLerp(cableEnergyCoefFD, tempMaterials.ToArray()));
-        
+
+
         yield return new WaitForSeconds(1.5f);
         screenTransitionFD.invert = true;
         screenTransitionFD.time = 0.25f;
         StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
+
+        if (OnReplaceCardPrinted != null) OnReplaceCardPrinted();
         screenCardSlot.Extract();
     }
 }

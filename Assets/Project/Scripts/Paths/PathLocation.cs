@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.ProBuilder.Shapes;
+using Unity.VisualScripting;
 
 public class PathLocation : MonoBehaviour
 {
@@ -14,6 +17,8 @@ public class PathLocation : MonoBehaviour
 
     [Header("NODE VISUALS")]
     [SerializeField] private MeshRenderer nodeMesh;
+    [SerializeField] Material lostMaterial;
+    [SerializeField] GameObject animationCube;
     private Material nodeMeshMaterial;
 
     [Header("MESH HOLDER")]
@@ -163,4 +168,37 @@ public class PathLocation : MonoBehaviour
         }
     }
 
+
+    public void Deactivate()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, 1.5f);
+        foreach (Collider col in hits)
+        {
+            if (col.gameObject.GetComponent<PathTile>() != null)
+            {
+                StartCoroutine(col.gameObject.GetComponent<PathTile>().Deactivate());
+            }
+        }
+    }
+
+    public IEnumerator Animation(bool lost = false)
+    {
+        if(animationCube == null)
+        {
+            yield break;
+        }
+        GameObject newCube = Instantiate(animationCube, transform.parent);
+        newCube.transform.position = transform.GetChild(0).position;
+        newCube.transform.SetParent(transform.parent);
+        if(lost)
+        {
+            newCube.GetComponent<MeshRenderer>().material = lostMaterial;
+        }
+        yield return new WaitForSeconds(0.25f);
+
+        newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
+        yield return new WaitForSeconds(0.75f);
+
+        newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(0.0f, 100.0f, 0.0f), 1.25f);
+    }
 }

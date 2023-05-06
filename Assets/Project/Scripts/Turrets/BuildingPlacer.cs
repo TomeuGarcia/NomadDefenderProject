@@ -9,6 +9,12 @@ public class BuildingPlacer : MonoBehaviour
     private Building selectedBuilding = null;
     private List<Building> placedBuildings = new List<Building>();
 
+    private static BuildingPlacer s_currentBuildingPlacer;
+    public static Building[] GetCurrentPlacedBuildings()
+    {
+        return s_currentBuildingPlacer.placedBuildings.ToArray();
+    }
+
     private Tile currentHoveredTile = null;
     private bool placingEnabled = false;
     private Coroutine dragAndDropCardCoroutine = null;
@@ -18,19 +24,32 @@ public class BuildingPlacer : MonoBehaviour
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+
+    public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
+
+
     public delegate void BuildingPlacerAction2(BuildingCard buildingCard); 
     public event BuildingPlacerAction2 OnBuildingCantBePlaced;
 
+    public delegate void BuildingPlacerAction3(Building building); 
+    public static event BuildingPlacerAction3 OnPreviewTurretBuildingHoversTile;
+
+
+
     private bool SelectedBuildingIsBeingShown => selectedBuilding != null;
 
-
+    
     private void OnEnable()
     {
+        s_currentBuildingPlacer = this;
+
         TDGameManager.OnEndGameResetPools += RemoveInteractions;
     }
 
     private void OnDisable()
     {
+        s_currentBuildingPlacer = null;
+
         TDGameManager.OnEndGameResetPools -= RemoveInteractions;
     }
 
@@ -47,6 +66,8 @@ public class BuildingPlacer : MonoBehaviour
         this.selectedBuildingCard = selectedBuildingCard;
         selectedBuilding = selectedBuildingCard.copyBuildingPrefab.GetComponent<Building>();
 
+        selectedBuilding.GotEnabledPlacing();
+
         Tile.OnTileUnhovered += HideBuildingPreview;
         Tile.OnTileHovered += ShowBuildingOnTilePreview;
         //Tile.OnTileSelected += TryPlaceBuilding;
@@ -59,6 +80,11 @@ public class BuildingPlacer : MonoBehaviour
 
     public void DisablePlacing()
     {
+        if ( selectedBuilding != null)
+        {
+            selectedBuilding.GotDisabledPlacing();
+        }
+
         Tile.OnTileUnhovered -= HideBuildingPreview;
         Tile.OnTileHovered -= ShowBuildingOnTilePreview;
         //Tile.OnTileSelected -= TryPlaceBuilding;
@@ -73,6 +99,8 @@ public class BuildingPlacer : MonoBehaviour
         if (dragAndDropCardCoroutine != null) StopCoroutine(dragAndDropCardCoroutine);
         placingEnabled = false;
         currentHoveredTile = null;
+
+        if (OnPlacingBuildingsDisabled != null) OnPlacingBuildingsDisabled();
     }
     private IEnumerator DelayedDisablePlacing(float duration)
     {
@@ -106,6 +134,14 @@ public class BuildingPlacer : MonoBehaviour
 
         currentHoveredTile = tile;
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
+
+        selectedBuilding.GotMovedWhenPlacing();
+
+
+        if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            if (OnPreviewTurretBuildingHoversTile != null) OnPreviewTurretBuildingHoversTile(selectedBuilding);
+        }
     }
 
     private void HideBuildingPreview()

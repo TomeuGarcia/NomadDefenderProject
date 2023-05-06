@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using System;
 
 public class EnemyWaveManager : MonoBehaviour
 {
@@ -24,6 +23,18 @@ public class EnemyWaveManager : MonoBehaviour
     private IEnumerator[] waveCoroutines;
     private Vector3 lastEnemyPos;
 
+    [SerializeField] TextLine textLine;
+
+    [Header("FEEDBACK")]
+    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
+
+
+    [Header("ENEMY PATH TRAIL")]
+    [SerializeField] private GameObject enemyPathTrailPrefab;
+    private PathFollower[] enemyPathFollowerTrails;
+    private bool enemyPathFollowerTrailsEnabled;
+    private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.up * 0.5f;
+
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
@@ -32,10 +43,6 @@ public class EnemyWaveManager : MonoBehaviour
 
     
 
-    [SerializeField] TextLine textLine;
-
-    [Header("FEEDBACK")]
-    [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
 
     private void Awake()
@@ -49,16 +56,21 @@ public class EnemyWaveManager : MonoBehaviour
         waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
 
 
+        StartCoroutine(SetupEnemyPathFollowerTrails());
+        
+
         StartCoroutine(WaitForStart());
 
         HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
         Enemy.OnEnemyDeathDropCurrency += OnEnemyDeath;
+        Enemy.OnEnemySuicide += OnEnemyDeath;
     }
 
     private void OnEnable()
     {
         CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
         TDGameManager.OnGameOverStart += ForceStopWaves;
+        TDGameManager.OnGameOverStart += PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
 
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
@@ -66,11 +78,20 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished += FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
         }
+
+        if (enemyPathFollowerTrails != null)
+        {
+            for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+            {
+                enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
+            }
+        }        
     }
     private void OnDisable()
     {
         CardDrawer.OnStartSetupBattleCanvases -= ActivateCanvas;
         TDGameManager.OnGameOverStart -= ForceStopWaves;
+        TDGameManager.OnGameOverStart -= PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
 
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
@@ -78,6 +99,27 @@ public class EnemyWaveManager : MonoBehaviour
             enemyWaveSpawners[i].OnWaveFinished -= FinishWave;
             enemyWaveSpawners[i].OnLastWaveFinished -= FinishLastWave;
         }
+
+        if (enemyPathFollowerTrails != null)
+        {
+            for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+            {
+                enemyPathFollowerTrails[i].OnPathEndReached2 -= ResetEnemyPathFollowerTrailToStart;
+            }
+        }
+
+        if (activeWaves > 0)
+        {
+            for (int waveCoroutineI = 0; waveCoroutineI < waveCoroutines.Length; ++waveCoroutineI)
+            {
+                if (waveCoroutines[waveCoroutineI] != null)
+                {
+                    StopCoroutine(waveCoroutines[waveCoroutineI]);
+                }
+            }
+            // TODO fix enemy Factory
+        }       
+        
     }
 
     private void ActivateCanvas()
@@ -102,6 +144,8 @@ public class EnemyWaveManager : MonoBehaviour
         {
             StartWave(enemyWaveSpawners[i], enemySpawnTransform, i);
         }
+
+        StopEnemyPathFollowerTrails();
     }
 
 
@@ -140,6 +184,23 @@ public class EnemyWaveManager : MonoBehaviour
             consoleDialog.PrintLine(textLine);
         }
     }
+    private void PrintConsoleGameOver()
+    {
+        StartCoroutine(DoPrintConsoleGameOver());
+    }
+    private IEnumerator DoPrintConsoleGameOver()
+    {
+        consoleDialog.SetMaxLinesOnScreen(10);
+        string[] texts = { "STAGE OVER", "StAge OVeR", "StaGE oVER", "sTAgE OVER", "STAGE oVer" };
+        PrintConsoleLine(TextTypes.SYSTEM, texts[0], true);
+        for (int i = 0; i < 10; ++i)
+        {
+            yield return new WaitForSeconds(0.15f);  
+            PrintConsoleLine(TextTypes.SYSTEM, texts[Random.Range(0, texts.Length)]);
+        }
+    }
+
+
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner, int index)
     {
         if(OnWaveFinished != null) OnWaveFinished();
@@ -204,17 +265,80 @@ public class EnemyWaveManager : MonoBehaviour
         lastEnemyPos = enemy.Position;
     }
 
-    private void Update()
+
+
+
+
+    private IEnumerator SetupEnemyPathFollowerTrails()
     {
-        // TO DELETE
-        if(Input.GetKeyDown(KeyCode.L))
+        yield return new WaitForSeconds(2f);
+        
+        enemyPathFollowerTrails = new PathFollower[startPathNodes.Length];
+        for (int i = 0; i < startPathNodes.Length; ++i)
         {
-            for (int i = 0; i < enemyWaveSpawners.Length; i++)
+            enemyPathFollowerTrails[i] = Instantiate(enemyPathTrailPrefab, startPathNodes[i].Position + enemyPathFollowerTrailsPositionOffset, Quaternion.identity,
+                enemySpawnTransform).GetComponent<PathFollower>();
+
+            enemyPathFollowerTrails[i].Init(startPathNodes[i].GetNextNode(), startPathNodes[i].GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, 
+                enemyPathFollowerTrails[i].transform);
+            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+            enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
+        }
+
+        StartEnemyPathFollowerTrails();
+    }
+
+    private void StartEnemyPathFollowerTrails()
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i) 
+        {
+            enemyPathFollowerTrails[i].SetMoveSpeed(1f);
+        }
+        enemyPathFollowerTrailsEnabled = true;
+    }
+
+    private void StopEnemyPathFollowerTrails()
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+        {
+            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+        }
+        enemyPathFollowerTrailsEnabled = false;
+    }
+
+    private void ResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail)
+    {
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
+        {
+            if (enemyPathFollowerTrails[i] == enemyPathFollowerTrail)
             {
-                StopCoroutine(waveCoroutines[i]);
-                currentWaves = enemyWaveSpawners[i].SetToLastWave();
-                StartNextWave(enemyWaveSpawners[i], i);
+                StartCoroutine(DoResetEnemyPathFollowerTrailToStart(enemyPathFollowerTrail, startPathNodes[i]));
+                return;
             }
         }
+    }
+
+    private IEnumerator DoResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail, PathNode startNode)
+    {
+        enemyPathFollowerTrail.SetMoveSpeed(0f);
+        yield return new WaitForSeconds(0.5f);
+        enemyPathFollowerTrail.gameObject.SetActive(false);
+
+        if (!enemyPathFollowerTrailsEnabled)
+        {
+            yield break;
+        }
+
+        enemyPathFollowerTrail.transform.position = startNode.Position + enemyPathFollowerTrailsPositionOffset;
+        enemyPathFollowerTrail.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+
+        if (!enemyPathFollowerTrailsEnabled)
+        {            
+            yield break;
+        }
+
+        enemyPathFollowerTrail.SetMoveSpeed(1f);
+        enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, enemyPathFollowerTrail.transform);
     }
 }

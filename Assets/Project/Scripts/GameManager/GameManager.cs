@@ -41,8 +41,16 @@ public class GameManager : MonoBehaviour
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
-        mapSceneLoader.LoadMainMenuScene(3f);
+        //mapSceneLoader.LoadMainMenuScene(3f);
+        StartCoroutine(DoStartVictory());
     }
+    private IEnumerator DoStartVictory()
+    {
+        yield return new WaitForSeconds(3.0f);
+        SceneLoader.GetInstance().StartLoadGameEndCredits();
+    }
+
+
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);

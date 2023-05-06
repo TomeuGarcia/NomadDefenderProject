@@ -8,7 +8,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [SerializeField] private Transform meshTransform;
     public Transform MeshTransform => meshTransform;
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material previewMaterial;
+    [SerializeField] protected Material previewMaterial;
     private Material[] defaultMaterials;
     protected Material[] previewMaterials;
 
@@ -23,27 +23,32 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
     private void Awake()
     {
+        AwakeInit();
+    }
+    protected void AwakeInit()
+    {
         foreach (GameObject go in visualUpgrades)
         {
             go.SetActive(false);
         }
     }
+
     virtual public void Init(TurretBuilding turretOwner, float turretRange)
     {
         InitMaterials();
         
     }
-    virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding,float supportRange)
+    virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
     {
         InitMaterials();
     }
 
-    virtual public void Upgrade(int newStatLevel) 
+    virtual public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel) 
     {
-        if (newStatLevel < visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
+        if (newStatLevel <= visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
     }
 
-    private void InitMaterials()
+    protected virtual void InitMaterials()
     {
         defaultMaterials = new Material[meshRenderer.materials.Length];
         previewMaterials = new Material[meshRenderer.materials.Length];
@@ -69,6 +74,26 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+    public virtual void GotEnabledPlacing()
+    {
+
+    }
+    public virtual void GotDisabledPlacing()
+    {
+
+    }
+    public virtual void GotMovedWhenPlacing()
+    {
+
+    }
+    
+    public virtual void GotHoveredWhenPlaced()
+    {
+    }
+    public virtual void GotUnoveredWhenPlaced()
+    {
+    }
+
 
     public void SetMaterialColor(Color color)
     {

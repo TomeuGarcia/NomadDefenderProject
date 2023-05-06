@@ -13,6 +13,6 @@ public class ExtraHPDamagePassive : BaseDamagePassive
             return damage;
         }
 
-        return (int)((float)damage * 1.2f);
+        return (int)((float)damage * 1.25f);
     }
 }

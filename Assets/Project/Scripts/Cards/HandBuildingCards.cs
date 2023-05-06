@@ -392,6 +392,8 @@ public class HandBuildingCards : MonoBehaviour
         {
             FinishedRedrawing();
         }
+
+        GameAudioManager.GetInstance().PlayRedrawConfirmation();
     }
     private IEnumerator RedrawHold(BuildingCard card)
     {
@@ -402,6 +404,10 @@ public class HandBuildingCards : MonoBehaviour
         float redrawHoldTime = card.borderFillValue01 * redrawHoldDuration;
         float t = card.borderFillValue01;
 
+        float minPitch = 1.0f;
+        float maxPitch = 1.8f;
+        float startPitch = Mathf.Lerp(minPitch, maxPitch, t);
+        GameAudioManager.GetInstance().PlayRedrawIncreasing(startPitch, maxPitch, redrawHoldDuration - redrawHoldTime);
 
         while (redrawHoldTime < redrawHoldDuration && Input.GetMouseButton(0) && card.cardState == BuildingCard.CardStates.HOVERED)
         {
@@ -422,7 +428,9 @@ public class HandBuildingCards : MonoBehaviour
         else
         {
             card.StartDecreaseBorderFill();
-        }        
+        }       
+        
+        GameAudioManager.GetInstance().StopRedrawIncreasing();
     }
 
 
@@ -839,7 +847,7 @@ public class HandBuildingCards : MonoBehaviour
             }
             else
             {
-                cards[i].SetCannotBePlayedAnimation();
+                cards[i].SetCannotBePlayedAnimation(true);
             }
         }
     }

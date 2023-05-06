@@ -19,6 +19,12 @@ public class SlowBase : TurretPartBase_Prefab
 
     private Material slowPlaneMaterial;
 
+
+    private void Awake()
+    {
+        AwakeInit();
+    }
+
     override public void Init(TurretBuilding turretOwner, float turretRange) 
     {
         base.Init(turretOwner, turretRange);
@@ -43,9 +49,9 @@ public class SlowBase : TurretPartBase_Prefab
         slowPlaneMaterial.SetFloat("_TileNum", planeRange);
     }
 
-    override public void Upgrade(int newStatLevel)
+    override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {
-        base.Upgrade(newStatLevel);
+        base.Upgrade(ownerSupportBuilding, newStatLevel);
         currentLvl = newStatLevel;
 
         foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)

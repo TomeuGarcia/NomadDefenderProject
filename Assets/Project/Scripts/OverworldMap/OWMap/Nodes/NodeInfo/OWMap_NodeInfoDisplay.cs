@@ -101,7 +101,7 @@ public abstract class OWMap_NodeInfoDisplay : MonoBehaviour
     // Functionality    
     private void CheckShowInfo()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !OWMap_Node.IsGlobalInteractable) return;
 
         if (hideInfoCoroutine != null) StopCoroutine(hideInfoCoroutine);
         ShowNodeInfo();
@@ -109,7 +109,7 @@ public abstract class OWMap_NodeInfoDisplay : MonoBehaviour
 
     private void CheckHideInfo()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !OWMap_Node.IsGlobalInteractable) return;
 
         if (showInfoCoroutine != null) StopCoroutine(showInfoCoroutine);
         HideNodeInfo();        

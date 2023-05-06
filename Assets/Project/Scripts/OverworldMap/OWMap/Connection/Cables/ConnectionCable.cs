@@ -11,7 +11,8 @@ public abstract class ConnectionCable : MonoBehaviour
     [SerializeField] protected List<GameObject> cableBones = new List<GameObject>();
     protected List<Material> cableMaterials = new List<Material>();
 
-    [SerializeField] protected MaterialLerp.FloatData lerpData;
+    [SerializeField] protected MaterialLerp.FloatData fillLerpData;
+    [SerializeField] protected MaterialLerp.FloatData indLerpData;
 
     private void Awake()
     {
@@ -26,7 +27,7 @@ public abstract class ConnectionCable : MonoBehaviour
 
     public virtual void FillCable(bool destroyed)
     {
-        lerpData.invert = false;
+        fillLerpData.invert = false;
         if (destroyed) { foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 1.0f); mat.SetFloat("_ConnectionCoef", 0.0f); } }
     }
 
@@ -35,10 +36,22 @@ public abstract class ConnectionCable : MonoBehaviour
         StartCoroutine(DoUnfillCable());
     }
 
+    public virtual void StartIndication()
+    {
+        indLerpData.invert = false;
+        StartCoroutine(MaterialLerp.FloatLerp(indLerpData, cableMaterials.ToArray()));
+    }
+
+    public virtual void StopIndication()
+    {
+        indLerpData.invert = true;
+        StartCoroutine(MaterialLerp.FloatLerp(indLerpData, cableMaterials.ToArray()));
+    }
+
     private IEnumerator DoUnfillCable()
     {
-        lerpData.invert = true;
-        yield return StartCoroutine(MaterialLerp.FloatLerp(lerpData, cableMaterials.ToArray()));
+        fillLerpData.invert = true;
+        yield return StartCoroutine(MaterialLerp.FloatLerp(fillLerpData, cableMaterials.ToArray()));
 
         foreach (Material mat in cableMaterials) { mat.SetFloat("_Broken", 0.0f); }
     }

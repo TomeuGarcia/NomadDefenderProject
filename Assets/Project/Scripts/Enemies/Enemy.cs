@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemyDeathDropCurrency;
+    public static EnemyAction OnEnemySuicide;
     public EnemyAction OnEnemyDeath;
     public EnemyAction OnEnemyDeactivated;
 
@@ -186,6 +187,7 @@ public class Enemy : MonoBehaviour
 
     private void Suicide()
     {
+        if (OnEnemySuicide != null) OnEnemySuicide(this);
         Deactivation();
     }
 
@@ -262,5 +264,11 @@ public class Enemy : MonoBehaviour
         
         healthSystem.AddArmor(armorToAdd);
         healthHUD.Show();
+    }
+
+
+    public virtual Vector3 GetPosition()
+    {
+        return Position;
     }
 }

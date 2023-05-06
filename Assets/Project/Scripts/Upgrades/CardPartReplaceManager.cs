@@ -20,13 +20,17 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private DeckData deckData;
     private List<BuildingCard> deckCards;
 
+    [Header("MACHINE")]
+    [SerializeField] private UpgradeMachineControl upgradeMachineControl;
+    [SerializeField] private GameObject incompletePreviewCard;
+
     [Header("HOLDERS")]
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
     public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
     public CardPartHolder CardPartHolder => cardPartHolder;
 
-    private enum PartType { ATTACK, BODY, BASE }
+    public enum PartType { ATTACK, BODY, BASE }
     [Header("TYPE")]
     [SerializeField] private int numCards = 3;
     [SerializeField] private int numParts = 3;
@@ -51,13 +55,20 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     [Header("COMPONENTS")]
-    [SerializeField] private GameObject buttonText;
-    [SerializeField] private Animator buttonAnimator;
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
+    [SerializeField] private Transform cardPlacerToParent;
+    [SerializeField] private Transform cardPartPlacerToParent;
+    [SerializeField] private Transform resultCardPlacerToParent;
+    [SerializeField] private TurretBuildingCard previewTurretCard;
 
+    [Header("TEXT")]
     [SerializeField] ConsoleDialogSystem consoleDialog;
     [SerializeField] TextLine textLine;
     [SerializeField] bool isTutorial;
+
+    [Header("PARTICLES")]
+    [SerializeField] private ParticleSystem printParticles_PS;
+
 
     private bool replacementDone = false;
     public bool ReplacementDone => replacementDone;
@@ -65,10 +76,6 @@ public class CardPartReplaceManager : MonoBehaviour
     private bool cardIsReady = false;
     private bool partIsReady = false;
     [HideInInspector] public bool canFinalRetrieveCard = true;
-
-    [Header("MATERIALS")]
-    [SerializeField] private MeshRenderer buttonMeshRenderer;
-    private Material buttonMaterial;
 
 
     private int numPartsIfPerfect = 1;
@@ -97,12 +104,12 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         deckCards = deckData.GetCardsReference();
 
-        buttonMaterial = buttonMeshRenderer.material;
-
         SetButtonNotReady();
         Init();
 
         PlayCardAndCardPartsAppearAnimation();
+
+        UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
     }
 
     private void OnEnable()
@@ -113,6 +120,9 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.OnCardUnselected += CardWasUnselected;
         cardPartHolder.OnPartSelected += PartWasSelected;
         cardPartHolder.OnPartUnselected += PartWasUnselected;
+
+        upgradeMachineControl.OnReplaceStart += AttachSelectedCardsToMachine;
+        upgradeMachineControl.OnReplaceCardPrinted += AttachResultCardToMachine;
     }
 
     private void OnDisable()
@@ -123,6 +133,9 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.OnCardUnselected -= CardWasUnselected;
         cardPartHolder.OnPartSelected -= PartWasSelected;
         cardPartHolder.OnPartUnselected -= PartWasUnselected;
+
+        upgradeMachineControl.OnReplaceStart -= AttachSelectedCardsToMachine;
+        upgradeMachineControl.OnReplaceCardPrinted -= AttachResultCardToMachine;
     }
 
 
@@ -341,12 +354,13 @@ public class CardPartReplaceManager : MonoBehaviour
 
         if (CanConfirm())
         {
-            buttonAnimator.SetTrigger("Pressed");
-            buttonMaterial.SetFloat("_IsAlwaysOn", 1f);
-
             replacementDone = true;
 
-            StartCoroutine(ReplecementAnimation());
+            //buttonAnimator.SetTrigger("Pressed");
+            //buttonMaterial.SetFloat("_IsAlwaysOn", 1f);
+            //StartCoroutine(ReplecementAnimation());
+
+            upgradeMachineControl.Replace();
 
             // Audio
             GameAudioManager.GetInstance().PlayUpgradeButtonPressed();
@@ -393,6 +407,7 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
+    
     private IEnumerator ReplecementAnimation()
     {
         upgradeCardHolder.StopInteractions();
@@ -460,7 +475,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
         consoleDialog.Clear();
         PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
-        
+
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }
@@ -470,47 +485,75 @@ public class CardPartReplaceManager : MonoBehaviour
     private void CardWasSelected()
     {
         cardIsReady = true;
-        upgradeCardHolder.StartAnimation();
+        upgradeMachineControl.SelectLeftCard();
 
-        if (partIsReady) SetButtonReady();
+        if (partIsReady)
+        {
+            SetButtonReady();            
+            UpdatePreviewCard_CardAndCardPart(previewTurretCard, upgradeCardHolder.selectedCard as TurretBuildingCard, CardPartHolder.selectedCardPart);
+        }
+        else
+        {
+            UpdatePreviewCard_MissingParts(previewTurretCard, false, true);
+        }
     }
-
     private void CardWasUnselected()
     {
         cardIsReady = false;
-        upgradeCardHolder.FinishAnimation();
+        upgradeMachineControl.RetrieveLeftCard();
 
-        if (partIsReady) SetButtonNotReady();
+        if (partIsReady)
+        {
+            SetButtonNotReady();
+            UpdatePreviewCard_MissingParts(previewTurretCard, true, false);
+        }
+        else
+        {
+            UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
+        }
     }
 
     private void PartWasSelected()
     {
         partIsReady = true;
-        cardPartHolder.StartAnimation();
+        upgradeMachineControl.SelectRightCard();
 
-        if (cardIsReady) SetButtonReady();
+        if (cardIsReady)
+        {
+            SetButtonReady();
+            UpdatePreviewCard_CardAndCardPart(previewTurretCard, upgradeCardHolder.selectedCard as TurretBuildingCard, CardPartHolder.selectedCardPart);
+        }
+        else
+        {
+            UpdatePreviewCard_MissingParts(previewTurretCard, true, false);
+        }
     }
-
     private void PartWasUnselected()
     {
         partIsReady = false;
-        cardPartHolder.FinishAnimation();
+        upgradeMachineControl.RetrieveRightCard();
 
-        if (cardIsReady) SetButtonNotReady();
+        if (cardIsReady)
+        {
+            SetButtonNotReady();
+            UpdatePreviewCard_MissingParts(previewTurretCard, false, true);
+        }
+        else
+        {
+            UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
+        }
     }
+
+
 
     private void SetButtonReady()
     {
-        buttonText.SetActive(true);
-
-        buttonMaterial.SetFloat("_IsOn", 1f);
+        upgradeMachineControl.ActivateButton();
     }
 
     private void SetButtonNotReady()
     {
-        buttonText.SetActive(false);
-
-        buttonMaterial.SetFloat("_IsOn", 0f);
+        upgradeMachineControl.DeactivateButton();
     }
 
     private void InvokeReplacementDone()
@@ -528,7 +571,6 @@ public class CardPartReplaceManager : MonoBehaviour
         if (OnReplacementStart != null) OnReplacementStart();
 
         SetButtonNotReady();
-        buttonMaterial.SetFloat("_IsAlwaysOn", 0f);
     }
 
     public bool GetPartIsReady()
@@ -602,5 +644,110 @@ public class CardPartReplaceManager : MonoBehaviour
         textLine.text = text;
         consoleDialog.PrintLine(textLine);
     }
+
+
+    private void AttachSelectedCardsToMachine()
+    {
+        upgradeCardHolder.selectedCard.RootCardTransform.SetParent(cardPlacerToParent);
+        cardPartHolder.selectedCardPart.RootCardTransform.SetParent(cardPartPlacerToParent);
+
+        Sequence selectedCardSequence = DOTween.Sequence();
+        selectedCardSequence.AppendInterval(0.3f);
+        float endY = upgradeCardHolder.selectedCard.RootCardTransform.position.y - 1.8f;
+        selectedCardSequence.Append(upgradeCardHolder.selectedCard.RootCardTransform.DOMoveY(endY, 0.65f));
+    }
+
+    private void AttachResultCardToMachine()
+    {
+        upgradeCardHolder.selectedCard.RootCardTransform.SetParent(resultCardPlacerToParent);
+        upgradeCardHolder.selectedCard.RootCardTransform.localPosition = Vector3.zero;
+        upgradeCardHolder.selectedCard.ResetCardPosition();
+
+        //upgradeCardHolder.selectedCard.RootCardTransform.localPosition = new Vector3(-7f, 1, 10.78f);
+        //upgradeCardHolder.selectedCard.RootCardTransform.position = resultCardPlacerToParent.position;
+
+
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+        ReplacePartInCard(selectedCard);
+
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayLevelUpAnimation();
+
+
+
+        Sequence selectedCardSequence = DOTween.Sequence();
+        selectedCardSequence.AppendCallback(() => cardPartHolder.ReplaceStartStopInteractions());
+        selectedCardSequence.AppendCallback(() => upgradeCardHolder.StopInteractions());
+        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader());
+        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlaySmokeBurst());
+        selectedCardSequence.AppendCallback(() => printParticles_PS.Play() );
+        selectedCardSequence.AppendInterval(1.7f);
+
+        selectedCardSequence.AppendCallback(() => cardPartHolder.Hide(0.5f, 0.2f));
+        selectedCardSequence.AppendInterval(1f);
+        if (replacedWithSamePart) selectedCardSequence.AppendInterval(1.5f);
+
+        selectedCardSequence.AppendCallback(() => upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f));
+        selectedCardSequence.AppendCallback(() => FinishResultCard());
+
+    }
+
+    private void FinishResultCard()
+    {
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+
+        upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
+    }
+
+
+
+
+    private void UpdatePreviewCard_CardAndCardPart(TurretBuildingCard previewCard, TurretBuildingCard selectedCard, CardPart selectedCardPart)
+    {
+        previewCard.RootCardTransform.gameObject.SetActive(true);
+
+        incompletePreviewCard.SetActive(false);
+
+        TurretPartAttack turretPartAttack = null;
+        TurretPartBody turretPartBody = null;
+        TurretPartBase turretPartBase = null;
+        TurretPassiveBase turretPassiveBase = null;
+
+        if (partType == PartType.ATTACK)
+        {
+            turretPartAttack = selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack;
+        }
+        else if (partType == PartType.BODY)
+        {
+            turretPartBody = selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody;
+        }
+        else if (partType == PartType.BASE)
+        {
+            turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
+            turretPassiveBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase;
+        }
+
+        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
+            partType, playCostSubtractAmountSamePart);
+    }
+
+    private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)
+    {
+        previewCard.RootCardTransform.gameObject.SetActive(false);
+
+        incompletePreviewCard.SetActive(true);
+
+        if (cardIsMissing)
+        {
+            // DO WHATEVER
+        }
+        if (cardPartIsMissing)
+        {
+            // DO WHATEVER
+        }
+    }
+
 
 }

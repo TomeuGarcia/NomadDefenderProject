@@ -8,11 +8,8 @@ using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] private Transform topBlackScreen;
-    private Vector3 topOpenPosition;
-
-    [SerializeField] private Transform bottomBlackScreen;
-    private Vector3 bottomOpenPosition;
+    [SerializeField] private Image topBlackImage;
+    [SerializeField] private Image bottomBlackImage;
 
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Color shutColor;
@@ -51,61 +48,40 @@ public class SceneLoader : MonoBehaviour
             Destroy(this);
         }
 
-        topOpenPosition = topBlackScreen.localPosition;
-        bottomOpenPosition = bottomBlackScreen.localPosition;
+
         backgroundImage.color = openColor;
+
+        topBlackImage.fillAmount = 0f;
+        bottomBlackImage.fillAmount = 0f;
 
         alreadyLoadingNextScene = false;
     }
 
     private void OnEnable()
     {
-        //TDGameManager.OnVictoryComplete += StartLoadNextScene; // not called, remove after check
-        //TDGameManager.OnGameOverComplete += StartReloadCurrentScene; // not called, remove after check
-
-        //CardPartReplaceManager.OnReplacementDone += StartLoadNextScene; // not called, remove after check
-
-        //GatherNewCardManager.OnCardGatherDone += StartLoadFirstScene; // not called, remove after check
-
         InitScene.OnStart += StartLoadMainMenu;
     }
 
     private void OnDisable()
     {
-        //TDGameManager.OnVictoryComplete -= StartLoadNextScene; // not called, remove after check
-        //TDGameManager.OnGameOverComplete -= StartReloadCurrentScene; // not called, remove after check
-
-        //CardPartReplaceManager.OnReplacementDone -= StartLoadNextScene; // not called, remove after check
-
-        //GatherNewCardManager.OnCardGatherDone -= StartLoadFirstScene; // not called, remove after check
-
         InitScene.OnStart -= StartLoadMainMenu;
-
     }
 
-    private void Update()
-    {
-        //if (alreadyLoadingNextScene) return;
-
-        //if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != mainMenuSceneIndex)
-        //{
-        //    if (OnSceneForceQuit != null) OnSceneForceQuit();
-        //    StartLoadMainMenu();
-        //}
-    }
 
 
     private void ShutAnimation(float duration)
     {
-        topBlackScreen.DOLocalMove(Vector3.zero, duration);
-        bottomBlackScreen.DOLocalMove(Vector3.zero, duration);
+        topBlackImage.DOFillAmount(1f, duration);
+        bottomBlackImage.DOFillAmount(1f, duration);
+
         backgroundImage.DOColor(shutColor, duration * 0.8f);
     }
 
     private void OpenAnimation(float duration)
     {
-        topBlackScreen.DOLocalMove(topOpenPosition, duration);
-        bottomBlackScreen.DOLocalMove(bottomOpenPosition, duration);
+        topBlackImage.DOFillAmount(0f, duration);
+        bottomBlackImage.DOFillAmount(0f, duration);
+
         backgroundImage.DOColor(openColor, duration * 1.2f);
     }
     private IEnumerator DoLoadScene(LoadSceneFunction loadSceneFunction)
@@ -142,21 +118,15 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(DoLoadScene(LoadTutorialScene));
     }
+    public void StartLoadGameEndCredits()
+    {
+        StartCoroutine(DoLoadScene(LoadGameEndCreditsScene));
+    }
+    public void StartLoadMainMenuCredits()
+    {
+        StartCoroutine(DoLoadScene(LoadMainMenuCreditsScene));
+    }
 
-    //public void StartLoadTutorialScene()
-    //{
-    //    StartCoroutine(DoLoadSceneWithoutAnimation(LoadNextScene));
-    //}
-    //private IEnumerator DoLoadSceneWithoutAnimation(LoadSceneFunction loadSceneFunction)
-    //{
-    //    alreadyLoadingNextScene = true;
-
-        
-    //    loadSceneFunction();
-    //    yield return new WaitForSeconds(loadSceneDuration);
-
-    //    alreadyLoadingNextScene = false;
-    //}
 
 
 
@@ -171,6 +141,14 @@ public class SceneLoader : MonoBehaviour
     private void LoadTutorialScene()
     {
         SceneManager.LoadScene("TutorialMap");
+    }
+    private void LoadGameEndCreditsScene()
+    {
+        SceneManager.LoadScene("GameEndCredits");
+    }
+    private void LoadMainMenuCreditsScene()
+    {
+        SceneManager.LoadScene("MainMenuCredits");
     }
 
     public void StartLoadMainMenu()
