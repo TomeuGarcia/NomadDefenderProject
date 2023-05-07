@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
-        overworldMapGameManager.DisableCardDisplayer();
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
     }
@@ -71,7 +70,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
         victorySubtitleTextDecoder.Activate();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
 
         GameAudioManager.GetInstance().MusicFadeOut(0.5f);
         
@@ -104,7 +103,6 @@ public class GameManager : MonoBehaviour
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);
-        overworldMapGameManager.DisableCardDisplayer();
 
         StartCoroutine(DoStartGameOver());
     }
