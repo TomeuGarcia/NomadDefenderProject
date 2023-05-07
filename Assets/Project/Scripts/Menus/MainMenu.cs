@@ -6,14 +6,18 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("PLAY BUTTON")]
+    [Header("BUTTONS")]
     [SerializeField] private GameObject playButtonGO;
     [SerializeField] private GameObject newGameButton;
+    [SerializeField] private GameObject optionsButton;
+    [SerializeField] private GameObject creditsButton;
+    [SerializeField] private GameObject quitButton;
 
     [Header("BUTTONS")]
     [SerializeField] private TextMeshProUGUI playButtonText;
     [SerializeField] private TextMeshProUGUI newGameButtonText;
     [SerializeField] private TextMeshProUGUI creditsButtonText;
+    [SerializeField] private TextMeshProUGUI optionsButtonText;
     [SerializeField] private TextMeshProUGUI quitButtonText;
 
 
@@ -22,6 +26,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder titleTextDecoder;
     [SerializeField] private TextDecoder newGameButtonTextDecoder;
     [SerializeField] private TextDecoder creditsButtonDecoder;
+    [SerializeField] private TextDecoder optionsButtonTextDecoder;
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
@@ -48,14 +53,12 @@ public class MainMenu : MonoBehaviour
         if (!finishedTutorails)
         {
             playButtonGO.SetActive(false);
-            Vector3 pos = newGameButton.GetComponent<RectTransform>().position;
-            newGameButton.GetComponent<RectTransform>().position = new Vector3(0.0f, pos.y, pos.z);
+            float offset = 0.3f;
 
-            pos = creditsButtonDecoder.transform.parent.GetComponent<RectTransform>().position;
-            creditsButtonDecoder.transform.parent.GetComponent<RectTransform>().position = new Vector3(pos.x + 0.25f, pos.y, pos.z);
-
-            pos = quitTextDecoder.transform.parent.GetComponent<RectTransform>().position;
-            quitTextDecoder.transform.parent.GetComponent<RectTransform>().position = new Vector3(pos.x - 0.25f, pos.y, pos.z);
+            newGameButton.GetComponent<RectTransform>().position -= Vector3.right * (offset + 0.1f);
+            quitTextDecoder.GetComponent<RectTransform>().position -= Vector3.right * offset;
+            optionsButton.GetComponent<RectTransform>().position += Vector3.right * offset;
+            creditsButtonDecoder.GetComponent<RectTransform>().position += Vector3.right * offset;
         }
 
         SetupTextDecoderManager();
@@ -79,8 +82,9 @@ public class MainMenu : MonoBehaviour
         textDecoders.Add(titleTextDecoder);
         if (playButtonGO.activeInHierarchy) { textDecoders.Add(playButtonTextDecoder); }
         textDecoders.Add(newGameButtonTextDecoder);
-        textDecoders.Add(creditsButtonDecoder);
+        textDecoders.Add(optionsButtonTextDecoder);
         textDecoders.Add(quitTextDecoder);
+        textDecoders.Add(creditsButtonDecoder);
 
         textDecoderManager.SetTextDecoders(textDecoders);
         //textDecoderManager.ResetTexts();
@@ -155,11 +159,23 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
 
-        
+
         ButtonClickedPunch(creditsButtonText);
 
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         SceneLoader.GetInstance().StartLoadMainMenuCredits();
+    }
+
+    public void Options()
+    {
+        if (!canInteract) return;
+
+        //canInteract = false;
+
+
+        ButtonClickedPunch(optionsButtonText);
+
+        PauseMenu.GetInstance().MainMenuOptions();
     }
 
     public void Title()
