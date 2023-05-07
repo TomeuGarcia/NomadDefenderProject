@@ -73,7 +73,7 @@ public class OverworldCardShower : MonoBehaviour
             else
                 OnBackToMap();
         }
-        if (Input.GetMouseButtonDown(2))
+        if (currentSelectedCard != null && Input.GetKeyDown(KeyCode.Mouse0))
         {
             DeselectCard();
         }
