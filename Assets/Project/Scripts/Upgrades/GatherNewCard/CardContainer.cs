@@ -20,6 +20,8 @@ public class CardContainer : MonoBehaviour
         StartCoroutine(Pistons(-0.55f));
         StartCoroutine(Lights(true));
         seal.DORotate(new Vector3(seal.rotation.eulerAngles.x, seal.rotation.eulerAngles.y, -180), 0.25f);
+        GameAudioManager.GetInstance().PlayContainerOpenStart();
+        GameAudioManager.GetInstance().PlayContainerSeal();
         yield return new WaitForSeconds(0.25f);
 
         seal.DOLocalMoveY(0.25f, 0.4f);
@@ -30,7 +32,9 @@ public class CardContainer : MonoBehaviour
         topDoor.DOLocalMoveX(0.9f, 0.4f);
         seal.DOLocalMoveX(-0.9f, 0.4f);
         botDoor.DOLocalMoveX(-0.9f, 0.4f);
-        yield return new WaitForSeconds(0.5f);
+        GameAudioManager.GetInstance().PlayContainerOpenEnd();
+        yield return new WaitForSeconds(0.25f);
+        GameAudioManager.GetInstance().PlayContainerLightOn();
     }
 
     public IEnumerator Deactivate()
@@ -38,15 +42,18 @@ public class CardContainer : MonoBehaviour
         topDoor.DOLocalMoveX(0f, 0.4f);
         seal.DOLocalMoveX(0f, 0.4f);
         botDoor.DOLocalMoveX(0f, 0.4f);
+        GameAudioManager.GetInstance().PlayContainerOpenEnd();
         yield return new WaitForSeconds(0.5f);
 
         seal.DOLocalMoveY(0.2f, 0.4f);
         topDoor.DOLocalMoveY(0.15f, 0.4f);
         botDoor.DOLocalMoveY(0.15f, 0.4f);
+        GameAudioManager.GetInstance().PlayContainerOpenStart();
         yield return new WaitForSeconds(0.75f);
 
         StartCoroutine(Lights(false));
         seal.DORotate(new Vector3(seal.rotation.eulerAngles.x, seal.rotation.eulerAngles.y, 180), 0.25f);
+        GameAudioManager.GetInstance().PlayContainerSeal();
         yield return new WaitForSeconds(0.25f);
         StartCoroutine(Pistons(-0.5f));
     }
@@ -60,6 +67,7 @@ public class CardContainer : MonoBehaviour
         foreach (MeshRenderer mesh in lights)
         {
             mesh.material = matToChange;
+            GameAudioManager.GetInstance().PlayContainerLightOn();
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -69,6 +77,7 @@ public class CardContainer : MonoBehaviour
         foreach (Transform p in pistons)
         {
             p.DOLocalMoveZ(goalPos, 0.5f);
+            GameAudioManager.GetInstance().PlayContainerPistonUp();
             yield return new WaitForSeconds(0.2f);
         }
     }

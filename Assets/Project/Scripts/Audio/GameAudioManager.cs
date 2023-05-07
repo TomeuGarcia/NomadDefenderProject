@@ -126,6 +126,13 @@ public class GameAudioManager : MonoBehaviour
     private IEnumerator droneBuildUp;
     private IEnumerator droneLerpBuildUp;
 
+    [Header("GATHER NEW CARDS")]
+    [SerializeField] private AudioSource containerSealAudioSource;
+    [SerializeField] private AudioSource containerOpenStartAudioSource;
+    [SerializeField] private AudioSource containerOpenEndAudioSource;
+    [SerializeField] private AudioSource containerLightOnAudioSource;
+    [SerializeField] private AudioSource containerPistonUpAudioSource;
+
     [Header("OTHER EFFECTS")]
     [SerializeField] private AudioSource effectsAudioSource;
     [SerializeField] private AudioClip smokeBurst;
@@ -840,6 +847,31 @@ public class GameAudioManager : MonoBehaviour
     {
         nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeSpawnAudioSource.Play();
+    }
+
+
+    // GATHER NEW CARD
+    public void PlayContainerSeal()
+    {
+        containerSealAudioSource.Play();
+    }
+    public void PlayContainerOpenStart()
+    {
+        containerOpenStartAudioSource.Play();
+    }
+    public void PlayContainerOpenEnd()
+    {
+        //containerOpenEndAudioSource.Play();
+    }
+    public void PlayContainerLightOn()
+    {
+        containerLightOnAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        containerLightOnAudioSource.Play();
+    }
+    public void PlayContainerPistonUp()
+    {
+        containerPistonUpAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        containerPistonUpAudioSource.Play();
     }
 
 
