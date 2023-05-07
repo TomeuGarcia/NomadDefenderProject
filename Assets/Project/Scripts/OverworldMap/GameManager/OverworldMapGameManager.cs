@@ -7,6 +7,8 @@ public class OverworldMapGameManager : MonoBehaviour
     private OWMap_Node[][] mapNodes;
     public OWMap_Node[][] GetMapNodes() { return mapNodes; }
     private int currentMapLevelI;
+    private bool gameFinished = false;
+
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
@@ -205,8 +207,10 @@ public class OverworldMapGameManager : MonoBehaviour
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            Debug.Log("END OF MAP REACHED ---> VICTORY");
+            gameFinished = true;
             InvokeOnVictory();
+            DisableCardDisplayer();
+            Debug.Log("END OF MAP REACHED ---> VICTORY");
             return;
         }
         
@@ -223,7 +227,9 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
+            gameFinished = true;
             InvokeOnGameOver();
+            DisableCardDisplayer();
             Debug.Log("ALL PATHS DESTROYED ---> GAME OVER");
         }
 
@@ -307,7 +313,7 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapPawn.ActivateCamera();
 
         cardDisplayer.ResetAll();
-        cardDisplayer.gameObject.SetActive(canDisplayDeck);
+        cardDisplayer.gameObject.SetActive(canDisplayDeck && !gameFinished);
 
         mapEventSystemGO.SetActive(true);
 
@@ -321,8 +327,11 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         owMapPawn.DeactivateCamera();
 
-        cardDisplayer.DestroyAllCards();
-        cardDisplayer.gameObject.SetActive(false);
+        if (gameFinished)
+        {
+            cardDisplayer.DestroyAllCards();
+            cardDisplayer.gameObject.SetActive(false);
+        }
 
         mapEventSystemGO.SetActive(false);
 
