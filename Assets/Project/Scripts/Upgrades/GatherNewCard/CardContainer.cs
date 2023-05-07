@@ -49,12 +49,11 @@ public class CardContainer : MonoBehaviour
         topDoor.DOLocalMoveY(0.15f, 0.4f);
         botDoor.DOLocalMoveY(0.15f, 0.4f);
         GameAudioManager.GetInstance().PlayContainerOpenStart();
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(Lights(false));
         seal.DORotate(new Vector3(seal.rotation.eulerAngles.x, seal.rotation.eulerAngles.y, 180), 0.25f);
         GameAudioManager.GetInstance().PlayContainerSeal();
-        yield return new WaitForSeconds(0.25f);
         StartCoroutine(Pistons(-0.5f));
     }
 
