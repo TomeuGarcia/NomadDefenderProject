@@ -156,24 +156,23 @@ public class GameAudioManager : MonoBehaviour
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            NextMusic1();
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
-            musicAudioSource.volume = volume;
-        }
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
-            musicAudioSource.volume = volume;
-        }
-
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.N))
+    //    {
+    //        NextMusic1();
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.P))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.O))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //}
 
     public static GameAudioManager GetInstance()
     {

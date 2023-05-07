@@ -146,10 +146,11 @@ public class HandBuildingCards : MonoBehaviour
         //{
         //    ResetAndSetStandardCard(selectedCard);
         //}
-        if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated)
-        {
-            if (OnQueryDrawCard != null) OnQueryDrawCard();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated)
+        //{
+        //    if (OnQueryDrawCard != null) OnQueryDrawCard();
+        //}
     }
 
     
