@@ -156,24 +156,23 @@ public class GameAudioManager : MonoBehaviour
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            NextMusic1();
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
-            musicAudioSource.volume = volume;
-        }
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
-            musicAudioSource.volume = volume;
-        }
-
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.N))
+    //    {
+    //        NextMusic1();
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.P))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.O))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //}
 
     public static GameAudioManager GetInstance()
     {
@@ -284,7 +283,7 @@ public class GameAudioManager : MonoBehaviour
     }
 
 
-    private void MusicFadeIn(MusicType type, float duration, float maxVolume)
+    public void MusicFadeIn(MusicType type, float duration, float maxVolume)
     {
         AudioClip clip = musicClips[type];
         musicAudioSource.clip = clip;
@@ -294,7 +293,7 @@ public class GameAudioManager : MonoBehaviour
 
         musicAudioSource.DOFade(maxVolume, duration);
     }
-    private void MusicFadeOut(float duration)
+    public void MusicFadeOut(float duration)
     {
         musicAudioSource.DOFade(0f, duration);
     }
@@ -605,7 +604,7 @@ public class GameAudioManager : MonoBehaviour
     {
         upgradesAudioSource3.clip = cardPlacedOnUpgradeHolder;
         upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
-        upgradesAudioSource3.volume = 0.1f;
+        upgradesAudioSource3.volume = 0.05f;
 
         upgradesAudioSource3.Play();
     }
@@ -613,7 +612,7 @@ public class GameAudioManager : MonoBehaviour
     {
         upgradesAudioSource3.clip = cardRetreivedFromUpgradeHolder;
         upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
-        upgradesAudioSource3.volume = 0.1f;
+        upgradesAudioSource3.volume = 0.05f;
 
         upgradesAudioSource3.Play();
     }
@@ -686,6 +685,7 @@ public class GameAudioManager : MonoBehaviour
     {
         battleCursedWiresAudioSource.clip = cursedWiresWave;
         battleCursedWiresAudioSource.pitch = 1.0f;
+        battleCursedWiresAudioSource.volume = 0.6f;
 
         battleCursedWiresAudioSource.Play();
     }
@@ -694,6 +694,7 @@ public class GameAudioManager : MonoBehaviour
     {
         battleCursedWiresAudioSource.clip = stageVictory;
         battleCursedWiresAudioSource.pitch = 1.0f;
+        battleCursedWiresAudioSource.volume = 0.3f;
 
         battleCursedWiresAudioSource.Play();
     }
