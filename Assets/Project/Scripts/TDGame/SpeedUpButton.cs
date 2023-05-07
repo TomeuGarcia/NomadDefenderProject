@@ -20,13 +20,15 @@ public class SpeedUpButton : MonoBehaviour
 
     private int current = 0;
     private int numSpeeds = 0;
-
+    private bool gameFinished = false;
 
     private void Awake()
     {
         numSpeeds = timeScales.Count;
         UpdateTimeSpeed();
+        PauseMenu.GameIsPaused = false;
     }
+
     private void OnDestroy()
     {
         Time.timeScale = 1.0f;
@@ -47,7 +49,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.GameIsPaused) return;
+        if (PauseMenu.GameIsPaused || gameFinished) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -76,6 +78,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void ResetTimeOnGameEnd()
     {
+        gameFinished = true;
         current = 0;
         UpdateTimeSpeed();
 
