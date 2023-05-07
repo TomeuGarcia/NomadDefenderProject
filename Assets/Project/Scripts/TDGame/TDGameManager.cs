@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,10 +34,13 @@ public class TDGameManager : MonoBehaviour
     [SerializeField] private PathLocation[] pathLocations;
     private int numAliveLocations = 0;
 
-
     [SerializeField] private bool hasToSendBattleState = true;
+    private bool alreadyPlayedVictoryOrGameOver = false;
 
-
+    [Header("TILES MATERIAL")]
+    [SerializeField] private Material obstaclesTilesMaterial;
+    [SerializeField] private Material tilesMaterial;
+    [SerializeField] private Material outerPlanesMaterial;
 
 
     private void Awake()
@@ -49,7 +53,7 @@ public class TDGameManager : MonoBehaviour
 
         numAliveLocations = pathLocations.Length;        
 
-        InitLocationsVisuals();
+        InitLocationsVisuals();        
     }    
 
 
@@ -80,7 +84,22 @@ public class TDGameManager : MonoBehaviour
             OWMap_Node owMapNode = battleStateResult.nodeResults[i].owMapNode;
             
             pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
-        }        
+        }
+
+        tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        tilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+        tilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        tilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
+
+        obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        obstaclesTilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+        obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
+
+        outerPlanesMaterial.SetFloat("_ErrorWiresStep", 0f);
+        outerPlanesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
+        outerPlanesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
+        outerPlanesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
     }
 
 
@@ -89,21 +108,45 @@ public class TDGameManager : MonoBehaviour
         return numAliveLocations > 0;
     }
 
-    private void DecreaseAliveLocationsAndCheckGameOver()
+    private void DecreaseAliveLocationsAndCheckGameOver(PathLocation destroyedPathLocation)
     {
+        if (!HasAliveLocationsLeft()) return;
+
         --numAliveLocations;
         if (!HasAliveLocationsLeft())
         {
+            obstaclesTilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
+            tilesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset", destroyedPathLocation.transform.position);
+
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, true);
             GameOver();
+        }
+        else
+        {
+            obstaclesTilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            //tilesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            outerPlanesMaterial.SetVector("_ErrorOriginOffset2", destroyedPathLocation.transform.position);
+            StartCoroutine(FirstLocationDestroyedAnimation());
+
+            //destroyAnim
+            LastEnemyKIllAnimation.instance.DeathAnimation(destroyedPathLocation.transform.position, false);
         }
     }
 
     private void GameOver()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("GameOver");
         SetBattleStateResult();
 
         StartCoroutine(GameOverAnimation());
+        Sequence audioSequence = DOTween.Sequence();
+        audioSequence.AppendInterval(0.35f);
+        audioSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayWiresCursedWave());
+
 
         if (OnGameOverStart != null) OnGameOverStart();
         if (OnGameFinishStart != null) OnGameFinishStart();
@@ -118,6 +161,9 @@ public class TDGameManager : MonoBehaviour
     }
     private void Victory()
     {
+        if (alreadyPlayedVictoryOrGameOver) return;
+
+        alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
         SetBattleStateResult();
 
@@ -125,25 +171,52 @@ public class TDGameManager : MonoBehaviour
         if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
+    private IEnumerator FirstLocationDestroyedAnimation()
+    {
+        for (float t = 0f; t < 2.3f; t += Time.deltaTime)
+        {
+            float errorWiresStep = (t * t * 0.3f) + 1.0f;
+            obstaclesTilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            tilesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", errorWiresStep);
+            yield return null;
+        }
+    }
 
     private IEnumerator GameOverAnimation()
     {
-        defeatHolder.SetActive(true);
-        yield return new WaitForSeconds(5f);
+        //defeatHolder.SetActive(true);
+
+        //yield return new WaitForSeconds(5f);
+        for (float t = 1f; t < 5f; t += Time.deltaTime)
+        {
+            float errorWiresStep = t * t * 1.0f;
+            obstaclesTilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            tilesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            outerPlanesMaterial.SetFloat("_ErrorWiresStep", errorWiresStep);
+            yield return null;
+        }
+
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     private IEnumerator VictoryAnimation()
     {
         //victoryHolder.SetActive(true);
+
+        GameAudioManager.GetInstance().PlayBattleStageVictory();
+        //yield return new WaitForSeconds(1f);
+
         yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
-        mapSceneNotifier.InvokeOnSceneFinished();        
+        mapSceneNotifier.InvokeOnSceneFinished();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     public void ForceFinishScene()

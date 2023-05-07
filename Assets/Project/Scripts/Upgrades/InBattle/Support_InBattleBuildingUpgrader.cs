@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 {
@@ -13,7 +14,16 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Button abilityButton;
     [SerializeField] private Image abilityButtonImage;
     [SerializeField] private Image abilityBackFillImage;
+    [SerializeField] private Image abilityFillImage;
     [SerializeField] private Image abilityBarToCurrencyCost;
+
+    [Header("Upgrade Descriptions")]
+    [SerializeField] private TextMeshProUGUI nextUpgradeText;
+    [SerializeField] private TextMeshProUGUI nextUpgradeDescriptionText;
+    [SerializeField] private CanvasGroup cgNextUpgradeDescription;
+    private bool isAbilityButtonHovered = false;
+
+    private TurretPartBase turretPartBase;
 
 
     protected override void AwakeInit()
@@ -22,26 +32,40 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         abilityBarToCurrencyCost.fillAmount = 0f;
     }
 
-    public override void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite)
+    public override void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        base.InitSupport(newCurrencyCounter, abilitySprite);
+        base.InitSupport(newRangeLvl, newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
         supportIcon.sprite = abilitySprite;
+        supportIcon.color = abilityColor;
+        abilityFillImage.color = abilityColor;
+
+        this.turretPartBase = turretPartBase;
+
+        UpdateNextUpgradeDescriptionText();
     }
 
+    protected override void DoUpgradeSupport()
+    {
+        UpdateNextUpgradeDescriptionText();
+    }
 
     protected override void UpdateSupportBar()
     {
         fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
 
         // Update UI
-        if (!CanUpgrade(supportLvl))
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl))
         {
-            EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)attackLvl * turretFillBarCoef);
-            PlayAnimationIconPunch(supportIcon.transform);
+            EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * turretFillBarCoef);
         }
+        else if (!HasEnoughCurrencyToLevelUp())
+        {
+            ResetStatBarColor(abilityBarToCurrencyCost, abilityButtonImage);
+        }
+        PlayAnimationIconPunch(supportIcon.transform);
 
-        if (IsStatMaxed(attackLvl)) DisableButton(abilityButton, abilityButtonImage);
-        if (IsCardUpgradedToMax(currentLevel)) DisableButtons();
+        if (IsStatMaxed(supportLvl)) DisableButton(abilityButton, abilityButtonImage);
+        if (IsCardUpgradedToMax(currentBuildingLevel)) DisableButtons();
     }
 
     protected override void DisableButtons()
@@ -50,6 +74,10 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
+    protected override void CheckHoveredButtonsCanNowUpgrade()
+    {
+        if (isAbilityButtonHovered && CanUpgrade(supportLvl)) SetBarAndButtonHighlighted(abilityBarToCurrencyCost, abilityButton.image);
+    }
 
 
     // Animations
@@ -75,11 +103,12 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgLvlText.alpha = 0f;
         cgCostText.alpha = 0f;
         cgAbilityStat.alpha = 0f;
+        cgNextUpgradeDescription.alpha = 0f;
 
 
         float t1 = 0.1f;
         float t3 = 0.3f;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -97,6 +126,9 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgCostText.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
 
+        cgNextUpgradeDescription.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+
         openAnimationCoroutine = null;
 
         ButtonFadeIn(abilityButton);
@@ -109,6 +141,11 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (openAnimationCoroutine != null)
         {
             StopCoroutine(openAnimationCoroutine);
+        }
+
+        if (isAbilityButtonHovered)
+        {
+            EmptyAbilityBar();
         }
 
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
@@ -127,6 +164,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgLvlText.alpha = 1f;
         cgCostText.alpha = 1f;
         cgAbilityStat.alpha = 1f;
+        cgNextUpgradeDescription.alpha = 1f;
 
 
 
@@ -141,6 +179,9 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgAbilityStat.DOFade(0f, t1);
         yield return new WaitForSeconds(t1);
 
+        cgNextUpgradeDescription.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+
         backgroundImage.DOFillAmount(0f, t3);
         yield return new WaitForSeconds(t1);
 
@@ -152,34 +193,50 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
 
-        StopButtonFade(abilityButton, false);
+        StopButtonFade(abilityButton, false, false);
     }
 
 
 
     public void FillAbilityBar()
     {
-        StopButtonFade(abilityButton, false);
+        bool highlight = CanUpgrade(supportLvl);
+
+        StopButtonFade(abilityButton, false, highlight);
 
         if (!abilityButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl)) return;
 
-        FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef);
+        FillStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)(supportLvl + 1) * supportFillBarCoef, highlight);
+
+        isAbilityButtonHovered = true;
     }
 
     public void EmptyAbilityBar()
     {
         if (!abilityButton.interactable) return;
-        if (IsCardUpgradedToMax(currentLevel) || IsStatMaxed(supportLvl)) return;
+        if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl)) return;
 
         EmptyStatBar(abilityBarToCurrencyCost, abilityButtonImage, abilityBackFillImage, (float)supportLvl * supportFillBarCoef);
 
         ButtonFadeIn(abilityButton);
+
+        isAbilityButtonHovered = false;
     }
 
     protected override void OnCanNotUpgradeSupport()
     {
         ButtonPressedErrorFadeInOut(abilityButton, abilityBarToCurrencyCost);
+    }
+
+
+    private void UpdateNextUpgradeDescriptionText()
+    {
+        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(currentBuildingLevel + 1);
+        if (currentBuildingLevel >= 3)
+        {
+            nextUpgradeText.color = disabledColor;
+        }
     }
 
 }

@@ -29,6 +29,7 @@ public class TextDecoder : MonoBehaviour
 
     [Header("PARAMETERS")]
     public DecodingParameters decodingParameters;
+    public bool advanceDecoding = true;
 
     [Header("STRINGS")]
     [SerializeField] public List<string> textStrings;
@@ -135,9 +136,11 @@ public class TextDecoder : MonoBehaviour
             }
             //
 
-            GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
-
-            indexChar++;
+            if (advanceDecoding)
+            {
+                GameAudioManager.GetInstance().PlayConsoleTyping((int)textType);
+                indexChar++;
+            }
             yield return new WaitForSecondsRealtime(decodingParameters.updateCharIndexTime);
         }
     }
@@ -237,7 +240,11 @@ public class TextDecoder : MonoBehaviour
         ClearText();
         InitDecodingVariables();
     }
-
+    public void ClearDecoder()
+    {
+        ClearText();
+        InitDecodingVariables();
+    }
 
     /*
     // Tomeu: I did this for Card Level

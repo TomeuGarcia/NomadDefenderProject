@@ -33,13 +33,13 @@ public class OverworldMapDecorator : MonoBehaviour
             DecorateFirstLevelEmpty(mapNodes[0]);
         }
 
-        int lastIteratedLevel = mapNodes.Length;
+        int lastIteratedLevel = mapNodes.Length - 1;
         if (dSettings.battleBeforeLastNode)
         {
-            lastIteratedLevel -= 2;
+            lastIteratedLevel -= 1;
             DecorateBattleLevel(mapNodes[mapNodes.Length - 2], lastIteratedLevel); // Boss
-            DecorateLastLevelEmpty(mapNodes[mapNodes.Length - 1]); // Finale
         }
+        DecorateLastLevelEmpty(mapNodes[mapNodes.Length - 1]); // Finale
 
         firstBattleLevel = firstDecoratedLevel + dSettings.numStartUpgradesLevels;
         for (int levelI = firstDecoratedLevel; levelI < firstBattleLevel; ++levelI)
@@ -146,7 +146,7 @@ public class OverworldMapDecorator : MonoBehaviour
             upgradesAlreadyInLevel.Add(upgradeType);
 
             NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
-
+            
             DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
         }
     }
@@ -170,7 +170,6 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         if (levelI > dSettings.lastLevelWithBattles) return false;
 
-        Debug.Log(GetBattleAfterNNodes());
         return ((levelI - lastIteratedBattleLevel) % GetBattleAfterNNodes()) == 0;
     }
     private int GetBattleAfterNNodes()

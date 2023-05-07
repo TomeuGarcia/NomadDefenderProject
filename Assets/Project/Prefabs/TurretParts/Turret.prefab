@@ -1142,6 +1142,7 @@ GameObject:
   - component: {fileID: 8000678238919794766}
   - component: {fileID: 1720381968368107033}
   - component: {fileID: 1226304504200950567}
+  - component: {fileID: 75523072863910064}
   m_Layer: 0
   m_Name: Upgrades_WorldCanvas
   m_TagString: Untagged
@@ -1246,6 +1247,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasTransform: {fileID: 5613672841969731097}
+--- !u!225 &75523072863910064
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2434340583536387355}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2574352221865485035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,7 +1909,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3452789900818799568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 0, y: 1.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4157,6 +4170,7 @@ MonoBehaviour:
   buildingType: 1
   canUpgradeParticles: {fileID: 6616791998591684781}
   canUpgradeTextHolder: {fileID: 5411716372068662876}
+  cgCanUpgradeText: {fileID: 75523072863910064}
   quickLevelDisplay: {fileID: 3473776814415698238}
   cgQuickLevelDisplay: {fileID: 433616124374606409}
   quickLevelDisplayText: {fileID: 6481754810517903934}

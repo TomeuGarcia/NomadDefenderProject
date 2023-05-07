@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
@@ -128,6 +129,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         UpdateCardLevelText();
     }
 
+
     protected override void InitStatsFromTurretParts()
     {
 
@@ -164,29 +166,35 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
     {
-        ReplacedWithSamePart = turretCardParts.turretPartAttack == newTurretPartAttack; // Check replaced with same part
+        ReplacedWithSamePart = HasSameAttackPart(newTurretPartAttack); // Check replaced with same part
 
         int costHolder = turretCardParts.turretPartAttack.cost;
         turretCardParts.turretPartAttack = newTurretPartAttack;
         turretCardParts.turretPartAttack.cost = costHolder;
         Init();
     }
+    public bool HasSameAttackPart(TurretPartAttack newTurretPartAttack)
+    {
+        return turretCardParts.turretPartAttack == newTurretPartAttack;
+    }
 
     public void SetNewPartBody(TurretPartBody newTurretPartBody)
     {
-        ReplacedWithSamePart = turretCardParts.turretPartBody == newTurretPartBody; // Check replaced with same part
+        ReplacedWithSamePart = HasSameBodyPart(newTurretPartBody); // Check replaced with same part
 
         int costHolder = turretCardParts.turretPartBody.cost;
         turretCardParts.turretPartBody = newTurretPartBody;
         turretCardParts.turretPartBody.cost = costHolder;
         Init();
     }
+    public bool HasSameBodyPart(TurretPartBody newTurretPartBody)
+    {
+        return turretCardParts.turretPartBody == newTurretPartBody;
+    }
 
     public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
     {
-        ReplacedWithSamePart = turretCardParts.turretPartBase == newTurretPartBase &&
-                               turretCardParts.turretPassiveBase == newTurretPassiveBase &&
-                               turretCardParts.turretPartBase.rangeLvl == newTurretPartBase.rangeLvl; // Check replaced with same part
+        ReplacedWithSamePart = HasSameBasePart(newTurretPartBase, newTurretPassiveBase); // Check replaced with same part
 
         //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
         int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
@@ -198,6 +206,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         turretCardParts.turretPassiveBase.cost = 0;
 
         Init();
+    }
+    public bool HasSameBasePart(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
+    {
+        return turretCardParts.turretPartBase == newTurretPartBase &&
+               turretCardParts.turretPassiveBase == newTurretPassiveBase &&
+               turretCardParts.turretPartBase.rangeLvl == newTurretPartBase.rangeLvl;
     }
 
 
@@ -368,6 +382,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     // Card Level
+    public override int GetCardLevel()
+    {
+        return turretCardParts.cardLevel;
+    }
+
     public void IncrementCardLevel(int levelIncrement)
     {
         cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
@@ -422,11 +441,19 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     
-    public void SubtractPlayCost(int amountToSubtract)
+    public void SubtractPlayCost(int amountToSubtract, bool useAnimation = true)
     {
         int endValue = Mathf.Max(turretStats.playCost - amountToSubtract, TurretBuilding.MIN_PLAY_COST);
         turretCardParts.cardCost = endValue;
-        StartCoroutine(SubtractPlayCostAnimation(endValue));
+        if (useAnimation)
+        {
+            StartCoroutine(SubtractPlayCostAnimation(endValue));
+        }
+        else
+        {
+            turretStats.playCost = endValue;
+            InitCostText();
+        }
     }
     private IEnumerator SubtractPlayCostAnimation(int endValue)
     {
@@ -483,5 +510,91 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         return CardTransform.position;
     }
+
+
+
+
+
+
+    public void PreviewChangeVisuals(TurretPartAttack newTurretPartAttack, TurretPartBody newTurretPartBody,
+                                     TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase,
+                                     TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
+                                     int playCostSubtractAmountSamePart)
+    {
+        bool replacingWithSamePart = false;
+
+        // ATTACK
+        //if (newTurretPartAttack == null)
+        if (partType != CardPartReplaceManager.PartType.ATTACK)
+        {
+            newTurretPartAttack = originalCard.turretCardParts.turretPartAttack;
+        }
+        else
+        {
+            replacingWithSamePart = originalCard.HasSameAttackPart(newTurretPartAttack);
+        }
+        cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
+        attackImage.sprite = newTurretPartAttack.abilitySprite;
+        attackImage.color = newTurretPartAttack.materialColor;
+
+
+        // BODY
+        //if (newTurretPartBody == null)
+        if (partType != CardPartReplaceManager.PartType.BODY)
+        {
+            newTurretPartBody = originalCard.turretCardParts.turretPartBody;
+        }
+        else
+        {
+            replacingWithSamePart = originalCard.HasSameBodyPart(newTurretPartBody);
+        }
+        cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
+        damageFillImage.fillAmount = newTurretPartBody.GetDamagePer1();
+        cadenceFillImage.fillAmount = newTurretPartBody.GetCadencePer1();
+
+
+        // BASE
+        //if (newTurretPartBase == null && newTurretPassiveBase == null)
+        if (partType != CardPartReplaceManager.PartType.BASE)
+        {
+            newTurretPartBase = originalCard.turretCardParts.turretPartBase;
+            newTurretPassiveBase = originalCard.turretCardParts.turretPassiveBase;
+        }
+        else
+        {
+            replacingWithSamePart = originalCard.HasSameBasePart(newTurretPartBase, newTurretPassiveBase);
+        }
+        cardBaseMaterial.SetTexture("_Texture", newTurretPartBase.materialTexture);
+        cardBaseMaterial.SetColor("_Color", newTurretPartBase.materialColor);
+        rangeFillImage.fillAmount = newTurretPartBase.GetRangePer1();
+
+        bool hasBasePassiveAbility = newTurretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
+        if (hasBasePassiveAbility)
+        {
+            basePassiveImage.transform.parent.gameObject.SetActive(true);
+
+            basePassiveImage.sprite = newTurretPassiveBase.visualInformation.sprite;
+            basePassiveImage.color = newTurretPassiveBase.visualInformation.color;
+        }
+        else
+        {
+            basePassiveImage.transform.parent.gameObject.SetActive(false);
+        }
+
+
+        // PLAY COST
+        turretCardParts = new TurretCardParts();
+        turretStats.playCost = originalCard.turretStats.playCost;
+        if (replacingWithSamePart) SubtractPlayCost(playCostSubtractAmountSamePart, useAnimation: false);
+        InitCostText();
+
+
+        // CARD LVL
+        turretCardParts.cardLevel = originalCard.turretCardParts.cardLevel;        
+        IncrementCardLevel(1);
+        UpdateCardLevelText();
+    }
+
+
 
 }

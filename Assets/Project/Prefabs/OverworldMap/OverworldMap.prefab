@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8127484686759048299}
+  - {fileID: 7317129866601759268}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -55,6 +56,8 @@ MonoBehaviour:
   mapSceneLoader: {fileID: 5862159990863268369}
   owMapPawn: {fileID: 257343108515024779}
   cardDisplayer: {fileID: 0}
+  mapEventSystemGO: {fileID: 0}
+  ambienceAudio: {fileID: 7317129866601759269}
 --- !u!114 &4525846865304159891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +114,93 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapScenesLibrary: {fileID: 11400000, guid: c279ff502d00f6e47ac5945859600c65, type: 2}
+--- !u!1001 &6620963440022524321
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4525846865304159890}
+    m_Modifications:
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497347751966086027, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+        type: 3}
+      propertyPath: m_Name
+      value: OWMap_AmbienceAudio
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ee6e81dc5b152e34b9b417e7d87bfd75, type: 3}
+--- !u!4 &7317129866601759268 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+    type: 3}
+  m_PrefabInstance: {fileID: 6620963440022524321}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7317129866601759269 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4497347751966086020, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
+    type: 3}
+  m_PrefabInstance: {fileID: 6620963440022524321}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7feee94a94039a4abc7f5b673ab1b04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7188559496431649374
 PrefabInstance:
   m_ObjectHideFlags: 0

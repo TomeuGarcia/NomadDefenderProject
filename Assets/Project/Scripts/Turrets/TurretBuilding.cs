@@ -55,6 +55,7 @@ public class TurretBuilding : RangeBuilding
     protected override void AwakeInit()
     {
         base.AwakeInit();
+        CardBuildingType = BuildingCard.CardBuildingType.TURRET;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
     }
@@ -266,7 +267,18 @@ public class TurretBuilding : RangeBuilding
 
         InvokeOnBuildingPlaced();
     }
-
+    public override void GotEnabledPlacing()
+    {
+        basePart.GotEnabledPlacing();
+    }
+    public override void GotDisabledPlacing()
+    {
+        basePart.GotDisabledPlacing();
+    }
+    public override void GotMovedWhenPlacing()
+    {
+        basePart.GotMovedWhenPlacing();
+    }
 
     public override void ShowQuickLevelUI()
     {
@@ -278,12 +290,12 @@ public class TurretBuilding : RangeBuilding
         upgrader.HideQuickLevelDisplay();
     }
 
-    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType)
+    private void PlayUpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
-        StartCoroutine(UpgradeAnimation(upgradeType));
+        StartCoroutine(UpgradeAnimation(upgradeType, upgradeLevel));
     }
     
-    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
         bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
         
@@ -306,6 +318,8 @@ public class TurretBuilding : RangeBuilding
         GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
+
+        bodyPart.PlayUpgradeAnimation(upgradeLevel);
     }
 
 

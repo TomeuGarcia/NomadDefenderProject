@@ -29,6 +29,11 @@ public class TurretPartBase : ScriptableObject
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] public string abilityDescription;
 
+    [Header("UPGRADE DESCRIPTIONS")]
+    [SerializeField, TextArea(2, 5)] public string upgrade1Description;
+    [SerializeField, TextArea(2, 5)] public string upgrade2Description;
+    [SerializeField, TextArea(2, 5)] public string upgrade3Description;
+
 
     public int Range { get => rangePerLvl[rangeLvl-1]; }
 
@@ -57,6 +62,10 @@ public class TurretPartBase : ScriptableObject
 
         this.abilityName = other.abilityName;
         this.abilityDescription = other.abilityDescription;
+
+        this.upgrade1Description = other.upgrade1Description;
+        this.upgrade2Description = other.upgrade2Description;
+        this.upgrade3Description = other.upgrade3Description;
     }
 
 
@@ -80,5 +89,16 @@ public class TurretPartBase : ScriptableObject
     public override int GetHashCode()
     {
         return base.GetHashCode();
+    }   
+
+
+    public string GetUpgradeDescriptionByLevel(int level)
+    {
+        if (level == 1) return upgrade1Description;
+        else if (level == 2) return upgrade2Description;
+        else if (level == 3) return upgrade3Description;
+
+        return "";
     }
+
 }

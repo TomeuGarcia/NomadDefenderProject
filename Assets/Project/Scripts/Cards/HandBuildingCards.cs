@@ -67,7 +67,7 @@ public class HandBuildingCards : MonoBehaviour
     public static event CardAction ReturnCardToDeck;
     public event HandAction OnCanAddCard;
 
-    [HideInInspector] public bool cheatDrawCardActivated = true;
+    [HideInInspector] public bool cheatDrawCardActivated = false;
 
 
 
@@ -97,7 +97,7 @@ public class HandBuildingCards : MonoBehaviour
         ComputeHiddenPosition();
 
         isInRedrawPhase = true;
-        InitCardsInHandForRedraw();        
+        InitCardsInHandForRedraw();      
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -106,6 +106,8 @@ public class HandBuildingCards : MonoBehaviour
 
         CheckCardsCost();
     }
+
+
 
     private void OnEnable()
     {
@@ -144,10 +146,11 @@ public class HandBuildingCards : MonoBehaviour
         //{
         //    ResetAndSetStandardCard(selectedCard);
         //}
-        if (Input.GetKeyDown(KeyCode.Space) && cheatDrawCardActivated)
-        {
-            if (OnQueryDrawCard != null) OnQueryDrawCard();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated)
+        //{
+        //    if (OnQueryDrawCard != null) OnQueryDrawCard();
+        //}
     }
 
     
@@ -219,7 +222,7 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardHovered += SetHoveredCard;
             card.OnCardSelected += CheckSelectCard;
 
-            card.OnCardInfoSelected += SetCardShowInfo;
+            //card.OnCardInfoSelected += SetCardShowInfo;
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
         }
@@ -325,7 +328,7 @@ public class HandBuildingCards : MonoBehaviour
             card.OnCardUnhovered += SetStandardCard;
             card.OnCardSelected += Redraw;
 
-            card.OnCardInfoSelected += SetCardShowInfo;
+            //card.OnCardInfoSelected += SetCardShowInfo;
 
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
@@ -352,10 +355,17 @@ public class HandBuildingCards : MonoBehaviour
 
         if (OnFinishRedrawing != null) OnFinishRedrawing();
 
+        CheckCardsCost();
+
         isInRedrawPhase = false;
     }
 
     private void Redraw(BuildingCard card)
+    {
+        StartCoroutine(RedrawHold(card));
+        //EffectuateRedraw(card);
+    }
+    private void EffectuateRedraw(BuildingCard card)
     {
         foreach (BuildingCard itCard in cards)
         {
@@ -367,11 +377,11 @@ public class HandBuildingCards : MonoBehaviour
         card.OnCardUnhovered -= SetStandardCard;
         card.OnCardSelected -= Redraw;
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);
-        }
-        card.OnCardInfoSelected -= SetCardShowInfo;
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);
+        //}
+        //card.OnCardInfoSelected -= SetCardShowInfo;
 
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
@@ -383,7 +393,48 @@ public class HandBuildingCards : MonoBehaviour
         {
             FinishedRedrawing();
         }
+
+        GameAudioManager.GetInstance().PlayRedrawConfirmation();
     }
+    private IEnumerator RedrawHold(BuildingCard card)
+    {
+        card.SetBorderFillEnabled(true);
+        card.ResetBorderFill();
+
+        float redrawHoldDuration = BuildingCard.redrawHoldDuration;
+        float redrawHoldTime = card.borderFillValue01 * redrawHoldDuration;
+        float t = card.borderFillValue01;
+
+        float minPitch = 1.0f;
+        float maxPitch = 1.8f;
+        float startPitch = Mathf.Lerp(minPitch, maxPitch, t);
+        GameAudioManager.GetInstance().PlayRedrawIncreasing(startPitch, maxPitch, redrawHoldDuration - redrawHoldTime);
+
+        while (redrawHoldTime < redrawHoldDuration && Input.GetMouseButton(0) && card.cardState == BuildingCard.CardStates.HOVERED)
+        {
+            redrawHoldTime += Time.deltaTime;
+            t = Mathf.Clamp01(redrawHoldTime / redrawHoldDuration);
+
+            card.SetBorderFillValue(t);
+            card.borderFillValue01 = t;
+
+            yield return null;
+        }  
+
+        if (redrawHoldTime >= redrawHoldDuration)
+        {
+            EffectuateRedraw(card);
+            card.SetBorderFillEnabled(false);
+        }
+        else
+        {
+            card.StartDecreaseBorderFill();
+        }       
+        
+        GameAudioManager.GetInstance().StopRedrawIncreasing();
+    }
+
+
     public bool HasRedrawsLeft()
     {
         return redrawsLeft > 0;
@@ -409,10 +460,10 @@ public class HandBuildingCards : MonoBehaviour
                 cards[i].ImmediateStandardState();
                 corrected = true;
 
-                if (cards[i].isShowingInfo)
-                {
-                    SetCardHideInfo(cards[i]);
-                }
+                //if (cards[i].isShowingInfo)
+                //{
+                //    SetCardHideInfo(cards[i]);
+                //}
             }
         }
 
@@ -462,7 +513,10 @@ public class HandBuildingCards : MonoBehaviour
                 --numCardsBeingAdded;
             } );
 
-        CheckCardsCost();
+        if (!isInRedrawPhase)
+        {
+            CheckCardsCost();
+        }
 
         if (HasPreviouslySelectedCard)
         {
@@ -511,10 +565,10 @@ public class HandBuildingCards : MonoBehaviour
         card.StandardState();
 
 
-        if (card.isShowingInfo)
-        {
-            SetCardHideInfo(card);            
-        }
+        //if (card.isShowingInfo)
+        //{
+        //    SetCardHideInfo(card);            
+        //}
 
 
         foreach (BuildingCard itCard in cards)
@@ -560,7 +614,9 @@ public class HandBuildingCards : MonoBehaviour
 
         //selectedCard.RootCardTransform.DOMove(selectedCard.HiddenRootPosition, 0.1f);
 
-        selectedCard.OnCardInfoSelected += SetCardShowInfo;
+
+
+        //selectedCard.OnCardInfoSelected += SetCardShowInfo;
         selectedCard = null;
 
         //if (!isBeingShown) ShowHand();
@@ -595,11 +651,11 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.DisableMouseInteraction(); // Do this to prevent collider in the way to place turrets
         selectedCard.OnDragMouseUp += ResetAndSetStandardCardAfterDragBack;
 
-        if (selectedCard.isShowingInfo)
-        {
-            SetCardHideInfo(selectedCard);
-        }
-        selectedCard.OnCardInfoSelected -= SetCardShowInfo;
+        //if (selectedCard.isShowingInfo)
+        //{
+        //    SetCardHideInfo(selectedCard);
+        //}
+        //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
 
 
         //buildingPlacer.EnablePlacing(card);
@@ -792,29 +848,29 @@ public class HandBuildingCards : MonoBehaviour
             }
             else
             {
-                cards[i].SetCannotBePlayedAnimation();
+                cards[i].SetCannotBePlayedAnimation(true);
             }
         }
     }
 
 
-    private void SetCardShowInfo(BuildingCard card)
-    {
-        if (AlreadyHasSelectedCard) return;
+    //private void SetCardShowInfo(BuildingCard card)
+    //{
+    //    if (AlreadyHasSelectedCard) return;
 
-        card.ShowInfo();
+    //    card.ShowInfo();
 
-        card.OnCardInfoSelected -= SetCardShowInfo;
-        card.OnCardInfoSelected += SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected -= SetCardShowInfo;
+    //    card.OnCardInfoSelected += SetCardHideInfo;
+    //}
 
-    private void SetCardHideInfo(BuildingCard card)
-    {
-        card.HideInfo();
+    //private void SetCardHideInfo(BuildingCard card)
+    //{
+    //    card.HideInfo();
 
-        card.OnCardInfoSelected += SetCardShowInfo;
-        card.OnCardInfoSelected -= SetCardHideInfo;
-    }
+    //    card.OnCardInfoSelected += SetCardShowInfo;
+    //    card.OnCardInfoSelected -= SetCardHideInfo;
+    //}
     
 
     private void EnableHandSideBlockers()

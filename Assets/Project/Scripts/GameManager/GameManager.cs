@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected GameObject victoryHolder;
     [SerializeField] protected GameObject gameOverHolder;
 
+    [Header("TEXTS")]
+    [SerializeField] protected TextDecoder victoryTitleTextDecoder;
+    [SerializeField] protected TextDecoder victorySubtitleTextDecoder;
+    [SerializeField] protected TextDecoder gameOverTitleTextDecoder;
+    [SerializeField] protected TextDecoder gameOverSubtitleTextDecoder;
+
     [Header("DEPENDENCIES")]
     [SerializeField] private OverworldMapGameManager overworldMapGameManager;
     [SerializeField] private MapSceneLoader mapSceneLoader;
@@ -41,14 +47,39 @@ public class GameManager : MonoBehaviour
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
-        mapSceneLoader.LoadMainMenuScene(3f);
+        //mapSceneLoader.LoadMainMenuScene(3f);
+        StartCoroutine(DoStartVictory());
     }
+    private IEnumerator DoStartVictory()
+    {
+        yield return new WaitForSeconds(2.0f);
+        victoryTitleTextDecoder.Activate();
+
+        yield return new WaitForSeconds(1.0f);
+        victorySubtitleTextDecoder.Activate();
+
+
+        SceneLoader.GetInstance().StartLoadGameEndCredits();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 3.0f);
+    }
+
+
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);
+
+        StartCoroutine(DoStartGameOver());
+    }
+    private IEnumerator DoStartGameOver()
+    {
+        yield return new WaitForSeconds(2.0f);
+        gameOverTitleTextDecoder.Activate();
+
+        yield return new WaitForSeconds(1.0f);
+        gameOverSubtitleTextDecoder.Activate();
+
         mapSceneLoader.LoadMainMenuScene(5f);
     }
-
 
 
 }

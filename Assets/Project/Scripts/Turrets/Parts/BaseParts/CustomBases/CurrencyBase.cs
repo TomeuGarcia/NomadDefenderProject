@@ -20,6 +20,7 @@ public class CurrencyBase : TurretPartBase_Prefab
     private int currentLvl = 0;
     private void Awake()
     {
+        AwakeInit();
         currencyPlane.SetActive(false);
         topCubeMaterial = cubeMeshRenderer.material;
     }
@@ -55,9 +56,9 @@ public class CurrencyBase : TurretPartBase_Prefab
     {
         currencyPlane.SetActive(true);
     }
-    override public void Upgrade(int newStatnewStatLevel)
+    override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatnewStatLevel)
     {
-        base.Upgrade(newStatnewStatLevel);
+        base.Upgrade(ownerSupportBuilding, newStatnewStatLevel);
         foreach (Enemy e in enemies)
         {
             e.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];

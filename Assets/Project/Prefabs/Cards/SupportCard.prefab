@@ -709,7 +709,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 314, y: 127}
+  m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8159994567374352626
 CanvasRenderer:
@@ -901,7 +901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 250
+    m_Left: 210
     m_Right: 0
     m_Top: 100
     m_Bottom: 0
@@ -1357,8 +1357,10 @@ MonoBehaviour:
     type: 3}
   copyBuildingPrefab: {fileID: 0}
   playCostText: {fileID: 5733248119080741909}
+  playCostCurrencyIcon: {fileID: 744519051243882881}
   cardCollider: {fileID: 8436797292709200466}
   cardHolder: {fileID: 5966887531202615239}
+  hoverAdditionalOffset: {x: 0, y: 0, z: 0}
   layerMaskMouseDragPlane:
     serializedVersion: 2
     m_Bits: 4096
@@ -1369,11 +1371,14 @@ MonoBehaviour:
   - {fileID: 4701946779586725980}
   - {fileID: 3815957422693145386}
   - {fileID: 4788041828697245378}
+  canDisplayInfoIfNotInteractable: 0
+  canDisplayInfoIfWhileInteractable: 1
   otherCfDrawAnimation:
   - {fileID: 6598585969574252253}
   isMissingDefaultCallbacks: 0
   isInteractable: 1
   canBeHovered: 1
+  borderFillValue01: 0
   infoInterface: {fileID: 7609954487759459054}
   infoShownPassiveIcon: {fileID: 7772817551273842811}
   defaultPassiveIcon: {fileID: 670514567913568641}

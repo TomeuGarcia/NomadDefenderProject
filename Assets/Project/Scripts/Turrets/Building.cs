@@ -13,6 +13,8 @@ public abstract class Building : MonoBehaviour
     [Header("Building Utils")]
     [SerializeField] protected BuildingsUtils buildingsUtils;
 
+    public BuildingCard.CardBuildingType CardBuildingType { get; protected set; }
+
     protected bool isFunctional = false;
 
 
@@ -33,6 +35,9 @@ public abstract class Building : MonoBehaviour
 
     protected abstract void AwakeInit();
     public abstract void GotPlaced();
+    public abstract void GotEnabledPlacing();
+    public abstract void GotDisabledPlacing();
+    public abstract void GotMovedWhenPlacing();
 
     //public virtual void Init(TurretStats turretStats, BuildingCard.BuildingCardParts buildingCardParts)
     //{

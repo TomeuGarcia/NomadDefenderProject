@@ -4,9 +4,24 @@ using UnityEngine;
 
 public class CloseRangeDamageProjectile : HomingProjectile
 {
+    [Header("TRAIL")]
+    [SerializeField] private TrailRenderer trailRenderer;
+    private Coroutine decreaseInSizeCoroutine;
+
     [Header("STATS")]
     [SerializeField, Range(0f, 1f)] private float baseDamagePer1 = 0.25f;
     [SerializeField, Min(0f)] private float distanceInverseMultiplier = 1.0f;
+
+
+    private void OnDisable()
+    {
+        if (decreaseInSizeCoroutine != null)
+        {
+            StopCoroutine(decreaseInSizeCoroutine);
+            decreaseInSizeCoroutine = null;
+        }
+    }
+
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
@@ -24,7 +39,7 @@ public class CloseRangeDamageProjectile : HomingProjectile
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
 
-        //Debug.Log(owner.stats.damage + " -> " + this.damage);
+        decreaseInSizeCoroutine = StartCoroutine(DecreaseSizeOvertime());
     }
 
     public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
@@ -39,11 +54,13 @@ public class CloseRangeDamageProjectile : HomingProjectile
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
+
+        decreaseInSizeCoroutine = StartCoroutine(DecreaseSizeOvertime());
     }
 
     private int ComputeDamage()
     {
-        float distance = Vector3.Distance(targetEnemy.Position, transform.position);
+        float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
         float distanceInverse = 1f / distance;
 
         int baseDamage = (int)(turretOwner.stats.damage * baseDamagePer1);
@@ -51,6 +68,23 @@ public class CloseRangeDamageProjectile : HomingProjectile
         int bonusDamage = (int)(baseDamageRemaining * distanceInverse * distanceInverseMultiplier);
 
         return baseDamage + bonusDamage;
+    }
+
+
+    private IEnumerator DecreaseSizeOvertime()
+    {
+        trailRenderer.widthMultiplier = 1f;
+        float scale = 2f;
+
+        while (Vector3.Distance(targetEnemy.Position, transform.position) > 0.1f)
+        {
+            scale -= Time.deltaTime * 16f;
+            scale = Mathf.Clamp(scale, 0.15f, 10f);
+            trailRenderer.widthMultiplier = scale;
+
+            yield return null;
+        }
+        decreaseInSizeCoroutine = null;
     }
 
 }

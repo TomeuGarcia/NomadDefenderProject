@@ -1469,6 +1469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decodingParameters: {fileID: 11400000, guid: 720b5361faf10b64e899e7b83714576a, type: 2}
+  advanceDecoding: 1
   textStrings: []
   textComponent: {fileID: 2089727611730500624}
 --- !u!222 &8086743459925788610
@@ -2524,8 +2525,10 @@ MonoBehaviour:
     type: 3}
   copyBuildingPrefab: {fileID: 0}
   playCostText: {fileID: 6140791141944725237}
+  playCostCurrencyIcon: {fileID: 5960621882348483828}
   cardCollider: {fileID: 8436797292709200466}
   cardHolder: {fileID: 5966887531202615239}
+  hoverAdditionalOffset: {x: 0, y: 0, z: 0}
   layerMaskMouseDragPlane:
     serializedVersion: 2
     m_Bits: 4096
@@ -2539,12 +2542,15 @@ MonoBehaviour:
   - {fileID: 2224634338313525617}
   - {fileID: 8288152647125107163}
   - {fileID: 6418168050248735777}
+  canDisplayInfoIfNotInteractable: 0
+  canDisplayInfoIfWhileInteractable: 1
   otherCfDrawAnimation:
   - {fileID: 3849485711336957856}
   - {fileID: 2710218681929909118}
   isMissingDefaultCallbacks: 0
   isInteractable: 1
   canBeHovered: 1
+  borderFillValue01: 0
   infoInterface: {fileID: 8362000015435792146}
   infoShownAttackIcon: {fileID: 8017359893535916994}
   defaultAttackIcon: {fileID: 5350238741604382807}

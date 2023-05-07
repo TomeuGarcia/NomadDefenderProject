@@ -30,6 +30,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] protected TextMeshProUGUI playCostText;
+    [SerializeField] protected Image playCostCurrencyIcon;
+    private static Color s_canNotPlayCardTextColor = new Color(202f/255f, 35f/255f, 54f/255f);
 
     [Header("OTHER COMPONENTS")]
     [SerializeField] private BoxCollider cardCollider;
@@ -88,17 +90,21 @@ public abstract class BuildingCard : MonoBehaviour
     protected Coroutine showInfoCoroutine = null;
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
+    [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
+    [HideInInspector] public bool canDisplayInfoIfWhileInteractable = true;
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
     protected bool isPlayingDrawAnimation = false;
-    protected const float drawAnimLoopDuration = 0.75f;
-    protected const float drawAnimWaitDurationBeforeBlink = 0.2f;
-    protected const float drawAnimBlinkDuration = 0.3f;
-    protected const float drawAnimNumBlinks = 3f;
+    protected const float drawAnimLoopDuration = 0.4f;
+    protected const float drawAnimWaitDurationBeforeBlink = 0.1f;
+    protected const float drawAnimBlinkDuration = 0.2f;
+    protected const float drawAnimNumBlinks = 2f;
 
     // CARD CAN NOT BE PLAYED ANIMATION
     private const float canNotBePlayedAnimDuration = 0.5f;
+
+    public const float redrawHoldDuration = 0.5f;
 
 
 
@@ -151,6 +157,12 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            StartShowInfoWithDelay();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -159,7 +171,7 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (OnCardHovered != null) OnCardHovered(this);
 
-        if (cardState == CardStates.HOVERED)
+        if (cardState == CardStates.HOVERED && canDisplayInfoIfWhileInteractable)
         {
             StartShowInfoWithDelay();
         }
@@ -167,6 +179,12 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (canDisplayInfoIfNotInteractable)
+        {
+            DoHideInfo();
+            return;
+        }
+
         if (!canBeHovered) return;
         if (isRepositioning) return;
         //if (isPlayingDrawAnimation) return;
@@ -175,7 +193,10 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (OnCardUnhovered != null) OnCardUnhovered(this);
 
-        DoHideInfo();
+        if (canDisplayInfoIfWhileInteractable)
+        {
+            DoHideInfo();
+        }
     }
 
     private void OnMouseDown() // only called by Left Click
@@ -226,7 +247,7 @@ public abstract class BuildingCard : MonoBehaviour
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
-        SetCannotBePlayedAnimation();
+        SetCannotBePlayedAnimation(false);
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
 
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
@@ -238,6 +259,9 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
+
+        SetBorderFillValue(0f);
+        SetBorderFillEnabled(false);
 
         isShowingInfo = false;
 
@@ -442,12 +466,65 @@ public abstract class BuildingCard : MonoBehaviour
     public void SetCanBePlayedAnimation()
     {
         cardMaterial.SetFloat("_CanBePlayed", 1f);
+        playCostText.DOBlendableColor(Color.white, 0.2f);
+        playCostCurrencyIcon.DOBlendableColor(Color.white, 0.2f);
     }
 
-    public void SetCannotBePlayedAnimation()
+    public void SetCannotBePlayedAnimation(bool updatePlayCostText)
     {
         cardMaterial.SetFloat("_CanBePlayed", 0f);
+
+        if (updatePlayCostText)
+        {
+            playCostText.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
+            playCostCurrencyIcon.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
+        }        
     }
+
+
+    public float borderFillValue01 = 0f;
+    private Coroutine decreaseBorderFillCoroutine;
+    public void SetBorderFillEnabled(bool isEnabled)
+    {
+        cardMaterial.SetFloat("_IsBorderFillEnabled", isEnabled ? 1f : 0f);
+    }
+    public void SetBorderFillValue(float fillValue01)
+    {
+        cardMaterial.SetFloat("_BorderFillValue", fillValue01);
+    }
+    public void ResetBorderFill()
+    {
+        if (decreaseBorderFillCoroutine != null)
+        {
+            StopCoroutine(decreaseBorderFillCoroutine);            
+        }
+        else
+        {
+            borderFillValue01 = 0f;
+        }
+    }
+    public void StartDecreaseBorderFill()
+    {
+        decreaseBorderFillCoroutine = StartCoroutine(DecreaseBorderFill());
+    }
+    private IEnumerator DecreaseBorderFill()
+    {
+        while (borderFillValue01 > 0f)
+        {
+            borderFillValue01 -= Time.deltaTime * (2.0f / redrawHoldDuration );
+            SetBorderFillValue(borderFillValue01);
+
+            yield return null;
+        }
+
+        borderFillValue01 = 0f;
+
+        SetBorderFillValue(borderFillValue01);
+        SetBorderFillEnabled(false);
+
+        decreaseBorderFillCoroutine = null;
+    }
+
 
     public void EnableMouseInteraction()
     {
@@ -472,6 +549,11 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (cardState == CardStates.HOVERED) 
             if (OnCardUnhovered != null) OnCardUnhovered(this);
+    }
+
+    public virtual int GetCardLevel()
+    { 
+        return 0;
     }
 
     protected abstract void InitInfoVisuals();
@@ -554,7 +636,7 @@ public abstract class BuildingCard : MonoBehaviour
         }
 
 
-        float t1 = 0.1f;
+        float t1 = 0.05f;
         for (int i = cgsInfoHide.Length-1; i >= 0; --i)
         {
             cgsInfoHide[i].DOFade(1f, t1);
@@ -584,11 +666,29 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void PlayCanNotBePlayedAnimation()
     {
-        SetCannotBePlayedAnimation();
+        SetCannotBePlayedAnimation(true);
         cardMaterial.SetFloat("_TimeStartCanNotBePlayed", Time.time);
 
         CardTransform.DOComplete(true);
         CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
     }
 
+
+    public void StartDisableInfoDisplayForDuration(float duration)
+    {
+        StartCoroutine(DisableInfoDisplayForDuration(duration));
+    }
+    private IEnumerator DisableInfoDisplayForDuration(float duration)
+    {
+        canDisplayInfoIfWhileInteractable = false;
+
+        yield return new WaitForSeconds(duration);
+
+        canDisplayInfoIfWhileInteractable = true;
+
+        if (cardState == CardStates.HOVERED)
+        {
+            StartShowInfoWithDelay();
+        }
+    }
 }

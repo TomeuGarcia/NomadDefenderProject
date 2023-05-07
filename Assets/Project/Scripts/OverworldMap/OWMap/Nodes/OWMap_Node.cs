@@ -23,6 +23,12 @@ public class OWMap_Node : MonoBehaviour
     // is interactable      ->  player can interact and travel there
     // is NOT interactable  ->  player can't interact nor travel there
     [HideInInspector] public bool isInteractable = false;
+    private static bool isGlobalInteractable = true;
+    public static bool IsGlobalInteractable
+    {
+        get { return isGlobalInteractable; }
+        set { isGlobalInteractable = value; }
+    }
 
 
     // NODE INTERACT STATE
@@ -37,6 +43,9 @@ public class OWMap_Node : MonoBehaviour
 
     //NODE CLASS
     [HideInInspector] public OWMap_NodeClass nodeClass;
+
+    [Header("MOUSE COLLIDER")]
+    [SerializeField] private Collider mouseCollider;
     
 
     // OW Node Data
@@ -193,14 +202,14 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable)  return;
 
         SetHovered();
     }
 
     private void OnMouseExit()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable) return;
 
         if (interactState == NodeInteractState.HOVERED)
         {
@@ -210,7 +219,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isInteractable) return;
+        if (!isInteractable || !IsGlobalInteractable) return;
 
         SetSelected(true);
     }
@@ -223,6 +232,12 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
 
         InvokeOnNodeInfoInteractionEnabled();
+
+        if(cameFromConnection != null)
+        {
+            cameFromConnection.StartIndicaton();
+            UpdateBorderMaterial(true);
+        }
     }
 
     public void DisableInteraction()
@@ -233,6 +248,12 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
 
         InvokeOnNodeInfoInteractionDisabled();
+
+        if (cameFromConnection != null)
+        {
+            cameFromConnection.StopIndication();
+            UpdateBorderMaterial(false);
+        }
     }
 
 
@@ -293,19 +314,15 @@ public class OWMap_Node : MonoBehaviour
             owMapGameManager.OnMapNodeSelected(this, wasSelectedByPlayer);
         }
 
-        //Debug.Log("2");
-        //UpdateBorderMaterial();
-
         flashMeshRenderer.gameObject.SetActive(true);
         flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         SetSelectedVisuals();
     }
 
-    public void UpdateBorderMaterial()
+    public void UpdateBorderMaterial(bool enabled)
     {
-        borderLerpData.invert = !borderLerpData.invert;
-        borderLerpData.endGoal = 1.0f - borderLerpData.endGoal;
+        borderLerpData.invert = !enabled;
         StartCoroutine(MaterialLerp.FloatLerp(borderLerpData, new Material[1] { circuitMesh.materials[1] }));
     }
 
@@ -422,6 +439,26 @@ public class OWMap_Node : MonoBehaviour
         return nextLevelEnabledNodes.ToArray();
     }
 
+    public OWMap_Node[] EnableAllNextLevelNodesInteraction(out int aliveNodesCount)
+    {
+        List<OWMap_Node> nextLevelEnabledNodes = new List<OWMap_Node>();
+        aliveNodesCount = 0;
+
+        for (int i = 0; i < mapReferencesData.nextLevelNodes.Length; ++i)
+        {
+            OWMap_Node nextLevelNode = mapReferencesData.nextLevelNodes[i];
+            nextLevelNode.SetCameFromConnection(nextLevelConnections[i]);
+
+            if (!nextLevelNode.IsDestroyed()) ++aliveNodesCount;
+            else nextLevelNode.SetDestroyedVisuals();
+
+            nextLevelNode.EnableInteraction();            
+            nextLevelEnabledNodes.Add(nextLevelNode);
+        }
+
+        return nextLevelEnabledNodes.ToArray();
+    }
+
     private void DisableNeighborLevelNodesInteraction()
     {
         foreach (OWMap_Node node in mapReferencesData.levelNeighbourNodes)
@@ -460,13 +497,21 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_IsDestroyed", 1f);
         material.SetFloat("_NoiseTwitchingEnabled", 1f);
     }
+    public void SetResurrectedVisuals()
+    {
+        SetIconColor(OWMapDecoratorUtils.s_orangeColor);
+        //SetCameFromColor(destroyed: false);
+        material.SetFloat("_IsDamaged", 1f);
+        material.SetFloat("_IsDestroyed", 0f);
+        material.SetFloat("_NoiseTwitchingEnabled", 0f);
+    }
 
 
     public void PlayFadeInAnimation()
     {
         material.SetFloat("_TimeStartFade", Time.time);
         material.SetFloat("_IsFadingAway", 0f);
-            }
+    }
 
 
     public void PlayFadeOutAnimation()
@@ -498,6 +543,22 @@ public class OWMap_Node : MonoBehaviour
             }
             yield return new WaitForSeconds(Random.Range(0.3f, 0.9f));
         }
+    }
+
+    public void ClearCameFromConnection()
+    {
+        cameFromConnection.UnfillCable();
+    }
+
+    public void ReenableMouseCollider()
+    {
+        StartCoroutine(DoReenableMouseCollider());
+    }
+    private IEnumerator DoReenableMouseCollider()
+    {
+        mouseCollider.enabled = false;
+        yield return null;
+        mouseCollider.enabled = true;
     }
 
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,18 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioClip music1;
+    [SerializeField] private AudioClip[] musics1;
+    [SerializeField] private AudioClip menuMusic;
+    [SerializeField] private AudioClip OWMapMusic;
+    [SerializeField] private AudioClip fightMusic;
+    [SerializeField] private TempMusicClips[] tempMusicClips;
+    private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
+    private int currentMusic1 = 0;
+    private bool musicPaused = false;
+    private float musicDefaultVolume;
+    private static bool keepFadingIn;
+    private static bool keepFadingOut;
+
 
     [Header("UI")]
     [SerializeField] private AudioSource uiAudioSource;
@@ -25,11 +37,18 @@ public class GameAudioManager : MonoBehaviour
     [Header("CARDS")]
     [SerializeField] private AudioSource cardsAudioSource;
     [SerializeField] private AudioSource cardsAudioSource2;
+    [SerializeField] private AudioSource cardsAudioSource3;
+    [SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
     [SerializeField] private AudioClip cardHoverExit;
     [SerializeField] private AudioClip cardPlayed;
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
+    [SerializeField] private AudioSource cardsAudioLoopSource;
+    [SerializeField] private AudioClip cardRedrawConfirmation;
+    [SerializeField] private AudioClip cardRedrawIncreasing;
+    private float cardAudioLoopStartVolume;
+    private bool playingRedrawsIncrease;
 
     [Header("CARDS INFO")]
     [SerializeField] private AudioSource cardsInfoAudioSource;
@@ -50,9 +69,13 @@ public class GameAudioManager : MonoBehaviour
     [Header("UPGRADE SCENES")]
     [SerializeField] private AudioSource upgradesAudioSource;
     [SerializeField] private AudioSource upgradesAudioSource2;
+    [SerializeField] private AudioSource upgradesAudioSource3;
     [SerializeField] private AudioClip upgradeButtonPressed;
     [SerializeField] private AudioClip upgradeButtonCantBePressed;
     [SerializeField] private AudioClip cardPartSwap;
+    [SerializeField] private AudioClip cardPlacedOnUpgradeHolder;
+    [SerializeField] private AudioClip cardRetreivedFromUpgradeHolder;
+    [SerializeField] private AudioClip cardFinalRetreivedFromUpgrader;
 
     [Header("ENEMIES")]
     [SerializeField] private AudioSource[] enemiesAudioSources;
@@ -67,6 +90,9 @@ public class GameAudioManager : MonoBehaviour
     [Header("BATTLE SCENES")]
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
+    [SerializeField] private AudioSource battleCursedWiresAudioSource;
+    [SerializeField] private AudioClip cursedWiresWave;
+    [SerializeField] private AudioClip stageVictory;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -76,6 +102,9 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("PROJECTILES")]
     [SerializeField] private AudioSource[] projectilesAudioSources;
+    [SerializeField] private AudioClip[] spammerProjectilesAudioSources;
+    [SerializeField] private AudioClip[] sentryProjectilesAudioSources;
+    [SerializeField] private AudioClip[] blasterProjectilesAudioSources;
     [SerializeField] private AudioClip[] projectileShots;
     [SerializeField] private AudioClip zapProjectileShot;
 
@@ -97,8 +126,19 @@ public class GameAudioManager : MonoBehaviour
     private IEnumerator droneBuildUp;
     private IEnumerator droneLerpBuildUp;
 
+    [Header("OTHER EFFECTS")]
+    [SerializeField] private AudioSource effectsAudioSource;
+    [SerializeField] private AudioClip smokeBurst;
+    [SerializeField] private AudioClip replaceMachineLoad;
 
 
+    public enum MusicType {NONE,MENU,OWMAP,BATTLE}
+    [System.Serializable]
+    struct TempMusicClips
+    {
+        public MusicType type;
+        public AudioClip clip;
+    }
     private void Awake()
     {
         if (instance == null)
@@ -111,8 +151,28 @@ public class GameAudioManager : MonoBehaviour
         else
         {
             Destroy(this);
-        }        
+        }
+        initMusicDictionary();
+        musicDefaultVolume = musicAudioSource.volume;
+        cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.N))
+    //    {
+    //        NextMusic1();
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.P))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.O))
+    //    {
+    //        float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
+    //        musicAudioSource.volume = volume;
+    //    }
+    //}
 
     public static GameAudioManager GetInstance()
     {
@@ -121,11 +181,8 @@ public class GameAudioManager : MonoBehaviour
 
 
     private void InitVariables()
-
     {
-
         droneBuildUpInitVolume = droneAudioSource.volume;
-
     }
 
     // Helpers
@@ -216,19 +273,81 @@ public class GameAudioManager : MonoBehaviour
         source.volume = endVol;
 
     }
-
-
-
-
     // Music
-    public void PlayMusic1()
+    private void initMusicDictionary()
     {
-        musicAudioSource.clip = music1;
-
-        musicAudioSource.Play();
+        foreach(TempMusicClips clips in tempMusicClips)
+        {
+            musicClips.Add(clips.type, clips.clip);
+        }
     }
 
 
+    public void MusicFadeIn(MusicType type, float duration, float maxVolume)
+    {
+        AudioClip clip = musicClips[type];
+        musicAudioSource.clip = clip;
+        musicAudioSource.volume = 0f;
+        musicAudioSource.loop = true;
+        musicAudioSource.Play();
+
+        musicAudioSource.DOFade(maxVolume, duration);
+    }
+    public void MusicFadeOut(float duration)
+    {
+        musicAudioSource.DOFade(0f, duration);
+    }
+    private void MusicFadeOutThenIn(MusicType type, float duration)
+    {
+        Sequence fadeSequence = DOTween.Sequence();
+
+        fadeSequence.AppendCallback(() => MusicFadeOut(duration));
+        fadeSequence.AppendInterval(duration);
+        fadeSequence.AppendCallback(() => MusicFadeIn(type, duration, musicDefaultVolume));
+    }
+
+
+    public void ChangeMusic(MusicType newMusicType, float duration)
+    {
+        MusicFadeOutThenIn(newMusicType, duration);
+    }
+    private void NextMusic1()
+    {
+        currentMusic1 = ++currentMusic1 % musics1.Length;
+        PlayMusic1();
+    }
+    public void PlayMusic1()
+    {
+        musicAudioSource.clip = musics1[currentMusic1];
+        musicAudioSource.loop = true;
+        musicAudioSource.Play();
+        musicPaused = false;
+    }
+    public void PauseMusic1()
+    {
+        musicAudioSource.Pause();
+        musicPaused = true;
+    }
+
+    public void ResumeMusic1()
+    {
+        musicAudioSource.UnPause();
+        musicPaused = false;
+    }
+    public bool isMusicPaused()
+    {
+        return musicPaused;
+    }
+    public void PausedMusicPitch()
+    {
+        musicAudioSource.pitch = 0.85f;
+        musicAudioSource.volume = 0.05f;
+    }
+    public void NormalMusicPitch()
+    {
+        musicAudioSource.pitch = 1f;
+        musicAudioSource.volume = 0.1f;
+    }
     // UI
     public void PlayUiButtonPressed()
     {
@@ -295,9 +414,9 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardSelected()
     {
-        //if (!canPlayCardAudio) return;
+        if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardHovered;
+        cardsAudioSource.clip = cardSelected;
         cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
 
         cardsAudioSource.Play();
@@ -306,7 +425,7 @@ public class GameAudioManager : MonoBehaviour
     }
 
     public void PlayCardHoverExit()
-    {
+    {        
         if (cardsAudioSource2.isPlaying) return;
 
         cardsAudioSource2.clip = cardHoverExit;
@@ -321,6 +440,40 @@ public class GameAudioManager : MonoBehaviour
         cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
         cardsAudioSource.Play();
+    }
+
+    public void PlayRedrawConfirmation()
+    {
+        //cardsAudioSource3.clip = cardRedrawConfirmation;
+        cardsAudioSource3.clip = cardSelected;
+        cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
+
+        cardsAudioSource3.Play();
+    }
+
+    public void PlayRedrawIncreasing(float startPitch, float endPitch, float duration)
+    {
+        playingRedrawsIncrease = true;
+
+        cardsAudioLoopSource.DOComplete(false);
+
+        cardsAudioLoopSource.clip = cardRedrawIncreasing;
+        cardsAudioLoopSource.volume = cardAudioLoopStartVolume;
+        cardsAudioLoopSource.pitch = startPitch;
+        cardsAudioLoopSource.DOPitch(endPitch, duration);
+
+        cardsAudioLoopSource.Play();
+    }
+    public void StopRedrawIncreasing()
+    {
+        playingRedrawsIncrease = false;
+
+        float duration = 0.08f;
+        cardsAudioLoopSource.DOFade(0f, duration);
+        cardsAudioLoopSource.DOPitch(0.5f, duration).OnComplete(() =>
+        {
+            if (!playingRedrawsIncrease) cardsAudioLoopSource.Stop();
+        });       
     }
 
 
@@ -447,6 +600,33 @@ public class GameAudioManager : MonoBehaviour
         upgradesAudioSource2.Play();
     }
 
+    public void PlayCardPlacedOnUpgradeHolder()
+    {
+        upgradesAudioSource3.clip = cardPlacedOnUpgradeHolder;
+        upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.volume = 0.05f;
+
+        upgradesAudioSource3.Play();
+    }
+    public void PlayCardRetreivedFromUpgradeHolder()
+    {
+        upgradesAudioSource3.clip = cardRetreivedFromUpgradeHolder;
+        upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.volume = 0.05f;
+
+        upgradesAudioSource3.Play();
+    }
+    public void PlayCardFinalRetreivedFromUpgrader()
+    {
+        //upgradesAudioSource3.clip = cardFinalRetreivedFromUpgrader;
+        //upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
+        upgradesAudioSource3.clip = cardHovered;
+        upgradesAudioSource3.volume = 1f;
+        upgradesAudioSource3.pitch = 0.4f;
+
+        upgradesAudioSource3.Play();
+    }
+
 
 
     // Enemies
@@ -486,25 +666,37 @@ public class GameAudioManager : MonoBehaviour
 
     // Battle
     public void PlayLocationTakeDamage()
-
     {
-
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(0.8f, 0.9f);
 
         battleAudioSource.Play();
-
     }
 
     public void PlayLocationDestroyed()
-
     {
-
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
 
         battleAudioSource.Play();
+    }
 
+    public void PlayWiresCursedWave()
+    {
+        battleCursedWiresAudioSource.clip = cursedWiresWave;
+        battleCursedWiresAudioSource.pitch = 1.0f;
+        battleCursedWiresAudioSource.volume = 0.6f;
+
+        battleCursedWiresAudioSource.Play();
+    }
+
+    public void PlayBattleStageVictory()
+    {
+        battleCursedWiresAudioSource.clip = stageVictory;
+        battleCursedWiresAudioSource.pitch = 1.0f;
+        battleCursedWiresAudioSource.volume = 0.3f;
+
+        battleCursedWiresAudioSource.Play();
     }
 
 
@@ -527,7 +719,22 @@ public class GameAudioManager : MonoBehaviour
     // Projectiles
     public void PlayProjectileShot(TurretPartBody.BodyType bodyType)
     {
-        LoopAudioSources(projectilesAudioSources, projectileShots[(int)bodyType], Random.Range(0.8f, 1.2f));
+        switch (bodyType)
+        {
+            case TurretPartBody.BodyType.SENTRY:
+                LoopAudioSources(projectilesAudioSources, blasterProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
+                break;
+
+            case TurretPartBody.BodyType.BLASTER:
+                LoopAudioSources(projectilesAudioSources, sentryProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
+                break;
+            case TurretPartBody.BodyType.SPAMMER:
+                LoopAudioSources(projectilesAudioSources, spammerProjectilesAudioSources[(int)Random.Range(0, 2)], Random.Range(0.8f, 1.2f));
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void PlayZapProjectileShot()
@@ -634,6 +841,25 @@ public class GameAudioManager : MonoBehaviour
     {
         nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
         nodeSpawnAudioSource.Play();
+    }
+
+
+    // OTHER EFFECTS
+    public void PlaySmokeBurst()
+    {
+        effectsAudioSource.clip = smokeBurst;
+        effectsAudioSource.volume = 0.1f;
+        effectsAudioSource.pitch = 1.0f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayReplaceMachineLoad()
+    {
+        effectsAudioSource.clip = replaceMachineLoad;
+        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.pitch = 1.3f;
+
+        effectsAudioSource.Play();
     }
 
 }

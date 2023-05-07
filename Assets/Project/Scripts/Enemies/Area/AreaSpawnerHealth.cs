@@ -35,7 +35,7 @@ public class AreaSpawnerHealth : MonoBehaviour
             case SpawnType.REPEATEDLY:
                 StopRepeating();
                 if (currentWave)
-                    currentWave.GetComponent<AreaFunctionalityArmor>().StopFollowing();
+                    currentWave.GetComponent<AreaFunctionalityHealth>().StopFollowing();
                 break;
         }
     }
