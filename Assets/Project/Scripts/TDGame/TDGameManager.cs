@@ -53,7 +53,7 @@ public class TDGameManager : MonoBehaviour
 
         numAliveLocations = pathLocations.Length;        
 
-        InitLocationsVisuals();        
+        InitLocationsVisuals();
     }    
 
 

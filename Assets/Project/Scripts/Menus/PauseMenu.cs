@@ -59,8 +59,8 @@ public class PauseMenu : MonoBehaviour
         return instance;
     }
 
-        void Update()
-        {
+    void Update()
+    {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameIsPaused)
