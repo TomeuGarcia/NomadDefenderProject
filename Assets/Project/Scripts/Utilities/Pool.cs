@@ -8,7 +8,7 @@ public class Pool : MonoBehaviour
     private GameObject pooledObject;
     private bool missingObjects = true;
 
-    private List<GameObject> objects;
+    private List<GameObject> objects = new List<GameObject>();
 
 
     void Awake()

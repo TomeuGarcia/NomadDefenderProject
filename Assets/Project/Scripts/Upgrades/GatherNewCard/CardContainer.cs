@@ -76,7 +76,7 @@ public class CardContainer : MonoBehaviour
     {
         foreach (Transform p in pistons)
         {
-            p.DOLocalMoveZ(goalPos, 0.5f);
+            p.DOLocalMoveZ(goalPos, 0.15f);
             GameAudioManager.GetInstance().PlayContainerPistonUp();
             yield return new WaitForSeconds(0.2f);
         }
