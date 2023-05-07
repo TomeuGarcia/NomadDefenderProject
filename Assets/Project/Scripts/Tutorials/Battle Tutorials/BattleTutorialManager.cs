@@ -63,6 +63,8 @@ public class BattleTutorialManager : MonoBehaviour
 
     void Start()
     {
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BATTLE, 1f);
+
         currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 0;
         currencyBackgroundImg.SetActive(false);
 
@@ -79,13 +81,23 @@ public class BattleTutorialManager : MonoBehaviour
 
         StartCoroutine(Tutorial());
         hand.cheatDrawCardActivated = false;
+    }
 
-        //Init Events
+    private void OnEnable()
+    {
         HandBuildingCards.OnCardPlayed += WaveStarted;
         EnemyWaveManager.OnWaveFinished += WaveStarted;
         EnemyWaveManager.OnStartNewWaves += WaveFinished;
         EnemyWaveManager.OnAllWavesFinished += AllWavesFinished;
         InBattleBuildingUpgrader.OnTurretUpgrade += CheckFirstUpgrade;
+    }
+    private void OnDisable()
+    {
+        HandBuildingCards.OnCardPlayed -= WaveStarted;
+        EnemyWaveManager.OnWaveFinished -= WaveStarted;
+        EnemyWaveManager.OnStartNewWaves -= WaveFinished;
+        EnemyWaveManager.OnAllWavesFinished -= AllWavesFinished;
+        InBattleBuildingUpgrader.OnTurretUpgrade -= CheckFirstUpgrade;
     }
 
     private void WaveFinished()
@@ -164,7 +176,7 @@ public class BattleTutorialManager : MonoBehaviour
 
 
         scriptedSequence.NextLine(); //4
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) );
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0) );
         yield return null;
 
         scriptedSequence.Clear();
@@ -194,6 +206,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.tutorialCard.showTurret = true;
         yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
+
 
         //Cards Stats
         scriptedSequence.NextLine();// 8
@@ -310,6 +323,10 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(4.0f);
 
+
+        GameAudioManager.GetInstance().MusicFadeOut(1f);
+
+
         yield return new WaitForSecondsRealtime(1.0f);
         GameAudioManager.GetInstance().PlayGlitchSound(2);
         globalVolume.profile = glitchVol;
@@ -403,9 +420,9 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(2.8f);
 
         //Finish scene and load next
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
         tDGameManager.ForceFinishScene();
-
 
     }
 

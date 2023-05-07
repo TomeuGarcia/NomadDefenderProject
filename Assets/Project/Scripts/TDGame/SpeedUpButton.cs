@@ -45,6 +45,26 @@ public class SpeedUpButton : MonoBehaviour
         LastEnemyKIllAnimation.OnQueryResumeTimescale -= UpdateTimeSpeed;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SetCurrentTimeSpeed(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SetCurrentTimeSpeed(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SetCurrentTimeSpeed(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            IncrementTime();
+        }
+    }
+
     public void ChangeTimeSpeed()
     {
         current = (current + 1) % numSpeeds;
@@ -70,18 +90,20 @@ public class SpeedUpButton : MonoBehaviour
 
     public void IncrementTime()
     {
-        current = (current + 1) % numSpeeds;
-
-        UpdateTimeSpeed();
+        SetCurrentTimeSpeed((current + 1) % numSpeeds);
         IncrementButtonPressed();
-        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
     }
     public void DecrementTime()
     {
-        current = (current + numSpeeds - 1) % numSpeeds;
+        SetCurrentTimeSpeed((current + numSpeeds - 1) % numSpeeds);
+        DecrementButtonPressed();
+    }
+    private void SetCurrentTimeSpeed(int newTimeSpeed)
+    {
+        current = newTimeSpeed;
 
         UpdateTimeSpeed();
-        DecrementButtonPressed();
+        
         GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
     }
 
