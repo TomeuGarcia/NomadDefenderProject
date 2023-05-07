@@ -102,7 +102,7 @@ public class PauseMenu : MonoBehaviour
 
 
         //GameAudioManager.GetInstance().NormalMusicPitch();
-        Time.timeScale = 1;   //segurament s ha de fer d un altre manera
+        Time.timeScale = lastTimeScale;   //segurament s ha de fer d un altre manera
         GameIsPaused = false;
         textManager.ResetTexts();        
 

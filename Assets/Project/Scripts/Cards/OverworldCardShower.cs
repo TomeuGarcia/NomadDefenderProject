@@ -60,20 +60,23 @@ public class OverworldCardShower : MonoBehaviour
         {
             itCard.OnCardHovered -= SetHoveredCard;
             itCard.OnCardUnhovered -= SetStandardCard;
-            itCard.OnCardSelected -= SelectCard;
+            //itCard.OnCardSelected -= SelectCard;
         }
+
+        showDeckButtonCG.alpha = 1f;
+        showDeckButtonCG.interactable = true;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (!showingDeck)
-                OnShowDeck();
-            else
-                OnBackToMap();
-        }
-        if (currentSelectedCard != null && Input.GetKeyDown(KeyCode.Mouse0))
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    if (!showingDeck)
+        //        OnShowDeck();
+        //    else
+        //        OnBackToMap();
+        //}
+        if (currentSelectedCard != null && Input.GetKeyDown(KeyCode.Mouse1))
         {
             DeselectCard();
         }
@@ -90,7 +93,7 @@ public class OverworldCardShower : MonoBehaviour
         {
             itCard.OnCardUnhovered += SetStandardCard;
             itCard.OnCardHovered += SetHoveredCard;
-            itCard.OnCardSelected += SelectCard;
+            //itCard.OnCardSelected += SelectCard;
             Quaternion rotation = transform.rotation;
             itCard.RootCardTransform.rotation = Quaternion.Euler(90, 0, 0);
             itCard.InitPositions(Vector3.up * 3.5f, Vector3.zero, itCard.RootCardTransform.position);
@@ -104,7 +107,7 @@ public class OverworldCardShower : MonoBehaviour
         showDeckButtonCG.interactable = false;
         showDeckButtonCG.alpha = 0f;
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
 
         float t1 = 0.1f;
         showDeckButtonCG.DOFade(1f, t1);

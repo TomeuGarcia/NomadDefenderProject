@@ -108,12 +108,6 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
-        //TODO
-        //currentNode.UpdateBorderMaterial();
-        //if(currentNode != owMapNode)
-        //{
-        //    owMapNode.UpdateBorderMaterial();
-        //}
 
         owMapPawn.MoveToNode(owMapNode);
 
@@ -122,6 +116,7 @@ public class OverworldMapGameManager : MonoBehaviour
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
 
             owMapPawn.ResetPosition();
+            DisableCardDisplayer();
         }
 
         // scuffed camera shake :)
@@ -313,7 +308,12 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapPawn.ActivateCamera();
 
         cardDisplayer.ResetAll();
-        cardDisplayer.gameObject.SetActive(canDisplayDeck && !gameFinished);
+        cardDisplayer.gameObject.SetActive(canDisplayDeck);
+
+        if (gameFinished)
+        {
+            cardDisplayer.gameObject.SetActive(false);
+        }
 
         mapEventSystemGO.SetActive(true);
 
@@ -327,9 +327,9 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         owMapPawn.DeactivateCamera();
 
+        cardDisplayer.DestroyAllCards();
         if (gameFinished)
         {
-            cardDisplayer.DestroyAllCards();
             cardDisplayer.gameObject.SetActive(false);
         }
 

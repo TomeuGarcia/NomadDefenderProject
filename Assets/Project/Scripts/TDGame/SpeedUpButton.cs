@@ -47,6 +47,8 @@ public class SpeedUpButton : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.GameIsPaused) return;
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetCurrentTimeSpeed(0);
