@@ -127,10 +127,18 @@ public class CardDescriptionDisplayer : MonoBehaviour
         {            
             positionOffset += Vector3.left * xDisplacement; // Display left
         }
+
         bool positionUpper = cardPositionInScreen.y < displayCamera.pixelHeight * 0.85f;
         if (positionUpper)
         {
-            positionOffset += Vector3.up * 0.1f; // Display right
+            positionOffset += Vector3.up * 0.1f;
+            Debug.Log("UPPER");
+        }
+        bool positionDown = cardPositionInScreen.y > displayCamera.pixelHeight * 0.15f;
+        if (positionDown)
+        {
+            positionOffset += Vector3.up * -0.1f;
+            Debug.Log("DOWN");
         }
 
 

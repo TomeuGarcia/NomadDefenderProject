@@ -209,7 +209,7 @@ public class OverworldMapGameManager : MonoBehaviour
             InvokeOnVictory();
             return;
         }
-
+        
 
         OWMap_Node[] nextLevelEnabledNodes = currentNode.EnableNextLevelNodesInteraction();
 
@@ -330,6 +330,10 @@ public class OverworldMapGameManager : MonoBehaviour
         ambienceAudio.Stop();
     }
 
+    public void DisableCardDisplayer()
+    {
+        cardDisplayer.gameObject.SetActive(false);
+    }
 
 
     protected void InvokeOnGameOver()

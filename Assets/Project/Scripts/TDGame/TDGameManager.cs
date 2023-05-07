@@ -186,6 +186,7 @@ public class TDGameManager : MonoBehaviour
     private IEnumerator GameOverAnimation()
     {
         //defeatHolder.SetActive(true);
+        PauseMenu.GetInstance().gameCanBePaused = false;
 
         //yield return new WaitForSeconds(5f);
         for (float t = 1f; t < 5f; t += Time.deltaTime)

@@ -12,7 +12,8 @@ public class MainMenuCreditsManager : MonoBehaviour
 
     private void Start()
     {
-        creditsDisplayer.StartCredits();        
+        creditsDisplayer.StartCredits();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.5f);
     }
 
 
