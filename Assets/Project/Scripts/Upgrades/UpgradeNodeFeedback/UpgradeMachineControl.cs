@@ -72,9 +72,16 @@ public class UpgradeMachineControl : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         StartCoroutine(leftCardSlot.Activate());
+        GameAudioManager.GetInstance().PlayCardSlotAppears();
         yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(rightCardSlot.Activate());
+        GameAudioManager.GetInstance().PlayCardSlotAppears();
+
+        yield return new WaitForSeconds(0.3f);
+        GameAudioManager.GetInstance().PlayCardSlotPlacerAppears();
+        yield return new WaitForSeconds(0.5f);
+        GameAudioManager.GetInstance().PlayCardSlotPlacerAppears();
     }
 
     private IEnumerator LightBlink(Light lightSource)

@@ -454,6 +454,7 @@ public class GameAudioManager : MonoBehaviour
         //cardsAudioSource3.clip = cardRedrawConfirmation;
         cardsAudioSource3.clip = cardSelected;
         cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
+        cardsAudioSource3.volume = 0.18f;
 
         cardsAudioSource3.Play();
     }
@@ -852,9 +853,24 @@ public class GameAudioManager : MonoBehaviour
 
 
     // GATHER NEW CARD
+    public void PlayCardSlotAppears()
+    {
+        containerSealAudioSource.Play();
+        containerSealAudioSource.pitch = 1.5f;
+    }
+    public void PlayCardSlotPlacerAppears()
+    {
+        cardsAudioSource3.clip = cardSelected;
+        cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
+        cardsAudioSource3.volume = 0.1f;
+
+        cardsAudioSource3.Play();
+    }
+
     public void PlayContainerSeal()
     {
         containerSealAudioSource.Play();
+        containerSealAudioSource.pitch = 1f;
     }
     public void PlayContainerOpenStart()
     {
