@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using System;
 
 public class EnemyWaveManager : MonoBehaviour
 {
@@ -71,6 +70,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         CardDrawer.OnStartSetupBattleCanvases += ActivateCanvas;
         TDGameManager.OnGameOverStart += ForceStopWaves;
+        TDGameManager.OnGameOverStart += PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
 
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
@@ -91,6 +91,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         CardDrawer.OnStartSetupBattleCanvases -= ActivateCanvas;
         TDGameManager.OnGameOverStart -= ForceStopWaves;
+        TDGameManager.OnGameOverStart -= PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
 
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
@@ -150,6 +151,16 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void StartWave(EnemyWaveSpawner enemyWaveSpawner, Transform enemySpawnTransform, int index)
     {
+        
+        //for (int i = 0; i < enemyWaveSpawner.EnemyWaves.Length; ++i)
+        //{
+        //    Debug.Log("Wave " + i);
+        //    for (int j = 0; j < enemyWaveSpawner.EnemyWaves[i].enemiesInWave.Length; ++j)
+        //    {
+        //        Debug.Log(enemyWaveSpawner.EnemyWaves[i].enemiesInWave[j].enemyType + " x" + enemyWaveSpawner.EnemyWaves[i].enemiesInWave[j].NumberOfSpawns);
+        //    }
+        //}
+
         ++currentWaves;
         waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform);
         StartCoroutine(waveCoroutines[index]);
@@ -183,6 +194,23 @@ public class EnemyWaveManager : MonoBehaviour
             consoleDialog.PrintLine(textLine);
         }
     }
+    private void PrintConsoleGameOver()
+    {
+        StartCoroutine(DoPrintConsoleGameOver());
+    }
+    private IEnumerator DoPrintConsoleGameOver()
+    {
+        consoleDialog.SetMaxLinesOnScreen(10);
+        string[] texts = { "STAGE OVER", "StAge OVeR", "StaGE oVER", "sTAgE OVER", "STAGE oVer" };
+        PrintConsoleLine(TextTypes.SYSTEM, texts[0], true);
+        for (int i = 0; i < 10; ++i)
+        {
+            yield return new WaitForSeconds(0.15f);  
+            PrintConsoleLine(TextTypes.SYSTEM, texts[Random.Range(0, texts.Length)]);
+        }
+    }
+
+
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner, int index)
     {
         if(OnWaveFinished != null) OnWaveFinished();

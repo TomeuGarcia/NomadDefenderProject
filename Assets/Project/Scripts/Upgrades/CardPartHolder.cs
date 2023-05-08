@@ -222,7 +222,7 @@ public class CardPartHolder : MonoBehaviour
             itCardPart.OnCardSelected -= SetSelectedCard;
         }
             
-        selectedCardPart.OnCardSelectedNotHovered += RetrieveCard;
+        selectedCardPart.OnCardSelectedNotHovered += RetrieveCardWithSound;
 
 
         // Audio
@@ -244,6 +244,8 @@ public class CardPartHolder : MonoBehaviour
             {
                 itCardPart.canDisplayInfoIfNotInteractable = true;
             }
+
+            GameAudioManager.GetInstance().PlayCardPlacedOnUpgradeHolder();
         }
         else
         {
@@ -275,9 +277,14 @@ public class CardPartHolder : MonoBehaviour
     //}
 
 
+    public void RetrieveCardWithSound(CardPart card)
+    {
+        RetrieveCard(card);
+        GameAudioManager.GetInstance().PlayCardRetreivedFromUpgradeHolder();
+    }
     public void RetrieveCard(CardPart card)
     {
-        selectedCardPart.OnCardSelectedNotHovered -= RetrieveCard;
+        selectedCardPart.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         SetStandardCard(card);
 
         selectedCardPart = null;
@@ -292,7 +299,7 @@ public class CardPartHolder : MonoBehaviour
     {
         canInteract = false;
 
-        selectedCardPart.OnCardSelectedNotHovered -= RetrieveCard;
+        selectedCardPart.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         
         foreach (CardPart cardPart in cardParts)
         {
@@ -368,7 +375,9 @@ public class CardPartHolder : MonoBehaviour
         foreach (CardPart cardPart in cardParts)
         {
             cardPart.transform.DOMove(cardPart.transform.position - moveOffset, moveDuration);
-            yield return new WaitForSeconds(delayBetweenCards);
+            yield return new WaitForSeconds(delayBetweenCards/2f);
+            GameAudioManager.GetInstance().PlayCardHovered();
+            yield return new WaitForSeconds(delayBetweenCards/2f);
         }
 
         foreach (CardPart cardPart in cardParts)

@@ -1,16 +1,32 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("PLAY BUTTON")]
+    [Header("BUTTONS")]
     [SerializeField] private GameObject playButtonGO;
+    [SerializeField] private GameObject newGameButton;
+    [SerializeField] private GameObject optionsButton;
+    [SerializeField] private GameObject creditsButton;
+    [SerializeField] private GameObject quitButton;
+
+    [Header("BUTTONS")]
+    [SerializeField] private TextMeshProUGUI playButtonText;
+    [SerializeField] private TextMeshProUGUI newGameButtonText;
+    [SerializeField] private TextMeshProUGUI creditsButtonText;
+    [SerializeField] private TextMeshProUGUI optionsButtonText;
+    [SerializeField] private TextMeshProUGUI quitButtonText;
+
 
     [Header("TEXT DECODERS")]
     [SerializeField] private TextManager textDecoderManager;
     [SerializeField] private TextDecoder titleTextDecoder;
     [SerializeField] private TextDecoder newGameButtonTextDecoder;
+    [SerializeField] private TextDecoder creditsButtonDecoder;
+    [SerializeField] private TextDecoder optionsButtonTextDecoder;
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
@@ -19,6 +35,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Material tilesMaterial;
     [SerializeField] private Material outerPlanesMaterial;
 
+
+    private int titleClickCount = 0;
+    private string originalTitleString;
 
     private bool canInteract = true;
 
@@ -34,10 +53,15 @@ public class MainMenu : MonoBehaviour
         if (!finishedTutorails)
         {
             playButtonGO.SetActive(false);
+            float offset = 0.3f;
+
+            newGameButton.GetComponent<RectTransform>().position -= Vector3.right * (offset + 0.1f);
+            quitTextDecoder.GetComponent<RectTransform>().position -= Vector3.right * offset;
+            optionsButton.GetComponent<RectTransform>().position += Vector3.right * offset;
+            creditsButtonDecoder.GetComponent<RectTransform>().position += Vector3.right * offset;
         }
 
         SetupTextDecoderManager();
-        //textDecoderManager.ResetTexts();
 
         obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
@@ -48,6 +72,7 @@ public class MainMenu : MonoBehaviour
     }
     private void Start()
     {
+        originalTitleString = titleTextDecoder.textStrings[0];
         PauseMenu.GetInstance().gameCanBePaused = false;
     }
 
@@ -55,11 +80,14 @@ public class MainMenu : MonoBehaviour
     {
         List<TextDecoder> textDecoders = new List<TextDecoder>();
         textDecoders.Add(titleTextDecoder);
-        if (playButtonGO.activeInHierarchy) textDecoders.Add(playButtonTextDecoder);
+        if (playButtonGO.activeInHierarchy) { textDecoders.Add(playButtonTextDecoder); }
         textDecoders.Add(newGameButtonTextDecoder);
+        textDecoders.Add(optionsButtonTextDecoder);
         textDecoders.Add(quitTextDecoder);
+        textDecoders.Add(creditsButtonDecoder);
 
         textDecoderManager.SetTextDecoders(textDecoders);
+        //textDecoderManager.ResetTexts();
     }
 
     private void Update()
@@ -80,7 +108,10 @@ public class MainMenu : MonoBehaviour
 
         canInteract = false;
         PauseMenu.GetInstance().gameCanBePaused = true;
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
+
+        ButtonClickedPunch(newGameButtonText);
+
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
 
         if (skipFirstBattle)
         {
@@ -107,6 +138,9 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
+
+        ButtonClickedPunch(playButtonText);
+
         PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
@@ -114,16 +148,110 @@ public class MainMenu : MonoBehaviour
     private IEnumerator DoPlay()
     {
         yield return new WaitForSeconds(0.3f);
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP,0.01f);
-        //Load First Scene
-        SceneLoader.GetInstance().StartLoadNormalGame(false);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
+        //Load First Scene        
+        SceneLoader.GetInstance().StartLoadNormalGame();
+    }
+
+    public void Credits()
+    {
+        if (!canInteract) return;
+
+        canInteract = false;
+
+
+        ButtonClickedPunch(creditsButtonText);
+
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
+        SceneLoader.GetInstance().StartLoadMainMenuCredits();
+    }
+
+    public void Options()
+    {
+        if (!canInteract) return;
+
+        //canInteract = false;
+
+
+        ButtonClickedPunch(optionsButtonText);
+
+        PauseMenu.GetInstance().MainMenuOptions();
+    }
+
+    public void Title()
+    {
+        if (!canInteract) return;
+
+        titleClickCount++;
+        titleClickCount %= 10;
+
+        titleTextDecoder.ClearDecoder();
+        if(titleClickCount == 3)
+        {
+            titleTextDecoder.SetTextStrings("NOMAD ATTACKER");
+            StartCoroutine(BackToDefender());
+        }else if(titleClickCount == 4)
+        {
+            titleTextDecoder.SetTextStrings(originalTitleString);
+        }
+        titleTextDecoder.Activate();
+    }
+
+    private IEnumerator BackToDefender()
+    {
+        yield return new WaitForSeconds(3.0f);
+        if(titleClickCount == 3)
+        {
+            titleTextDecoder.ClearDecoder();
+            titleTextDecoder.SetTextStrings(new List<string> { originalTitleString });
+            titleTextDecoder.Activate();
+        }
     }
 
     public void Quit()
     {
         if (!canInteract) return;
 
+        ButtonClickedPunch(quitButtonText);
+
         Application.Quit();
     }
 
+    public void ButtonHovered()
+    {
+        GameAudioManager.GetInstance().PlayCardInfoShown();
+    }
+
+    public void ButtonUnhovered()
+    {
+        GameAudioManager.GetInstance().PlayCardInfoHidden();
+    }
+
+    private void ButtonClickedPunch(TextMeshProUGUI buttonText)
+    {
+        float duration = 0.5f;
+
+        Sequence punchSequence = DOTween.Sequence();
+        punchSequence.Append(buttonText.rectTransform.DOPunchScale(Vector3.one * 0.4f, duration, 6));
+
+        //int numBlinks = 3;
+        //float blinkDuration = duration / (numBlinks*10f);
+        //for (int i = 0; i < numBlinks; ++i)
+        //{
+        //    punchSequence.Join(buttonText.DOFade(0.0f, blinkDuration));
+        //    punchSequence.AppendInterval(blinkDuration);
+        //    punchSequence.Join(buttonText.DOFade(1.0f, blinkDuration));
+        //    punchSequence.AppendInterval(blinkDuration);
+        //}
+        
+
+
+        GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
+
+    private void OnDisable()
+    {
+        //textDecoderManager.ResetTexts();
+    }
 }

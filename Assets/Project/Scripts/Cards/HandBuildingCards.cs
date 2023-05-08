@@ -67,7 +67,7 @@ public class HandBuildingCards : MonoBehaviour
     public static event CardAction ReturnCardToDeck;
     public event HandAction OnCanAddCard;
 
-    [HideInInspector] public bool cheatDrawCardActivated = true;
+    [HideInInspector] public bool cheatDrawCardActivated = false;
 
 
 
@@ -146,10 +146,11 @@ public class HandBuildingCards : MonoBehaviour
         //{
         //    ResetAndSetStandardCard(selectedCard);
         //}
-        if (Input.GetKeyDown(KeyCode.Space) && cheatDrawCardActivated)
-        {
-            if (OnQueryDrawCard != null) OnQueryDrawCard();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated)
+        //{
+        //    if (OnQueryDrawCard != null) OnQueryDrawCard();
+        //}
     }
 
     
@@ -392,6 +393,8 @@ public class HandBuildingCards : MonoBehaviour
         {
             FinishedRedrawing();
         }
+
+        GameAudioManager.GetInstance().PlayRedrawConfirmation();
     }
     private IEnumerator RedrawHold(BuildingCard card)
     {
@@ -402,6 +405,10 @@ public class HandBuildingCards : MonoBehaviour
         float redrawHoldTime = card.borderFillValue01 * redrawHoldDuration;
         float t = card.borderFillValue01;
 
+        float minPitch = 1.0f;
+        float maxPitch = 1.8f;
+        float startPitch = Mathf.Lerp(minPitch, maxPitch, t);
+        GameAudioManager.GetInstance().PlayRedrawIncreasing(startPitch, maxPitch, redrawHoldDuration - redrawHoldTime);
 
         while (redrawHoldTime < redrawHoldDuration && Input.GetMouseButton(0) && card.cardState == BuildingCard.CardStates.HOVERED)
         {
@@ -422,7 +429,9 @@ public class HandBuildingCards : MonoBehaviour
         else
         {
             card.StartDecreaseBorderFill();
-        }        
+        }       
+        
+        GameAudioManager.GetInstance().StopRedrawIncreasing();
     }
 
 

@@ -13,7 +13,7 @@ public static class EnemyWaveJSONManager
 
         public EnemyWavesWrapper()
         {
-            enemyWaves = new EnemyWave[2];
+            enemyWaves = new EnemyWave[0];
             for (int i = 0; i < enemyWaves.Length; ++i)
             {
                 enemyWaves[i] = new EnemyWave();

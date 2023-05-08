@@ -135,6 +135,15 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public void SetEnemyWaves(EnemyWave[] enemyWaves)
     {
+        for (int i = 0; i < enemyWaves.Length; ++i)
+        {
+            if (enemyWaves[i].enemiesInWave.Length <= 1)
+            {
+                enemyWaves[i].enemiesInWave = new EnemyInWave[0];
+            }
+        }
+
+
         this.enemyWaves = enemyWaves;
     }
 
@@ -169,11 +178,11 @@ public class EnemyWaveSpawner : ScriptableObject
 
                 for (int i = 0; i < enemyInWave.NumberOfSpawns; ++i)
                 {
+                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
                     if (stopForced) break;
-
+                    
                     SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
 
-                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
                 }                
             }
         }

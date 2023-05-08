@@ -7,6 +7,8 @@ public class OverworldMapGameManager : MonoBehaviour
     private OWMap_Node[][] mapNodes;
     public OWMap_Node[][] GetMapNodes() { return mapNodes; }
     private int currentMapLevelI;
+    private bool gameFinished = false;
+
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
@@ -106,12 +108,6 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
-        //TODO
-        //currentNode.UpdateBorderMaterial();
-        //if(currentNode != owMapNode)
-        //{
-        //    owMapNode.UpdateBorderMaterial();
-        //}
 
         owMapPawn.MoveToNode(owMapNode);
 
@@ -120,6 +116,7 @@ public class OverworldMapGameManager : MonoBehaviour
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
 
             owMapPawn.ResetPosition();
+            DisableCardDisplayer();
         }
 
         // scuffed camera shake :)
@@ -205,11 +202,13 @@ public class OverworldMapGameManager : MonoBehaviour
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            Debug.Log("END OF MAP REACHED ---> VICTORY");
+            gameFinished = true;
             InvokeOnVictory();
+            DisableCardDisplayer();
+            Debug.Log("END OF MAP REACHED ---> VICTORY");
             return;
         }
-
+        
 
         OWMap_Node[] nextLevelEnabledNodes = currentNode.EnableNextLevelNodesInteraction();
 
@@ -223,7 +222,9 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
+            gameFinished = true;
             InvokeOnGameOver();
+            DisableCardDisplayer();
             Debug.Log("ALL PATHS DESTROYED ---> GAME OVER");
         }
 
@@ -291,7 +292,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void StartBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BATTLE, 0.01f);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BATTLE, 1f);
         mapSceneLoader.LoadBattleScene(battleType, numLocationsToDefend);
         if (OnMapNodeSceneStartsLoading != null) OnMapNodeSceneStartsLoading();
     }
@@ -309,6 +310,11 @@ public class OverworldMapGameManager : MonoBehaviour
         cardDisplayer.ResetAll();
         cardDisplayer.gameObject.SetActive(canDisplayDeck);
 
+        if (gameFinished)
+        {
+            cardDisplayer.gameObject.SetActive(false);
+        }
+
         mapEventSystemGO.SetActive(true);
 
         EnemyFactory.GetInstance().ResetPools();
@@ -322,7 +328,10 @@ public class OverworldMapGameManager : MonoBehaviour
         owMapPawn.DeactivateCamera();
 
         cardDisplayer.DestroyAllCards();
-        cardDisplayer.gameObject.SetActive(false);
+        if (gameFinished)
+        {
+            cardDisplayer.gameObject.SetActive(false);
+        }
 
         mapEventSystemGO.SetActive(false);
 
@@ -330,6 +339,10 @@ public class OverworldMapGameManager : MonoBehaviour
         ambienceAudio.Stop();
     }
 
+    public void DisableCardDisplayer()
+    {
+        cardDisplayer.gameObject.SetActive(false);
+    }
 
 
     protected void InvokeOnGameOver()

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,7 +53,7 @@ public class TDGameManager : MonoBehaviour
 
         numAliveLocations = pathLocations.Length;        
 
-        InitLocationsVisuals();        
+        InitLocationsVisuals();
     }    
 
 
@@ -142,6 +143,10 @@ public class TDGameManager : MonoBehaviour
         SetBattleStateResult();
 
         StartCoroutine(GameOverAnimation());
+        Sequence audioSequence = DOTween.Sequence();
+        audioSequence.AppendInterval(0.35f);
+        audioSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayWiresCursedWave());
+
 
         if (OnGameOverStart != null) OnGameOverStart();
         if (OnGameFinishStart != null) OnGameFinishStart();
@@ -180,7 +185,8 @@ public class TDGameManager : MonoBehaviour
 
     private IEnumerator GameOverAnimation()
     {
-        defeatHolder.SetActive(true);
+        //defeatHolder.SetActive(true);
+        PauseMenu.GetInstance().gameCanBePaused = false;
 
         //yield return new WaitForSeconds(5f);
         for (float t = 1f; t < 5f; t += Time.deltaTime)
@@ -196,18 +202,22 @@ public class TDGameManager : MonoBehaviour
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
         mapSceneNotifier.InvokeOnSceneFinished();
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     private IEnumerator VictoryAnimation()
     {
         //victoryHolder.SetActive(true);
+
+        GameAudioManager.GetInstance().PlayBattleStageVictory();
+        //yield return new WaitForSeconds(1f);
+
         yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
         mapSceneNotifier.InvokeOnSceneFinished();
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.01f);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
     public void ForceFinishScene()

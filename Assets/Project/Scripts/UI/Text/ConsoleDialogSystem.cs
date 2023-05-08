@@ -15,7 +15,7 @@ public class ConsoleDialogSystem : MonoBehaviour
     private string closingContext;
 
     [Header("PARAMETERS")]
-    [SerializeField] private int maxLinesOnScreen;
+    [SerializeField] private int maxLinesOnScreen;    
     [SerializeField] private Vector3 lineSeparation;
     [SerializeField] private Vector3 initialLinePosition;
     [SerializeField] private Color32 contextColor;
@@ -150,6 +150,11 @@ public class ConsoleDialogSystem : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void SetMaxLinesOnScreen(int maxLinesOnScreen)
+    {
+        this.maxLinesOnScreen = maxLinesOnScreen;
     }
 
 }
