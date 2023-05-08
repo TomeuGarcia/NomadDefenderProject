@@ -135,10 +135,11 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.01f);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
         Time.timeScale = 1;
 
         pauseMenuUI.SetActive(false);
+        mainMenuButtonText.gameObject.SetActive(true);
         surrenderText.gameObject.SetActive(false);
 
         OWMap_Node.IsGlobalInteractable = true;

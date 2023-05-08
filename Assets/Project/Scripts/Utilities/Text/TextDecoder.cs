@@ -61,6 +61,12 @@ public class TextDecoder : MonoBehaviour
 
     private void InitDecodingVariables()
     {
+        //TODO: CAREFUL
+        if(decodingParameters != null)
+        {
+            decodingParameters.startDecodingIndex = 0;
+        }
+
         nextLine = false;
         if(textComponent != null)
         {
