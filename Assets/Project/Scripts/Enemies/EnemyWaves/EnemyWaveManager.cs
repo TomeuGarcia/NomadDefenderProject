@@ -151,6 +151,16 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void StartWave(EnemyWaveSpawner enemyWaveSpawner, Transform enemySpawnTransform, int index)
     {
+        
+        //for (int i = 0; i < enemyWaveSpawner.EnemyWaves.Length; ++i)
+        //{
+        //    Debug.Log("Wave " + i);
+        //    for (int j = 0; j < enemyWaveSpawner.EnemyWaves[i].enemiesInWave.Length; ++j)
+        //    {
+        //        Debug.Log(enemyWaveSpawner.EnemyWaves[i].enemiesInWave[j].enemyType + " x" + enemyWaveSpawner.EnemyWaves[i].enemiesInWave[j].NumberOfSpawns);
+        //    }
+        //}
+
         ++currentWaves;
         waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform);
         StartCoroutine(waveCoroutines[index]);

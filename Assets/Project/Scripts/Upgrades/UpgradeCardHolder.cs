@@ -430,7 +430,9 @@ public class UpgradeCardHolder : MonoBehaviour
         foreach (BuildingCard card in cards)
         {
             card.RootCardTransform.DOMove(card.RootCardTransform.position - moveOffset, moveDuration);
-            yield return new WaitForSeconds(delayBetweenCards);
+            yield return new WaitForSeconds(delayBetweenCards/2f);
+            GameAudioManager.GetInstance().PlayCardHovered();
+            yield return new WaitForSeconds(delayBetweenCards/2f);
         }
 
         

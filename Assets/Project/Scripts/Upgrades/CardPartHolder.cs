@@ -375,7 +375,9 @@ public class CardPartHolder : MonoBehaviour
         foreach (CardPart cardPart in cardParts)
         {
             cardPart.transform.DOMove(cardPart.transform.position - moveOffset, moveDuration);
-            yield return new WaitForSeconds(delayBetweenCards);
+            yield return new WaitForSeconds(delayBetweenCards/2f);
+            GameAudioManager.GetInstance().PlayCardHovered();
+            yield return new WaitForSeconds(delayBetweenCards/2f);
         }
 
         foreach (CardPart cardPart in cardParts)

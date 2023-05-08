@@ -59,8 +59,8 @@ public class PauseMenu : MonoBehaviour
         return instance;
     }
 
-        void Update()
-        {
+    void Update()
+    {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameIsPaused)
@@ -102,7 +102,7 @@ public class PauseMenu : MonoBehaviour
 
 
         //GameAudioManager.GetInstance().NormalMusicPitch();
-        Time.timeScale = 1;   //segurament s ha de fer d un altre manera
+        Time.timeScale = lastTimeScale;   //segurament s ha de fer d un altre manera
         GameIsPaused = false;
         textManager.ResetTexts();        
 
@@ -112,7 +112,7 @@ public class PauseMenu : MonoBehaviour
     void Pause()
     {
         if (!gameCanBePaused) return;
-        
+
         if (button != null)
         {
             buttonText.rectTransform.DOScale(Vector3.one, 0f).SetUpdate(true);
@@ -130,7 +130,12 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
         TextFadeIn(titleText);
 
-        OWMap_Node.IsGlobalInteractable = false;        
+        OWMap_Node.IsGlobalInteractable = false;
+    }
+
+    public void MainMenuOptions()
+    {
+        GoToOptionsMenu();
     }
 
     public void LoadMenu()

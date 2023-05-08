@@ -127,11 +127,20 @@ public class CardDescriptionDisplayer : MonoBehaviour
         {            
             positionOffset += Vector3.left * xDisplacement; // Display left
         }
-        bool positionUpper = cardPositionInScreen.y < displayCamera.pixelHeight * 0.85f;
+
+        bool positionUpper = cardPositionInScreen.y < displayCamera.pixelHeight * 0.30f;
         if (positionUpper)
         {
-            positionOffset += Vector3.up * 0.1f; // Display right
+            positionOffset += Vector3.up * 0.25f;            
         }
+        bool positionDown = cardPositionInScreen.y > displayCamera.pixelHeight * 0.70f;
+        if (positionDown)
+        {
+            positionOffset += Vector3.up * -0.5f;
+        }
+
+        //Debug.Log("cardPositionInScreen: " + cardPositionInScreen);
+        //Debug.Log("displayCamera: " + new Vector3(displayCamera.pixelWidth, displayCamera.pixelHeight, 0f));
 
 
         RectTransform parentUI = GetParentUIDescriptionBox();

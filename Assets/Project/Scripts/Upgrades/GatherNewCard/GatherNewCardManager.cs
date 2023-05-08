@@ -22,6 +22,11 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField, Min(0f)] private float distanceBetweenCards = 1.2f;
     [SerializeField] private Transform cardHolder;
 
+    [Header("CONTAINERS")]
+    [SerializeField] private CardContainer leftCardConteiner;
+    [SerializeField] private CardContainer midCardConteiner;
+    [SerializeField] private CardContainer rightCardConteiner;
+
     // Animations
     Vector3[] startPositions;
 
@@ -66,6 +71,11 @@ public class GatherNewCardManager : MonoBehaviour
         {
             numCards = 2;
             numSupportCards = Random.Range(0, 2); // 50%
+
+            midCardConteiner.gameObject.SetActive(false);
+            Vector3 offset = new Vector3(0.6f, 0.0f, 0.0f);
+            leftCardConteiner.transform.position += offset;
+            rightCardConteiner.transform.position -= offset;
         }
         else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
         {
@@ -82,7 +92,6 @@ public class GatherNewCardManager : MonoBehaviour
                 turretCardsLevel = TurretCardParts.MAX_CARD_LEVEL;
             }
         }
-
 
 
         cards = new BuildingCard[numCards];
@@ -285,7 +294,7 @@ public class GatherNewCardManager : MonoBehaviour
             cards[i].RootCardTransform.localRotation = upsideDown;
         }
 
-        yield return new WaitForSeconds(1f); // start delay
+        //yield return new WaitForSeconds(1f);
 
         float delayBetweenCards = 0.2f;
         float moveDuration = 1.5f;
@@ -293,20 +302,21 @@ public class GatherNewCardManager : MonoBehaviour
         {
             cards[i].RootCardTransform.DOLocalMove(endPositions[i], moveDuration);
 
-            yield return new WaitForSeconds(delayBetweenCards);
+            //yield return new WaitForSeconds(delayBetweenCards);
         }
-        yield return new WaitForSeconds(moveDuration);
+        //yield return new WaitForSeconds(moveDuration);
 
 
 
         float rotationDuration = 0.5f;
         foreach (BuildingCard card in cards)
         {
-            card.RootCardTransform.DOLocalRotate(Vector3.zero, rotationDuration);
+            //card.RootCardTransform.DOLocalRotate(Vector3.zero, rotationDuration);
+            card.transform.localRotation = Quaternion.identity;
 
-            yield return new WaitForSeconds(delayBetweenCards);
+            //yield return new WaitForSeconds(delayBetweenCards);
         }
-        yield return new WaitForSeconds(delayBetweenCards); // extra wait
+        //yield return new WaitForSeconds(delayBetweenCards); // extra wait
 
 
         foreach (BuildingCard itCard in cards)
@@ -315,12 +325,31 @@ public class GatherNewCardManager : MonoBehaviour
         }
         PrintConsoleLine(TextTypes.INSTRUCTION, "choose a new CARD for your deck",true);
 
+        yield return new WaitForSeconds(1.0f);
+
+        //CONTAINTERS
+        if (numCards == 3)
+        {
+            StartCoroutine(midCardConteiner.Activate());
+            yield return new WaitForSeconds(0.5f);
+
+            StartCoroutine(leftCardConteiner.Activate());
+            StartCoroutine(rightCardConteiner.Activate());
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            StartCoroutine(leftCardConteiner.Activate());
+            StartCoroutine(rightCardConteiner.Activate());
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return new WaitForSeconds(1.0f);
+
         // scuffed fix, allow mouse interaction if already hovering the cards
         foreach (BuildingCard itCard in cards)
         {
             itCard.ReenableMouseInteraction();
         }
-
     }
 
     private IEnumerator SelectCardAnimation()
@@ -331,16 +360,16 @@ public class GatherNewCardManager : MonoBehaviour
         yield return new WaitForSeconds(shakeDuration);
 
         float moveDuration = 1.0f;
-        float delayBetweenCards = 0.2f;
-        for (int i = 0; i < numCards; ++i)
-        {
-            if (cards[i] == selectedCard) continue;
+        //float delayBetweenCards = 0.2f;
+        //for (int i = 0; i < numCards; ++i)
+        //{
+        //    if (cards[i] == selectedCard) continue;
 
-            cards[i].RootCardTransform.DOLocalMove(startPositions[i], moveDuration);
+        //    cards[i].RootCardTransform.DOLocalMove(startPositions[i], moveDuration);
 
-            yield return new WaitForSeconds(delayBetweenCards);
-        }
-        yield return new WaitForSeconds(moveDuration);
+        //    yield return new WaitForSeconds(delayBetweenCards);
+        //}
+        //yield return new WaitForSeconds(moveDuration);
 
 
         float centerMoveDuration = 0.15f;
@@ -358,6 +387,24 @@ public class GatherNewCardManager : MonoBehaviour
         yield return new WaitForSeconds(centerMoveDuration);
 
 
+        //CONTAINTERS
+        if (numCards == 3)
+        {
+            StartCoroutine(midCardConteiner.Deactivate());
+            yield return new WaitForSeconds(0.5f);
+
+            StartCoroutine(leftCardConteiner.Deactivate());
+            StartCoroutine(rightCardConteiner.Deactivate());
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            StartCoroutine(leftCardConteiner.Deactivate());
+            StartCoroutine(rightCardConteiner.Deactivate());
+            yield return new WaitForSeconds(0.5f);
+        }
+
+
         Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
         selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
         selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 1.5f);
@@ -365,7 +412,7 @@ public class GatherNewCardManager : MonoBehaviour
 
 
         //Debug.Log("FINISH");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         //if (OnCardGatherDone != null) OnCardGatherDone();
         consoleDialog.Clear();
 

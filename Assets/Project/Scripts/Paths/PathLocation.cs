@@ -59,10 +59,10 @@ public class PathLocation : MonoBehaviour
         InitParticles();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.D) && !IsDead) TakeDamage(1);
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.D) && !IsDead) TakeDamage(1);
+    //}
 
     public void TakeDamage(int damageAmount)
     {

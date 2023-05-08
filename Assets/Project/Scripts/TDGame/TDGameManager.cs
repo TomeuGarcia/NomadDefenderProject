@@ -53,7 +53,7 @@ public class TDGameManager : MonoBehaviour
 
         numAliveLocations = pathLocations.Length;        
 
-        InitLocationsVisuals();        
+        InitLocationsVisuals();
     }    
 
 
@@ -186,6 +186,7 @@ public class TDGameManager : MonoBehaviour
     private IEnumerator GameOverAnimation()
     {
         //defeatHolder.SetActive(true);
+        PauseMenu.GetInstance().gameCanBePaused = false;
 
         //yield return new WaitForSeconds(5f);
         for (float t = 1f; t < 5f; t += Time.deltaTime)
@@ -208,10 +209,10 @@ public class TDGameManager : MonoBehaviour
     {
         //victoryHolder.SetActive(true);
 
-        yield return new WaitForSeconds(1f);
         GameAudioManager.GetInstance().PlayBattleStageVictory();
+        //yield return new WaitForSeconds(1f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
 
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 

@@ -71,11 +71,17 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
 
-        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         StartCoroutine(leftCardSlot.Activate());
+        GameAudioManager.GetInstance().PlayCardSlotAppears();
         yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(rightCardSlot.Activate());
+        GameAudioManager.GetInstance().PlayCardSlotAppears();
+
+        yield return new WaitForSeconds(0.3f);
+        GameAudioManager.GetInstance().PlayCardSlotPlacerAppears();
+        yield return new WaitForSeconds(0.5f);
+        GameAudioManager.GetInstance().PlayCardSlotPlacerAppears();
     }
 
     private IEnumerator LightBlink(Light lightSource)
@@ -211,6 +217,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void ActivateButton()
     {
+        screenTransitionFD.invert = false;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         screenButtonText.material.SetFloat("_ReplaceCoef", 1.0f);
 
         //lerp button out
@@ -221,6 +229,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void DeactivateButton()
     {
+        screenTransitionFD.invert = true;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
         screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
 
         //lerp button in
