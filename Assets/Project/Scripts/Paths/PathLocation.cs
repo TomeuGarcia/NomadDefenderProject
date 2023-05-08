@@ -11,6 +11,7 @@ public class PathLocation : MonoBehaviour
     [Header("HEALTH")]
     [SerializeField] private int health = 3;
     public HealthSystem healthSystem { get; private set; }
+    private bool hasGameFinished;
 
     [Header("HUD")]
     [SerializeField] private LocationHealthHUD healthHUD;
@@ -57,12 +58,33 @@ public class PathLocation : MonoBehaviour
         healthSystem = new HealthSystem(health);
         healthHUD.Init(healthSystem);
         InitParticles();
+
+        hasGameFinished = false;
+    }
+
+    private void OnEnable()
+    {
+        EnemyWaveManager.OnAllWavesFinished += SetHasGameFinished;
+    }
+    private void OnDisable()
+    {
+        EnemyWaveManager.OnAllWavesFinished -= SetHasGameFinished;
     }
 
     //private void Update()
     //{
     //    if (Input.GetKeyDown(KeyCode.D) && !IsDead) TakeDamage(1);
     //}
+
+    private void SetHasGameFinished()
+    {
+        hasGameFinished = true;
+    }
+
+    public bool CanTakeDamage()
+    {
+        return !IsDead && !hasGameFinished;
+    }
 
     public void TakeDamage(int damageAmount)
     {

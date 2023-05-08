@@ -535,7 +535,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
     protected void PlayAnimationIconPunch(Transform iconTransform)
     {
-        iconTransform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 7);
+        iconTransform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 7).OnComplete(()=> iconTransform.localScale = Vector3.one);
     }
 
     protected void PlayAnimationTextCostPunch(Color flashColor, Color endColor, float duration, float punchScale, int punchVibrato)

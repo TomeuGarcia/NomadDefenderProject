@@ -46,7 +46,8 @@ public class Enemy : MonoBehaviour
     // Queued damage
     private int queuedDamage = 0;
 
-    public bool IsFakeEnemy { get; protected set; } = false;    
+    public bool IsFakeEnemy { get; protected set; } = false;
+    private bool collidedWithLocation = false;
 
 
     protected HealthSystem healthSystem;
@@ -107,6 +108,8 @@ public class Enemy : MonoBehaviour
         healthSystem.HealToMax();
         healthSystem.ResetArmor();
 
+        collidedWithLocation = false;
+
         queuedDamage = 0;
 
         ResetStats();
@@ -128,12 +131,16 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PathLocation"))
+        if (other.CompareTag("PathLocation") && !collidedWithLocation)
         {
+            Debug.Log(this.name);
+
             PathLocation pathLocation = other.gameObject.GetComponent<PathLocation>();
-            if (!pathLocation.IsDead)
+            if (pathLocation.CanTakeDamage())
             {
-                pathLocation.TakeDamage((int)damage);
+                //pathLocation.TakeDamage((int)damage);
+                pathLocation.TakeDamage(1);
+                collidedWithLocation = true;
             }
             Suicide();
         }

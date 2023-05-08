@@ -42,10 +42,10 @@ public class CurrencyCounter : MonoBehaviour
         addedCurrencyText.gameObject.SetActive(false);
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.C)) AddCurrency(50);
-    //}
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C)) AddCurrency(50);
+    }
 
     private void OnEnable()
     {
