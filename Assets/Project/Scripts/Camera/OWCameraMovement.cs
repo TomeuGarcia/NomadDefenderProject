@@ -73,10 +73,11 @@ public class OWCameraMovement : MonoBehaviour
     private IEnumerator LateMoveToNextLevel()
     {
         transform.DOMove(nextLevelPos, 2.0f);
+        originalPos = nextLevelPos;
+        nextLevelPos = originalPos + distanceToNextLevel;
         yield return new WaitForSeconds(2.0f);
 
         moving = false;
-        SetPositions();
         if(!nodeSelected)
         {
             CanDrag(true);
