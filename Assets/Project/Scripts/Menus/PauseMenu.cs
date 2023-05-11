@@ -52,6 +52,8 @@ public class PauseMenu : MonoBehaviour
         {
             Destroy(this);
         }
+
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
     }
 
     public static PauseMenu GetInstance()

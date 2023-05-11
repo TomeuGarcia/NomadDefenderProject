@@ -62,6 +62,8 @@ public class OverworldMapGameManager : MonoBehaviour
         mapSceneLoader.OnSceneFromMapUnloaded -= DoOnSceneFromMapUnloaded;
 
         TDGameManager.OnQueryReferenceToBattleStateResult -= CreateNewBattleStateResult;
+
+        ambienceAudio.Stop();
     }
 
 

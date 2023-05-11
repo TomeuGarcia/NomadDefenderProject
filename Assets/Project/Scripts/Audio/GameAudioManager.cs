@@ -8,8 +8,6 @@ public class GameAudioManager : MonoBehaviour
 {
     private static GameAudioManager instance;
 
-    [SerializeField] private FMODUnity.StudioEventEmitter testEventEmitter;
-
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip[] musics1;
@@ -18,6 +16,13 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip fightMusic;
     [SerializeField] private TempMusicClips[] tempMusicClips;
     private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
+
+    [SerializeField] private FMODUnity.StudioEventEmitter mainMenuMusicEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter mapMusicEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter battleMusicEmitter;
+    private FMODUnity.StudioEventEmitter lastMusicEmitter = null;
+
+    private Dictionary<MusicType, FMODUnity.StudioEventEmitter> musicToEmitter = new Dictionary<MusicType, FMODUnity.StudioEventEmitter>();
     private int currentMusic1 = 0;
     private bool musicPaused = false;
     private float musicDefaultVolume;
@@ -37,13 +42,22 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] textConsoleTyping;
 
     [Header("CARDS")]
-    [SerializeField] private AudioSource cardsAudioSource;
-    [SerializeField] private AudioSource cardsAudioSource2;
-    [SerializeField] private AudioSource cardsAudioSource3;
-    [SerializeField] private AudioClip cardSelected;
+    //[SerializeField] private AudioSource cardsAudioSource;
+    //[SerializeField] private AudioSource cardsAudioSource2;
+    //[SerializeField] private AudioSource cardsAudioSource3;
+    //[SerializeField] private AudioClip cardSelected;
     [SerializeField] private AudioClip cardHovered;
-    [SerializeField] private AudioClip cardHoverExit;
-    [SerializeField] private AudioClip cardPlayed;
+    //[SerializeField] private AudioClip cardHoverExit;
+    //[SerializeField] private AudioClip cardPlayed;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsEmitter2;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsEmitter3;
+    [SerializeField] private FMODUnity.EventReference cardHoveredER;
+    [SerializeField] private FMODUnity.EventReference cardSelectedER;
+    [SerializeField] private FMODUnity.EventReference cardHoverExitER;
+    [SerializeField] private FMODUnity.EventReference redrawConfirmationER;
+    [SerializeField] private FMODUnity.EventReference cardSlotPlacerAppearsER;
+
     const float cardAudioCooldown = 0.2f;
     bool canPlayCardAudio = true;
     [SerializeField] private AudioSource cardsAudioLoopSource;
@@ -103,11 +117,8 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip currencySpent;
 
     [Header("PROJECTILES")]
-    [SerializeField] private AudioSource[] projectilesAudioSources;
-    [SerializeField] private AudioClip[] spammerProjectilesAudioSources;
-    [SerializeField] private AudioClip[] sentryProjectilesAudioSources;
-    [SerializeField] private AudioClip[] blasterProjectilesAudioSources;
-    [SerializeField] private AudioClip[] projectileShots;
+    [SerializeField] private FMODUnity.StudioEventEmitter[] projectilesEmitters;
+
     [SerializeField] private AudioClip zapProjectileShot;
 
 
@@ -165,7 +176,6 @@ public class GameAudioManager : MonoBehaviour
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
 
-        testEventEmitter.Play();
     }
     //private void Update()
     //{
@@ -214,6 +224,7 @@ public class GameAudioManager : MonoBehaviour
             ++i;
         }
     }
+
     private IEnumerator BuildUp(AudioSource source, float initVol, float endVol, float attackTime, float sustainTime, float releaseTime)
 
     {
@@ -291,18 +302,32 @@ public class GameAudioManager : MonoBehaviour
         {
             musicClips.Add(clips.type, clips.clip);
         }
+
+        lastMusicEmitter = null;
+        musicToEmitter = new Dictionary<MusicType, FMODUnity.StudioEventEmitter>
+        {
+            { MusicType.NONE, mainMenuMusicEmitter },
+            { MusicType.MENU, mainMenuMusicEmitter },
+            { MusicType.OWMAP, mapMusicEmitter },
+            { MusicType.BATTLE, battleMusicEmitter }
+        };
     }
 
 
     public void MusicFadeIn(MusicType type, float duration, float maxVolume)
     {
-        AudioClip clip = musicClips[type];
-        musicAudioSource.clip = clip;
-        musicAudioSource.volume = 0f;
-        musicAudioSource.loop = true;
-        musicAudioSource.Play();
+        //AudioClip clip = musicClips[type];
+        //musicAudioSource.clip = clip;
+        //musicAudioSource.volume = 0f;
+        //musicAudioSource.loop = true;
+        //musicAudioSource.Play();
 
-        musicAudioSource.DOFade(maxVolume, duration);
+        //musicAudioSource.DOFade(maxVolume, duration);
+
+
+        if (lastMusicEmitter != null) lastMusicEmitter.Stop();
+        lastMusicEmitter = musicToEmitter[type];
+        lastMusicEmitter.Play();
     }
     public void MusicFadeOut(float duration)
     {
@@ -410,10 +435,13 @@ public class GameAudioManager : MonoBehaviour
     {
         if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardHovered;
-        cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        //cardsAudioSource.clip = cardHovered;
+        //cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
-        cardsAudioSource.Play();
+        //cardsAudioSource.Play();
+
+        cardsEmitter.EventReference = cardHoveredER;
+        cardsEmitter.Play();
 
         StartCoroutine(CardAudioCooldown());
     }
@@ -427,40 +455,49 @@ public class GameAudioManager : MonoBehaviour
     {
         if (!canPlayCardAudio) return;
 
-        cardsAudioSource.clip = cardSelected;
-        cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
+        //cardsAudioSource.clip = cardSelected;
+        //cardsAudioSource.pitch = Random.Range(1.3f, 1.4f);
 
-        cardsAudioSource.Play();
+        //cardsAudioSource.Play();
+
+        cardsEmitter.EventReference = cardSelectedER;
+        cardsEmitter.Play();
 
         StartCoroutine(CardAudioCooldown());
     }
 
     public void PlayCardHoverExit()
     {        
-        if (cardsAudioSource2.isPlaying) return;
+        //if (cardsAudioSource2.isPlaying) return;
 
-        cardsAudioSource2.clip = cardHoverExit;
-        cardsAudioSource2.pitch = Random.Range(0.9f, 1.1f);
+        //cardsAudioSource2.clip = cardHoverExit;
+        //cardsAudioSource2.pitch = Random.Range(0.9f, 1.1f);
 
-        cardsAudioSource2.Play();
+        //cardsAudioSource2.Play();
+
+        if (cardsEmitter2.IsPlaying()) return;
+        cardsEmitter2.EventReference = cardHoverExitER;
+        cardsEmitter2.Play();
     }
 
     public void PlayCardPlayed()
     {
-        cardsAudioSource.clip = cardPlayed;
-        cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        //cardsAudioSource.clip = cardPlayed;
+        //cardsAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
-        cardsAudioSource.Play();
+        //cardsAudioSource.Play();
     }
 
     public void PlayRedrawConfirmation()
     {
-        //cardsAudioSource3.clip = cardRedrawConfirmation;
-        cardsAudioSource3.clip = cardSelected;
-        cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
-        cardsAudioSource3.volume = 0.18f;
+        //cardsAudioSource3.clip = cardSelected;
+        //cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
+        //cardsAudioSource3.volume = 0.18f;
 
-        cardsAudioSource3.Play();
+        //cardsAudioSource3.Play();
+
+        cardsEmitter3.EventReference = redrawConfirmationER;
+        cardsEmitter3.Play();
     }
 
     public void PlayRedrawIncreasing(float startPitch, float endPitch, float duration)
@@ -731,27 +768,23 @@ public class GameAudioManager : MonoBehaviour
     // Projectiles
     public void PlayProjectileShot(TurretPartBody.BodyType bodyType)
     {
-        switch (bodyType)
+        FMODUnity.StudioEventEmitter emitter = projectilesEmitters[0];
+        for (int i = 0; i < projectilesEmitters.Length; ++i)
         {
-            case TurretPartBody.BodyType.SENTRY:
-                LoopAudioSources(projectilesAudioSources, blasterProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
+            if (!projectilesEmitters[i].IsPlaying())
+            {
+                emitter = projectilesEmitters[i];
                 break;
-
-            case TurretPartBody.BodyType.BLASTER:
-                LoopAudioSources(projectilesAudioSources, sentryProjectilesAudioSources[(int)Random.Range(0, 3)], Random.Range(0.8f, 1.2f));
-                break;
-            case TurretPartBody.BodyType.SPAMMER:
-                LoopAudioSources(projectilesAudioSources, spammerProjectilesAudioSources[(int)Random.Range(0, 2)], Random.Range(0.8f, 1.2f));
-                break;
-
-            default:
-                break;
+            }
         }
+
+        emitter.SetParameter("BodyType", (float)bodyType);
+        emitter.Play();
     }
 
     public void PlayZapProjectileShot()
     {
-        LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.8f, 1.2f));
+        //LoopAudioSources(projectilesAudioSources, zapProjectileShot, Random.Range(0.8f, 1.2f));
     }
 
 
@@ -864,11 +897,14 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardSlotPlacerAppears()
     {
-        cardsAudioSource3.clip = cardSelected;
-        cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
-        cardsAudioSource3.volume = 0.1f;
+        //cardsAudioSource3.clip = cardSelected;
+        //cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
+        //cardsAudioSource3.volume = 0.1f;
 
-        cardsAudioSource3.Play();
+        //cardsAudioSource3.Play();
+
+        cardsEmitter3.EventReference = cardSlotPlacerAppearsER;
+        cardsEmitter3.Play();
     }
 
     public void PlayContainerSeal()
