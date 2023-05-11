@@ -8,6 +8,8 @@ public class GameAudioManager : MonoBehaviour
 {
     private static GameAudioManager instance;
 
+    [SerializeField] private FMODUnity.StudioEventEmitter testEventEmitter;
+
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip[] musics1;
@@ -162,6 +164,8 @@ public class GameAudioManager : MonoBehaviour
         initMusicDictionary();
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
+
+        testEventEmitter.Play();
     }
     //private void Update()
     //{

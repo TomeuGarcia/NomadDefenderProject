@@ -3053,6 +3053,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4191515420290509108}
   - component: {fileID: 4191515420290509109}
+  - component: {fileID: 2023241378545346498}
   m_Layer: 0
   m_Name: GameAudioManager
   m_TagString: Untagged
@@ -3104,6 +3105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed5c11fce7a8d84d82749dc99bed0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testEventEmitter: {fileID: 2023241378545346498}
   musicAudioSource: {fileID: 4191515421600717575}
   musics1:
   - {fileID: 8300000, guid: 2a4db6d54d2b73f44b7bfb7b1520a6c7, type: 3}
@@ -3224,6 +3226,36 @@ MonoBehaviour:
   effectsAudioSource: {fileID: 5958617142563979586}
   smokeBurst: {fileID: 8300000, guid: d5c7e13a5de94074abad5883415f25a9, type: 3}
   replaceMachineLoad: {fileID: 8300000, guid: 9801ad209e4599e40bc729bb048c626a, type: 3}
+--- !u!114 &2023241378545346498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191515420290509110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 698375827
+      Data2: 1174947444
+      Data3: 487006398
+      Data4: -1504851036
+    Path: event:/Music/music
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &4191515420391423071
 GameObject:
   m_ObjectHideFlags: 0
