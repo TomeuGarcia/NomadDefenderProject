@@ -28,11 +28,11 @@ public class GameAudioManager : MonoBehaviour
 
 
     [Header("UI")]
-    [SerializeField] private AudioSource uiAudioSource;
-    [SerializeField] private AudioClip uiButtonPressed;
-    [SerializeField] private AudioClip screenShut;
-    [SerializeField] private AudioSource errorSource;
-    //[SerializeField] private AudioClip screenOpen;
+    [SerializeField] private FMODUnity.StudioEventEmitter uiEmitter;
+    [SerializeField] private FMODUnity.EventReference screenShut_ER;
+    [SerializeField] private FMODUnity.EventReference screenOpen_ER;
+    [SerializeField] private FMODUnity.StudioEventEmitter errorEmitter;
+
 
     [Header("TEXT")]
     [SerializeField] private AudioSource textConsoleTypingSource;
@@ -295,11 +295,6 @@ public class GameAudioManager : MonoBehaviour
     // Music
     private void initMusicDictionary()
     {
-        foreach(TempMusicClips clips in tempMusicClips)
-        {
-            musicClips.Add(clips.type, clips.clip);
-        }
-
         lastMusicEmitter = null;
         musicToEmitter = new Dictionary<MusicType, FMODUnity.StudioEventEmitter>
         {
@@ -382,35 +377,42 @@ public class GameAudioManager : MonoBehaviour
         musicAudioSource.volume = 0.1f;
     }
     // UI
-    public void PlayUiButtonPressed()
-    {
-        uiAudioSource.clip = uiButtonPressed;
-        uiAudioSource.pitch = Random.Range(0.9f, 1.1f);
 
-        uiAudioSource.Play();
-    }
-    
     public void PlayScreenShut()
     {
+        /*
         uiAudioSource.clip = screenShut;
         uiAudioSource.pitch = Random.Range(0.9f, 0.95f);
 
         uiAudioSource.Play();
+        */
+
+        uiEmitter.EventReference = screenOpen_ER;
+        uiEmitter.Play();
     }
 
     public void PlayScreenOpen()
     {
         //uiAudioSource.clip = screenOpen;
+        /*
         uiAudioSource.clip = screenShut;
         uiAudioSource.pitch = Random.Range(1.0f, 1.05f);
 
         uiAudioSource.Play();
+        */
+
+        uiEmitter.EventReference = screenOpen_ER;
+        uiEmitter.Play();
     }
 
     public void PlayError()
     {
+        /*
         errorSource.pitch = Random.Range(1.25f, 1.35f);
         errorSource.Play();
+        */
+        
+        errorEmitter.Play();
     }
 
 

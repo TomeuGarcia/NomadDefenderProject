@@ -7,8 +7,10 @@ using static RandomSoundsCollection;
 public class PlayOnParticleBurst : MonoBehaviour
 {
     [SerializeField] ParticleSystem particleSystem;
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] List<RandomSoundsCollection.RandomSound> soundPool = new List<RandomSound>();
+    //[SerializeField] AudioSource audioSource;
+    //[SerializeField] List<RandomSoundsCollection.RandomSound> soundPool = new List<RandomSound>();
+
+    [SerializeField] private FMODUnity.StudioEventEmitter soundEmitter;
 
     private bool allParticlesDied = true;
 
@@ -18,11 +20,13 @@ public class PlayOnParticleBurst : MonoBehaviour
         {
             allParticlesDied = false;
 
-            int soundIndex = Random.Range(0, soundPool.Count);
-            audioSource.clip = soundPool[soundIndex].audioClip;
-            audioSource.volume = Random.Range(soundPool[soundIndex].minVolume, soundPool[soundIndex].maxVolume);
-            audioSource.pitch = Random.Range(soundPool[soundIndex].minPitch, soundPool[soundIndex].maxPitch);
-            audioSource.Play();
+            //int soundIndex = Random.Range(0, soundPool.Count);
+            //audioSource.clip = soundPool[soundIndex].audioClip;
+            //audioSource.volume = Random.Range(soundPool[soundIndex].minVolume, soundPool[soundIndex].maxVolume);
+            //audioSource.pitch = Random.Range(soundPool[soundIndex].minPitch, soundPool[soundIndex].maxPitch);
+            //audioSource.Play();
+
+            soundEmitter.Play();
         }
         else if(!allParticlesDied && particleSystem.particleCount == 0)
         {

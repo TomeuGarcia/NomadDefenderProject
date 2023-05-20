@@ -1559,6 +1559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4925121952954262430}
   - component: {fileID: 8093016739138551522}
+  - component: {fileID: 3766765509420995799}
   m_Layer: 0
   m_Name: UI_ErrorAudioSource
   m_TagString: Untagged
@@ -1678,6 +1679,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3766765509420995799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3114051095090677446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -672664839
+      Data2: 1161436112
+      Data3: -1939046483
+      Data4: 1784860080
+    Path: event:/SFX/UI/Error
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &3232001625332531653
 GameObject:
   m_ObjectHideFlags: 0
@@ -2599,6 +2630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4191515419929208528}
   - component: {fileID: 4191515419929208543}
+  - component: {fileID: 3162126967814502406}
   m_Layer: 0
   m_Name: UI_AudioSource
   m_TagString: Untagged
@@ -2718,6 +2750,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3162126967814502406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191515419929208529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &4191515420040335250
 GameObject:
   m_ObjectHideFlags: 0
@@ -3234,10 +3296,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 12bdda986bce31348ab7fc2ee3bf30bf, type: 3}
   - {fileID: 8300000, guid: bddb7bd14258291448ca05581715900c, type: 3}
   - {fileID: 8300000, guid: 0da7e6aba361fbf4da1aa66dc1c55758, type: 3}
-  menuMusic: {fileID: 0}
-  OWMapMusic: {fileID: 0}
-  fightMusic: {fileID: 0}
-  tempMusicClips: []
   mainMenuMusicEmitter: {fileID: 9026884332405506299}
   mapMusicEmitter: {fileID: 8329274104225667547}
   battleMusicEmitter: {fileID: 617615909257997945}
@@ -3245,6 +3303,29 @@ MonoBehaviour:
   uiButtonPressed: {fileID: 0}
   screenShut: {fileID: 8300000, guid: a1df210e917233641b66f56a687f0939, type: 3}
   errorSource: {fileID: 8093016739138551522}
+  uiEmitter: {fileID: 3162126967814502406}
+  uiButtonPressed_ER:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  screenShut_ER:
+    Guid:
+      Data1: 1661543837
+      Data2: 1084670534
+      Data3: 289921189
+      Data4: 1234092231
+    Path: event:/SFX/UI/screenShut
+  screenOpen_ER:
+    Guid:
+      Data1: 797357687
+      Data2: 1120819303
+      Data3: 39257990
+      Data4: 239946934
+    Path: event:/SFX/UI/screenOpen
+  errorEmitter: {fileID: 3766765509420995799}
   textConsoleTypingSource: {fileID: 1885947684668353361}
   textConsoleTyping:
   - {fileID: 8300000, guid: a60f16fcbba41804c95add8d860745f7, type: 3}
