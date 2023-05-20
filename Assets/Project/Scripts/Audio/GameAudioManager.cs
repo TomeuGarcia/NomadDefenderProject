@@ -11,10 +11,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioClip[] musics1;
-    [SerializeField] private AudioClip menuMusic;
-    [SerializeField] private AudioClip OWMapMusic;
-    [SerializeField] private AudioClip fightMusic;
-    [SerializeField] private TempMusicClips[] tempMusicClips;
+
     private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
 
     [SerializeField] private FMODUnity.StudioEventEmitter mainMenuMusicEmitter;
