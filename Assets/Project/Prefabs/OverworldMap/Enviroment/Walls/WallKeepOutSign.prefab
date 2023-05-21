@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2439738907842289053}
   - component: {fileID: 2439738907842289052}
   - component: {fileID: 2439738907842289043}
-  - component: {fileID: 229001466467503566}
+  - component: {fileID: 6080516740416241407}
   m_Layer: 0
   m_Name: WallKeepOutSign
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &229001466467503566
+--- !u!114 &6080516740416241407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,17 +108,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2439738907842289041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: d6fb8a88df0a030438ea8d14bac917dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 24032406
-      Data2: 1217877314
-      Data3: -11926909
-      Data4: -531155589
-    Path: event:/SFX/3D Props/BarrierPulse
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   Event: 
   PlayEvent: 1
   StopEvent: 2
@@ -126,6 +126,6 @@ MonoBehaviour:
   TriggerOnce: 0
   Preload: 0
   Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 10
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
