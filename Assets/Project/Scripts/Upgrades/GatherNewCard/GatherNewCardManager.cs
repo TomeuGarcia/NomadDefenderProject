@@ -26,6 +26,7 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField] private CardContainer leftCardConteiner;
     [SerializeField] private CardContainer midCardConteiner;
     [SerializeField] private CardContainer rightCardConteiner;
+    [SerializeField] private GameObject containerBlocker;
 
     // Animations
     Vector3[] startPositions;
@@ -343,7 +344,8 @@ public class GatherNewCardManager : MonoBehaviour
             StartCoroutine(rightCardConteiner.Activate());
             yield return new WaitForSeconds(0.5f);
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
+        containerBlocker.SetActive(false);
 
         // scuffed fix, allow mouse interaction if already hovering the cards
         foreach (BuildingCard itCard in cards)
