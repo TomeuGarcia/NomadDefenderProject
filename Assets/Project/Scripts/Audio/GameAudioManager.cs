@@ -37,6 +37,7 @@ public class GameAudioManager : MonoBehaviour
     [Header("TEXT")]
     [SerializeField] private AudioSource textConsoleTypingSource;
     [SerializeField] private AudioClip[] textConsoleTyping;
+    [SerializeField] private FMODUnity.StudioEventEmitter consoleEmitter;
 
     [Header("CARDS")]
     //[SerializeField] private AudioSource cardsAudioSource;
@@ -67,6 +68,12 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource cardsInfoAudioSource;
     [SerializeField] private AudioClip cardInfoElement;
     [SerializeField] private AudioClip cardInfoElementMoves;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsInfoShownEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsInfoMoveShownEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsInfoHiddenEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardsInfoMoveHiddenEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardUIInfoShownEmitter;
+    [SerializeField] private FMOD.Studio.EventInstance cardUIInfoShownEI;
 
 
 
@@ -96,16 +103,22 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip enemyDeath;
     [SerializeField] private AudioClip enemySpawn;
 
-    [SerializeField] private AudioSource enemyLastDeathAudioSource;
-    [SerializeField] private AudioSource enemyArmorBreakAudioSource;
+    //[SerializeField] private AudioSource enemyLastDeathAudioSource;
+    //[SerializeField] private AudioSource enemyArmorBreakAudioSource;
+    [SerializeField] private FMODUnity.StudioEventEmitter enemyLastDeathEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter enemyArmorBreakEmtter;
 
 
     [Header("BATTLE SCENES")]
-    [SerializeField] private AudioSource battleAudioSource;
-    [SerializeField] private AudioClip locationTakeDamage;
-    [SerializeField] private AudioSource battleCursedWiresAudioSource;
-    [SerializeField] private AudioClip cursedWiresWave;
-    [SerializeField] private AudioClip stageVictory;
+    //[SerializeField] private AudioSource battleAudioSource;
+    //[SerializeField] private AudioClip locationTakeDamage;
+    //[SerializeField] private AudioSource battleCursedWiresAudioSource;
+    //[SerializeField] private AudioClip cursedWiresWave;
+    //[SerializeField] private AudioClip stageVictory;
+    [SerializeField] private FMODUnity.StudioEventEmitter locationTakeDamageEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter locationIsDestroyedEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter cursedWiresEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter battleVictoryEmitter;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -172,6 +185,7 @@ public class GameAudioManager : MonoBehaviour
         initMusicDictionary();
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
+        cardUIInfoShownEI = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/UI/cardUIInfoShown");
 
     }
     //private void Update()
@@ -418,14 +432,17 @@ public class GameAudioManager : MonoBehaviour
 
     // Text
     public void PlayConsoleTyping(int textType)
-    {
-        if(textConsoleTyping.Length <= textType)
+    {        
+        if(4 <= textType)
             textType = 0;
 
-        textConsoleTypingSource.clip = textConsoleTyping[textType];
-        textConsoleTypingSource.pitch = Random.Range(0.9f, 1.1f);
+        //textConsoleTypingSource.clip = textConsoleTyping[textType];
+        //textConsoleTypingSource.pitch = Random.Range(0.9f, 1.1f);
 
-        textConsoleTypingSource.Play();
+        //textConsoleTypingSource.Play();
+
+        consoleEmitter.SetParameter("ConsoleType", textType);
+        consoleEmitter.Play();
     }
 
 
@@ -528,45 +545,56 @@ public class GameAudioManager : MonoBehaviour
     // Cards Info
     public void PlayCardInfoShown()
     {
-        cardsInfoAudioSource.clip = cardInfoElement;
-        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
-        cardsInfoAudioSource.volume = 0.05f;
+        //cardsInfoAudioSource.clip = cardInfoElement;
+        //cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        //cardsInfoAudioSource.volume = 0.05f;
 
-        cardsInfoAudioSource.Play();
+        //cardsInfoAudioSource.Play();
+
+        cardsInfoShownEmitter.Play();
     }
     public void PlayCardInfoMoveShown()
     {
-        cardsInfoAudioSource.clip = cardInfoElementMoves;
-        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
-        cardsInfoAudioSource.volume = 0.08f;
+        //cardsInfoAudioSource.clip = cardInfoElementMoves;
+        //cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        //cardsInfoAudioSource.volume = 0.08f;
 
-        cardsInfoAudioSource.Play();
+        //cardsInfoAudioSource.Play();
+
+        cardsInfoMoveShownEmitter.Play();
     }
 
     public void PlayCardInfoHidden()
     {
-        cardsInfoAudioSource.clip = cardInfoElement;
-        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        cardsInfoAudioSource.volume = 0.05f;
+        //cardsInfoAudioSource.clip = cardInfoElement;
+        //cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        //cardsInfoAudioSource.volume = 0.05f;
 
-        cardsInfoAudioSource.Play();
+        //cardsInfoAudioSource.Play();
+
+        cardsInfoHiddenEmitter.Play();
     }
     public void PlayCardInfoMoveHidden()
     {
-        cardsInfoAudioSource.clip = cardInfoElementMoves;
-        cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        cardsInfoAudioSource.volume = 0.08f;
+        //cardsInfoAudioSource.clip = cardInfoElementMoves;
+        //cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        //cardsInfoAudioSource.volume = 0.08f;
 
-        cardsInfoAudioSource.Play();
+        //cardsInfoAudioSource.Play();
+
+        cardsInfoMoveHiddenEmitter.Play();
     }
 
     public void PlayCardUIInfoShown(float pitch)
     {
-        cardsInfoAudioSource.clip = cardInfoElement;
-        cardsInfoAudioSource.pitch = pitch;
-        cardsInfoAudioSource.volume = 0.05f;
+        //cardsInfoAudioSource.clip = cardInfoElement;
+        //cardsInfoAudioSource.pitch = pitch;
+        //cardsInfoAudioSource.volume = 0.05f;
 
-        cardsInfoAudioSource.Play();
+        //cardsInfoAudioSource.Play();
+
+        cardUIInfoShownEI.setPitch(pitch);
+        cardUIInfoShownEmitter.Play();
     }
 
 
@@ -697,54 +725,68 @@ public class GameAudioManager : MonoBehaviour
 
     {
         //StartCoroutine(LerpVolume(enemyLastDeathAudioSource, 0.05f, enemyLastDeathAudioSource.volume, 2.0f));
-        enemyLastDeathAudioSource.Play();
-
+        //enemyLastDeathAudioSource.Play();
+        enemyLastDeathEmitter.Play();
     }
 
     public void PlayEnemyArmorBreak()
-
     {
+        //enemyArmorBreakAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        //enemyArmorBreakAudioSource.Play();
 
-        enemyArmorBreakAudioSource.pitch = Random.Range(0.9f, 1.1f);
-
-        enemyArmorBreakAudioSource.Play();
-
+        enemyArmorBreakEmtter.Play();
     }
 
 
     // Battle
     public void PlayLocationTakeDamage()
     {
+        /*
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(0.8f, 0.9f);
 
         battleAudioSource.Play();
+        */
+
+        locationTakeDamageEmitter.Play();
     }
 
     public void PlayLocationDestroyed()
     {
+        /*
         battleAudioSource.clip = locationTakeDamage;
         battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
 
         battleAudioSource.Play();
+        */
+
+        locationIsDestroyedEmitter.Play();
     }
 
     public void PlayWiresCursedWave()
     {
+        /*
         battleCursedWiresAudioSource.clip = cursedWiresWave;
         battleCursedWiresAudioSource.pitch = 1.0f;
         battleCursedWiresAudioSource.volume = 0.6f;
 
         battleCursedWiresAudioSource.Play();
+        */
+
+        cursedWiresEmitter.Play();
     }
 
     public void PlayBattleStageVictory()
     {
+        /*
         battleCursedWiresAudioSource.clip = stageVictory;
         battleCursedWiresAudioSource.pitch = 1.0f;
         battleCursedWiresAudioSource.volume = 0.3f;
 
         battleCursedWiresAudioSource.Play();
+        */
+
+        battleVictoryEmitter.Play();
     }
 
 
