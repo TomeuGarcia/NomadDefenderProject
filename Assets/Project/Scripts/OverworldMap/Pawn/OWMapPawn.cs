@@ -9,6 +9,7 @@ public class OWMapPawn : MonoBehaviour
 
     [SerializeField] private Transform moveTransform;
     [SerializeField] private OWCameraMovement followCamera;
+    [SerializeField] private FMODUnity.StudioListener cameraListener;
     public Transform FollowCameraTransform => followCamera.gameObject.transform;
 
     private OWMap_Node currentNode;
@@ -102,5 +103,14 @@ public class OWMapPawn : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         ActivateCamera();
         followCamera.MoveToNextLevel();
+    }
+
+    public void MuteListener()
+    {
+        cameraListener.enabled = false;
+    }
+    public void UnmuteListener()
+    {
+        cameraListener.enabled = true;
     }
 }

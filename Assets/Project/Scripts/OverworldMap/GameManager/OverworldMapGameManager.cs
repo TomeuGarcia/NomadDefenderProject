@@ -308,6 +308,7 @@ public class OverworldMapGameManager : MonoBehaviour
     private void DoOnSceneFromMapUnloaded()
     {       
         owMapPawn.ActivateCamera();
+        PlayOnParticleBurst.canPlaySound = true;
 
         cardDisplayer.ResetAll();
         cardDisplayer.gameObject.SetActive(canDisplayDeck);
@@ -328,6 +329,7 @@ public class OverworldMapGameManager : MonoBehaviour
     private void DoOnSceneFromMapLoaded()
     {
         owMapPawn.DeactivateCamera();
+        PlayOnParticleBurst.canPlaySound = false;
 
         cardDisplayer.DestroyAllCards();
         if (gameFinished)

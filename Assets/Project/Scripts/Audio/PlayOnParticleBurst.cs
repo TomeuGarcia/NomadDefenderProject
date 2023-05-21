@@ -14,6 +14,10 @@ public class PlayOnParticleBurst : MonoBehaviour
 
     private bool allParticlesDied = true;
 
+    public static bool canPlaySound = true;
+
+
+
     void Update()
     {
         if(allParticlesDied && particleSystem.particleCount > 0)
@@ -26,7 +30,10 @@ public class PlayOnParticleBurst : MonoBehaviour
             //audioSource.pitch = Random.Range(soundPool[soundIndex].minPitch, soundPool[soundIndex].maxPitch);
             //audioSource.Play();
 
-            soundEmitter.Play();
+            if (canPlaySound)
+            {
+                soundEmitter.Play();
+            }
         }
         else if(!allParticlesDied && particleSystem.particleCount == 0)
         {

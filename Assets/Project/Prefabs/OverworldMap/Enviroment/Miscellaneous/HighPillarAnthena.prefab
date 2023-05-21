@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8954669834987625591}
   - component: {fileID: 1046008115676698578}
   - component: {fileID: 1421053490495838797}
-  - component: {fileID: 6054240724625204480}
+  - component: {fileID: 7960115335081337655}
   m_Layer: 0
   m_Name: HighPillarAnthena
   m_TagString: Untagged
@@ -190,7 +190,7 @@ AudioReverbZone:
   m_Density: 100
   m_LFReference: 250
   m_RoomLF: 0
---- !u!114 &6054240724625204480
+--- !u!114 &7960115335081337655
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 448459119540156710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: d6fb8a88df0a030438ea8d14bac917dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
@@ -211,14 +211,14 @@ MonoBehaviour:
       Data4: -2090578841
     Path: event:/SFX/3D Props/AnthenaServoMotor
   Event: 
-  PlayEvent: 1
-  StopEvent: 2
+  PlayEvent: 0
+  StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
   Params: []
   OverrideAttenuation: 1
-  OverrideMinDistance: 10
+  OverrideMinDistance: 1
   OverrideMaxDistance: 15
 --- !u!1001 &448459118746433694
 PrefabInstance:
