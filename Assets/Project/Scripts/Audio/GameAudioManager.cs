@@ -79,12 +79,14 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("CARDS PLAYED")]
     [SerializeField] private AudioSource cardPlayedAudioSource;
+    [SerializeField] private FMODUnity.StudioEventEmitter cardPlayedAudioEmitter;
     [SerializeField] private AudioSource watcherCardPlayedAudioSource;
 
 
 
     [Header("IN-BATTLE UPGRADES")]
     [SerializeField] private AudioSource inBattleBuildingUpgradeAudioSource;
+    [SerializeField] private FMODUnity.StudioEventEmitter inBattleBuildingUpgradeEmitter;
 
     [Header("UPGRADE SCENES")]
     [SerializeField] private AudioSource upgradesAudioSource;
@@ -138,6 +140,10 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource sparkAudioSource;
     [SerializeField] private AudioSource nodeSpawnAudioSource;
     [SerializeField] private AudioSource[] doorAudioSources;
+    [SerializeField] private FMODUnity.StudioEventEmitter selectedNodeEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter upgradeNodeSpawnEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter battleNodeSpawnEmitter;
+    [SerializeField] private FMODUnity.StudioEventEmitter connectionNodeSpawnEmitter;
 
 
     [Header("GLITCH")]
@@ -629,9 +635,10 @@ public class GameAudioManager : MonoBehaviour
 
         }
 
-        cardPlayedAudioSource.pitch = pitch;
+        //cardPlayedAudioSource.pitch = pitch;
+        //cardPlayedAudioSource.Play();
 
-        cardPlayedAudioSource.Play();
+        cardPlayedAudioEmitter.Play();
     }
     public void PlayWatcherCard()
     {
@@ -641,13 +648,11 @@ public class GameAudioManager : MonoBehaviour
 
     // In-Battle Upgrades
     public void PlayInBattleBuildingUpgrade()
-
     {
+        //inBattleBuildingUpgradeAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        //inBattleBuildingUpgradeAudioSource.Play();
 
-        inBattleBuildingUpgradeAudioSource.pitch = Random.Range(0.9f, 1.1f);
-
-        inBattleBuildingUpgradeAudioSource.Play();
-
+        inBattleBuildingUpgradeEmitter.Play();
     }
 
 
@@ -844,8 +849,10 @@ public class GameAudioManager : MonoBehaviour
 
     public void PlayNodeSelectedSound()
     {
-        nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        nodeAudioSource.Play();
+        //nodeAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        //nodeAudioSource.Play();
+
+        selectedNodeEmitter.Play();
     }
 
     public void PlayDoorSound(int soundIndex)
@@ -909,24 +916,30 @@ public class GameAudioManager : MonoBehaviour
     
     public void PlayUpgradeNodeSpawnSound()
     {
-        nodeSpawnAudioSource.pitch = Random.Range(1.15f, 1.3f);
-        nodeSpawnAudioSource.Play();
+        //nodeSpawnAudioSource.pitch = Random.Range(1.15f, 1.3f);
+        //nodeSpawnAudioSource.Play();
+
+        upgradeNodeSpawnEmitter.Play();
     }
 
 
 
     public void PlayBattleNodeSpawnSound()
     {
-        nodeSpawnAudioSource.pitch = Random.Range(0.6f, 0.75f);
-        nodeSpawnAudioSource.Play();
+        //nodeSpawnAudioSource.pitch = Random.Range(0.6f, 0.75f);
+        //nodeSpawnAudioSource.Play();
+
+        battleNodeSpawnEmitter.Play();
     }
 
 
 
     public void PlayConnectionsNodeSpawnSound()
     {
-        nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        nodeSpawnAudioSource.Play();
+        //nodeSpawnAudioSource.pitch = Random.Range(0.9f, 1.0f);
+        //nodeSpawnAudioSource.Play();
+
+        connectionNodeSpawnEmitter.Play();
     }
 
 
