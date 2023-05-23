@@ -7,7 +7,10 @@ using UnityEngine;
 public class OverworldMapCreator : MonoBehaviour
 {
     [Header("MAP DATA")]
-    [SerializeField] private MapData mapData;
+    [SerializeField] private MapData testMapData;
+    [SerializeField] private MapData[] mapDataPool;
+    [SerializeField] private bool useTestOverPool = false;
+    private MapData mapData;
 
     [Header("PREFABS")]
     [SerializeField] private GameObject nodePrefab;
@@ -32,6 +35,7 @@ public class OverworldMapCreator : MonoBehaviour
 
     public void RegenerateMap(out OWMap_Node[][] mapNodes)
     {
+        SetupMapdata();
         CleanupMap();
         CreateMap(out mapNodes);
     }
@@ -44,6 +48,19 @@ public class OverworldMapCreator : MonoBehaviour
         }
     }
 
+    private void SetupMapdata()
+    {
+        if (useTestOverPool)
+        {
+            mapData = testMapData;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, mapDataPool.Length);
+            mapData = mapDataPool[randomIndex];
+            //Debug.Log(randomIndex);
+        }
+    }
 
     private void CreateMap(out OWMap_Node[][] mapNodes)
     {
@@ -85,7 +102,7 @@ public class OverworldMapCreator : MonoBehaviour
                 mapNodes[levelI][nodeI].InitTransform(nodeI, mapLevel.nodes.Length, MapRightDir, NodeGapWidth);
             }
 
-            // For easier development purposes:
+            // For easier development purposes:           
             /*
             Transform textTransform = Instantiate(mapTextPrefab, otherHolder).transform;
             textTransform.GetChild(0).GetComponent<TextMeshPro>().text = levelI.ToString();
