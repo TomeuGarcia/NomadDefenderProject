@@ -56,8 +56,8 @@ MonoBehaviour:
   mapSceneLoader: {fileID: 8485875724773115229}
   owMapPawn: {fileID: 2813399844669948103}
   cardDisplayer: {fileID: 0}
-  mapEventSystemGO: {fileID: 0}
   ambienceAudio: {fileID: 20488842013388027}
+  mapEventSystemGO: {fileID: 0}
   owMapTutorial: {fileID: 0}
   owMapTutorial2: {fileID: 0}
   owMapTutorialOptional: {fileID: 0}
@@ -73,7 +73,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29248fde3d0c4b5419b1c8d01ef70c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapData: {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
+  testMapData: {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
+  mapDataPool:
+  - {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
+  useTestOverPool: 0
   nodePrefab: {fileID: 1796615990406169327, guid: c28f448d3ea50e14aba7c72d35d81294,
     type: 3}
   nodeConnectionPrefab: {fileID: 2967734118931303802, guid: ba08383f23c37554fb2be7505ddba2e8,
