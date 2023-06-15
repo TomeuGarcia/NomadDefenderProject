@@ -70,6 +70,11 @@ public class TurretPartBase_Prefab : MonoBehaviour
         meshRenderer.materials = previewMaterials;
     }
 
+    public bool IsPointWithinRange(Vector3 point)
+    {
+        return baseCollider.IsPointWithinRange(point);
+    }
+
     public virtual void OnGetPlaced()
     {
 

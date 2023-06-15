@@ -68,7 +68,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
         fakeEnemy.OnGetPosition += ComputeTargetAndAssignFakeEnemyPosition;
 
-        BuildingPlacer.OnPlacingBuildingsDisabled += HideTurretBinder;
+        BuildingPlacer.OnPlacingBuildingsDisabled += HideFirstTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectFirstBinderWithBuilding;
     }
 
@@ -78,7 +78,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
         fakeEnemy.OnGetPosition -= ComputeTargetAndAssignFakeEnemyPosition;
 
-        BuildingPlacer.OnPlacingBuildingsDisabled -= HideTurretBinder;
+        BuildingPlacer.OnPlacingBuildingsDisabled -= HideFirstTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectFirstBinderWithBuilding;
     }
 
@@ -107,9 +107,9 @@ public class RepeaterBase : TurretPartBase_Prefab
         supportOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         supportOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
-        UpdateRepeatAreaPlaneSize(supportOwner);
+        UpdateAreaPlaneSize(supportOwner);
     }
-    private void UpdateRepeatAreaPlaneSize(SupportBuilding supportOwner)
+    private void UpdateAreaPlaneSize(SupportBuilding supportOwner)
     {
         float planeRange = supportOwner.stats.range * 2 + 1; //only for square
         float range = supportOwner.stats.range;
@@ -156,7 +156,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (newStatLevel == 3)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
-            UpdateRepeatAreaPlaneSize(ownerSupportBuilding);
+            UpdateAreaPlaneSize(ownerSupportBuilding);
         }
 
         currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];        
@@ -349,9 +349,13 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
-    private void HideTurretBinder()
+    private void HideFirstTurretBinder()
     {
-        turretBinderMeshes[0].gameObject.SetActive(false);
+        HideTurretBinder(turretBinderMeshes[0]);
+    }
+    private void HideTurretBinder(MeshRenderer binderMesh)
+    {
+        binderMesh.gameObject.SetActive(false);
     }
     private void ShowTurretBinder(MeshRenderer binderMesh)
     {
@@ -367,7 +371,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void ConnectWithAlreadyPlacedBuildings() // TODO Call this when trying to play
+    private void ConnectWithAlreadyPlacedBuildings() 
     {
         Building[] currentPlacedBuildings = BuildingPlacer.GetCurrentPlacedBuildings();
 
@@ -386,17 +390,29 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            ShowTurretBinder(binderMesh);
-            ConnectBinderWithTurretBuilding(binderMesh, building as TurretBuilding);
+            TurretBuilding turretBuilding = building as TurretBuilding;
+            float turretRange = GetTurretRangeDistance(turretBuilding);
+            bool isTurretWithinRange = IsBinderTargetWithinRange(binderMesh.transform, turretBuilding.BodyPartTransform, turretRange); // Old way to compute
+            isTurretWithinRange = turretBuilding.GetBasePart().IsPointWithinRange(transform.position);
+
+
+            if (isTurretWithinRange)
+            {
+                ShowTurretBinder(binderMesh);
+                ConnectBinderWithTurretBuilding(binderMesh, turretBuilding, isTurretWithinRange);
+            }
+            else
+            {
+                HideTurretBinder(binderMesh);
+            }
         }        
     }
 
-    private void ConnectBinderWithTurretBuilding(MeshRenderer binderMesh, TurretBuilding turretBuilding)
+    private void ConnectBinderWithTurretBuilding(MeshRenderer binderMesh, TurretBuilding turretBuilding, bool isTurretWithinRange)
     {
         UpdateTurretBinder(binderMesh.transform, turretBuilding.BodyPartTransform);
-
-        float turretRange = ((turretBuilding.stats.range + 0.5f) / 2f) + 0.15f; // Weird formula...
-        if (IsBinderTargetWithinRange(binderMesh.transform, turretBuilding.BodyPartTransform, turretRange))
+      
+        if (isTurretWithinRange)
         {
             binderMesh.material = withinRangeMaterial;
         }
@@ -406,6 +422,11 @@ public class RepeaterBase : TurretPartBase_Prefab
         }
     }
         
+
+    private float GetTurretRangeDistance(TurretBuilding turretBuilding)
+    {
+        return ((turretBuilding.stats.range + 0.5f) / 2f) + 0.15f; // Weird formula...
+    }
 
 
     private void UpdateTurretBinder(Transform binderTransform, Transform targetTransform)

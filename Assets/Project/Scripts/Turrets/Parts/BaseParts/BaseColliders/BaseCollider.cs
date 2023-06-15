@@ -19,6 +19,7 @@ public abstract class BaseCollider : MonoBehaviour
     public abstract void EnableCollisions();
     public abstract void DisableCollisions();
 
+    public abstract bool IsPointWithinRange(Vector3 point);
 
     public void HideRange()
     {
@@ -35,5 +36,7 @@ public abstract class BaseCollider : MonoBehaviour
     {
         rangePlaneMaterial.color = color;
     }
+
+    
 
 }

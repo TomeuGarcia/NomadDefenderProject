@@ -12,6 +12,7 @@ public class SlowBase : TurretPartBase_Prefab
 
     [Header("SLOW BASE")]
     [SerializeField] private List<float> slowSpeedCoefs = new List<float>();
+    private float currentSlowSpeedCoef;
     private int currentLvl = 0;
 
     [SerializeField] private GameObject slowPlane;
@@ -33,16 +34,24 @@ public class SlowBase : TurretPartBase_Prefab
         turretOwner.OnEnemyExitRange += StopEnemySlow;
 
         slowPlane.transform.localScale = Vector3.one * ((float)turretRange / 10.0f);
+
+        currentSlowSpeedCoef = slowSpeedCoefs[currentLvl];
     }
-    override public void InitAsSupportBuilding(SupportBuilding turretOwner, float supportRange)
+    override public void InitAsSupportBuilding(SupportBuilding supportOwner, float supportRange)
     {
-        base.InitAsSupportBuilding(turretOwner, supportRange);
+        base.InitAsSupportBuilding(supportOwner, supportRange);
 
-        turretOwner.OnEnemyEnterRange += SlowEnemy;
-        turretOwner.OnEnemyExitRange += StopEnemySlow;
+        supportOwner.OnEnemyEnterRange += SlowEnemy;
+        supportOwner.OnEnemyExitRange += StopEnemySlow;
 
-        float planeRange = turretOwner.stats.range * 2 + 1; //only for square
-        float range = turretOwner.stats.range;
+        UpdateAreaPlaneSize(supportOwner);
+
+        currentSlowSpeedCoef = slowSpeedCoefs[currentLvl];
+    }
+    private void UpdateAreaPlaneSize(SupportBuilding supportOwner)
+    {
+        float planeRange = supportOwner.stats.range * 2 + 1; //only for square
+        float range = supportOwner.stats.range;
 
         slowPlane.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
         slowPlaneMaterial = slowPlane.GetComponent<MeshRenderer>().materials[0];
@@ -54,14 +63,25 @@ public class SlowBase : TurretPartBase_Prefab
         base.Upgrade(ownerSupportBuilding, newStatLevel);
         currentLvl = newStatLevel;
 
-        foreach(KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
+        currentSlowSpeedCoef = slowSpeedCoefs[currentLvl];
+
+        foreach (KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
         {
-            if(slowedEnemy.Value.slowCoefApplied > slowSpeedCoefs[currentLvl])
+            if(slowedEnemy.Value.slowCoefApplied > currentSlowSpeedCoef)
             {
-                slowedEnemy.Key.SetMoveSpeed(slowSpeedCoefs[currentLvl]);
-                slowedEnemy.Value.slowCoefApplied = slowSpeedCoefs[currentLvl];
+                slowedEnemy.Key.SetMoveSpeed(currentSlowSpeedCoef);
+                slowedEnemy.Value.slowCoefApplied = currentSlowSpeedCoef;
             }
         }
+
+        // TODO see if we want to make Supports 3rd upgrade always increment range
+        /*
+        if (newStatLevel == 3)
+        {
+            ownerSupportBuilding.UpgradeRangeIncrementingLevel();
+            UpdateAreaPlaneSize(ownerSupportBuilding);
+        }
+        */
     }
 
     private void SlowEnemy(Enemy enemy)
@@ -72,8 +92,8 @@ public class SlowBase : TurretPartBase_Prefab
         }
         else
         {
-            enemy.SetMoveSpeed(slowSpeedCoefs[currentLvl]);
-            slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = slowSpeedCoefs[currentLvl] };
+            enemy.SetMoveSpeed(currentSlowSpeedCoef);
+            slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = currentSlowSpeedCoef };
         }
     }
 
