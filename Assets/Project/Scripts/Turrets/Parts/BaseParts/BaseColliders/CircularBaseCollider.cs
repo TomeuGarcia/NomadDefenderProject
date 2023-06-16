@@ -26,4 +26,17 @@ public class CircularBaseCollider : BaseCollider
         rangeCollider.enabled = true;
     }
 
+    public override bool IsPointWithinRange(Vector3 point)
+    {
+        Vector3 center = transform.position;
+        center.y = 0f;
+
+        point.y = 0f;
+
+        float distance = Vector3.Distance(center, point);
+        Debug.Log(distance + " < " + rangeCollider.radius);
+
+        return distance <= rangeCollider.radius;
+    }
+
 }

@@ -19,6 +19,7 @@ public abstract class RangeBuilding : Building
     private TriggerNotifier triggerNotifier;
 
     protected TurretPartBase_Prefab basePart; // Consider all ranged buildings have a BasePart
+    
 
 
     public delegate int EnemySortFunction(Enemy e1, Enemy e2);
@@ -49,6 +50,11 @@ public abstract class RangeBuilding : Building
     protected override void AwakeInit()
     {
         ResetEnemySortFunction();
+    }
+
+    public TurretPartBase_Prefab GetBasePart()
+    {
+        return basePart;
     }
 
     private void OnTriggerEnterNotif(Collider other)
@@ -104,6 +110,7 @@ public abstract class RangeBuilding : Building
     private void AddEnemy(Enemy enemy)
     {
         if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
+
         enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
         enemies.Sort(SortEnemies);
