@@ -12,8 +12,15 @@ public class OverworldMapGameManager : MonoBehaviour
 
     [Header("CREATOR & DECORATOR")]
     [SerializeField] private OverworldMapCreator owMapCreator;
+    [SerializeField] private OverworldMapGenerator owMapGenerator;
     [SerializeField] private OverworldMapDecorator owMapDecorator;
     [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+
+    [Header("MAP DATA")]
+    [SerializeField] private MapData testMapData;
+    [SerializeField] private MapData[] mapDataPool;
+    [SerializeField] private bool useTestOverPool = false;
+    [SerializeField] private bool useProceduralMap = false;
 
     [Header("MAP SCENE LOADER")]
     [SerializeField] protected MapSceneLoader mapSceneLoader;
@@ -84,9 +91,35 @@ public class OverworldMapGameManager : MonoBehaviour
         ambienceAudio.Play();
     }
 
+    private MapData SetupMapData()
+    {
+        MapData mapData;
+
+        if (useProceduralMap)
+        {
+            ////// TODO use this map data once procedural generation works 
+            mapData = owMapGenerator.GenerateMap();
+            //return mapData;
+        }
+
+        if (useTestOverPool)
+        {
+            mapData = testMapData;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, mapDataPool.Length);
+            mapData = mapDataPool[randomIndex];
+            //Debug.Log(randomIndex);
+        }        
+
+        return mapData;
+    }
+
     protected void InitMapGeneration()
     {
-        owMapCreator.RegenerateMap(out mapNodes);
+        MapData mapData = SetupMapData();
+        owMapCreator.RegenerateMap(out mapNodes, mapData);
         owMapDecorator.DecorateMap(mapNodes);
     }
     protected void InitMapSceneLoader()

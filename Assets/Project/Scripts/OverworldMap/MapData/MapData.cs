@@ -11,13 +11,32 @@ public class MapData : ScriptableObject
     public class MapNodeData
     {
         public int[] connectionsNextLevel;
-        [HideInInspector] public int xAxisPos; // Formula: nodeI*2 - (numNodesInLevel-1)       
+        [HideInInspector] public int xAxisPos;
+        
+        public MapNodeData()
+        {
+        }
+        public MapNodeData(int nodeI, int numNodesInLevel)
+        {
+            SetXAxisPos(nodeI, numNodesInLevel);
+        }
+
+        public void SetXAxisPos(int nodeI, int numNodesInLevel)
+        {
+            // Formula: nodeI*2 - (numNodesInLevel-1)       
+            xAxisPos = (nodeI * 2) - (numNodesInLevel - 1);
+        }
     }
 
     [System.Serializable]
     public class MapLevelData
     {
         public MapNodeData[] nodes;
+
+        public MapLevelData(MapNodeData[] nodes)
+        {
+            this.nodes = nodes;
+        }
     }
 
 
