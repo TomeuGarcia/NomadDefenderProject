@@ -107,8 +107,8 @@ public class OverworldMapGenerator : MonoBehaviour
 
     private void GenerateConnections()
     {
-        // TODO
         MakeAllNodeConnections();
+        RemoveNodeConnectionsRandomly();
     }
 
     private int GetXDistanceBetweenNodes(MapData.MapNodeData nodeA, MapData.MapNodeData nodeB)
@@ -119,9 +119,17 @@ public class OverworldMapGenerator : MonoBehaviour
     private void ConnectNodes(MapData.MapNodeData currentLevelNode, MapData.MapNodeData nextLevelNode)
     {
         currentLevelNode.connectionsToNextLevel.Add(nextLevelNode);
+        nextLevelNode.connectionsFromPreviousLevel.Add(currentLevelNode);
 
-        //int[] temp = new int[currentLevelNode.connectionsNextLevel.Length + 1];
-        //currentLevelNode.connectionsNextLevel.add
+        currentLevelNode.connectionsNextLevel.Add(nextLevelNode.nodeI);
+    }
+
+    private void DisconnectNodes(MapData.MapNodeData currentLevelNode, MapData.MapNodeData nextLevelNode)
+    {
+        currentLevelNode.connectionsToNextLevel.Remove(nextLevelNode);
+        nextLevelNode.connectionsFromPreviousLevel.Remove(currentLevelNode);
+
+        currentLevelNode.connectionsNextLevel.Remove(nextLevelNode.nodeI);
     }
 
     private void MakeAllNodeConnections()
@@ -180,15 +188,16 @@ public class OverworldMapGenerator : MonoBehaviour
 
                     do
                     {
-                        // 0 = None
-                        // 1 = Up_Right
-                        // 2 = Up_Left
-                        int randomConnection = Random.Range(0, 3);
-                        if (randomConnection == 1)
+                        float noConnectionThreshold = 0.20f;
+                        float upRightConnectionThreshold = 0.60f;
+                        float upLeftConnectionThreshold = 1.0f;
+                        float randomValue = Random.Range(0f, 1f);
+
+                        if (randomValue > noConnectionThreshold && randomValue < upRightConnectionThreshold)
                         {
                             ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1]);
                         }
-                        else if (randomConnection == 2)
+                        else if (randomValue > upRightConnectionThreshold && randomValue < upLeftConnectionThreshold)
                         {
                             ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI]);
                         }
@@ -238,6 +247,37 @@ public class OverworldMapGenerator : MonoBehaviour
 
 
         }
+    }
+
+
+    private void RemoveNodeConnectionsRandomly()
+    {
+        for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
+        {
+            MapData.MapNodeData[] currentLevelNodes = mapData.levels[levelI].nodes;
+
+            for (int currentNodeI = 0; currentNodeI < currentLevelNodes.Length; ++currentNodeI)
+            {
+                List<MapData.MapNodeData> connectionsToNextLevel = currentLevelNodes[currentNodeI].connectionsToNextLevel;
+
+                for (int toNextI = 0; toNextI < connectionsToNextLevel.Count && connectionsToNextLevel.Count > 1; ++toNextI)
+                {
+                    if (connectionsToNextLevel[toNextI].connectionsFromPreviousLevel.Count > 1)
+                    {
+                        float removeConnectionThreshold = 0.75f;
+                        float randomValue = Random.Range(0f, 1f);
+
+                        if (randomValue > removeConnectionThreshold)
+                        {
+                            DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI]);
+                            --toNextI;
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 
 }

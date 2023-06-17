@@ -118,7 +118,7 @@ public class OverworldMapCreator : MonoBehaviour
 
                 List<OWMap_Connection> nextLevelConnections = new List<OWMap_Connection>(); // Connections Reference
 
-                int[] connectionsNextLevel = currentNode.connectionsNextLevel;
+                int[] connectionsNextLevel = currentNode.connectionsNextLevel.ToArray();
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI) //connection iteration
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];
@@ -161,7 +161,7 @@ public class OverworldMapCreator : MonoBehaviour
 
                 List<OWMap_Node> nextLevelNodes = new List<OWMap_Node>(); // NodeReferences
 
-                int[] connectionsNextLevel = currentNode.connectionsNextLevel;
+                int[] connectionsNextLevel = currentNode.connectionsNextLevel.ToArray();
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI)
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];

@@ -10,9 +10,10 @@ public class MapData : ScriptableObject
     [System.Serializable]
     public class MapNodeData
     {
-        public int[] connectionsNextLevel;
+        public List<int> connectionsNextLevel;
         [HideInInspector] public int xAxisPos;
         [HideInInspector] public List<MapNodeData> connectionsToNextLevel;
+        [HideInInspector] public List<MapNodeData> connectionsFromPreviousLevel;
         [HideInInspector] public int nodeI;
 
         public MapNodeData()
@@ -22,8 +23,9 @@ public class MapData : ScriptableObject
         {
             SetXAxisPos(nodeI, numNodesInLevel);
             this.nodeI = nodeI;
-            connectionsNextLevel = new int[0];
+            connectionsNextLevel = new List<int>();
             connectionsToNextLevel = new List<MapNodeData>();
+            connectionsFromPreviousLevel = new List<MapNodeData>();
         }
 
         public void SetXAxisPos(int nodeI, int numNodesInLevel)

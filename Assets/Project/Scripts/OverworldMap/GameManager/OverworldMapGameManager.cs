@@ -97,9 +97,8 @@ public class OverworldMapGameManager : MonoBehaviour
 
         if (useProceduralMap)
         {
-            ////// TODO use this map data once procedural generation works 
             mapData = owMapGenerator.GenerateMap();
-            //return mapData;
+            return mapData;
         }
 
         if (useTestOverPool)
