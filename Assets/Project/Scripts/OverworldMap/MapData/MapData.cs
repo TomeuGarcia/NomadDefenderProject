@@ -12,13 +12,18 @@ public class MapData : ScriptableObject
     {
         public int[] connectionsNextLevel;
         [HideInInspector] public int xAxisPos;
-        
+        [HideInInspector] public List<MapNodeData> connectionsToNextLevel;
+        [HideInInspector] public int nodeI;
+
         public MapNodeData()
         {
         }
         public MapNodeData(int nodeI, int numNodesInLevel)
         {
             SetXAxisPos(nodeI, numNodesInLevel);
+            this.nodeI = nodeI;
+            connectionsNextLevel = new int[0];
+            connectionsToNextLevel = new List<MapNodeData>();
         }
 
         public void SetXAxisPos(int nodeI, int numNodesInLevel)

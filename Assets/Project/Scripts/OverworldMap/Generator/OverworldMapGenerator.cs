@@ -108,6 +108,136 @@ public class OverworldMapGenerator : MonoBehaviour
     private void GenerateConnections()
     {
         // TODO
+        MakeAllNodeConnections();
+    }
+
+    private int GetXDistanceBetweenNodes(MapData.MapNodeData nodeA, MapData.MapNodeData nodeB)
+    {
+        return (int)Mathf.Abs(nodeA.xAxisPos - nodeB.xAxisPos);
+    }
+
+    private void ConnectNodes(MapData.MapNodeData currentLevelNode, MapData.MapNodeData nextLevelNode)
+    {
+        currentLevelNode.connectionsToNextLevel.Add(nextLevelNode);
+
+        //int[] temp = new int[currentLevelNode.connectionsNextLevel.Length + 1];
+        //currentLevelNode.connectionsNextLevel.add
+    }
+
+    private void MakeAllNodeConnections()
+    {
+        for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
+        {
+            MapData.MapNodeData[] currentLevelNodes = mapData.levels[levelI].nodes;
+            MapData.MapNodeData[] nextLevelNodes = mapData.levels[levelI + 1].nodes;
+
+            // 0-1-distance connections
+            for (int currentNodeI = 0; currentNodeI < currentLevelNodes.Length; ++currentNodeI)
+            {
+                MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
+
+                for (int nextNodeI = 0; nextNodeI < nextLevelNodes.Length; ++nextNodeI)
+                {
+                    MapData.MapNodeData nextLevelNode = nextLevelNodes[nextNodeI];
+
+                    int xDistance = GetXDistanceBetweenNodes(currentLevelNode, nextLevelNode);
+                    if (xDistance <= 1)
+                    {
+                        ConnectNodes(currentLevelNode, nextLevelNode);
+                    }
+                }
+            }
+
+
+            bool bothLevelsHaveMoreThan1Node = currentLevelNodes.Length > 1 && nextLevelNodes.Length > 1;
+            if (bothLevelsHaveMoreThan1Node)
+            {
+                // 2-distance crossed connections
+                bool isCurrentLevelPair = currentLevelNodes.Length % 2 == 0;
+                bool isNextLevelPair = nextLevelNodes.Length % 2 == 0;
+
+                if (!(isCurrentLevelPair ^ isNextLevelPair)) // when both levels are odd or pair
+                {
+                    int currentNodeI = 0;
+                    int nextNodeI = 0;
+
+                    if (currentLevelNodes.Length > nextLevelNodes.Length)
+                    {
+                        do
+                        {
+                            ++currentNodeI;
+                        }
+                        while (GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI]) > 0);
+                    }
+                    else if (currentLevelNodes.Length < nextLevelNodes.Length)
+                    {
+                        do
+                        {
+                            ++nextNodeI;
+                        }
+                        while (GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI]) > 0);
+                    }
+
+                    do
+                    {
+                        // 0 = None
+                        // 1 = Up_Right
+                        // 2 = Up_Left
+                        int randomConnection = Random.Range(0, 3);
+                        if (randomConnection == 1)
+                        {
+                            ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1]);
+                        }
+                        else if (randomConnection == 2)
+                        {
+                            ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI]);
+                        }
+
+                        ++currentNodeI;
+                        ++nextNodeI;
+                    }
+                    while (currentNodeI < currentLevelNodes.Length - 1 && nextNodeI < nextLevelNodes.Length - 1);
+                }
+            }
+
+
+            // 2-N edge connections
+            int firstCurrentToFirstNextXDistance = GetXDistanceBetweenNodes(currentLevelNodes[0], nextLevelNodes[0]);
+            bool edgeConnectionsExist = firstCurrentToFirstNextXDistance >= 2;
+            if (edgeConnectionsExist)
+            {
+                int leftSideXDistance = firstCurrentToFirstNextXDistance;
+                int currentNodeI = 0;
+                MapData.MapNodeData leftmostNextLevelNode = nextLevelNodes[0];
+
+                do 
+                {
+                    MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
+                    ConnectNodes(currentLevelNode, leftmostNextLevelNode);
+
+                    ++currentNodeI;
+                    leftSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], leftmostNextLevelNode);
+                } 
+                while(leftSideXDistance >= 2);
+
+
+                int rightSideXDistance = firstCurrentToFirstNextXDistance;
+                currentNodeI = currentLevelNodes.Length - 1;
+                MapData.MapNodeData rightmostNextLevelNode = nextLevelNodes[nextLevelNodes.Length - 1];
+
+                do
+                {
+                    MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
+                    ConnectNodes(currentLevelNode, leftmostNextLevelNode);
+
+                    --currentNodeI;
+                    rightSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], rightmostNextLevelNode);
+                }
+                while (rightSideXDistance >= 2);
+            }
+
+
+        }
     }
 
 }
