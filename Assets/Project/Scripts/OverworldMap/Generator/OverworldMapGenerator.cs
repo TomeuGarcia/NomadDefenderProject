@@ -36,13 +36,15 @@ public class OverworldMapGenerator : MonoBehaviour
 
         int counterTotal1Width = 0;
         int counterChained1Width = 0;
+        int sameWidthRepeatCount = 0;
 
         for (int levelI = generationSettings.numberOf1WidthStartLevels; levelI < randomWidthLevelI; ++levelI)
         {
             int lastLevelWidth = mapData.levels[levelI - 1].nodes.Length;
             int maxWidthThisLevel = (int)Mathf.Min(generationSettings.maxWidth, lastLevelWidth + generationSettings.maxWidthGrowStep);
-            int minWidthThisLevel = (int)Mathf.Max(1, lastLevelWidth - generationSettings.maxWidthShrinkStep);
+            int minWidthThisLevel = (int)Mathf.Max(generationSettings.minWidth, lastLevelWidth - generationSettings.maxWidthShrinkStep);
             int levelWidth = Random.Range(minWidthThisLevel, maxWidthThisLevel + 1);
+
 
             //// kinda hardcoded
             if (levelWidth == 1)
@@ -52,7 +54,8 @@ public class OverworldMapGenerator : MonoBehaviour
 
                 if (counterTotal1Width > generationSettings.maxNum1Width || counterChained1Width > generationSettings.maxChained1Width)
                 {
-                    levelWidth = Random.Range(2, lastLevelWidth + generationSettings.maxWidthGrowStep + 1);
+                    minWidthThisLevel = 2;
+                    levelWidth = Random.Range(minWidthThisLevel, maxWidthThisLevel);
                 }
             }
             else
@@ -60,6 +63,21 @@ public class OverworldMapGenerator : MonoBehaviour
                 counterChained1Width = 0;
             }
             ////
+            
+
+            sameWidthRepeatCount = (levelWidth == lastLevelWidth) ? (sameWidthRepeatCount + 1) : 0;
+            if (sameWidthRepeatCount >= generationSettings.maxSameWidthRepeatTimes)
+            {
+                do
+                {
+                    levelWidth = Random.Range(minWidthThisLevel, maxWidthThisLevel + 1);
+                }
+                while (levelWidth == lastLevelWidth);
+
+                sameWidthRepeatCount = 0;
+            }
+
+
 
             InstantiateNodesAtLevel(levelWidth, levelI);
 
@@ -264,10 +282,10 @@ public class OverworldMapGenerator : MonoBehaviour
                 {
                     if (connectionsToNextLevel[toNextI].connectionsFromPreviousLevel.Count > 1)
                     {
-                        float removeConnectionThreshold = 0.75f;
+                        float removeConnectionThreshold = 0.35f;
                         float randomValue = Random.Range(0f, 1f);
 
-                        if (randomValue > removeConnectionThreshold)
+                        if (randomValue < removeConnectionThreshold)
                         {
                             DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI]);
                             --toNextI;
