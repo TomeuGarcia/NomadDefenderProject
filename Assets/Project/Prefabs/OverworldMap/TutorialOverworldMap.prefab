@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1897838225408051678}
   - component: {fileID: 193539522410786926}
   - component: {fileID: 1897838225408051679}
+  - component: {fileID: 72844936549633472}
   - component: {fileID: 2637262688121507641}
   - component: {fileID: 8485875724773115229}
   m_Layer: 0
@@ -50,9 +51,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owMapCreator: {fileID: 1897838225408051679}
+  owMapGenerator: {fileID: 72844936549633472}
   owMapDecorator: {fileID: 2637262688121507641}
   upgradeSceneSetupInfo: {fileID: 11400000, guid: d1f253e6d0edf5a48962ee638e796717,
     type: 2}
+  testMapData: {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
+  mapDataPool:
+  - {fileID: 11400000, guid: 26960e1ea3183af44860baed91809289, type: 2}
+  - {fileID: 11400000, guid: f03237748a0f62a4cb878e3063911d76, type: 2}
+  - {fileID: 11400000, guid: 6f68cb0e273d1354fb87d3b61c55c252, type: 2}
+  useTestOverPool: 1
   mapSceneLoader: {fileID: 8485875724773115229}
   owMapPawn: {fileID: 2813399844669948103}
   cardDisplayer: {fileID: 0}
@@ -73,10 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29248fde3d0c4b5419b1c8d01ef70c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMapData: {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
-  mapDataPool:
-  - {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
-  useTestOverPool: 0
   nodePrefab: {fileID: 1796615990406169327, guid: c28f448d3ea50e14aba7c72d35d81294,
     type: 3}
   nodeConnectionPrefab: {fileID: 2967734118931303802, guid: ba08383f23c37554fb2be7505ddba2e8,
@@ -87,6 +91,20 @@ MonoBehaviour:
     type: 3}
   cablePool: {fileID: 11400000, guid: fe6827155ff9ffb4aa54e4a92f2862b0, type: 2}
   holder: {fileID: 4102724624924968311}
+--- !u!114 &72844936549633472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897838225408051672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ebcc486d83d3d43b5ef0f581175727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapData: {fileID: 11400000, guid: faf8dc860a1d7ad4785d6f3099c97e22, type: 2}
+  generationSettings: {fileID: 11400000, guid: 67e8c3955eff28147bb5cac4c8612c1f, type: 2}
 --- !u!114 &2637262688121507641
 MonoBehaviour:
   m_ObjectHideFlags: 0

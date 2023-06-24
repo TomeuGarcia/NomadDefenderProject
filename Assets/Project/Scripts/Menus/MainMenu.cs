@@ -68,7 +68,10 @@ public class MainMenu : MonoBehaviour
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         tilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
         outerPlanesMaterial.SetFloat("_ErrorWiresStep", 0f);
-        outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);        
+        outerPlanesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
+
+        PauseMenu.GameIsPaused = false;
+        PauseMenu.GetInstance().HideUI();
     }
     private void Start()
     {
@@ -92,13 +95,17 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             skipFirstBattle = true;
             ////Reset All Tutorials
             //TutorialsSaverLoader.GetInstance().ResetTutorials();
             //Debug.Log("All Tutorials Have Been Reset");
             //playButtonGO.SetActive(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            Play();
         }
     }
 

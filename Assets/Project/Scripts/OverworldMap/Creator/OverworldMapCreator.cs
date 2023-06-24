@@ -6,10 +6,7 @@ using UnityEngine;
 
 public class OverworldMapCreator : MonoBehaviour
 {
-    [Header("MAP DATA")]
-    [SerializeField] private MapData testMapData;
-    [SerializeField] private MapData[] mapDataPool;
-    [SerializeField] private bool useTestOverPool = false;
+    //[Header("MAP DATA")]
     private MapData mapData;
 
     [Header("PREFABS")]
@@ -33,9 +30,9 @@ public class OverworldMapCreator : MonoBehaviour
 
 
 
-    public void RegenerateMap(out OWMap_Node[][] mapNodes)
+    public void RegenerateMap(out OWMap_Node[][] mapNodes, MapData mapData)
     {
-        SetupMapdata();
+        this.mapData = mapData;
         CleanupMap();
         CreateMap(out mapNodes);
     }
@@ -48,20 +45,6 @@ public class OverworldMapCreator : MonoBehaviour
         }
     }
 
-    private void SetupMapdata()
-    {
-        if (useTestOverPool)
-        {
-            mapData = testMapData;
-        }
-        else
-        {
-            int randomIndex = Random.Range(0, mapDataPool.Length);
-            mapData = mapDataPool[randomIndex];
-            //Debug.Log(randomIndex);
-        }
-    }
-
     private void CreateMap(out OWMap_Node[][] mapNodes)
     {
         //// TODO move this code when precedural generation is added
@@ -71,7 +54,7 @@ public class OverworldMapCreator : MonoBehaviour
             for (int nodeI = 0; nodeI < numNodesInLevel; ++nodeI)
             {
                 // Formula xAxisPos: nodeI*2 - (numNodesInLevel-1) 
-                mapData.levels[levelI].nodes[nodeI].xAxisPos = (nodeI * 2) - (numNodesInLevel - 1);
+                mapData.levels[levelI].nodes[nodeI].SetXAxisPos(nodeI, numNodesInLevel);
             }
         }
         ////
@@ -135,7 +118,7 @@ public class OverworldMapCreator : MonoBehaviour
 
                 List<OWMap_Connection> nextLevelConnections = new List<OWMap_Connection>(); // Connections Reference
 
-                int[] connectionsNextLevel = currentNode.connectionsNextLevel;
+                int[] connectionsNextLevel = currentNode.connectionsNextLevel.ToArray();
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI) //connection iteration
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];
@@ -178,7 +161,7 @@ public class OverworldMapCreator : MonoBehaviour
 
                 List<OWMap_Node> nextLevelNodes = new List<OWMap_Node>(); // NodeReferences
 
-                int[] connectionsNextLevel = currentNode.connectionsNextLevel;
+                int[] connectionsNextLevel = currentNode.connectionsNextLevel.ToArray();
                 for (int conI = 0; conI < connectionsNextLevel.Length; ++conI)
                 {
                     int connectedNextNodeI = connectionsNextLevel[conI];
