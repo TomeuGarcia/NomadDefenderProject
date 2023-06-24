@@ -23,4 +23,12 @@ public class OWMapGenerationSettings : ScriptableObject
 
     [Header("ADDITIONAL WIDTH CONTROL")]
     [SerializeField, Min(2)] public int maxSameWidthRepeatTimes = 3;
+
+    [Header("\n\nDIAGONAL CONNECTIONS")]
+    [SerializeField, Range(0.0f, 1.0f)] public float diagonalNoConnectionThreshold = 0.20f;
+    [SerializeField, Range(0.0f, 1.0f)] public float diagonalUpRightConnectionThreshold = 0.60f;
+    [SerializeField, Range(0.0f, 1.0f)] public float diagonalUpLeftConnectionThreshold = 1.0f;
+
+    [Header("REMOVE CONNECTION")]
+    [SerializeField, Range(0.0f, 1.0f)] public float removeConnectionThreshold = 0.30f;
 }

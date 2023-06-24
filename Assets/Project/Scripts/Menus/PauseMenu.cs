@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     float lastTimeScale;
     [SerializeField] GameObject pauseMenuUI;
+    [SerializeField] private CanvasGroup interactionCanvasGroup;
     public bool gameCanBePaused;
     [SerializeField] TextManager textManager;
 
@@ -130,6 +131,8 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
         TextFadeIn(titleText);
 
+        interactionCanvasGroup.interactable = true;
+
         OWMap_Node.IsGlobalInteractable = false;
     }
 
@@ -143,14 +146,23 @@ public class PauseMenu : MonoBehaviour
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
         Time.timeScale = 1;
 
-        pauseMenuUI.SetActive(false);
-        mainMenuButtonText.gameObject.SetActive(true);
-        surrenderText.gameObject.SetActive(false);
+        //HideUI();
+        
+        interactionCanvasGroup.interactable = false;
 
         OWMap_Node.IsGlobalInteractable = true;
+        textManager.ResetTexts();
 
         SceneLoader.GetInstance().StartLoadMainMenu();
     }
+
+    public void HideUI()
+    {
+        pauseMenuUI.SetActive(false);
+        mainMenuButtonText.gameObject.SetActive(true);
+        surrenderText.gameObject.SetActive(false);
+    }
+
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)
     {
         if (!GameIsPaused) { return; }
