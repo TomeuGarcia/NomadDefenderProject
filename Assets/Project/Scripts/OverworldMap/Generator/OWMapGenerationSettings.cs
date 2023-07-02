@@ -7,7 +7,7 @@ using UnityEngine;
 public class OWMapGenerationSettings : ScriptableObject
 {
     [Header("MAP LENGTH")]
-    [SerializeField, Min(3)] public int numberOfLevels = 15;
+    [SerializeField, Min(3)] public int numberOfLevels = 15;    
 
     [Header("WIDTH & GROW/SHRINK")]
     [SerializeField, Min(1)] public int maxWidthGrowStep = 1;
@@ -22,6 +22,7 @@ public class OWMapGenerationSettings : ScriptableObject
     [SerializeField, Min(1)] public int maxChained1Width = 1;
 
     [Header("ADDITIONAL WIDTH CONTROL")]
+    [SerializeField, Min(2)] public int maxConnectionsPerNode = 2;
     [SerializeField, Min(2)] public int maxSameWidthRepeatTimes = 3;
 
     [Header("\n\nDIAGONAL CONNECTIONS")]

@@ -275,6 +275,7 @@ public class OverworldMapGenerator : MonoBehaviour
     }
 
 
+
     private void RemoveNodeConnectionsRandomly()
     {
         for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
@@ -285,6 +286,22 @@ public class OverworldMapGenerator : MonoBehaviour
             {
                 List<MapData.MapNodeData> connectionsToNextLevel = currentLevelNodes[currentNodeI].connectionsToNextLevel;
 
+
+                // Remove connections exceeding max limit
+                int numExceedingConnections = connectionsToNextLevel.Count - generationSettings.maxConnectionsPerNode;
+                while (numExceedingConnections > 0)
+                {
+                    int connectionI = Random.Range(0, connectionsToNextLevel.Count);
+
+                    if (connectionsToNextLevel[connectionI].connectionsFromPreviousLevel.Count > 1)
+                    {
+                        DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[connectionI]);
+                        --numExceedingConnections;
+                    }             
+                }
+
+
+                // Remove connections randomly
                 for (int toNextI = 0; toNextI < connectionsToNextLevel.Count && connectionsToNextLevel.Count > 1; ++toNextI)
                 {
                     if (connectionsToNextLevel[toNextI].connectionsFromPreviousLevel.Count > 1)
