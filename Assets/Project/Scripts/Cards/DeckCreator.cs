@@ -25,7 +25,6 @@ public class DeckCreator : MonoBehaviour
 
         for (int i = 0; i < turretCardNum; ++i)
         {
-            //BuildingCard card = GetUninitializedNewBuildingCard();
             TurretBuildingCard card = GetUninitializedNewTurretCard();
             card.ResetParts(deckData.starterTurretCardsComponents[i]);
 
@@ -33,7 +32,6 @@ public class DeckCreator : MonoBehaviour
         }
         for (int i = turretCardNum; i < starterCards.Length; ++i)
         {
-            //BuildingCard card = GetUninitializedNewBuildingCard();
             SupportBuildingCard card = GetUninitializedNewSupportCard();
             card.ResetParts(deckData.starterSupportCardsComponents[i - turretCardNum]);
 
