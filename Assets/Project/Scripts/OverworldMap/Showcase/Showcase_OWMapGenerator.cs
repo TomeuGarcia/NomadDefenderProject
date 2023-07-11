@@ -290,40 +290,51 @@ namespace OWmapShowcase
                 if (edgeConnectionsExist)
                 {
                     int leftSideXDistance = firstCurrentToFirstNextXDistance;
-                    int currentNodeI = 0;
-                    MapData.MapNodeData leftmostNextLevelNode = nextLevelNodes[0];
+                    MapData.MapNodeData leftmostCurrentLevelNode = currentLevelNodes[0];
+                    int nextNodeI = 0;
+                    MapData.MapNodeData leftSideNextLevelNode = nextLevelNodes[nextNodeI];
 
                     do
                     {
-                        MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
-                        ConnectNodes(currentLevelNode, leftmostNextLevelNode, levelI, currentNodeI, 0);
+                        ConnectNodes(leftmostCurrentLevelNode, leftSideNextLevelNode, levelI, 0, nextNodeI);
 
-                        ++currentNodeI;
-                        Debug.Log(currentNodeI + "/" + currentLevelNodes.Length);
-                        leftSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], leftmostNextLevelNode);
+                        ++nextNodeI;
+                        if (nextNodeI == nextLevelNodes.Length)
+                        {
+                            break;
+                        }
+
+                        leftSideNextLevelNode = nextLevelNodes[nextNodeI];
+
+                        leftSideXDistance = GetXDistanceBetweenNodes(leftmostCurrentLevelNode, leftSideNextLevelNode);
 
                         yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                     }
-                    while (leftSideXDistance >= 2 && currentNodeI < currentLevelNodes.Length);
-                    //while (leftSideXDistance >= 2);
+                    while (leftSideXDistance >= 2);
 
 
                     int rightSideXDistance = firstCurrentToFirstNextXDistance;
-                    currentNodeI = currentLevelNodes.Length - 1;
-                    MapData.MapNodeData rightmostNextLevelNode = nextLevelNodes[nextLevelNodes.Length - 1];
+                    MapData.MapNodeData rightmostCurrentLevelNode = currentLevelNodes[currentLevelNodes.Length - 1];
+                    nextNodeI = nextLevelNodes.Length - 1;
+                    MapData.MapNodeData rightSideNextLevelNode = nextLevelNodes[nextNodeI];
                     
                     do
                     {
-                        MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
-                        ConnectNodes(currentLevelNode, leftmostNextLevelNode, levelI, currentNodeI, 0);
+                        ConnectNodes(rightmostCurrentLevelNode, rightSideNextLevelNode, levelI, currentLevelNodes.Length - 1, nextNodeI);
 
-                        --currentNodeI;
-                        rightSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], rightmostNextLevelNode);
+                        --nextNodeI;
+                        if (nextNodeI == -1)
+                        {
+                            break;
+                        }
+
+                        rightSideNextLevelNode = nextLevelNodes[nextNodeI];
+
+                        rightSideXDistance = GetXDistanceBetweenNodes(rightmostCurrentLevelNode, rightSideNextLevelNode);
 
                         yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                     }
-                    while (rightSideXDistance >= 2 && currentNodeI < currentLevelNodes.Length);
-                    //while (rightSideXDistance >= 2);
+                    while (rightSideXDistance >= 2);
                 }
 
 

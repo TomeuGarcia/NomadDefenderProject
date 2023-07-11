@@ -86,7 +86,7 @@ namespace OWmapShowcase
 
         private IEnumerator SpawnMap()
         {
-            _hasFinishedSpawningMap = false;
+            _hasFinishedSpawningMap = false;            
 
             yield return _generator.GenerateMap();
             MapData mapData = _generator.GetMapData();
@@ -154,7 +154,11 @@ namespace OWmapShowcase
             connection.SetActive(true);
             connection.name = "Connection " + fromNodeI.ToString() + "-" + toNodeI.ToString();
 
-            _spawnedConnectionsMap.Add((fromLevelI, fromNodeI, toNodeI), connection);
+            (int, int, int) connectionKey = (fromLevelI, fromNodeI, toNodeI);
+            if (!_spawnedConnectionsMap.ContainsKey(connectionKey))
+            {
+                _spawnedConnectionsMap.Add((fromLevelI, fromNodeI, toNodeI), connection);
+            }            
 
             _connectionEvaluator.transform.position = positionAndRotation.Item1;
             _connectionEvaluator.transform.rotation = positionAndRotation.Item2;
@@ -190,6 +194,7 @@ namespace OWmapShowcase
         private void ShowConnectionEvaluator()
         {
             _connectionEvaluator.gameObject.SetActive(true);
+            _connectionEvaluator.SetMaterial(_connectionCreatedMaterial);
         }
 
     }
