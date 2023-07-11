@@ -10,8 +10,9 @@ namespace OWmapShowcase
         [SerializeField, Tooltip("MapData where to store the generated map")] private MapData mapData;
         [SerializeField] private OWMapGenerationSettings generationSettings;
 
-        private const float DELAY_LEVEL_SPAWN = 0.2f;
-        private const float DELAY_CONNECTION_SPAWN = 0.2f;
+        [SerializeField] private float DELAY_LEVEL_SPAWN = 0.3f;
+        [SerializeField] private float DELAY_CONNECTION_SPAWN = 0.4f;
+        [SerializeField] private float DELAY_CONNECTION_DELETE = 0.4f;
 
 
         // int --> levelI
@@ -22,6 +23,10 @@ namespace OWmapShowcase
         // int --> fromNodeI
         // int --> toNodeI
         public Action<int, int, int> OnConnectionCreated;
+        public Action<int, int, int> OnConnectionRemoved;
+        public Action<int, int, int> OnConnectionSavedFromRemove;
+
+        public Action OnConnectionCreationStart;
 
 
 
@@ -169,8 +174,9 @@ namespace OWmapShowcase
 
         private IEnumerator GenerateConnections()
         {
+            OnConnectionCreationStart?.Invoke();
             yield return StartCoroutine(MakeAllNodeConnections());
-            RemoveNodeConnectionsRandomly();
+            yield return StartCoroutine(RemoveNodeConnectionsRandomly());
         }
 
         private int GetXDistanceBetweenNodes(MapData.MapNodeData nodeA, MapData.MapNodeData nodeB)
@@ -188,12 +194,14 @@ namespace OWmapShowcase
             OnConnectionCreated?.Invoke(fromLevelI, fromNodeI, toNodeI);
         }
 
-        private void DisconnectNodes(MapData.MapNodeData currentLevelNode, MapData.MapNodeData nextLevelNode)
+        private void DisconnectNodes(MapData.MapNodeData currentLevelNode, MapData.MapNodeData nextLevelNode, int fromLevelI, int fromNodeI)
         {
             currentLevelNode.connectionsToNextLevel.Remove(nextLevelNode);
             nextLevelNode.connectionsFromPreviousLevel.Remove(currentLevelNode);
 
             currentLevelNode.connectionsNextLevel.Remove(nextLevelNode.nodeI);
+
+            OnConnectionRemoved?.Invoke(fromLevelI, fromNodeI, nextLevelNode.nodeI);
         }
 
         private IEnumerator MakeAllNodeConnections()
@@ -217,11 +225,6 @@ namespace OWmapShowcase
                         {
                             ConnectNodes(currentLevelNode, nextLevelNode, levelI, currentNodeI, nextNodeI);
                             yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
-
-                            if (xDistance == 1)
-                            {
-                                Debug.Log(levelI + ": " + currentNodeI + "-" + nextNodeI);
-                            }
                         }
                     }
                 }
@@ -263,13 +266,13 @@ namespace OWmapShowcase
                             if (randomValue > generationSettings.diagonalNoConnectionThreshold &&
                                 randomValue < generationSettings.diagonalUpRightConnectionThreshold)
                             {
-                                ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1], levelI, currentNodeI, nextNodeI);
+                                ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1], levelI, currentNodeI, nextNodeI + 1);
                                 yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                             }
                             else if (randomValue > generationSettings.diagonalUpRightConnectionThreshold &&
                                      randomValue < generationSettings.diagonalUpLeftConnectionThreshold)
                             {
-                                ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI], levelI, currentNodeI, nextNodeI);
+                                ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI], levelI, currentNodeI + 1, nextNodeI);
                                 yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                             }
 
@@ -296,11 +299,13 @@ namespace OWmapShowcase
                         ConnectNodes(currentLevelNode, leftmostNextLevelNode, levelI, currentNodeI, 0);
 
                         ++currentNodeI;
+                        Debug.Log(currentNodeI + "/" + currentLevelNodes.Length);
                         leftSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], leftmostNextLevelNode);
 
                         yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                     }
-                    while (leftSideXDistance >= 2);
+                    while (leftSideXDistance >= 2 && currentNodeI < currentLevelNodes.Length);
+                    //while (leftSideXDistance >= 2);
 
 
                     int rightSideXDistance = firstCurrentToFirstNextXDistance;
@@ -317,7 +322,8 @@ namespace OWmapShowcase
 
                         yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                     }
-                    while (rightSideXDistance >= 2);
+                    while (rightSideXDistance >= 2 && currentNodeI < currentLevelNodes.Length);
+                    //while (rightSideXDistance >= 2);
                 }
 
 
@@ -326,7 +332,7 @@ namespace OWmapShowcase
 
 
 
-        private void RemoveNodeConnectionsRandomly()
+        private IEnumerator RemoveNodeConnectionsRandomly()
         {
             for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
             {
@@ -345,8 +351,10 @@ namespace OWmapShowcase
 
                         if (connectionsToNextLevel[connectionI].connectionsFromPreviousLevel.Count > 1)
                         {
-                            DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[connectionI]);
+                            DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[connectionI], levelI, currentNodeI);
                             --numExceedingConnections;
+                            
+                            yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
                         }
                     }
 
@@ -360,8 +368,15 @@ namespace OWmapShowcase
 
                             if (randomValue < generationSettings.removeConnectionThreshold)
                             {
-                                DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI]);
+                                DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI], levelI, currentNodeI);
                                 --toNextI;
+                            
+                                yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
+                            }
+                            else
+                            {
+                                OnConnectionSavedFromRemove?.Invoke(levelI, currentNodeI, connectionsToNextLevel[toNextI].nodeI);
+                                yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
                             }
                         }
                     }
