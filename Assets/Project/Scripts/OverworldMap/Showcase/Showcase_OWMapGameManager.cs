@@ -86,7 +86,7 @@ namespace OWmapShowcase
 
         private IEnumerator SpawnMap()
         {
-            _hasFinishedSpawningMap = false;            
+            _hasFinishedSpawningMap = false;
 
             yield return _generator.GenerateMap();
             MapData mapData = _generator.GetMapData();
@@ -154,14 +154,18 @@ namespace OWmapShowcase
             connection.SetActive(true);
             connection.name = "Connection " + fromNodeI.ToString() + "-" + toNodeI.ToString();
 
-            (int, int, int) connectionKey = (fromLevelI, fromNodeI, toNodeI);
-            if (!_spawnedConnectionsMap.ContainsKey(connectionKey))
-            {
-                _spawnedConnectionsMap.Add((fromLevelI, fromNodeI, toNodeI), connection);
-            }            
+            Vector3 fromNodePosition = _levelsHolder.GetChild(fromLevelI).GetChild(fromNodeI).position;
+            Vector3 toNodePosition = _levelsHolder.GetChild(fromLevelI + 1).GetChild(toNodeI).position;
+            float distanceBetweenNodes = Vector3.Distance(fromNodePosition, toNodePosition);
+            connection.GetComponent<FakeConnection>().SetLengthScale(distanceBetweenNodes);
+
+            _spawnedConnectionsMap.Add((fromLevelI, fromNodeI, toNodeI), connection);
 
             _connectionEvaluator.transform.position = positionAndRotation.Item1;
             _connectionEvaluator.transform.rotation = positionAndRotation.Item2;
+
+
+            _connectionEvaluator.SetLengthScale(distanceBetweenNodes);
         }
 
         private void RemoveConnection(int fromLevelI, int fromNodeI, int toNodeI)
@@ -173,6 +177,11 @@ namespace OWmapShowcase
             _connectionEvaluator.SetMaterial(_connectionDestroyedMaterial);
             _connectionEvaluator.transform.position = connection.transform.position;
             _connectionEvaluator.transform.rotation = connection.transform.rotation;
+
+
+            Vector3 fromNodePosition = _levelsHolder.GetChild(fromLevelI).GetChild(fromNodeI).position;
+            Vector3 toNodePosition = _levelsHolder.GetChild(fromLevelI + 1).GetChild(toNodeI).position;
+            _connectionEvaluator.SetLengthScale(Vector3.Distance(fromNodePosition, toNodePosition));
 
             _spawnedConnectionsMap.Remove(connectionKey);
             Destroy(connection);
@@ -186,6 +195,10 @@ namespace OWmapShowcase
             _connectionEvaluator.SetMaterial(_connectionSavedMaterial);
             _connectionEvaluator.transform.position = connection.transform.position;
             _connectionEvaluator.transform.rotation = connection.transform.rotation;
+
+            Vector3 fromNodePosition = _levelsHolder.GetChild(fromLevelI).GetChild(fromNodeI).position;
+            Vector3 toNodePosition = _levelsHolder.GetChild(fromLevelI + 1).GetChild(toNodeI).position;
+            _connectionEvaluator.SetLengthScale(Vector3.Distance(fromNodePosition, toNodePosition));
         }
 
 

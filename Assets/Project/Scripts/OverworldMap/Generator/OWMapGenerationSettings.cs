@@ -32,4 +32,25 @@ public class OWMapGenerationSettings : ScriptableObject
 
     [Header("REMOVE CONNECTION")]
     [SerializeField, Range(0.0f, 1.0f)] public float removeConnectionThreshold = 0.30f;
+
+
+    private void OnValidate()
+    {
+        FixParameters();
+    }
+
+    private void Awake()
+    {
+        FixParameters();
+    }
+
+    private void FixParameters()
+    {
+        int maxPossibleConnectionsPerNode = Mathf.Max(maxWidthGrowStep, maxWidthShrinkStep) + 1;
+        if (maxConnectionsPerNode < maxPossibleConnectionsPerNode)
+        {
+            maxConnectionsPerNode = maxPossibleConnectionsPerNode;
+        }        
+    }
+
 }

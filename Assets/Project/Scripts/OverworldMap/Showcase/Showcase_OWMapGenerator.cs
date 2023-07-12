@@ -289,58 +289,78 @@ namespace OWmapShowcase
                 bool edgeConnectionsExist = firstCurrentToFirstNextXDistance >= 2;
                 if (edgeConnectionsExist)
                 {
-                    int leftSideXDistance = firstCurrentToFirstNextXDistance;
-                    MapData.MapNodeData leftmostCurrentLevelNode = currentLevelNodes[0];
-                    int nextNodeI = 0;
-                    MapData.MapNodeData leftSideNextLevelNode = nextLevelNodes[nextNodeI];
+                    bool currentLevelIsWider = currentLevelNodes.Length > nextLevelNodes.Length;
 
-                    do
+                    if (currentLevelIsWider)
                     {
-                        ConnectNodes(leftmostCurrentLevelNode, leftSideNextLevelNode, levelI, 0, nextNodeI);
-
-                        ++nextNodeI;
-                        if (nextNodeI == nextLevelNodes.Length)
-                        {
-                            break;
-                        }
-
-                        leftSideNextLevelNode = nextLevelNodes[nextNodeI];
-
-                        leftSideXDistance = GetXDistanceBetweenNodes(leftmostCurrentLevelNode, leftSideNextLevelNode);
-
-                        yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                        yield return StartCoroutine(CreateEdgeConnections(currentLevelNodes, nextLevelNodes, levelI, currentLevelIsWider));
                     }
-                    while (leftSideXDistance >= 2);
-
-
-                    int rightSideXDistance = firstCurrentToFirstNextXDistance;
-                    MapData.MapNodeData rightmostCurrentLevelNode = currentLevelNodes[currentLevelNodes.Length - 1];
-                    nextNodeI = nextLevelNodes.Length - 1;
-                    MapData.MapNodeData rightSideNextLevelNode = nextLevelNodes[nextNodeI];
-                    
-                    do
+                    else
                     {
-                        ConnectNodes(rightmostCurrentLevelNode, rightSideNextLevelNode, levelI, currentLevelNodes.Length - 1, nextNodeI);
-
-                        --nextNodeI;
-                        if (nextNodeI == -1)
-                        {
-                            break;
-                        }
-
-                        rightSideNextLevelNode = nextLevelNodes[nextNodeI];
-
-                        rightSideXDistance = GetXDistanceBetweenNodes(rightmostCurrentLevelNode, rightSideNextLevelNode);
-
-                        yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                        yield return StartCoroutine(CreateEdgeConnections(nextLevelNodes, currentLevelNodes, levelI, currentLevelIsWider));
                     }
-                    while (rightSideXDistance >= 2);
                 }
-
 
             }
         }
 
+        
+        private IEnumerator CreateEdgeConnections(MapData.MapNodeData[] widerLevelNodes, MapData.MapNodeData[] shorterLevelNodes, int levelI, bool widerIsCorrentLevel)
+        {
+            int leftSideXDistance = 9999;
+
+            MapData.MapNodeData leftmostShorterLevelNode = shorterLevelNodes[0];
+            int widerNodeI = 0;
+            MapData.MapNodeData leftSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+
+            do
+            {
+                if (widerIsCorrentLevel)
+                {
+                    ConnectNodes(leftSideWiderLevelNode, leftmostShorterLevelNode, levelI, widerNodeI, 0);
+                }
+                else
+                {
+                    ConnectNodes(leftmostShorterLevelNode, leftSideWiderLevelNode, levelI, 0, widerNodeI);
+                }
+
+                ++widerNodeI;
+                leftSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+                leftSideXDistance = GetXDistanceBetweenNodes(leftSideWiderLevelNode, leftmostShorterLevelNode);
+
+                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+            }
+            while (leftSideXDistance >= 2);
+
+
+            int rightSideXDistance = 9999;
+            MapData.MapNodeData rightmostShorterLevelNode = shorterLevelNodes[shorterLevelNodes.Length - 1];
+            widerNodeI = widerLevelNodes.Length - 1;
+            MapData.MapNodeData rightSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+            do
+            {
+                if (widerIsCorrentLevel)
+                {
+                    ConnectNodes(rightSideWiderLevelNode, rightmostShorterLevelNode, levelI, widerNodeI, shorterLevelNodes.Length - 1);
+                }
+                else
+                {
+                    ConnectNodes(rightmostShorterLevelNode, rightSideWiderLevelNode, levelI, shorterLevelNodes.Length - 1, widerNodeI);
+                }
+
+                --widerNodeI;
+                rightSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+                rightSideXDistance = GetXDistanceBetweenNodes(rightSideWiderLevelNode, rightmostShorterLevelNode);
+
+                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+            }
+            while (rightSideXDistance >= 2);
+        }
+        
 
 
         private IEnumerator RemoveNodeConnectionsRandomly()
@@ -356,7 +376,9 @@ namespace OWmapShowcase
 
                     // Remove connections exceeding max limit
                     int numExceedingConnections = connectionsToNextLevel.Count - generationSettings.maxConnectionsPerNode;
-                    while (numExceedingConnections > 0)
+                    int itCount = 0;
+                    int maxItCount = 100;
+                    while (numExceedingConnections > 0 && itCount < maxItCount)
                     {
                         int connectionI = UnityEngine.Random.Range(0, connectionsToNextLevel.Count);
 
@@ -367,6 +389,12 @@ namespace OWmapShowcase
                             
                             yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
                         }
+
+                        ++itCount;
+                    }
+                    if (itCount == maxItCount)
+                    {
+                        Debug.Log("ERROR! maxConnectionsPerNode parameter is TOO SMALL");
                     }
 
 
