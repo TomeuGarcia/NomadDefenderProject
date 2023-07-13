@@ -9,18 +9,25 @@ namespace OWmapShowcase
 
     public class Showcase_OWMapGameManager : MonoBehaviour
     {
+        [Header("HUD")]
+        [SerializeField] private ShowcaseHUD _showcaseHUD;
+
+        [Header("GENERATION")]
         [SerializeField] private OWMapGenerationSettings _generationSettings;
         [SerializeField] private Showcase_OWMapGenerator _generator;
 
         private bool _hasFinishedSpawningMap;
 
+        [Header("TRANSFORMS")]
         [SerializeField] private Transform _levelsHolder;
 
+        [Header("CONNECTION")]
         [SerializeField] private FakeConnection _connectionEvaluator;
         [SerializeField] private Material _connectionCreatedMaterial;
         [SerializeField] private Material _connectionDestroyedMaterial;
         [SerializeField] private Material _connectionSavedMaterial;
 
+        [Header("PREFABS")]
         [SerializeField] private GameObject _levelPrefab;
         [SerializeField] private GameObject _nodePrefab;
         [SerializeField] private GameObject _connectionPrefab;
@@ -41,24 +48,15 @@ namespace OWmapShowcase
             _spawnedNodes = new List<GameObject>(_generationSettings.numberOfLevels * _generationSettings.maxWidth);
             _spawnedConnectionsMap = new Dictionary<(int, int, int), GameObject>(_generationSettings.numberOfLevels * _generationSettings.maxWidth);
 
-            for (int i = 0; i < _generationSettings.numberOfLevels; ++i)
+            for (int i = 0; i < 15; ++i)
             {
                 GameObject level = Instantiate(_levelPrefab, _levelsHolder);
                 level.name = "Level " + i.ToString();
             }
 
+            _showcaseHUD.AwakeInit(this, _generationSettings);
         }
 
-
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.S) && _hasFinishedSpawningMap)
-            {
-                DestroyCurrentMap();
-                StartCoroutine(SpawnMap());
-            }
-        }
 
 
         private void OnEnable()
@@ -83,17 +81,32 @@ namespace OWmapShowcase
             _generator.OnConnectionSavedFromRemove -= SaveConnection;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+        }
+
+        public void ResetMap()
+        {
+            DestroyCurrentMap();
+            StartCoroutine(SpawnMap());
+        }
 
         private IEnumerator SpawnMap()
         {
             _hasFinishedSpawningMap = false;
 
-            yield return _generator.GenerateMap();
+            yield return _generator.GenerateMap(_generationSettings);
             MapData mapData = _generator.GetMapData();
 
             _hasFinishedSpawningMap = true;
 
             _connectionEvaluator.gameObject.SetActive(false);
+
+            _showcaseHUD.EnableStartButton();
         }
 
         private void DestroyCurrentMap()

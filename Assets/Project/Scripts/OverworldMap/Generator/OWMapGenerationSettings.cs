@@ -44,13 +44,10 @@ public class OWMapGenerationSettings : ScriptableObject
         FixParameters();
     }
 
-    private void FixParameters()
+    public void FixParameters()
     {
         int maxPossibleConnectionsPerNode = Mathf.Max(maxWidthGrowStep, maxWidthShrinkStep) + 1;
-        if (maxConnectionsPerNode < maxPossibleConnectionsPerNode)
-        {
-            maxConnectionsPerNode = maxPossibleConnectionsPerNode;
-        }        
+        maxConnectionsPerNode = maxPossibleConnectionsPerNode;
     }
 
 }

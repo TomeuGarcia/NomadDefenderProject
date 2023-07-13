@@ -8,7 +8,7 @@ namespace OWmapShowcase
     public class Showcase_OWMapGenerator : MonoBehaviour
     {
         [SerializeField, Tooltip("MapData where to store the generated map")] private MapData mapData;
-        [SerializeField] private OWMapGenerationSettings generationSettings;
+        private OWMapGenerationSettings _generationSettings;
 
         [SerializeField] private float DELAY_LEVEL_SPAWN = 0.3f;
         [SerializeField] private float DELAY_CONNECTION_SPAWN = 0.4f;
@@ -30,8 +30,9 @@ namespace OWmapShowcase
 
 
 
-        public IEnumerator GenerateMap()
+        public IEnumerator GenerateMap(OWMapGenerationSettings generationSettings)
         {
+            _generationSettings = generationSettings;
             yield return StartCoroutine(GenerateNodes());
             yield return StartCoroutine(GenerateConnections());            
         }
@@ -43,12 +44,12 @@ namespace OWmapShowcase
 
         private IEnumerator GenerateNodes()
         {
-            mapData.levels = new MapData.MapLevelData[generationSettings.numberOfLevels];
+            mapData.levels = new MapData.MapLevelData[_generationSettings.numberOfLevels];
 
             yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
 
             // 1 width start levels
-            for (int levelI = 0; levelI < generationSettings.numberOf1WidthStartLevels; ++levelI)
+            for (int levelI = 0; levelI < _generationSettings.numberOf1WidthStartLevels; ++levelI)
             {
                 InstantiateNodesAtLevel(1, levelI);
 
@@ -60,16 +61,16 @@ namespace OWmapShowcase
 
 
             // other levels
-            int transitionTo1WidthEnd = (int)Mathf.Max(0, generationSettings.maxWidth - 2) / generationSettings.maxWidthShrinkStep;
-            int randomWidthLevelI = generationSettings.numberOfLevels - generationSettings.numberOf1WidthEndLevels - transitionTo1WidthEnd;
+            int transitionTo1WidthEnd = (int)Mathf.Max(0, _generationSettings.maxWidth - 2) / _generationSettings.maxWidthShrinkStep;
+            int randomWidthLevelI = _generationSettings.numberOfLevels - _generationSettings.numberOf1WidthEndLevels - transitionTo1WidthEnd;
 
             _counterTotal1Width = 0;
             _counterChained1Width = 0;
             _sameWidthRepeatCount = 0;
 
-            for (int levelI = generationSettings.numberOf1WidthStartLevels; levelI < randomWidthLevelI; ++levelI)
+            for (int levelI = _generationSettings.numberOf1WidthStartLevels; levelI < randomWidthLevelI; ++levelI)
             {
-                GenerateMiddleLevel(levelI, generationSettings.maxWidth);
+                GenerateMiddleLevel(levelI, _generationSettings.maxWidth);
 
                 OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes); 
                 yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
@@ -77,8 +78,8 @@ namespace OWmapShowcase
 
 
             // transition to 1 width
-            int transitionTo1WidthEndLevelI = generationSettings.numberOfLevels - generationSettings.numberOf1WidthEndLevels;
-            int widthTransition = generationSettings.maxWidth - 1;
+            int transitionTo1WidthEndLevelI = _generationSettings.numberOfLevels - _generationSettings.numberOf1WidthEndLevels;
+            int widthTransition = _generationSettings.maxWidth - 1;
 
             for (int levelI = randomWidthLevelI; levelI < transitionTo1WidthEndLevelI; ++levelI)
             {
@@ -92,7 +93,7 @@ namespace OWmapShowcase
 
 
             // 1 width end levels
-            for (int levelI = transitionTo1WidthEndLevelI; levelI < generationSettings.numberOfLevels; ++levelI)
+            for (int levelI = transitionTo1WidthEndLevelI; levelI < _generationSettings.numberOfLevels; ++levelI)
             {
                 InstantiateNodesAtLevel(1, levelI);
 
@@ -110,8 +111,8 @@ namespace OWmapShowcase
         private void GenerateMiddleLevel(int levelI, int maxWidth)
         {
             int lastLevelWidth = mapData.levels[levelI - 1].nodes.Length;
-            int maxWidthThisLevel = (int)Mathf.Min(maxWidth, lastLevelWidth + generationSettings.maxWidthGrowStep);
-            int minWidthThisLevel = (int)Mathf.Max(generationSettings.minWidth, lastLevelWidth - generationSettings.maxWidthShrinkStep);
+            int maxWidthThisLevel = (int)Mathf.Min(maxWidth, lastLevelWidth + _generationSettings.maxWidthGrowStep);
+            int minWidthThisLevel = (int)Mathf.Max(_generationSettings.minWidth, lastLevelWidth - _generationSettings.maxWidthShrinkStep);
             int levelWidth = UnityEngine.Random.Range(minWidthThisLevel, maxWidthThisLevel + 1);
 
 
@@ -121,7 +122,7 @@ namespace OWmapShowcase
                 ++_counterTotal1Width;
                 ++_counterChained1Width;
 
-                if (_counterTotal1Width > generationSettings.maxNum1Width || _counterChained1Width > generationSettings.maxChained1Width)
+                if (_counterTotal1Width > _generationSettings.maxNum1Width || _counterChained1Width > _generationSettings.maxChained1Width)
                 {
                     minWidthThisLevel = 2;
                     levelWidth = UnityEngine.Random.Range(minWidthThisLevel, maxWidthThisLevel);
@@ -135,7 +136,7 @@ namespace OWmapShowcase
 
 
             _sameWidthRepeatCount = (levelWidth == lastLevelWidth) ? (_sameWidthRepeatCount + 1) : 0;
-            if (_sameWidthRepeatCount >= generationSettings.maxSameWidthRepeatTimes)
+            if (_sameWidthRepeatCount >= _generationSettings.maxSameWidthRepeatTimes)
             {
                 if (minWidthThisLevel == maxWidthThisLevel)
                 {
@@ -263,14 +264,14 @@ namespace OWmapShowcase
                         {
                             float randomValue = UnityEngine.Random.Range(0f, 1f);
 
-                            if (randomValue > generationSettings.diagonalNoConnectionThreshold &&
-                                randomValue < generationSettings.diagonalUpRightConnectionThreshold)
+                            if (randomValue > _generationSettings.diagonalNoConnectionThreshold &&
+                                randomValue < _generationSettings.diagonalUpRightConnectionThreshold)
                             {
                                 ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1], levelI, currentNodeI, nextNodeI + 1);
                                 yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
                             }
-                            else if (randomValue > generationSettings.diagonalUpRightConnectionThreshold &&
-                                     randomValue < generationSettings.diagonalUpLeftConnectionThreshold)
+                            else if (randomValue > _generationSettings.diagonalUpRightConnectionThreshold &&
+                                     randomValue < _generationSettings.diagonalUpLeftConnectionThreshold)
                             {
                                 ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI], levelI, currentNodeI + 1, nextNodeI);
                                 yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
@@ -375,7 +376,7 @@ namespace OWmapShowcase
 
 
                     // Remove connections exceeding max limit
-                    int numExceedingConnections = connectionsToNextLevel.Count - generationSettings.maxConnectionsPerNode;
+                    int numExceedingConnections = connectionsToNextLevel.Count - _generationSettings.maxConnectionsPerNode;
                     int itCount = 0;
                     int maxItCount = 100;
                     while (numExceedingConnections > 0 && itCount < maxItCount)
@@ -405,7 +406,7 @@ namespace OWmapShowcase
                         {
                             float randomValue = UnityEngine.Random.Range(0f, 1f);
 
-                            if (randomValue < generationSettings.removeConnectionThreshold)
+                            if (randomValue < _generationSettings.removeConnectionThreshold)
                             {
                                 DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI], levelI, currentNodeI);
                                 --toNextI;
