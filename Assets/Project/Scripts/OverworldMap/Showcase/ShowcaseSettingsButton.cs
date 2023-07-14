@@ -88,8 +88,10 @@ namespace OWmapShowcase
         }
 
 
-        private void DisableButtons()
+        private void DisableButtons(bool isInstantly)
         {
+            if (isInstantly) return;
+
             _addButton.enabled = false;
             _addButton.image.color = Color.gray;
 

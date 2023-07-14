@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,9 @@ namespace OWmapShowcase
         private OWMapGenerationSettings _generationSettings;
 
         [SerializeField] private Button _startButton;
+        [SerializeField] private Toggle _instantlyToggle;
 
+        [SerializeField] private TextMeshProUGUI _generationStatusText;
 
 
         [SerializeField] private ShowcaseSettingsButton _numberOfLevelsSB;
@@ -29,7 +32,7 @@ namespace OWmapShowcase
 
 
 
-        static public Action OnGenerationStart;
+        static public Action<bool> OnGenerationStart;
         static public Action OnGenerationFinish;
 
 
@@ -39,6 +42,9 @@ namespace OWmapShowcase
             _generationSettings = generationSettings;
 
             _startButton.onClick.AddListener(OnStartButtonPressed);
+
+            _instantlyToggle.isOn = manager.Instantly;
+            _instantlyToggle.onValueChanged.AddListener(manager.SetInstantly);
         }
 
         void Start()
@@ -91,13 +97,26 @@ namespace OWmapShowcase
             _generationSettings.FixParameters();
             _manager.ResetMap();
 
-            OnGenerationStart?.Invoke();
+            OnGenerationStart?.Invoke(_manager.Instantly);
         }
         public void EnableStartButton()
         {
             _startButton.gameObject.SetActive(true);
 
             OnGenerationFinish?.Invoke();
+        }
+
+        public void SetGenerationStatusText(string text)
+        {
+            _generationStatusText.text = text;
+        }
+        public void ShowGenerationStatusText()
+        {
+            _generationStatusText.gameObject.SetActive(true);
+        }
+        public void HideGenerationStatusText()
+        {
+            _generationStatusText.gameObject.SetActive(false);
         }
 
 

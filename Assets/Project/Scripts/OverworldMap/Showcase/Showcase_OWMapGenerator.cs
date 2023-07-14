@@ -13,6 +13,9 @@ namespace OWmapShowcase
         [SerializeField] private float DELAY_LEVEL_SPAWN = 0.3f;
         [SerializeField] private float DELAY_CONNECTION_SPAWN = 0.4f;
         [SerializeField] private float DELAY_CONNECTION_DELETE = 0.4f;
+        private float _delayLevelSpawn = 0.3f;
+        private float _delayConnectionSpawn = 0.4f;
+        private float _delayConnectionDelete = 0.4f;
 
 
         // int --> levelI
@@ -28,10 +31,16 @@ namespace OWmapShowcase
 
         public Action OnConnectionCreationStart;
 
+        public ShowcaseHUD showcaseHUD;
+        private bool _instantGeneration;
 
-
-        public IEnumerator GenerateMap(OWMapGenerationSettings generationSettings)
+        public IEnumerator GenerateMap(OWMapGenerationSettings generationSettings, bool instantly)
         {
+            _instantGeneration = instantly;
+            _delayLevelSpawn = instantly ? 0.0f : DELAY_LEVEL_SPAWN;
+            _delayConnectionSpawn = instantly ? 0.0f : DELAY_CONNECTION_SPAWN;
+            _delayConnectionDelete = instantly ? 0.0f : DELAY_CONNECTION_DELETE;
+
             _generationSettings = generationSettings;
             yield return StartCoroutine(GenerateNodes());
             yield return StartCoroutine(GenerateConnections());            
@@ -44,9 +53,11 @@ namespace OWmapShowcase
 
         private IEnumerator GenerateNodes()
         {
+            showcaseHUD.SetGenerationStatusText("Generating nodes...");
+
             mapData.levels = new MapData.MapLevelData[_generationSettings.numberOfLevels];
 
-            yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
+            if (!_instantGeneration) yield return new WaitForSeconds(_delayLevelSpawn);
 
             // 1 width start levels
             for (int levelI = 0; levelI < _generationSettings.numberOf1WidthStartLevels; ++levelI)
@@ -56,7 +67,7 @@ namespace OWmapShowcase
                 //Debug.Log("srt " + 1);
 
                 OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes);
-                yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayLevelSpawn);
             }
 
 
@@ -72,8 +83,8 @@ namespace OWmapShowcase
             {
                 GenerateMiddleLevel(levelI, _generationSettings.maxWidth);
 
-                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes); 
-                yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
+                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayLevelSpawn);
             }
 
 
@@ -87,8 +98,8 @@ namespace OWmapShowcase
 
                 --widthTransition;
 
-                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes); 
-                yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
+                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayLevelSpawn);
             }
 
 
@@ -99,8 +110,8 @@ namespace OWmapShowcase
 
                 //Debug.Log("end " + 1);
 
-                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes); 
-                yield return new WaitForSeconds(DELAY_LEVEL_SPAWN);
+                OnLevelCreated?.Invoke(levelI, mapData.levels[levelI].nodes);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayLevelSpawn);
             }
 
         }
@@ -207,6 +218,8 @@ namespace OWmapShowcase
 
         private IEnumerator MakeAllNodeConnections()
         {
+            showcaseHUD.SetGenerationStatusText("Generating connections...");
+
             for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
             {
                 MapData.MapNodeData[] currentLevelNodes = mapData.levels[levelI].nodes;
@@ -225,7 +238,7 @@ namespace OWmapShowcase
                         if (xDistance <= 1)
                         {
                             ConnectNodes(currentLevelNode, nextLevelNode, levelI, currentNodeI, nextNodeI);
-                            yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                            if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionSpawn);
                         }
                     }
                 }
@@ -268,13 +281,13 @@ namespace OWmapShowcase
                                 randomValue < _generationSettings.diagonalUpRightConnectionThreshold)
                             {
                                 ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1], levelI, currentNodeI, nextNodeI + 1);
-                                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionSpawn);
                             }
                             else if (randomValue > _generationSettings.diagonalUpRightConnectionThreshold &&
                                      randomValue < _generationSettings.diagonalUpLeftConnectionThreshold)
                             {
                                 ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI], levelI, currentNodeI + 1, nextNodeI);
-                                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionSpawn);
                             }
 
                             ++currentNodeI;
@@ -331,7 +344,7 @@ namespace OWmapShowcase
 
                 leftSideXDistance = GetXDistanceBetweenNodes(leftSideWiderLevelNode, leftmostShorterLevelNode);
 
-                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionSpawn);
             }
             while (leftSideXDistance >= 2);
 
@@ -357,7 +370,7 @@ namespace OWmapShowcase
 
                 rightSideXDistance = GetXDistanceBetweenNodes(rightSideWiderLevelNode, rightmostShorterLevelNode);
 
-                yield return new WaitForSeconds(DELAY_CONNECTION_SPAWN);
+                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionSpawn);
             }
             while (rightSideXDistance >= 2);
         }
@@ -366,6 +379,8 @@ namespace OWmapShowcase
 
         private IEnumerator RemoveNodeConnectionsRandomly()
         {
+            showcaseHUD.SetGenerationStatusText("Removing connections...");
+
             for (int levelI = 0; levelI < mapData.levels.Length - 1; ++levelI)
             {
                 MapData.MapNodeData[] currentLevelNodes = mapData.levels[levelI].nodes;
@@ -387,8 +402,8 @@ namespace OWmapShowcase
                         {
                             DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[connectionI], levelI, currentNodeI);
                             --numExceedingConnections;
-                            
-                            yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
+
+                            if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionDelete);
                         }
 
                         ++itCount;
@@ -410,13 +425,13 @@ namespace OWmapShowcase
                             {
                                 DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[toNextI], levelI, currentNodeI);
                                 --toNextI;
-                            
-                                yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
+
+                                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionDelete);
                             }
                             else
                             {
                                 OnConnectionSavedFromRemove?.Invoke(levelI, currentNodeI, connectionsToNextLevel[toNextI].nodeI);
-                                yield return new WaitForSeconds(DELAY_CONNECTION_DELETE);
+                                if (!_instantGeneration) yield return new WaitForSeconds(_delayConnectionDelete);
                             }
                         }
                     }

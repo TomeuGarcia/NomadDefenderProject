@@ -14,7 +14,7 @@ namespace OWmapShowcase
 
         [Header("GENERATION")]
         [SerializeField] private OWMapGenerationSettings _generationSettings;
-        [SerializeField] private Showcase_OWMapGenerator _generator;
+        [SerializeField] private Showcase_OWMapGenerator _generator;        
 
         private bool _hasFinishedSpawningMap;
 
@@ -34,6 +34,9 @@ namespace OWmapShowcase
         private List<GameObject> _spawnedNodes;
         private Dictionary<(int, int, int), GameObject> _spawnedConnectionsMap;
 
+        private bool _instantly = false;
+        public bool Instantly => _instantly;
+        
 
         private void Awake()
         {
@@ -55,6 +58,9 @@ namespace OWmapShowcase
             }
 
             _showcaseHUD.AwakeInit(this, _generationSettings);
+            _showcaseHUD.HideGenerationStatusText();
+
+            _generator.showcaseHUD = _showcaseHUD;
         }
 
 
@@ -98,8 +104,9 @@ namespace OWmapShowcase
         private IEnumerator SpawnMap()
         {
             _hasFinishedSpawningMap = false;
+            if (!_instantly) _showcaseHUD.ShowGenerationStatusText();
 
-            yield return _generator.GenerateMap(_generationSettings);
+            yield return _generator.GenerateMap(_generationSettings, _instantly);
             MapData mapData = _generator.GetMapData();
 
             _hasFinishedSpawningMap = true;
@@ -107,6 +114,7 @@ namespace OWmapShowcase
             _connectionEvaluator.gameObject.SetActive(false);
 
             _showcaseHUD.EnableStartButton();
+            _showcaseHUD.HideGenerationStatusText();
         }
 
         private void DestroyCurrentMap()
@@ -219,8 +227,14 @@ namespace OWmapShowcase
 
         private void ShowConnectionEvaluator()
         {
+            //if (_instantly) return;
             _connectionEvaluator.gameObject.SetActive(true);
             _connectionEvaluator.SetMaterial(_connectionCreatedMaterial);
+        }
+
+        public void SetInstantly(bool instantly)
+        {
+            _instantly = instantly;
         }
 
     }
