@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static ICardDescriptionProvider;
 
 public class CardPartBody : CardPart, ICardDescriptionProvider
 {
@@ -31,6 +32,9 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
     [SerializeField] private TurretPartAttack defaultColorTurretPartAttack;
 
 
+    [Header("DESCRIPTION")]
+    [SerializeField] private Transform leftDescriptionPosition;
+    [SerializeField] private Transform rightDescriptionPosition;
 
 
     protected override void AwakeInit()
@@ -199,6 +203,12 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
     public Vector3 GetCenterPosition()
     {
         return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
+    }
+
+
+    public DescriptionCornerPositions GetCornerPositions()
+    {
+        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
     }
 
 }

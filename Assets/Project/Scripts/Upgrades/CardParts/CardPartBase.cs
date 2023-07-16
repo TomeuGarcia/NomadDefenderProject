@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static ICardDescriptionProvider;
 using static TurretBuildingCard;
 
 public class CardPartBase : CardPart, ICardDescriptionProvider
@@ -37,6 +38,11 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
 
     private bool hasBasePassiveAbility;
+
+
+    [Header("DESCRIPTION")]
+    [SerializeField] private Transform leftDescriptionPosition;
+    [SerializeField] private Transform rightDescriptionPosition;
 
 
 
@@ -262,6 +268,11 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
     public Vector3 GetCenterPosition()
     {
         return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
+    }
+
+    public DescriptionCornerPositions GetCornerPositions()
+    {
+        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
     }
 
 }
