@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class OverworldMapGenerator : MonoBehaviour
 {
-    [SerializeField, Tooltip("MapData where to store the generated map")] private MapData mapData;  
-    [SerializeField] private OWMapGenerationSettings generationSettings;  
+    [SerializeField, Tooltip("MapData where to store the generated map")] private MapData mapData;
+    [SerializeField] private OWMapGenerationSettings generationSettings;
 
 
     public MapData GenerateMap()
@@ -26,7 +26,7 @@ public class OverworldMapGenerator : MonoBehaviour
         {
             InstantiateNodesAtLevel(1, levelI);
 
-            Debug.Log("srt "+1);
+            Debug.Log("srt " + 1);
         }
 
 
@@ -40,7 +40,7 @@ public class OverworldMapGenerator : MonoBehaviour
 
         for (int levelI = generationSettings.numberOf1WidthStartLevels; levelI < randomWidthLevelI; ++levelI)
         {
-            GenerateMiddleLevels(levelI, generationSettings.maxWidth, ref counterTotal1Width, ref counterChained1Width, ref sameWidthRepeatCount);     
+            GenerateMiddleLevels(levelI, generationSettings.maxWidth, ref counterTotal1Width, ref counterChained1Width, ref sameWidthRepeatCount);
         }
 
 
@@ -51,7 +51,7 @@ public class OverworldMapGenerator : MonoBehaviour
         for (int levelI = randomWidthLevelI; levelI < transitionTo1WidthEndLevelI; ++levelI)
         {
             GenerateMiddleLevels(levelI, widthTransition, ref counterTotal1Width, ref counterChained1Width, ref sameWidthRepeatCount);
-           
+
             --widthTransition;
         }
 
@@ -61,7 +61,7 @@ public class OverworldMapGenerator : MonoBehaviour
         {
             InstantiateNodesAtLevel(1, levelI);
 
-            Debug.Log("end "+1);
+            Debug.Log("end " + 1);
         }
 
     }
@@ -114,7 +114,7 @@ public class OverworldMapGenerator : MonoBehaviour
 
 
         InstantiateNodesAtLevel(levelWidth, levelI);
-    
+
         Debug.Log("mid " + levelWidth);
     }
 
@@ -216,12 +216,12 @@ public class OverworldMapGenerator : MonoBehaviour
                     {
                         float randomValue = Random.Range(0f, 1f);
 
-                        if (randomValue > generationSettings.diagonalNoConnectionThreshold && 
+                        if (randomValue > generationSettings.diagonalNoConnectionThreshold &&
                             randomValue < generationSettings.diagonalUpRightConnectionThreshold)
                         {
                             ConnectNodes(currentLevelNodes[currentNodeI], nextLevelNodes[nextNodeI + 1]);
                         }
-                        else if (randomValue > generationSettings.diagonalUpRightConnectionThreshold && 
+                        else if (randomValue > generationSettings.diagonalUpRightConnectionThreshold &&
                                  randomValue < generationSettings.diagonalUpLeftConnectionThreshold)
                         {
                             ConnectNodes(currentLevelNodes[currentNodeI + 1], nextLevelNodes[nextNodeI]);
@@ -240,39 +240,77 @@ public class OverworldMapGenerator : MonoBehaviour
             bool edgeConnectionsExist = firstCurrentToFirstNextXDistance >= 2;
             if (edgeConnectionsExist)
             {
-                int leftSideXDistance = firstCurrentToFirstNextXDistance;
-                int currentNodeI = 0;
-                MapData.MapNodeData leftmostNextLevelNode = nextLevelNodes[0];
+                bool currentLevelIsWider = currentLevelNodes.Length > nextLevelNodes.Length;
 
-                do 
+                if (currentLevelIsWider)
                 {
-                    MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
-                    ConnectNodes(currentLevelNode, leftmostNextLevelNode);
-
-                    ++currentNodeI;
-                    leftSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], leftmostNextLevelNode);
-                } 
-                while(leftSideXDistance >= 2);
-
-
-                int rightSideXDistance = firstCurrentToFirstNextXDistance;
-                currentNodeI = currentLevelNodes.Length - 1;
-                MapData.MapNodeData rightmostNextLevelNode = nextLevelNodes[nextLevelNodes.Length - 1];
-
-                do
-                {
-                    MapData.MapNodeData currentLevelNode = currentLevelNodes[currentNodeI];
-                    ConnectNodes(currentLevelNode, leftmostNextLevelNode);
-
-                    --currentNodeI;
-                    rightSideXDistance = GetXDistanceBetweenNodes(currentLevelNodes[currentNodeI], rightmostNextLevelNode);
+                    CreateEdgeConnections(currentLevelNodes, nextLevelNodes, currentLevelIsWider);
                 }
-                while (rightSideXDistance >= 2);
+                else
+                {
+                   CreateEdgeConnections(nextLevelNodes, currentLevelNodes, currentLevelIsWider);
+                }
             }
 
-
         }
+
     }
+
+
+
+    private void CreateEdgeConnections(MapData.MapNodeData[] widerLevelNodes, MapData.MapNodeData[] shorterLevelNodes, bool widerIsCorrentLevel)
+    {
+        int leftSideXDistance = 9999;
+
+        MapData.MapNodeData leftmostShorterLevelNode = shorterLevelNodes[0];
+        int widerNodeI = 0;
+        MapData.MapNodeData leftSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+
+        do
+        {
+            if (widerIsCorrentLevel)
+            {
+                ConnectNodes(leftSideWiderLevelNode, leftmostShorterLevelNode);
+            }
+            else
+            {
+                ConnectNodes(leftmostShorterLevelNode, leftSideWiderLevelNode);
+            }
+
+            ++widerNodeI;
+            leftSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+            leftSideXDistance = GetXDistanceBetweenNodes(leftSideWiderLevelNode, leftmostShorterLevelNode);
+        }
+        while (leftSideXDistance >= 2);
+
+
+        int rightSideXDistance = 9999;
+        MapData.MapNodeData rightmostShorterLevelNode = shorterLevelNodes[shorterLevelNodes.Length - 1];
+        widerNodeI = widerLevelNodes.Length - 1;
+        MapData.MapNodeData rightSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+        do
+        {
+            if (widerIsCorrentLevel)
+            {
+                ConnectNodes(rightSideWiderLevelNode, rightmostShorterLevelNode);
+            }
+            else
+            {
+                ConnectNodes(rightmostShorterLevelNode, rightSideWiderLevelNode);
+            }
+
+            --widerNodeI;
+            rightSideWiderLevelNode = widerLevelNodes[widerNodeI];
+
+            rightSideXDistance = GetXDistanceBetweenNodes(rightSideWiderLevelNode, rightmostShorterLevelNode);
+        }
+        while (rightSideXDistance >= 2);
+    }
+
+
 
 
 
@@ -289,7 +327,9 @@ public class OverworldMapGenerator : MonoBehaviour
 
                 // Remove connections exceeding max limit
                 int numExceedingConnections = connectionsToNextLevel.Count - generationSettings.maxConnectionsPerNode;
-                while (numExceedingConnections > 0)
+                int itCount = 0;
+                int maxItCount = 100;
+                while (numExceedingConnections > 0 && itCount < maxItCount)
                 {
                     int connectionI = Random.Range(0, connectionsToNextLevel.Count);
 
@@ -297,7 +337,13 @@ public class OverworldMapGenerator : MonoBehaviour
                     {
                         DisconnectNodes(currentLevelNodes[currentNodeI], connectionsToNextLevel[connectionI]);
                         --numExceedingConnections;
-                    }             
+                    }
+
+                    ++itCount;
+                }
+                if (itCount == maxItCount)
+                {
+                    Debug.Log("ERROR! maxConnectionsPerNode parameter is TOO SMALL");
                 }
 
 
@@ -319,6 +365,8 @@ public class OverworldMapGenerator : MonoBehaviour
 
         }
 
-    }
 
+
+
+    }
 }

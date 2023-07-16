@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using static ICardDescriptionProvider;
 
 public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 {
@@ -57,6 +58,10 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
     private bool isPlayingSubtractCostAnimation = false;
 
+
+    [Header("DESCRIPTION")]
+    [SerializeField] private Transform leftDescriptionPosition;
+    [SerializeField] private Transform rightDescriptionPosition;
 
 
 
@@ -596,5 +601,10 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
+
+    public DescriptionCornerPositions GetCornerPositions()
+    {
+        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
 
 }
