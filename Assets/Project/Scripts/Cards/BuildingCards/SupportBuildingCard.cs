@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static ICardDescriptionProvider;
 using static TurretBuildingCard;
 
 
@@ -32,6 +33,11 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     private Material material;
     [SerializeField] private Image rangeFillImage;
     [SerializeField] private Image abilityImage;
+
+
+    [Header("DESCRIPTION")]
+    [SerializeField] private Transform leftDescriptionPosition;
+    [SerializeField] private Transform rightDescriptionPosition;
 
 
     public void Awake()
@@ -246,4 +252,8 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         return CardTransform.position;
     }
 
+    public DescriptionCornerPositions GetCornerPositions()
+    {
+        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
 }

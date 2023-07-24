@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static ICardDescriptionProvider;
 using static TurretBuildingCard;
 
 public class CardPartAttack : CardPart, ICardDescriptionProvider
@@ -29,6 +30,10 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     //[SerializeField] private MeshRenderer attackMeshRenderer;
     [SerializeField] private Image attackImage;
 
+
+    [Header("DESCRIPTION")]
+    [SerializeField] private Transform leftDescriptionPosition;
+    [SerializeField] private Transform rightDescriptionPosition;
 
 
     protected override void AwakeInit()
@@ -167,5 +172,9 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
         return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
     }
 
+    public DescriptionCornerPositions GetCornerPositions()
+    {
+        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
 
 }

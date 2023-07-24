@@ -113,38 +113,43 @@ public class CardDescriptionDisplayer : MonoBehaviour
     // true if positioned at right, false if left
     private bool PositionCardInfo(ICardDescriptionProvider descriptionProvider)
     {
+        ICardDescriptionProvider.DescriptionCornerPositions cornerPositions = descriptionProvider.GetCornerPositions();
         Vector3 cardPositionInScreen = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition());
 
+        Vector3 displayPosition = descriptionProvider.GetCenterPosition();
+
+        RectTransform parentUI = GetParentUIDescriptionBox();
+
         float xDisplacement = 1.0f;
-        Vector3 positionOffset = Vector3.zero;
+        Vector3 screenPositionOffset = Vector3.zero;
 
         bool positionAtTheRight = cardPositionInScreen.x < displayCamera.pixelWidth * 0.80f;
         if (positionAtTheRight)
-        {            
-            positionOffset += Vector3.right * xDisplacement; // Display right
+        {
+            displayPosition = cornerPositions.rightPosition;
+            screenPositionOffset.x += parentUI.rect.width / 2; // Display right
         }
         else
-        {            
-            positionOffset += Vector3.left * xDisplacement; // Display left
+        {
+            screenPositionOffset.x -= parentUI.rect.width / 2; // Display left
+            displayPosition = cornerPositions.leftPosition;
         }
+
+        screenPositionOffset.y -= parentUI.rect.height / 2;
 
         bool positionUpper = cardPositionInScreen.y < displayCamera.pixelHeight * 0.30f;
         if (positionUpper)
         {
-            positionOffset += Vector3.up * 0.25f;            
+            screenPositionOffset.y += parentUI.rect.height / 8;
         }
         bool positionDown = cardPositionInScreen.y > displayCamera.pixelHeight * 0.70f;
         if (positionDown)
         {
-            positionOffset += Vector3.up * -0.5f;
+            screenPositionOffset.y -= parentUI.rect.height / 8;
         }
+        
 
-        //Debug.Log("cardPositionInScreen: " + cardPositionInScreen);
-        //Debug.Log("displayCamera: " + new Vector3(displayCamera.pixelWidth, displayCamera.pixelHeight, 0f));
-
-
-        RectTransform parentUI = GetParentUIDescriptionBox();
-        parentUI.position = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition() + positionOffset);
+        parentUI.position = displayCamera.WorldToScreenPoint(displayPosition) + screenPositionOffset;
 
         return positionAtTheRight;
     }

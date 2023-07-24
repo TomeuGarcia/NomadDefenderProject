@@ -25,6 +25,17 @@ public interface ICardDescriptionProvider
         }
     }
 
+    public class DescriptionCornerPositions
+    {
+        public DescriptionCornerPositions(Vector3 leftPosition, Vector3 rightPosition)
+        {
+            this.leftPosition = leftPosition;
+            this.rightPosition = rightPosition;
+        }
+        public Vector3 leftPosition;
+        public Vector3 rightPosition;
+    }
+
 
     /// <summary>
     /// 
@@ -33,4 +44,7 @@ public interface ICardDescriptionProvider
     public abstract SetupData[] GetAbilityDescriptionSetupData();
 
     public abstract Vector3 GetCenterPosition();
+
+
+    public DescriptionCornerPositions GetCornerPositions();
 }
