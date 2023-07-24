@@ -157,7 +157,8 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         //Load First Scene        
-        SceneLoader.GetInstance().StartLoadNormalGame();
+        SceneLoader.GetInstance().LoadDeckSelector();
+        //SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
 
     public void Credits()

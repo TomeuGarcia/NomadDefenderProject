@@ -260,7 +260,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardDescriptionDisplayer.GetInstance()?.HideCardDescription();
         return;
 
         if (isHideInfoAnimationPlaying) return;

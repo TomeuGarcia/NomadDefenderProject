@@ -142,7 +142,7 @@ public class OverworldCardShower : MonoBehaviour
 
     private void ResetDeckData()
     {
-        deckCreator.SpawnCardsAndResetDeckData();
+        deckCreator.SpawnDefaultDeckDataCards();
     }
     public void OnShowDeck()
     {
