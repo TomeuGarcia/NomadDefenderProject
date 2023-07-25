@@ -13,6 +13,11 @@ public class DecksLibrary : ScriptableObject
     [SerializeField] protected DeckData gameDeckData;
 
 
+    public void SetStarterDeck(DeckData newStarterDeckData)
+    {
+        starterDeckData = newStarterDeckData;
+    }
+    
     public void InitGameDeck()
     {
         gameDeckData.ReplaceFor(starterDeckData);

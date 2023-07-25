@@ -114,7 +114,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        //PauseMenu.GetInstance().gameCanBePaused = true;
 
         ButtonClickedPunch(newGameButtonText);
 
@@ -148,7 +148,7 @@ public class MainMenu : MonoBehaviour
 
         ButtonClickedPunch(playButtonText);
 
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        //PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
     }
@@ -157,7 +157,8 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         //Load First Scene        
-        SceneLoader.GetInstance().StartLoadNormalGame();
+        SceneLoader.GetInstance().LoadDeckSelector();
+        //SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
 
     public void Credits()

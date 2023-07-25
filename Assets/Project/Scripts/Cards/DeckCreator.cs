@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DeckCreator : MonoBehaviour
 {
+    [SerializeField] private bool spawnCardsOnAwake = true;
     [SerializeField] private Transform spawnTransform;
     [SerializeField] private GameObject turretCardPrefab;
     [SerializeField] private GameObject supportCardPrefab;
@@ -11,45 +12,57 @@ public class DeckCreator : MonoBehaviour
     
     private BuildingCard[] starterCards;
 
+    private bool saveOnDisable = true;
+
 
     private void Awake()
     {
-        SpawnCardsAndResetDeckData();
-    }
-
-    public void SpawnCardsAndResetDeckData()
-    {
-        int turretCardNum = deckData.starterTurretCardsComponents.Count;
-        int supportCardNum = deckData.starterSupportCardsComponents.Count;
-        starterCards = new BuildingCard[turretCardNum + supportCardNum];
-
-        for (int i = 0; i < turretCardNum; ++i)
+        if (spawnCardsOnAwake)
         {
-            //BuildingCard card = GetUninitializedNewBuildingCard();
-            TurretBuildingCard card = GetUninitializedNewTurretCard();
-            card.ResetParts(deckData.starterTurretCardsComponents[i]);
-
-            starterCards[i] = card;
+            SpawnDefaultDeckDataCards();
         }
-        for (int i = turretCardNum; i < starterCards.Length; ++i)
-        {
-            //BuildingCard card = GetUninitializedNewBuildingCard();
-            SupportBuildingCard card = GetUninitializedNewSupportCard();
-            card.ResetParts(deckData.starterSupportCardsComponents[i - turretCardNum]);
-
-            starterCards[i] = card;
-        }
-
-        deckData.Init(starterCards);
-        Debug.Log("Spawn Cards");
     }
 
     private void OnDisable()
     {
-        deckData.Save();
+        if (saveOnDisable)
+        {
+            deckData.Save();
+        }
     }
 
-    
+
+    public void SpawnDefaultDeckDataCards()
+    {
+        SpawnCardsAndResetDeckData(deckData, out starterCards);
+    }
+
+    public void SpawnCardsAndResetDeckData(DeckData deckData, out BuildingCard[] buildingCards)
+    {
+        int turretCardNum = deckData.starterTurretCardsComponents.Count;
+        int supportCardNum = deckData.starterSupportCardsComponents.Count;
+        buildingCards = new BuildingCard[turretCardNum + supportCardNum];
+
+        for (int i = 0; i < turretCardNum; ++i)
+        {
+            TurretBuildingCard card = GetUninitializedNewTurretCard();
+            card.ResetParts(deckData.starterTurretCardsComponents[i]);
+
+            buildingCards[i] = card;
+        }
+        for (int i = turretCardNum; i < buildingCards.Length; ++i)
+        {
+            SupportBuildingCard card = GetUninitializedNewSupportCard();
+            card.ResetParts(deckData.starterSupportCardsComponents[i - turretCardNum]);
+
+            buildingCards[i] = card;
+        }
+
+        deckData.Init(buildingCards);
+    }
+
+
+
     public TurretBuildingCard GetUninitializedNewTurretCard()
     {
         return Instantiate(turretCardPrefab, spawnTransform).GetComponent<TurretBuildingCard>();
@@ -70,6 +83,12 @@ public class DeckCreator : MonoBehaviour
     {
         deckData.AddSupportCard(supportCard);
         deckData.SetStarterCardComponentsAsSaved();
+    }
+
+
+    public void DisableSaveOnDisable()
+    {
+        saveOnDisable = false;
     }
 
 }
