@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
 
         victoryHolder.SetActive(false);
         gameOverHolder.SetActive(false);
+
+        PauseMenu.GetInstance().gameCanBePaused = true;
     }
 
 

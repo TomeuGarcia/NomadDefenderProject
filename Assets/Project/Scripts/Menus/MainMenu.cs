@@ -114,7 +114,7 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        //PauseMenu.GetInstance().gameCanBePaused = true;
 
         ButtonClickedPunch(newGameButtonText);
 
@@ -148,7 +148,7 @@ public class MainMenu : MonoBehaviour
 
         ButtonClickedPunch(playButtonText);
 
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        //PauseMenu.GetInstance().gameCanBePaused = true;
 
         StartCoroutine(DoPlay());
     }

@@ -6,6 +6,7 @@ public class TutorialGameManager : GameManager
 {
     [SerializeField] private OWMapTutorialManager2 tutoManager2;
 
+
     protected override void StartVictory()
     {
         StartCoroutine(tutoManager2.TutorialAnimation(this));

@@ -12,6 +12,8 @@ public class DeckCreator : MonoBehaviour
     
     private BuildingCard[] starterCards;
 
+    private bool saveOnDisable = true;
+
 
     private void Awake()
     {
@@ -23,36 +25,16 @@ public class DeckCreator : MonoBehaviour
 
     private void OnDisable()
     {
-        deckData.Save();
+        if (saveOnDisable)
+        {
+            deckData.Save();
+        }
     }
 
 
     public void SpawnDefaultDeckDataCards()
     {
         SpawnCardsAndResetDeckData(deckData, out starterCards);
-        /*
-        int turretCardNum = deckData.starterTurretCardsComponents.Count;
-        int supportCardNum = deckData.starterSupportCardsComponents.Count;
-        starterCards = new BuildingCard[turretCardNum + supportCardNum];
-
-        for (int i = 0; i < turretCardNum; ++i)
-        {
-            TurretBuildingCard card = GetUninitializedNewTurretCard();
-            card.ResetParts(deckData.starterTurretCardsComponents[i]);
-
-            starterCards[i] = card;
-        }
-        for (int i = turretCardNum; i < starterCards.Length; ++i)
-        {
-            SupportBuildingCard card = GetUninitializedNewSupportCard();
-            card.ResetParts(deckData.starterSupportCardsComponents[i - turretCardNum]);
-
-            starterCards[i] = card;
-        }
-
-        deckData.Init(starterCards);
-        Debug.Log("Spawn Cards");
-        */
     }
 
     public void SpawnCardsAndResetDeckData(DeckData deckData, out BuildingCard[] buildingCards)
@@ -101,6 +83,12 @@ public class DeckCreator : MonoBehaviour
     {
         deckData.AddSupportCard(supportCard);
         deckData.SetStarterCardComponentsAsSaved();
+    }
+
+
+    public void DisableSaveOnDisable()
+    {
+        saveOnDisable = false;
     }
 
 }

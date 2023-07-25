@@ -9,11 +9,18 @@ public class SelectableDeck : MonoBehaviour
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
     [SerializeField] private DeckData deckData;
-    private BuildingCard[] cards;
 
+    private BuildingCard[] cards;
     private DeckSelector deckSelector;
 
-    public BuildingCard[] Cards => cards;
+
+    [SerializeField] private SpriteRenderer supportSprite;
+    [SerializeField] private SpriteRenderer mainProjectileSprite;
+
+
+    private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
+
+    public DeckData DeckData => deckData;
     public Transform CardsHolder => cardsHolder;
 
 
@@ -30,10 +37,34 @@ public class SelectableDeck : MonoBehaviour
                                                           Random.Range(-maxRotationAngle.z, maxRotationAngle.z));
     }
 
+    private void OnValidate()
+    {
+        SetDeckSprites();
+    }
+
+    private void Awake()
+    {
+        SetDeckSprites();
+    }
+
 
     private void OnMouseDown()
     {
         deckSelector.OnDeckSelected(this);
+    }
+
+
+    private void SetDeckSprites()
+    {
+        if (deckData == null || supportSprite == null || mainProjectileSprite == null) return;
+
+        TurretPartBase supportBasePart = deckData.starterSupportCardsComponents[deckData.starterSupportCardsComponents.Count - 1].turretPartBase;
+        supportSprite.sprite = supportBasePart.abilitySprite;
+        supportSprite.color = supportBasePart.spriteColor;
+
+        TurretPartAttack mainTurretAttackPart = deckData.starterTurretCardsComponents[deckData.starterTurretCardsComponents.Count - 1].turretPartAttack;
+        mainProjectileSprite.sprite = mainTurretAttackPart.abilitySprite;
+        mainProjectileSprite.color = mainTurretAttackPart.materialColor;
     }
 
 
@@ -84,6 +115,7 @@ public class SelectableDeck : MonoBehaviour
         for (int i = cards.Length - 1; i >= 0; --i)
         {           
             ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -93,8 +125,8 @@ public class SelectableDeck : MonoBehaviour
     {
         card.RootCardTransform.SetParent(newParent);
 
-        card.RootCardTransform.DOLocalRotateQuaternion(Quaternion.Euler(arrangeCardsData.RandomRotationAngle + Vector3.right * 90f), motionDuration);
-        card.RootCardTransform.DOLocalMove(i * arrangeCardsData.DisplacementBetweenCards, motionDuration);
+        card.RootCardTransform.DOLocalRotateQuaternion(Quaternion.Euler(arrangeCardsData.RandomRotationAngle + faceUpRotationOffset), motionDuration).SetEase(Ease.OutCubic);
+        card.RootCardTransform.DOLocalMove(i * arrangeCardsData.DisplacementBetweenCards, motionDuration).SetEase(Ease.OutCubic);
     }
 
     public void EnableCardsMouseInteraction()
@@ -102,6 +134,7 @@ public class SelectableDeck : MonoBehaviour
         foreach (BuildingCard card in cards)
         {
             card.ReenableMouseInteraction();
+            card.canDisplayInfoIfNotInteractable = true;
         }
     }
 
@@ -110,6 +143,7 @@ public class SelectableDeck : MonoBehaviour
         foreach (BuildingCard card in cards)
         {
             card.DisableMouseInteraction();
+            card.canDisplayInfoIfNotInteractable = false;
         }
     }
 
