@@ -100,7 +100,7 @@ public class MapSceneLoader : MonoBehaviour
     {
         string sceneName = upgradeScenes.Get((int)upgradeType);
 
-        Debug.Log("Loading Upgrade scene: " + sceneName);
+        //Debug.Log("Loading Upgrade scene: " + sceneName);
         StartScene(sceneName);
     }
 
@@ -152,11 +152,11 @@ public class MapSceneLoader : MonoBehaviour
             {
                 availableBattleScenes[locationsAmountIndex].Add(battleScenes[locationsAmountIndex].Get(i));
             }
-            Debug.Log("Refilling battle scenes");
+            //Debug.Log("Refilling battle scenes");
         }
 
 
-        Debug.Log("Loading Battle scene: " + sceneName);
+        //Debug.Log("Loading Battle scene: " + sceneName);
         StartScene(sceneName);
     }
 

@@ -11,10 +11,6 @@ public class DeckSelector : MonoBehaviour
     [Header("DECK LIBRARY")]
     [SerializeField] private DecksLibrary deckLibrary;
 
-    [Header("LIBRARIES")]
-    [SerializeField] private CardsLibrary cardLibrary;
-    [SerializeField] private PartsLibrary partLibrary;
-
     [Header("CONFIGURATION")]
     [SerializeField] private SelectableDeck.ArrangeCardsData pileUpArrangeCardsData;
     [SerializeField] private SelectableDeck.ArrangeCardsData selectedArrangeCardsData;
@@ -58,8 +54,9 @@ public class DeckSelector : MonoBehaviour
         deckLibrary.SetStarterDeck(selectableDeck.DeckData);
 
         SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
-        cardLibrary.SetContent(runContent.cardsContent);
-        partLibrary.SetContent(runContent.attacksContent, runContent.bodiesContent, runContent.basesContent);
+
+        LibrariesManager.GetInstance().CardsLibrary.SetContent(runContent.cardsContent);
+        LibrariesManager.GetInstance().PartsLibrary.SetContent(runContent.attacksContent, runContent.bodiesContent, runContent.basesContent);
 
         StartCoroutine(DoOnDeckSelected(selectableDeck));
     }

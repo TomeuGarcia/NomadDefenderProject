@@ -25,8 +25,6 @@ public class OverworldMapGenerator : MonoBehaviour
         for (int levelI = 0; levelI < generationSettings.numberOf1WidthStartLevels; ++levelI)
         {
             InstantiateNodesAtLevel(1, levelI);
-
-            Debug.Log("srt " + 1);
         }
 
 
@@ -60,8 +58,6 @@ public class OverworldMapGenerator : MonoBehaviour
         for (int levelI = transitionTo1WidthEndLevelI; levelI < generationSettings.numberOfLevels; ++levelI)
         {
             InstantiateNodesAtLevel(1, levelI);
-
-            Debug.Log("end " + 1);
         }
 
     }
@@ -114,8 +110,6 @@ public class OverworldMapGenerator : MonoBehaviour
 
 
         InstantiateNodesAtLevel(levelWidth, levelI);
-
-        Debug.Log("mid " + levelWidth);
     }
 
 

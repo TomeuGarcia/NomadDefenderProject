@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = "TurretParts/TurretPartsLibrary")]
@@ -85,21 +86,16 @@ public class PartsLibrary : ScriptableObject
     }
 
     //DON'T REMOVE SerializeFields, otherwise ScriptableObject doesn't save the arrays when SetContent()
-    [SerializeField] private AttacksByProgressionState[] attacksByProgressionStates;
-    [SerializeField] private BodiesByProgressionState[] bodiesByProgressionStates;
-    [SerializeField] private BasesAndPassivesByProgressionState[] basesAndPassivesByProgressionStates;
+    private AttacksByProgressionState[] attacksByProgressionStates;
+    private BodiesByProgressionState[] bodiesByProgressionStates;
+    private BasesAndPassivesByProgressionState[] basesAndPassivesByProgressionStates;
 
 
     public void SetContent(AttackPartsLibraryContent newAttacksContent, BodyPartsLibraryContent newBodiesContent, BasePartsLibraryContent newBasesContent)
-    {        
+    {
         attacksByProgressionStates = newAttacksContent.GetArrayByProgression();
         bodiesByProgressionStates = newBodiesContent.GetArrayByProgression();
         basesAndPassivesByProgressionStates = newBasesContent.GetArrayByProgression();
-
-        Debug.Log("SET PARTS");
-        Debug.Log(attacksByProgressionStates.Length);
-        Debug.Log(bodiesByProgressionStates.Length);
-        Debug.Log(basesAndPassivesByProgressionStates.Length);
     }
 
 

@@ -36,8 +36,6 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private int numParts = 3;
     [SerializeField] private PartType partType;
 
-    [Header("PARTS")]
-    [SerializeField] private PartsLibrary partsLibrary;
     [Header("ATTACK")]
     [SerializeField] private GameObject cardPartAttackPrefab;
     [Header("BODY")]
@@ -208,7 +206,8 @@ public class CardPartReplaceManager : MonoBehaviour
     }
     private void InitAttacksRandom()
     {
-        InitAttacks(partsLibrary.GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+        InitAttacks(LibrariesManager.GetInstance().PartsLibrary
+            .GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
     }
     private void InitAttacks(TurretPartAttack[] attacks)
     {
@@ -236,7 +235,8 @@ public class CardPartReplaceManager : MonoBehaviour
     }
     private void InitBodiesRandom()
     {
-        InitBodies(partsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+        InitBodies(LibrariesManager.GetInstance()
+            .PartsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
     }
     private void InitBodies(TurretPartBody[] bodies)
     {
@@ -262,7 +262,8 @@ public class CardPartReplaceManager : MonoBehaviour
     }
     private void InitBasesRandom()
     {
-        InitBases(partsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+        InitBases(LibrariesManager.GetInstance()
+            .PartsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
     }
     private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {
