@@ -51,6 +51,13 @@ public class DeckSelector : MonoBehaviour
 
     public void OnDeckSelected(SelectableDeck selectableDeck)
     {
+        deckLibrary.SetStarterDeck(selectableDeck.DeckData);
+
+        SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
+
+        LibrariesManager.GetInstance().CardsLibrary.SetContent(runContent.cardsContent);
+        LibrariesManager.GetInstance().PartsLibrary.SetContent(runContent.attacksContent, runContent.bodiesContent, runContent.basesContent);
+
         StartCoroutine(DoOnDeckSelected(selectableDeck));
     }
 
@@ -67,8 +74,6 @@ public class DeckSelector : MonoBehaviour
         }
 
         currentlySelectedDeck = selectableDeck;
-
-        deckLibrary.SetStarterDeck(currentlySelectedDeck.DeckData);
 
         currentlySelectedDeck.SetEnabledInteraction(false);
 

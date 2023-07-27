@@ -11,7 +11,7 @@ public class GatherNewCardManager : MonoBehaviour
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
-    [SerializeField] private CardsLibrary cardsLibrary;
+    private CardsLibrary cardsLibrary;
     [SerializeField] private PartsLibrary partsLibrary;
     [SerializeField] private DeckCreator deckCreator;
 
@@ -51,6 +51,7 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void Init()
     {
+        cardsLibrary = LibrariesManager.GetInstance().CardsLibrary;
         cardsLibrary.InitSetup();
 
         // NodeEnums.HealthState.GREATLY_DAMAGED        --> 2 Turret Cards

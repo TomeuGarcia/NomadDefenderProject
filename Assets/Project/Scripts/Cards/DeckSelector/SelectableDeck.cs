@@ -6,24 +6,40 @@ using static SelectableDeck;
 
 public class SelectableDeck : MonoBehaviour
 {
+    [Header("DECK DATA")]
+    [SerializeField] private DeckData deckData;
+
+    [Header("RUN CONTENT")]
+    [SerializeField] private RunUpgradesContent runContent;
+
+
+    [Header("REFERENCES")]
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
-    [SerializeField] private DeckData deckData;
+
+    [SerializeField] private SpriteRenderer supportSprite;
+    [SerializeField] private SpriteRenderer mainProjectileSprite;
 
     private BuildingCard[] cards;
     private DeckSelector deckSelector;
 
 
-    [SerializeField] private SpriteRenderer supportSprite;
-    [SerializeField] private SpriteRenderer mainProjectileSprite;
-
-
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
 
+    public RunUpgradesContent RunContent => runContent;
     public DeckData DeckData => deckData;
     public Transform CardsHolder => cardsHolder;
 
 
+
+    [System.Serializable]
+    public class RunUpgradesContent
+    {
+        [SerializeField] public CardsLibraryContent cardsContent;
+        [SerializeField] public AttackPartsLibraryContent attacksContent;
+        [SerializeField] public BodyPartsLibraryContent bodiesContent;
+        [SerializeField] public BasePartsLibraryContent basesContent;
+    }
 
     [System.Serializable]
     public class ArrangeCardsData

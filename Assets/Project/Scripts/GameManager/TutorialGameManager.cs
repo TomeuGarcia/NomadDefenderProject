@@ -6,6 +6,23 @@ public class TutorialGameManager : GameManager
 {
     [SerializeField] private OWMapTutorialManager2 tutoManager2;
 
+    [Header("\nREPLACE DECK SELECTOR")]
+    [Header("Libraries")]
+    [SerializeField] private CardsLibrary cardLibrary;
+    [SerializeField] private PartsLibrary partLibrary;
+
+    [Header("Run Content")]
+    [SerializeField] private CardsLibraryContent cardsContent;
+    [SerializeField] private AttackPartsLibraryContent attacksContent;
+    [SerializeField] private BodyPartsLibraryContent bodiesContent;
+    [SerializeField] private BasePartsLibraryContent basesContent;
+
+
+    private void Start()
+    {
+        cardLibrary.SetContent(cardsContent);
+        partLibrary.SetContent(attacksContent, bodiesContent, basesContent);
+    }
 
     protected override void StartVictory()
     {
