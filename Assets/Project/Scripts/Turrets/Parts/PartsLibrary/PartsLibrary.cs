@@ -85,7 +85,6 @@ public class PartsLibrary : ScriptableObject
         }
     }
 
-    //DON'T REMOVE SerializeFields, otherwise ScriptableObject doesn't save the arrays when SetContent()
     private AttacksByProgressionState[] attacksByProgressionStates;
     private BodiesByProgressionState[] bodiesByProgressionStates;
     private BasesAndPassivesByProgressionState[] basesAndPassivesByProgressionStates;

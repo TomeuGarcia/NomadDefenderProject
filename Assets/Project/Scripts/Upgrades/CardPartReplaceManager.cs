@@ -49,7 +49,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     [Header("SUBTRACT CARD PLAY COST")]
-    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 20;
+    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 30;
 
 
     [Header("COMPONENTS")]

@@ -201,15 +201,17 @@ public class BattleTutorialManager2 : MonoBehaviour
         TurretBuildingCard card = deckCreator.GetUninitializedNewTurretCard();
         card.ResetParts(watcherCardScriptableObject);
 
-        //Place new Turret
-        obstacleTile.SetActive(false);
-        watcherCardTile.gameObject.SetActive(true);
+        
 
-        yield return new WaitForSecondsRealtime(0.5f);
+        
 
         card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
 
         turretSpawnParticles.Play();
+        yield return new WaitForSecondsRealtime(0.5f);
+        //Place new Turret
+        obstacleTile.SetActive(false);
+        watcherCardTile.gameObject.SetActive(true);
 
         GameAudioManager.GetInstance().PlayWatcherCard();
         yield return new WaitForSeconds(1.0f);

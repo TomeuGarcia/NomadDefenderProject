@@ -45,7 +45,7 @@ public class TurretBuilding : RangeBuilding
     public int CardLevel { get; private set; }
 
 
-    public const int MIN_PLAY_COST = 50;
+    public const int MIN_PLAY_COST = 10;
 
 
     void Awake()
