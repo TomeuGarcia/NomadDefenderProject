@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,6 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
     private CardsLibrary cardsLibrary;
-    [SerializeField] private PartsLibrary partsLibrary;
     [SerializeField] private DeckCreator deckCreator;
 
     [SerializeField, Min(1)] private int numCards;
@@ -98,13 +98,13 @@ public class GatherNewCardManager : MonoBehaviour
 
         cards = new BuildingCard[numCards];
         int numTurretCards = numCards - numSupportCards;
+        int numPerfect = lastBattleWasDefendedPerfectly ? 1 : 0;
 
-
-        CreateNTurretCards(numTurretCards, 1, lastBattleWasDefendedPerfectly, progressionState); // Get Random Turrets
+        CreateNTurretCards(numTurretCards, numPerfect, progressionState); // Get Random Turrets
 
         if (numSupportCards > 0)
         {
-            CreateNSupportCards(numTurretCards, numSupportCards, GroupedCardParts.MIN_CARD_POWERFULNESS, GroupedCardParts.MAX_CARD_POWERFULNESS); // Get Random Supports
+            CreateNSupportCards(numTurretCards, numSupportCards, progressionState); // Get Random Supports
         }
 
 
@@ -114,33 +114,9 @@ public class GatherNewCardManager : MonoBehaviour
     }
 
 
-    /*
-    private void CreateNTurretCards(int numTurretCards)
+    private void CreateNTurretCards(int totalAmount, int perfectAmount, NodeEnums.ProgressionState progressionState)
     {
-        // Get Random Turrets
-        TurretPartAttack[] attacks = partsLibrary.GetRandomTurretPartAttacks(numTurretCards);
-        TurretPartBody[] bodies = partsLibrary.GetRandomTurretPartBodies(numTurretCards);
-        TurretPartBase[] bases = partsLibrary.GetRandomTurretPartBases(numTurretCards);
-        TurretPassiveBase[] passives = partsLibrary.GetRandomTurretPassiveBases(numTurretCards);
-
-
-        for (int i = 0; i < numTurretCards; i++)
-        {
-            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
-
-            TurretCardParts cardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
-            cardParts.Init(1, attacks[i], bodies[i], bases[i], passives[i]);
-
-            turretCard.ResetParts(cardParts);
-
-            cards[i] = turretCard;
-        }
-    }
-    */
-
-    private void CreateNTurretCards(int totalAmount, int perfectAmount, bool perfect, NodeEnums.ProgressionState progressionState)
-    {
-        TurretCardParts[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(totalAmount, perfectAmount, perfect, progressionState); // Generate 
+        TurretCardParts[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(progressionState, totalAmount, perfectAmount); // Generate 
         turretCardPartsSet = cardsLibrary.GetConsumableTurretCardPartsSet(turretCardPartsSet); // Setup to create new cards
 
         for (int i = 0; i < totalAmount; i++)
@@ -158,9 +134,9 @@ public class GatherNewCardManager : MonoBehaviour
         }
     }
 
-    private void CreateNSupportCards(int startIndex, int numSupportCards, int minPowerfulness, int maxPowerfulness)
+    private void CreateNSupportCards(int startIndex, int numSupportCards, NodeEnums.ProgressionState progressionState)
     {
-        SupportCardParts[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(numSupportCards, minPowerfulness, maxPowerfulness); // Generate 
+        SupportCardParts[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(progressionState, numSupportCards); // Generate 
         supportCardPartsSet = cardsLibrary.GetConsumableSupportCardPartsSet(supportCardPartsSet); // Setup to create new cards
 
         for (int i = 0; i < numSupportCards; i++)
