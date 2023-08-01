@@ -37,6 +37,8 @@ public class CurrencyCounter : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.GetInstance().CurrencyCounter = this;
+
         UpdateCurrencyCountText(currencyCount);
 
         addedCurrencyText.gameObject.SetActive(false);

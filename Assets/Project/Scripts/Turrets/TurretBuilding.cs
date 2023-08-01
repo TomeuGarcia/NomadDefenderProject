@@ -31,6 +31,7 @@ public class TurretBuilding : RangeBuilding
 
     private TurretPartBody.BodyType bodyType; // Used to play sound
     private TurretPartAttack_Prefab turretAttack;
+    public TurretPartAttack TurretPartAttack { get; private set; }
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -46,6 +47,9 @@ public class TurretBuilding : RangeBuilding
 
 
     public const int MIN_PLAY_COST = 10;
+
+    public delegate void TurretBuildingEvent();
+    public event TurretBuildingEvent OnGotPlaced;
 
 
     void Awake()
@@ -86,7 +90,7 @@ public class TurretBuilding : RangeBuilding
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
-        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
+        this.TurretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
         TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
@@ -98,7 +102,7 @@ public class TurretBuilding : RangeBuilding
         bodyType = turretCardParts.turretPartBody.bodyType;
 
 
-        this.turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
 
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
@@ -118,6 +122,14 @@ public class TurretBuilding : RangeBuilding
         upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         DisableFunctionality();
+    }
+
+    public void ResetAttackPart(TurretPartAttack turretPartAttack)
+    {
+        this.TurretPartAttack = turretPartAttack;
+
+        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        bodyPart.ResetProjectileMaterial(turretAttack.materialForTurret);
     }
 
     protected override void UpdateRange()
@@ -267,6 +279,7 @@ public class TurretBuilding : RangeBuilding
         upgrader.OnBuildingOwnerPlaced();
 
         InvokeOnBuildingPlaced();
+        if (OnGotPlaced != null) OnGotPlaced();
     }
     public override void GotEnabledPlacing()
     {

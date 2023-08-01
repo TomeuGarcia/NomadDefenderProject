@@ -12,6 +12,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     private TurretBuilding.TurretBuildingStats turretStats;
 
+    private TurretBuilding turretBuilding;
+
 
     [Header("CARD INFO")]
     [SerializeField] private GameObject infoInterface;
@@ -150,7 +152,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<TurretBuilding>().Init(turretStats, turretCardParts, currencyCounter);
+        turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
+        turretBuilding.Init(turretStats, turretCardParts, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 
@@ -605,6 +608,20 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public DescriptionCornerPositions GetCornerPositions()
     {
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
+
+
+    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack)
+    {
+        turretCardParts.turretPartAttack = newTurretPartAttack;
+
+        turretBuilding.ResetAttackPart(newTurretPartAttack);
+        InitInfoVisuals();
+
+        cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
+        attackImage.sprite = newTurretPartAttack.abilitySprite;
+        attackImage.color = newTurretPartAttack.materialColor;
+
     }
 
 }

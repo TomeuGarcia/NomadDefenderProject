@@ -72,6 +72,8 @@ public class CardDrawer : MonoBehaviour
 
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
+        ServiceLocator.GetInstance().CardDrawer = this;
+
         SetupRedraws();
         SetupDeck();        
 
@@ -100,7 +102,33 @@ public class CardDrawer : MonoBehaviour
 
 
 
-    public void TryDrawCard()
+    public BuildingCard UtilityTryDrawAnyRandomCard()
+    {
+        BuildingCard card = null;
+        if (deck.HasCardsLeft())
+        {
+            card = DrawRandomCard();
+            hand.InitCardsInHand();
+        }
+
+        return card;
+    }
+    public BuildingCard UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType)
+    {
+        BuildingCard card = deck.GetRandomCardOfType(cardBuildingType);
+
+        if (card != null)
+        {
+            AddCardToHand(card);
+            hand.InitCardsInHand();
+        }
+
+        return card;
+    }
+    
+    
+    
+    private void TryDrawCard()
     {
         if (deck.HasCardsLeft())
             DrawRandomCard();
@@ -157,10 +185,13 @@ public class CardDrawer : MonoBehaviour
         AddCardToHand(deck.GetTopCard());
         //TryHideDeckHUD();        
     }
-    private void DrawRandomCard()
+    private BuildingCard DrawRandomCard()
     {
-        AddCardToHand(deck.GetRandomCard());
+        BuildingCard card = deck.GetRandomCard();
+        AddCardToHand(card);
         //TryHideDeckHUD();
+
+        return card;
     }
 
     private void AddCardToHand(BuildingCard card)
@@ -284,28 +315,7 @@ public class CardDrawer : MonoBehaviour
 
     public void StartRedrawButtonAnimation()
     {
-        //StartCoroutine(PlayStartRedrawButtonAnimation());
         PlayStartRedrawHUDAnimation();
-    }
-    private IEnumerator PlayStartRedrawButtonAnimation() // Old
-    {
-        cgFinishRedrawsButton.alpha = 0f;
-        cgFinishRedrawsButton.blocksRaycasts = false;
-
-        yield return new WaitForSeconds(0.5f);
-
-        redrawCanvasGameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-
-        float t = 0.1f;
-        cgFinishRedrawsButton.DOFade(1f, t);
-        yield return new WaitForSeconds(t);
-        cgFinishRedrawsButton.DOFade(0f, t);
-        yield return new WaitForSeconds(t);
-        cgFinishRedrawsButton.DOFade(1f, t);
-        yield return new WaitForSeconds(t);
-
-        cgFinishRedrawsButton.blocksRaycasts = true;
     }
 
     private void PlayStartRedrawHUDAnimation()

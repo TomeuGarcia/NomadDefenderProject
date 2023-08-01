@@ -52,11 +52,16 @@ public class TurretPartBody_Prefab : MonoBehaviour
         }
 
 
+        ResetProjectileMaterial(projectileMaterial);
+    }
+
+    public virtual void ResetProjectileMaterial(Material projectileMaterial)
+    {
         // Replace inital materials for projectile material
         for (int i = 0; i < projectileMaterialIndices.Length; ++i)
         {
             defaultMaterials[projectileMaterialIndices[i].meshI][projectileMaterialIndices[i].materialI] = projectileMaterial;
-        }      
+        }
     }
 
     public Vector3 GetNextShootingPoint()

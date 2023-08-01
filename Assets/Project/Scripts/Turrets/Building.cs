@@ -20,7 +20,13 @@ public abstract class Building : MonoBehaviour
 
     public delegate void BuildingAction();
     public static event BuildingAction OnBuildingPlaced;
+    public event BuildingAction OnDestroyed;
     protected void InvokeOnBuildingPlaced() { if (OnBuildingPlaced != null) OnBuildingPlaced(); }
+
+    private void OnDestroy()
+    {
+        if (OnDestroyed != null) OnDestroyed();
+    }
 
 
     protected virtual void DisableFunctionality()

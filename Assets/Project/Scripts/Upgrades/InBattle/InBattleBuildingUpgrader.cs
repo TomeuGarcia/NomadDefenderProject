@@ -183,12 +183,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         {
             if (outOfArea && automaticCloseCoroutine == null)
             {
-                Debug.Log("CLOSE START");
                 AutomaticWindowCloseStart();
             }
             else if (!outOfArea && automaticCloseCoroutine != null)
             {
-                Debug.Log("CLOSE STOP");
                 AutomaticWindowCloseStop();
             }
         }

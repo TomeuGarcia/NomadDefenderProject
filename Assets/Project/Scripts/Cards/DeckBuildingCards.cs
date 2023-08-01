@@ -84,6 +84,31 @@ public class DeckBuildingCards : MonoBehaviour
 
         return topCard;
     }
+    
+    public BuildingCard GetRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType)
+    {
+        List<int> cardIndicesOfType = new List<int>();
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            if (cards[i].cardBuildingType == cardBuildingType)
+            {
+                cardIndicesOfType.Add(i);
+            }
+        }
+
+        if (cardIndicesOfType.Count == 0)
+        {
+            return null;
+        }
+
+
+        int randomCardI = cardIndicesOfType[Random.Range(0, cardIndicesOfType.Count)];
+
+        return GetAndRemoveCard(randomCardI);
+    }
+
+
+
 
     public void AddCardToDeckBottom(BuildingCard card)
     {
