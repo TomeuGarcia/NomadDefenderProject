@@ -32,7 +32,7 @@ public class BaseDrawCard : BasePassive
     private async void DoDrawCard()
     {
         await Task.Delay(500);
-        ServiceLocator.GetInstance().CardDrawer.UtilityTryDrawAnyRandomCard();
+        ServiceLocator.GetInstance().CardDrawer.UtilityTryDrawAnyRandomCard(1.5f);
     }
 
 }

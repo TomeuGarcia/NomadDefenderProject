@@ -102,24 +102,26 @@ public class CardDrawer : MonoBehaviour
 
 
 
-    public BuildingCard UtilityTryDrawAnyRandomCard()
+    public BuildingCard UtilityTryDrawAnyRandomCard(float handShownDuration)
     {
         BuildingCard card = null;
         if (deck.HasCardsLeft())
         {
-            card = DrawRandomCard();
+            card = deck.GetRandomCard();
+            AddCardToHand(card, handShownDuration);
+
             hand.InitCardsInHand();
         }
 
         return card;
     }
-    public BuildingCard UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType)
+    public BuildingCard UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType, float handShownDuration)
     {
         BuildingCard card = deck.GetRandomCardOfType(cardBuildingType);
 
         if (card != null)
         {
-            AddCardToHand(card);
+            AddCardToHand(card, handShownDuration);
             hand.InitCardsInHand();
         }
 
@@ -185,20 +187,18 @@ public class CardDrawer : MonoBehaviour
         AddCardToHand(deck.GetTopCard());
         //TryHideDeckHUD();        
     }
-    private BuildingCard DrawRandomCard()
+    private void DrawRandomCard()
     {
         BuildingCard card = deck.GetRandomCard();
         AddCardToHand(card);
         //TryHideDeckHUD();
-
-        return card;
     }
 
-    private void AddCardToHand(BuildingCard card)
+    private void AddCardToHand(BuildingCard card, float handShownDuration = 0.0f)
     {
         hand.CorrectCardsBeforeAddingCard();
         hand.HintedCardWillBeAdded();
-        hand.AddCard(card);
+        hand.AddCard(card, handShownDuration);
 
         card.StartDisableInfoDisplayForDuration(1.5f);
 

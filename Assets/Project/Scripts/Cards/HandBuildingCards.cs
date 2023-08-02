@@ -492,7 +492,7 @@ public class HandBuildingCards : MonoBehaviour
             //ResetAndSetStandardCard(selectedCard);
         }
     }
-    public void AddCard(BuildingCard card)
+    public void AddCard(BuildingCard card, float handShownDuration)
     {
         cards.Add(card);
 
@@ -508,7 +508,7 @@ public class HandBuildingCards : MonoBehaviour
             () => { 
                 if (!isInRedrawPhase) {
                     isHandHidden = false;
-                    StartCoroutine(DelayedTryHideHandAfterDraw()); 
+                    StartCoroutine(DelayedTryHideHandAfterDraw(handShownDuration)); 
                 }
                 --numCardsBeingAdded;
             } );

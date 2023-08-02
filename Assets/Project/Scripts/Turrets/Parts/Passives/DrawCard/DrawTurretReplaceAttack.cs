@@ -32,13 +32,13 @@ public class DrawTurretReplaceAttack : BasePassive
     private async void DoDrawCard()
     {
         await Task.Delay(500);
-        BuildingCard card = ServiceLocator.GetInstance().CardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET);
+        BuildingCard card = ServiceLocator.GetInstance().CardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 2.25f);
 
         if (card == null) return;
 
         TurretBuildingCard turretCard = card as TurretBuildingCard;
                 
-        turretCard.InBattleReplaceAttack(owner.TurretPartAttack);
+        turretCard.InBattleReplaceAttack(owner.TurretPartAttack, 1.5f);
     }
 
 }

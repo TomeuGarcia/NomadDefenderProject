@@ -8,7 +8,6 @@ public class ServiceLocator : MonoBehaviour
     static private ServiceLocator instance;
 
     public CardDrawer CardDrawer { get; set; }
-    public CurrencyCounter CurrencyCounter { get; set; }
 
 
     private void Awake()

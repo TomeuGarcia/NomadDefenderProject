@@ -100,7 +100,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         // Mesh Materials
         cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
-        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color
 
         cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
@@ -112,8 +111,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
 
 
-        attackImage.sprite = turretPartAttack.abilitySprite;
-        attackImage.color = turretPartAttack.materialColor;
+        SetAttackIcon(turretPartAttack);
 
 
         hasBasePassiveAbility = turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
@@ -136,6 +134,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         UpdateCardLevelText();
     }
 
+    private void SetAttackIcon(TurretPartAttack turretPartAttack)
+    {
+        attackImage.sprite = turretPartAttack.abilitySprite;
+        attackImage.color = turretPartAttack.materialColor;
+
+        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor);
+    }
 
     protected override void InitStatsFromTurretParts()
     {
@@ -611,16 +616,39 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
-    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack)
+    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack, float delayBeforeAnimation)
     {
+        TurretPartAttack oldTurretPartAttack = turretCardParts.turretPartAttack;
         turretCardParts.turretPartAttack = newTurretPartAttack;
 
         turretBuilding.ResetAttackPart(newTurretPartAttack);
         InitInfoVisuals();
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
-        attackImage.sprite = newTurretPartAttack.abilitySprite;
-        attackImage.color = newTurretPartAttack.materialColor;
+
+
+        float iconViewDuration = 0.1f;
+        Sequence replaceAttackAnimation = DOTween.Sequence();
+        replaceAttackAnimation.AppendInterval(delayBeforeAnimation);
+        replaceAttackAnimation.AppendCallback(() => SetAttackIcon(newTurretPartAttack));
+
+        for (int i = 0; i < 4; i++)
+        {
+            replaceAttackAnimation.AppendInterval(iconViewDuration);
+            replaceAttackAnimation.AppendCallback(() =>
+            {
+                SetAttackIcon(oldTurretPartAttack);
+                GameAudioManager.GetInstance().PlayCardInfoHidden();
+            });            
+            
+
+            replaceAttackAnimation.AppendInterval(iconViewDuration);
+            replaceAttackAnimation.AppendCallback(() => 
+            { 
+                SetAttackIcon(newTurretPartAttack);
+                GameAudioManager.GetInstance().PlayCardInfoShown();
+            });
+        }    
 
     }
 
