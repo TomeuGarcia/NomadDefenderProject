@@ -25,6 +25,9 @@ public class PathLocation : MonoBehaviour
     [Header("MESH HOLDER")]
     [SerializeField] private Transform locationMeshHolder;
 
+    public Vector3 Position => transform.position;
+
+
     [System.Serializable]
     private struct DamagedVisuals
     {

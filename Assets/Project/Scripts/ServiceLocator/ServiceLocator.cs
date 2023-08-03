@@ -8,6 +8,7 @@ public class ServiceLocator : MonoBehaviour
     static private ServiceLocator instance;
 
     public CardDrawer CardDrawer { get; set; }
+    public TDLocationsUtils TDLocationsUtils { get; set; }
 
 
     private void Awake()

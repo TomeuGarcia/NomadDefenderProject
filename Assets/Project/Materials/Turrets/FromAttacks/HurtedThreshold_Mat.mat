@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5877655075068658353
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PreviewBuilding_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: d2b6ae71aa9d35042a693b35b456e5c6,
+  m_Name: HurtedThreshold_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 2b97ff85b655a0e469d89eb4672163d7,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -35,30 +48,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EmissionCoef: 1.76
-    - _MaxAlpha: 0.2
-    - _MaxNoiseScale: 0.5
-    - _MinAlpha: 0.05
-    - _MinNoiseScale: 5
+    - _IsBerserkEnabled: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0.05
-    - _StripeFactor: 0.2
-    - _StripeWidth: 0.1
     m_Colors:
-    - _Color: {r: 0, g: 1, b: 0.078431375, a: 1}
-    - _Color2: {r: 0, g: 0, b: 0, a: 0}
+    - _DetailsColor: {r: 3.980045, g: 0, b: 0.03746323, a: 0}
+    - _MainColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2782236158093070226
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5

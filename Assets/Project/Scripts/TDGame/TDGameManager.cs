@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TDGameManager : MonoBehaviour
+public class TDGameManager : MonoBehaviour, TDLocationsUtils
 {
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
@@ -45,6 +45,8 @@ public class TDGameManager : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.GetInstance().TDLocationsUtils = this;
+
         victoryHolder.SetActive(false);
         defeatHolder.SetActive(false);
 
@@ -253,5 +255,24 @@ public class TDGameManager : MonoBehaviour
         else
             return NodeEnums.HealthState.GREATLY_DAMAGED;
     }
+
+
+
+    public int GetHighestLocationHealth()
+    {
+        int highestHealth = -1;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            int loactionHealth = pathLocations[i].healthSystem.health;
+            if (loactionHealth > highestHealth)
+            {
+                highestHealth = loactionHealth;
+            }
+        }
+
+        return highestHealth;
+    }
+
 
 }

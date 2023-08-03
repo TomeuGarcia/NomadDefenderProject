@@ -15,7 +15,7 @@ public class TurretPartAttack : ScriptableObject
     [Header("VISUALS")]
     [SerializeField] public Texture texture;
     [SerializeField] public Sprite abilitySprite;
-    [SerializeField] public Color materialColor;
+    [SerializeField] public Color materialColor = Color.white;
 
     [Header("ABILITY INFO")]
     [Header("Name")]
