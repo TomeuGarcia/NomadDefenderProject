@@ -22,6 +22,7 @@ public class TurretBuilding : RangeBuilding
 
     public PassiveDamageModifier baseDamagePassive;
 
+
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
     public Vector3 Position => transform.position;
@@ -29,9 +30,11 @@ public class TurretBuilding : RangeBuilding
     private Enemy targetedEnemy;
 
 
-    private TurretPartBody.BodyType bodyType; // Used to play sound
+    public TurretPartBody.BodyType BodyType { get; private set; }
+
     private TurretPartAttack_Prefab turretAttack;
     public TurretPartAttack TurretPartAttack { get; private set; }
+    
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -99,11 +102,11 @@ public class TurretBuilding : RangeBuilding
         CardLevel = turretCardParts.cardLevel;
 
         InitStats(turretStats);
-        bodyType = turretCardParts.turretPartBody.bodyType;
+        BodyType = turretCardParts.turretPartBody.bodyType;
 
 
         this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-
+        
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
 
@@ -241,7 +244,7 @@ public class TurretBuilding : RangeBuilding
 
 
         // Audio
-        GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
+        GameAudioManager.GetInstance().PlayProjectileShot(BodyType);
     }
 
 
@@ -279,6 +282,8 @@ public class TurretBuilding : RangeBuilding
         upgrader.OnBuildingOwnerPlaced();
 
         InvokeOnBuildingPlaced();
+
+        TurretPartAttack.OnTurretPlaced(this, turretAttack.materialForTurret);
         if (OnGotPlaced != null) OnGotPlaced();
     }
     public override void GotEnabledPlacing()

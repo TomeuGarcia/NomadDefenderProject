@@ -5,4 +5,5 @@ using UnityEngine;
 public interface TDLocationsUtils 
 {
     public int GetHighestLocationHealth();
+
 }

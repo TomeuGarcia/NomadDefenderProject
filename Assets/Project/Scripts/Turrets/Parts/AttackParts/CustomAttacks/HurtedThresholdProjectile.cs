@@ -7,6 +7,7 @@ public class HurtedThresholdProjectile : HomingProjectile
     [Header("STATS")]
     [SerializeField, Range(0f, 5f)] private float damageMultiplier = 2.0f;
     [SerializeField, Range(0, 5)] private int healthThresholdApplyMultiplier = 2;
+    public int HealthThreshold => healthThresholdApplyMultiplier;
 
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)

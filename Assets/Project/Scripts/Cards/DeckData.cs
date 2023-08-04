@@ -22,16 +22,16 @@ public class DeckData : ScriptableObject
         {
             TurretCardParts otherComponents = other.starterTurretCardsComponents[i];
 
-            TurretPartAttack turretPartAttack = ScriptableObject.CreateInstance("TurretPartAttack") as TurretPartAttack;
+            TurretPartAttack turretPartAttack = ScriptableObject.Instantiate(otherComponents.turretPartAttack);
             turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
-
-            TurretPartBody turretPartBody = ScriptableObject.CreateInstance("TurretPartBody") as TurretPartBody;
+            
+            TurretPartBody turretPartBody = ScriptableObject.Instantiate(otherComponents.turretPartBody);
             turretPartBody.InitAsCopy(otherComponents.turretPartBody);
-
-            TurretPartBase turretPartBase = ScriptableObject.CreateInstance("TurretPartBase") as TurretPartBase;
+            
+            TurretPartBase turretPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
             turretPartBase.InitAsCopy(otherComponents.turretPartBase);
-
-            TurretPassiveBase turretPassiveBase = ScriptableObject.CreateInstance("TurretPassiveBase") as TurretPassiveBase;
+            
+            TurretPassiveBase turretPassiveBase = ScriptableObject.Instantiate(otherComponents.turretPassiveBase);
             turretPassiveBase.InitAsCopy(otherComponents.turretPassiveBase);
 
 
@@ -45,7 +45,7 @@ public class DeckData : ScriptableObject
         {
             SupportCardParts otherComponents = other.starterSupportCardsComponents[i];
 
-            TurretPartBase supportPartBase = ScriptableObject.CreateInstance("TurretPartBase") as TurretPartBase;
+            TurretPartBase supportPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
             supportPartBase.InitAsCopy(otherComponents.turretPartBase);
 
 
