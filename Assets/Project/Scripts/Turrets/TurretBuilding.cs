@@ -134,6 +134,11 @@ public class TurretBuilding : RangeBuilding
         this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         bodyPart.ResetProjectileMaterial(turretAttack.materialForTurret);
     }
+    public void ResetBodyMaterial(Material newMaterial)
+    {        
+        bodyPart.ResetProjectileMaterial(newMaterial);
+        bodyPart.SetDefaultMaterial();
+    }
 
     protected override void UpdateRange()
     {

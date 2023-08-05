@@ -137,6 +137,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource effectsAudioSource;
     [SerializeField] private AudioClip smokeBurst;
     [SerializeField] private AudioClip replaceMachineLoad;
+    [SerializeField] private AudioClip berserker;
 
 
     public enum MusicType {NONE,MENU,OWMAP,BATTLE}
@@ -906,6 +907,22 @@ public class GameAudioManager : MonoBehaviour
         effectsAudioSource.clip = replaceMachineLoad;
         effectsAudioSource.volume = 0.5f;
         effectsAudioSource.pitch = 1.3f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayEnterBerserker()
+    {
+        effectsAudioSource.clip = berserker;
+        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.pitch = 0.85f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayExitBerserker()
+    {
+        effectsAudioSource.clip = berserker;
+        effectsAudioSource.volume = 0.4f;
+        effectsAudioSource.pitch = 1.5f;
 
         effectsAudioSource.Play();
     }

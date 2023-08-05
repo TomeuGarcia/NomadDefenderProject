@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class BerserkerTurretBuildingVisuals : MonoBehaviour
 {
-    [SerializeField] private HurtedThresholdProjectile berserkerProjectilePrefab;
+    [SerializeField] private HurtedThresholdProjectile _berserkerProjectilePrefab;
+    [SerializeField] private MeshRenderer _flashEffectMesh;
+    private Material _flashEffectMaterial;
 
-    private Material _material;
+    private Material _turretMaterial;
     private TurretBuilding _owner;
     private int _berserkHealthThreshold;
     private bool _isBerserk;
@@ -15,6 +17,8 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     private int _isBerserkEnabledProperty;
     private int _berserkEyesOffsetProperty;
     private int _berserkEyesScaleProperty;
+
+    private int _startTimeFlashProperty;
 
     private static Dictionary<TurretPartBody.BodyType, BerserkEyesData> _bodyTypeToEyesData =
         new Dictionary<TurretPartBody.BodyType, BerserkEyesData>() {
@@ -35,27 +39,40 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         public float scale;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            StartBerserk();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            StopBerserk();
+        }
+    }
 
     public void TurretPlacedInit(TurretBuilding owner, Material material)
     {
         _owner = owner;
-        _material = material;
+        _turretMaterial = new Material(material);
+        owner.ResetBodyMaterial(_turretMaterial);
 
-        _berserkHealthThreshold = berserkerProjectilePrefab.HealthThreshold;
+        _berserkHealthThreshold = _berserkerProjectilePrefab.HealthThreshold;
 
         _isBerserkEnabledProperty = Shader.PropertyToID("_IsBerserkEnabled");
         _berserkEyesOffsetProperty = Shader.PropertyToID("_BerserkEyesOffset");
         _berserkEyesScaleProperty = Shader.PropertyToID("_BerserkEyesScale");
 
+        _flashEffectMaterial = _flashEffectMesh.material;
+        _startTimeFlashProperty = Shader.PropertyToID("_StartTimeFlashAnimation");
 
         BerserkEyesData eyesData = _bodyTypeToEyesData[owner.BodyType];
-        material.SetVector(_berserkEyesOffsetProperty, eyesData.offset);
-        material.SetFloat(_berserkEyesScaleProperty, eyesData.scale);
-
+        _turretMaterial.SetVector(_berserkEyesOffsetProperty, eyesData.offset);
+        _turretMaterial.SetFloat(_berserkEyesScaleProperty, eyesData.scale);
 
         SubscribeToEvents();
 
-        StopBerserk();
+        StopBerserk(false);
         CheckIsBerserk();
     }
 
@@ -95,13 +112,21 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     {
         _isBerserk = true;
 
-        _material.SetFloat(_isBerserkEnabledProperty, 1.0f);
+        _turretMaterial.SetFloat(_isBerserkEnabledProperty, 1.0f);
+        _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time);
+
+        GameAudioManager.GetInstance().PlayEnterBerserker();
     }
-    private void StopBerserk()
+    private void StopBerserk(bool playAudio = true)
     {
         _isBerserk = false;
 
-        _material.SetFloat(_isBerserkEnabledProperty, 0.0f);
+        _turretMaterial.SetFloat(_isBerserkEnabledProperty, 0.0f);
+
+        if (playAudio)
+        {
+            GameAudioManager.GetInstance().PlayExitBerserker();
+        }
     }
 
 
