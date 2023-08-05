@@ -7,7 +7,12 @@ public class HurtedThresholdProjectile : HomingProjectile
     [Header("STATS")]
     [SerializeField, Range(0f, 5f)] private float damageMultiplier = 2.0f;
     [SerializeField, Range(0, 5)] private int healthThresholdApplyMultiplier = 2;
+
     public int HealthThreshold => healthThresholdApplyMultiplier;
+
+
+    [Header("VISUALS")]
+    [SerializeField] private TrailRenderer trilRenderer;
 
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
@@ -52,6 +57,11 @@ public class HurtedThresholdProjectile : HomingProjectile
         if (highestHealth <= healthThresholdApplyMultiplier)
         {
             damage += (int)(damageMultiplier * damage);
+            trilRenderer.widthMultiplier = 2.5f;
+        }
+        else
+        {
+            trilRenderer.widthMultiplier = 1.0f;
         }
 
         return damage;

@@ -4924,6 +4924,7 @@ MonoBehaviour:
   lerp: {fileID: 3128012061546670383}
   damageMultiplier: 3
   healthThresholdApplyMultiplier: 2
+  trilRenderer: {fileID: 5887406024782493711}
 --- !u!114 &3128012061546670383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4996,7 +4997,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 01b6e6dba7aa74343b1f4be4f6c02a78, type: 2}
+  - {fileID: 2100000, guid: ddb813cc500aa0d4f82b90637d36c94c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5017,7 +5018,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.06
+  m_Time: 0.1
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -5025,8 +5026,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.13114929
+        time: 0.008152008
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -5034,8 +5035,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.50000006
-        value: 0.12698404
+        time: 0.062499054
+        value: 0.108693585
         inSlope: -0.04915233
         outSlope: -0.04915233
         tangentMode: 0

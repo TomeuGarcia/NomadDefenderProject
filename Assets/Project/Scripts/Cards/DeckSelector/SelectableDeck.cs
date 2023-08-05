@@ -16,6 +16,9 @@ public class SelectableDeck : MonoBehaviour
     [Header("REFERENCES")]
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
+    [SerializeField] private MeshRenderer pulsingMesh;
+    private Material pulsingMaterial;
+    private int isSelectedPropertyId;
 
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
@@ -61,6 +64,9 @@ public class SelectableDeck : MonoBehaviour
     private void Awake()
     {
         SetDeckSprites();
+
+        pulsingMaterial = pulsingMesh.material;
+        isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
 
@@ -163,7 +169,14 @@ public class SelectableDeck : MonoBehaviour
         }
     }
 
-
+    public void SetSelected()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
+    }
+    public void SetNotSelected()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
+    }
 
 
 }

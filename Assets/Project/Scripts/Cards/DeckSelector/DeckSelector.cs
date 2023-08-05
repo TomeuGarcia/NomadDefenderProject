@@ -24,7 +24,7 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private Button startSimulationButton;
 
 
-    private void Awake()
+    private void Start()
     {
         Init();
 
@@ -45,6 +45,7 @@ public class DeckSelector : MonoBehaviour
             selectableDecks[i].InitReferences(this);
             selectableDecks[i].InitSpawnCards(deckCreator);
             selectableDecks[i].InitArrangeCards(pileUpArrangeCardsData);
+            selectableDecks[i].SetNotSelected();
         }
     }
 
@@ -68,6 +69,8 @@ public class DeckSelector : MonoBehaviour
         {
             previouslySelectedDeck = currentlySelectedDeck;
 
+            previouslySelectedDeck.SetNotSelected();
+
             previouslySelectedDeck.DisableCardsMouseInteraction();
             yield return StartCoroutine(previouslySelectedDeck.ArrangeCardsFromFirst(0.2f, 0.0f, pileUpArrangeCardsData, previouslySelectedDeck.CardsHolder));   
             GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
@@ -75,6 +78,7 @@ public class DeckSelector : MonoBehaviour
 
         currentlySelectedDeck = selectableDeck;
 
+        currentlySelectedDeck.SetSelected();
         currentlySelectedDeck.SetEnabledInteraction(false);
 
         yield return StartCoroutine(currentlySelectedDeck.ArrangeCardsFromLast(0.25f, 0.1f, selectedArrangeCardsData, selectedDeckHolder));
@@ -92,5 +96,8 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = false;
         SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
+
+
+
 
 }
