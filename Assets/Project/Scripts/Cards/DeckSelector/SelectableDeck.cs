@@ -32,7 +32,9 @@ public class SelectableDeck : MonoBehaviour
     public RunUpgradesContent RunContent => runContent;
     public DeckData DeckData => deckData;
     public Transform CardsHolder => cardsHolder;
+    public Vector3 Position => cardsHolder.position;
 
+    public bool FinishedArranging { get; private set; }
 
 
     [System.Serializable]
@@ -122,18 +124,22 @@ public class SelectableDeck : MonoBehaviour
     }
 
 
+
     public IEnumerator ArrangeCardsFromFirst(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
     {
+        FinishedArranging = false;
         for (int i = 0; i < cards.Length; ++i)
         {
             ArrangeCard(cards[i], i, motionDuration, arrangeCardsData, newParent);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
+        FinishedArranging = true;
     }
     
     public IEnumerator ArrangeCardsFromLast(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
     {
+        FinishedArranging = false;
         for (int i = cards.Length - 1; i >= 0; --i)
         {           
             ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent);
@@ -141,6 +147,7 @@ public class SelectableDeck : MonoBehaviour
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
+        FinishedArranging = true;
     }
 
     private void ArrangeCard(BuildingCard card, int i, float motionDuration, ArrangeCardsData arrangeCardsData, Transform newParent)
