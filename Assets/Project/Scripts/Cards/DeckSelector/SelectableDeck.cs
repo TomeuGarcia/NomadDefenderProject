@@ -26,6 +26,8 @@ public class SelectableDeck : MonoBehaviour
     private BuildingCard[] cards;
     private DeckSelector deckSelector;
 
+    private bool isSelected;
+
 
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
 
@@ -68,6 +70,7 @@ public class SelectableDeck : MonoBehaviour
         SetDeckSprites();
 
         pulsingMaterial = pulsingMesh.material;
+
         isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
@@ -77,6 +80,16 @@ public class SelectableDeck : MonoBehaviour
         deckSelector.OnDeckSelected(this);
     }
 
+    private void OnMouseEnter()
+    {
+        if (isSelected) return;
+        SetHovered();
+    }
+    private void OnMouseExit()
+    {
+        if (isSelected) return;
+        SetNotHovered();
+    }
 
     private void SetDeckSprites()
     {
@@ -178,12 +191,27 @@ public class SelectableDeck : MonoBehaviour
 
     public void SetSelected()
     {
+        isSelected = true;
         pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
     }
     public void SetNotSelected()
     {
+        isSelected = false;
         pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
     }
 
+
+    private void SetHovered()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
+
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+    }
+    private void SetNotHovered()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
+
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+    }
 
 }

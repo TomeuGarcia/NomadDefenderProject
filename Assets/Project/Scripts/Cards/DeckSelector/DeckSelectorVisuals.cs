@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 public class DeckSelectorVisuals : MonoBehaviour
 {
+    [SerializeField] private Transform runSimulationButtonTransform;
+    private Vector3 positionButtonWires;
+
     [SerializeField] private MeshRenderer floorMesh;
     private Material floorMaterial;
 
@@ -21,6 +24,10 @@ public class DeckSelectorVisuals : MonoBehaviour
     private Vector3 hiddenWiresPosition = Vector3.right * 10000.0f;
 
 
+    [SerializeField] float positionOffsetWires1 = 0.15f;
+    [SerializeField] float positionOffsetWires2 = -0.70f;
+
+
     public void Init()
     {
         floorMaterial = floorMesh.material;
@@ -28,6 +35,8 @@ public class DeckSelectorVisuals : MonoBehaviour
         errorWiresStepPropertyId = Shader.PropertyToID("_ErrorWiresStep");
         errorOriginOffset1PropertyId = Shader.PropertyToID("_ErrorOriginOffset");
         errorOriginOffset2PropertyId = Shader.PropertyToID("_ErrorOriginOffset2");
+
+        positionButtonWires = runSimulationButtonTransform.position + Vector3.forward * positionOffsetWires2;
 
         HideWires();
     }
@@ -37,14 +46,18 @@ public class DeckSelectorVisuals : MonoBehaviour
     public void ShowWires(Vector3 position)
     {
         Vector3 wiresPosition1 = position;
-        wiresPosition1.z += 0.15f;
+        wiresPosition1.z += positionOffsetWires1;
         floorMaterial.SetVector(errorOriginOffset1PropertyId, wiresPosition1);
 
-        Vector3 wiresPosition2 = position;
-        wiresPosition2.z -= 0.70f;
-        floorMaterial.SetVector(errorOriginOffset2PropertyId, wiresPosition2);
+        
+        //Vector3 wiresPosition2 = position;
+        //wiresPosition2.z -= positionOffsetWires2;
+        //floorMaterial.SetVector(errorOriginOffset2PropertyId, wiresPosition2);
+        floorMaterial.SetVector(errorOriginOffset2PropertyId, positionButtonWires);
+        
 
         SetCurrentWiresStep(0f);
+
         DOTween.To(() => currentWiresStep, x => SetCurrentWiresStep(x), maxWireStep, showDuration);
     }
     

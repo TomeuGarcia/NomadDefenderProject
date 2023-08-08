@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9020596358818851709
+--- !u!114 &-5209188886868526475
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SelectableDeckHolder_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 7bd96efcca16983418e11c2a749de493,
+  m_Shader: {fileID: -6465566751694194690, guid: 2dd74343bf5a4c24a85793a5d7bba5f8,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -48,15 +48,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _HoveredFadeSpeed: -6
+    - _IsHovered: 0
     - _IsSelected: 0
-    - _PulsingSpeed: 2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _StripeSharpness: 4
-    - _StripeWidth: 0.15
-    - _StripesMoveSpeed: 0.1
     m_Colors:
-    - _BaseColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
-    - _PulsingColor: {r: 0.36078432, g: 1.2705883, b: 1.2862746, a: 0}
-    - _SelectedColor: {r: 0, g: 11.796082, b: 6.361238, a: 0}
+    - _DefaultColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
+    - _HoveredColor: {r: 0.101960786, g: 0.9019608, b: 1.8980392, a: 0}
+    - _SelectedColor: {r: 0, g: 0.5007997, b: 0.6792453, a: 0}
   m_BuildTextureStacks: []

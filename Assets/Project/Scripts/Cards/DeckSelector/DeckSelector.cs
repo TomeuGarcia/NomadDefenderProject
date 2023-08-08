@@ -98,15 +98,25 @@ public class DeckSelector : MonoBehaviour
         currentlySelectedDeck = selectableDeck;
 
         currentlySelectedDeck.SetSelected();
-        currentlySelectedDeck.SetEnabledInteraction(false);
+
+        foreach (var selectableDeckIt in selectableDecks)
+        {
+            selectableDeckIt.SetEnabledInteraction(false);
+        }
 
 
         yield return StartCoroutine(currentlySelectedDeck.ArrangeCardsFromLast(0.25f, 0.1f, selectedArrangeCardsData, selectedDeckHolder));
 
         currentlySelectedDeck.EnableCardsMouseInteraction();
-        
 
-        previouslySelectedDeck?.SetEnabledInteraction(true);
+
+        foreach (var selectableDeckIt in selectableDecks)
+        {
+            if (selectableDeckIt != currentlySelectedDeck)
+            {
+                selectableDeckIt.SetEnabledInteraction(true);
+            }
+        }
 
         startSimulationButton.interactable = true;
     }
