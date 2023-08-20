@@ -28,8 +28,8 @@ public class CurrencyBase : TurretPartBase_Prefab
     {
         base.Init(turretOwner, turretRange);
         //owner = turretOwner;
-        turretOwner.OnEnemyEnterRange += increaseCurrencyDrop;
-        turretOwner.OnEnemyExitRange += decreaseCurrencyDrop;
+        turretOwner.OnEnemyEnterRange += IncreaseCurrencyDrop;
+        turretOwner.OnEnemyExitRange += DecreaseCurrencyDrop;
         turretOwner.OnEnemyEnterRange += EnemyBloomsCube;
         turretOwner.OnEnemyExitRange += EnemyDoesNotBloomCube;
 
@@ -38,8 +38,8 @@ public class CurrencyBase : TurretPartBase_Prefab
     public override void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
     {
         base.InitAsSupportBuilding(supportBuilding, supportRange);
-        supportBuilding.OnEnemyEnterRange += increaseCurrencyDrop;   
-        supportBuilding.OnEnemyExitRange += decreaseCurrencyDrop;
+        supportBuilding.OnEnemyEnterRange += IncreaseCurrencyDrop;   
+        supportBuilding.OnEnemyExitRange += DecreaseCurrencyDrop;
         supportBuilding.OnEnemyEnterRange += EnemyBloomsCube;
         supportBuilding.OnEnemyExitRange += EnemyDoesNotBloomCube;
 
@@ -64,19 +64,19 @@ public class CurrencyBase : TurretPartBase_Prefab
             e.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
         }
         currentLvl = newStatnewStatLevel;
-        Debug.Log(currentLvl);
+        
         foreach (Enemy e in enemies)
         {
             e.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
         }
     }
-    private void increaseCurrencyDrop(Enemy enemy)
+    private void IncreaseCurrencyDrop(Enemy enemy)
     {
         enemy.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
         enemies.Add(enemy);
     }
 
-    private void decreaseCurrencyDrop(Enemy enemy)
+    private void DecreaseCurrencyDrop(Enemy enemy)
     {
         enemy.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
         enemies.Remove(enemy);
