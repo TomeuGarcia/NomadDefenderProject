@@ -119,7 +119,7 @@ public class SupportBuilding : RangeBuilding
         upgrader.OnBuildingOwnerPlaced();
         upgrader.OnUpgrade += PlayUpgradeAnimation;
 
-        InvokeOnBuildingPlaced();
+        InvokeOnPlaced();
     }
 
     public override void GotEnabledPlacing()

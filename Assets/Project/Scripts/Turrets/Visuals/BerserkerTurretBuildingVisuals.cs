@@ -96,7 +96,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     {
         int highestLocationHealth = ServiceLocator.GetInstance().TDLocationsUtils.GetHighestLocationHealth();
         bool berserkIsTriggered = highestLocationHealth <= _berserkHealthThreshold;
-        Debug.Log(highestLocationHealth);
 
         if (!_isBerserk && berserkIsTriggered)
         {

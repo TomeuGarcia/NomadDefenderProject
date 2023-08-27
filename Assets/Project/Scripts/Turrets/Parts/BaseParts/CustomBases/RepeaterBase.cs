@@ -60,6 +60,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.gameObject.SetActive(false);
         HideAllTurretBinders();
         currentDamagePer1Increment = 0f;
+        repeatAreaPlaneMaterial = repeatAreaPlane.materials[0];
     }
 
     private void OnEnable()
@@ -107,17 +108,9 @@ public class RepeaterBase : TurretPartBase_Prefab
         supportOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         supportOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
-        UpdateAreaPlaneSize(supportOwner);
+        UpdateAreaPlaneSize(supportOwner, repeatAreaPlane, repeatAreaPlaneMaterial);
     }
-    private void UpdateAreaPlaneSize(SupportBuilding supportOwner)
-    {
-        float planeRange = supportOwner.stats.range * 2 + 1; //only for square
-        float range = supportOwner.stats.range;
 
-        repeatAreaPlane.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
-        repeatAreaPlaneMaterial = repeatAreaPlane.materials[0];
-        repeatAreaPlaneMaterial.SetFloat("_TileNum", planeRange);
-    }
 
     public override void OnGetPlaced()
     {
@@ -156,7 +149,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (newStatLevel == 3)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
-            UpdateAreaPlaneSize(ownerSupportBuilding);
+            UpdateAreaPlaneSize(ownerSupportBuilding, repeatAreaPlane, repeatAreaPlaneMaterial);
         }
 
         currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];        
@@ -410,8 +403,9 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ConnectBinderWithTurretBuilding(MeshRenderer binderMesh, TurretBuilding turretBuilding, bool isTurretWithinRange)
     {
-        UpdateTurretBinder(binderMesh.transform, turretBuilding.BodyPartTransform);
-      
+        TurretBinderUtils.UpdateTurretBinder(binderMesh.transform, turretBuilding.BodyPartTransform, bindOriginTransform);
+
+
         if (isTurretWithinRange)
         {
             binderMesh.material = withinRangeMaterial;

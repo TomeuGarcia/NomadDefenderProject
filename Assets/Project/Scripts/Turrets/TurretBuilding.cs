@@ -286,7 +286,7 @@ public class TurretBuilding : RangeBuilding
 
         upgrader.OnBuildingOwnerPlaced();
 
-        InvokeOnBuildingPlaced();
+        InvokeOnPlaced();
 
         TurretPartAttack.OnTurretPlaced(this, turretAttack.materialForTurret);
         if (OnGotPlaced != null) OnGotPlaced();

@@ -274,5 +274,23 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         return highestHealth;
     }
 
+    public PathLocation GetHealthiestLocation()
+    {
+        int highestHealth = -1;
+        PathLocation healthiestLocation = null;
+
+        for (int i = 0; i < pathLocations.Length; ++i)
+        {
+            int loactionHealth = pathLocations[i].healthSystem.health;
+            if (loactionHealth > highestHealth)
+            {
+                highestHealth = loactionHealth;
+                healthiestLocation = pathLocations[i];
+            }
+        }
+
+        return healthiestLocation;
+    }
+
 
 }

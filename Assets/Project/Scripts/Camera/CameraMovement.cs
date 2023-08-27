@@ -51,12 +51,10 @@ public class CameraMovement : MonoBehaviour
     private void OnEnable()
     {
         PathLocation.OnTakeDamage += CameraShakeLocationTakeDamage;
-        //Building.OnBuildingPlaced += CameraShakeBuildingPlaced;
     }
     private void OnDisable()
     {
         PathLocation.OnTakeDamage -= CameraShakeLocationTakeDamage;
-        //Building.OnBuildingPlaced -= CameraShakeBuildingPlaced;
     }
 
     void LateUpdate()
