@@ -7,10 +7,10 @@ public class TurretPartBase_Prefab : MonoBehaviour
 {
     [SerializeField] private Transform meshTransform;
     public Transform MeshTransform => meshTransform;
-    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private MeshRenderer[] meshRenderers;
     [SerializeField] protected Material previewMaterial;
-    private Material[] defaultMaterials;
-    protected Material[] previewMaterials;
+    private Material[][] defaultMaterials;
+    protected Material[][] previewMaterials;
 
     [Header("BASE COLLIDER")]
     [SerializeField] public BaseCollider baseCollider;
@@ -50,24 +50,38 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
     protected virtual void InitMaterials()
     {
-        defaultMaterials = new Material[meshRenderer.materials.Length];
-        previewMaterials = new Material[meshRenderer.materials.Length];
+        defaultMaterials = new Material[meshRenderers.Length][];
+        previewMaterials = new Material[meshRenderers.Length][];
 
-        for (int i = 0; i < meshRenderer.materials.Length; ++i)
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
         {
-            defaultMaterials[i] = meshRenderer.materials[i];
-            previewMaterials[i] = previewMaterial;
-        }
+            MeshRenderer meshRenderer = meshRenderers[meshI];
+
+            defaultMaterials[meshI] = new Material[meshRenderer.materials.Length];
+            previewMaterials[meshI] = new Material[meshRenderer.materials.Length];
+
+            for (int i = 0; i < meshRenderer.materials.Length; ++i)
+            {
+                defaultMaterials[meshI][i] = meshRenderer.materials[i];
+                previewMaterials[meshI][i] = previewMaterial;
+            }
+        }        
     }
 
     public virtual void SetDefaultMaterial()
     {
-        meshRenderer.materials = defaultMaterials;
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        {
+            meshRenderers[meshI].materials = defaultMaterials[meshI];
+        }
     }
 
     public virtual void SetPreviewMaterial()
     {
-        meshRenderer.materials = previewMaterials;
+        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        {
+            meshRenderers[meshI].materials = previewMaterials[meshI];
+        }
     }
 
     public bool IsPointWithinRange(Vector3 point)

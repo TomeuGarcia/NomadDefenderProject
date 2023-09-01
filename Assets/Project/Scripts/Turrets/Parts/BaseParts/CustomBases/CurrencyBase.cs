@@ -91,7 +91,7 @@ public class CurrencyBase : TurretPartBase_Prefab
     public override void SetPreviewMaterial()
     {
         base.SetPreviewMaterial();
-        cubeMeshRenderer.material = previewMaterials[0];
+        cubeMeshRenderer.material = previewMaterials[0][0];
 
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
 
     [Header("MESHES")]
+    [SerializeField] private Transform rotatingMesh;
     [SerializeField] private MeshRenderer rangePlane;
     private Material rangePlaneMaterial;
 
@@ -21,6 +23,10 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     [SerializeField] private Transform bindOriginTransform;
     [SerializeField] private MeshRenderer nodeBinderMesh;
+
+    [Header("UPGRADES EXTRA")]
+    [SerializeField] private Transform rocketTop;
+    [SerializeField] private Vector3 rocketTopMoveBy = Vector3.up * 0.4f;
 
 
 
@@ -43,6 +49,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
         owner.OnPlaced -= OnOwnerBuildingPlaced;
 
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+
+        rotatingMesh.DOKill();
     }
 
     public override void Init(TurretBuilding turretOwner, float turretRange)
@@ -80,11 +88,14 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         explosionCapsuleMesh.gameObject.SetActive(true);
         explosionCapsuleMaterial = explosionCapsuleMesh.material;
+
     }
 
     public override void OnGetPlaced()
     {
         rangePlane.gameObject.SetActive(true);
+        HideNodeBinder();
+        rotatingMesh.DOBlendableRotateBy(Vector3.up * 180f, 8.0f).SetLoops(-1);
     }
 
     override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
@@ -97,6 +108,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
             UpdateAreaPlaneSize(ownerSupportBuilding, rangePlane, rangePlaneMaterial);
+
+            rocketTop.DOBlendableMoveBy(rocketTopMoveBy, 1.0f);
         }
     }
 
@@ -154,6 +167,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     public override void GotEnabledPlacing()
     {
+        ShowNodeBinder();
         ConnectBinderWithPathLocation();
     }
     public override void GotDisabledPlacing()
@@ -178,7 +192,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void ConnectBinderWithPathLocation()
     {
-        ShowNodeBinder();
         PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation();
         TurretBinderUtils.UpdateTurretBinder(nodeBinderMesh.transform, pathLocation.transform, bindOriginTransform);
     }
