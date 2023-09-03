@@ -5,9 +5,6 @@ using UnityEngine;
 public class SlowFireRateProjectile : HomingProjectile
 {
     [Header("STATS")]
-    [SerializeField, Range(0f, 1f)] private float baseDamagePer1 = 0.75f;
-    [SerializeField, Min(0f)] private float distanceMultiplier = 1.0f;
-
     [SerializeField, Min(0f)] private float maxDamageMultiplier = 10.0f;
     [SerializeField] private AnimationCurve damageRateCurve;
 
