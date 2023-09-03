@@ -12,7 +12,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     }
 
 
-    public enum AttackType { BASIC, TESLA, LONG_RANGE, CLOSE_RANGE, PIERCING, HURTED_THRESHOLD }
+    public enum AttackType { BASIC, TESLA, LONG_RANGE, CLOSE_RANGE, PIERCING, HURTED_THRESHOLD, SLOW_FIRE_RATE }
 
     protected Enemy targetEnemy;
     protected int damage;

@@ -39,17 +39,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         public float scale;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            StartBerserk();
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            StopBerserk();
-        }
-    }
 
     public void TurretPlacedInit(TurretBuilding owner, Material material)
     {

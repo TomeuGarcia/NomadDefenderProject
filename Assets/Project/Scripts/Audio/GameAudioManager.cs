@@ -90,6 +90,8 @@ public class GameAudioManager : MonoBehaviour
     [Header("BATTLE SCENES")]
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
+    [SerializeField] private AudioSource battleAudioSource2;
+    [SerializeField] private AudioClip selfHurtExplosion;
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
     [SerializeField] private AudioClip stageVictory;
@@ -688,6 +690,13 @@ public class GameAudioManager : MonoBehaviour
         battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
 
         battleAudioSource.Play();
+    }
+    public void PlaySelfHurtExplosion()
+    {
+        battleAudioSource2.clip = selfHurtExplosion;
+        battleAudioSource2.pitch = Random.Range(0.9f, 1.1f);
+
+        battleAudioSource2.Play();
     }
 
     public void PlayWiresCursedWave()

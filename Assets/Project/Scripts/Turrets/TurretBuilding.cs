@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TurretBuilding : RangeBuilding
@@ -22,6 +21,8 @@ public class TurretBuilding : RangeBuilding
 
     public PassiveDamageModifier baseDamagePassive;
 
+
+    public float TimeSinceLastShot { get; private set; }
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
@@ -53,6 +54,7 @@ public class TurretBuilding : RangeBuilding
 
     public delegate void TurretBuildingEvent();
     public event TurretBuildingEvent OnGotPlaced;
+    public event TurretBuildingEvent OnTimeSinceLastShotSet;
 
 
     void Awake()
@@ -63,6 +65,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
+        TimeSinceLastShot = 0.0f;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
     }
@@ -170,8 +173,10 @@ public class TurretBuilding : RangeBuilding
 
     private void UpdateShoot()
     {
+        TimeSinceLastShot += Time.deltaTime * GameTime.TimeScale;
+
         if (currentShootTimer < stats.cadence)
-        {
+        {            
             currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
@@ -250,6 +255,7 @@ public class TurretBuilding : RangeBuilding
 
         // Audio
         GameAudioManager.GetInstance().PlayProjectileShot(BodyType);
+        TimeSinceLastShot = 0.0f;
     }
 
 

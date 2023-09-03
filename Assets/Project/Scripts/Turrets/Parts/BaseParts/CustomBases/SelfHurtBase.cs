@@ -29,6 +29,9 @@ public class SelfHurtBase : TurretPartBase_Prefab
     [SerializeField] private Vector3 rocketTopMoveBy = Vector3.up * 0.4f;
 
 
+    private bool isPlaced = false;
+
+
 
     private int currentLvl = 0;
 
@@ -42,13 +45,18 @@ public class SelfHurtBase : TurretPartBase_Prefab
         rangePlane.gameObject.SetActive(false);
         explosionCapsuleMesh.gameObject.SetActive(false);
         HideNodeBinder();
+
+        isPlaced = false;
     }
 
     private void OnDestroy()
     {
         owner.OnPlaced -= OnOwnerBuildingPlaced;
 
-        PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+        if (isPlaced)
+        {
+            PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+        }
 
         rotatingMesh.DOKill();
     }
@@ -60,7 +68,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
         owner = turretOwner;
         owner.OnPlaced += OnOwnerBuildingPlaced;
 
-        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
 
         UpdateExplosionDamage();
 
@@ -74,8 +81,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         owner = supportBuilding;
         owner.OnPlaced += OnOwnerBuildingPlaced;
-
-        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
 
         UpdateExplosionDamage();
 
@@ -93,6 +98,9 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     public override void OnGetPlaced()
     {
+        isPlaced = true;
+        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
+
         rangePlane.gameObject.SetActive(true);
         HideNodeBinder();
         rotatingMesh.DOBlendableRotateBy(Vector3.up * 180f, 8.0f).SetLoops(-1);
@@ -120,17 +128,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
 
 
-    public override void SetDefaultMaterial()
-    {
-        base.SetDefaultMaterial();
-    }
-
-    public override void SetPreviewMaterial()
-    {
-        base.SetPreviewMaterial();
-
-    }
-
 
     private async void OnOwnerBuildingPlaced(Building invokerBuilding)
     {
@@ -143,13 +140,18 @@ public class SelfHurtBase : TurretPartBase_Prefab
     {
         ConnectBinderWithPathLocation();
 
-        DamageEnemies();
+        DamageEnemies(0.3f);
         PlayExplosionAnimation();
+
+        GameAudioManager.GetInstance().PlaySelfHurtExplosion();
     }
 
-    private void DamageEnemies()
+    private async void DamageEnemies(float delay)
     {
         Enemy[] enemies = owner.GetEnemiesInRange();
+
+        await Task.Delay((int)(delay * 1000));
+
         foreach (Enemy enemy in enemies)
         {
             enemy.QueueDamage(explosionDamage);
