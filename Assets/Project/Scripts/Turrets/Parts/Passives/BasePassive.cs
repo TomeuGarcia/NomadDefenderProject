@@ -15,4 +15,16 @@ public abstract class BasePassive : ScriptableObject
 
 
     public abstract void ApplyEffects(TurretBuilding owner);
+
+    public virtual void GotEnabledPlacing()
+    {
+    }
+    public virtual void GotDisabledPlacing()
+    {
+    }
+    public virtual void GotMovedWhenPlacing()
+    {
+    }
+
+
 }

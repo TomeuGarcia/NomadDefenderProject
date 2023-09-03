@@ -5,6 +5,8 @@ using UnityEngine.XR;
 
 public class TurretPartBody_Prefab : MonoBehaviour
 {
+    [SerializeField] public Transform binderPoint;
+
     [SerializeField] public bool lookAtTarget;
     [SerializeField] public Transform shootingPointParent;
     private int currentShootingPoint = 0;
@@ -108,7 +110,7 @@ public class TurretPartBody_Prefab : MonoBehaviour
 
     public void PlayUpgradeAnimation(int level)
     {
-        if (level > turretUpgradeVisuals.Length) return;
+        if (level > turretUpgradeVisuals.Length || level <= 0) return;
         turretUpgradeVisuals[level-1].SetActive(true);
     }
 }

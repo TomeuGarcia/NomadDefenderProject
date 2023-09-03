@@ -9,6 +9,7 @@ public class ServiceLocator : MonoBehaviour
 
     public CardDrawer CardDrawer { get; set; }
     public TDLocationsUtils TDLocationsUtils { get; set; }
+    public TDTurretBinderHelper TDTurretBinderHelper { get; set; }
 
 
     private void Awake()

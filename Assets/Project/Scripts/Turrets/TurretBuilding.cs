@@ -18,8 +18,10 @@ public class TurretBuilding : RangeBuilding
 
     private TurretPartBody_Prefab bodyPart;
     public Transform BodyPartTransform => bodyPart.transform;
+    public Transform BinderPointTransform => bodyPart.binderPoint;
 
     public PassiveDamageModifier baseDamagePassive;
+    private BasePassive basePassive;
 
 
     public float TimeSinceLastShot { get; private set; }
@@ -120,12 +122,13 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        //PASSIVE
-        turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
-
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+        Upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
-        upgrader.OnUpgrade += PlayUpgradeAnimation;
+        Upgrader.OnUpgrade += PlayUpgradeAnimation;
+
+        //PASSIVE
+        basePassive = turretCardParts.turretPassiveBase.passive;
+        basePassive.ApplyEffects(this);
 
         DisableFunctionality();
     }
@@ -290,7 +293,7 @@ public class TurretBuilding : RangeBuilding
         placedParticleSystem.gameObject.SetActive(true);
         placedParticleSystem.Play();
 
-        upgrader.OnBuildingOwnerPlaced();
+        Upgrader.OnBuildingOwnerPlaced();
 
         InvokeOnPlaced();
 
@@ -300,24 +303,27 @@ public class TurretBuilding : RangeBuilding
     public override void GotEnabledPlacing()
     {
         basePart.GotEnabledPlacing();
+        basePassive.GotEnabledPlacing();
     }
     public override void GotDisabledPlacing()
     {
         basePart.GotDisabledPlacing();
+        basePassive.GotDisabledPlacing();
     }
     public override void GotMovedWhenPlacing()
     {
         basePart.GotMovedWhenPlacing();
+        basePassive.GotMovedWhenPlacing();
     }
 
     public override void ShowQuickLevelUI()
     {
-        upgrader.ShowQuickLevelDisplay();
+        Upgrader.ShowQuickLevelDisplay();
     }
 
     public override void HideQuickLevelUI()
     {
-        upgrader.HideQuickLevelDisplay();
+        Upgrader.HideQuickLevelDisplay();
     }
 
     private void PlayUpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
