@@ -15,6 +15,7 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
+    public TurretCardParts TurretCardParts { get; private set; }
 
     private TurretPartBody_Prefab bodyPart;
     public Transform BodyPartTransform => bodyPart.transform;
@@ -98,6 +99,7 @@ public class TurretBuilding : RangeBuilding
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
+        TurretCardParts = turretCardParts;
         this.TurretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;

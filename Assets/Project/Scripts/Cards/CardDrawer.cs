@@ -12,6 +12,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
+    [SerializeField] private DeckCreator deckCreator;
+    [SerializeField] private TurretCardParts testTurretCardParts;
 
     [Header("REDRAWS UI")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
@@ -69,6 +71,7 @@ public class CardDrawer : MonoBehaviour
     {
         GameStartSetup(2f, displayRedrawsOnGameStart, finishRedrawSetup);
     }
+
 
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
@@ -457,4 +460,27 @@ public class CardDrawer : MonoBehaviour
         ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
+
+
+    public void SpawnTurretCardInDeck(TurretCardParts turretCardParts)
+    {
+        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+        turretCard.ResetParts(turretCardParts);
+
+        deck.AddCardToDeckBottom(turretCard);
+
+        battleHUD.AddNewDeckCardIconsAndShow(1);
+    }
+    public void SpawnTurretCardInHand(TurretCardParts turretCardParts)
+    {
+        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+        turretCard.ResetParts(turretCardParts);
+
+        deck.AddCardToDeckTop(turretCard);
+        DrawTopCard();
+        hand.InitCardsInHand();
+
+        battleHUD.AddNewDeckCardIconsAndShow(1);
+    }
+
 }

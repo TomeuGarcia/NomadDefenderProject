@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class BattleHUD : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] private RectTransform deckUI;
     private float hiddenDeckUIy;
     private float shownDeckUIy;
+    private bool deckIsBeingShown;
 
     [Header("Deck text")]
     [SerializeField] private TextMeshProUGUI deckText;
@@ -107,6 +109,7 @@ public class BattleHUD : MonoBehaviour
 
         showSpeedUp = true;
         canShowDrawCardButton = true;
+        deckIsBeingShown = false;
     }
 
     private void Update()
@@ -306,6 +309,9 @@ public class BattleHUD : MonoBehaviour
 
     public void ShowDeckUI()
     {
+        if (deckIsBeingShown) return;
+        deckIsBeingShown = true;
+
         GameAudioManager.GetInstance().PlayCardHovered();
 
         shownDeckUIy = ComputeShownDeckUIy();
@@ -327,6 +333,9 @@ public class BattleHUD : MonoBehaviour
 
     public void HideDeckUI() // called on hover exit
     {
+        if (!deckIsBeingShown) return;
+        deckIsBeingShown = false;
+
         GameAudioManager.GetInstance().PlayCardHoverExit();
 
         deckUI.DOLocalMoveY(hiddenDeckUIy, hideDuration);
@@ -541,22 +550,26 @@ public class BattleHUD : MonoBehaviour
 
     public void InitDeckCardIcons(int amount)
     {
+        lastSpriteHasCardIndex = -1;
         cardIcons = new List<Image>(amount);
         for (int i = 0; i< amount; ++i)
         {
             AddNewDeckCardIcon();
         }
-
-        lastSpriteHasCardIndex = amount - 1;
     }
-    public void AddNewDeckCardIcon()
+    private Image AddNewDeckCardIcon()
     {
         Image newCardIcon = Instantiate(referenceCardIconImage);
         newCardIcon.gameObject.SetActive(true);
+                
+        cardIcons.Insert(0, newCardIcon);
 
-        cardIcons.Add(newCardIcon);
         newCardIcon.rectTransform.SetParent(cardIconsHolder);
         newCardIcon.sprite = spriteHasCard;
+
+        ++lastSpriteHasCardIndex;
+
+        return newCardIcon;
     }
 
     public void SubtractHasDeckCardIcon()
@@ -565,11 +578,42 @@ public class BattleHUD : MonoBehaviour
 
         Image icon = cardIcons[lastSpriteHasCardIndex];
         icon.sprite = spriteNoCard;
+        PlayIconPunchAnimation(icon);
+        --lastSpriteHasCardIndex;
+    }
+
+    private void PlayIconPunchAnimation(Image icon)
+    {
         icon.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
         icon.DOBlendableColor(canDrawCardColor, 0.2f)
             .OnComplete(() => icon.DOBlendableColor(Color.white, 0.2f));
-        --lastSpriteHasCardIndex;
     }
+
+    public void AddNewDeckCardIconsAndShow(int numberOfIcons)
+    {
+        Sequence sequence = DOTween.Sequence();
+        
+        sequence.AppendCallback(() => ShowDeckUI());
+        sequence.AppendInterval(showDuration);
+
+        for (int i = 0; i < numberOfIcons; ++i)
+        {
+            sequence.AppendCallback(() => 
+                {
+                    Image icon = AddNewDeckCardIcon();
+                    PlayIconPunchAnimation(icon);
+                }
+            );            
+            
+            sequence.AppendInterval(0.5f);
+        }
+
+        sequence.AppendCallback(() => HideDeckUI());
+
+        sequence.Play();        
+    }
+
+
     public void AddHasDeckCardIcon()
     {
         ++lastSpriteHasCardIndex;

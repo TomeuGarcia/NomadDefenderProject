@@ -120,8 +120,7 @@ public class DeckBuildingCards : MonoBehaviour
     {
         cards.Insert(0, card);
         ArrangeCards();
-    }
-
+    }    
 
 
     public DeckData GetDeckData()
