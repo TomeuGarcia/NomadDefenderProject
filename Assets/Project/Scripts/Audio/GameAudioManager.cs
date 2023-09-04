@@ -90,6 +90,8 @@ public class GameAudioManager : MonoBehaviour
     [Header("BATTLE SCENES")]
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
+    [SerializeField] private AudioSource battleAudioSource2;
+    [SerializeField] private AudioClip selfHurtExplosion;
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
     [SerializeField] private AudioClip stageVictory;
@@ -137,6 +139,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource effectsAudioSource;
     [SerializeField] private AudioClip smokeBurst;
     [SerializeField] private AudioClip replaceMachineLoad;
+    [SerializeField] private AudioClip berserker;
 
 
     public enum MusicType {NONE,MENU,OWMAP,BATTLE}
@@ -688,6 +691,13 @@ public class GameAudioManager : MonoBehaviour
 
         battleAudioSource.Play();
     }
+    public void PlaySelfHurtExplosion()
+    {
+        battleAudioSource2.clip = selfHurtExplosion;
+        battleAudioSource2.pitch = Random.Range(0.9f, 1.1f);
+
+        battleAudioSource2.Play();
+    }
 
     public void PlayWiresCursedWave()
     {
@@ -906,6 +916,22 @@ public class GameAudioManager : MonoBehaviour
         effectsAudioSource.clip = replaceMachineLoad;
         effectsAudioSource.volume = 0.5f;
         effectsAudioSource.pitch = 1.3f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayEnterBerserker()
+    {
+        effectsAudioSource.clip = berserker;
+        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.pitch = 0.85f;
+
+        effectsAudioSource.Play();
+    }
+    public void PlayExitBerserker()
+    {
+        effectsAudioSource.clip = berserker;
+        effectsAudioSource.volume = 0.4f;
+        effectsAudioSource.pitch = 1.5f;
 
         effectsAudioSource.Play();
     }

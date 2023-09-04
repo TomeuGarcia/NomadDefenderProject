@@ -25,6 +25,9 @@ public class PathLocation : MonoBehaviour
     [Header("MESH HOLDER")]
     [SerializeField] private Transform locationMeshHolder;
 
+    public Vector3 Position => transform.position;
+
+
     [System.Serializable]
     private struct DamagedVisuals
     {
@@ -49,8 +52,10 @@ public class PathLocation : MonoBehaviour
 
 
     public delegate void PathLocationAction(PathLocation thisPathLocation);
+    public delegate void PathLocationAction2();
     public event PathLocationAction OnDeath;
     public static event PathLocationAction OnTakeDamage;
+    public static event PathLocationAction2 OnHealthChanged;
 
 
     private void Awake()
@@ -106,6 +111,19 @@ public class PathLocation : MonoBehaviour
         }
 
         if (OnTakeDamage != null) OnTakeDamage(this);
+        if (OnHealthChanged != null) OnHealthChanged();
+    }
+
+    public void Heal(int healAmount)
+    {        
+        healthSystem.Heal(healAmount);
+
+        SetDamagedVisuals();
+        locationMeshHolder.DOPunchScale(new Vector3(0.3f, 1f, 0.3f) * 0.3f, 0.6f, 8);
+        // TODO: Add audio
+
+
+        if (OnHealthChanged != null) OnHealthChanged();
     }
 
     private void Die()

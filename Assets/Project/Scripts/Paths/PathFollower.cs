@@ -132,6 +132,7 @@ public class PathFollower : MonoBehaviour
     
     public void PauseForDuration(float duration)
     {
+        if (!gameObject.activeInHierarchy) return;
         if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
         pauseCoroutine = StartCoroutine(DoPauseForDuration(duration));
     }

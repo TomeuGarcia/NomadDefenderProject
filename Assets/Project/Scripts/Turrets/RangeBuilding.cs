@@ -31,6 +31,7 @@ public abstract class RangeBuilding : Building
 
 
     [SerializeField] protected InBattleBuildingUpgrader upgrader;
+    public InBattleBuildingUpgrader Upgrader => upgrader;
 
 
     private void OnEnable()
@@ -183,6 +184,11 @@ public abstract class RangeBuilding : Building
         return enemyList.ToArray();
     }
 
+    public Enemy[] GetEnemiesInRange()
+    {
+        return enemies.ToArray();
+    }
+
     public override void ShowRangePlane()
     {
         basePart.baseCollider.ShowRange();
@@ -196,11 +202,11 @@ public abstract class RangeBuilding : Building
 
     public void ShowUpgrades()
     {
-        if (upgrader.CanOpenWindow()) upgrader.OpenWindow();
+        if (Upgrader.CanOpenWindow()) Upgrader.OpenWindow();
     }
     public void HideUpgrades()
     {
-        upgrader.CloseWindow();
+        Upgrader.CloseWindow();
     }
 
 

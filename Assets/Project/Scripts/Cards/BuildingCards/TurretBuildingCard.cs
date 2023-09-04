@@ -12,6 +12,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     private TurretBuilding.TurretBuildingStats turretStats;
 
+    private TurretBuilding turretBuilding;
+
 
     [Header("CARD INFO")]
     [SerializeField] private GameObject infoInterface;
@@ -98,7 +100,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         // Mesh Materials
         cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
-        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color
 
         cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
@@ -110,8 +111,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
 
 
-        attackImage.sprite = turretPartAttack.abilitySprite;
-        attackImage.color = turretPartAttack.materialColor;
+        SetAttackIcon(turretPartAttack);
 
 
         hasBasePassiveAbility = turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
@@ -134,6 +134,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         UpdateCardLevelText();
     }
 
+    private void SetAttackIcon(TurretPartAttack turretPartAttack)
+    {
+        attackImage.sprite = turretPartAttack.abilitySprite;
+        attackImage.color = turretPartAttack.materialColor;
+
+        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor);
+    }
 
     protected override void InitStatsFromTurretParts()
     {
@@ -150,7 +157,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<TurretBuilding>().Init(turretStats, turretCardParts, currencyCounter);
+        turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
+        turretBuilding.Init(turretStats, turretCardParts, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 
@@ -605,6 +613,43 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public DescriptionCornerPositions GetCornerPositions()
     {
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
+
+
+    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack, float delayBeforeAnimation)
+    {
+        TurretPartAttack oldTurretPartAttack = turretCardParts.turretPartAttack;
+        turretCardParts.turretPartAttack = newTurretPartAttack;
+
+        turretBuilding.ResetAttackPart(newTurretPartAttack);
+        InitInfoVisuals();
+
+        cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
+
+
+        float iconViewDuration = 0.1f;
+        Sequence replaceAttackAnimation = DOTween.Sequence();
+        replaceAttackAnimation.AppendInterval(delayBeforeAnimation);
+        replaceAttackAnimation.AppendCallback(() => SetAttackIcon(newTurretPartAttack));
+
+        for (int i = 0; i < 4; i++)
+        {
+            replaceAttackAnimation.AppendInterval(iconViewDuration);
+            replaceAttackAnimation.AppendCallback(() =>
+            {
+                SetAttackIcon(oldTurretPartAttack);
+                GameAudioManager.GetInstance().PlayCardInfoHidden();
+            });            
+            
+
+            replaceAttackAnimation.AppendInterval(iconViewDuration);
+            replaceAttackAnimation.AppendCallback(() => 
+            { 
+                SetAttackIcon(newTurretPartAttack);
+                GameAudioManager.GetInstance().PlayCardInfoShown();
+            });
+        }    
+
     }
 
 }

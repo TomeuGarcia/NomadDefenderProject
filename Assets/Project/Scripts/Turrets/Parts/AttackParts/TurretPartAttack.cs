@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartAttack", menuName = "TurretParts/TurretPartAttack")]
-
 public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
@@ -15,7 +14,8 @@ public class TurretPartAttack : ScriptableObject
     [Header("VISUALS")]
     [SerializeField] public Texture texture;
     [SerializeField] public Sprite abilitySprite;
-    [SerializeField] public Color materialColor;
+    [SerializeField] public Color materialColor = Color.white;
+
 
     [Header("ABILITY INFO")]
     [Header("Name")]
@@ -33,6 +33,11 @@ public class TurretPartAttack : ScriptableObject
 
         this.abilityName = other.abilityName;
         this.abilityDescription = other.abilityDescription;
+    }
+
+
+    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
+    {
     }
 
 

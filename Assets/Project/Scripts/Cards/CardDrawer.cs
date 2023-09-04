@@ -12,6 +12,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
+    [SerializeField] private DeckCreator deckCreator;
+    [SerializeField] private TurretCardParts testTurretCardParts;
 
     [Header("REDRAWS UI")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
@@ -70,8 +72,11 @@ public class CardDrawer : MonoBehaviour
         GameStartSetup(2f, displayRedrawsOnGameStart, finishRedrawSetup);
     }
 
+
     protected void GameStartSetup(float startDelay, bool displayRedrawsOnEnd, bool finishRedrawSetup)
     {
+        ServiceLocator.GetInstance().CardDrawer = this;
+
         SetupRedraws();
         SetupDeck();        
 
@@ -100,7 +105,35 @@ public class CardDrawer : MonoBehaviour
 
 
 
-    public void TryDrawCard()
+    public BuildingCard UtilityTryDrawAnyRandomCard(float handShownDuration)
+    {
+        BuildingCard card = null;
+        if (deck.HasCardsLeft())
+        {
+            card = deck.GetRandomCard();
+            AddCardToHand(card, handShownDuration);
+
+            hand.InitCardsInHand();
+        }
+
+        return card;
+    }
+    public BuildingCard UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType, float handShownDuration)
+    {
+        BuildingCard card = deck.GetRandomCardOfType(cardBuildingType);
+
+        if (card != null)
+        {
+            AddCardToHand(card, handShownDuration);
+            hand.InitCardsInHand();
+        }
+
+        return card;
+    }
+    
+    
+    
+    private void TryDrawCard()
     {
         if (deck.HasCardsLeft())
             DrawRandomCard();
@@ -159,15 +192,16 @@ public class CardDrawer : MonoBehaviour
     }
     private void DrawRandomCard()
     {
-        AddCardToHand(deck.GetRandomCard());
+        BuildingCard card = deck.GetRandomCard();
+        AddCardToHand(card);
         //TryHideDeckHUD();
     }
 
-    private void AddCardToHand(BuildingCard card)
+    private void AddCardToHand(BuildingCard card, float handShownDuration = 0.0f)
     {
         hand.CorrectCardsBeforeAddingCard();
         hand.HintedCardWillBeAdded();
-        hand.AddCard(card);
+        hand.AddCard(card, handShownDuration);
 
         card.StartDisableInfoDisplayForDuration(1.5f);
 
@@ -284,28 +318,7 @@ public class CardDrawer : MonoBehaviour
 
     public void StartRedrawButtonAnimation()
     {
-        //StartCoroutine(PlayStartRedrawButtonAnimation());
         PlayStartRedrawHUDAnimation();
-    }
-    private IEnumerator PlayStartRedrawButtonAnimation() // Old
-    {
-        cgFinishRedrawsButton.alpha = 0f;
-        cgFinishRedrawsButton.blocksRaycasts = false;
-
-        yield return new WaitForSeconds(0.5f);
-
-        redrawCanvasGameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-
-        float t = 0.1f;
-        cgFinishRedrawsButton.DOFade(1f, t);
-        yield return new WaitForSeconds(t);
-        cgFinishRedrawsButton.DOFade(0f, t);
-        yield return new WaitForSeconds(t);
-        cgFinishRedrawsButton.DOFade(1f, t);
-        yield return new WaitForSeconds(t);
-
-        cgFinishRedrawsButton.blocksRaycasts = true;
     }
 
     private void PlayStartRedrawHUDAnimation()
@@ -447,4 +460,27 @@ public class CardDrawer : MonoBehaviour
         ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
+
+
+    public void SpawnTurretCardInDeck(TurretCardParts turretCardParts)
+    {
+        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+        turretCard.ResetParts(turretCardParts);
+
+        deck.AddCardToDeckBottom(turretCard);
+
+        battleHUD.AddNewDeckCardIconsAndShow(1);
+    }
+    public void SpawnTurretCardInHand(TurretCardParts turretCardParts)
+    {
+        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
+        turretCard.ResetParts(turretCardParts);
+
+        deck.AddCardToDeckTop(turretCard);
+        DrawTopCard();
+        hand.InitCardsInHand();
+
+        battleHUD.AddNewDeckCardIconsAndShow(1);
+    }
+
 }

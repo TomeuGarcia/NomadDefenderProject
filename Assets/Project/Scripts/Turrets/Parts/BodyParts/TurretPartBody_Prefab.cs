@@ -5,6 +5,8 @@ using UnityEngine.XR;
 
 public class TurretPartBody_Prefab : MonoBehaviour
 {
+    [SerializeField] public Transform binderPoint;
+
     [SerializeField] public bool lookAtTarget;
     [SerializeField] public Transform shootingPointParent;
     private int currentShootingPoint = 0;
@@ -52,11 +54,16 @@ public class TurretPartBody_Prefab : MonoBehaviour
         }
 
 
+        ResetProjectileMaterial(projectileMaterial);
+    }
+
+    public virtual void ResetProjectileMaterial(Material projectileMaterial)
+    {
         // Replace inital materials for projectile material
         for (int i = 0; i < projectileMaterialIndices.Length; ++i)
         {
             defaultMaterials[projectileMaterialIndices[i].meshI][projectileMaterialIndices[i].materialI] = projectileMaterial;
-        }      
+        }
     }
 
     public Vector3 GetNextShootingPoint()
@@ -103,7 +110,7 @@ public class TurretPartBody_Prefab : MonoBehaviour
 
     public void PlayUpgradeAnimation(int level)
     {
-        if (level > turretUpgradeVisuals.Length) return;
+        if (level > turretUpgradeVisuals.Length || level <= 0) return;
         turretUpgradeVisuals[level-1].SetActive(true);
     }
 }

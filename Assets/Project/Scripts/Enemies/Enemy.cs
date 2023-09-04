@@ -133,7 +133,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PathLocation") && !collidedWithLocation)
         {
-            Debug.Log(this.name);
+            //Debug.Log(this.name);
 
             PathLocation pathLocation = other.gameObject.GetComponent<PathLocation>();
             if (pathLocation.CanTakeDamage())

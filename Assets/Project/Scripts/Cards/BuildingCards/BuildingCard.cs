@@ -25,6 +25,7 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("BUILDING PREFAB")]
     [SerializeField] public GameObject buildingPrefab;
     [HideInInspector] public GameObject copyBuildingPrefab;
+
     public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;
 
 

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -183,12 +184,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         {
             if (outOfArea && automaticCloseCoroutine == null)
             {
-                Debug.Log("CLOSE START");
                 AutomaticWindowCloseStart();
             }
             else if (!outOfArea && automaticCloseCoroutine != null)
             {
-                Debug.Log("CLOSE STOP");
                 AutomaticWindowCloseStop();
             }
         }
@@ -299,6 +298,57 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         yield return null;
         visible = true;
+    }
+
+    public TurretUpgradeType GetLowestStatUpgradeType(bool includeSupport)
+    {
+        List<(int, TurretUpgradeType)> levelsByUpgradeTypes = new List<(int, TurretUpgradeType)> { 
+            (attackLvl, TurretUpgradeType.ATTACK), 
+            (cadenceLvl, TurretUpgradeType.CADENCE), 
+            (rangeLvl, TurretUpgradeType.RANGE)
+        };
+        if (includeSupport)
+        {
+            levelsByUpgradeTypes.Add((supportLvl, TurretUpgradeType.SUPPORT));
+        }
+
+        levelsByUpgradeTypes.Sort((a, b) => { 
+            if (a.Item1 > b.Item1) return 1; 
+            else if (a.Item1 == b.Item1) return Random.Range(0, 2); 
+            else return -1; 
+        } );
+
+        return levelsByUpgradeTypes[0].Item2;
+    }
+
+    public void FreeTurretUpgrade(TurretUpgradeType turretUpgradeType)
+    {
+        //NextLevel();
+        //CheckStopParticlesCanUpgrade();
+
+        if (turretUpgradeType == TurretUpgradeType.ATTACK)
+        {
+            attackLvl++;
+            UpdateAttackBar();
+
+            turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
+        }
+        else if (turretUpgradeType == TurretUpgradeType.CADENCE)
+        {
+            cadenceLvl++;
+            UpdateCadenceBar();
+
+            turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+        }
+        else if (turretUpgradeType == TurretUpgradeType.RANGE)
+        {
+            rangeLvl++;
+            UpdateRangeBar();
+
+            turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);            
+        }
+
+        InvokeOnUpgrade(turretUpgradeType);
     }
 
     public void UpgradedAttack() // Called by button

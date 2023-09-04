@@ -16,6 +16,9 @@ public class SelectableDeck : MonoBehaviour
     [Header("REFERENCES")]
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
+    [SerializeField] private MeshRenderer pulsingMesh;
+    private Material pulsingMaterial;
+    private int isSelectedPropertyId;
 
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
@@ -23,13 +26,17 @@ public class SelectableDeck : MonoBehaviour
     private BuildingCard[] cards;
     private DeckSelector deckSelector;
 
+    private bool isSelected;
+
 
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
 
     public RunUpgradesContent RunContent => runContent;
     public DeckData DeckData => deckData;
     public Transform CardsHolder => cardsHolder;
+    public Vector3 Position => cardsHolder.position;
 
+    public bool FinishedArranging { get; private set; }
 
 
     [System.Serializable]
@@ -61,6 +68,10 @@ public class SelectableDeck : MonoBehaviour
     private void Awake()
     {
         SetDeckSprites();
+
+        pulsingMaterial = pulsingMesh.material;
+
+        isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
 
@@ -69,6 +80,16 @@ public class SelectableDeck : MonoBehaviour
         deckSelector.OnDeckSelected(this);
     }
 
+    private void OnMouseEnter()
+    {
+        if (isSelected) return;
+        SetHovered();
+    }
+    private void OnMouseExit()
+    {
+        if (isSelected) return;
+        SetNotHovered();
+    }
 
     private void SetDeckSprites()
     {
@@ -116,18 +137,22 @@ public class SelectableDeck : MonoBehaviour
     }
 
 
+
     public IEnumerator ArrangeCardsFromFirst(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
     {
+        FinishedArranging = false;
         for (int i = 0; i < cards.Length; ++i)
         {
             ArrangeCard(cards[i], i, motionDuration, arrangeCardsData, newParent);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
+        FinishedArranging = true;
     }
     
     public IEnumerator ArrangeCardsFromLast(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
     {
+        FinishedArranging = false;
         for (int i = cards.Length - 1; i >= 0; --i)
         {           
             ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent);
@@ -135,6 +160,7 @@ public class SelectableDeck : MonoBehaviour
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
+        FinishedArranging = true;
     }
 
     private void ArrangeCard(BuildingCard card, int i, float motionDuration, ArrangeCardsData arrangeCardsData, Transform newParent)
@@ -163,7 +189,29 @@ public class SelectableDeck : MonoBehaviour
         }
     }
 
+    public void SetSelected()
+    {
+        isSelected = true;
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
+    }
+    public void SetNotSelected()
+    {
+        isSelected = false;
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
+    }
 
 
+    private void SetHovered()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
+
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+    }
+    private void SetNotHovered()
+    {
+        pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
+
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+    }
 
 }

@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TurretBuilding : RangeBuilding
@@ -16,11 +15,17 @@ public class TurretBuilding : RangeBuilding
 
     [HideInInspector] public TurretBuildingStats stats;
 
+    public TurretCardParts TurretCardParts { get; private set; }
 
     private TurretPartBody_Prefab bodyPart;
     public Transform BodyPartTransform => bodyPart.transform;
+    public Transform BinderPointTransform => bodyPart.binderPoint;
 
     public PassiveDamageModifier baseDamagePassive;
+    private BasePassive basePassive;
+
+
+    public float TimeSinceLastShot { get; private set; }
 
     private float currentShootTimer;
     private Vector3 lastTargetedPosition;
@@ -29,8 +34,11 @@ public class TurretBuilding : RangeBuilding
     private Enemy targetedEnemy;
 
 
-    private TurretPartBody.BodyType bodyType; // Used to play sound
+    public TurretPartBody.BodyType BodyType { get; private set; }
+
     private TurretPartAttack_Prefab turretAttack;
+    public TurretPartAttack TurretPartAttack { get; private set; }
+    
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -47,6 +55,10 @@ public class TurretBuilding : RangeBuilding
 
     public const int MIN_PLAY_COST = 10;
 
+    public delegate void TurretBuildingEvent();
+    public event TurretBuildingEvent OnGotPlaced;
+    public event TurretBuildingEvent OnTimeSinceLastShotSet;
+
 
     void Awake()
     {
@@ -56,6 +68,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
+        TimeSinceLastShot = 0.0f;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
     }
@@ -86,7 +99,8 @@ public class TurretBuilding : RangeBuilding
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
-        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
+        TurretCardParts = turretCardParts;
+        this.TurretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
         TurretPartBase turretPartBase = turretCardParts.turretPartBase;
         TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
@@ -95,11 +109,11 @@ public class TurretBuilding : RangeBuilding
         CardLevel = turretCardParts.cardLevel;
 
         InitStats(turretStats);
-        bodyType = turretCardParts.turretPartBody.bodyType;
+        BodyType = turretCardParts.turretPartBody.bodyType;
 
 
-        this.turretAttack = turretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-
+        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
 
@@ -110,14 +124,28 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        //PASSIVE
-        turretCardParts.turretPassiveBase.passive.ApplyEffects(this);
-
-        upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+        Upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
-        upgrader.OnUpgrade += PlayUpgradeAnimation;
+        Upgrader.OnUpgrade += PlayUpgradeAnimation;
+
+        //PASSIVE
+        basePassive = turretCardParts.turretPassiveBase.passive;
+        basePassive.ApplyEffects(this);
 
         DisableFunctionality();
+    }
+
+    public void ResetAttackPart(TurretPartAttack turretPartAttack)
+    {
+        this.TurretPartAttack = turretPartAttack;
+
+        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        bodyPart.ResetProjectileMaterial(turretAttack.materialForTurret);
+    }
+    public void ResetBodyMaterial(Material newMaterial)
+    {        
+        bodyPart.ResetProjectileMaterial(newMaterial);
+        bodyPart.SetDefaultMaterial();
     }
 
     protected override void UpdateRange()
@@ -150,8 +178,10 @@ public class TurretBuilding : RangeBuilding
 
     private void UpdateShoot()
     {
+        TimeSinceLastShot += Time.deltaTime * GameTime.TimeScale;
+
         if (currentShootTimer < stats.cadence)
-        {
+        {            
             currentShootTimer += Time.deltaTime * GameTime.TimeScale;
             return;
         }
@@ -229,7 +259,8 @@ public class TurretBuilding : RangeBuilding
 
 
         // Audio
-        GameAudioManager.GetInstance().PlayProjectileShot(bodyType);
+        GameAudioManager.GetInstance().PlayProjectileShot(BodyType);
+        TimeSinceLastShot = 0.0f;
     }
 
 
@@ -264,31 +295,37 @@ public class TurretBuilding : RangeBuilding
         placedParticleSystem.gameObject.SetActive(true);
         placedParticleSystem.Play();
 
-        upgrader.OnBuildingOwnerPlaced();
+        Upgrader.OnBuildingOwnerPlaced();
 
-        InvokeOnBuildingPlaced();
+        InvokeOnPlaced();
+
+        TurretPartAttack.OnTurretPlaced(this, turretAttack.materialForTurret);
+        if (OnGotPlaced != null) OnGotPlaced();
     }
     public override void GotEnabledPlacing()
     {
         basePart.GotEnabledPlacing();
+        basePassive.GotEnabledPlacing();
     }
     public override void GotDisabledPlacing()
     {
         basePart.GotDisabledPlacing();
+        basePassive.GotDisabledPlacing();
     }
     public override void GotMovedWhenPlacing()
     {
         basePart.GotMovedWhenPlacing();
+        basePassive.GotMovedWhenPlacing();
     }
 
     public override void ShowQuickLevelUI()
     {
-        upgrader.ShowQuickLevelDisplay();
+        Upgrader.ShowQuickLevelDisplay();
     }
 
     public override void HideQuickLevelUI()
     {
-        upgrader.HideQuickLevelDisplay();
+        Upgrader.HideQuickLevelDisplay();
     }
 
     private void PlayUpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)

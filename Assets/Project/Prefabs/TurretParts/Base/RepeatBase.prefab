@@ -5504,7 +5504,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshTransform: {fileID: 5166099506917001427}
-  meshRenderer: {fileID: 7122536065465789328}
+  meshRenderers:
+  - {fileID: 7122536065465789328}
+  - {fileID: 8048421754670182887}
+  - {fileID: 679790685688435162}
   previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
   baseCollider: {fileID: 2857610521408497421}
   visualUpgrades:
@@ -5521,9 +5524,7 @@ MonoBehaviour:
   - 1
   - 1
   upgradeVisualsHolder: {fileID: 2602282631418732181}
-  extraMeshes:
-  - {fileID: 8048421754670182887}
-  - {fileID: 679790685688435162}
+  extraMeshes: []
   repeatParticles: {fileID: 6997308516746782402}
   bindOriginTransform: {fileID: 7392060454382277272}
   turretBinderMeshes:

@@ -55,7 +55,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        upgrader.InitSupport(turretPartBase.rangeLvl, currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(turretPartBase.rangeLvl, currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -116,10 +116,10 @@ public class SupportBuilding : RangeBuilding
         basePart.PlacedParticleSystem.gameObject.SetActive(true);
         basePart.PlacedParticleSystem.Play();
 
-        upgrader.OnBuildingOwnerPlaced();
-        upgrader.OnUpgrade += PlayUpgradeAnimation;
+        Upgrader.OnBuildingOwnerPlaced();
+        Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
-        InvokeOnBuildingPlaced();
+        InvokeOnPlaced();
     }
 
     public override void GotEnabledPlacing()
@@ -137,13 +137,13 @@ public class SupportBuilding : RangeBuilding
 
     public override void ShowQuickLevelUI() 
     {
-        upgrader.ShowQuickLevelDisplay();
+        Upgrader.ShowQuickLevelDisplay();
         basePart.GotHoveredWhenPlaced();
     }
 
     public override void HideQuickLevelUI() 
     {
-        upgrader.HideQuickLevelDisplay();
+        Upgrader.HideQuickLevelDisplay();
         basePart.GotUnoveredWhenPlaced();
     }
 
