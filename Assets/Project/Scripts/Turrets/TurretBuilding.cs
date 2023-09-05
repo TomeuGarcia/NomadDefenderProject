@@ -120,7 +120,7 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, stats.range);
 
-        currentShootTimer = Mathf.Max(stats.cadence - 0.2f, 0f);
+        TimeSinceLastShot = currentShootTimer = Mathf.Max(stats.cadence - 0.2f, 0f);
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 

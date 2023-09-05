@@ -284,6 +284,7 @@ public abstract class BuildingCard : MonoBehaviour
     {
         playCostText.text = GetCardPlayCost().ToString();
     }
+    public abstract void UpdatePlayCost(int newPlayCost);
 
 
     // CARD MOVEMENT
@@ -467,8 +468,8 @@ public abstract class BuildingCard : MonoBehaviour
     public void SetCanBePlayedAnimation()
     {
         cardMaterial.SetFloat("_CanBePlayed", 1f);
-        playCostText.DOBlendableColor(Color.white, 0.2f);
-        playCostCurrencyIcon.DOBlendableColor(Color.white, 0.2f);
+        playCostText.DOColor(Color.white, 0.2f);
+        playCostCurrencyIcon.DOColor(Color.white, 0.2f);
     }
 
     public void SetCannotBePlayedAnimation(bool updatePlayCostText)
@@ -477,8 +478,8 @@ public abstract class BuildingCard : MonoBehaviour
 
         if (updatePlayCostText)
         {
-            playCostText.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
-            playCostCurrencyIcon.DOBlendableColor(s_canNotPlayCardTextColor, 0.2f);
+            playCostText.DOColor(s_canNotPlayCardTextColor, 0.2f);
+            playCostCurrencyIcon.DOColor(s_canNotPlayCardTextColor, 0.2f);
         }        
     }
 

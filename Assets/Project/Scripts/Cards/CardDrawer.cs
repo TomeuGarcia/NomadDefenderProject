@@ -462,7 +462,7 @@ public class CardDrawer : MonoBehaviour
     }
 
 
-    public void SpawnTurretCardInDeck(TurretCardParts turretCardParts)
+    public TurretBuildingCard SpawnTurretCardInDeck(TurretCardParts turretCardParts)
     {
         TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
         turretCard.ResetParts(turretCardParts);
@@ -470,8 +470,10 @@ public class CardDrawer : MonoBehaviour
         deck.AddCardToDeckBottom(turretCard);
 
         battleHUD.AddNewDeckCardIconsAndShow(1);
+
+        return turretCard;
     }
-    public void SpawnTurretCardInHand(TurretCardParts turretCardParts)
+    public TurretBuildingCard SpawnTurretCardInHand(TurretCardParts turretCardParts)
     {
         TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
         turretCard.ResetParts(turretCardParts);
@@ -481,6 +483,18 @@ public class CardDrawer : MonoBehaviour
         hand.InitCardsInHand();
 
         battleHUD.AddNewDeckCardIconsAndShow(1);
+
+        return turretCard;
+    }
+
+    public BuildingCard[] GetCardsInHand()
+    {
+        return hand.GetCards().ToArray();
+    }
+
+    public void CheckHandCardsCost()
+    {
+        hand.CheckCardsCost();
     }
 
 }

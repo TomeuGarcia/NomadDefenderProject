@@ -9,7 +9,6 @@ public class TurretPartBody : ScriptableObject
 {
     public static int[] damagePerLvl = new int[] { 6, 10, 20, 30, 40 };
     public static float[] cadencePerLvl = new float[] { 3f, 2f, 1.5f, 1f, 0.5f };
-    public static float GetSlowestCadence() { return cadencePerLvl[0]; }
     
     public enum BodyType
     {
