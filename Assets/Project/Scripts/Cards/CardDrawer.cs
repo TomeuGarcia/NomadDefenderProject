@@ -233,7 +233,7 @@ public class CardDrawer : MonoBehaviour
             battleHUD.canInteractWithDeckUI = false;
             battleHUD.canShowDrawCardButton = false;
             battleHUD.ShowDeckUI();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.0f);
 
             int numCardsDrawn = 0;
             while (numCardsDrawn < cardsToDrawPerWave && deck.HasCardsLeft())
