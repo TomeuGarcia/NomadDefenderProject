@@ -134,7 +134,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
         currencyCounter.OnCurrencyAdded -= CheckCardsCost;
-        currencyCounter.OnCurrencySpent -= CheckCardsCost;
+        currencyCounter.OnCurrencySpent -= CheckCardsCost;        
 
         buildingPlacer.OnBuildingCantBePlaced -= ResetToStandardWhenPlacingCancelled;
         BuildingCard.OnDragOutsideDragBounds -= EnablePlacingAfterDragged;
@@ -836,7 +836,7 @@ public class HandBuildingCards : MonoBehaviour
     public void RemoveCard(BuildingCard card) {
         cards.Remove(card);
     }
-    private void CheckCardsCost()
+    public void CheckCardsCost()
     {
         for (int i = 0; i < cards.Count; ++i)
         {

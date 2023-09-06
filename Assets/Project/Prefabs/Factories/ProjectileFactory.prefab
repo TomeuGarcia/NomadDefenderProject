@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2337501459450368511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8205045976070575219}
+  - component: {fileID: 8283534366679040470}
+  m_Layer: 0
+  m_Name: CardHoardPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8205045976070575219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2337501459450368511}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4214954000757422418}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8283534366679040470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2337501459450368511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 1490798308166202780, guid: a5871bd2d2a4a3e4cb60861dc13b4a21,
+    type: 3}
 --- !u!1 &4214953998975782064
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +312,7 @@ Transform:
   - {fileID: 4214953999389858340}
   - {fileID: 6363627830064405617}
   - {fileID: 1231018116377135127}
+  - {fileID: 8205045976070575219}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -296,6 +343,8 @@ MonoBehaviour:
     pool: {fileID: 3445385579216326835}
   - attackType: 6
     pool: {fileID: 3315721406142200886}
+  - attackType: 7
+    pool: {fileID: 8283534366679040470}
 --- !u!1 &5100760360193730304
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +356,7 @@ GameObject:
   - component: {fileID: 6363627830064405617}
   - component: {fileID: 3445385579216326835}
   m_Layer: 0
-  m_Name: HurtedThresholdPool
+  m_Name: BerserkerPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

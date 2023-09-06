@@ -78,6 +78,8 @@ public class SupportBuilding : RangeBuilding
 
         if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+
+        InvokeOnBuildingUpgraded();
     }
     public void UpgradeRangeIncrementingLevel()
     {

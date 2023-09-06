@@ -8,6 +8,7 @@ public class SlowFireRateProjectile : HomingProjectile
     [SerializeField, Min(0f)] private float maxDamageMultiplier = 10.0f;
     [SerializeField] private AnimationCurve damageRateCurve;
 
+    public const float MAX_CADENCE_TIME = 5.0f;
 
 
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
@@ -44,11 +45,10 @@ public class SlowFireRateProjectile : HomingProjectile
     }
 
     private int ComputeDamage()
-    {
-        float maxTime = TurretPartBody.GetSlowestCadence();
-        float currentTime = Mathf.Min(turretOwner.TimeSinceLastShot, maxTime);
+    {        
+        float currentTime = Mathf.Min(turretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
         
-        float curveCoefficient = currentTime / maxTime;
+        float curveCoefficient = currentTime / MAX_CADENCE_TIME;
         float curveValue = damageRateCurve.Evaluate(curveCoefficient);
 
         int damage = (int)(curveValue * turretOwner.stats.damage * maxDamageMultiplier);
