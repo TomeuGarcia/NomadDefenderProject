@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT };
+public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT, NONE };
 
 public abstract class InBattleBuildingUpgrader : MonoBehaviour
 {
@@ -300,17 +300,36 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         visible = true;
     }
 
+    public bool StatsLevelBellowLimit(bool isSupport)
+    {
+        bool allStatsAreMaxed = true;
+        if (isSupport) allStatsAreMaxed &= IsStatMaxed(supportLvl);
+        else allStatsAreMaxed &= IsStatMaxed(attackLvl) && IsStatMaxed(cadenceLvl) && IsStatMaxed(rangeLvl);
+
+        return !allStatsAreMaxed;
+    }
+
     public TurretUpgradeType GetLowestStatUpgradeType(bool includeSupport)
     {
-        List<(int, TurretUpgradeType)> levelsByUpgradeTypes = new List<(int, TurretUpgradeType)> { 
-            (attackLvl, TurretUpgradeType.ATTACK), 
-            (cadenceLvl, TurretUpgradeType.CADENCE), 
-            (rangeLvl, TurretUpgradeType.RANGE)
-        };
-        if (includeSupport)
+        List<(int, TurretUpgradeType)> levelsByUpgradeTypes = new List<(int, TurretUpgradeType)>(4);
+        if (!IsStatMaxed(attackLvl))
+        {
+            levelsByUpgradeTypes.Add((attackLvl, TurretUpgradeType.ATTACK));
+        }
+        if (!IsStatMaxed(cadenceLvl))
+        {
+            levelsByUpgradeTypes.Add((cadenceLvl, TurretUpgradeType.CADENCE));
+        }
+        if (!IsStatMaxed(rangeLvl))
+        {
+            levelsByUpgradeTypes.Add((rangeLvl, TurretUpgradeType.RANGE));
+        }
+        if (includeSupport && !IsStatMaxed(supportLvl))
         {
             levelsByUpgradeTypes.Add((supportLvl, TurretUpgradeType.SUPPORT));
         }
+
+        if (levelsByUpgradeTypes.Count == 0) return TurretUpgradeType.NONE;
 
         levelsByUpgradeTypes.Sort((a, b) => { 
             if (a.Item1 > b.Item1) return 1; 
@@ -349,6 +368,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         }
 
         InvokeOnUpgrade(turretUpgradeType);
+        CheckStopParticlesCanUpgrade();
     }
 
     public void UpgradedAttack() // Called by button
@@ -651,7 +671,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
 
 
-    private bool IsBuildingUpgradeAvailable()
+    protected virtual bool IsBuildingUpgradeAvailable()
     {
         return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentBuildingLevel) && HasEnoughCurrencyToLevelUp();
     }
@@ -682,7 +702,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
     }
 
-    private bool IsBuildingUpgradeNotAvailable()
+    protected virtual bool IsBuildingUpgradeNotAvailable()
     {
         return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentBuildingLevel) || !HasEnoughCurrencyToLevelUp());
     }

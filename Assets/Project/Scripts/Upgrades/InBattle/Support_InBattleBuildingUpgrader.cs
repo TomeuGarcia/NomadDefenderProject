@@ -239,4 +239,14 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         }
     }
 
+    protected override bool IsBuildingUpgradeAvailable()
+    {
+        return base.IsBuildingUpgradeAvailable() || (StatsLevelBellowLimit(true) && !IsCardUpgradedToMax(currentBuildingLevel));
+    }
+
+    protected override bool IsBuildingUpgradeNotAvailable()
+    {
+        return base.IsBuildingUpgradeNotAvailable() || (!StatsLevelBellowLimit(true) && IsCardUpgradedToMax(currentBuildingLevel));
+    }
+
 }

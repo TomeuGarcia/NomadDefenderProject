@@ -157,6 +157,7 @@ public class SupportBuilding : RangeBuilding
 
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
     {
+        basePart.DOComplete();
         basePart.MeshTransform.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
 
 

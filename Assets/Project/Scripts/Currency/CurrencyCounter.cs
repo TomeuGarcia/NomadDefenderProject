@@ -28,6 +28,8 @@ public class CurrencyCounter : MonoBehaviour
     public delegate void CurrencyCounterAction();
     public event CurrencyCounterAction OnCurrencyAdded;
     public event CurrencyCounterAction OnCurrencySpent;
+    public delegate void CurrencyCounterAction2(int amountSpent);
+    public event CurrencyCounterAction2 OnCurrencyAmountSpent;
 
 
     private void OnValidate()
@@ -49,11 +51,13 @@ public class CurrencyCounter : MonoBehaviour
 
     private void OnEnable()
     {
+        ServiceLocator.GetInstance().CurrencyCounter = this;
+
         DroppedCurrency.OnCurrencyGathered += AddCurrency;
     }
 
     private void OnDisable()
-    {
+    {       
         DroppedCurrency.OnCurrencyGathered -= AddCurrency;
     }
 
@@ -118,6 +122,7 @@ public class CurrencyCounter : MonoBehaviour
         currencyCount -= amount;
 
         if (OnCurrencySpent != null) OnCurrencySpent();
+        if (OnCurrencyAmountSpent != null) OnCurrencyAmountSpent(amount);
     }
 
     private IEnumerator SubtractCurrencyAnimation(int initialCurrencyCount, int amount)
