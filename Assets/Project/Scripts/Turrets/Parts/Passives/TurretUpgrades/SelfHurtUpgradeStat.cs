@@ -29,6 +29,8 @@ public class SelfHurtUpgradeStat : BasePassive
         await Task.Delay(300);
 
         TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
+        if (lowestStat == TurretUpgradeType.NONE) return;
+
         owner.Upgrader.FreeTurretUpgrade(lowestStat);
 
         ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation().TakeDamage(1);

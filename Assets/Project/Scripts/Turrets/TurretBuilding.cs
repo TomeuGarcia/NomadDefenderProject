@@ -342,6 +342,7 @@ public class TurretBuilding : RangeBuilding
     
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
+        bodyHolder.DOComplete();
         bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
         
 
