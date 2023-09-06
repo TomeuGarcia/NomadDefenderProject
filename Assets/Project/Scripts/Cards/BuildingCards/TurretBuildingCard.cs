@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static ICardDescriptionProvider;
+using static SupportBuilding;
 
 public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 {
@@ -166,7 +167,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         return turretStats.playCost;
     }
-
+    public override void UpdatePlayCost(int newPlayCost)
+    {
+        turretStats.playCost = newPlayCost;
+        InitCostText();
+    }
 
     public void ResetParts(TurretCardParts turretCardParts)
     {

@@ -45,6 +45,8 @@ public class EnemyWaveSpawner : ScriptableObject
 
 
     public delegate void EnemyWaveSpawnerAction(EnemyWaveSpawner enemyWaveSpawner);
+    public event EnemyWaveSpawnerAction OnWaveStartSpawning;
+    public event EnemyWaveSpawnerAction OnEnemySpawn;
     public event EnemyWaveSpawnerAction OnWaveFinished;
     public event EnemyWaveSpawnerAction OnLastWaveFinished;
 
@@ -160,8 +162,13 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
+    public void ReadyToStartNextWave()
     {
+        if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
+    }
+
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
+    {        
         yield return new WaitForSeconds(delayWaveStart * GameTime.TimeScale);
 
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
@@ -192,6 +199,8 @@ public class EnemyWaveSpawner : ScriptableObject
 
     private void SpawnEnemy(Enemy.EnemyType enemyType, Transform spawnTransform)
     {
+        if (OnEnemySpawn != null) OnEnemySpawn(this);
+
         GameObject enemyGameObject = EnemyFactory.GetInstance()
             .GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity, spawnTransform);
         enemyGameObject.SetActive(true);

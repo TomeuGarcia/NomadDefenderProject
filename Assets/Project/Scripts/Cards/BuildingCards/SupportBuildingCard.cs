@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ICardDescriptionProvider;
+using static SupportBuilding;
 using static TurretBuildingCard;
 
 
@@ -64,6 +65,13 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         return supportBuildingStats.playCost;
     }
+
+    public override void UpdatePlayCost(int newPlayCost)
+    {
+        supportBuildingStats.playCost = newPlayCost;
+        InitCostText();
+    }
+
     public void ResetParts(SupportCardParts supportCardParts)
     {
         this.supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
@@ -256,4 +264,5 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
     }
+
 }

@@ -15,6 +15,7 @@ public class HurtedThresholdProjectile : HomingProjectile
     [SerializeField] private TrailRenderer trilRenderer;
 
 
+
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
@@ -65,5 +66,6 @@ public class HurtedThresholdProjectile : HomingProjectile
         }
 
         return damage;
-    }
+    }   
+
 }
