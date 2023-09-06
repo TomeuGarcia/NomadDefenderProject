@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6561019592097627548
+--- !u!114 &-2576937941855135952
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,12 +20,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OuterPlaneGround_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 23b0c1bff7bfbfa45b0fb9b222c2b48d,
+  m_Name: PerspectiveFog 1
+  m_Shader: {fileID: -6465566751694194690, guid: 9e18afe7f18db9d4b93dce49703f08a0,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -34,10 +34,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -52,28 +48,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdditionalErrorWireStep2: 0
-    - _BrightColorIncrease: 0.03
-    - _ErrorNoiseScale: 2
-    - _ErrorNoiseStrength: 0.5
-    - _ErrorWiresStep: 0
-    - _LerpWireColors: 0
-    - _NoiseScale: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0
-    - _SquareScaleCoef: 2
-    - _WireColorLerpPeriod: 1
-    - _WireEdge: 0.614
-    - _WiresScale: 0.17
     m_Colors:
-    - _BaseColor1: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor2: {r: 0, g: 0.1254902, b: 0.14117648, a: 1}
-    - _BrightErrorColor: {r: 47.937256, g: 0, b: 0, a: 0}
-    - _ErrorOriginOffset: {r: -1000, g: -1000, b: -1000, a: 0}
-    - _ErrorOriginOffset2: {r: -0.5, g: 0, b: 14.81, a: 0}
-    - _WiresColor: {r: 0, g: 0.09411765, b: 0.11372549, a: 1}
-    - _WiresColor2: {r: 0.2086226, g: 0.7218053, b: 1.078732, a: 1}
-    - _WiresErrorColor: {r: 4.237095, g: 0.3105724, b: 0, a: 0}
-    - _WiresOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
