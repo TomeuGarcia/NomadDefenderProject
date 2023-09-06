@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2efab6b19df19a14394d44de805bcd8d, type: 3}
   m_Name: CurrencySpendUpgradeStat_Script
   m_EditorClassIdentifier: 
-  abilityName: payBoon
-  abilityDescription: TODO
+  abilityName: powerInvestor
+  abilityDescription: "When you spend 500\u2666, upgrade the lowest stat, then increase
+    that amount by +150\u2666."
   visualsPrefab: {fileID: 1719587861110896655, guid: a8cc36dd5ba076049bca6815658e6e80,
     type: 3}
-  requiredSpendAmount: 300
-  requiredSpendAmountIncrement: 100
+  startRequiredSpendAmount: 500
+  requiredSpendAmountIncrement: 150

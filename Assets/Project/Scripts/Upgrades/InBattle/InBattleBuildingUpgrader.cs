@@ -671,7 +671,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
 
 
-    protected virtual bool IsBuildingUpgradeAvailable()
+    protected bool IsBuildingUpgradeAvailable()
     {
         return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentBuildingLevel) && HasEnoughCurrencyToLevelUp();
     }
@@ -702,7 +702,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
     }
 
-    protected virtual bool IsBuildingUpgradeNotAvailable()
+    protected bool IsBuildingUpgradeNotAvailable()
     {
         return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentBuildingLevel) || !HasEnoughCurrencyToLevelUp());
     }

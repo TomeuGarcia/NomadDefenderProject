@@ -50,7 +50,7 @@ public class CurrencySpendUpgradeStatVisuals : MonoBehaviour
             if (endValuePer1 > 0.999f)
             {
                 fillImage.fillAmount = 0.0f;
-                canvasHolder.DOPunchPosition(Vector3.up * 0.5f, 1.0f, 6, 0.8f);
+                canvasHolder.DOPunchPosition(Vector3.up * 0.25f, 1.0f, 6, 0.8f);
             }
 
         }
@@ -63,7 +63,7 @@ public class CurrencySpendUpgradeStatVisuals : MonoBehaviour
                 (x) => { value = x; text.text = value.ToString(); },
                 endValue,
                 duration
-                    );
+            );
         }
     }
 
@@ -75,7 +75,6 @@ public class CurrencySpendUpgradeStatVisuals : MonoBehaviour
 
         _startColor = _fillImage.color;
         _generalCanvasGroup.alpha = 0.0f;
-        _divisorImage.color = _startColor;
     }
 
     public void QueueUpdateVisuals(int value, int maxValue)
@@ -108,7 +107,7 @@ public class CurrencySpendUpgradeStatVisuals : MonoBehaviour
     
     public void Hide()
     {
-        _generalCanvasGroup.DOFade(0.0f, 2.0f);
+        _generalCanvasGroup.DOFade(0.0f, 1.0f);
     }
 
 
