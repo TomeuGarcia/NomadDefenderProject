@@ -18,7 +18,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         LONG_RANGE, 
         CLOSE_RANGE, 
         PIERCING, 
-        HURTED_THRESHOLD, 
+        BERSERKER, 
         SLOW_FIRE_RATE,
         CARD_HOARD
     }

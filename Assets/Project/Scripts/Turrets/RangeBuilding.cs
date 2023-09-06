@@ -29,6 +29,11 @@ public abstract class RangeBuilding : Building
     public RangeBuildingAction OnEnemyEnterRange;
     public RangeBuildingAction OnEnemyExitRange;
 
+    public delegate void RangeBuildingAction2();
+    public RangeBuildingAction2 OnBuildingUpgraded;
+    public RangeBuildingAction2 OnShowRangePlane;
+    public RangeBuildingAction2 OnHideRangePlane;
+
 
     [SerializeField] protected InBattleBuildingUpgrader upgrader;
     public InBattleBuildingUpgrader Upgrader => upgrader;
@@ -190,12 +195,14 @@ public abstract class RangeBuilding : Building
     }
 
     public override void ShowRangePlane()
-    {
+    {        
         basePart.baseCollider.ShowRange();
+        if (OnShowRangePlane != null) OnShowRangePlane();
     }
     public override void HideRangePlane()
     {
         basePart.baseCollider.HideRange();
+        if (OnHideRangePlane != null) OnHideRangePlane();
     }
     protected abstract void UpdateRange();
 
@@ -247,4 +254,8 @@ public abstract class RangeBuilding : Building
 
 
     public abstract void Upgrade(TurretUpgradeType upgradeType, int newStatLevel);
+    protected void InvokeOnBuildingUpgraded()
+    {
+        if (OnBuildingUpgraded != null) OnBuildingUpgraded();
+    }
 }

@@ -154,9 +154,14 @@ public class TurretBuilding : RangeBuilding
     }
 
 
-    public void InitStats(TurretBuildingStats stats)
+    private void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
+    }
+    public void UpdateStats(TurretBuildingStats stats)
+    {
+        InitStats(stats);
+        UpdateRange();
     }
 
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
@@ -174,6 +179,8 @@ public class TurretBuilding : RangeBuilding
                 UpdateRange();
                 break;
         }
+
+        InvokeOnBuildingUpgraded();
     }
 
     private void UpdateShoot()
