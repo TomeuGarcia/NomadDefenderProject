@@ -299,6 +299,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
+            if (pathLocations[i].healthSystem.IsDead()) continue;
+
             int loactionHealth = pathLocations[i].healthSystem.health;
             if (loactionHealth < lowestHealth)
             {

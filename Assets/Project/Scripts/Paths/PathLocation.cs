@@ -21,9 +21,13 @@ public class PathLocation : MonoBehaviour
     [SerializeField] Material lostMaterial;
     [SerializeField] GameObject animationCube;
     private Material nodeMeshMaterial;
+    [SerializeField] private MeshRenderer healFlashMesh;
+    private Material healFlashMaterial;
+
 
     [Header("MESH HOLDER")]
     [SerializeField] private Transform locationMeshHolder;
+
 
     public Vector3 Position => transform.position;
 
@@ -65,6 +69,8 @@ public class PathLocation : MonoBehaviour
         InitParticles();
 
         hasGameFinished = false;
+
+        healFlashMaterial = healFlashMesh.material;
     }
 
     private void OnEnable()
@@ -101,11 +107,13 @@ public class PathLocation : MonoBehaviour
         if (healthSystem.IsDead())
         {
             Die();
+            locationMeshHolder.DOComplete();
             locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.3f, 0.6f, 8);
             GameAudioManager.GetInstance().PlayLocationDestroyed();
         }
         else
         {
+            locationMeshHolder.DOComplete();
             locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
             GameAudioManager.GetInstance().PlayLocationTakeDamage();
         }
@@ -119,9 +127,12 @@ public class PathLocation : MonoBehaviour
         healthSystem.Heal(healAmount);
 
         SetDamagedVisuals();
+        locationMeshHolder.DOComplete();
         locationMeshHolder.DOPunchScale(new Vector3(0.3f, 1f, 0.3f) * 0.3f, 0.6f, 8);
-        // TODO: Add audio
 
+        
+        GameAudioManager.GetInstance().PlayLocationHealed();
+        healFlashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
         if (OnHealthChanged != null) OnHealthChanged();
     }

@@ -13,6 +13,6 @@ public class ExtraArmorDamagePassive : BaseDamagePassive
             return damage;
         }
 
-        return (int)((float)damage * 1.5f);
+        return (int)((float)damage * 2.0f);
     }
 }
