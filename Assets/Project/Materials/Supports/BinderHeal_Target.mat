@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BinderRepeater_OutsideRange
+  m_Name: BinderHeal_Target
   m_Shader: {fileID: -6465566751694194690, guid: 100dbc82c80ffa04d9f795064681e85e,
     type: 3}
   m_ValidKeywords: []
@@ -48,7 +48,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Direction: 1
+    - _Direction: -1
     - _DisapearCoef: 0
     - _MoveSpeed: 2
     - _QueueControl: 0
@@ -58,5 +58,5 @@ Material:
     - _WarpMoveSpeed: 2
     - _WarpSpread: 0.5
     m_Colors:
-    - _Color: {r: 1.4980392, g: 0, b: 0.015686275, a: 1}
+    - _Color: {r: 0, g: 2.9960785, b: 0.20505506, a: 1}
   m_BuildTextureStacks: []
