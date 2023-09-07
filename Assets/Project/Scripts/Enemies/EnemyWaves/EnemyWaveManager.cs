@@ -362,4 +362,14 @@ public class EnemyWaveManager : MonoBehaviour
         enemyPathFollowerTrail.SetMoveSpeed(1f);
         enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, enemyPathFollowerTrail.transform);
     }
+
+
+    public void HideWaveSpawnersInfoDisplay()
+    {
+        foreach (var enemyWaveInfoDisplayer in enemyWaveInfoDisplayers)
+        {
+            enemyWaveInfoDisplayer.Hide();
+        }
+    }
+
 }

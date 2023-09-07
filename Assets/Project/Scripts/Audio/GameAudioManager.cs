@@ -91,10 +91,12 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource battleAudioSource;
     [SerializeField] private AudioClip locationTakeDamage;
     [SerializeField] private AudioSource battleAudioSource2;
+    [SerializeField] private AudioSource battleAudioSource3;
     [SerializeField] private AudioClip selfHurtExplosion;
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
     [SerializeField] private AudioClip stageVictory;
+    [SerializeField] private AudioClip locationHealed;
 
     [Header("CURRENCY")]
     [SerializeField] private AudioSource[] currencyAudioSources;
@@ -576,7 +578,6 @@ public class GameAudioManager : MonoBehaviour
 
     // In-Battle Upgrades
     public void PlayInBattleBuildingUpgrade()
-
     {
 
         inBattleBuildingUpgradeAudioSource.pitch = Random.Range(0.9f, 1.1f);
@@ -690,6 +691,13 @@ public class GameAudioManager : MonoBehaviour
         battleAudioSource.pitch = Random.Range(1.1f, 1.2f);
 
         battleAudioSource.Play();
+    }
+    public void PlayLocationHealed()
+    {
+        battleAudioSource3.clip = locationHealed;
+        battleAudioSource3.pitch = Random.Range(1.1f, 1.2f);
+
+        battleAudioSource3.Play();
     }
     public void PlaySelfHurtExplosion()
     {

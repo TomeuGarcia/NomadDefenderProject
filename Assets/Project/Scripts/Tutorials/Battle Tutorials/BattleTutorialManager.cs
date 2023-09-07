@@ -15,6 +15,7 @@ public class BattleTutorialManager : MonoBehaviour
     //CurrencyBackgroundImg (can set alpha to 0)
     [SerializeField] private TutorialCardDrawer tutoCardDrawer;
     [SerializeField] private HandBuildingCards hand;
+    [SerializeField] private EnemyWaveManager enemyWaveManager;
 
     [SerializeField] private GameObject currencyBackgroundImg;
 
@@ -316,8 +317,9 @@ public class BattleTutorialManager : MonoBehaviour
 
         yield return new WaitUntil(() => wavesCounter > 2);
         scriptedSequence.Clear();
-        
-        
+
+        enemyWaveManager.HideWaveSpawnersInfoDisplay();
+
         //Last Wave
         scriptedSequence.NextLine(); //23
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );

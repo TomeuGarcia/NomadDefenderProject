@@ -102,9 +102,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         canvasGroup.DOFade(1.0f, showHideDuration);
         await Task.Delay((int)(showHideDuration * 1000));
     }
-    private void Hide()
+    public void Hide()
     {
         canvasGroup.DOFade(0.0f, showHideDuration);
-    }
+    }   
 
 }

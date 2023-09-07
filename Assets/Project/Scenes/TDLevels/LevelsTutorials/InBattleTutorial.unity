@@ -4588,6 +4588,8 @@ MonoBehaviour:
   hand: {fileID: 1635650534}
   deck: {fileID: 1635650530}
   battleHUD: {fileID: 1635650533}
+  deckCreator: {fileID: 0}
+  testTurretCardParts: {fileID: 0}
   redrawCanvasGameObject: {fileID: 1635650535}
   redrawsLeftCounterText: {fileID: 495573788}
   cgRedrawsLeftText: {fileID: 495573789}
@@ -28060,6 +28062,18 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96cca41b32840aa45bdf634ab705208b, type: 3}
+--- !u!114 &4485851063868794197 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4485851063868794196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403097627d2ae574bb259badaed0576f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4508207010723784022
 GameObject:
   m_ObjectHideFlags: 0
@@ -29394,6 +29408,11 @@ PrefabInstance:
       propertyPath: redrawInterface
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: enemyWaveManager
+      value: 
+      objectReference: {fileID: 4485851063868794197}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: currencyBackgroundImg

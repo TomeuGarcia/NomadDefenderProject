@@ -41,6 +41,8 @@ public class EnemyFeedback : MonoBehaviour
     //ARMOR
     public void ArmorUpdate(HealthSystem.UpdateType updateType)
     {
+        if (!gameObject.activeInHierarchy) return;
+
         switch (updateType)
         {
             case HealthSystem.UpdateType.INCREASE:
