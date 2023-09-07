@@ -99,11 +99,6 @@ public class HandBuildingCards : MonoBehaviour
         isInRedrawPhase = true;
         InitCardsInHandForRedraw();      
 
-        for (int i = 0; i < cards.Count; ++i)
-        {
-            cards[i].CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
-        }
-
         CheckCardsCost();
     }
 
@@ -347,6 +342,8 @@ public class HandBuildingCards : MonoBehaviour
         {
             itCard.OnCardSelected += CheckSelectCard;
             itCard.OnCardSelected -= Redraw;
+
+            itCard.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
         buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
@@ -496,12 +493,7 @@ public class HandBuildingCards : MonoBehaviour
     {
         cards.Add(card);
 
-        if (isHandHidden) HandTransform.position = defaultHandPosition;
-
-        if (!card.AlreadySpawnedCopyBuildingPrefab)
-        {
-            card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
-        }
+        if (isHandHidden) HandTransform.position = defaultHandPosition;       
 
         ++numCardsBeingAdded;
         card.PlayDrawAnimation(
@@ -516,6 +508,11 @@ public class HandBuildingCards : MonoBehaviour
         if (!isInRedrawPhase)
         {
             CheckCardsCost();
+
+            if (!card.AlreadySpawnedCopyBuildingPrefab)
+            {
+                card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
+            }
         }
 
         if (HasPreviouslySelectedCard)
