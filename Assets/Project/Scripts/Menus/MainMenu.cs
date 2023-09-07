@@ -79,6 +79,8 @@ public class MainMenu : MonoBehaviour
         PauseMenu.GetInstance().gameCanBePaused = false;
     }
 
+    
+
     private void SetupTextDecoderManager()
     {
         List<TextDecoder> textDecoders = new List<TextDecoder>();
@@ -103,8 +105,9 @@ public class MainMenu : MonoBehaviour
             //Debug.Log("All Tutorials Have Been Reset");
             //playButtonGO.SetActive(false);
         }
-        else if (Input.GetKeyDown(KeyCode.P))
+        else if (Input.GetKeyDown(KeyCode.P) && canInteract)
         {
+            TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();
             Play();
         }
     }

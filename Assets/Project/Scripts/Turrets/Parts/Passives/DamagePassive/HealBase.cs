@@ -1,52 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "SelfHurtUpgradeStat", menuName = "TurretPassives/SelfHurtUpgradeStat")]
-public class SelfHurtUpgradeStat : BasePassive
+
+[CreateAssetMenu(fileName = "DeployHealBase", menuName = "TurretPassives/DeployHealBase")]
+public class HealBase : BasePassive
 {
-    private TurretBinder binder;
     private TurretBuilding owner;
+
+    TurretBinder binder;
 
 
     public override void ApplyEffects(TurretBuilding owner)
-    {        
+    {
         this.owner = owner;
-        owner.OnPlaced += OnOwnerTurretPlaced;
+        owner.OnGotPlaced += OnOwnerGotPlaced;
+        owner.OnDestroyed += UnsubscriveEvents;
+    }
 
-        PathLocation.OnHealthChanged += OnPathLocationHealthChanged;
+    private void UnsubscriveEvents()
+    {
+        owner.OnGotPlaced -= OnOwnerGotPlaced;
+        owner.OnDestroyed -= UnsubscriveEvents;
     }
 
 
-    private async void OnOwnerTurretPlaced(Building invokerBuilding)
-    {
-        owner.OnPlaced -= OnOwnerTurretPlaced;
-        PathLocation.OnHealthChanged -= OnPathLocationHealthChanged;
 
+    private void OnOwnerGotPlaced()
+    {
+        HideBinder();
+        DoHeal();
+    }
+
+    private async void DoHeal()
+    {
         await Task.Delay(300);
 
-        TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
-        if (lowestStat == TurretUpgradeType.NONE) return;
+        int healAmount = owner.CardLevel;
 
-        owner.Upgrader.FreeTurretUpgrade(lowestStat);
+        PathLocation mostDamagedLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation();
 
-        ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation().TakeDamage(1);
-        
-        HideBinder();
+        mostDamagedLocation.Heal(healAmount);
     }
+
 
 
     public override void GotEnabledPlacing()
     {
         ShowNewBinder();
         ConnectBinderWithPathLocation();
+
+        PathLocation.OnHealthChanged += OnPathLocationHealthChanged;
     }
     public override void GotDisabledPlacing()
     {
         HideBinder();
+
+        PathLocation.OnHealthChanged -= OnPathLocationHealthChanged;
     }
 
     public override void GotMovedWhenPlacing()
@@ -57,7 +69,7 @@ public class SelfHurtUpgradeStat : BasePassive
 
     public void ShowNewBinder()
     {
-        binder = ServiceLocator.GetInstance().TDTurretBinderHelper.TakeBinder(TDTurretBinderHelper.BinderType.HURT_TARGET);
+        binder = ServiceLocator.GetInstance().TDTurretBinderHelper.TakeBinder(TDTurretBinderHelper.BinderType.HEAL_TARGET);
         binder.Show();
     }
     public void HideBinder()
@@ -71,7 +83,7 @@ public class SelfHurtUpgradeStat : BasePassive
 
     private void ConnectBinderWithPathLocation()
     {
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation();
+        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation();
         TurretBinderUtils.UpdateTurretBinder(binder.Transform, pathLocation.transform, owner.BinderPointTransform);
     }
 
@@ -80,6 +92,11 @@ public class SelfHurtUpgradeStat : BasePassive
         if (binder != null)
         {
             ConnectBinderWithPathLocation();
-        }        
+        }
     }
+
+
+
+
+
 }

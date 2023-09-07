@@ -6,5 +6,6 @@ public interface TDLocationsUtils
 {
     public int GetHighestLocationHealth();
     public PathLocation GetHealthiestLocation();
+    public PathLocation GetMostDamagedLocation();
 
 }

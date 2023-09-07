@@ -64,4 +64,12 @@ public class TutorialsSaverLoader : MonoBehaviour
         SetTutorialDone(Tutorials.BATTLE);
     }
 
+    public void SetAllTutorialsDone()
+    {
+        for (int i = 0; i < (int)Tutorials.COUNT; ++i)
+        {
+            SetTutorialDone((Tutorials)i);
+        }
+    }
+
 }

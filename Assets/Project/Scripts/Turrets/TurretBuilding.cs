@@ -244,6 +244,7 @@ public class TurretBuilding : RangeBuilding
         else
         {
             Shoot(enemyTarget);
+            bodyPart.transform.DOComplete();
             bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
         }
     }
