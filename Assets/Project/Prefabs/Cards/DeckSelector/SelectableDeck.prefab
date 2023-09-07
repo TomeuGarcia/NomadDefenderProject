@@ -873,9 +873,13 @@ MonoBehaviour:
     attacksContent: {fileID: 11400000, guid: 26ea0703c51b8ce4bb5bd105a5d5e397, type: 2}
     bodiesContent: {fileID: 11400000, guid: 413beb10a30a46a4da120a9db4db55b5, type: 2}
     basesContent: {fileID: 11400000, guid: 17bffd77ed929ef47b641b3a3517a0af, type: 2}
+  firstMaterialLightName: _FirstFillCoef
+  secondMaterialLightName: _SecondFillCoef
+  materialBorderIndex: 2
   cardsHolder: {fileID: 5289272715382212520}
   interactionCollider: {fileID: 8990557148789142646}
   pulsingMesh: {fileID: 5792448075486990874}
+  screenMesh: {fileID: 4434907461011034727}
   supportSprite: {fileID: 1015041702967004592}
   mainProjectileSprite: {fileID: 7793973923014409395}
 --- !u!65 &8990557148789142646
@@ -3352,6 +3356,12 @@ PrefabInstance:
 --- !u!4 &3296872465188595976 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 995729395078186105, guid: 9bb78f6a83803774f835acefaf6a0113,
+    type: 3}
+  m_PrefabInstance: {fileID: 2310718870490049905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4434907461011034727 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2133200198897450774, guid: 9bb78f6a83803774f835acefaf6a0113,
     type: 3}
   m_PrefabInstance: {fileID: 2310718870490049905}
   m_PrefabAsset: {fileID: 0}
