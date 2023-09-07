@@ -11,7 +11,7 @@ public class TDTurretBinderHelper : MonoBehaviour
     private Dictionary<BinderType, BinderMaterial> _typeToMaterial;
 
 
-    public enum BinderType { WITHIN_RANGE, OUTSIDE_RANGE, HURT_TARGET }
+    public enum BinderType { WITHIN_RANGE, OUTSIDE_RANGE, HURT_TARGET, HEAL_TARGET }
 
     [System.Serializable]
     public class BinderMaterial

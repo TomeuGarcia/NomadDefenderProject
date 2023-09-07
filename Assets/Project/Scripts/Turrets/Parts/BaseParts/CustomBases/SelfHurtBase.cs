@@ -127,7 +127,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
         }
 
         DamageHealthiestLocation(pathLocationDamage);
-        ++pathLocationDamage;
     }
 
     private void UpdateExplosionDamage()
