@@ -28,6 +28,9 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private Button startSimulationButton;
     [SerializeField] private MeshRenderer runButtonMesh;
     [SerializeField] private MeshRenderer runInnerButtonMesh;
+    [SerializeField] private MeshRenderer startSimulationFlashMesh;
+    [SerializeField] private MeshRenderer startSimulationFlashMesh2;
+    private Material startSimulationFlashMaterial;
 
     private float currentFill = 0.0f;
 
@@ -44,6 +47,10 @@ public class DeckSelector : MonoBehaviour
 
         // Avoid null references
         deckCreator.DisableSaveOnDisable();
+
+        startSimulationFlashMaterial = startSimulationFlashMesh.material;
+        startSimulationFlashMesh.material = startSimulationFlashMaterial;
+        startSimulationFlashMesh2.material = startSimulationFlashMaterial;
     }
 
     private void Update()
@@ -150,9 +157,20 @@ public class DeckSelector : MonoBehaviour
         runInnerButtonMesh.transform.DOBlendableLocalMoveBy(Vector3.down * 0.3f, 0.25f);
         startSimulationButton.transform.DOBlendableLocalMoveBy(Vector3.forward * 6.0f, 0.25f);
 
+
+        if (false)
+        {
+            Color flashColor = currentlySelectedDeck.DeckColor;
+            flashColor *= 5.0f;
+            startSimulationFlashMaterial.SetColor("_FlashColor", flashColor);
+        }
+        
+        startSimulationFlashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
+
         float duration = 0.5f;
         //startSimulationButton.transform.DOPunchScale(Vector3.one * 0.4f, duration, 6);
-        GameAudioManager.GetInstance().PlayCardSelected();
+        //GameAudioManager.GetInstance().PlayCardSelected();
+        GameAudioManager.GetInstance().PlayNodeSelectedSound();
 
         startSimulationButton.interactable = false;
 

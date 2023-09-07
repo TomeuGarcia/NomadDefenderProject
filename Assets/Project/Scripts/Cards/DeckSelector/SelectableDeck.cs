@@ -16,7 +16,7 @@ public class SelectableDeck : MonoBehaviour
     [SerializeField] private string firstMaterialLightName;
     [SerializeField] private string secondMaterialLightName;
     [SerializeField] private int materialBorderIndex;
-    
+
     [Header("REFERENCES")]
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
@@ -24,6 +24,8 @@ public class SelectableDeck : MonoBehaviour
     [SerializeField] private MeshRenderer screenMesh;
     private Material pulsingMaterial;
     private int isSelectedPropertyId;
+
+    public Color DeckColor {get; private set;}
 
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
@@ -103,6 +105,7 @@ public class SelectableDeck : MonoBehaviour
         TurretPartBase supportBasePart = deckData.starterSupportCardsComponents[deckData.starterSupportCardsComponents.Count - 1].turretPartBase;
         supportSprite.sprite = supportBasePart.abilitySprite;
         supportSprite.color = supportBasePart.spriteColor;
+        DeckColor = supportBasePart.spriteColor;
 
         TurretPartAttack mainTurretAttackPart = deckData.starterTurretCardsComponents[deckData.starterTurretCardsComponents.Count - 1].turretPartAttack;
         mainProjectileSprite.sprite = mainTurretAttackPart.abilitySprite;
