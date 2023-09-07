@@ -12,11 +12,16 @@ public class SelectableDeck : MonoBehaviour
     [Header("RUN CONTENT")]
     [SerializeField] private RunUpgradesContent runContent;
 
-
+    [Header("PARAMETERS")]
+    [SerializeField] private string firstMaterialLightName;
+    [SerializeField] private string secondMaterialLightName;
+    [SerializeField] private int materialBorderIndex;
+    
     [Header("REFERENCES")]
     [SerializeField] private Transform cardsHolder;
     [SerializeField] private Collider interactionCollider;
     [SerializeField] private MeshRenderer pulsingMesh;
+    [SerializeField] private MeshRenderer screenMesh;
     private Material pulsingMaterial;
     private int isSelectedPropertyId;
 
@@ -193,25 +198,44 @@ public class SelectableDeck : MonoBehaviour
     {
         isSelected = true;
         pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
+
+        ChangeBorderLight(firstMaterialLightName, 0.0f, 1.0f, 0.8f);
     }
     public void SetNotSelected()
     {
         isSelected = false;
         pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
+
+        ChangeBorderLight(firstMaterialLightName, 1.0f, 0.0f, 0.2f);
+        ChangeBorderLight(secondMaterialLightName, 1.0f, 0.0f, 0.2f);
     }
 
+
+    private void ChangeBorderLight(string reference, float start, float goal, float duration)
+    {
+        DOTween.To(
+            () => start,
+            (x) => { start = x;
+                screenMesh.materials[materialBorderIndex].SetFloat(reference, start);
+            },
+            goal,
+            duration
+        );
+    }
 
     private void SetHovered()
     {
         pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
 
         GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        ChangeBorderLight(secondMaterialLightName, 0.0f, 1.0f, 0.2f);
     }
     private void SetNotHovered()
     {
         pulsingMaterial.SetFloat(isSelectedPropertyId, 0.0f);
 
         GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        ChangeBorderLight(secondMaterialLightName,  1.0f,0.0f, 0.2f);
     }
 
 }
