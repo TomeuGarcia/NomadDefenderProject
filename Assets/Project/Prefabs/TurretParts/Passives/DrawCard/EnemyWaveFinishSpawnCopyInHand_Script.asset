@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0df8167189b23b48baf6b9c4d61a93c, type: 3}
+  m_Name: EnemyWaveFinishSpawnCopyInHand_Script
+  m_EditorClassIdentifier: 
+  abilityName: stockGenerator
+  abilityDescription: "While in hand, when an enemy wave finishes, spawn a copy of
+    this card in your hand without this ability that costs +10\u2666 for each card
+    in hand."
+  costIncrement: 10
+  baseNullPassive: {fileID: 11400000, guid: 080f0a1ea26f9b346907b425a2821887, type: 2}

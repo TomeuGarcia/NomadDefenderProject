@@ -120,7 +120,7 @@ public class TurretBuilding : RangeBuilding
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, stats.range);
 
-        currentShootTimer = Mathf.Max(stats.cadence - 0.2f, 0f);
+        TimeSinceLastShot = currentShootTimer = Mathf.Max(stats.cadence - 0.2f, 0f);
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
@@ -154,9 +154,14 @@ public class TurretBuilding : RangeBuilding
     }
 
 
-    public void InitStats(TurretBuildingStats stats)
+    private void InitStats(TurretBuildingStats stats)
     {
         this.stats = stats;
+    }
+    public void UpdateStats(TurretBuildingStats stats)
+    {
+        InitStats(stats);
+        UpdateRange();
     }
 
     public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
@@ -174,6 +179,8 @@ public class TurretBuilding : RangeBuilding
                 UpdateRange();
                 break;
         }
+
+        InvokeOnBuildingUpgraded();
     }
 
     private void UpdateShoot()
@@ -335,6 +342,7 @@ public class TurretBuilding : RangeBuilding
     
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
+        bodyHolder.DOComplete();
         bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
         
 

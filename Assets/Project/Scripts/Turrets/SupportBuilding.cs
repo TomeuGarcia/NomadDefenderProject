@@ -78,6 +78,8 @@ public class SupportBuilding : RangeBuilding
 
         if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+
+        InvokeOnBuildingUpgraded();
     }
     public void UpgradeRangeIncrementingLevel()
     {
@@ -155,6 +157,7 @@ public class SupportBuilding : RangeBuilding
 
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
     {
+        basePart.DOComplete();
         basePart.MeshTransform.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
 
 

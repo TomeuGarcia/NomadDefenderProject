@@ -36,7 +36,7 @@ public class SlowFireRateTurretBuildingVisuals : MonoBehaviour
 
     private void UpdateFillAmount()
     {
-        float timePer1 = _owner.TimeSinceLastShot / TurretPartBody.GetSlowestCadence();
+        float timePer1 = _owner.TimeSinceLastShot / SlowFireRateProjectile.MAX_CADENCE_TIME;
 
         bool reachedMax = timePer1 > 0.999f;
         if (reachedMax && !_isMax)

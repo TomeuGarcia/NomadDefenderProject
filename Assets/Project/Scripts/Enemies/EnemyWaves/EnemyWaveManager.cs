@@ -7,11 +7,13 @@ public class EnemyWaveManager : MonoBehaviour
 {
     [SerializeField] private Transform enemySpawnTransform;
     [SerializeField] private GameObject canvas;
+    [SerializeField] private EnemyWaveInfoDisplayer enemyWaveInfoPrefab;
 
     [SerializeField] private TextMeshProUGUI debugText; // works for 1 waveSpawner
 
     [SerializeField] private EnemyWaveSpawner[] enemyWaveSpawners;
     [SerializeField] private PathNode[] startPathNodes;
+    private EnemyWaveInfoDisplayer[] enemyWaveInfoDisplayers;
 
     [SerializeField] ConsoleDialogSystem consoleDialog;
 
@@ -49,9 +51,16 @@ public class EnemyWaveManager : MonoBehaviour
     {
         //canvas.SetActive(false);
         activeWaves = enemyWaveSpawners.Length;
+
+        enemyWaveInfoDisplayers = new EnemyWaveInfoDisplayer[enemyWaveSpawners.Length];
+
         for (int i = 0; i< enemyWaveSpawners.Length; i++)
         {
-            enemyWaveSpawners[i].Init(startPathNodes[i]);
+            PathNode startPathNode = startPathNodes[i];
+            enemyWaveSpawners[i].Init(startPathNode);
+
+            enemyWaveInfoDisplayers[i] = Instantiate(enemyWaveInfoPrefab, startPathNode.transform);
+            enemyWaveInfoDisplayers[i].Init(startPathNode, enemyWaveSpawners[i]);
         }
         waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
 
@@ -214,6 +223,8 @@ public class EnemyWaveManager : MonoBehaviour
     private IEnumerator StartNextWave(EnemyWaveSpawner enemyWaveSpawner, int index)
     {
         if(OnWaveFinished != null) OnWaveFinished();
+
+        enemyWaveSpawner.ReadyToStartNextWave();
 
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 

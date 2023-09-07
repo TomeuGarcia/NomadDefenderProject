@@ -11,8 +11,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
     private Material _turretMaterial;
     private TurretBuilding _owner;
-    private int _berserkHealthThreshold;
-    private bool _isBerserk;
 
     private int _isBerserkEnabledProperty;
     private int _berserkEyesOffsetProperty;
@@ -40,13 +38,30 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     }
 
 
+
+    private TurretBuilding.TurretBuildingStats _defaultStats;
+    private TurretBuilding.TurretBuildingStats _hyperStats;
+
+    private const float HYPER_DAMAGE_MULTIPLIER = 3.0f;
+    private const float HYPER_CADENCE_MULTIPLIER = 0.25f;
+    private const float HYPER_RANGE_MULTIPLIER = 2.0f;
+
+    private static bool _firstBerserkerPlaced = false;
+    private const float BERSERK_START_DURATION = 2.0f;
+    private const float BERSERK_DURATION_INCREMENT = 0.25f;
+    private static float _berserkDuration;
+    private float _berserkTimer;
+    private Coroutine _berserkModeCoroutine;
+
+
+    public static bool IsBerserkEnabled { get; private set; }
+
+
     public void TurretPlacedInit(TurretBuilding owner, Material material)
     {
         _owner = owner;
         _turretMaterial = new Material(material);
         owner.ResetBodyMaterial(_turretMaterial);
-
-        _berserkHealthThreshold = _berserkerProjectilePrefab.HealthThreshold;
 
         _isBerserkEnabledProperty = Shader.PropertyToID("_IsBerserkEnabled");
         _berserkEyesOffsetProperty = Shader.PropertyToID("_BerserkEyesOffset");
@@ -61,61 +76,119 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
         SubscribeToEvents();
 
-        StopBerserk(false);
-        CheckIsBerserk();
+        StopBerserkVisuals(false);
+
+
+        if (!_firstBerserkerPlaced)
+        {
+            _firstBerserkerPlaced = true;
+            _berserkDuration = BERSERK_START_DURATION;
+        }
     }
 
 
     private void SubscribeToEvents()
     {
         _owner.OnDestroyed += UnsubscribeToEvents;
+        _owner.OnBuildingUpgraded += CheckIsBerserkSetupHyperStats;
 
-        PathLocation.OnHealthChanged += CheckIsBerserk;
+        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
     }
 
     private void UnsubscribeToEvents()
     {
         _owner.OnDestroyed -= UnsubscribeToEvents;
+        _owner.OnBuildingUpgraded -= CheckIsBerserkSetupHyperStats;
 
-        PathLocation.OnHealthChanged -= CheckIsBerserk;
+        PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+
+        _firstBerserkerPlaced = false;
     }
 
 
-    private void CheckIsBerserk()
-    {
-        int highestLocationHealth = ServiceLocator.GetInstance().TDLocationsUtils.GetHighestLocationHealth();
-        bool berserkIsTriggered = highestLocationHealth <= _berserkHealthThreshold;
 
-        if (!_isBerserk && berserkIsTriggered)
+    private void OnPathLocationTakesDamage(PathLocation pathLocation)
+    {
+        EnterBerserkMode();
+    }
+
+    private void EnterBerserkMode()
+    {
+        _berserkTimer += _berserkDuration;
+
+        if (!IsInBerserkMode())
         {
-            StartBerserk();
+            _berserkModeCoroutine = StartCoroutine(BerserkMode());
         }
-        else if(_isBerserk && !berserkIsTriggered)
-        {
-            StopBerserk();
-        }        
     }
 
-    private void StartBerserk()
+    private IEnumerator BerserkMode()
     {
-        _isBerserk = true;
+        SetupHyperStats();
+        StartBerserkVisuals();
+        IsBerserkEnabled = true;
 
+        while (_berserkTimer > 0.0f)
+        {
+            _berserkTimer -= Time.deltaTime * GameTime.TimeScale;
+            yield return null;
+        }
+        _berserkTimer = 0.0f;
+
+        ResetStats();
+        StopBerserkVisuals();
+        IsBerserkEnabled = false;
+        _berserkModeCoroutine = null;
+
+        _berserkDuration += BERSERK_DURATION_INCREMENT;
+    }
+
+    private bool IsInBerserkMode()
+    {
+        return _berserkModeCoroutine != null;
+    }
+
+    private void CheckIsBerserkSetupHyperStats()
+    {
+        if (IsInBerserkMode())
+        {
+            SetupHyperStats();
+        }
+    }
+
+    private void SetupHyperStats()
+    {
+        _defaultStats = _owner.stats;
+
+        _hyperStats = _owner.stats;
+        _hyperStats.damage = (int)(_hyperStats.damage * HYPER_DAMAGE_MULTIPLIER);
+        _hyperStats.cadence *= HYPER_CADENCE_MULTIPLIER;
+        _hyperStats.range *= HYPER_RANGE_MULTIPLIER;
+
+        _owner.UpdateStats(_hyperStats);
+    }
+
+    private void ResetStats()
+    {
+        _owner.UpdateStats(_defaultStats);
+    }
+
+
+    private void StartBerserkVisuals()
+    {
         _turretMaterial.SetFloat(_isBerserkEnabledProperty, 1.0f);
         _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time);
 
         GameAudioManager.GetInstance().PlayEnterBerserker();
     }
-    private void StopBerserk(bool playAudio = true)
+    private void StopBerserkVisuals(bool playAudio = true)
     {
-        _isBerserk = false;
-
         _turretMaterial.SetFloat(_isBerserkEnabledProperty, 0.0f);
 
         if (playAudio)
         {
+            _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time - 0.5f);
             GameAudioManager.GetInstance().PlayExitBerserker();
         }
     }
-
-
 }
