@@ -26,6 +26,10 @@ public class DeckSelector : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button startSimulationButton;
+    [SerializeField] private MeshRenderer runButtonMesh;
+    [SerializeField] private MeshRenderer runInnerButtonMesh;
+
+    private float currentFill = 0.0f;
 
 
     private void Start()
@@ -119,16 +123,35 @@ public class DeckSelector : MonoBehaviour
         }
 
         startSimulationButton.interactable = true;
+        if (currentFill == 0)
+        {
+            ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
+            currentFill = 1.0f;
+        }
     }
 
-
+    private void ChangeBorderLight(MeshRenderer mr, string reference, float init, float goal)
+    {
+        float litUpCoef = init;
+        DOTween.To(
+            () => litUpCoef,
+            (x) => { litUpCoef = x;
+                mr.materials[1].SetFloat(reference, litUpCoef);
+            },
+            goal,
+            0.25f
+        );
+    }
 
     private async void OnStartSimulationButtonPressed()
     {
         startSimulationButton.enabled = false;
 
+        runInnerButtonMesh.transform.DOBlendableLocalMoveBy(Vector3.down * 0.3f, 0.25f);
+        startSimulationButton.transform.DOBlendableLocalMoveBy(Vector3.forward * 6.0f, 0.25f);
+
         float duration = 0.5f;
-        startSimulationButton.transform.DOPunchScale(Vector3.one * 0.4f, duration, 6);
+        //startSimulationButton.transform.DOPunchScale(Vector3.one * 0.4f, duration, 6);
         GameAudioManager.GetInstance().PlayCardSelected();
 
         startSimulationButton.interactable = false;
