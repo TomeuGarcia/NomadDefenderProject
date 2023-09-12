@@ -58,6 +58,8 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         AwakeInit();
         fakeEnemy.gameObject.SetActive(false);
+        fakeEnemy.SetupColliderBounds();
+
         HideAllTurretBinders();
         currentDamagePer1Increment = 0f;
         repeatAreaPlaneMaterial = repeatAreaPlane.materials[0];
@@ -384,10 +386,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
             TurretBuilding turretBuilding = building as TurretBuilding;
-            float turretRange = GetTurretRangeDistance(turretBuilding);
-            bool isTurretWithinRange = IsBinderTargetWithinRange(binderMesh.transform, turretBuilding.BodyPartTransform, turretRange); // Old way to compute
-            isTurretWithinRange = turretBuilding.GetBasePart().IsPointWithinRange(transform.position);
-
+            bool isTurretWithinRange = turretBuilding.GetBasePart().IsBoundsWithinRange(fakeEnemy.GetColliderBounds());
 
             if (isTurretWithinRange)
             {

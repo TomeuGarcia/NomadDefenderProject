@@ -121,6 +121,11 @@ public class CardPartReplaceManager : MonoBehaviour
 
         upgradeMachineControl.OnReplaceStart += AttachSelectedCardsToMachine;
         upgradeMachineControl.OnReplaceCardPrinted += AttachResultCardToMachine;
+
+        upgradeCardHolder.OnCardHovered += upgradeMachineControl.LeftPanelStartPulsing;
+        upgradeCardHolder.OnCardUnhovered += upgradeMachineControl.LeftPanelStopPulsing;
+        cardPartHolder.OnPartHovered += upgradeMachineControl.RightPanelStartPulsing;
+        cardPartHolder.OnPartUnhovered += upgradeMachineControl.RightPanelStopPulsing;
     }
 
     private void OnDisable()
@@ -134,6 +139,11 @@ public class CardPartReplaceManager : MonoBehaviour
 
         upgradeMachineControl.OnReplaceStart -= AttachSelectedCardsToMachine;
         upgradeMachineControl.OnReplaceCardPrinted -= AttachResultCardToMachine;
+
+        upgradeCardHolder.OnCardHovered -= upgradeMachineControl.LeftPanelStartPulsing;
+        upgradeCardHolder.OnCardUnhovered -= upgradeMachineControl.LeftPanelStopPulsing;
+        cardPartHolder.OnPartHovered -= upgradeMachineControl.RightPanelStartPulsing;
+        cardPartHolder.OnPartUnhovered -= upgradeMachineControl.RightPanelStopPulsing;
     }
 
 
@@ -219,7 +229,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's PROJECTILE with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's PROJECTILE with a new one", true, 2f);
     }
 
 
@@ -247,7 +257,7 @@ public class CardPartReplaceManager : MonoBehaviour
             parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's BODY with a new one", true, 2f);
     }
 
     public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
@@ -276,7 +286,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BASE with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's BASE with a new one", true, 2f);
     }
 
 
@@ -370,6 +380,7 @@ public class CardPartReplaceManager : MonoBehaviour
         {
             // Audio
             GameAudioManager.GetInstance().PlayUpgradeButtonCantBePressed();
+            upgradeMachineControl.CantReplace();
         }
     }
 
@@ -475,7 +486,7 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
 
         consoleDialog.Clear();
-        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+        PrintConsoleLine(TextTypes.SYSTEM, "Combination done successfully", false, 0f);
 
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
@@ -697,7 +708,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void FinishResultCard()
     {
         consoleDialog.Clear();
-        PrintConsoleLine(TextTypes.SYSTEM, "Replacement done successfully", false, 0f);
+        PrintConsoleLine(TextTypes.SYSTEM, "Combination done successfully", false, 0f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }

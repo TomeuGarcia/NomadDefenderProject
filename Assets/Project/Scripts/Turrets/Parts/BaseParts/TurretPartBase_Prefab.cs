@@ -88,6 +88,11 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
         return baseCollider.IsPointWithinRange(point);
     }
+    
+    public bool IsBoundsWithinRange(Bounds bounds)
+    {
+        return baseCollider.IsBoundsWithinRange(bounds);
+    }
 
     public virtual void OnGetPlaced()
     {

@@ -42,6 +42,8 @@ public class CardPartHolder : MonoBehaviour
     public delegate void CardPartHolderAction();
     public event CardPartHolderAction OnPartSelected;
     public event CardPartHolderAction OnPartUnselected;
+    public event CardPartHolderAction OnPartHovered;
+    public event CardPartHolderAction OnPartUnhovered;
 
 
 
@@ -102,6 +104,7 @@ public class CardPartHolder : MonoBehaviour
         foreach (CardPart itCardPart in cardParts)
         {
             itCardPart.OnCardHovered += SetHoveredCard;
+            itCardPart.hideInfoWhenSelected = false;
         }
     }
 
@@ -162,9 +165,11 @@ public class CardPartHolder : MonoBehaviour
             itCardPart.OnCardUnhovered += SetStandardCard;
             itCardPart.OnCardSelected += SetSelectedCard;
         }
-        
+
 
         //card.OnCardInfoSelected += SetCardPartShowInfo;
+
+        if (OnPartHovered != null) OnPartHovered();
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
@@ -190,7 +195,9 @@ public class CardPartHolder : MonoBehaviour
             itCardPart.OnCardUnhovered -= SetStandardCard;
             itCardPart.OnCardSelected -= SetSelectedCard;
         }
-                
+
+
+        if (OnPartUnhovered != null) OnPartUnhovered();
     }
 
     private void SetSelectedCard(CardPart card)
@@ -205,6 +212,8 @@ public class CardPartHolder : MonoBehaviour
 
         selectedCardPart.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
 
+
+        selectedCardPart.HideInfo();
         cardWasSelected = true;
 
         //if (selectedCardPart.isShowingInfo)
@@ -287,6 +296,7 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         SetStandardCard(card);
 
+        selectedCardPart.HideInfo();
         selectedCardPart = null;
 
         if (OnPartUnselected != null) OnPartUnselected();

@@ -34,9 +34,22 @@ public class CircularBaseCollider : BaseCollider
         point.y = 0f;
 
         float distance = Vector3.Distance(center, point);
-        Debug.Log(distance + " < " + rangeCollider.radius);
+        //Debug.Log(distance + " < " + rangeCollider.radius);        
 
         return distance <= rangeCollider.radius;
+    }
+    
+    public override bool IsBoundsWithinRange(Bounds bounds)
+    {
+        if (Vector3.Distance(bounds.center, transform.position) < rangeCollider.radius)
+        {
+            return true;
+        }
+
+        Vector3 rangeColliderSurfacePoint = (bounds.center - transform.position).normalized * rangeCollider.radius + transform.position;
+        bounds.extents = Vector3.one * 0.3f;
+
+        return bounds.Contains(rangeColliderSurfacePoint);
     }
 
 }

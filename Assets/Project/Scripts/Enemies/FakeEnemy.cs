@@ -16,6 +16,9 @@ public class FakeEnemy : Enemy
     public event FakeEnemyGetPositionAction OnGetPosition;
 
 
+    [SerializeField] private BoxCollider boxCollider;
+    private Bounds colliderBounds;
+
 
     private void Awake()
     {
@@ -118,4 +121,16 @@ public class FakeEnemy : Enemy
 
         return delegatedPosition;
     }
+
+    public void SetupColliderBounds()
+    {
+        colliderBounds = new Bounds(boxCollider.transform.position, boxCollider.size);
+    }
+    
+    public Bounds GetColliderBounds()
+    {
+        colliderBounds.center = boxCollider.transform.position;
+        return colliderBounds;
+    }
+
 }

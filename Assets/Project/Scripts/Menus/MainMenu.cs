@@ -107,7 +107,7 @@ public class MainMenu : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.P) && canInteract)
         {
-            TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();
+            TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();            
             Play();
         }
     }

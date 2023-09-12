@@ -130,6 +130,7 @@ public class SelectableDeck : MonoBehaviour
             BuildingCard card = cards[i];
 
             card.DisableMouseInteraction();
+            card.hideInfoWhenSelected = false;
 
             card.RootCardTransform.SetParent(cardsHolder.transform);
 
