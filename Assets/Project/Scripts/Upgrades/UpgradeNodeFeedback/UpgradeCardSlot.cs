@@ -35,6 +35,9 @@ public class UpgradeCardSlot : MonoBehaviour
     [Header("Parametars")]
     [SerializeField] private float trailTravelTime;
 
+    private Material panelMaterial;
+    private float timeLastStart = 0.0f;
+
 
     private void Awake()
     {
@@ -45,6 +48,10 @@ public class UpgradeCardSlot : MonoBehaviour
             transform.position -= Vector3.up * deactivatedHeight;
             panel.transform.localPosition = new Vector3(panel.localPosition.x, panel.localPosition.y, insertHeight);
         }
+
+        panelMaterial = panel.gameObject.GetComponent<MeshRenderer>().materials[0];
+
+        PulsePanel(0);
     }
 
     public IEnumerator Activate()
@@ -67,18 +74,26 @@ public class UpgradeCardSlot : MonoBehaviour
         StartCoroutine(DelayEmission());
     }
 
+    public void ResetStartTime()
+    {
+        float timeNewStart = Time.time;
+        if (timeNewStart - timeLastStart > 0.2f)
+        {
+            panelMaterial.SetFloat("_StartTime", timeNewStart);
+        }                
+        timeLastStart = timeNewStart;
+    }
     public void PulsePanel(int pulse)
     {
-        panel.gameObject.GetComponent<MeshRenderer>().materials[0].SetFloat("_IsOn", pulse);
+        panelMaterial.SetFloat("_IsOn", pulse);
 
-        if (pulse == 0) { trail.emitting = true; }
-        else { trail.emitting = false; }
+        trail.emitting = pulse != 0;
     }
 
     private IEnumerator DelayEmission()
     {
         yield return new WaitForSeconds(extractTime);
-        trail.emitting = true;
+        //trail.emitting = true;
     }
 
     private IEnumerator TrailMovement()

@@ -20,6 +20,7 @@ public abstract class BaseCollider : MonoBehaviour
     public abstract void DisableCollisions();
 
     public abstract bool IsPointWithinRange(Vector3 point);
+    public abstract bool IsBoundsWithinRange(Bounds bounds);
 
     public void HideRange()
     {

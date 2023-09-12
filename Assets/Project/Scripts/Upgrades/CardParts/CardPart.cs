@@ -30,6 +30,7 @@ public abstract class CardPart : MonoBehaviour
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
+    [HideInInspector] public bool hideInfoWhenSelected = true;
 
 
     private Vector3 standardPosition;
@@ -127,7 +128,10 @@ public abstract class CardPart : MonoBehaviour
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
 
-        DoHideInfo();
+        if (hideInfoWhenSelected)
+        {
+            DoHideInfo();
+        }
     }
 
     private void Update()

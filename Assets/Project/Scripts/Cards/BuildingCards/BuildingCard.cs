@@ -93,6 +93,7 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool isHideInfoAnimationPlaying = false;
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
     [HideInInspector] public bool canDisplayInfoIfWhileInteractable = true;
+    [HideInInspector] public bool hideInfoWhenSelected = true;
 
     // CARD DRAW ANIMATION
     [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
@@ -216,7 +217,10 @@ public abstract class BuildingCard : MonoBehaviour
             if (OnCardSelectedNotHovered != null) OnCardSelectedNotHovered(this);
         }
 
-        DoHideInfo();
+        if (hideInfoWhenSelected)
+        {
+            DoHideInfo();
+        }
     }
 
     private void Update()

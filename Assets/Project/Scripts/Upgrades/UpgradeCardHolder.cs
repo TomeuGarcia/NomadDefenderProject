@@ -48,6 +48,9 @@ public class UpgradeCardHolder : MonoBehaviour
     public event CardPartHolderAction OnCardUnselected;
     public event CardPartHolderAction OnFinalRetrieve;
 
+    public event CardPartHolderAction OnCardHovered;
+    public event CardPartHolderAction OnCardUnhovered;
+
 
 
     private void OnValidate()
@@ -138,6 +141,8 @@ public class UpgradeCardHolder : MonoBehaviour
             cards[i].transform.localRotation = rotation;
 
             cards[i].InitPositions(selectedTransform.position, Vector3.zero, cards[i].transform.position);
+
+            cards[i].hideInfoWhenSelected = false;
         }
     }
 
@@ -176,6 +181,8 @@ public class UpgradeCardHolder : MonoBehaviour
             itCard.OnCardSelected += SetSelectedCard;
         }
 
+        if (OnCardHovered != null) OnCardHovered();
+
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
     }
@@ -206,6 +213,8 @@ public class UpgradeCardHolder : MonoBehaviour
             itCard.OnCardSelected -= SetSelectedCard;
             itCard.canDisplayInfoIfNotInteractable = false;
         }
+
+        if (OnCardUnhovered != null) OnCardUnhovered();
     }
 
     private void SetSelectedCard(BuildingCard card)
@@ -222,6 +231,7 @@ public class UpgradeCardHolder : MonoBehaviour
 
         cardWasSelected = true;
 
+        card.HideInfo();
         //if (selectedCard.isShowingInfo)
         //{
         //    SetCardHideInfo(selectedCard);            
@@ -296,6 +306,7 @@ public class UpgradeCardHolder : MonoBehaviour
     {
         selectedCard.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         SetStandardCard(card);
+        card.HideInfo();
 
         selectedCard = null;
 

@@ -28,9 +28,7 @@ public class UpgradeMachineControl : MonoBehaviour
     [SerializeField] private MeshRenderer screen;
     [SerializeField] private MeshRenderer screenButton;
     [SerializeField] private MeshRenderer screenButtonOutline;
-    [SerializeField] private SpriteRenderer screenButtonText;
-    [SerializeField] private Color32 screenButtonActiveTextColor;
-    private Color32 screenButtonUnactiveTextColor;
+    [SerializeField] private TextMeshPro fuseButtonText;
 
 
 
@@ -139,6 +137,26 @@ public class UpgradeMachineControl : MonoBehaviour
         }
     }
 
+    public void LeftPanelStartPulsing()
+    {
+        leftCardSlot.ResetStartTime();
+        leftCardSlot.PulsePanel(1);
+    }
+    public void LeftPanelStopPulsing()
+    {
+        leftCardSlot.PulsePanel(0);
+    }
+    
+    public void RightPanelStartPulsing()
+    {
+        rightCardSlot.ResetStartTime();
+        rightCardSlot.PulsePanel(1);
+    }
+    public void RightPanelStopPulsing()
+    {
+        rightCardSlot.PulsePanel(0);
+    }
+
     public void SelectLeftCard()
     {
         leftCardSlot.PulsePanel(1);
@@ -219,7 +237,7 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         screenTransitionFD.invert = false;
         StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
-        screenButtonText.material.SetFloat("_ReplaceCoef", 1.0f);
+        fuseButtonText.color = Color.cyan;
 
         //lerp button out
         screenButton.transform.DOLocalMoveY(0.0f, 0.2f);
@@ -231,7 +249,7 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         screenTransitionFD.invert = true;
         StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { screen.materials[1] }));
-        screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
+        fuseButtonText.color = Color.grey;
 
         //lerp button in
         screenButton.transform.DOLocalMoveY(-0.082f, 0.2f);
@@ -246,7 +264,7 @@ public class UpgradeMachineControl : MonoBehaviour
         rightCardSlot.PulsePanel(0);
         leftCardSlot.PulsePanel(0);
         screenCardSlot.PulsePanel(0);
-        screenButtonText.material.SetFloat("_ReplaceCoef", 0.0f);
+        fuseButtonText.color = Color.grey;
 
         //Button disappear
         screenButton.transform.DOLocalMoveY(-0.3f, 0.25f);
@@ -263,6 +281,13 @@ public class UpgradeMachineControl : MonoBehaviour
         rightCardSlot.Insert();
 
         StartCoroutine(EnergyFill());
+    }
+
+    public void CantReplace()
+    {
+        fuseButtonText.DOComplete();
+        fuseButtonText.color = Color.red;
+        fuseButtonText.DOColor(Color.grey, 0.3f);
     }
 
     private IEnumerator EnergyFill()
