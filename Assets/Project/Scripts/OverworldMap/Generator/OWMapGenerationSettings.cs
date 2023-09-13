@@ -18,8 +18,8 @@ public class OWMapGenerationSettings : ScriptableObject
     [Header("1 WIDTH CONTROL")]
     [SerializeField, Min(1)] public int numberOf1WidthStartLevels = 1;
     [SerializeField, Min(1)] public int numberOf1WidthEndLevels = 2;
-    [SerializeField, Min(1), Tooltip("Excluding numberOf1WidthStartLevels & numberOf1WidthEndLevels")] public int maxNum1Width = 2;
-    [SerializeField, Min(1)] public int maxChained1Width = 1;
+    [SerializeField, Min(0), Tooltip("Excluding numberOf1WidthStartLevels & numberOf1WidthEndLevels")] public int maxNum1Width = 2;
+    [SerializeField, Min(0)] public int maxChained1Width = 1;
 
     [Header("ADDITIONAL WIDTH CONTROL")]
     [SerializeField, Min(2)] public int maxConnectionsPerNode = 2;
@@ -48,6 +48,8 @@ public class OWMapGenerationSettings : ScriptableObject
     {
         int maxPossibleConnectionsPerNode = Mathf.Max(maxWidthGrowStep, maxWidthShrinkStep) + 1;
         maxConnectionsPerNode = maxPossibleConnectionsPerNode;
+
+
     }
 
 }

@@ -79,7 +79,7 @@ public class OverworldMapGenerator : MonoBehaviour
             if (counterTotal1Width > generationSettings.maxNum1Width || counterChained1Width > generationSettings.maxChained1Width)
             {
                 minWidthThisLevel = 2;
-                levelWidth = Random.Range(minWidthThisLevel, maxWidthThisLevel);
+                levelWidth = Random.Range(minWidthThisLevel, maxWidthThisLevel);                
             }
         }
         else

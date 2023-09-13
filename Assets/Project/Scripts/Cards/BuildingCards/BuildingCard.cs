@@ -3,6 +3,7 @@ using TMPro;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
+using static CardPart;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -584,7 +585,10 @@ public abstract class BuildingCard : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
+
+        if (cardState != CardStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
+
         ShowInfo();
         showInfoDelayCoroutine = null;
     }

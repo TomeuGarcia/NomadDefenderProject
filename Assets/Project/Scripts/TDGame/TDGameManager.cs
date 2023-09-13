@@ -142,6 +142,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("GameOver");
+
         SetBattleStateResult();
 
         StartCoroutine(GameOverAnimation());
@@ -167,7 +168,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
-        SetBattleStateResult();
 
         StartCoroutine(VictoryAnimation());
         if (OnGameFinishStart != null) OnGameFinishStart();
@@ -204,6 +204,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
         mapSceneNotifier.InvokeOnSceneFinished();
+        
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
@@ -215,10 +216,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         //yield return new WaitForSeconds(1f);
 
         yield return new WaitForSeconds(5f);
-
+        
+        SetBattleStateResult();
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
         mapSceneNotifier.InvokeOnSceneFinished();
+        
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
     }
 
@@ -227,6 +230,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         if (OnEndGameResetPools != null) OnEndGameResetPools();
 
         mapSceneNotifier.InvokeOnSceneFinished();
+        SetBattleStateResult();
     }
 
 
@@ -274,15 +278,28 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         return highestHealth;
     }
 
-    public PathLocation GetHealthiestLocation()
+    public PathLocation GetHealthiestLocation(Vector3 quearierPosition)
     {
         int highestHealth = -1;
+        float closestDistance = 1000;
+        float distanceThreshold = 0.5f;
         PathLocation healthiestLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
+            if (pathLocations[i].healthSystem.IsDead()) continue;
+
+
+            float distanceToQuearier = Vector3.Distance(quearierPosition, pathLocations[i].Position) + distanceThreshold;
+            bool isCloser = distanceToQuearier < closestDistance;
+            if (isCloser)
+            {
+                closestDistance = distanceToQuearier;
+            }
+
+
             int loactionHealth = pathLocations[i].healthSystem.health;
-            if (loactionHealth > highestHealth)
+            if (loactionHealth > highestHealth || (loactionHealth == highestHealth && isCloser))
             {
                 highestHealth = loactionHealth;
                 healthiestLocation = pathLocations[i];
@@ -292,17 +309,28 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         return healthiestLocation;
     }
 
-    public PathLocation GetMostDamagedLocation()
+    public PathLocation GetMostDamagedLocation(Vector3 quearierPosition)
     {
         int lowestHealth = 1000;
+        float closestDistance = 1000;
+        float distanceThreshold = 0.5f;
         PathLocation mostDamagedLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
             if (pathLocations[i].healthSystem.IsDead()) continue;
 
+
+            float distanceToQuearier = Vector3.Distance(quearierPosition, pathLocations[i].Position) + distanceThreshold;
+            bool isCloser = distanceToQuearier < closestDistance;
+            if (isCloser)
+            {
+                closestDistance = distanceToQuearier;
+            }
+
+
             int loactionHealth = pathLocations[i].healthSystem.health;
-            if (loactionHealth < lowestHealth)
+            if (loactionHealth < lowestHealth || (loactionHealth == lowestHealth && isCloser))
             {
                 lowestHealth = loactionHealth;
                 mostDamagedLocation = pathLocations[i];

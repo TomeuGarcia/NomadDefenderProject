@@ -240,7 +240,8 @@ public class OWMapTutorialManager2 : MonoBehaviour
 
         if (tutorialGame != null)
         {
-            tutorialGame.LoadRegularGame();
+            tutorialGame.LoadRegularGame(); // Load game
+            //SceneLoader.GetInstance().LoadDeckSelector(); // Load deck selector
         }
     }
 

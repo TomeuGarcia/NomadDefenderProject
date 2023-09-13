@@ -49,7 +49,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     [Header("SUBTRACT CARD PLAY COST")]
-    [SerializeField, Range(5, 50)] private readonly int playCostSubtractAmountSamePart = 30;
+    [SerializeField, Range(5, 50)] private int playCostSubtractAmountSamePart = 50;
 
 
     [Header("COMPONENTS")]
@@ -458,6 +458,10 @@ public class CardPartReplaceManager : MonoBehaviour
         TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
         ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
+
+
+        CardPartHolder.selectedCardPart.canDisplayInfoIfNotInteractable = false;
+        CardPartHolder.selectedCardPart.HideInfo();
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
         if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);

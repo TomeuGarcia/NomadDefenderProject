@@ -58,6 +58,9 @@ public class TurretBuilding : RangeBuilding
     public delegate void TurretBuildingEvent();
     public event TurretBuildingEvent OnGotPlaced;
     public event TurretBuildingEvent OnTimeSinceLastShotSet;
+    public event TurretBuildingEvent OnGotEnabledPlacing;
+    public event TurretBuildingEvent OnGotDisabledPlacing;
+    public event TurretBuildingEvent OnGotMovedWhenPlacing;
 
 
     void Awake()
@@ -313,17 +316,20 @@ public class TurretBuilding : RangeBuilding
     public override void GotEnabledPlacing()
     {
         basePart.GotEnabledPlacing();
-        basePassive.GotEnabledPlacing();
+
+        if (OnGotEnabledPlacing != null) OnGotEnabledPlacing();
     }
     public override void GotDisabledPlacing()
     {
         basePart.GotDisabledPlacing();
-        basePassive.GotDisabledPlacing();
+
+        if (OnGotDisabledPlacing != null) OnGotDisabledPlacing();
     }
     public override void GotMovedWhenPlacing()
     {
         basePart.GotMovedWhenPlacing();
-        basePassive.GotMovedWhenPlacing();
+
+        if (OnGotMovedWhenPlacing != null) OnGotMovedWhenPlacing();
     }
 
     public override void ShowQuickLevelUI()

@@ -57,7 +57,7 @@ public class DeckSelector : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneLoader.GetInstance().StartLoadMainMenu();
+            BackToMainMenu();
         }
     }
 
@@ -158,6 +158,12 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.transform.DOBlendableLocalMoveBy(Vector3.forward * 6.0f, 0.25f);
 
 
+        foreach (SelectableDeck selectableDeck in selectableDecks)
+        {
+            selectableDeck.SetEnabledInteraction(false);
+        }
+        currentlySelectedDeck.DisableShowInfo();
+
         if (false)
         {
             Color flashColor = currentlySelectedDeck.DeckColor;
@@ -191,6 +197,17 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = false;
 
         await Task.Delay((int)(duration * 1000));
+
+        BackToMainMenu();
+    }
+
+    private void BackToMainMenu()
+    {
+        if (currentlySelectedDeck != null)
+        {
+            currentlySelectedDeck.DisableCardsMouseInteraction();
+            currentlySelectedDeck.DisableShowInfo();
+        }
 
         SceneLoader.GetInstance().StartLoadMainMenu();
     }

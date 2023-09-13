@@ -484,7 +484,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
             --turretStats.playCost;
             InitCostText();
             GameAudioManager.GetInstance().PlayConsoleTyping(0);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.03f);
         }
 
         isPlayingSubtractCostAnimation = false;

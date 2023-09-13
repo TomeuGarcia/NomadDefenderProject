@@ -48,7 +48,7 @@ public class OWMapPawn : MonoBehaviour
 
         Vector3 targetPos = GetNodePos(currentNode);
         float distance = Vector3.Distance(moveTransform.position, targetPos);
-        float duration = distance * 0.5f;
+        float duration = distance * 0.25f;
 
         followCamera.CanDrag(false);
         moveTransform.DORotateQuaternion(Quaternion.FromToRotation(startFwd, endFwd), 0.25f)
