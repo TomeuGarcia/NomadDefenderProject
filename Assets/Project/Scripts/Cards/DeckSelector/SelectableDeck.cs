@@ -145,6 +145,17 @@ public class SelectableDeck : MonoBehaviour
         interactionCollider.enabled = isEnabled;
     }
 
+    public void DisableShowInfo()
+    {
+        foreach (BuildingCard card in cards)
+        {
+            card.canDisplayInfoIfNotInteractable = false;
+            if (card.isShowingInfo)
+            {
+                card.HideInfo();
+            }
+        }
+    }
 
 
     public IEnumerator ArrangeCardsFromFirst(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)

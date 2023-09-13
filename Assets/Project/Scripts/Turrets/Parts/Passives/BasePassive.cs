@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.Compilation;
 using UnityEngine;
 
 
@@ -15,16 +14,5 @@ public abstract class BasePassive : ScriptableObject
 
 
     public abstract void ApplyEffects(TurretBuilding owner);
-
-    public virtual void GotEnabledPlacing()
-    {
-    }
-    public virtual void GotDisabledPlacing()
-    {
-    }
-    public virtual void GotMovedWhenPlacing()
-    {
-    }
-
 
 }

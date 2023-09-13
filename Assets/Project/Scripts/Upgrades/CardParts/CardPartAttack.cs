@@ -70,9 +70,8 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
         attackDescriptionText.alpha = 0;
     }
 
-    public override void ShowInfo()
+    protected override void DoShowInfo()
     {
-        base.ShowInfo();
         CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
         return;
 

@@ -99,9 +99,8 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
         baseDescriptionText.alpha = 0;
     }
 
-    public override void ShowInfo()
+    protected override void DoShowInfo()
     {
-        base.ShowInfo();
         CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
         return;
 

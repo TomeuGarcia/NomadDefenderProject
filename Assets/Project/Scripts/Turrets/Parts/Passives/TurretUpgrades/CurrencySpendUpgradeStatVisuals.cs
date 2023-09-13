@@ -68,7 +68,7 @@ public class CurrencySpendUpgradeStatVisuals : MonoBehaviour
     }
 
 
-    private void Awake()
+    public void Init()
     {
         _updateVisualsQueue = new Queue<UpdateVisualsCommand>();
         _isAlreadyDequeuing = false;

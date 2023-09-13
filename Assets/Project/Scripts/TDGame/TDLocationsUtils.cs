@@ -5,7 +5,7 @@ using UnityEngine;
 public interface TDLocationsUtils 
 {
     public int GetHighestLocationHealth();
-    public PathLocation GetHealthiestLocation();
-    public PathLocation GetMostDamagedLocation();
+    public PathLocation GetHealthiestLocation(Vector3 quearierPosition);
+    public PathLocation GetMostDamagedLocation(Vector3 quearierPosition);
 
 }

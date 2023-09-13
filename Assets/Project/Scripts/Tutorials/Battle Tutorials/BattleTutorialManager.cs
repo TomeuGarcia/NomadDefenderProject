@@ -219,25 +219,25 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();// 9
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         tutoCardDrawer.tutorialCard.showPlayCost = true;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
 
         //Attack
         scriptedSequence.NextLine();// 10
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showAttackStat = true;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
 
         //Cadency
         scriptedSequence.NextLine();// 11
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showCadenceStat = true;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
 
         //Range
         scriptedSequence.NextLine();// 12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showRangeStat = true;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
 
 
 

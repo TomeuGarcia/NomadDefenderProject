@@ -137,11 +137,11 @@ public class OWMapTutorialManager : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(4.0f);
 
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         scriptedSequence.Clear();
 
@@ -149,25 +149,25 @@ public class OWMapTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //Rendering Map...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine(); //Loading Upgrade Nodes
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         //Show Upgrade Nodes
         for (int i = 0; i < upgradeNodes.Count; ++i)        
         {
             GameAudioManager.GetInstance().PlayUpgradeNodeSpawnSound();
             upgradeNodes[i].PlayFadeInAnimation();
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.15f);
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine(); //Loading Battle Nodes
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         //Show Battle Nodes
         foreach (OWMap_Node node in battleNodes)
@@ -175,27 +175,27 @@ public class OWMapTutorialManager : MonoBehaviour
             GameAudioManager.GetInstance().PlayBattleNodeSpawnSound();
             node.PlayFadeInAnimation();
             
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.15f);
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine(); //Loading Nodes Connection
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.0f);
 
         GameAudioManager.GetInstance().PlayConnectionsNodeSpawnSound();
 
         foreach (OWMap_Connection connection in nodesConnections)
         {
-            yield return StartCoroutine(connection.cable.ShowNodesConnections(0.25f));
+            yield return StartCoroutine(connection.cable.ShowNodesConnections(0.15f));
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         scriptedSequence.NextLine(); //Map Loaded
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         scriptedSequence.Clear();
 
         //if (testing)

@@ -38,6 +38,7 @@ public abstract class RangeBuilding : Building
     [SerializeField] protected InBattleBuildingUpgrader upgrader;
     public InBattleBuildingUpgrader Upgrader => upgrader;
 
+    public Vector3 Position => transform.position;
 
     private void OnEnable()
     {

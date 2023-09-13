@@ -8,78 +8,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SelfHurtUpgradeStat", menuName = "TurretPassives/SelfHurtUpgradeStat")]
 public class SelfHurtUpgradeStat : BasePassive
 {
-    private TurretBinder binder;
-    private TurretBuilding owner;
-
+    [SerializeField] private SelfHurtUpgradeStatLogic logicPrefab;
+    [SerializeField, Range(1, 5)] private int damageAmount = 1;
 
     public override void ApplyEffects(TurretBuilding owner)
-    {        
-        this.owner = owner;
-        owner.OnPlaced += OnOwnerTurretPlaced;
-
-        PathLocation.OnHealthChanged += OnPathLocationHealthChanged;
-    }
-
-
-    private async void OnOwnerTurretPlaced(Building invokerBuilding)
     {
-        owner.OnPlaced -= OnOwnerTurretPlaced;
-        PathLocation.OnHealthChanged -= OnPathLocationHealthChanged;
-
-        await Task.Delay(300);
-
-        TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
-        if (lowestStat == TurretUpgradeType.NONE) return;
-
-        owner.Upgrader.FreeTurretUpgrade(lowestStat);
-
-        ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation().TakeDamage(1);
-        
-        HideBinder();
+        SelfHurtUpgradeStatLogic spawnedLogic = Instantiate(logicPrefab, owner.transform);
+        spawnedLogic.Init(owner, damageAmount);
     }
 
-
-    public override void GotEnabledPlacing()
-    {
-        ShowNewBinder();
-        ConnectBinderWithPathLocation();
-    }
-    public override void GotDisabledPlacing()
-    {
-        HideBinder();
-    }
-
-    public override void GotMovedWhenPlacing()
-    {
-        ConnectBinderWithPathLocation();
-    }
-
-
-    public void ShowNewBinder()
-    {
-        binder = ServiceLocator.GetInstance().TDTurretBinderHelper.TakeBinder(TDTurretBinderHelper.BinderType.HURT_TARGET);
-        binder.Show();
-    }
-    public void HideBinder()
-    {
-        if (binder == null) return;
-
-        binder.Hide();
-        ServiceLocator.GetInstance().TDTurretBinderHelper.GiveBackBinder(binder);
-        binder = null;
-    }
-
-    private void ConnectBinderWithPathLocation()
-    {
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation();
-        TurretBinderUtils.UpdateTurretBinder(binder.Transform, pathLocation.transform, owner.BinderPointTransform);
-    }
-
-    private void OnPathLocationHealthChanged()
-    {
-        if (binder != null)
-        {
-            ConnectBinderWithPathLocation();
-        }        
-    }
 }

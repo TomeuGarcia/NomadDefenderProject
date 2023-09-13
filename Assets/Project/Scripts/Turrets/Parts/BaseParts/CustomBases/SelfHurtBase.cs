@@ -145,7 +145,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
     private async void DamageHealthiestLocation(int damage)
     {
         await Task.Delay(200);
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation();
+        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position);
         pathLocation.TakeDamage(damage);
     }
 
@@ -217,7 +217,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void ConnectBinderWithPathLocation()
     {
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation();
+        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position);
         TurretBinderUtils.UpdateTurretBinder(nodeBinderMesh.transform, pathLocation.transform, bindOriginTransform);
     }
 }

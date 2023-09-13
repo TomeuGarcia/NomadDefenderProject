@@ -253,12 +253,16 @@ public abstract class CardPart : MonoBehaviour
 
     protected abstract void InitInfoVisuals();
     protected abstract void SetupCardInfo();
-    public virtual void ShowInfo()
+    public void ShowInfo()
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
         if (OnInfoShown != null) OnInfoShown();
+
+        DoShowInfo();
     }
+    protected abstract void DoShowInfo();
+
     public virtual void HideInfo()
     {
         isShowingInfo = false;
@@ -272,7 +276,10 @@ public abstract class CardPart : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
+
+        if (cardState != CardPartStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
+
         ShowInfo();
         showInfoDelayCoroutine = null;
     }
