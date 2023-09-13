@@ -46,7 +46,7 @@ public class CurrencyCounter : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C)) AddCurrency(50);
+        if (Input.GetKeyDown(KeyCode.C) && GameCheats.cheatsEnabled) AddCurrency(50);
     }
 
     private void OnEnable()

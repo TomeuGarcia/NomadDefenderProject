@@ -143,7 +143,7 @@ public class HandBuildingCards : MonoBehaviour
         //    ResetAndSetStandardCard(selectedCard);
         //}
 
-        if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated)
+        if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated && GameCheats.cheatsEnabled)
         {
             if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
