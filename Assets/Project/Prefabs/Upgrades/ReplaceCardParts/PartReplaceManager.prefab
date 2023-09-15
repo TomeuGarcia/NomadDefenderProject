@@ -48,33 +48,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91bf2d33813c2346be900dcd834c43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseDragCamera: {fileID: 0}
   upgradeSceneSetupInfo: {fileID: 11400000, guid: d1f253e6d0edf5a48962ee638e796717,
     type: 2}
   mapSceneNotifier: {fileID: 470311337487129545}
   deckData: {fileID: 11400000, guid: 34287d5d7447ba8438b13f39557bad56, type: 2}
+  upgradeMachineControl: {fileID: 0}
+  incompletePreviewCard: {fileID: 0}
   upgradeCardHolder: {fileID: 0}
   cardPartHolder: {fileID: 0}
   numCards: 3
   numParts: 3
   partType: 0
-  partsLibrary: {fileID: 11400000, guid: 2bd79358ac63bdb46b0839b5eb3da6a9, type: 2}
   cardPartAttackPrefab: {fileID: 3900070926476808981, guid: e4f053b17459aa64d9fedbcf144feb76,
     type: 3}
   cardPartBodyPrefab: {fileID: 3900070926476808981, guid: eed9a752635c79840b7f217766591048,
     type: 3}
   cardPartBasePrefab: {fileID: 3900070926476808981, guid: d882f06068a8e6a42aeed588a7064e48,
     type: 3}
-  buttonText: {fileID: 0}
-  buttonAnimator: {fileID: 0}
+  playCostSubtractAmountSamePart: 40
   buttonMouseOverNotifier: {fileID: 0}
+  cardPlacerToParent: {fileID: 0}
+  cardPartPlacerToParent: {fileID: 0}
+  resultCardPlacerToParent: {fileID: 0}
+  previewTurretCard: {fileID: 0}
   consoleDialog: {fileID: 360986106233380882}
   textLine:
     textType: 0
     text: 
     clearTime: 0
   isTutorial: 0
+  printParticles_PS: {fileID: 0}
   canFinalRetrieveCard: 1
-  buttonMeshRenderer: {fileID: 0}
 --- !u!114 &470311337487129545
 MonoBehaviour:
   m_ObjectHideFlags: 0

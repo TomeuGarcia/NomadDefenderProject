@@ -172,10 +172,12 @@ public class OverworldCardShower : MonoBehaviour
         //followCamera.transform.rotation = prevCameraRot;
         
 
-        followCamera.gameObject.SetActive(true);
+        followCamera.gameObject.SetActive(true);        
         transform.GetChild(0).gameObject.SetActive(false);
         backToMapButton.gameObject.SetActive(false);
         showDeckButton.gameObject.SetActive(true);
+
+        Debug.Log("back");
     }
 
 

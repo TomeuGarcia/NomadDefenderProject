@@ -141,6 +141,8 @@ public class Enemy : MonoBehaviour
                 //pathLocation.TakeDamage((int)damage);
                 pathLocation.TakeDamage(1);
                 collidedWithLocation = true;
+
+                if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
             }
             Suicide();
         }
