@@ -326,6 +326,10 @@ public class UpgradeCardHolder : MonoBehaviour
         foreach (BuildingCard card in cards)
         {
             card.canDisplayInfoIfNotInteractable = false;
+            if (card.isShowingInfo)
+            {
+                card.HideInfo();
+            }
         }
     }
 

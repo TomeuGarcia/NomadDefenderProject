@@ -425,6 +425,7 @@ public class CardPartReplaceManager : MonoBehaviour
         upgradeCardHolder.StopInteractions();
         cardPartHolder.StopInteractions();
 
+
         float partMoveDuration = 0.2f;
         float flipDuration = 0.4f;
         float moveDuration = 0.5f;
@@ -435,6 +436,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         yield return new WaitForSeconds(0.1f);
+
 
         // Audio
         GameAudioManager.GetInstance().PlayCardPartSwap();
@@ -459,9 +461,6 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
         InvokeReplacementStart();
 
-
-        CardPartHolder.selectedCardPart.canDisplayInfoIfNotInteractable = false;
-        CardPartHolder.selectedCardPart.HideInfo();
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
         if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);

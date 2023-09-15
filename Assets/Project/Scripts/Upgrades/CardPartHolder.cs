@@ -314,9 +314,24 @@ public class CardPartHolder : MonoBehaviour
         foreach (CardPart cardPart in cardParts)
         {
             cardPart.canDisplayInfoIfNotInteractable = false;
+            if (cardPart.isShowingInfo)
+            {
+                cardPart.HideInfo();
+            }
         }
     }
 
+    public void DisableCardsShowInfo()
+    {
+        foreach (CardPart cardPart in cardParts)
+        {
+            cardPart.canDisplayInfoIfNotInteractable = false;
+            if (cardPart.isShowingInfo)
+            {
+                cardPart.HideInfo();
+            }
+        }
+    }
 
     public void ReplaceStartStopInteractions()
     {
