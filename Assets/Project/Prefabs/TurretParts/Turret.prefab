@@ -1190,7 +1190,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -2038,9 +2040,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4728543272238142509}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &4831186610286890181
@@ -2701,7 +2711,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5698239489495674825}
   - component: {fileID: 5698239489495674830}
-  - component: {fileID: 6802527228143950705}
   m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
@@ -2750,20 +2759,6 @@ MonoBehaviour:
   baseHolder: {fileID: 40166544886556335}
   placedParticleSystem: {fileID: 7092745323191377638}
   upgradeParticles: {fileID: 1401920438832917988}
---- !u!136 &6802527228143950705
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5698239489495674828}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 20
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5813164696923928327
 GameObject:
   m_ObjectHideFlags: 0
@@ -4098,7 +4093,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -4492,6 +4489,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8989046114779512156}
     m_Modifications:
     - target: {fileID: 4662412007931874884, guid: 03b48e5ac214f8a4a97fde4030c2e2db,
@@ -4560,6 +4558,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03b48e5ac214f8a4a97fde4030c2e2db, type: 3}
 --- !u!198 &6616791998591684781 stripped
 ParticleSystem:
@@ -4578,6 +4579,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8989046114779512156}
     m_Modifications:
     - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
@@ -4641,6 +4643,9 @@ PrefabInstance:
       value: Dust_Particles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fad29eb1cbd39eb428fca592697d7e53, type: 3}
 --- !u!198 &7092745323191377638 stripped
 ParticleSystem:
@@ -4659,6 +4664,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8989046114779512156}
     m_Modifications:
     - target: {fileID: 8280366561528748482, guid: e5080559fefd86b41b257a77baf9d45d,
@@ -4722,6 +4728,9 @@ PrefabInstance:
       value: BurstCanUpgradeBuildingParticles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5080559fefd86b41b257a77baf9d45d, type: 3}
 --- !u!198 &1401920438832917988 stripped
 ParticleSystem:

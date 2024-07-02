@@ -6,6 +6,7 @@ using UnityEngine.SocialPlatforms;
 public class GameTime
 {
     static public float TimeScale { get; private set; } = 1f;
+    static public float DeltaTime => Time.deltaTime * TimeScale;
 
     static public void SetTimeScale(float timeScale)
     {

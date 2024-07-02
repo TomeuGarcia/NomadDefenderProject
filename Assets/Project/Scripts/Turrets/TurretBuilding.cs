@@ -87,7 +87,7 @@ public class TurretBuilding : RangeBuilding
         {
             if (TargetEnemyExists())
             {
-                lastTargetedPosition = targetedEnemy.transformToMove.position;
+                lastTargetedPosition = targetedEnemy.Position;
             }
             LookAtTarget();
         }
@@ -96,8 +96,9 @@ public class TurretBuilding : RangeBuilding
 
     private void LookAtTarget()
     {
-        Quaternion targetRot = Quaternion.LookRotation((lastTargetedPosition - bodyPart.transform.position).normalized, bodyPart.transform.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
+        Vector3 lookDirection = Vector3.ProjectOnPlane(lastTargetedPosition - bodyPart.transform.position, Vector3.up).normalized;
+        Quaternion targetRot = Quaternion.LookRotation(lookDirection, Vector3.up);
+        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
     }
 
     public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
@@ -196,6 +197,7 @@ public class TurretBuilding : RangeBuilding
             return;
         }
 
+        
         if (!TargetEnemyExists()) return;
 
         currentShootTimer = 0.0f;
@@ -219,6 +221,8 @@ public class TurretBuilding : RangeBuilding
     private void ComputeNextTargetedEnemy()
     {
         targetedEnemy = null;
+
+        Debug.Log(enemies.Count);
 
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())

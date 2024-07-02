@@ -1,15 +1,11 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SpeedUpButton : MonoBehaviour
 {
-    //[SerializeField] private Image image;
-    //[SerializeField] private List<Sprite> sprites = new List<Sprite>();
     [SerializeField] private List<float> timeScales = new List<float>();
 
     [SerializeField] private TextMeshProUGUI timeSpeedCountText;

@@ -14,7 +14,8 @@ public class PathFollower : MonoBehaviour
 
     // Target Node
     private PathNode targetNode = null;
-    private Vector3 moveDirection;
+    private Quaternion _targetRotation;
+    public Vector3 MoveDirection { get; private set; }
     [SerializeField, Min(0f)] public float moveSpeed = 10f;
     private float baseMoveSpeed;
     private Transform transformToMove;
@@ -48,8 +49,7 @@ public class PathFollower : MonoBehaviour
     {
         baseMoveSpeed = moveSpeed;
 
-        targetNode = startTargetNode;
-        moveDirection = startDirection;
+        UpdateTarget(startTargetNode, startDirection);
 
         finished = false;
         paused = false;
@@ -64,7 +64,7 @@ public class PathFollower : MonoBehaviour
         currentStartPosition = transformToMove.position + positionOffset;
         currentEndPosition = targetNode.Position + positionOffset;
 
-        this.transformToMove.rotation = Quaternion.LookRotation((currentEndPosition - currentStartPosition).normalized, targetNode.Up);
+        this.transformToMove.rotation = _targetRotation;
 
         startToEndT = 0f;
 
@@ -102,8 +102,7 @@ public class PathFollower : MonoBehaviour
             }
             else
             {
-                moveDirection = targetNode.GetDirectionToNextNode();
-                targetNode = targetNode.GetNextNode();
+                UpdateTarget(targetNode.GetNextNode(), targetNode.GetDirectionToNextNode());
 
                 currentStartPosition = currentEndPosition;
                 currentEndPosition = targetNode.Position + positionOffset;
@@ -115,25 +114,40 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        float iterationStep = Time.deltaTime * step * GameTime.TimeScale;
+        float iterationStep = step * GameTime.DeltaTime;
         travelledDistance += iterationStep * distanceStartToEnd;
 
         startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
         transformToMove.position = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
 
-
-        if (Vector3.Dot(transformToMove.forward, moveDirection) < 1f)
+        transformToMove.rotation = _targetRotation;
+        return;
+        if (Vector3.Dot(transformToMove.forward, MoveDirection) > 0.98f)
         {
-            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, Quaternion.LookRotation(moveDirection, transform.up), 300f * Time.deltaTime * GameTime.TimeScale);
+            transformToMove.rotation = _targetRotation;
+        }
+        else
+        {
+            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, _targetRotation, 300f * GameTime.DeltaTime);
         }
     }
 
+
+    private void UpdateTarget(PathNode newTargetNode, Vector3 targetDirection)
+    {
+        targetNode = newTargetNode;
+        MoveDirection = targetDirection;
+        _targetRotation = Quaternion.LookRotation(MoveDirection, targetNode.Up);
+    }
 
     
     public void PauseForDuration(float duration)
     {
         if (!gameObject.activeInHierarchy) return;
-        if (pauseCoroutine != null) StopCoroutine(pauseCoroutine);
+        if (pauseCoroutine != null)
+        {
+            StopCoroutine(pauseCoroutine);
+        }
         pauseCoroutine = StartCoroutine(DoPauseForDuration(duration));
     }
 

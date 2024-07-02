@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -23,6 +23,8 @@ Material:
   m_Name: RangeMarkedTiles_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 06efa1198db813e4e8a728dab77ffa63,
     type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -31,6 +33,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -39,6 +42,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_f5d88e26f08b4dc192c2059335806f31_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 6120f3ff8a1c025448623e1dda17dc93, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f5d88e26f08b4dc192c2059335806f31_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 6120f3ff8a1c025448623e1dda17dc93, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -56,10 +63,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FadeInDuration: 0.1
     - _MaxAlpha: 0.4
+    - _MaxAlphaTiles: 0.38
+    - _MaxTotalAlpha: 0.5
     - _MinAlpha: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _StartTimeFadeIn: 0
     - _TileNum: 3
     m_Colors:
     - _Color: {r: 0, g: 1.2862746, b: 0.015686275, a: 0}

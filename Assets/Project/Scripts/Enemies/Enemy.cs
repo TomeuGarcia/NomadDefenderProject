@@ -1,11 +1,6 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using static PathFollower;
 
 public class Enemy : MonoBehaviour
 {
@@ -18,6 +13,9 @@ public class Enemy : MonoBehaviour
         HEALTH_TRUCK, // 5
         COUNT
     }
+
+    [Header("Attack")]
+    [SerializeField] private EnemyAttackGeneralConfig _attackGeneralConfig;
     
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -128,24 +126,31 @@ public class Enemy : MonoBehaviour
         currencyDrop = baseCurrencyDrop;
     }
 
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PathLocation") && !collidedWithLocation)
+        TryAttackPathLocation(other.gameObject);
+    }
+    */
+
+    private void TryAttackPathLocation(GameObject hitObject)
+    {
+        if (!collidedWithLocation)
         {
-            //Debug.Log(this.name);
-
-            PathLocation pathLocation = other.gameObject.GetComponent<PathLocation>();
-            if (pathLocation.CanTakeDamage())
+            if (hitObject.TryGetComponent<PathLocation>(out PathLocation pathLocation))
             {
-                //pathLocation.TakeDamage((int)damage);
-                pathLocation.TakeDamage(1);
-                collidedWithLocation = true;
+                if (pathLocation.CanTakeDamage())
+                {
+                    //pathLocation.TakeDamage((int)damage);
+                    pathLocation.TakeDamage(1);
+                    collidedWithLocation = true;
 
-                if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+                    if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+                }
             }
-            Suicide();
         }
+
+        Suicide();
     }
 
 
@@ -161,8 +166,14 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        Vector3 launchDirection = (transformToMove.forward + (transformToMove.up * 0.2f)).normalized;
-        rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
+        //Vector3 launchDirection = (transformToMove.forward + (transformToMove.up * 0.2f)).normalized;
+        //rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
+
+        if (Physics.Raycast(Position, pathFollower.MoveDirection, out RaycastHit hit, 10, 
+            _attackGeneralConfig.PathLocationAttackLayer, QueryTriggerInteraction.Collide))
+        {
+            TryAttackPathLocation(hit.collider.gameObject);
+        }
     }
 
     public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)

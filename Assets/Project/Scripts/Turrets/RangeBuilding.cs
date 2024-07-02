@@ -100,7 +100,7 @@ public abstract class RangeBuilding : Building
 
     private void OnEnemyEnters(Enemy enemy)
     {
-        if (!enemy.DiesFromQueuedDamage())
+        if (!enemy.DiesFromQueuedDamage() && !enemies.Contains(enemy))
         {
             AddEnemy(enemy);
         }
@@ -121,12 +121,18 @@ public abstract class RangeBuilding : Building
         enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
         enemies.Sort(SortEnemies);
+
+        Debug.Log("Enemy ADD");
+
     }
 
     protected void RemoveEnemy(Enemy enemy)
     {
         enemy.OnEnemyDeactivated -= DeleteEnemyFromList;
         DeleteEnemyFromList(enemy);
+
+        Debug.Log("Enemy REMOVE");
+
     }
 
     private void DeleteEnemyFromList(Enemy enemyToDelete)
