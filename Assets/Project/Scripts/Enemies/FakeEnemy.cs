@@ -24,8 +24,8 @@ public class FakeEnemy : Enemy
     {
         healthSystem = new HealthSystem(1000);
 
-        pathFollower.paused = true;
-        pathFollower.enabled = false;
+        PathFollower.paused = true;
+        PathFollower.enabled = false;
 
         MeshTransform.gameObject.SetActive(false);
 

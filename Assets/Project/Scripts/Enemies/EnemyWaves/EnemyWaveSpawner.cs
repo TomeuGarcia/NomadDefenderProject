@@ -218,7 +218,7 @@ public class EnemyWaveSpawner : ScriptableObject
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
         Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.3f, 0.3f)) + 
                                (spawnedEnemy.transformToMove.forward * Random.Range(-0.3f, 0.3f));
-        spawnedEnemy.pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), randomOffset, totalDistance, spawnedEnemy.transformToMove);
+        spawnedEnemy.SpawnedInit(startNode, randomOffset, totalDistance);
         /////////////
 
         spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;

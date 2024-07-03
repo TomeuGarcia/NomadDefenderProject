@@ -45,7 +45,8 @@ public class PathFollower : MonoBehaviour
 
 
 
-    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, Transform transformToMove = null)
+    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, 
+        Transform transformToMove = null)
     {
         baseMoveSpeed = moveSpeed;
 
@@ -87,10 +88,10 @@ public class PathFollower : MonoBehaviour
         moveSpeed = (baseMoveSpeed * speedCoef);
         step = moveSpeed / distanceStartToEnd;
     }
-
+    
     private void FollowPathInterpolated()
     {
-        if (startToEndT > 0.999999f)
+        if (startToEndT > 0.99f)
         {
             transformToMove.position = currentEndPosition; // Snap at position
 

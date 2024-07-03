@@ -23,13 +23,15 @@ public class Enemy : MonoBehaviour
     private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
-    [SerializeField] public PathFollower pathFollower;
+    [SerializeField] private PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] private Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
     [SerializeField] private HealthHUD healthHUD;
     [SerializeField] private EnemyFeedback enemyFeedback;
     //[SerializeField] private MeshRenderer armorCover;
+
+    public PathFollower PathFollower => pathFollower;
 
     [Header("Stats")]
     [SerializeField] private int baseDamage = 1;
@@ -124,6 +126,11 @@ public class Enemy : MonoBehaviour
         armor = baseArmor;
 
         currencyDrop = baseCurrencyDrop;
+    }
+
+    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance)
+    {
+        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance, transformToMove);
     }
 
     /*
