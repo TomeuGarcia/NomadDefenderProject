@@ -222,8 +222,6 @@ public class TurretBuilding : RangeBuilding
     {
         targetedEnemy = null;
 
-        Debug.Log(enemies.Count);
-
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
         {

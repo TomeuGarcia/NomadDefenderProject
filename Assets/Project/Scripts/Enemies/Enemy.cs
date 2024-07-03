@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour
 
     public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance)
     {
-        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance, transformToMove);
+        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
     }
 
     /*

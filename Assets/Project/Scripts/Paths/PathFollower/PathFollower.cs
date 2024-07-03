@@ -18,7 +18,7 @@ public class PathFollower : MonoBehaviour
     public Vector3 MoveDirection { get; private set; }
     [SerializeField, Min(0f)] public float moveSpeed = 10f;
     private float baseMoveSpeed;
-    private Transform transformToMove;
+    [SerializeField] private Rigidbody _rigidbodyToMove;
 
     // Path Follow Control
     private bool finished = false;
@@ -30,7 +30,7 @@ public class PathFollower : MonoBehaviour
     public float DistanceLeftToEnd => totalDistanceToTravel - travelledDistance; 
 
     // Position
-    public Vector3 Position => transformToMove.position;
+    public Vector3 Position => _rigidbodyToMove.position;
 
     private Coroutine pauseCoroutine = null;
 
@@ -45,8 +45,7 @@ public class PathFollower : MonoBehaviour
 
 
 
-    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel, 
-        Transform transformToMove = null)
+    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel)
     {
         baseMoveSpeed = moveSpeed;
 
@@ -58,14 +57,11 @@ public class PathFollower : MonoBehaviour
         travelledDistance = 0.0f;
         this.totalDistanceToTravel = totalDistanceToTravel;
 
-        this.transformToMove = transformToMove ? transformToMove : transform;
-
-
         this.positionOffset = positionOffset;
-        currentStartPosition = transformToMove.position + positionOffset;
+        currentStartPosition = Position + positionOffset;
         currentEndPosition = targetNode.Position + positionOffset;
 
-        this.transformToMove.rotation = _targetRotation;
+        _rigidbodyToMove.rotation = _targetRotation;
 
         startToEndT = 0f;
 
@@ -77,8 +73,14 @@ public class PathFollower : MonoBehaviour
     }
 
 
-
+    /*
     private void Update()
+    {
+        if (!finished && !paused) FollowPathInterpolated();
+    }
+    */
+
+    private void FixedUpdate()
     {
         if (!finished && !paused) FollowPathInterpolated();
     }
@@ -93,7 +95,7 @@ public class PathFollower : MonoBehaviour
     {
         if (startToEndT > 0.99f)
         {
-            transformToMove.position = currentEndPosition; // Snap at position
+            _rigidbodyToMove.position = currentEndPosition; // Snap at position
 
             if (targetNode.IsLastNode)
             {
@@ -115,22 +117,27 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        float iterationStep = step * GameTime.DeltaTime;
+        float iterationStep = step * GameTime.TimeScale * Time.fixedDeltaTime;
         travelledDistance += iterationStep * distanceStartToEnd;
 
         startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
-        transformToMove.position = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
 
-        transformToMove.rotation = _targetRotation;
+        Vector3 currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
+        Quaternion currentRotation = _targetRotation;// Quaternion.identity;
+
+        _rigidbodyToMove.Move(currentPosition, currentRotation);
+
         return;
-        if (Vector3.Dot(transformToMove.forward, MoveDirection) > 0.98f)
+        if (Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f)
         {
-            transformToMove.rotation = _targetRotation;
+            currentRotation = _targetRotation;
         }
         else
         {
-            transformToMove.rotation = Quaternion.RotateTowards(transformToMove.rotation, _targetRotation, 300f * GameTime.DeltaTime);
+            currentRotation = Quaternion.RotateTowards(_rigidbodyToMove.rotation, _targetRotation, 300f * GameTime.DeltaTime);
         }
+
+        
     }
 
 
