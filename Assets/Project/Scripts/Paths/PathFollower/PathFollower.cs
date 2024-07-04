@@ -17,6 +17,7 @@ public class PathFollower : MonoBehaviour
     private Quaternion _targetRotation;
     public Vector3 MoveDirection { get; private set; }
     [SerializeField, Min(0f)] public float moveSpeed = 10f;
+    [SerializeField, Min(0f)] public float _rotationSpeed = 300f;
     private float baseMoveSpeed;
     [SerializeField] private Rigidbody _rigidbodyToMove;
 
@@ -121,23 +122,15 @@ public class PathFollower : MonoBehaviour
         travelledDistance += iterationStep * distanceStartToEnd;
 
         startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
-
         Vector3 currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
-        Quaternion currentRotation = _targetRotation;// Quaternion.identity;
+
+        bool isLookingTowardsMoveDirection = Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f;
+        Quaternion currentRotation = isLookingTowardsMoveDirection
+            ? _targetRotation
+            : Quaternion.RotateTowards(_rigidbodyToMove.rotation, _targetRotation, _rotationSpeed * GameTime.DeltaTime);
+
 
         _rigidbodyToMove.Move(currentPosition, currentRotation);
-
-        return;
-        if (Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f)
-        {
-            currentRotation = _targetRotation;
-        }
-        else
-        {
-            currentRotation = Quaternion.RotateTowards(_rigidbodyToMove.rotation, _targetRotation, 300f * GameTime.DeltaTime);
-        }
-
-        
     }
 
 
