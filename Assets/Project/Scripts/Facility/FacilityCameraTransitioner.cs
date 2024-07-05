@@ -12,6 +12,7 @@ public class FacilityCameraTransitioner : MonoBehaviour
     [Header("REFERENCES")]
     [SerializeField] private Transform _targetTransform;
     [SerializeField] private CinemachineVirtualCamera _vcam;
+    [SerializeField] private FacilityUITransitioner _facilityUITransitioner;
 
     [Header("PARAMETERS")]
     [SerializeField] private float _horizontalTime;
@@ -26,7 +27,7 @@ public class FacilityCameraTransitioner : MonoBehaviour
     [SerializeField] private Ease _verticalEase;
     [SerializeField] private Ease _rotationEase;
 
-
+    //TODO - Delete
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.W))
@@ -57,11 +58,6 @@ public class FacilityCameraTransitioner : MonoBehaviour
         mySequence.Insert(0.0f, _targetTransform.DOMoveZ(_positionGoal.z, _horizontalTime).SetEase(_horizontalEase));
         mySequence.Insert(0.0f, _targetTransform.DOMoveY(_positionGoal.y, _verticalTime).SetEase(_verticalEase));
         mySequence.Insert(0.0f, _targetTransform.DORotate(_rotationGoal, _rotationTime).SetEase(_rotationEase));
-        mySequence.OnComplete(StartLoading);
-    }
-
-    private void StartLoading()
-    {
-
+        mySequence.OnComplete(_facilityUITransitioner.StartLoading);
     }
 }
