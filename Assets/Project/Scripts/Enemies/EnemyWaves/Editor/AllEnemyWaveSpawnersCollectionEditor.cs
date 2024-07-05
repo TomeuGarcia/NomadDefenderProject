@@ -17,7 +17,7 @@ public class AllEnemyWaveSpawnersCollectionEditor : Editor
     private void OnEnable()
     {
         _enemyWaveSpawnersCollectionInspected = target as AllEnemyWaveSpawnersCollection;
-        //UpdateCollection();
+        UpdateCollection();
         InitializeGuiStyles();
     }
 
@@ -69,7 +69,8 @@ public class AllEnemyWaveSpawnersCollectionEditor : Editor
 
     private void OnEnemyWaveSpawnerFindCallback(EnemyWaveSpawner enemyWaveSpawner)
     {
-        
+        return;
+
         enemyWaveSpawner.ValidateJSONFormat();
         EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
         
