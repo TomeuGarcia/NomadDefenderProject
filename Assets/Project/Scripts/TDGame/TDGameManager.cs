@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class TDGameManager : MonoBehaviour, TDLocationsUtils
 {
+    [Header("CONFIG")]
+    [SerializeField] private TDGameManagerConfig _config;
+
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
@@ -81,10 +84,13 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
     private void InitLocationsVisuals()
     {
+        int locationsHealth = _config.GetLocationsHealth(pathLocations.Length);
+
         for (int i = 0; i < pathLocations.Length; ++i)
         {
             OWMap_Node owMapNode = battleStateResult.nodeResults[i].owMapNode;
             
+            pathLocations[i].InitNodeHealth(locationsHealth);
             pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
         }
 

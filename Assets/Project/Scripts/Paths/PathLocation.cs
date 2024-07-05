@@ -8,8 +8,6 @@ using Unity.VisualScripting;
 
 public class PathLocation : MonoBehaviour
 {
-    [Header("HEALTH")]
-    [SerializeField] private int health = 3;
     public HealthSystem healthSystem { get; private set; }
     private bool hasGameFinished;
 
@@ -64,8 +62,6 @@ public class PathLocation : MonoBehaviour
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
-        healthHUD.Init(healthSystem);
         InitParticles();
 
         hasGameFinished = false;
@@ -142,6 +138,12 @@ public class PathLocation : MonoBehaviour
         if (OnDeath != null) OnDeath(this);
     }
 
+
+    public void InitNodeHealth(int maxHealth)
+    {
+        healthSystem = new HealthSystem(maxHealth);
+        healthHUD.Init(healthSystem);
+    }
 
     public void InitNodeVisuals(Texture nodeIconTexture, Color borderColor)
     {
