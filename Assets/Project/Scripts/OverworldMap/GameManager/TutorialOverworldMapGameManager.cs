@@ -73,12 +73,11 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     protected override void ApplyBattleStateResult()
     {
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
-        bool wonWithPerfectDefense = currentBattleStateResult.DidWinWithPerfectDefense();
         if (firstBattleResultApplied)
         {
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense, true);
+                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, true);
             }                        
         }
         else
@@ -86,7 +85,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             firstBattleResultApplied = true;
             for (int i = 0; i < nodeResults.Length; ++i)
             {
-                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false, true); // Hardcoded to always apply UNDAMAGED
+                nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.SURVIVED, true); // Hardcoded to always apply UNDAMAGED
             }
         }
 
@@ -150,7 +149,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
         for (int i = 0; i < nextLevelEnabledNodes.Length; ++i)
         {
-            nextLevelEnabledNodes[i].SetHealthState(NodeEnums.HealthState.GREATLY_DAMAGED, false, true);
+            nextLevelEnabledNodes[i].SetHealthState(NodeEnums.HealthState.SURVIVED, true);
             nextLevelEnabledNodes[i].SetResurrectedVisuals();
             nextLevelEnabledNodes[i].ClearCameFromConnection();
             nextLevelEnabledNodes[i].isInteractable = true;

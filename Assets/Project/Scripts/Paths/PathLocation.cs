@@ -205,7 +205,7 @@ public class PathLocation : MonoBehaviour
             nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
             nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_redColor);
         }
-        else if (healthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        else if (healthSystem.health == 1)
         {
             nodeMeshMaterial.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
             nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);

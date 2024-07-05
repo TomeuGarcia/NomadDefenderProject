@@ -246,18 +246,9 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
     public static NodeEnums.HealthState ComputeHealthState(HealthSystem healthSystem)
     {
-        if (healthSystem.IsDead())
-            return NodeEnums.HealthState.DESTROYED;
-
-        if (healthSystem.IsFullHealth())
-            return NodeEnums.HealthState.UNDAMAGED;
-
-
-        float healthRatio = healthSystem.HealthRatio;
-        if (healthRatio > 0.5f)
-            return NodeEnums.HealthState.SLIGHTLY_DAMAGED;
-        else
-            return NodeEnums.HealthState.GREATLY_DAMAGED;
+        return healthSystem.IsDead()
+            ? NodeEnums.HealthState.DESTROYED
+            : NodeEnums.HealthState.SURVIVED;
     }
 
 

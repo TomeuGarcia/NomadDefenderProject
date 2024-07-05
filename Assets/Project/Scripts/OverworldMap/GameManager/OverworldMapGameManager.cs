@@ -174,7 +174,7 @@ public class OverworldMapGameManager : MonoBehaviour
             {
                 if (cameFromNodeWasBattle)
                 {
-                    upgradeSceneSetupInfo.SetData(currentNode.nodeClass.progressionState, currentNode.healthState, currentBattleStateResult.DidWinWithPerfectDefense());
+                    upgradeSceneSetupInfo.SetData(currentNode.nodeClass.progressionState, currentNode.healthState);
                 }
                 else
                 {
@@ -275,11 +275,10 @@ public class OverworldMapGameManager : MonoBehaviour
     protected virtual void ApplyBattleStateResult()
     {
         BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
-        bool wonWithPerfectDefense = currentBattleStateResult.DidWinWithPerfectDefense();
 
         for (int i = 0; i < nodeResults.Length; ++i)
         {
-            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, wonWithPerfectDefense, true);
+            nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, true);
             if(nodeResults[i].healthState == NodeEnums.HealthState.DESTROYED)
             {
                 currentNode.GetNextLevelConnections()[i].LightConnection(true);
@@ -293,7 +292,7 @@ public class OverworldMapGameManager : MonoBehaviour
         OWMap_Node[] nextLevelNodes = currentNode.GetMapReferencesData().nextLevelNodes;
         foreach (OWMap_Node node in nextLevelNodes)
         {
-            node.SetHealthState(NodeEnums.HealthState.UNDAMAGED, false, true);
+            node.SetHealthState(NodeEnums.HealthState.SURVIVED, true);
         }
     }
 
