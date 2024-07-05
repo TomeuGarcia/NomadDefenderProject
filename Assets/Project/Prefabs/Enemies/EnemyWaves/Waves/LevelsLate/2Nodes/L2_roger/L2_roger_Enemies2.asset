@@ -16,98 +16,242 @@ MonoBehaviour:
   delayWaveStart: 1
   delayBetweenWaves: 5
   enemyWaves:
-  - delayBetweenSpawns: 2
-    enemies: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
-    enemiesInWave:
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-    - enemyType: 0
-      delayBeforeSpawn: 2
-  - delayBetweenSpawns: 1
-    enemies: 0000000000000000000000000000000000000000030000000300000002000000
-    enemiesInWave:
-    - enemyType: 0
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
       delayBeforeSpawn: 1
-    - enemyType: 0
+      numberOfSpawns: 3
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
       delayBeforeSpawn: 1
-    - enemyType: 0
+      numberOfSpawns: 2
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
       delayBeforeSpawn: 1
-    - enemyType: 0
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
       delayBeforeSpawn: 1
-    - enemyType: 0
-      delayBeforeSpawn: 1
-    - enemyType: 3
-      delayBeforeSpawn: 1
-    - enemyType: 3
-      delayBeforeSpawn: 1
-    - enemyType: 2
-      delayBeforeSpawn: 1
-  - delayBetweenSpawns: 1.5
-    enemies: 030000000100000005000000000000000200000000000000
-    enemiesInWave:
-    - enemyType: 3
+      numberOfSpawns: 3
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
       delayBeforeSpawn: 1.5
-    - enemyType: 1
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
       delayBeforeSpawn: 1.5
-    - enemyType: 5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
       delayBeforeSpawn: 1.5
-    - enemyType: 0
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
       delayBeforeSpawn: 1.5
-    - enemyType: 2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
       delayBeforeSpawn: 1.5
-    - enemyType: 0
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
       delayBeforeSpawn: 1.5
-  - delayBetweenSpawns: 0.75
-    enemies: 0000000000000000000000000000000000000000030000000300000003000000
-    enemiesInWave:
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 3
-      delayBeforeSpawn: 0.75
-    - enemyType: 3
-      delayBeforeSpawn: 0.75
-    - enemyType: 3
-      delayBeforeSpawn: 0.75
-  - delayBetweenSpawns: 0.75
-    enemies: 000000000400000003000000030000000500000000000000
-    enemiesInWave:
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-    - enemyType: 4
-      delayBeforeSpawn: 0.75
-    - enemyType: 3
-      delayBeforeSpawn: 0.75
-    - enemyType: 3
-      delayBeforeSpawn: 0.75
-    - enemyType: 5
-      delayBeforeSpawn: 0.75
-    - enemyType: 0
-      delayBeforeSpawn: 0.75
-  nameLevel: 2M_prototypeLvl1
-  nameJSON: 2M_prototypeLvl1_Enemies1
-  progressionState: 0
-  numNodes: 1
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 090f3fcceefbf1445acb812a7648647d, type: 2}
+      enemyType: 6
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 3
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 2.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
+      enemyType: 4
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 090f3fcceefbf1445acb812a7648647d, type: 2}
+      enemyType: 6
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: e51a5eedfe92a3442a0578249d82608a, type: 2}
+      enemyType: 7
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 0408630e89e5f06448c5cdea1f4604e1, type: 2}
+      enemyType: 3
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 0408630e89e5f06448c5cdea1f4604e1, type: 2}
+      enemyType: 3
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 0408630e89e5f06448c5cdea1f4604e1, type: 2}
+      enemyType: 3
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+  - enemiesInWave:
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 0.2
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 03c2bbba40523b645b1bd7883431d711, type: 2}
+      enemyType: 5
+      delayBeforeSpawn: 1
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 090f3fcceefbf1445acb812a7648647d, type: 2}
+      enemyType: 6
+      delayBeforeSpawn: 1.5
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: e51a5eedfe92a3442a0578249d82608a, type: 2}
+      enemyType: 7
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 2.5
+      numberOfSpawns: 3
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
+      enemyType: 0
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 2
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.25
+      numberOfSpawns: 1
+    - _enemyType: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+      enemyType: 1
+      delayBeforeSpawn: 0.5
+      numberOfSpawns: 3

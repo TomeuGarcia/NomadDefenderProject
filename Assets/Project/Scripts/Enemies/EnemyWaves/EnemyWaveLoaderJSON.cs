@@ -106,7 +106,7 @@ public static class EnemyWaveJSONManager
     {
         string targetFilePath = GetJSONFileName(enemyWaveSpawner);
 
-        Debug.Log(directoryPath + targetFilePath);
+        //Debug.Log(directoryPath + targetFilePath);
 
         return directoryPath + targetFilePath;
     }

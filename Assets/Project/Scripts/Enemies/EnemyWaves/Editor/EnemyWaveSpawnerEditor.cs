@@ -4,8 +4,6 @@ using System.IO;
 using UnityEngine;
 using Unity.VisualScripting;
 
-
-#if UNITY_EDITOR
 using UnityEditor;
 
 [CustomEditor(typeof(EnemyWaveSpawner))]
@@ -159,4 +157,3 @@ public class EnemyWaveSpawnerEditor : Editor
     }
 
 }
-#endif

@@ -53,6 +53,7 @@ public class EnemyWaveSpawner : ScriptableObject
     bool stopForced;
 
 
+
     private void OnValidate()
     {        
         // UNCOMMENT AFTER FIXING
@@ -156,9 +157,9 @@ public class EnemyWaveSpawner : ScriptableObject
         this.startNode = startNode;
         stopForced = false;
 
-        // UNCOMMENT AFTER FIXING
-        ValidateJSONFormat();
-        EnemyWaveJSONManager.LoadEnemyWave(this, false);
+        // UNCOMMENT if need to read from json
+        //ValidateJSONFormat();
+        //EnemyWaveJSONManager.LoadEnemyWave(this, false);
     }
 
 
@@ -188,7 +189,7 @@ public class EnemyWaveSpawner : ScriptableObject
                     yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
                     if (stopForced) break;
                     
-                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+                    SpawnEnemy(enemyInWave.EnemyTypeN, spawnTransform);
 
                 }                
             }
@@ -197,7 +198,7 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    private void SpawnEnemy(Enemy.EnemyType enemyType, Transform spawnTransform)
+    private void SpawnEnemy(EnemyTypeConfig enemyType, Transform spawnTransform)
     {
         if (OnEnemySpawn != null) OnEnemySpawn(this);
 
