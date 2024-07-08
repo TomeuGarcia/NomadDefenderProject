@@ -8,7 +8,7 @@ using UnityEngine;
 public class TurretPartBody : ScriptableObject
 {
     public static int[] damagePerLvl = new int[] { 12, 20, 40, 60, 80 };
-    public static float[] cadencePerLvl = new float[] { 3f, 2f, 1.5f, 1f, 0.5f };
+    public static float[] cadencePerLvl = new float[] { 2f, 1.33f, 1f, 0.66f, 0.33f };//0.33
     
     public enum BodyType
     {
@@ -21,8 +21,8 @@ public class TurretPartBody : ScriptableObject
 
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
-    [SerializeField, Range(1, 5), Tooltip("{ 6, 10, 20, 30, 40 }")] public int damageLvl;
-    [SerializeField, Range(1, 5), Tooltip("{ 3f, 2f, 1.5f, 1f, 0.5f }")] public int cadenceLvl;
+    [SerializeField, Range(1, 6), Tooltip("{ 12, 20, 40, 60, 80  }")] public int damageLvl;
+    [SerializeField, Range(1, 6), Tooltip("{ 1.5f, 1f, 0.75f, 0.5f, 0.25f }")] public int cadenceLvl;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
