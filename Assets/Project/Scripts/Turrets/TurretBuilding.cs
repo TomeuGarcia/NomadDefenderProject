@@ -128,7 +128,7 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitTurret(turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+        Upgrader.InitTurret(this, turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 

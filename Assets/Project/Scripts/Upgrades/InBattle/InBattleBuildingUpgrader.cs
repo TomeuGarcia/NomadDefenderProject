@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT, NONE };
 
-public abstract class InBattleBuildingUpgrader : MonoBehaviour
+public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeConditionChecker
 {
     [SerializeField] private Transform building;
     [SerializeField] private RectTransform mouseDetectionPanel;
@@ -17,7 +17,6 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     [SerializeField] private Image costCurrencyImage;
 
     [SerializeField] private List<int> upgradeCosts = new List<int>();
-    [SerializeField] protected List<Image> fillBars = new List<Image>();
     
     [SerializeField] private Color32 disalbedTextColor;
 
@@ -110,8 +109,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
 
         costText.text = upgradeCosts[0].ToString();
 
-        turretFillBarCoef = 100.0f / ((float)maxStatLevel * 100.0f);
-        supportFillBarCoef = 100.0f / ((float)maxSupportStatLevel * 100.0f);
+        turretFillBarCoef = 1.0f / maxStatLevel;
+        supportFillBarCoef = 1.0f / maxSupportStatLevel;
 
         visible = false;
 
@@ -199,7 +198,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public virtual void InitTurret(int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
+    public virtual void InitTurret(TurretBuilding turret, int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
         bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
         attackLvl = newAttackLvl;
@@ -249,21 +248,23 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     }
     public void OpenWindow()
     {
-        if(!UIWindowManager.GetInstance().IsHoveringOtherWindow(this))
+        if(UIWindowManager.GetInstance().IsHoveringOtherWindow(this))
         {
-            UIWindowManager.GetInstance().OpenedWindow(this);
-
-            newUiParent.gameObject.SetActive(true);
-
-            newUiParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
-            StartCoroutine(SetVisible());
-
-            PlayOpenAnimation();
-
-            IsWindowOpen = true;
-
-            HideQuickLevelDisplay();
+            return;
         }
+
+        UIWindowManager.GetInstance().OpenedWindow(this);
+
+        newUiParent.gameObject.SetActive(true);
+
+        newUiParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
+        StartCoroutine(SetVisible());
+
+        PlayOpenAnimation();
+
+        IsWindowOpen = true;
+
+        HideQuickLevelDisplay();
     }
 
     public void CloseWindow()
@@ -491,11 +492,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour
     {
         return levelToCheck >= maxLevels;
     }
-    protected bool IsStatMaxed(int levelToCheck)
+    public bool IsStatMaxed(int levelToCheck)
     {
         return levelToCheck >= maxStatLevel;
     }
-    protected bool HasEnoughCurrencyToLevelUp()
+    public bool HasEnoughCurrencyToLevelUp()
     {
         return currencyCounter.HasEnoughCurrency(upgradeCosts[currentBuildingLevel]);
     }

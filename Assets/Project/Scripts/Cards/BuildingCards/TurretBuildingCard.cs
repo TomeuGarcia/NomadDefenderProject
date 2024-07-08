@@ -39,9 +39,10 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     [SerializeField] private Image baseImage;
     private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
 
-    [SerializeField] private Image damageFillImage;
-    [SerializeField] private Image cadenceFillImage;
-    [SerializeField] private Image rangeFillImage;
+    [SerializeField] private TextMeshProUGUI _damageStatValueText;
+    [SerializeField] private TextMeshProUGUI _fireRateStatValueText;
+    [SerializeField] private TextMeshProUGUI _rangeStatValueText;
+
     [SerializeField] private Image basePassiveImage;
 
     [SerializeField] protected TextMeshProUGUI cardLevelText;
@@ -100,9 +101,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
         // Canvas
-        damageFillImage.fillAmount = turretPartBody.GetDamagePer1();
-        cadenceFillImage.fillAmount = turretPartBody.GetCadencePer1();
-        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
+        turretPartBody.SetStatTexts(_damageStatValueText, _fireRateStatValueText);
+        turretPartBase.SetStatTexts(_rangeStatValueText);
 
 
         SetAttackIcon(turretPartAttack);
@@ -124,6 +124,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         // Level
         UpdateCardLevelText();
     }
+
 
     private void SetAttackIcon(TurretPartAttack turretPartAttack)
     {
@@ -420,8 +421,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
             replacingWithSamePart = originalCard.HasSameBodyPart(newTurretPartBody);
         }
         cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
-        damageFillImage.fillAmount = newTurretPartBody.GetDamagePer1();
-        cadenceFillImage.fillAmount = newTurretPartBody.GetCadencePer1();
+
+        newTurretPartBody.SetStatTexts(_damageStatValueText, _fireRateStatValueText);
 
 
         // BASE
@@ -437,7 +438,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         }
         cardBaseMaterial.SetTexture("_Texture", newTurretPartBase.materialTexture);
         cardBaseMaterial.SetColor("_Color", newTurretPartBase.materialColor);
-        rangeFillImage.fillAmount = newTurretPartBase.GetRangePer1();
+        newTurretPartBase.SetStatTexts(_rangeStatValueText);
+
 
         bool hasBasePassiveAbility = newTurretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
         if (hasBasePassiveAbility)

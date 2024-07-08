@@ -26,7 +26,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     //[SerializeField] private MeshRenderer baseMeshRenderer;
     [SerializeField] private Image baseImage;
     private Material material;
-    [SerializeField] private Image rangeFillImage;
+    [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     [SerializeField] private Image abilityImage;
 
 
@@ -94,7 +94,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         material.SetColor("_Color", turretPartBase.materialColor);
 
         // Canvas
-        rangeFillImage.fillAmount = turretPartBase.GetRangePer1();
+        turretPartBase.SetStatTexts(_rangeStatValueText);
         abilityImage.transform.parent.gameObject.SetActive(true);
 
         abilityImage.sprite = turretPartBase.abilitySprite;

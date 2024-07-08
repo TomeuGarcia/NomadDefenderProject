@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using TMPro;
 
 [CreateAssetMenu(fileName = "TurretPartBody", menuName = "TurretParts/TurretPartBody")]
 
@@ -39,6 +40,8 @@ public class TurretPartBody : ScriptableObject
 
     public int Damage { get => damagePerLvl[damageLvl-1]; }
     public float Cadence { get => cadencePerLvl[cadenceLvl-1]; }
+    public string DamageText => Damage.ToString();
+    public string CadenceText => (1f / Cadence).ToString();
 
     public float GetDamagePer1()
     {
@@ -85,5 +88,11 @@ public class TurretPartBody : ScriptableObject
     public override int GetHashCode()
     {
         return base.GetHashCode();
+    }
+
+    public void SetStatTexts(TMP_Text damageText, TMP_Text fireRateText)
+    {
+        damageText.text = DamageText;
+        fireRateText.text = CadenceText;
     }
 }

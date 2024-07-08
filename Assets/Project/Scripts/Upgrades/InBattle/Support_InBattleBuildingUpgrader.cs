@@ -51,8 +51,6 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void UpdateSupportBar()
     {
-        fillBars[0].fillAmount = (float)supportLvl * supportFillBarCoef;
-
         // Update UI
         if (IsCardUpgradedToMax(currentBuildingLevel) || IsStatMaxed(supportLvl))
         {
