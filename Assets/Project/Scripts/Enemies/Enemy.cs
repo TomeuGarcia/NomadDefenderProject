@@ -224,7 +224,6 @@ public class Enemy : MonoBehaviour
         enemyFeedback.FinishCoroutines();
 
         pathFollower.CheckDeactivateCoroutines();
-        rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 
@@ -233,13 +232,6 @@ public class Enemy : MonoBehaviour
     {
         queuedDamage += amount;
         return amount;
-    }
-
-    IEnumerator TimedDeath()
-    {
-        Debug.LogWarning("Enemy Death for timer");
-        yield return new WaitForSeconds(0.5f);
-        Die();
     }
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed

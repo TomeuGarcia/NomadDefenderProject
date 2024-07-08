@@ -17,23 +17,16 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     [Header("CARD INFO")]
-    [SerializeField] private GameObject infoInterface;
-
     [Header("Attack card info")]
-    [SerializeField] private RectTransform infoShownAttackIcon;
     [SerializeField] private RectTransform defaultAttackIcon; // used as Hidden info
     private Vector3 infoShownAttackIconPos;
     private Vector3 infoHiddenAttackIconPos;
-    [SerializeField] private TextMeshProUGUI attackNameText;
-    [SerializeField] private TextMeshProUGUI attackDescriptionText;
+
 
     [Header("Base card info")]
-    [SerializeField] private RectTransform infoShownBaseIcon;
     [SerializeField] private RectTransform defaultBaseIcon; // used as Hidden info
     private Vector3 infoShownBaseIconPos;
     private Vector3 infoHiddenBaseIconPos;
-    [SerializeField] private TextMeshProUGUI baseNameText;
-    [SerializeField] private TextMeshProUGUI baseDescriptionText;
 
 
 
@@ -127,9 +120,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         else {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
-
-        // Ability Info
-        InitInfoVisuals();
 
         // Level
         UpdateCardLevelText();
@@ -232,42 +222,22 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
                turretCardParts.turretPartBase.rangeLvl == newTurretPartBase.rangeLvl;
     }
 
-
-    protected override void InitInfoVisuals()
-    {
-        attackNameText.text = '/' + turretCardParts.turretPartAttack.abilityName;
-        attackDescriptionText.text = turretCardParts.turretPartAttack.abilityDescription;
-
-        baseNameText.text = '/' + turretCardParts.turretPassiveBase.passive.abilityName;
-        baseDescriptionText.text = turretCardParts.turretPassiveBase.passive.abilityDescription;
-    }
     protected override void SetupCardInfo()
     {
         // general
-        infoInterface.SetActive(true);
         isShowInfoAnimationPlaying = false;
 
         // attack
-        infoShownAttackIconPos = infoShownAttackIcon.localPosition;
         infoHiddenAttackIconPos = defaultAttackIcon.localPosition;
-        attackNameText.alpha = 0;
-        attackDescriptionText.alpha = 0;
 
         // base
-        infoShownBaseIconPos = infoShownBaseIcon.localPosition;
         infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
-        baseNameText.alpha = 0;
-        baseDescriptionText.alpha = 0;
     }
 
     public override void ShowInfo()
     {
         base.ShowInfo();
         CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
-        return;
-
-
-        showInfoCoroutine = StartCoroutine(ShowInfoAnimation());
     }
 
     public override void HideInfo()
@@ -277,125 +247,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         return;
 
         if (isHideInfoAnimationPlaying) return;
-
-
-        if (isShowInfoAnimationPlaying)
-        {
-            StopCoroutine(showInfoCoroutine);
-        }        
-
-        StartCoroutine(HideInfoAnimation());
     }
 
-    private IEnumerator ShowInfoAnimation()
-    {
-        canInfoInteract = false;
-        isShowInfoAnimationPlaying = true;
-
-        // hide generics
-        float t = 0.05f;
-        for (int i = 0; i < cgsInfoHide.Length; ++i)            
-        {
-            cgsInfoHide[i].DOFade(0f, t);
-            GameAudioManager.GetInstance().PlayCardInfoShown();
-            yield return new WaitForSeconds(t);
-        }
-
-
-        float t2 = 0.1f;
-
-
-        // show attack icon
-        defaultAttackIcon.DOLocalMove(infoShownAttackIconPos, t2);
-        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
-        yield return new WaitForSeconds(t2);
-
-        // show base icon
-        if (hasBasePassiveAbility)
-        {
-            defaultBaseIcon.DOLocalMove(infoShownBaseIconPos, t2);
-            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
-            yield return new WaitForSeconds(t2);
-        }
-
-        // show attack text
-        attackNameText.DOFade(1f, t2);
-        GameAudioManager.GetInstance().PlayCardInfoShown();
-        yield return new WaitForSeconds(t2);
-        attackDescriptionText.DOFade(1f, t2);
-        GameAudioManager.GetInstance().PlayCardInfoShown();
-        yield return new WaitForSeconds(t2);
-
-        // show base text
-        if (hasBasePassiveAbility)
-        {
-            baseNameText.DOFade(1f, t2);
-            GameAudioManager.GetInstance().PlayCardInfoShown();
-            yield return new WaitForSeconds(t2);
-            baseDescriptionText.DOFade(1f, t2);
-            GameAudioManager.GetInstance().PlayCardInfoShown();
-            yield return new WaitForSeconds(t2);
-        }
-
-
-        canInfoInteract = true;
-        isShowInfoAnimationPlaying = false;
-    }
-
-    private IEnumerator HideInfoAnimation()
-    {
-        canInfoInteract = false;
-
-
-        float t2 = 0.1f;
-
-        // hide base text
-        if (hasBasePassiveAbility)
-        {
-            baseDescriptionText.DOFade(0f, t2);
-            GameAudioManager.GetInstance().PlayCardInfoHidden();
-            yield return new WaitForSeconds(t2);
-            baseNameText.DOFade(0f, t2);
-            GameAudioManager.GetInstance().PlayCardInfoHidden();
-            yield return new WaitForSeconds(t2);
-        }
-
-        // hide attack text
-        attackDescriptionText.DOFade(0f, t2);
-        GameAudioManager.GetInstance().PlayCardInfoHidden();
-        yield return new WaitForSeconds(t2);
-        attackNameText.DOFade(0f, t2);
-        GameAudioManager.GetInstance().PlayCardInfoHidden();
-        yield return new WaitForSeconds(t2);
-
-
-        // hide base icon
-        if (hasBasePassiveAbility)
-        {
-            defaultBaseIcon.DOLocalMove(infoHiddenBaseIconPos, t2);
-            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
-            yield return new WaitForSeconds(t2);
-        }
-
-        // hide attack icon
-        defaultAttackIcon.DOLocalMove(infoHiddenAttackIconPos, t2);
-        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
-        yield return new WaitForSeconds(t2);
-
-
-        // show generics
-        float t = 0.05f;
-
-        for (int i = cgsInfoHide.Length - 1; i >= 0; --i)
-        {
-            cgsInfoHide[i].DOFade(1f, t);
-            GameAudioManager.GetInstance().PlayCardInfoHidden();
-            yield return new WaitForSeconds(t);
-        }
-
-
-        canInfoInteract = true;
-    }
 
 
 
@@ -627,7 +480,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         turretCardParts.turretPartAttack = newTurretPartAttack;
 
         turretBuilding.ResetAttackPart(newTurretPartAttack);
-        InitInfoVisuals();
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
 
