@@ -8,7 +8,7 @@ using UnityEngine;
 public class TurretPartBody : ScriptableObject
 {
     public static int[] damagePerLvl = new int[] { 12, 20, 40, 60, 80 };
-    public static float[] cadencePerLvl = new float[] { 2f, 1.33f, 1f, 0.66f, 0.33f };//0.33
+    public static float[] cadencePerLvl = new float[] { 2f, 1.33f, 1f, 0.66f, 0.33f };
     
     public enum BodyType
     {
