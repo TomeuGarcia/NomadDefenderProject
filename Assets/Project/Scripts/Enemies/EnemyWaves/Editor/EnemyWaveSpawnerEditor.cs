@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using Unity.VisualScripting;
-
-
-#if UNITY_EDITOR
 using UnityEditor;
 
 [CustomEditor(typeof(EnemyWaveSpawner))]
@@ -14,78 +10,76 @@ public class EnemyWaveSpawnerEditor : Editor
 {
     private bool firstTime = true;
     private bool jsonExists = false;
+    private EnemyWaveSpawner _enemyWaveSpawnerInspected;
 
+    private GUIStyle _headerLabelStyle;
+    private GUIStyle _header2LabelStyle;
+
+    private void OnEnable()
+    {
+        InitializeGuiStyles();
+        _enemyWaveSpawnerInspected = target as EnemyWaveSpawner;
+    }
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        EnemyWaveSpawner enemyWaveSpawner = target as EnemyWaveSpawner;
-        enemyWaveSpawner.ValidateJSONFormat();
+        _enemyWaveSpawnerInspected.ValidateJSONFormat();
 
 
         if (firstTime)
         {
             firstTime = false;
 
-            jsonExists = EnemyWaveJSONManager.DoesJSONExist(enemyWaveSpawner);
+            jsonExists = EnemyWaveJSONManager.DoesJSONExist(_enemyWaveSpawnerInspected);
         }
 
-
-
-        DisplayInfoEnemyWaveSpawnerJSON(enemyWaveSpawner);
-
-        if (enemyWaveSpawner.IsIncorrect) return;
-
-        if (jsonExists)
-        {
-            GUILayout.Space(20);
-            if (GUILayout.Button("Show JSON In Folder", GUILayout.Width(200), GUILayout.Height(30)))
-            {
-                ShowJSONInFolder(enemyWaveSpawner);
-            }
-        }
-        else
-        {
-            GUI.color = Color.green;
-            GUILayout.Space(20);
-            if (GUILayout.Button("Generate New Empty JSON", GUILayout.Width(200), GUILayout.Height(30)))
-            {
-                GenerateNewEmptyJSON(enemyWaveSpawner);
-                jsonExists = true;
-            }
-            GUI.color = Color.white;
-        }
-
-        if (jsonExists)
-        {
-            GUILayout.Space(40);
-            if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
-            {
-                EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
-            }
-            GUILayout.Space(20);
-            if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
-            {
-                EnemyWaveJSONManager.SaveEnemyWave(enemyWaveSpawner, false);
-            }
-        }
-
-        //GUILayout.Space(40);
-        //if (GUILayout.Button("Save to Workaround", GUILayout.Width(200), GUILayout.Height(30)))
-        //{
-        //    enemyWaveSpawner.SaveToWorkaround();
-        //}
-        //GUILayout.Space(20);
-        //if (GUILayout.Button("Load from Workaround", GUILayout.Width(200), GUILayout.Height(30)))
-        //{
-        //    enemyWaveSpawner.LoadFromWorkaround();
-        //}
-
-
-        PrintEnemyTypeLegend();
+        DisplayDroppedCurrency();
+        //DisplayInfoEnemyWaveSpawnerJSON(_enemyWaveSpawnerInspected);
+        //DisplayJSONButtons();
+        //PrintEnemyTypeLegend();
     }
 
+
+    private void InitializeGuiStyles()
+    {
+        _headerLabelStyle = new GUIStyle(EditorStyles.largeLabel)
+        {
+            fontStyle = FontStyle.Bold,
+            fontSize = 14,
+            fixedHeight = 40.0f
+        };
+        _headerLabelStyle.normal.textColor = Color.white;
+
+        _header2LabelStyle = new GUIStyle(EditorStyles.largeLabel)
+        {
+            fontStyle = FontStyle.Bold,
+            fontSize = 12,
+            fixedHeight = 30.0f
+        };
+    }
+
+    private void DisplayDroppedCurrency()
+    {
+        EditorGUILayout.LabelField($"Currency Dropped (by wave index)", _headerLabelStyle);
+        int totalWavesCurrency = 0;
+        for (int i = 0; i < _enemyWaveSpawnerInspected.EnemyWaves.Length; ++i)
+        {
+            EnemyWave enemyWave = _enemyWaveSpawnerInspected.EnemyWaves[i];
+            int waveCurrency = 0;
+            foreach (EnemyInWave enemyInWave in enemyWave.enemiesInWave)
+            {
+                waveCurrency += enemyInWave.EnemyTypeN.BaseStats.CurrencyDrop;
+            }
+
+            EditorGUILayout.LabelField($" {i}. {waveCurrency} ", _header2LabelStyle);
+            totalWavesCurrency += waveCurrency;
+
+        }
+
+        EditorGUILayout.LabelField($" Total: {totalWavesCurrency} ", _header2LabelStyle);
+    }
 
     private void DisplayInfoEnemyWaveSpawnerJSON(EnemyWaveSpawner enemyWaveSpawner)
     {
@@ -120,6 +114,58 @@ public class EnemyWaveSpawnerEditor : Editor
         GUILayout.Label("Progression State --> " + enemyWaveSpawner.ProgressionState.ToString());
         GUILayout.Label("Num nodes --> " + enemyWaveSpawner.NumNodes.ToString());
         GUILayout.Label("Is Tutorial --> " + enemyWaveSpawner.IsTutorial.ToString());      
+    }
+
+    private void DisplayJSONButtons()
+    {
+        if (_enemyWaveSpawnerInspected.IsIncorrect) return;
+
+        if (jsonExists)
+        {
+            GUILayout.Space(20);
+            if (GUILayout.Button("Show JSON In Folder", GUILayout.Width(200), GUILayout.Height(30)))
+            {
+                ShowJSONInFolder(_enemyWaveSpawnerInspected);
+            }
+        }
+        else
+        {
+            GUI.color = Color.green;
+            GUILayout.Space(20);
+            if (GUILayout.Button("Generate New Empty JSON", GUILayout.Width(200), GUILayout.Height(30)))
+            {
+                GenerateNewEmptyJSON(_enemyWaveSpawnerInspected);
+                jsonExists = true;
+            }
+            GUI.color = Color.white;
+        }
+
+        if (jsonExists)
+        {
+            GUILayout.Space(40);
+            if (GUILayout.Button("Load data from JSON (DEBUG & JSON TEST ONLY)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.LoadEnemyWave(_enemyWaveSpawnerInspected, false);
+            }
+            GUILayout.Space(20);
+            if (GUILayout.Button("Save data to JSON (DATA WILL BE OVERWRITTEN)", GUILayout.Width(350), GUILayout.Height(30)))
+            {
+                EnemyWaveJSONManager.SaveEnemyWave(_enemyWaveSpawnerInspected, false);
+            }
+        }
+
+
+        //GUILayout.Space(40);
+        //if (GUILayout.Button("Save to Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.SaveToWorkaround();
+        //}
+        //GUILayout.Space(20);
+        //if (GUILayout.Button("Load from Workaround", GUILayout.Width(200), GUILayout.Height(30)))
+        //{
+        //    enemyWaveSpawner.LoadFromWorkaround();
+        //}
+
     }
 
     private void ShowJSONInFolder(EnemyWaveSpawner enemyWaveSpawner)
@@ -159,4 +205,3 @@ public class EnemyWaveSpawnerEditor : Editor
     }
 
 }
-#endif

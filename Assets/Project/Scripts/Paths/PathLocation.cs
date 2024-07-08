@@ -8,8 +8,6 @@ using Unity.VisualScripting;
 
 public class PathLocation : MonoBehaviour
 {
-    [Header("HEALTH")]
-    [SerializeField] private int health = 3;
     public HealthSystem healthSystem { get; private set; }
     private bool hasGameFinished;
 
@@ -64,8 +62,6 @@ public class PathLocation : MonoBehaviour
 
     private void Awake()
     {
-        healthSystem = new HealthSystem(health);
-        healthHUD.Init(healthSystem);
         InitParticles();
 
         hasGameFinished = false;
@@ -143,6 +139,12 @@ public class PathLocation : MonoBehaviour
     }
 
 
+    public void InitNodeHealth(int maxHealth)
+    {
+        healthSystem = new HealthSystem(maxHealth);
+        healthHUD.Init(healthSystem);
+    }
+
     public void InitNodeVisuals(Texture nodeIconTexture, Color borderColor)
     {
         nodeMeshMaterial = nodeMesh.material;
@@ -205,7 +207,7 @@ public class PathLocation : MonoBehaviour
             nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);
             nodeMeshMaterial.SetColor("_IconColor", OWMapDecoratorUtils.s_redColor);
         }
-        else if (healthState == NodeEnums.HealthState.GREATLY_DAMAGED)
+        else if (healthSystem.health == 1)
         {
             nodeMeshMaterial.SetColor("_BorderFlashColor", OWMapDecoratorUtils.s_redColor);
             nodeMeshMaterial.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_redColor);

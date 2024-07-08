@@ -77,7 +77,6 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
     private int numPartsIfPerfect = 1;
-    private bool lastBattleWasDefendedPerfectly = false;
     NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
 
 
@@ -150,32 +149,10 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Init()
     {
-        // TODO
         numPartsIfPerfect = 1;
         progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
-        lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
         NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
 
-        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
-        {
-            numCards = 2;
-            numParts = 2;
-        }
-        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
-        {
-            numCards = 3;
-            numParts = 2;
-        }
-        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
-        {
-            numCards = 3;
-            numParts = 3;
-
-            if (lastBattleWasDefendedPerfectly)
-            {
-                // level up card to max
-            }
-        }
 
         if (!partsCreatedByTutorial)
         {
@@ -217,7 +194,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InitAttacksRandom()
     {
         InitAttacks(LibrariesManager.GetInstance().PartsLibrary
-            .GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+            .GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, false, progressionState));
     }
     private void InitAttacks(TurretPartAttack[] attacks)
     {
@@ -246,7 +223,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InitBodiesRandom()
     {
         InitBodies(LibrariesManager.GetInstance()
-            .PartsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+            .PartsLibrary.GetRandomTurretPartBodies(numParts, numPartsIfPerfect, false, progressionState));
     }
     private void InitBodies(TurretPartBody[] bodies)
     {
@@ -273,7 +250,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InitBasesRandom()
     {
         InitBases(LibrariesManager.GetInstance()
-            .PartsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, lastBattleWasDefendedPerfectly, progressionState));
+            .PartsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, false, progressionState));
     }
     private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
     {

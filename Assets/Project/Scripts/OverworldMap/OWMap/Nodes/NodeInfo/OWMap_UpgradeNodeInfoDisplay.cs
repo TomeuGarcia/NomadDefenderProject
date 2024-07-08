@@ -9,23 +9,16 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 
     [SerializeField] private TextMeshProUGUI nodeTitleText;
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private TextMeshProUGUI rewardsText;
 
     private static string[] upgardeTypesToText =
     {
         "NewCard", "Projectile", "Base", "Body"
     };
 
-    private static string[] nodeHealthToText = { "<color=#1DFF5F>INTACT</color>",
-                                                 "<color=#FFF345>PLUNDERED</color>",
-                                                 "<color=#F5550C>RUINED</color>",
-                                                 "<color=#FF003E>DESTROYED</color>" };
-    private static string[] nodeHealthToRewardText = { "<color=#1DFF5F>GREAT</color>",
-                                                       "<color=#FFF345>MEDIUM</color>",
-                                                       "<color=#F5550C>POOR</color>",
-                                                       "<color=#FF003E>ERROR</color>" };
-    private const string perfectNodeHealthText = "<color=#439bee>PERFECT</color>";
-    private const string perfectRewardText = "<color=#439bee>GREAT+</color>";
+
+    private static string[] nodeHealthToStatusText = { "<color=#6F6F6F>LOCKED</color>",
+                                                       "<color=#32E8E8>AVAILABLE</color>",
+                                                       "<color=#FF003E>DESTROYED</color>" };
 
     private const string statusStr = "status: ";
     private const string rewardsStr = "rewards: ";
@@ -37,7 +30,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         infoCanvasTransform.gameObject.SetActive(false);
 
         statusText.text = statusStr + unknownStr;
-        rewardsText.text = rewardsStr + unknownStr;
     }
 
 
@@ -63,18 +55,9 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 
 
     // Functionality
-    private void SetupTexts(NodeEnums.HealthState nodeHealth, bool wonWithPerfectDefense)
+    private void SetupTexts(NodeEnums.HealthState nodeHealth)
     {
-        if (wonWithPerfectDefense)
-        {
-            statusText.text = statusStr + perfectNodeHealthText;
-            rewardsText.text = rewardsStr + perfectRewardText;
-        }
-        else
-        {
-            statusText.text = statusStr + nodeHealthToText[(int)nodeHealth];
-            rewardsText.text = rewardsStr + nodeHealthToRewardText[(int)nodeHealth];
-        }
+        statusText.text = statusStr + nodeHealthToStatusText[(int)nodeHealth];
     }
 
 
@@ -85,7 +68,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         backgroundImage.DOComplete();
         nodeTitleText.DOComplete();
         statusText.DOComplete();
-        rewardsText.DOComplete();
 
         float t0 = 0.001f;
         float t1 = 0.1f;
@@ -96,7 +78,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         backgroundImage.fillAmount = 0f;
         nodeTitleText.DOFade(0f, t0);
         statusText.DOFade(0f, t0);
-        rewardsText.DOFade(0f, t0);
         yield return new WaitForSeconds(t0);
 
 
@@ -118,10 +99,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         statusText.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
 
-
-        rewardsText.DOFade(1f, t1);
-        yield return new WaitForSeconds(t1);
-
         showInfoCoroutine = null;
     }
 
@@ -132,14 +109,12 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         backgroundImage.DOComplete();
         nodeTitleText.DOComplete();
         statusText.DOComplete();
-        rewardsText.DOComplete();
 
         float t1 = 0.1f;
         float t2 = 0.2f;
 
         transform.DORotate(Vector3.zero, 1f);
 
-        rewardsText.DOFade(0f, t1);
         //GameAudioManager.GetInstance().PlayCardInfoHidden();
         yield return new WaitForSeconds(t1);
         //GameAudioManager.GetInstance().PlayCardInfoHidden();

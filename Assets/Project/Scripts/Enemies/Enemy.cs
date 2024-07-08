@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
@@ -33,15 +34,12 @@ public class Enemy : MonoBehaviour
 
     public PathFollower PathFollower => pathFollower;
 
-    [Header("Stats")]
-    [SerializeField] private int baseDamage = 1;
-    [SerializeField] private int baseHealth = 2;
-    [SerializeField] private int baseArmor = 0;
-    private float damage;
+    [Header("STATS")]
+    [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
+    private int damage;
     private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
-    [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;
@@ -64,8 +62,9 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         ResetStats();
+        
 
-        if(armor == 0)
+        if (armor == 0)
         {
             healthSystem = new HealthSystem((int)health);
         }
@@ -121,11 +120,11 @@ public class Enemy : MonoBehaviour
 
     private void ResetStats()
     {
-        damage = baseDamage;
-        health = baseHealth;
-        armor = baseArmor;
-
-        currencyDrop = baseCurrencyDrop;
+        damage = _typeConfig.BaseStats.Damage;
+        health = _typeConfig.BaseStats.Health;
+        armor = _typeConfig.BaseStats.Armor;
+        currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
+        pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
     }
 
     public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance)
@@ -133,12 +132,6 @@ public class Enemy : MonoBehaviour
         pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
     }
 
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        TryAttackPathLocation(other.gameObject);
-    }
-    */
 
     private void TryAttackPathLocation(GameObject hitObject)
     {
@@ -148,8 +141,7 @@ public class Enemy : MonoBehaviour
             {
                 if (pathLocation.CanTakeDamage())
                 {
-                    //pathLocation.TakeDamage((int)damage);
-                    pathLocation.TakeDamage(1);
+                    pathLocation.TakeDamage(damage);
                     collidedWithLocation = true;
 
                     if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
@@ -267,8 +259,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
-        damage = (float)baseDamage * multiplier;
-        health = (float)baseHealth * multiplier;
+        health = (float)_typeConfig.BaseStats.Health * multiplier;
 
         healthSystem.UpdateHealth((int)health);
     }

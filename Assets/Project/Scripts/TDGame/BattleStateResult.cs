@@ -9,7 +9,7 @@ public class BattleStateResult
         public NodeBattleStateResult(OWMap_Node owMapNode)
         {
             this.owMapNode = owMapNode;
-            this.healthState = NodeEnums.HealthState.UNDAMAGED;
+            this.healthState = NodeEnums.HealthState.NOT_FOUGHT_YET;
         }
 
         public readonly OWMap_Node owMapNode;
@@ -28,19 +28,6 @@ public class BattleStateResult
     }
 
     public NodeBattleStateResult[] nodeResults;
-    public bool DidWinWithPerfectDefense()
-    {
-        if (nodeResults.Length < 2) return false;
 
-        for (int i = 0; i < nodeResults.Length; i++)
-        {
-            if (nodeResults[i].healthState != NodeEnums.HealthState.UNDAMAGED)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
 }
