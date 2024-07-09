@@ -35,8 +35,8 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
 
-    public int Range { get => rangePerLvl[rangeLvl-1]; }
-    public string RangeText => Range.ToString();
+    public int Range => GetRangeByLevel(rangeLvl);
+    public string RangeText => GetRangeByLevelText(rangeLvl);
 
     public float GetRangePer1()
     {
@@ -106,5 +106,14 @@ public class TurretPartBase : ScriptableObject
     public void SetStatTexts(TMP_Text rangeText)
     {
         rangeText.text = RangeText;
+    }
+
+    public int GetRangeByLevel(int level)
+    {
+        return rangePerLvl[level - 1];
+    }
+    public string GetRangeByLevelText(int level)
+    {
+        return GetRangeByLevel(level).ToString();
     }
 }

@@ -6,16 +6,25 @@ using DG.Tweening;
 using System.Threading.Tasks;
 using TMPro;
 
+
 public class InBattleUpgradeStat : MonoBehaviour
 {
-    [Header("Range")]
+    [Header("STAT")]
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _iconImage;
     [SerializeField] private Button _button;
     [SerializeField] private TMP_Text _statValueText;
     [SerializeField] private Image _barToCurrencyCost;
 
+    [Header("STAT PROGRESSION")]
+    [SerializeField] private GameObject _statProgressionHolder;
+    [SerializeField] private TMP_Text _statProgressionValueText;
+    [SerializeField] private Image _arrowProgressionImage;
+    [SerializeField] private GameObject _maxedStatHolder;
+
     private InBattleUpgradeConditionChecker _conditionChecker;
+    private Action _onButtonHovered;
+    private Action _onButtonUnhovered;
 
     public bool IsButtonHovered { get; private set; } = false;
     public bool IsButtonInteractable => _button.interactable;
@@ -25,18 +34,45 @@ public class InBattleUpgradeStat : MonoBehaviour
     private Transform ButtonTransform => _button.transform;
 
 
+
     private static Color normalColor = Color.white;
     private static Color errorColor = Color.red;
     private static Color highlightedColor = Color.cyan;
     private static Color fadedInColor = Color.white;
     private static Color fadedOutColor = new Color(0.7f, 0.7f, 0.7f);
     private static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
+   
 
-    public void Init(InBattleUpgradeConditionChecker conditionChecker)
+    public void Init(InBattleUpgradeConditionChecker conditionChecker, Action clickedCallback,
+        Action hoveredCallback, Action unhoveredCallback)
     {
         _conditionChecker = conditionChecker;
         _barToCurrencyCost.fillAmount = 0f;
+
+        _onButtonHovered = hoveredCallback;
+        _onButtonUnhovered = unhoveredCallback;
+        _button.onClick.AddListener(new UnityEngine.Events.UnityAction(clickedCallback));
+
+        _statProgressionValueText.color = highlightedColor;
+        _arrowProgressionImage.color = highlightedColor;
+
+
+        _statProgressionHolder.gameObject.SetActive(false);
+        _maxedStatHolder.SetActive(false);
     }
+
+    public void OnButtonHovered()
+    {
+        _onButtonHovered();
+    }
+
+    public void OnButtonUnhovered()
+    {
+        _onButtonUnhovered();
+    }
+
+
+
 
     public void SetupOpenAnimation()
     {
@@ -80,7 +116,7 @@ public class InBattleUpgradeStat : MonoBehaviour
         ButtonImage.DOKill();
     }
 
-    public void EmptyStatBar(string statValue)
+    private void EmptyStatBar()
     {
         float duration = 0.2f;
 
@@ -92,7 +128,16 @@ public class InBattleUpgradeStat : MonoBehaviour
         ButtonTransform.DOComplete();
         ButtonTransform.DOScale(Vector3.one, duration);
 
+        _statProgressionHolder.SetActive(false);
+    }
+
+    private void SetStatValueText(string statValue)
+    {
         _statValueText.text = statValue;
+    }
+    private void SetStatProgressionValueText(string statValue)
+    {
+        _statProgressionValueText.text = statValue;
     }
 
 
@@ -149,11 +194,15 @@ public class InBattleUpgradeStat : MonoBehaviour
         //fillBars[(int)TurretUpgradeType.ATTACK].fillAmount = (float)attackLvl * turretFillBarCoef;
 
         PlayIconPunchAnimation();
-
+        
         // Update UI
         if (isCardUpgradedToMax || isStatMaxed)
         {
-            EmptyStatBar(statValue);
+            EmptyStatBar();
+            if (isStatMaxed)
+            {
+                _maxedStatHolder.SetActive(true);
+            }
         }
         else if (!_conditionChecker.HasEnoughCurrencyToLevelUp())
         {
@@ -165,6 +214,8 @@ public class InBattleUpgradeStat : MonoBehaviour
         {
             DisableButton();
         }
+
+        SetStatValueText(statValue);
     }
 
     public void SetBarAndButtonHighlighted()
@@ -201,7 +252,8 @@ public class InBattleUpgradeStat : MonoBehaviour
         ButtonImageTransform.DOScale(Vector3.one * 1.1f, duration);
         ButtonImage.DOBlendableColor(fadedInColor, duration * 0.5f);
 
-        _statValueText.text = statValue;
+        SetStatProgressionValueText(statValue);
+        _statProgressionHolder.SetActive(true);
 
         GameAudioManager.GetInstance().PlayCardInfoShown();
     }
@@ -211,8 +263,10 @@ public class InBattleUpgradeStat : MonoBehaviour
     {
         if (!IsButtonInteractable || isCardUpgradedToMax || isStatMaxed) return;
 
-        EmptyStatBar(statValue);
+        EmptyStatBar();
 
-        IsButtonHovered = false;
+        IsButtonHovered = false;        
     }
+
+
 }

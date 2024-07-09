@@ -44,7 +44,7 @@ public class HealthSystem
 
         if (HasArmor())
         {
-            Debug.Log("Take damage on armor");
+            //Debug.Log("Take damage on armor");
             armor -= damageAmount;
             int remainingDamage = -armor;
             armor = armor > 0 ? armor : 0;

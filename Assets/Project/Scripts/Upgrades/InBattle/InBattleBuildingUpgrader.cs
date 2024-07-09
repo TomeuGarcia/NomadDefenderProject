@@ -10,7 +10,7 @@ public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT, NONE };
 
 public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeConditionChecker
 {
-    [SerializeField] private Transform building;
+    [SerializeField] private RangeBuilding _building;
     [SerializeField] private RectTransform mouseDetectionPanel;
     [SerializeField] private TMP_Text lvlText;
     [SerializeField] private TMP_Text costText;
@@ -29,9 +29,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     [Header("BUILDING TYPE")]
     [SerializeField] private BuildingCard.CardBuildingType buildingType = BuildingCard.CardBuildingType.NONE;
-    private TurretBuilding turretBuilding;
-    private SupportBuilding supportBuilding;
-    private int maxLevels;
+    protected int maxLevels;
 
 
     [Header("FEEDBACK")]
@@ -69,7 +67,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     private float xOffset;
     private const int maxStatLevel = 5;
     private const int maxSupportStatLevel = 3;
-    private const int maxUpgradeCount = 3;
+    protected const int maxUpgradeCount = 3;
     protected int currentBuildingLevel = 0;
 
     protected int attackLvl;
@@ -128,20 +126,6 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     private void Start()
     {
-        if (buildingType == BuildingCard.CardBuildingType.TURRET)
-        {
-            turretBuilding = building.gameObject.GetComponent<TurretBuilding>();
-            maxLevels = turretBuilding.CardLevel;
-            UpdateAttackBar();
-            UpdateCadenceBar();
-            UpdateRangeBar();
-        }
-        else if (buildingType == BuildingCard.CardBuildingType.SUPPORT)
-        {
-            supportBuilding = building.gameObject.GetComponent<SupportBuilding>();
-            maxLevels = maxUpgradeCount;
-            UpdateSupportBar();
-        }
         UpdateLevelText();
     }
 
@@ -257,7 +241,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         newUiParent.gameObject.SetActive(true);
 
-        newUiParent.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
+        newUiParent.position = Camera.main.WorldToScreenPoint(_building.Position) + Vector3.up * 50.0f + (Vector3.right * xOffset);
         StartCoroutine(SetVisible());
 
         PlayOpenAnimation();
@@ -351,136 +335,51 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
             attackLvl++;
             UpdateAttackBar();
 
-            turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
+            _building.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
         }
         else if (turretUpgradeType == TurretUpgradeType.CADENCE)
         {
             cadenceLvl++;
             UpdateCadenceBar();
 
-            turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
+            _building.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
         }
         else if (turretUpgradeType == TurretUpgradeType.RANGE)
         {
             rangeLvl++;
             UpdateRangeBar();
 
-            turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);            
+            _building.Upgrade(TurretUpgradeType.RANGE, rangeLvl);            
         }
 
         InvokeOnUpgrade(turretUpgradeType);
         CheckStopParticlesCanUpgrade();
     }
 
-    public void UpgradedAttack() // Called by button
+    protected bool TryUpgradeStat(ref int statLevel, TurretUpgradeType upgradeType)
     {
-        if(CanUpgrade(attackLvl))
+        bool canUpgradeStat = CanUpgrade(statLevel);
+
+        if (canUpgradeStat)
         {
             currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
 
             NextLevel();
+            statLevel++;
+            _building.Upgrade(upgradeType, statLevel);
 
-            attackLvl++;
-            UpdateAttackBar();
-
-            turretBuilding.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
-
-            CheckStopParticlesCanUpgrade();
-            
+            CheckStopParticlesCanUpgrade();            
             PlayPositiveAnimationTextCostPunch();
-
-            InvokeOnUpgrade(TurretUpgradeType.ATTACK);
+            InvokeOnUpgrade(upgradeType);
         }
         else
         {
-            PlayNegativeAnimationTextCostPunch();
-            OnCanNotUpgradeAttack();
+            PlayNegativeAnimationTextCostPunch();            
         }
+
+        return canUpgradeStat;
     }
 
-    public void UpgradedCadence() // Called by button
-    {
-        if (CanUpgrade(cadenceLvl))
-        {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
-
-            NextLevel();
-
-            cadenceLvl++;
-            UpdateCadenceBar();
-
-            turretBuilding.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
-
-            CheckStopParticlesCanUpgrade();
-
-            PlayPositiveAnimationTextCostPunch();
-
-            InvokeOnUpgrade(TurretUpgradeType.CADENCE);
-        }
-        else
-        {
-            PlayNegativeAnimationTextCostPunch();
-            OnCanNotUpgradeFireRate();
-        }
-    }
-
-    public void UpgradedRange() // Called by button
-    {
-        if (CanUpgrade(rangeLvl))
-        {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
-
-            NextLevel();
-
-            rangeLvl++;
-            UpdateRangeBar();
-
-            turretBuilding.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
-
-            CheckStopParticlesCanUpgrade();
-
-            PlayPositiveAnimationTextCostPunch();
-
-            InvokeOnUpgrade(TurretUpgradeType.RANGE);
-        }
-        else
-        {
-            PlayNegativeAnimationTextCostPunch();
-            OnCanNotUpgradeRange();
-        }
-    }
-
-    public void UpgradedSupport()
-    {
-        if (CanUpgrade(supportLvl))
-        {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
-
-            NextLevel();
-
-            supportLvl++;
-            UpdateSupportBar();
-
-            supportBuilding.Upgrade(TurretUpgradeType.SUPPORT, supportLvl);
-
-            CheckStopParticlesCanUpgrade();
-
-            PlayPositiveAnimationTextCostPunch();
-
-            InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
-
-            DoUpgradeSupport();
-        }
-        else
-        {
-            PlayNegativeAnimationTextCostPunch();
-            OnCanNotUpgradeSupport();
-        }
-    }
-
-    protected virtual void DoUpgradeSupport()
-    {
-    }
 
     protected bool CanUpgrade(int levelToCheck)
     {
@@ -656,7 +555,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     {
         if (IsWindowOpen) return;
         
-        quickLevelDisplay.position = Camera.main.WorldToScreenPoint(building.position) + Vector3.down * 35.0f;
+        quickLevelDisplay.position = Camera.main.WorldToScreenPoint(_building.Position) + Vector3.down * 35.0f;
         quickLevelDisplay.gameObject.SetActive(true);
         cgQuickLevelDisplay.DOFade(1f, 0.1f);
 
@@ -820,4 +719,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         button.DOComplete();
         button.DOBlendableColor(Color.cyan, 0.1f);
     }
+
+
+
+
 }

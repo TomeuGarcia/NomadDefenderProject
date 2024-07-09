@@ -38,10 +38,10 @@ public class TurretPartBody : ScriptableObject
     [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
 
 
-    public int Damage { get => damagePerLvl[damageLvl-1]; }
-    public float Cadence { get => cadencePerLvl[cadenceLvl-1]; }
-    public string DamageText => Damage.ToString();
-    public string CadenceText => (1f / Cadence).ToString();
+    public int Damage => GetDamageByLevel(damageLvl); 
+    public string DamageText => GetDamageByLevelText(damageLvl);
+    public float Cadence => GetCadenceByLevel(cadenceLvl);
+    public string CadenceText => GetCadenceByLevelText(cadenceLvl);
 
     public float GetDamagePer1()
     {
@@ -94,5 +94,24 @@ public class TurretPartBody : ScriptableObject
     {
         damageText.text = DamageText;
         fireRateText.text = CadenceText;
+    }
+
+    public int GetDamageByLevel(int level)
+    {
+        return damagePerLvl[level - 1];
+    }
+
+    public string GetDamageByLevelText(int level)
+    {
+        return GetDamageByLevel(level).ToString();
+    }
+
+    public float GetCadenceByLevel(int level)
+    {
+        return cadencePerLvl[level - 1];
+    }
+    public string GetCadenceByLevelText(int level)
+    {
+        return (1f / GetCadenceByLevel(level)).ToString("0.0").Replace(',', '.');
     }
 }

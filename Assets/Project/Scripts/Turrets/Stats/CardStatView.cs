@@ -8,6 +8,7 @@ public class CardStatView : MonoBehaviour
 {
     [Header("CONFIG")]
     [Required] [SerializeField] private CardStatViewConfig _config;
+    [SerializeField] private bool _configureOnAwake = true;
     
     [Header("COMPONENS")]
     [SerializeField] private Image _iconImage;
@@ -25,7 +26,10 @@ public class CardStatView : MonoBehaviour
 
     void Awake()
     {
-        ConfigureComponents();
+        if (_configureOnAwake)
+        {
+            ConfigureComponents();
+        }        
     }
 
     private void ConfigureComponents()

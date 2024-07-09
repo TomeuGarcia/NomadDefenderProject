@@ -16,17 +16,20 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private Image quickHoverBasePassiveImage;
 
     private TurretBuilding _turret;
-    private string DamageStatValueText => _turret.TurretCardParts.turretPartBody.DamageText;
-    private string FireRateStatValueText => _turret.TurretCardParts.turretPartBody.CadenceText;
-    private string RangeStatValueText => _turret.TurretCardParts.turretPartBase.RangeText;
+    private string DamageStatValueText => _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl);
+    private string NextDamageStatValueText => IsStatMaxed(attackLvl) ? "" : _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl+1);
+    private string FireRateStatValueText => _turret.TurretCardParts.turretPartBody.GetCadenceByLevelText(cadenceLvl);
+    private string NextFireRateStatValueText => IsStatMaxed(cadenceLvl) ? "" : _turret.TurretCardParts.turretPartBody.GetCadenceByLevelText(cadenceLvl+1);
+    private string RangeStatValueText => _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl);
+    private string NextRangeStatValueText => IsStatMaxed(rangeLvl) ? "" : _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl+1);
 
     protected override void AwakeInit()
     {
         base.AwakeInit();
 
-        _damageUpgradeStat.Init(this);
-        _fireRateUpgradeStat.Init(this);
-        _rangeUpgradeStat.Init(this);
+        _damageUpgradeStat.Init(this, OnUpgradeDamageButtonClicked, OnDamageButtonHovered, OnDamageButtonUnhovered);
+        _fireRateUpgradeStat.Init(this, OnUpgradeFireRateButtonClicked, OnFireRateButtonHovered, OnFireRateButtonUnhovered);
+        _rangeUpgradeStat.Init(this, OnUpgradeRangeButtonClicked, OnRangeButtonHovered, OnRangeButtonUnhovered);
     }
 
 
@@ -36,6 +39,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         base.InitTurret(turret, newAttackLvl, newCadenceLvl, newRangeLvl, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
 
         _turret = turret;
+        maxLevels = _turret.CardLevel;
 
         if (hasPassiveAbility)
         {
@@ -48,9 +52,9 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             quickHoverBasePassiveImageHolder.gameObject.SetActive(false);
         }
 
-        if (IsStatMaxed(newAttackLvl)) _damageUpgradeStat.DisableButton();
-        if (IsStatMaxed(newCadenceLvl)) _fireRateUpgradeStat.DisableButton();
-        if (IsStatMaxed(newRangeLvl)) _rangeUpgradeStat.DisableButton();
+        UpdateAttackBar();
+        UpdateCadenceBar();
+        UpdateRangeBar();
     }
 
 
@@ -165,9 +169,9 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             StopCoroutine(openAnimationCoroutine);
         }
 
-        if (_damageUpgradeStat.IsButtonHovered) EmptyAttackBar();
-        if (_fireRateUpgradeStat.IsButtonHovered) EmptyFireRateBar();
-        if (_fireRateUpgradeStat.IsButtonHovered) EmptyRangeBar();
+        if (_damageUpgradeStat.IsButtonHovered) OnDamageButtonUnhovered();
+        if (_fireRateUpgradeStat.IsButtonHovered) OnFireRateButtonUnhovered();
+        if (_fireRateUpgradeStat.IsButtonHovered) OnRangeButtonUnhovered();
 
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
     }
@@ -215,47 +219,51 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
 
 
-    public void FillAttackBar() // Attack button hovered
+    // DAMAGE
+    private void OnDamageButtonHovered()
     {
         bool highlight = CanUpgrade(attackLvl);
         //float fillValue = (float)(attackLvl + 1) * turretFillBarCoef;
-        _damageUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(attackLvl), DamageStatValueText);
+        _damageUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(attackLvl), NextDamageStatValueText);
 
         StopAllButtonsFade(false, true, true, highlight);
     }
-    public void FillFireRateBar() // FireRate button hovered
+
+
+
+    private void OnFireRateButtonHovered()
     {
         bool highlight = CanUpgrade(cadenceLvl);
 
-        _fireRateUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(cadenceLvl), FireRateStatValueText);
+        _fireRateUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(cadenceLvl), NextFireRateStatValueText);
 
         StopAllButtonsFade(true, false, true, highlight);
     }
-    public void FillRangeBar() // Range button hovered
+    private void OnRangeButtonHovered()
     {
         bool highlight = CanUpgrade(rangeLvl);
 
-        _rangeUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(rangeLvl), RangeStatValueText);
+        _rangeUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(rangeLvl), NextRangeStatValueText);
 
         StopAllButtonsFade(true, true, false, highlight);
     }
 
 
-    public void EmptyAttackBar() // Attack button UN-hovered
+    public void OnDamageButtonUnhovered() // Attack button UN-hovered
     {
         //float fillValue = (float)attackLvl * turretFillBarCoef;
         _damageUpgradeStat.OnButtonUnhovered(IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(attackLvl), DamageStatValueText);
 
         AllButtonsFadeIn();
     }
-    public void EmptyFireRateBar() // FireRate button UN-hovered
+    public void OnFireRateButtonUnhovered() // FireRate button UN-hovered
     {
         // (float)cadenceLvl * turretFillBarCoef
         _fireRateUpgradeStat.OnButtonUnhovered(IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(cadenceLvl), FireRateStatValueText);
 
         AllButtonsFadeIn();
     }
-    public void EmptyRangeBar() // Range button UN-hovered
+    public void OnRangeButtonUnhovered() // Range button UN-hovered
     {
         // (float)rangeLvl * turretFillBarCoef
         _rangeUpgradeStat.OnButtonUnhovered(IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(rangeLvl), RangeStatValueText);
@@ -300,5 +308,43 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _rangeUpgradeStat.ButtonPressedErrorFadeInOut();
     }
 
+
+
+
+    private void OnUpgradeDamageButtonClicked()
+    {
+        if (TryUpgradeStat(ref attackLvl, TurretUpgradeType.ATTACK))
+        {
+            UpdateAttackBar();
+        }
+        else
+        {
+            OnCanNotUpgradeAttack();
+        }
+    }
+
+    private void OnUpgradeFireRateButtonClicked()
+    {
+        if (TryUpgradeStat(ref cadenceLvl, TurretUpgradeType.CADENCE))
+        {
+            UpdateCadenceBar();
+        }
+        else
+        {
+            OnCanNotUpgradeFireRate();
+        }
+    }
+
+    private void OnUpgradeRangeButtonClicked()
+    {
+        if (TryUpgradeStat(ref rangeLvl, TurretUpgradeType.RANGE))
+        {
+            UpdateRangeBar();
+        }
+        else
+        {
+            OnCanNotUpgradeRange();
+        }
+    }
 
 }
