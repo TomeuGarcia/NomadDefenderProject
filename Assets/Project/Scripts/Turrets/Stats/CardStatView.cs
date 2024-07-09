@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using NaughtyAttributes;
 
 public class CardStatView : MonoBehaviour
@@ -12,7 +13,7 @@ public class CardStatView : MonoBehaviour
     
     [Header("COMPONENS")]
     [SerializeField] private Image _iconImage;
-    [SerializeField] private GameObject _valueText;
+    [SerializeField] private TMP_Text _valueText;
 
 
 
@@ -35,10 +36,11 @@ public class CardStatView : MonoBehaviour
     private void ConfigureComponents()
     {
         _iconImage.sprite = _config.Icon;
-        _iconImage.color = _config.Color;
+        _iconImage.color = _config.IconColor;
 
         gameObject.name = _config.GameObjectName;
-        _valueText.name = _config.ValueGameObjectName;
+        _valueText.gameObject.name = _config.ValueGameObjectName;
+        _valueText.color = _config.TextColor;
     }
 
     private bool HasAllReferences()

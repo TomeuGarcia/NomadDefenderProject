@@ -13,6 +13,7 @@ public class InBattleUpgradeStat : MonoBehaviour
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _iconImage;
     [SerializeField] private Button _button;
+    [SerializeField] private Image _buttonImage;
     [SerializeField] private TMP_Text _statValueText;
     [SerializeField] private Image _barToCurrencyCost;
 
@@ -29,7 +30,7 @@ public class InBattleUpgradeStat : MonoBehaviour
     public bool IsButtonHovered { get; private set; } = false;
     public bool IsButtonInteractable => _button.interactable;
 
-    private Image ButtonImage => _button.image;
+    private Image ButtonImage => _buttonImage;
     private Transform ButtonImageTransform => ButtonImage.transform;
     private Transform ButtonTransform => _button.transform;
 
