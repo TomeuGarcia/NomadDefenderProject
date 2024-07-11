@@ -60,10 +60,9 @@ public class FakeEnemy : Enemy
         return resultDamage;
     }
 
-    public override void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public override void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
         if (projectileSource != null && OnAttackedByProjectile != null) OnAttackedByProjectile(projectileSource);
-        return;
     }
 
 

@@ -181,7 +181,13 @@ public class Enemy : MonoBehaviour
         return modifier(damageAmount, healthSystem);
     }
 
-    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    {
+        DoTakeDamage(projectileSource, damageAmount);
+        SpawntakeDamageText(damageAmount);
+    }
+    
+    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
         healthHUD.Show();
 
@@ -197,6 +203,16 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
+
+    private void SpawntakeDamageText(int damageAmount)
+    {
+        IFadingTextsFactory fadingTextsFactory = ServiceLocator.GetInstance().FadingTextFactory;
+        IFadingTextsFactory.TextSpawnData textSpawnData = fadingTextsFactory.GetTextSpawnData();
+        textSpawnData.Init(Position, damageAmount.ToString());
+        fadingTextsFactory.SpawnFadingText(textSpawnData);
+    }
+
+
 
     public virtual void GetStunned(float duration)
     {

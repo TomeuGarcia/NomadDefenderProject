@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddd39b4ab43e2fa40a5fd7bcbe0a07ae, type: 3}
+  m_Name: FadingTextConfig_EnemyTakesDamage
+  m_EditorClassIdentifier: 
+  _defaultImageBackgroundColor: {r: 0.80784315, g: 0.19788556, b: 0, a: 1}
+  _randomPositionOffsetBounds: {x: 0.5, y: 0.3, z: 0.5}
+  _fixedPositionOffset: {x: 0, y: 0.5, z: 0}
+  _characterAppearAnimation:
+    _appearDuration: 0.1
+    _rotationPunch:
+      _value: {x: 0, y: 0, z: 15}
+      _duration: 0.2
+      _vibrato: 8
+      _elasticity: 1
+      _ease: 4
+    _scalePunch:
+      _value: {x: 1, y: 2, z: 1}
+      _duration: 0.2
+      _vibrato: 6
+      _elasticity: 0.5
+      _ease: 4
+  _textAppearAnimation:
+    _moveVelocity: {x: 0, y: 0.5, z: 0}
+    _delayBeforeFadeOut: 0.25
+    _backgroundImageAppearScale:
+      _value: {x: 0.8, y: 0.8, z: 0.8}
+      _duration: 0.5
+      _ease: 25
+    _groupFadeOut:
+      _value: 0
+      _duration: 0.5
+      _ease: 7
