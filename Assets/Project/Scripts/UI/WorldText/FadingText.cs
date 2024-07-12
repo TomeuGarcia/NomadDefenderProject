@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using Scripts.ObjectPooling;
 using DG.Tweening;
 using System.Threading.Tasks;
+using System.Collections;
 
 public class FadingText : RecyclableObject
 {
     [Header("COMPONENTS")]
     [SerializeField] private CanvasGroup _canvasGroup;
-    [SerializeField] private Image _backgroundImage;
+    [SerializeField] private Transform _backgroundImageHolder;
     [SerializeField] private Transform _charactersHolder;
 
     private List<FadingTextCharacter> _fadingTextCharacters;
@@ -37,36 +38,39 @@ public class FadingText : RecyclableObject
         string Content = textSpawnData.Content;
         foreach (char character in Content)
         {
-            WithCharacter(charactersFactory, character);
+            WithCharacter(charactersFactory, character, textSpawnData);
         }
 
         transform.position = textSpawnData.WorldPosition + config.RandomPositionOffset;
-        _backgroundImage.color = textSpawnData.BackgroundImageColor;
-        _backgroundImage.transform.localScale = Vector3.zero;
+        _backgroundImageHolder.localScale = Vector3.zero;
         _canvasGroup.alpha = 1;
 
-        PlayAppearAnimation(config);
+        StartCoroutine(PlayAppearAnimation(config));
     }
 
-    private void WithCharacter(IFadingTextCharactersFactory charactersFactory, char character)
+    private void WithCharacter(IFadingTextCharactersFactory charactersFactory, char character, IFadingTextsFactory.TextSpawnData textSpawnData)
     {
-        FadingTextCharacter fadingTextCharacter = charactersFactory.SpawnFadingTextCharacter(_charactersHolder, character);
+        FadingTextCharacter fadingTextCharacter = charactersFactory.SpawnFadingTextCharacter(_charactersHolder, character, textSpawnData.TextColor);
         _fadingTextCharacters.Add(fadingTextCharacter);
     }
 
-    private async void PlayAppearAnimation(FadingTextConfig config)
+    private IEnumerator PlayAppearAnimation(FadingTextConfig config)
     {
-        FadingTextConfig.TextAnimation _textAppearAnimation = config.TextAppearAnimation;
+        FadingTextConfig.TextAnimation textAppearAnimation = config.TextAppearAnimation;
 
-        _moveVelocity = _textAppearAnimation.MoveVelocity;
-        
-        _backgroundImage.transform.Scale(_textAppearAnimation.BackgroundImageAppearScale);       
+        _moveVelocity = textAppearAnimation.MoveVelocity;
+
+        _canvasGroup.transform.PunchScale(textAppearAnimation.AppearScale);
+
+        _backgroundImageHolder.Scale(textAppearAnimation.BackgroundImageAppearScale);
+        _backgroundImageHolder.LocalRotateBy(textAppearAnimation.BackgroundRotationTween);
+
         foreach (FadingTextCharacter fadingTextCharacter in _fadingTextCharacters)
         {
-            await fadingTextCharacter.PlayAppearAnimation(config.CharacterAppearAnimation);
+            yield return fadingTextCharacter.PlayAppearAnimation(config.CharacterAppearAnimation);
         }
 
-        await Task.Delay(TimeSpan.FromSeconds(_textAppearAnimation.DelayBeforeFadeOut));
+        yield return new WaitForSeconds(textAppearAnimation.DelayBeforeFadeOut);
         
         _canvasGroup.Fade(config.TextAppearAnimation.GroupFadeOut)
             .OnComplete(AppearAnimationCompleted);
@@ -74,7 +78,7 @@ public class FadingText : RecyclableObject
 
     private void AppearAnimationCompleted()
     {
-        _backgroundImage.transform.DOComplete();
+        _backgroundImageHolder.DOComplete();
         _canvasGroup.DOComplete();
 
         foreach(FadingTextCharacter fadingTextCharacter in _fadingTextCharacters)

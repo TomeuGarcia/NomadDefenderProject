@@ -8,24 +8,24 @@ public interface IFadingTextsFactory
     {
         public Vector3 WorldPosition { get; private set; }
         public string Content { get; private set; }
-        public Color BackgroundImageColor { get; private set; }
-        private Color _defaultBackgroundImageColor;
+        public Color TextColor { get; private set; }
+        private Color _defaultTextColor;
 
 
-        public TextSpawnData(Color defaultBackgroundImageColor)
+        public TextSpawnData(Color defaultTextColor)
         {
-            _defaultBackgroundImageColor = defaultBackgroundImageColor;
+            _defaultTextColor = defaultTextColor;
         }
 
         public void Init(Vector3 worldPosition, string content)
         {
-            Init(worldPosition, content, _defaultBackgroundImageColor);
+            Init(worldPosition, content, _defaultTextColor);
         }
-        public void Init(Vector3 worldPosition, string content, Color backgroundImageColor)
+        public void Init(Vector3 worldPosition, string content, Color textColor)
         {
             WorldPosition = worldPosition;
             Content = content;
-            BackgroundImageColor = backgroundImageColor;
+            TextColor = textColor;
         }
     }
 

@@ -14,7 +14,7 @@ public class TweenConfig
     public float Duration => _duration;
     public Ease Ease => _ease;
 
-    private TweenConfig(Vector3 value, float duration, Ease ease)
+    public TweenConfig(Vector3 value, float duration, Ease ease)
     {
         _value = value;
         _duration = duration;

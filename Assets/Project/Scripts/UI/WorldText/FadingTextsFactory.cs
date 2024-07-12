@@ -24,9 +24,9 @@ public class FadingTextsFactory : MonoBehaviour, IFadingTextsFactory, IFadingTex
 
         _textSpawnDataBuffer = new CircularBuffer<IFadingTextsFactory.TextSpawnData>(new IFadingTextsFactory.TextSpawnData[]
         {
-            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultImageBackgroundColor),
-            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultImageBackgroundColor),
-            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultImageBackgroundColor)
+            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultTextsColor),
+            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultTextsColor),
+            new IFadingTextsFactory.TextSpawnData(_config.FadingTextConfig.DefaultTextsColor)
         });
     }
 
@@ -43,10 +43,10 @@ public class FadingTextsFactory : MonoBehaviour, IFadingTextsFactory, IFadingTex
         fadingText.Init(textSpawnData, this, _config.FadingTextConfig);
     }
 
-    public FadingTextCharacter SpawnFadingTextCharacter(Transform fadingTextParent, char character)
+    public FadingTextCharacter SpawnFadingTextCharacter(Transform fadingTextParent, char character, Color color)
     {
         FadingTextCharacter fadingTextCharacter = _fadingTextCharactersPool.Spawn<FadingTextCharacter>(Vector3.zero, Quaternion.identity);
-        fadingTextCharacter.Init(fadingTextParent, character);
+        fadingTextCharacter.Init(fadingTextParent, character, color);
         return fadingTextCharacter;
     }
 }

@@ -24,11 +24,12 @@ public class FadingTextCharacter : RecyclableObject
         _defaultParent = transform.parent;
     }
 
-    public void Init(Transform parentFadingText, char character)
+    public void Init(Transform parentFadingText, char character, Color color)
     {
         transform.SetParent(parentFadingText);
         transform.localScale = Vector3.one;
         _frontText.text = _backgroundText.text = character.ToString();
+        _frontText.color = color;
     }
 
     public async Task PlayAppearAnimation(FadingTextConfig.CharacterAnimation appearAnimationConfig)

@@ -12,31 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd39b4ab43e2fa40a5fd7bcbe0a07ae, type: 3}
   m_Name: FadingTextConfig_EnemyTakesDamage
   m_EditorClassIdentifier: 
-  _defaultImageBackgroundColor: {r: 0.80784315, g: 0.19788556, b: 0, a: 1}
-  _randomPositionOffsetBounds: {x: 0.5, y: 0.3, z: 0.5}
-  _fixedPositionOffset: {x: 0, y: 0.5, z: 0}
+  _defaultTextsColor: {r: 1, g: 1, b: 1, a: 1}
+  _randomPositionOffsetBounds: {x: 0.5, y: 0.2, z: 0.5}
+  _fixedPositionOffset: {x: 0, y: 1, z: 0}
   _characterAppearAnimation:
-    _appearDuration: 0.1
+    _appearDuration: 0.08
     _rotationPunch:
       _value: {x: 0, y: 0, z: 15}
-      _duration: 0.2
-      _vibrato: 8
+      _duration: 0.3
+      _vibrato: 10
       _elasticity: 1
       _ease: 4
     _scalePunch:
-      _value: {x: 1, y: 2, z: 1}
+      _value: {x: 0.5, y: 1.5, z: 0.5}
       _duration: 0.2
       _vibrato: 6
       _elasticity: 0.5
       _ease: 4
   _textAppearAnimation:
-    _moveVelocity: {x: 0, y: 0.5, z: 0}
-    _delayBeforeFadeOut: 0.25
-    _backgroundImageAppearScale:
-      _value: {x: 0.8, y: 0.8, z: 0.8}
+    _appearScale:
+      _value: {x: 1, y: -0.5, z: 0}
       _duration: 0.5
+      _vibrato: 6
+      _elasticity: 0
+      _ease: 4
+    _moveVelocity: {x: 0, y: 2, z: 0}
+    _randomRotationInterval: {x: -30, y: -50}
+    _backgroundRotatateBy:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 1
+      _ease: 4
+    _backgroundImageAppearScale:
+      _value: {x: 1, y: 1, z: 1}
+      _duration: 0.25
       _ease: 25
+    _delayBeforeFadeOut: 0.5
     _groupFadeOut:
       _value: 0
-      _duration: 0.5
+      _duration: 0.3
       _ease: 7

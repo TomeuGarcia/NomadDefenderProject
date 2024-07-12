@@ -183,15 +183,14 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
     {
-        DoTakeDamage(projectileSource, damageAmount);
-        SpawntakeDamageText(damageAmount);
+        DoTakeDamage(projectileSource, damageAmount, out bool hitArmor);
     }
     
-    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount, out bool hitArmor)
     {
         healthHUD.Show();
 
-        healthSystem.TakeDamage(damageAmount);
+        healthSystem.TakeDamage(damageAmount, out hitArmor);
         RemoveQueuedDamage(damageAmount);
 
         MeshTransform.localScale = originalMeshLocalScale;
@@ -202,13 +201,15 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
+
+        SpawntakeDamageText(damageAmount, hitArmor);
     }
 
-    private void SpawntakeDamageText(int damageAmount)
+    private void SpawntakeDamageText(int damageAmount, bool hitArmor)
     {
         IFadingTextsFactory fadingTextsFactory = ServiceLocator.GetInstance().FadingTextFactory;
         IFadingTextsFactory.TextSpawnData textSpawnData = fadingTextsFactory.GetTextSpawnData();
-        textSpawnData.Init(Position, damageAmount.ToString());
+        textSpawnData.Init(Position, damageAmount.ToString(), healthHUD.GetBarColor(hitArmor));
         fadingTextsFactory.SpawnFadingText(textSpawnData);
     }
 
