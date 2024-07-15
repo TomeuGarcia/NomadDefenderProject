@@ -320,12 +320,19 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         InitCostText();
     }
 
-    public void PlayDecrementPlayCostAnimation(int amountToDecrement)
+    public void PlayUpdatePlayCostAnimation(int amountToIncrement)
     {
-        int endValue = Mathf.Max(turretStats.playCost - amountToDecrement, TurretBuilding.MIN_PLAY_COST);
+        int endValue = Mathf.Max(turretStats.playCost + amountToIncrement, TurretBuilding.MIN_PLAY_COST);
         turretCardParts.cardCost = endValue;
 
-        StartCoroutine(DoPlayDecrementPlayCostAnimation(endValue));
+        if (endValue > turretStats.playCost)
+        {
+            StartCoroutine(DoPlayPlayIncrementCostAnimation(endValue));
+        }
+        else
+        {
+            StartCoroutine(DoPlayDecrementPlayCostAnimation(endValue));
+        }
     }
 
     private IEnumerator DoPlayDecrementPlayCostAnimation(int endValue, int decrementAmountPerTick = 1, 
@@ -350,14 +357,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         playingPlayCostAnimation = false;
     }
 
-
-    public void PlayIncrementPlayCostAnimation(int amountToIncrement)
-    {
-        int endValue = turretStats.playCost + amountToIncrement;
-        turretCardParts.cardCost = endValue;
-
-        StartCoroutine(DoPlayPlayIncrementCostAnimation(endValue));
-    }
     private IEnumerator DoPlayPlayIncrementCostAnimation(int endValue, int incrementAmountPerTick = 1, 
         float tickDuration = 0.03f, float startDelay = 0.4f)
     {
@@ -426,7 +425,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public void PreviewChangeVisuals(TurretPartAttack newTurretPartAttack, TurretPartBody newTurretPartBody,
                                      TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase,
                                      TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
-                                     int playCostIncrementAmount, int playCostDecrementAmount)
+                                     CardUpgradeTurretPlayCostConfig playCostsConfig)
     {
         bool replacingWithSamePart = false;
 
@@ -493,7 +492,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         // PLAY COST
         turretCardParts = new TurretCardParts();
         turretStats.playCost = originalCard.turretStats.playCost;
-        InstantUpdatePlayCost(replacingWithSamePart ? -playCostDecrementAmount : playCostIncrementAmount);
+
+        turretCardParts.turretPartAttack = newTurretPartAttack;
+        turretCardParts.turretPartBody = newTurretPartBody;
+        turretCardParts.turretPartBase = newTurretPartBase;
+        turretCardParts.turretPassiveBase = newTurretPassiveBase;
+
+        InstantUpdatePlayCost(playCostsConfig.ComputeCardPlayCostIncrement(!replacingWithSamePart, this));
 
 
         // CARD LVL

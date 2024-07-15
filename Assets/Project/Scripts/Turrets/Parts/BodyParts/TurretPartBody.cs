@@ -40,6 +40,7 @@ public class TurretPartBody : ScriptableObject
 
     public int Damage => GetDamageByLevel(damageLvl); 
     public string DamageText => GetDamageByLevelText(damageLvl);
+    public float CadenceInverted => GetCadenceByLevelInverted(cadenceLvl);
     public float Cadence => GetCadenceByLevel(cadenceLvl);
     public string CadenceText => GetCadenceByLevelText(cadenceLvl);
 
@@ -110,8 +111,12 @@ public class TurretPartBody : ScriptableObject
     {
         return cadencePerLvl[level - 1];
     }
+    public float GetCadenceByLevelInverted(int level)
+    {
+        return 1f / GetCadenceByLevel(level);
+    }
     public string GetCadenceByLevelText(int level)
     {
-        return (1f / GetCadenceByLevel(level)).ToString("0.0").Replace(',', '.');
+        return GetCadenceByLevelInverted(level).ToString("0.0").Replace(',', '.');
     }
 }
