@@ -300,8 +300,7 @@ public class EnemyWaveManager : MonoBehaviour
             enemyPathFollowerTrails[i] = Instantiate(enemyPathTrailPrefab, startPathNodes[i].Position + enemyPathFollowerTrailsPositionOffset, Quaternion.identity,
                 enemySpawnTransform).GetComponent<PathFollower>();
 
-            enemyPathFollowerTrails[i].Init(startPathNodes[i].GetNextNode(), startPathNodes[i].GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, 
-                enemyPathFollowerTrails[i].transform);
+            enemyPathFollowerTrails[i].Init(startPathNodes[i].GetNextNode(), startPathNodes[i].GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
             enemyPathFollowerTrails[i].SetMoveSpeed(0f);
             enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
         }
@@ -360,7 +359,7 @@ public class EnemyWaveManager : MonoBehaviour
         }
 
         enemyPathFollowerTrail.SetMoveSpeed(1f);
-        enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f, enemyPathFollowerTrail.transform);
+        enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
     }
 
 

@@ -59,9 +59,10 @@ MonoBehaviour:
   rb: {fileID: 7843448872325241605}
   healthHUD: {fileID: 6257679996672441795}
   enemyFeedback: {fileID: 7955090365776896138}
+  _typeConfig: {fileID: 11400000, guid: 188c05e82553101488330466e2f12e1e, type: 2}
   baseDamage: 1
-  baseHealth: 20
-  baseArmor: 20
+  baseHealth: 40
+  baseArmor: 40
   currencyDrop: 3
   baseCurrencyDrop: 20
 --- !u!114 &7955090365776896138
@@ -166,7 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3700909352eed4eb96f4961b828321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2.5
+  moveSpeed: 3.75
+  _rotationSpeed: 300
+  _rigidbodyToMove: {fileID: 7843448872325241605}
   paused: 0
 --- !u!65 &8499339281684224333
 BoxCollider:
@@ -212,7 +215,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1

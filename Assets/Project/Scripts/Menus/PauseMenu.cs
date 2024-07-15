@@ -39,8 +39,6 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
 
         surrenderText.gameObject.SetActive(false);
-
-        GameAudioManager.GetInstance().PlayMusic1();
     }
     private void Awake()
     {
@@ -73,18 +71,6 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             }
         }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            if (GameAudioManager.GetInstance().isMusicPaused())
-            {
-                GameAudioManager.GetInstance().PlayMusic1();
-            }
-            else
-            {
-                GameAudioManager.GetInstance().PauseMusic1();
-            }
-        }
-
     }
 
 

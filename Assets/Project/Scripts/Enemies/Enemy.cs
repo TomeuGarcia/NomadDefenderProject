@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Enemy : MonoBehaviour
     private Vector3 originalMeshLocalScale;
 
     [Header("Components")]
-    [SerializeField] public PathFollower pathFollower;
+    [SerializeField] private PathFollower pathFollower;
     [SerializeField] public Transform transformToMove;
     [SerializeField] private Rigidbody rb;
     //[SerializeField] private BoxCollider boxCollider;
@@ -31,15 +32,14 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyFeedback enemyFeedback;
     //[SerializeField] private MeshRenderer armorCover;
 
-    [Header("Stats")]
-    [SerializeField] private int baseDamage = 1;
-    [SerializeField] private int baseHealth = 2;
-    [SerializeField] private int baseArmor = 0;
-    private float damage;
+    public PathFollower PathFollower => pathFollower;
+
+    [Header("STATS")]
+    [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
+    private int damage;
     private float armor;
     private float health;
     [HideInInspector] public int currencyDrop;
-    [SerializeField] public int baseCurrencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;
@@ -62,8 +62,9 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         ResetStats();
+        
 
-        if(armor == 0)
+        if (armor == 0)
         {
             healthSystem = new HealthSystem((int)health);
         }
@@ -119,19 +120,18 @@ public class Enemy : MonoBehaviour
 
     private void ResetStats()
     {
-        damage = baseDamage;
-        health = baseHealth;
-        armor = baseArmor;
-
-        currencyDrop = baseCurrencyDrop;
+        damage = _typeConfig.BaseStats.Damage;
+        health = _typeConfig.BaseStats.Health;
+        armor = _typeConfig.BaseStats.Armor;
+        currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
+        pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
     }
 
-    /*
-    private void OnTriggerEnter(Collider other)
+    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance)
     {
-        TryAttackPathLocation(other.gameObject);
+        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
     }
-    */
+
 
     private void TryAttackPathLocation(GameObject hitObject)
     {
@@ -141,8 +141,7 @@ public class Enemy : MonoBehaviour
             {
                 if (pathLocation.CanTakeDamage())
                 {
-                    //pathLocation.TakeDamage((int)damage);
-                    pathLocation.TakeDamage(1);
+                    pathLocation.TakeDamage(damage);
                     collidedWithLocation = true;
 
                     if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
@@ -182,11 +181,16 @@ public class Enemy : MonoBehaviour
         return modifier(damageAmount, healthSystem);
     }
 
-    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    {
+        DoTakeDamage(projectileSource, damageAmount, out bool hitArmor);
+    }
+    
+    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount, out bool hitArmor)
     {
         healthHUD.Show();
 
-        healthSystem.TakeDamage(damageAmount);
+        healthSystem.TakeDamage(damageAmount, out hitArmor);
         RemoveQueuedDamage(damageAmount);
 
         MeshTransform.localScale = originalMeshLocalScale;
@@ -197,7 +201,19 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
+
+        SpawntakeDamageText(damageAmount, hitArmor);
     }
+
+    private void SpawntakeDamageText(int damageAmount, bool hitArmor)
+    {
+        IFadingTextsFactory fadingTextsFactory = ServiceLocator.GetInstance().FadingTextFactory;
+        IFadingTextsFactory.TextSpawnData textSpawnData = fadingTextsFactory.GetTextSpawnData();
+        textSpawnData.Init(Position, damageAmount.ToString(), healthHUD.GetBarColor(hitArmor));
+        fadingTextsFactory.SpawnFadingText(textSpawnData);
+    }
+
+
 
     public virtual void GetStunned(float duration)
     {
@@ -225,7 +241,6 @@ public class Enemy : MonoBehaviour
         enemyFeedback.FinishCoroutines();
 
         pathFollower.CheckDeactivateCoroutines();
-        rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 
@@ -234,13 +249,6 @@ public class Enemy : MonoBehaviour
     {
         queuedDamage += amount;
         return amount;
-    }
-
-    IEnumerator TimedDeath()
-    {
-        Debug.LogWarning("Enemy Death for timer");
-        yield return new WaitForSeconds(0.5f);
-        Die();
     }
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
@@ -260,8 +268,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
-        damage = (float)baseDamage * multiplier;
-        health = (float)baseHealth * multiplier;
+        health = (float)_typeConfig.BaseStats.Health * multiplier;
 
         healthSystem.UpdateHealth((int)health);
     }

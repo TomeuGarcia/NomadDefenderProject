@@ -10,17 +10,10 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioClip[] musics1;
-    [SerializeField] private AudioClip menuMusic;
-    [SerializeField] private AudioClip OWMapMusic;
-    [SerializeField] private AudioClip fightMusic;
     [SerializeField] private TempMusicClips[] tempMusicClips;
     private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
-    private int currentMusic1 = 0;
     private bool musicPaused = false;
     private float musicDefaultVolume;
-    private static bool keepFadingIn;
-    private static bool keepFadingOut;
 
 
     [Header("UI")]
@@ -164,7 +157,8 @@ public class GameAudioManager : MonoBehaviour
         {
             Destroy(this);
         }
-        initMusicDictionary();
+
+        InitMusicDictionary();
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
@@ -216,77 +210,49 @@ public class GameAudioManager : MonoBehaviour
         }
     }
     private IEnumerator BuildUp(AudioSource source, float initVol, float endVol, float attackTime, float sustainTime, float releaseTime)
-
     {
-
         if(attackTime > 0.0f)
-
         {
-
             droneLerpBuildUp = LerpVolume(source, initVol, endVol, attackTime);
-
             yield return StartCoroutine(droneLerpBuildUp);
-
         }
-
         else
-
+        {
             source.volume = endVol;
-
-
+        }
 
         if (sustainTime > 0.0f)
-
+        {
             yield return new WaitForSeconds(sustainTime);
-
-
+        }
 
         if (releaseTime > 0.0f)
-
         {
-
             droneLerpBuildUp = LerpVolume(source, endVol, initVol, releaseTime);
-
             yield return StartCoroutine(droneLerpBuildUp);
-
         }
-
     }
+
     private IEnumerator LerpVolume(AudioSource source, float initVol, float endVol, float lerpTime)
-
     {
-
         float currentTime = 0.0f;
-
         float tParam;
-
-
-
         float diff = endVol - initVol;
 
-
-
         while (currentTime < lerpTime)
-
         {
-
             currentTime += Time.deltaTime;
-
             tParam = currentTime / lerpTime;
-
             source.volume = tParam * diff + initVol;
-
             yield return null;
-
         }
 
-
-
         source.volume = endVol;
-
     }
+
+
     // Music
-    private void initMusicDictionary()
+    private void InitMusicDictionary()
     {
         foreach(TempMusicClips clips in tempMusicClips)
         {
@@ -322,18 +288,6 @@ public class GameAudioManager : MonoBehaviour
     public void ChangeMusic(MusicType newMusicType, float duration)
     {
         MusicFadeOutThenIn(newMusicType, duration);
-    }
-    private void NextMusic1()
-    {
-        currentMusic1 = ++currentMusic1 % musics1.Length;
-        PlayMusic1();
-    }
-    public void PlayMusic1()
-    {
-        musicAudioSource.clip = musics1[currentMusic1];
-        musicAudioSource.loop = true;
-        musicAudioSource.Play();
-        musicPaused = false;
     }
     public void PauseMusic1()
     {

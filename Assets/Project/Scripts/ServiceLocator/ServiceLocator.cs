@@ -11,6 +11,7 @@ public class ServiceLocator : MonoBehaviour
     public TDLocationsUtils TDLocationsUtils { get; set; }
     public TDTurretBinderHelper TDTurretBinderHelper { get; set; }
     public CurrencyCounter CurrencyCounter { get; set; }
+    public IFadingTextsFactory FadingTextFactory { get; set; }
 
 
     private void Awake()

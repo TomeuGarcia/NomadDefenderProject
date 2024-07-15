@@ -46,6 +46,8 @@ public class DroppedCurrency : MonoBehaviour
 
         Vector3 forceDir = (Vector3.up * 3f + randomDir).normalized * 3.0f;
         rb.AddForce(forceDir, ForceMode.Impulse);
+
+        StartCoroutine(StartDisappearing());
     }
 
     private void Update()
@@ -90,18 +92,16 @@ public class DroppedCurrency : MonoBehaviour
     }
 
 
-    public void Collided(Collision collision)
-    {
-        StartCoroutine(TouchedFloor());
-    }
 
-    private IEnumerator TouchedFloor()
+    private IEnumerator StartDisappearing()
     {
+        yield return new WaitForSeconds(0.5f);
+
         meshRenderer.enabled = false;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         shatterParticles.Play();
 
-        yield return new WaitUntil(() => shatterParticles.gameObject.activeInHierarchy == false);
+        yield return new WaitUntil(() => !shatterParticles.gameObject.activeInHierarchy);
 
         meshRenderer.enabled = true;
         shatterParticles.gameObject.SetActive(true);

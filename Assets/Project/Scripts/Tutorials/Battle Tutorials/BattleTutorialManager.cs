@@ -128,8 +128,6 @@ public class BattleTutorialManager : MonoBehaviour
     {
 
         yield return new WaitForSeconds(1.0f);
-
-
         scriptedSequence.NextLine(); //0
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
@@ -391,34 +389,34 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine(); //34
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//35
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//36
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//37
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//38
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//39
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//40
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//41
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//42
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//43
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();
+        scriptedSequence.NextLine();//44
         yield return new WaitForSecondsRealtime(2.8f);
 
         //Finish scene and load next

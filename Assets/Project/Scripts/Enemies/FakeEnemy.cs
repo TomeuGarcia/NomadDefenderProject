@@ -24,8 +24,8 @@ public class FakeEnemy : Enemy
     {
         healthSystem = new HealthSystem(1000);
 
-        pathFollower.paused = true;
-        pathFollower.enabled = false;
+        PathFollower.paused = true;
+        PathFollower.enabled = false;
 
         MeshTransform.gameObject.SetActive(false);
 
@@ -60,10 +60,10 @@ public class FakeEnemy : Enemy
         return resultDamage;
     }
 
-    public override void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public override void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount, out bool hitArmor)
     {
+        hitArmor = false;
         if (projectileSource != null && OnAttackedByProjectile != null) OnAttackedByProjectile(projectileSource);
-        return;
     }
 
 

@@ -62,43 +62,16 @@ public class GatherNewCardManager : MonoBehaviour
         //// TODO read from data instead
         NodeEnums.ProgressionState progressionState = upgradeSceneSetupInfo.CurrentNodeProgressionState;
         NodeEnums.HealthState currentNodeHealthState = upgradeSceneSetupInfo.CurrentNodeHealthState;
-        bool lastBattleWasDefendedPerfectly = upgradeSceneSetupInfo.LastBattleWasDefendedPerfectly;
         ////
 
 
-        int numSupportCards = 0;
-        turretCardsLevel = -1;
-
-        if (currentNodeHealthState == NodeEnums.HealthState.GREATLY_DAMAGED)
-        {
-            numCards = 2;
-            numSupportCards = Random.Range(0, 2); // 50%
-
-            midCardConteiner.gameObject.SetActive(false);
-            Vector3 offset = new Vector3(0.6f, 0.0f, 0.0f);
-            leftCardConteiner.transform.position += offset;
-            rightCardConteiner.transform.position -= offset;
-        }
-        else if (currentNodeHealthState == NodeEnums.HealthState.SLIGHTLY_DAMAGED)
-        {
-            numCards = 3;
-            numSupportCards = 1;
-        }
-        else if (currentNodeHealthState == NodeEnums.HealthState.UNDAMAGED)
-        {
-            numCards = 3;
-            numSupportCards = 1;
-
-            if (lastBattleWasDefendedPerfectly)
-            {
-                turretCardsLevel = TurretCardParts.MAX_CARD_LEVEL;
-            }
-        }
+        int numSupportCards = 1; // Random.Range(0, 2); // 50%
+        turretCardsLevel = -1; // If >0 overwrites card level // TurretCardParts.MAX_CARD_LEVEL;
 
 
         cards = new BuildingCard[numCards];
         int numTurretCards = numCards - numSupportCards;
-        int numPerfect = lastBattleWasDefendedPerfectly ? 1 : 0;
+        int numPerfect = 0; // lastBattleWasDefendedPerfectly ? 1 : 0;
 
         CreateNTurretCards(numTurretCards, numPerfect, progressionState); // Get Random Turrets
 

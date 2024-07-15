@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartBase", menuName = "TurretParts/TurretPartBase")]
-
 public class TurretPartBase : ScriptableObject
 {
     public static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };
@@ -35,7 +35,8 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
 
-    public int Range { get => rangePerLvl[rangeLvl-1]; }
+    public int Range => GetRangeByLevel(rangeLvl);
+    public string RangeText => GetRangeByLevelText(rangeLvl);
 
     public float GetRangePer1()
     {
@@ -101,4 +102,18 @@ public class TurretPartBase : ScriptableObject
         return "";
     }
 
+
+    public void SetStatTexts(TMP_Text rangeText)
+    {
+        rangeText.text = RangeText;
+    }
+
+    public int GetRangeByLevel(int level)
+    {
+        return rangePerLvl[level - 1];
+    }
+    public string GetRangeByLevelText(int level)
+    {
+        return GetRangeByLevel(level).ToString();
+    }
 }

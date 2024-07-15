@@ -30,6 +30,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
+    [Header("STEAM")]
+    [SerializeField, Min(0)] private float _startDelay = 0.5f;
+    [SerializeField] private CanvasGroup _steamCanvasGroup;
+    [SerializeField] private TextDecoder _steamDecoder;
+    [SerializeField] private TweenColorConfig _colorTextFade;
+    [SerializeField] private TMP_Text _steamText;
+
+
     [Header("MATERIALS SETUP")]
     [SerializeField] private Material obstacleTilesMaterial;
     [SerializeField] private Material tilesMaterial;
@@ -72,11 +80,14 @@ public class MainMenu : MonoBehaviour
 
         PauseMenu.GameIsPaused = false;
         PauseMenu.GetInstance().HideUI();
+
+        StartCoroutine(PlayShowSteamAnimation());
     }
     private void Start()
     {
         originalTitleString = titleTextDecoder.textStrings[0];
         PauseMenu.GetInstance().gameCanBePaused = false;
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.2f);
     }
 
     
@@ -264,5 +275,33 @@ public class MainMenu : MonoBehaviour
     private void OnDisable()
     {
         //textDecoderManager.ResetTexts();
+    }
+
+
+    private IEnumerator PlayShowSteamAnimation()
+    {
+        _steamCanvasGroup.alpha = 0;
+        yield return new WaitForSeconds(_startDelay);
+
+        float blinkDuration = 0.1f;
+
+        for (int i = 0; i < 2; ++i)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+            _steamCanvasGroup.alpha = 1;
+            yield return new WaitForSeconds(blinkDuration);
+            _steamCanvasGroup.alpha = 0;
+            yield return new WaitForSeconds(blinkDuration);
+        }
+        _steamCanvasGroup.alpha = 1;
+
+        _steamDecoder.Activate();
+
+        _steamText.PunchColor(_colorTextFade);
+    }
+
+    public void OpenSteamWishlist()
+    {
+        Application.OpenURL("https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
     }
 }

@@ -132,6 +132,30 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.NextLine(); //7 -> I won't be always around...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
+        
+        scriptedSequence.NextLine(); //8 
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(2.0f);
+        
+        scriptedSequence.NextLine(); //9 
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(2.0f);
+        
+        scriptedSequence.NextLine(); //10 
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(2.0f);
+        
+        scriptedSequence.NextLine(); //11 
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(2.0f);
+        
+        scriptedSequence.NextLine(); //12 
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        yield return new WaitForSeconds(2.0f);
+        
+
+        
+
 
         scriptedSequence.Clear();
         yield return new WaitForSeconds(1.0f);
@@ -150,17 +174,16 @@ public class OWMapTutorialManager2 : MonoBehaviour
         //yield return StartCoroutine(GlitchScreen(0.0f, 1000.5f, true));
 
         GameAudioManager.GetInstance().PlayDroneBuildUp(25.0f, 0.0f, 0.0f);
-
-        scriptedSequence.NextLine(); //9 -> So you want to get to the end of this...
+        scriptedSequence.NextLine(); //13 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(3.0f);
         scriptedSequence.Clear();
         
-        scriptedSequence.NextLine(); //10 -> In that case...
+     /*   scriptedSequence.NextLine(); //10 -> In that case...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.5f);
 
-        scriptedSequence.Clear();
+        scriptedSequence.Clear();*/
         
         //yield return new WaitForSeconds(5.0f);
         //Camera Animation
@@ -185,12 +208,12 @@ public class OWMapTutorialManager2 : MonoBehaviour
             if (!text1Shown && currentTime > 1.0f)
             {
                 text1Shown = true;
-                scriptedSequence.NextLine(); //11 -> I
+                scriptedSequence.NextLine(); //14 -> I
             }
             else if (!text2Shown && currentTime > 3.5f)
             {
                 text2Shown = true;
-                scriptedSequence.NextLine(); //12 -> Will
+                scriptedSequence.NextLine(); //15 -> Will
             }
             currentTime += Time.deltaTime;
             tParam = currentTime / animation1Time;
@@ -205,7 +228,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
 
         //yield return new WaitForSeconds(1.0f);
-        scriptedSequence.NextLine(); //13 -> Be
+        scriptedSequence.NextLine(); //16 -> Be
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
         GameAudioManager.GetInstance().PlayDroneBuildUp(0.0f, 10.0f, 7.5f);
@@ -221,7 +244,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
         NextVolume();
         yield return new WaitForSeconds(5.5f);
         
-        scriptedSequence.NextLine(); //14 -> Watching
+        scriptedSequence.NextLine(); //17 -> Watching
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 0));
         wathcersEyes.SetActive(true);

@@ -38,7 +38,7 @@ public class OWMap_Node : MonoBehaviour
 
 
     // NODE HEALTH STATE
-    [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.UNDAMAGED;
+    [HideInInspector] public NodeEnums.HealthState healthState = NodeEnums.HealthState.NOT_FOUGHT_YET;
 
 
     //NODE CLASS
@@ -120,7 +120,7 @@ public class OWMap_Node : MonoBehaviour
 
 
     // EVENTS
-    public delegate void NodeHealthStateAction(NodeEnums.HealthState healthState, bool wonWithPerfectDefense);
+    public delegate void NodeHealthStateAction(NodeEnums.HealthState healthState);
     public event NodeHealthStateAction OnNodeHealthStateSet;
 
     public delegate void NodeInteractionAction();
@@ -138,7 +138,7 @@ public class OWMap_Node : MonoBehaviour
 
     private void Awake()
     {
-        healthState = NodeEnums.HealthState.UNDAMAGED;
+        healthState = NodeEnums.HealthState.NOT_FOUGHT_YET;
 
         material = meshRenderer.material;
 
@@ -359,30 +359,20 @@ public class OWMap_Node : MonoBehaviour
     }
 
 
-    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool wonWithPerfectDefense, bool enableInfoDisplay)
+    public void SetHealthState(NodeEnums.HealthState nodeHealthState, bool enableInfoDisplay)
     {
         healthState = nodeHealthState;
 
         switch (healthState)
         {
-            case NodeEnums.HealthState.UNDAMAGED:
+            case NodeEnums.HealthState.NOT_FOUGHT_YET:
                 {
                     SetIconColor(OWMapDecoratorUtils.s_blueColor);
                     colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
                 break;
-            case NodeEnums.HealthState.SLIGHTLY_DAMAGED:
+            case NodeEnums.HealthState.SURVIVED:
                 {
-                    material.SetFloat("_IsDamaged", 1f);
-                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_yellowColor);
-                    SetIconColor(OWMapDecoratorUtils.s_blueColor);
-                    colorInUse = OWMapDecoratorUtils.s_blueColor;
-                }
-                break;
-            case NodeEnums.HealthState.GREATLY_DAMAGED:
-                {
-                    material.SetFloat("_IsDamaged", 1f);
-                    material.SetColor("_DamagedTwitchColor", OWMapDecoratorUtils.s_orangeColor);
                     SetIconColor(OWMapDecoratorUtils.s_blueColor);
                     colorInUse = OWMapDecoratorUtils.s_blueColor;
                 }
@@ -402,7 +392,7 @@ public class OWMap_Node : MonoBehaviour
                 break;
         }
 
-        if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState, wonWithPerfectDefense);
+        if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState);
         if (enableInfoDisplay) InvokeOnNodeInfoInteractionEnabled();
     }
 

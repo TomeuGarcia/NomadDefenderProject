@@ -25,8 +25,6 @@ public abstract class CardPart : MonoBehaviour
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
 
     [Header("CARD INFO")]
-    [SerializeField] protected GameObject infoInterface;
-    protected Coroutine showInfoCoroutine = null;
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
@@ -76,6 +74,7 @@ public abstract class CardPart : MonoBehaviour
     protected virtual void AwakeInit()
     {
         cardColliderOffset = cardCollider.center;
+        isShowInfoAnimationPlaying = false;
     }
 
     private void OnMouseEnter()
@@ -250,10 +249,7 @@ public abstract class CardPart : MonoBehaviour
         cardCollider.center = cardColliderOffset + CardTransform.localPosition;
     }
 
-
-    protected abstract void InitInfoVisuals();
-    protected abstract void SetupCardInfo();
-    public void ShowInfo()
+        public void ShowInfo()
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");

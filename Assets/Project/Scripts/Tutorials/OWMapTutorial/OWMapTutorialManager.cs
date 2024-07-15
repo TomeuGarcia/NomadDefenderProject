@@ -136,9 +136,30 @@ public class OWMapTutorialManager : MonoBehaviour
             owMapTuto2.StartTutorial();
             yield break;
         }
+        //watcher
+        yield return new WaitForSeconds(2.0f);
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(2f);
+        
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(2f);
+        
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(2f);
+        
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
+        yield return new WaitForSeconds(2f);
+        
+        scriptedSequence.NextLine();
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
 
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(6.0f);
 
+        scriptedSequence.Clear();
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
