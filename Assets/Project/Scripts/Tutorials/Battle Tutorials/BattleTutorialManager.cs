@@ -326,12 +326,12 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine(); //22
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.5f);
-        
         GameTime.SetTimeScale(1f);
 
-
         
-        scriptedSequence.NextLine(); //23
+        //23 
+        yield return new WaitUntil(() => wavesCounter > 1 );
+        scriptedSequence.NextLine(); 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(170) );
         scriptedSequence.Clear();
@@ -369,12 +369,11 @@ public class BattleTutorialManager : MonoBehaviour
         globalVolume.profile = glitchVol;
         yield return new WaitForSecondsRealtime(0.1f);
         globalVolume.profile = initVol;
+        
 
         scriptedSequence.NextLine(); //26
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.5f);
-
-
+        yield return new WaitForSecondsRealtime(0.25f);
 
         scriptedSequence.NextLine(); //27
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -404,19 +403,18 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.25f);
 
-        scriptedSequence.NextLine(); //34
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
         //Random Bullshit Text
+        scriptedSequence.NextLine(); //34
+        yield return new WaitForSecondsRealtime(1.5f);
+
         scriptedSequence.NextLine(); //35
         yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine(); //36
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //37
-        yield return new WaitForSecondsRealtime(1.5f);
+        scriptedSequence.NextLine();//37
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();//38
         yield return new WaitForSecondsRealtime(1.0f);
@@ -425,9 +423,9 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();//40
-        yield return new WaitForSecondsRealtime(1.0f);
+        yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();//40
+        scriptedSequence.NextLine();//41
         yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();//42
@@ -438,15 +436,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();//44
         yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//45
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//46
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//47
-        yield return new WaitForSecondsRealtime(2.8f);
+        
 
         //Finish scene and load next
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
