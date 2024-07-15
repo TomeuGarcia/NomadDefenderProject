@@ -334,8 +334,9 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine(); //23
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(170) );
-        scriptedSequence.NextLine(); //24 Place another Turret
+        scriptedSequence.Clear();
         
+        scriptedSequence.NextLine(); //24 Place another Turret
         GameTime.SetTimeScale(0f);
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() =>  PlacedSecondBuilding);
