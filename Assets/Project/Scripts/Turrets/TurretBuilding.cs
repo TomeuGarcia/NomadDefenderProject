@@ -62,6 +62,46 @@ public class TurretBuilding : RangeBuilding
     public event TurretBuildingEvent OnGotDisabledPlacing;
     public event TurretBuildingEvent OnGotMovedWhenPlacing;
 
+    private TestingSnapshot _testingSnapshot;
+    private struct TestingSnapshot
+    {
+        private string _turretName;
+        private float _turretRange;
+        private float _totalTimePlaced;
+        private float _timeTargetingEnemies;
+
+        public TestingSnapshot(string turretName)
+        {
+            _turretName = turretName;
+            _turretRange = 0;
+            _totalTimePlaced = 0;
+            _timeTargetingEnemies = 0;
+        }
+
+        public void SetRange(float turretRange)
+        {
+            _turretRange = turretRange;
+        }
+        
+        public void UpdateTotalTimePlaced(float deltaTime)
+        {
+            _totalTimePlaced += deltaTime;
+        }
+        
+        public void UpdateTimeTargetingEnemies(float deltaTime)
+        {
+            _timeTargetingEnemies += deltaTime;
+        }
+
+        public void Print()
+        {
+            Debug.Log(_turretName + ": " + 
+                "Range: " + _turretRange + " | " +
+                "Total time placed: " + _totalTimePlaced + " | " +
+                "Time targeting enemies: " + _timeTargetingEnemies);
+        }
+    }
+
 
     void Awake()
     {
@@ -74,6 +114,19 @@ public class TurretBuilding : RangeBuilding
         TimeSinceLastShot = 0.0f;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
+
+        TDGameManager.OnGameFinishStart += PrintData;
+    }
+
+    private void OnDestroy()
+    {
+        TDGameManager.OnGameFinishStart -= PrintData;
+    }
+
+    private void PrintData()
+    {
+        _testingSnapshot.SetRange(stats.range);
+        _testingSnapshot.Print();
     }
 
     private void Update()
@@ -137,6 +190,9 @@ public class TurretBuilding : RangeBuilding
         basePassive.ApplyEffects(this);
 
         DisableFunctionality();
+
+        string dataTestingName = turretPartBody.name + "--" + turretPartBase.name + "_" + turretPassiveBase.name + "--" + TurretPartAttack.name;
+        _testingSnapshot = new TestingSnapshot(dataTestingName);
     }
 
     public void ResetAttackPart(TurretPartAttack turretPartAttack)
@@ -189,14 +245,17 @@ public class TurretBuilding : RangeBuilding
 
     private void UpdateShoot()
     {
-        TimeSinceLastShot += Time.deltaTime * GameTime.TimeScale;
+        float deltaTime = Time.deltaTime * GameTime.TimeScale;
+
+        _testingSnapshot.UpdateTotalTimePlaced(deltaTime);
+        TimeSinceLastShot += deltaTime;
 
         if (currentShootTimer < stats.cadence)
         {            
-            currentShootTimer += Time.deltaTime * GameTime.TimeScale;
+            currentShootTimer += deltaTime;
+            _testingSnapshot.UpdateTimeTargetingEnemies(deltaTime);
             return;
         }
-
         
         if (!TargetEnemyExists()) return;
 

@@ -48,8 +48,9 @@ public class CardPartReplaceManager : MonoBehaviour
     private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
 
 
-    [Header("SUBTRACT CARD PLAY COST")]
-    [SerializeField, Range(5, 50)] private int playCostSubtractAmountSamePart = 50;
+    [Header("UPDATE CARD PLAY COST")]
+    [SerializeField, Range(0, 100)] private int playCostDecrementAmountSamePart = 30;
+    [SerializeField, Range(0, 100)] private int playCostIncrementAmountDifferentPart = 30;
 
 
     [Header("COMPONENTS")]
@@ -440,7 +441,14 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        if (replacedWithSamePart)
+        {
+            selectedCard.PlayDecrementPlayCostAnimation(playCostDecrementAmountSamePart);
+        }
+        else
+        {
+            selectedCard.PlayIncrementPlayCostAnimation(playCostIncrementAmountDifferentPart);
+        }
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -663,7 +671,14 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        if (replacedWithSamePart)
+        {
+            selectedCard.PlayDecrementPlayCostAnimation(playCostDecrementAmountSamePart);
+        }
+        else
+        {
+            selectedCard.PlayIncrementPlayCostAnimation(playCostIncrementAmountDifferentPart);
+        }
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -722,7 +737,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
 
         previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
-            partType, playCostSubtractAmountSamePart);
+            partType, playCostIncrementAmountDifferentPart, playCostDecrementAmountSamePart);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)
