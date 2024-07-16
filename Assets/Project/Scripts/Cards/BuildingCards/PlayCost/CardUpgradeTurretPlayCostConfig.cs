@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "CardUpgradeTurretPlayCostConfig", menuName = "Cards/Cost/CardUpgradeTurretPlayCostConfig")]
+[CreateAssetMenu(fileName = "CardUpgradeTurretPlayCostConfig", 
+    menuName = SOAssetPaths.CARDS_COST + "CardUpgradeTurretPlayCostConfig")]
 public class CardUpgradeTurretPlayCostConfig : ScriptableObject
 {
     [Header("CONFIGURATION")]

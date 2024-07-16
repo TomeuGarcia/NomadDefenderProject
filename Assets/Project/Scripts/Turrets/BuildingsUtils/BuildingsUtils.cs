@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BuildingsUtils", menuName = "BuildingsUtils")]
+[CreateAssetMenu(fileName = "BuildingsUtils", 
+    menuName = SOAssetPaths.BUILDINGS + "BuildingsUtils")]
 public class BuildingsUtils : ScriptableObject
 {
     [Header("Particles Materials")]

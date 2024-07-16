@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartAttack", menuName = "TurretParts/TurretPartAttack")]
+[CreateAssetMenu(fileName = "TurretPartAttack", 
+    menuName = SOAssetPaths.TURRET_PARTS + "TurretPartAttack")]
 public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]

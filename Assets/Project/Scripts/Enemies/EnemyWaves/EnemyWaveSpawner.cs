@@ -6,7 +6,8 @@ using UnityEditor;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
+[CreateAssetMenu(fileName = "EnemyWaveSpawner", 
+    menuName = SOAssetPaths.ENEMY_WAVES + "EnemyWaveSpawner")]
 public class EnemyWaveSpawner : ScriptableObject
 {
     [SerializeField, Tooltip("Enemy stats will increase each round ddepending on this coef")]

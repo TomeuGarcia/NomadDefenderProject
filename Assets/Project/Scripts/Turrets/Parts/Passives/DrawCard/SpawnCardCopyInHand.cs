@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "EnemyWaveFinishSpawnCopyInHand", menuName = "TurretPassives/EnemyWaveFinishSpawnCopyInHand")]
+[CreateAssetMenu(fileName = "EnemyWaveFinishSpawnCopyInHand", 
+    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "EnemyWaveFinishSpawnCopyInHand")]
 public class SpawnCardCopyInHand : BasePassive
 {
     private TurretBuilding owner;

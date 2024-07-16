@@ -4,7 +4,8 @@ using UnityEngine;
 using NaughtyAttributes;
 
 
-[CreateAssetMenu(fileName = "TurretCardPlayCostCalculator", menuName = "Cards/Cost/TurretCardPlayCostCalculator")]
+[CreateAssetMenu(fileName = "TurretCardPlayCostCalculator", 
+    menuName = SOAssetPaths.CARDS_COST + "TurretCardPlayCostCalculator")]
 public class TurretCardPlayCostCalculator : ScriptableObject
 {
     [Header("Enemies")]

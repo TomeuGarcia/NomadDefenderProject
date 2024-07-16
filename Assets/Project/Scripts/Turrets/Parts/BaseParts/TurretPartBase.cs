@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartBase", menuName = "TurretParts/TurretPartBase")]
+[CreateAssetMenu(fileName = "TurretPartBase", 
+    menuName = SOAssetPaths.TURRET_PARTS_BASES + "TurretPartBase")]
 public class TurretPartBase : ScriptableObject
 {
     public static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };

@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "DeckData", menuName = "Cards/DeckData")]
+[CreateAssetMenu(fileName = "DeckData", 
+    menuName = SOAssetPaths.CARDS_DECKS + "DeckData")]
 public class DeckData : ScriptableObject
 {
     private List<BuildingCard> cards;

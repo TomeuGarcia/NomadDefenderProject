@@ -1,7 +1,8 @@
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "NewSupportBuilding", menuName = "Cards/SupportCardParts")]
+[CreateAssetMenu(fileName = "NewSupportBuilding", 
+    menuName = SOAssetPaths.CARDS_BUILDINGS + "SupportCardParts")]
 public class SupportCardParts : GroupedCardParts
 {
     public TurretPartBase turretPartBase;

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewOWMapDecoratorSettings", menuName = "Map/OWMapDecoratorSettings")]
+[CreateAssetMenu(fileName = "NewOWMapDecoratorSettings", 
+    menuName = SOAssetPaths.MAP_OVERWORLD + "OWMapDecoratorSettings")]
 public class OWMapDecoratorSettings : ScriptableObject
 {
     [SerializeField] public bool firstNodeIsEmpty = true;

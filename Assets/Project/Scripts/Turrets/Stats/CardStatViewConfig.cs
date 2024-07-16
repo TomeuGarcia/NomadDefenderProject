@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CardStatConfig_NAME", menuName = "Cards/CardStatConfig")]
+[CreateAssetMenu(fileName = "CardStatViewConfig_NAME", 
+    menuName = SOAssetPaths.CARDS_STATS + "CardStatViewConfig")]
 public class CardStatViewConfig : ScriptableObject
 {
-    [Header("META TYPE")]
-    [SerializeField] private CardStatMetaType _metaType;
-
     [Header("PARAMETERS")]
     [SerializeField] private string _name;
     [SerializeField] private Sprite _icon;
@@ -15,8 +13,7 @@ public class CardStatViewConfig : ScriptableObject
     [SerializeField] private Color _textColor = Color.black;
     
 
-    public string GameObjectName => _metaType.GetGameObjectName(_name);
-    public string ValueGameObjectName => _metaType.GetValueGameObjectName(_name);
+    public string Name => _name;
     public Sprite Icon => _icon;
     public Color IconColor => _iconColor;
     public Color TextColor => _textColor;

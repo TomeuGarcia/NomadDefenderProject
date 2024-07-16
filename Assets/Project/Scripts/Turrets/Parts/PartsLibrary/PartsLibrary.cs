@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = "TurretParts/TurretPartsLibrary")]
+[CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "TurretPartsLibrary")]
 public class PartsLibrary : ScriptableObject
 {
     [System.Serializable]

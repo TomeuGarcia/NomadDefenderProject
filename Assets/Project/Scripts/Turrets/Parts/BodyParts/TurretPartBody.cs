@@ -4,8 +4,8 @@ using System.ComponentModel;
 using UnityEngine;
 using TMPro;
 
-[CreateAssetMenu(fileName = "TurretPartBody", menuName = "TurretParts/TurretPartBody")]
-
+[CreateAssetMenu(fileName = "TurretPartBody", 
+    menuName = SOAssetPaths.TURRET_PARTS + "TurretPartBody")]
 public class TurretPartBody : ScriptableObject
 {
     public static int[] damagePerLvl = new int[] { 12, 20, 40, 60, 80 };

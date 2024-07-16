@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DeploySpawnCopyInDeck", menuName = "TurretPassives/DeploySpawnCopyInDeck")]
+[CreateAssetMenu(fileName = "DeploySpawnCopyInDeck", 
+    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "DeploySpawnCopyInDeck")]
 public class SpawnCardCopyInDeck : BasePassive
 {
     private TurretBuilding owner;

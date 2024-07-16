@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BasePartsLibraryContent", menuName = "TurretParts/BasePartsLibraryContent")]
+[CreateAssetMenu(fileName = "BasePartsLibraryContent", 
+    menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "BasePartsLibraryContent")]
 public class BasePartsLibraryContent : ScriptableObject
 {
     [Header("BASES & PASSIVES")]
