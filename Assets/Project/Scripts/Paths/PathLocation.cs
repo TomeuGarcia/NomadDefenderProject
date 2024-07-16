@@ -95,7 +95,7 @@ public class PathLocation : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        healthSystem.TakeDamage(damageAmount);
+        healthSystem.TakeDamage(damageAmount, out bool hitArmor);
 
         SetDamagedVisuals();
         locationMeshHolder.DOComplete();

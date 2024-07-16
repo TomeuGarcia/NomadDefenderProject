@@ -17,6 +17,10 @@ public class HealthHUD : MonoBehaviour
     [SerializeField] private ParticleSystem armorShatterParticles;
     private IEnumerator armorBreak;
 
+    public Color GetBarColor(bool armor)
+    {
+        return armor ? armorImage.color : healthImage.color;
+    }
 
     public void Init(HealthSystem healthSystem)
     {

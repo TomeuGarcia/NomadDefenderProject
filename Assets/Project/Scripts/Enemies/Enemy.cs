@@ -181,11 +181,16 @@ public class Enemy : MonoBehaviour
         return modifier(damageAmount, healthSystem);
     }
 
-    public virtual void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    public void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
+    {
+        DoTakeDamage(projectileSource, damageAmount, out bool hitArmor);
+    }
+    
+    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount, out bool hitArmor)
     {
         healthHUD.Show();
 
-        healthSystem.TakeDamage(damageAmount);
+        healthSystem.TakeDamage(damageAmount, out hitArmor);
         RemoveQueuedDamage(damageAmount);
 
         MeshTransform.localScale = originalMeshLocalScale;
@@ -196,7 +201,19 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
+
+        SpawntakeDamageText(damageAmount, hitArmor);
     }
+
+    private void SpawntakeDamageText(int damageAmount, bool hitArmor)
+    {
+        IFadingTextsFactory fadingTextsFactory = ServiceLocator.GetInstance().FadingTextFactory;
+        IFadingTextsFactory.TextSpawnData textSpawnData = fadingTextsFactory.GetTextSpawnData();
+        textSpawnData.Init(Position, damageAmount.ToString(), healthHUD.GetBarColor(hitArmor));
+        fadingTextsFactory.SpawnFadingText(textSpawnData);
+    }
+
+
 
     public virtual void GetStunned(float duration)
     {
@@ -224,7 +241,6 @@ public class Enemy : MonoBehaviour
         enemyFeedback.FinishCoroutines();
 
         pathFollower.CheckDeactivateCoroutines();
-        rb.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 
@@ -233,13 +249,6 @@ public class Enemy : MonoBehaviour
     {
         queuedDamage += amount;
         return amount;
-    }
-
-    IEnumerator TimedDeath()
-    {
-        Debug.LogWarning("Enemy Death for timer");
-        yield return new WaitForSeconds(0.5f);
-        Die();
     }
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed

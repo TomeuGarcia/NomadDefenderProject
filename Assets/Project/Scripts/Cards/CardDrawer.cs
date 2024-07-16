@@ -25,7 +25,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private Image[] redrawsLeftWireImages;
     [SerializeField] private Image leftWireImage;
     [SerializeField] private Image rightWireImage;
-    private static Color fadedInColor = Color.white;
+    private static Color fadedInColor = Color.cyan;
     private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);
     private static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
 

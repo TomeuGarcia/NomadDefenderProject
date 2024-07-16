@@ -171,7 +171,7 @@ public class EnemyWaveManager : MonoBehaviour
         //}
 
         ++currentWaves;
-        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform);
+        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this);
         StartCoroutine(waveCoroutines[index]);
 
 

@@ -10,17 +10,10 @@ public class GameAudioManager : MonoBehaviour
 
     [Header("MUSIC")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioClip[] musics1;
-    [SerializeField] private AudioClip menuMusic;
-    [SerializeField] private AudioClip OWMapMusic;
-    [SerializeField] private AudioClip fightMusic;
     [SerializeField] private TempMusicClips[] tempMusicClips;
     private Dictionary<MusicType, AudioClip> musicClips = new Dictionary<MusicType, AudioClip>();
-    private int currentMusic1 = 0;
     private bool musicPaused = false;
     private float musicDefaultVolume;
-    private static bool keepFadingIn;
-    private static bool keepFadingOut;
 
 
     [Header("UI")]
@@ -294,21 +287,7 @@ public class GameAudioManager : MonoBehaviour
 
     public void ChangeMusic(MusicType newMusicType, float duration)
     {
-        return;  // TODO: Remove "return" when adding valid Music (1/2)
         MusicFadeOutThenIn(newMusicType, duration);
-    }
-    private void NextMusic1()
-    {
-        currentMusic1 = ++currentMusic1 % musics1.Length;
-        PlayMusic1();
-    }
-    public void PlayMusic1()
-    {
-        return;  // TODO: Remove "return" when adding valid Music (2/2)
-        musicAudioSource.clip = musics1[currentMusic1];
-        musicAudioSource.loop = true;
-        musicAudioSource.Play();
-        musicPaused = false;
     }
     public void PauseMusic1()
     {

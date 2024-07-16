@@ -7,6 +7,7 @@ public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
+    [SerializeField, Min(0)] public float _numberOfHittableTargets = 1f;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -22,6 +23,9 @@ public class TurretPartAttack : ScriptableObject
     [SerializeField] public string abilityName;
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] public string abilityDescription;
+
+    public float NumberOfHittableTargets => _numberOfHittableTargets;
+
 
     public void InitAsCopy(TurretPartAttack other)
     {

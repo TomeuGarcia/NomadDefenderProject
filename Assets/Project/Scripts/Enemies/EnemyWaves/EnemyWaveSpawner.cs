@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -168,10 +169,9 @@ public class EnemyWaveSpawner : ScriptableObject
         if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
     }
 
-    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
-    {        
-        yield return new WaitForSeconds(delayWaveStart * GameTime.TimeScale);
-
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour)
+    {
+        yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
         if (activeEnemies == 0) // If empty wave, end
@@ -186,7 +186,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
                 for (int i = 0; i < enemyInWave.NumberOfSpawns; ++i)
                 {
-                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
+                    yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(enemyInWave.DelayBeforeSpawn));
                     if (stopForced) break;
                     
                     SpawnEnemy(enemyInWave.EnemyTypeN, spawnTransform);

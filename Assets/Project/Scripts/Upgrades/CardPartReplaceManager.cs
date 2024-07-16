@@ -48,9 +48,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
 
 
-    [Header("SUBTRACT CARD PLAY COST")]
-    [SerializeField, Range(5, 50)] private int playCostSubtractAmountSamePart = 50;
-
+    [Header("UPDATE CARD PLAY COST")]
+    [SerializeField] private CardUpgradeTurretPlayCostConfig _playCostsConfig;
 
     [Header("COMPONENTS")]
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
@@ -440,7 +439,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -663,7 +662,7 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -722,7 +721,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
 
         previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
-            partType, playCostSubtractAmountSamePart);
+            partType, _playCostsConfig);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)

@@ -38,13 +38,15 @@ public class HealthSystem
         spawnArmorAmount = maxArmour;
         armor = maxArmour;
     }
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, out bool hitArmor)
     {
         UpdateType type;
 
-        if (HasArmor())
+        hitArmor = HasArmor();
+
+        if (hitArmor)
         {
-            Debug.Log("Take damage on armor");
+            //Debug.Log("Take damage on armor");
             armor -= damageAmount;
             int remainingDamage = -armor;
             armor = armor > 0 ? armor : 0;
