@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6396937748634050974
+--- !u!114 &-222358884173886194
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,29 +20,31 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ObstacleTileTop_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: c4cfb8a25aecae24e8bb0d4b9cd1c86d,
-    type: 3}
+  m_Name: IBM_Tandy_1000_04
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _METALLICSPECGLOSSMAP
+  - _NORMALMAP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 9652204e1f109454a86aa1e70578c1c6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 7adf8a2e27be292479672c6787ff63e0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -62,11 +64,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 9652204e1f109454a86aa1e70578c1c6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 206ae206b71a80c4884ba7e4ecd40ebe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -75,18 +77,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_66918b35f83b459bbdf2179e9bd0f5e1_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 66b5a34955e1e96439f3844fd4787a9f, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -107,10 +97,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdditionalErrorWireStep2: 0
     - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _Blend: 0
-    - _BrightColorIncrease: 0.03
+    - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -119,45 +109,27 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _ErrorNoiseScale: 0.5
-    - _ErrorNoiseStrength: 2
-    - _ErrorWiresStep: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LerpWireColors: 0
     - _Metallic: 0
-    - _NoiseScale: 0.2
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.2
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _WireColorLerpSpeed: 1
-    - _WireEdge: 0.5
-    - _WireErrorBrightnessIncrease: 0.03
-    - _WireStep: 0.35
-    - _WiresScale: 0.17
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.33383763, g: 0.5849056, b: 0.54927164, a: 1}
-    - _BaseColor1: {r: 0, g: 0, b: 0, a: 1}
-    - _BaseColor2: {r: 0, g: 0.12706968, b: 0.14150941, a: 1}
-    - _BrightErrorColor: {r: 47.937256, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.33383757, g: 0.5849056, b: 0.54927164, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ErrorColor: {r: 4.237095, g: 0.30561182, b: 0, a: 0}
-    - _ErrorOriginOffset: {r: -1000, g: -1000, b: -1000, a: 0}
-    - _ErrorOriginOffset2: {r: -1000, g: -1000, b: -1000, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _WiresColor: {r: 0, g: 0.09411765, b: 0.11372549, a: 1}
-    - _WiresColor2: {r: 0.2089689, g: 1.078732, b: 0.4546066, a: 1}
-    - _WiresOffset: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
