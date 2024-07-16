@@ -59,6 +59,7 @@ public class FacilityUITransitioner : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardSelected();
         yield return new WaitForSeconds(_completedWaitingTime);
 
+        _completedText.gameObject.SetActive(false);
         StartCoroutine(ConsoleLineSpam());
         yield return new WaitForSeconds(_consoleLinesTime);
 

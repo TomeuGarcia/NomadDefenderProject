@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_TestingSurface
-  m_Shader: {fileID: -6465566751694194690, guid: 304e78a47b9a65b4b85574e004e48bc2,
+  m_Name: FlickeringLightMat
+  m_Shader: {fileID: -6465566751694194690, guid: bc368b48c39eab640ba756dbcae4322a,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,11 +38,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO: 1
+    - _Activate: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    m_Colors: []
+    - _Smoothness: 0.5
+    m_Colors:
+    - _BaseColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
+    - _LightColor: {r: 0.8897352, g: 2.7562032, b: 4.030425, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &41719978287584716
+--- !u!114 &8009924081744810974
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

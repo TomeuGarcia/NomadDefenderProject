@@ -7,17 +7,10 @@ using UnityEngine.Events;
 
 public class PointAndClickClickableObject : MonoBehaviour
 {
-
     private Outline _outline;
     private bool _highlighted = false;
     
     [SerializeField] private UnityEvent _onClick = new UnityEvent();
-
-
-    private void Start()
-    {
-        
-    }
 
     private void OnMouseEnter()
     {
