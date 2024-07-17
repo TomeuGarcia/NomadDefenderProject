@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class AFacilityInteractable : MonoBehaviour
 {
-    private FacilityPointAndClickManager _manager;
+    protected FacilityPointAndClickManager _manager;
 
     [Header("PARAMETERS")]
     [SerializeField] protected float _duration;

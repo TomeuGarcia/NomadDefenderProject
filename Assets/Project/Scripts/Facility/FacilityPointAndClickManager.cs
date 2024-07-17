@@ -9,6 +9,9 @@ public class FacilityPointAndClickManager : MonoBehaviour
 
     [SerializeField] private List<AFacilityInteractable> _interactables = new();
 
+    [HideInInspector] public bool IsMultiSocketOn = false;
+    [HideInInspector] public bool IsPCOn = false;
+
     private void Awake()
     {
         foreach (AFacilityInteractable aFacilityInteractable in _interactables)

@@ -8,6 +8,7 @@ using UnityEngine;
 public class FIMultiSocketSwitch : AFacilityInteractable
 {
     [Header("REFERENCES")]
+    [SerializeField] private FIComputerButton _computerButton;
     [SerializeField] private Transform _button;
     [SerializeField] private Transform _buttonMR;
     [SerializeField] private Light _multiSocketSwitchLight;
@@ -22,13 +23,13 @@ public class FIMultiSocketSwitch : AFacilityInteractable
     [SerializeField] private float _buttonSwitchRotation;
     [SerializeField] private Ease _buttonEase;
 
-    private Material _buttonMaterial;
+    private Material _buttonMat;
     private Material _roomLightMat;
     private bool _on = false;
 
     protected override void DoInit()
     {
-        _buttonMaterial = _buttonMR.GetComponent<MeshRenderer>().material;
+        _buttonMat = _buttonMR.GetComponent<MeshRenderer>().material;
         _roomLightMat = _roomLightMR.GetComponent<MeshRenderer>().materials[0];
     }
 
@@ -36,14 +37,17 @@ public class FIMultiSocketSwitch : AFacilityInteractable
     {
         if (_on) yield return TurnOff();
         else yield return TurnOn();
+
+        yield return new WaitForSeconds(_duration);
     }
 
     private IEnumerator TurnOn()
     {
+        _on = true;
         _multiSocketSwitchLight.color = _onLightColor;
         _roomLightMat.DOFloat(1.0f, "_Activate", _lightMatDuration);
 
-        _buttonMaterial.DOFloat(1.0f, "_Activate", _buttonSwitchDuration);
+        _buttonMat.DOFloat(1.0f, "_Activate", _buttonSwitchDuration);
         _button.DOLocalRotate(new Vector3(0.0f, 0.0f, _buttonSwitchRotation), _buttonSwitchDuration)
             .SetEase(_buttonEase);
 
@@ -52,15 +56,19 @@ public class FIMultiSocketSwitch : AFacilityInteractable
             light.gameObject.SetActive(true);
         }
 
-        yield return _duration;
+        _computerButton.ChangeElectricityState(true);
+
+        _manager.IsMultiSocketOn = true;
+        yield return null;
     }
 
     private IEnumerator TurnOff()
     {
+        _on = false;
         _multiSocketSwitchLight.color = _offLightColor;
         _roomLightMat.DOFloat(0.0f, "_Activate", _lightMatDuration);
 
-        _buttonMaterial.DOFloat(0.0f, "_Activate", _buttonSwitchDuration);
+        _buttonMat.DOFloat(0.0f, "_Activate", _buttonSwitchDuration);
         _button.DOLocalRotate(new Vector3(0.0f, 0.0f, -_buttonSwitchRotation), _buttonSwitchDuration)
             .SetEase(_buttonEase);
 
@@ -69,6 +77,9 @@ public class FIMultiSocketSwitch : AFacilityInteractable
             light.gameObject.SetActive(false);
         }
 
-        yield return _duration;
+        _computerButton.ChangeElectricityState(false);
+
+        _manager.IsMultiSocketOn = false;
+        yield return null;
     }
 }
