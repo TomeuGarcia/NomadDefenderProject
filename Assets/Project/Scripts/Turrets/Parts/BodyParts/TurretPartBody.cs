@@ -8,8 +8,8 @@ using TMPro;
 
 public class TurretPartBody : ScriptableObject
 {
-    public static int[] damagePerLvl = new int[] {12, 36, 72, 120, 180   };
-    public static float[] cadencePerLvl = new float[] { 4f, 1.33333f, 0.666666f, 0.4f, 0.26666f };
+    public static int[] damagePerLvl = new int[] {8, 20, 60, 120, 180   };
+    public static float[] cadencePerLvl = new float[] { 4, 1.33333f, 0.5f, 0.4f, 0.26666f };
     
     public enum BodyType
     {
