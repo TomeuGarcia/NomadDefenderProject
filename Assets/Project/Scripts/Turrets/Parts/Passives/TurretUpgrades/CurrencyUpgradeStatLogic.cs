@@ -95,7 +95,7 @@ public class CurrencyUpgradeStatLogic : MonoBehaviour
 
     private void UpgradeLowestStat()
     {
-        TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
+        TurretUpgradeType lowestStat = owner.Upgrader.GetRandomStatUpgradeType(false);
 
         if (lowestStat == TurretUpgradeType.NONE) return;
 

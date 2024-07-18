@@ -57,7 +57,7 @@ public class SelfHurtUpgradeStatLogic : MonoBehaviour
 
         await Task.Delay(300);
 
-        TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
+        TurretUpgradeType lowestStat = owner.Upgrader.GetRandomStatUpgradeType(false);
         if (lowestStat == TurretUpgradeType.NONE) return;
 
         owner.Upgrader.FreeTurretUpgrade(lowestStat);
