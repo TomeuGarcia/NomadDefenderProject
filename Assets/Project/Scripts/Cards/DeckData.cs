@@ -129,7 +129,6 @@ public class DeckData : ScriptableObject
         }
         else if (card.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
         {
-            Debug.Log(card.name);
             SupportBuildingCard supportCard = card as SupportBuildingCard;
             AddToSavedSupportCardsComponents(supportCard);
         }

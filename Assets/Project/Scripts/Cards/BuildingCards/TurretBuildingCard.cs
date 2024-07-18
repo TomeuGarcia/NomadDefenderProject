@@ -139,9 +139,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         turretStats.playCost = turretCardParts.GetCardCost();
 
-        turretStats.damage = turretCardParts.turretPartBody.Damage;
-        turretStats.range = turretCardParts.turretPartBase.Range;
-        turretStats.cadence = turretCardParts.turretPartBody.Cadence;
+        turretStats.damage = turretCardParts.turretPartBody.BaseDamage;
+        turretStats.range = turretCardParts.turretPartBase.BaseRange;
+        turretStats.cadence = turretCardParts.turretPartBody.BaseShotsPerSecondInverted;
     }
 
     public override void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter)
@@ -220,7 +220,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         return turretCardParts.turretPartBase == newTurretPartBase &&
                turretCardParts.turretPassiveBase == newTurretPassiveBase &&
-               turretCardParts.turretPartBase.rangeLvl == newTurretPartBase.rangeLvl;
+               turretCardParts.turretPartBase.BaseRange == newTurretPartBase.BaseRange;
     }
 
     protected override void SetupCardInfo()

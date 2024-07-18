@@ -26,9 +26,9 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _abilityUpgradeStat.Init(this, OnUpgradeSupportButtonClicked, OnSupportButtonHovered, OnSupportButtonUnhovered);
     }
 
-    public override void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public override void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        base.InitSupport(newRangeLvl, newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
+        base.InitSupport(newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
         supportIcon.sprite = abilitySprite;
         supportIcon.color = abilityColor;
 

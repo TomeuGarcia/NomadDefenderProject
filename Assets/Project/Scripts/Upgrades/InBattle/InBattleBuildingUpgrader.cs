@@ -182,12 +182,12 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public virtual void InitTurret(TurretBuilding turret, int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter, 
+    public virtual void InitTurret(TurretBuilding turret, CurrencyCounter newCurrencyCounter, 
         bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
-        attackLvl = newAttackLvl;
-        cadenceLvl = newCadenceLvl;
-        rangeLvl = newRangeLvl;
+        attackLvl = 0;
+        cadenceLvl = 0;
+        rangeLvl = 0;
 
         currencyCounter = newCurrencyCounter;
         currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
@@ -195,10 +195,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        rangeLvl = newRangeLvl;
-
+        rangeLvl = 0;
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;

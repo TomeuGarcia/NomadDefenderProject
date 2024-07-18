@@ -18,8 +18,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     private TurretBuilding _turret;
     private string DamageStatValueText => _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl);
     private string NextDamageStatValueText => IsStatMaxed(attackLvl) ? "" : _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl+1);
-    private string FireRateStatValueText => _turret.TurretCardParts.turretPartBody.GetCadenceByLevelText(cadenceLvl);
-    private string NextFireRateStatValueText => IsStatMaxed(cadenceLvl) ? "" : _turret.TurretCardParts.turretPartBody.GetCadenceByLevelText(cadenceLvl+1);
+    private string FireRateStatValueText => _turret.TurretCardParts.turretPartBody.GetShotsPerSecondByLevelText(cadenceLvl);
+    private string NextFireRateStatValueText => IsStatMaxed(cadenceLvl) ? "" : _turret.TurretCardParts.turretPartBody.GetShotsPerSecondByLevelText(cadenceLvl+1);
     private string RangeStatValueText => _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl);
     private string NextRangeStatValueText => IsStatMaxed(rangeLvl) ? "" : _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl+1);
 
@@ -33,10 +33,10 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
-    public override void InitTurret(TurretBuilding turret, int newAttackLvl, int newCadenceLvl, int newRangeLvl, CurrencyCounter newCurrencyCounter,
+    public override void InitTurret(TurretBuilding turret, CurrencyCounter newCurrencyCounter,
         bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
-        base.InitTurret(turret, newAttackLvl, newCadenceLvl, newRangeLvl, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
+        base.InitTurret(turret, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
 
         _turret = turret;
         maxLevels = _turret.CardLevel;

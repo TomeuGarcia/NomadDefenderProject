@@ -181,7 +181,7 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitTurret(this, turretPartBody.damageLvl, turretPartBody.cadenceLvl, turretPartBase.rangeLvl, currencyCounter,
+        Upgrader.InitTurret(this, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
@@ -229,13 +229,13 @@ public class TurretBuilding : RangeBuilding
         switch(upgradeType)
         {
             case TurretUpgradeType.ATTACK:
-                stats.damage = TurretPartBody.damagePerLvl[newStatLevel - 1];
+                stats.damage = TurretCardParts.turretPartBody.GetDamageByLevel(newStatLevel);
                 break;
             case TurretUpgradeType.CADENCE:
-                stats.cadence = TurretPartBody.cadencePerLvl[newStatLevel - 1];
+                stats.cadence = TurretCardParts.turretPartBody.GetShotsPerSecondInvertedByLevel(newStatLevel);
                 break;
             case TurretUpgradeType.RANGE:
-                stats.range = TurretPartBase.rangePerLvl[newStatLevel - 1];
+                stats.range = TurretCardParts.turretPartBase.GetRangeByLevel(newStatLevel);
                 UpdateRange();
                 break;
         }

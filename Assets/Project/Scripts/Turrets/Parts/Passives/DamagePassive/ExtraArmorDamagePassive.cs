@@ -9,11 +9,11 @@ public class ExtraArmorDamagePassive : BaseDamagePassive
 {
     public override int PassiveDamageModifier(int damage, HealthSystem healthSystem)
     {
-        if (!healthSystem.HasArmor())
+        if (healthSystem.HasArmor())
         {
-            return damage;
+            damage *= 2;
         }
 
-        return (int)((float)damage * 2.0f);
+        return damage;
     }
 }

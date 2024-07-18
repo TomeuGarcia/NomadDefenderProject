@@ -7,12 +7,9 @@ using UnityEngine;
     menuName = SOAssetPaths.TURRET_PARTS_BASES + "TurretPartBase")]
 public class TurretPartBase : ScriptableObject
 {
-    public static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };
-
-
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
-    [SerializeField, Range(1, 5), Tooltip("{ 1, 2, 3, 4, 5 }")] public int rangeLvl;
+    [SerializeField] private CardStatConfig _radiusRangeStat;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -36,13 +33,9 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
 
-    public int Range => GetRangeByLevel(rangeLvl);
-    public string RangeText => GetRangeByLevelText(rangeLvl);
+    public float BaseRange => GetRangeByLevel(0);
+    public string BaseRangeText => GetRangeByLevelText(0);
 
-    public float GetRangePer1()
-    {
-        return (float)rangeLvl / (float)5;
-    }
 
     public bool HasAbilitySprite()
     {
@@ -53,7 +46,6 @@ public class TurretPartBase : ScriptableObject
     public void InitAsCopy(TurretPartBase other)
     {
         this.cost = other.cost;
-        this.rangeLvl = other.rangeLvl;
 
         this.prefab = other.prefab;
 
@@ -106,15 +98,15 @@ public class TurretPartBase : ScriptableObject
 
     public void SetStatTexts(TMP_Text rangeText)
     {
-        rangeText.text = RangeText;
+        rangeText.text = BaseRangeText;
     }
 
-    public int GetRangeByLevel(int level)
+    public float GetRangeByLevel(int level)
     {
-        return rangePerLvl[level - 1];
+        return _radiusRangeStat.ComputeValueByLevel(level);
     }
     public string GetRangeByLevelText(int level)
     {
-        return GetRangeByLevel(level).ToString();
+        return GetRangeByLevel(level).ToString("0.0").Replace(',', '.');
     }
 }
