@@ -21,6 +21,8 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private Light _screenLight;
     [SerializeField] private Transform _backgroundMap;
     [SerializeField] private Transform _bootUpTextParent;
+    [SerializeField] private TextDecoder _engageDecoder;
+    [SerializeField] private GameObject _titleTextShadow;
     [SerializeField] private List<BootUpFragment> _bootUpTexts = new();
 
     [Header("PARAMETERS")]
@@ -38,6 +40,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private float _lastBlackScreenTime;
     [SerializeField] private Vector3 _deformedMapScale;
     [SerializeField] private float _deformedMapTime;
+    [SerializeField] private float _engageTime;
 
     private bool _on = false;
 
@@ -64,6 +67,7 @@ public class FIComputerButton : AFacilityInteractable
     }
     private IEnumerator TurnOn()
     {
+        _titleTextShadow.gameObject.SetActive(false);
         _on = true;
         yield return MoveButton();
 
@@ -106,9 +110,18 @@ public class FIComputerButton : AFacilityInteractable
         _blueScreen.gameObject.SetActive(false);
         _screenLight.color = _defaultScreenLightColor;
         yield return new WaitForSeconds(_lastBlackScreenTime);
-
         _blackScreen.gameObject.SetActive(false);
+
+        _engageDecoder.ClearText();
+        _engageDecoder.gameObject.SetActive(true);
+        _engageDecoder.Activate();
+        _engageDecoder.NextLine();
+        _blueScreen.gameObject.SetActive(true);
+        yield return new WaitForSeconds(_engageTime);
+        _blueScreen.gameObject.SetActive(false);
+
         _backgroundMap.localScale = _deformedMapScale;
+        _titleTextShadow.gameObject.SetActive(true);
         yield return new WaitForSeconds(_deformedMapTime);
         _backgroundMap.localScale = Vector3.one;
 
@@ -121,6 +134,7 @@ public class FIComputerButton : AFacilityInteractable
         yield return MoveButton();
 
         _buttonLight.color = _buttonLightOffColor;
+        _engageDecoder.gameObject.SetActive(false);
         _screenParent.gameObject.SetActive(false);
 
         yield return null;
@@ -138,5 +152,8 @@ public class FIComputerButton : AFacilityInteractable
     {
         _buttonLight.gameObject.SetActive(state);
         _buttonMat.SetFloat("_Activate", state ? 1 : 0);
+
+        _buttonLight.color = _buttonLightOffColor;
+        _screenParent.gameObject.SetActive(false);
     }
 }
