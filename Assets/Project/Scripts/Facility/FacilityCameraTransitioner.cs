@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class FacilityCameraTransitioner : MonoBehaviour
+public class FacilityCameraTransitioner : AFacilityInteractable
 {
-    private bool _canTransition = true;
-
     [Header("REFERENCES")]
     [SerializeField] private Transform _targetTransform;
     [SerializeField] private CinemachineVirtualCamera _vcam;
@@ -27,22 +25,18 @@ public class FacilityCameraTransitioner : MonoBehaviour
     [SerializeField] private Ease _verticalEase;
     [SerializeField] private Ease _rotationEase;
 
-    //TODO - Delete
-    void Update()
+    protected override IEnumerator DoInteract()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(_manager.IsPCOn)
         {
-            if(_canTransition)
-            {
-                TransitionToComputer();
-            }
+            TransitionToComputer();
+
+            yield return new WaitForSeconds(_duration);
         }
     }
 
     public void TransitionToComputer()
     {
-        _canTransition = false;
-
         DOTween.To(() => _vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain,
             x => _vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = x,
             0.0f,
