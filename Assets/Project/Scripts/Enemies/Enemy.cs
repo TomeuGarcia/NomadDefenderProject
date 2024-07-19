@@ -5,16 +5,6 @@ using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { 
-        BASIC, // 0
-        FAST,  // 1
-        TANK,BASIC_ARMORED, // 2
-        FAST_ARMORED,TANK_ARMORED, // 3
-        ARMOR_TRUCK,  // 4
-        HEALTH_TRUCK, // 5
-        COUNT
-    }
-
     [Header("Attack")]
     [SerializeField] private EnemyAttackGeneralConfig _attackGeneralConfig;
     
