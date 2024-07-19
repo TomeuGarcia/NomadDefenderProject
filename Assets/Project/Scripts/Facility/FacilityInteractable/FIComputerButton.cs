@@ -110,7 +110,6 @@ public class FIComputerButton : AFacilityInteractable
         _bootUpTextParent.localScale = _deformedTextScale;
         yield return new WaitForSeconds(_deformedTextTime);
 
-        //Reset the texts
         foreach (BootUpFragment bootUpFragment in _bootUpTexts)
         {
             foreach (GameObject text in bootUpFragment.TextList)
@@ -165,6 +164,7 @@ public class FIComputerButton : AFacilityInteractable
         }
 
         _titleDecoder.ResetDecoder();
+        _titleDecoder.StopAllCoroutines();
 
         _flickeringLightGroup.Deactivate();
 

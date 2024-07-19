@@ -8,6 +8,7 @@ public abstract class AFacilityInteractable : MonoBehaviour
     protected FacilityPointAndClickManager _manager;
 
     [Header("PARAMETERS")]
+    [SerializeField] protected bool _needsPermissionToInteract = true;
     [SerializeField] protected float _duration;
 
     public void Init(FacilityPointAndClickManager manager)
@@ -20,7 +21,7 @@ public abstract class AFacilityInteractable : MonoBehaviour
 
     public void Interact()
     {
-        if(_manager.CanInteract)
+        if(!_needsPermissionToInteract || _manager.CanInteract)
         {
             _manager.DisableInteractions();
             StartCoroutine(InteractionCoroutine());
