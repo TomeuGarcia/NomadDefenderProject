@@ -83,7 +83,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     protected override void InitStatsFromTurretParts()
     {
         supportBuildingStats.playCost = supportCardParts.GetCardCost();
-        supportBuildingStats.range = supportCardParts.turretPartBase.Range;
+        supportBuildingStats.range = supportCardParts.turretPartBase.BaseRange;
     }
 
     protected override void InitVisuals()

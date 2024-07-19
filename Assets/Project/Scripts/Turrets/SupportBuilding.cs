@@ -55,7 +55,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitSupport(turretPartBase.rangeLvl, currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -83,9 +83,8 @@ public class SupportBuilding : RangeBuilding
     }
     public void UpgradeRangeIncrementingLevel()
     {
-        int newStatLevel = turretPartBase.rangeLvl + 1;
-
-        stats.range = TurretPartBase.rangePerLvl[newStatLevel - 1];
+        int newStatLevel = 1; // IDK - Tomeu
+        stats.range = turretPartBase.GetRangeByLevel(newStatLevel);
         UpdateRange();
     }
 

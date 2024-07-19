@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CardsLibrary", menuName = "Cards/CardsLibrary")]
+[CreateAssetMenu(fileName = "CardsLibrary", 
+    menuName = SOAssetPaths.CARDS_LIBRARIES + "CardsLibrary")]
 public class CardsLibrary : ScriptableObject
 {
     private CardsLibraryContent content;

@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "DeckData", menuName = "Cards/DeckData")]
+[CreateAssetMenu(fileName = "DeckData", 
+    menuName = SOAssetPaths.CARDS_DECKS + "DeckData")]
 public class DeckData : ScriptableObject
 {
     private List<BuildingCard> cards;
@@ -128,7 +129,6 @@ public class DeckData : ScriptableObject
         }
         else if (card.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
         {
-            Debug.Log(card.name);
             SupportBuildingCard supportCard = card as SupportBuildingCard;
             AddToSavedSupportCardsComponents(supportCard);
         }

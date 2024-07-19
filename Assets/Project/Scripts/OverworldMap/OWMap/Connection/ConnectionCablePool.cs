@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ConnectionCableLibrary", menuName = "Map/ConnectionCableLibrary")]
+[CreateAssetMenu(fileName = "ConnectionCableLibrary", 
+    menuName = SOAssetPaths.MAP + "ConnectionCableLibrary")]
 public class ConnectionCablePool : ScriptableObject
 {
     [System.Serializable]

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FadingTextConfig_NAME", menuName = "UI/FadingTexts/FadingTextConfig")]
+[CreateAssetMenu(fileName = "FadingTextConfig_NAME", 
+    menuName = SOAssetPaths.UI_FADING_TEXTS + "FadingTextConfig")]
 public class FadingTextConfig : ScriptableObject
 {
     [Header("DEFAULTS")]

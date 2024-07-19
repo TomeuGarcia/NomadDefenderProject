@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FurthestTargetingPassive", menuName = "TurretPassives/FurthestTargetingPassive")]
+[CreateAssetMenu(fileName = "FurthestTargetingPassive", 
+    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "FurthestTargetingPassive")]
 public class FurthestTargetingPassive : BaseTargetingPassive
 {
     protected override int SortingFunction(Enemy e1, Enemy e2)

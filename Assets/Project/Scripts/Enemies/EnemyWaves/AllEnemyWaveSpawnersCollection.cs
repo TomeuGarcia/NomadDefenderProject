@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "AllEnemyWaveSpawnersCollection", menuName = "Enemies/AllEnemyWaveSpawnersCollection")]
+[CreateAssetMenu(fileName = "AllEnemyWaveSpawnersCollection", 
+    menuName = SOAssetPaths.ENEMY_WAVES + "AllEnemyWaveSpawnersCollection")]
 public class AllEnemyWaveSpawnersCollection : ScriptableObject
 {
     [Expandable] [SerializeField] private EnemyWaveSpawner[] _allEnemyWaveSpawners;

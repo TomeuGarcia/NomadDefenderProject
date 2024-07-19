@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "CardUpgradeTurretPlayCostConfig", menuName = "Cards/Cost/CardUpgradeTurretPlayCostConfig")]
+[CreateAssetMenu(fileName = "CardUpgradeTurretPlayCostConfig", 
+    menuName = SOAssetPaths.CARDS_COST + "CardUpgradeTurretPlayCostConfig")]
 public class CardUpgradeTurretPlayCostConfig : ScriptableObject
 {
     [Header("CONFIGURATION")]
@@ -28,7 +29,7 @@ public class CardUpgradeTurretPlayCostConfig : ScriptableObject
                 TurretPartBody body = turretCard.turretCardParts.turretPartBody;
                 TurretPartAttack attack = turretCard.turretCardParts.turretPartAttack;
                 TurretCardPlayCostCalculator.InputData turretData = new TurretCardPlayCostCalculator.InputData(
-                    body.Damage, body.CadenceInverted, attack.NumberOfHittableTargets);
+                    body.BaseDamage, body.BaseShotsPerSecond, attack.NumberOfHittableTargets);
                 return _calculator.ComputePlayCost(turretData) - turretCard.GetCardPlayCost();
             }
 

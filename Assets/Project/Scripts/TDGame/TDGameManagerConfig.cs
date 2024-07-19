@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TDGameManagerConfig", menuName = "TDGame/TDGameManagerConfig")]
+[CreateAssetMenu(fileName = "TDGameManagerConfig", 
+    menuName = SOAssetPaths.TD_GAME + "TDGameManagerConfig")]
 public class TDGameManagerConfig : ScriptableObject
 {
     [Header("LOCATIONS MAX HEALTH")]
