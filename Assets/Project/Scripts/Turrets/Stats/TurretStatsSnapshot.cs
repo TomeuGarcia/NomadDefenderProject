@@ -19,4 +19,17 @@ public class TurretStatsSnapshot
         ShotsPerSecond = shotsPerSecond;
         RadiusRange = radiusRange;
     }
+
+    public bool HasDamage()
+    {
+        return Damage != 0;
+    }
+    public bool HasShotsPerSecond()
+    {
+        return ShotsPerSecond != 0;
+    }
+    public bool HasRadiusRange()
+    {
+        return RadiusRange != 0;
+    }
 }

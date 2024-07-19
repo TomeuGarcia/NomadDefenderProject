@@ -40,7 +40,7 @@ public class CardsLibrary : ScriptableObject
     public TurretCardParts GetConsumableTurretCardParts(TurretCardParts holderParts)
     {
         TurretCardParts parts = ScriptableObject.CreateInstance<TurretCardParts>();
-        parts.Init(holderParts);
+        parts.InitCopyingReferences(holderParts);
 
         return parts;
     }

@@ -137,7 +137,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
 
         turretStats.playCost = turretCardParts.GetCardCost();
-
         turretStats.damage = turretCardParts.turretPartBody.BaseDamage;
         turretStats.range = turretCardParts.turretPartBase.BaseRange;
         turretStats.cadence = turretCardParts.turretPartBody.BaseShotsPerSecondInverted;
@@ -166,7 +165,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public void ResetParts(TurretCardParts turretCardParts)
     {
         this.turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
-        this.turretCardParts.Init(turretCardParts);
+        this.turretCardParts.InitCopyingReferences(turretCardParts);
 
         Init();
     }

@@ -9,7 +9,7 @@ public class TurretBuilding : RangeBuilding
     {
         public int playCost;
         public int damage;
-        [SerializeField, Min(1)] public float range;
+        public float range;
         public float cadence;
     }
 

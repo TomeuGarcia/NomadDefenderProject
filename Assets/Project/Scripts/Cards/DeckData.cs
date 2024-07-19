@@ -85,7 +85,7 @@ public class DeckData : ScriptableObject
         cards.Add(turretCard);
 
         TurretCardParts turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
-        turretCardParts.Init(turretCard.turretCardParts);
+        turretCardParts.InitCopyingReferences(turretCard.turretCardParts);
 
         starterTurretCardsComponents.Add(turretCardParts);
     }
@@ -141,7 +141,7 @@ public class DeckData : ScriptableObject
     private void AddToSavedTurretCardsComponents(TurretBuildingCard turretCard)
     {
         TurretCardParts turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
-        turretCardParts.Init(turretCard.turretCardParts);
+        turretCardParts.InitCopyingReferences(turretCard.turretCardParts);
 
         savedTurretCardsComponents.Add(turretCardParts);
     }

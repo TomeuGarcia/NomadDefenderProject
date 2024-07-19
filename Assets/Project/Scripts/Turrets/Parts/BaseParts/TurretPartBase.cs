@@ -10,6 +10,7 @@ public class TurretPartBase : ScriptableObject
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
     [SerializeField] private CardStatConfig _radiusRangeStat;
+    public CardStatConfig RadiusRangeStat => _radiusRangeStat;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;

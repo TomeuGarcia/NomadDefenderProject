@@ -22,6 +22,8 @@ public class TurretPartBody : ScriptableObject
     [SerializeField, Min(0)] public int cost;
     [SerializeField] private CardStatConfig _damageStat;
     [SerializeField] private CardStatConfig _shotsPerSecondStat;
+    public CardStatConfig DamageStat => _damageStat;
+    public CardStatConfig ShotsPerSecondStat => _shotsPerSecondStat;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
