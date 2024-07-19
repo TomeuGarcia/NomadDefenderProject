@@ -43,11 +43,13 @@ public class TurretPartBody : ScriptableObject
     public string BaseShotsPerSecondText => GetShotsPerSecondByLevelText(0);
     public float BaseShotsPerSecondInverted => GetShotsPerSecondInvertedByLevel(0);
 
-
-
     public void InitAsCopy(TurretPartBody other)
     {
         this.cost = other.cost;
+        
+        this._damageStat = other._damageStat;
+        this._shotsPerSecondStat = other._shotsPerSecondStat;
+
         this.prefab = other.prefab;
         this.materialTextureMap = other.materialTextureMap;
 
@@ -108,6 +110,6 @@ public class TurretPartBody : ScriptableObject
     }
     public float GetShotsPerSecondInvertedByLevel(int level)
     {
-        return 1f / _shotsPerSecondStat.ComputeValueByLevel(level);
+        return 1f / GetShotsPerSecondByLevel(level);
     }
 }

@@ -71,7 +71,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     protected override void AwakeInit(CardBuildingType cardBuildingType)
     {
         base.AwakeInit(cardBuildingType);
-        SetupCardInfo();
+        SetupCardInfo();        
     }
 
     protected override void GetMaterialsRefs() 
@@ -125,7 +125,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         UpdateCardLevelText();
     }
 
-
     private void SetAttackIcon(TurretPartAttack turretPartAttack)
     {
         attackImage.sprite = turretPartAttack.abilitySprite;
@@ -166,7 +165,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     public void ResetParts(TurretCardParts turretCardParts)
     {
-        this.turretCardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+        this.turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
         this.turretCardParts.Init(turretCardParts);
 
         Init();
@@ -213,7 +212,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         turretCardParts.turretPassiveBase = newTurretPassiveBase;
         turretCardParts.turretPassiveBase.cost = 0;
-
+        
         Init();
     }
     public bool HasSameBasePart(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
@@ -490,7 +489,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
         // PLAY COST
-        turretCardParts = new TurretCardParts();
+        turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
         turretStats.playCost = originalCard.turretStats.playCost;
 
         turretCardParts.turretPartAttack = newTurretPartAttack;

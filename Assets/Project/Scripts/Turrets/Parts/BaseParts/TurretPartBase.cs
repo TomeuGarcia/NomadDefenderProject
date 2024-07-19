@@ -32,7 +32,6 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade2Description;
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
-
     public float BaseRange => GetRangeByLevel(0);
     public string BaseRangeText => GetRangeByLevelText(0);
 
@@ -46,6 +45,7 @@ public class TurretPartBase : ScriptableObject
     public void InitAsCopy(TurretPartBase other)
     {
         this.cost = other.cost;
+        this._radiusRangeStat = other._radiusRangeStat;
 
         this.prefab = other.prefab;
 

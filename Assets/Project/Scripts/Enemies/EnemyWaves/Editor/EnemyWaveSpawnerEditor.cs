@@ -69,8 +69,8 @@ public class EnemyWaveSpawnerEditor : Editor
             EnemyWave enemyWave = _enemyWaveSpawnerInspected.EnemyWaves[i];
             int waveCurrency = 0;
             foreach (EnemyInWave enemyInWave in enemyWave.enemiesInWave)
-            {
-                waveCurrency += enemyInWave.EnemyType.BaseStats.CurrencyDrop;
+            {                
+                waveCurrency += enemyInWave.EnemyType.BaseStats.CurrencyDrop * enemyInWave.numberOfSpawns;
             }
 
             EditorGUILayout.LabelField($" {i}. {waveCurrency} ", _header2LabelStyle);

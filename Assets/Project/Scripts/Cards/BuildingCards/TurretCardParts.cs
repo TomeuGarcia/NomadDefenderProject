@@ -16,17 +16,6 @@ public class TurretCardParts : GroupedCardParts
         this.cardLevel = cardLevel;
     }
 
-    public void Init(int cardLevel, TurretPartAttack turretPartAttack, TurretPartBody turretPartBody,
-                     TurretPartBase turretPartBase, TurretPassiveBase turretPassiveBase)
-    {
-        this.turretPartAttack = turretPartAttack;
-        this.turretPartBody = turretPartBody;
-        this.turretPartBase = turretPartBase;
-        this.turretPassiveBase = turretPassiveBase;
-        this.cardCost = GetCostCombinedParts();
-        this.cardLevel = cardLevel;
-    }
-
     public void Init(TurretCardParts other)
     {
         this.turretPartAttack = other.turretPartAttack;
@@ -44,7 +33,6 @@ public class TurretCardParts : GroupedCardParts
     public TurretPassiveBase turretPassiveBase;
     [Range(1, 3)] public int cardLevel = 1;
     public const int MAX_CARD_LEVEL = 3;
-
 
 
     private void OnValidate()

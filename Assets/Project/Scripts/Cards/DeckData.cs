@@ -23,20 +23,20 @@ public class DeckData : ScriptableObject
         {
             TurretCardParts otherComponents = other.starterTurretCardsComponents[i];
 
-            TurretPartAttack turretPartAttack = ScriptableObject.Instantiate(otherComponents.turretPartAttack);
+            TurretPartAttack turretPartAttack = ScriptableObject.CreateInstance<TurretPartAttack>();
             turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
             
-            TurretPartBody turretPartBody = ScriptableObject.Instantiate(otherComponents.turretPartBody);
+            TurretPartBody turretPartBody = ScriptableObject.CreateInstance<TurretPartBody>();
             turretPartBody.InitAsCopy(otherComponents.turretPartBody);
             
-            TurretPartBase turretPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
+            TurretPartBase turretPartBase = ScriptableObject.CreateInstance<TurretPartBase>();
             turretPartBase.InitAsCopy(otherComponents.turretPartBase);
             
-            TurretPassiveBase turretPassiveBase = ScriptableObject.Instantiate(otherComponents.turretPassiveBase);
+            TurretPassiveBase turretPassiveBase = ScriptableObject.CreateInstance<TurretPassiveBase>();
             turretPassiveBase.InitAsCopy(otherComponents.turretPassiveBase);
 
 
-            TurretCardParts turretCardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+            TurretCardParts turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
             turretCardParts.Init(otherComponents.cardLevel, turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, otherComponents.cardCost);
             starterTurretCardsComponents.Add(turretCardParts);
         }
@@ -46,11 +46,11 @@ public class DeckData : ScriptableObject
         {
             SupportCardParts otherComponents = other.starterSupportCardsComponents[i];
 
-            TurretPartBase supportPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
+            TurretPartBase supportPartBase = ScriptableObject.CreateInstance<TurretPartBase>();
             supportPartBase.InitAsCopy(otherComponents.turretPartBase);
 
 
-            SupportCardParts supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
+            SupportCardParts supportCardParts = ScriptableObject.CreateInstance<SupportCardParts>();
             supportCardParts.Init(supportPartBase, otherComponents.cardCost);
             starterSupportCardsComponents.Add(supportCardParts);
         }
@@ -84,7 +84,7 @@ public class DeckData : ScriptableObject
     {
         cards.Add(turretCard);
 
-        TurretCardParts turretCardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+        TurretCardParts turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
         turretCardParts.Init(turretCard.turretCardParts);
 
         starterTurretCardsComponents.Add(turretCardParts);
@@ -93,7 +93,7 @@ public class DeckData : ScriptableObject
     {
         cards.Add(supportCard);
 
-        SupportCardParts supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
+        SupportCardParts supportCardParts = ScriptableObject.CreateInstance<SupportCardParts>();
         supportCardParts.Init(supportCard.supportCardParts);
 
         starterSupportCardsComponents.Add(supportCardParts);
@@ -140,7 +140,7 @@ public class DeckData : ScriptableObject
     }
     private void AddToSavedTurretCardsComponents(TurretBuildingCard turretCard)
     {
-        TurretCardParts turretCardParts = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
+        TurretCardParts turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
         turretCardParts.Init(turretCard.turretCardParts);
 
         savedTurretCardsComponents.Add(turretCardParts);
@@ -148,7 +148,7 @@ public class DeckData : ScriptableObject
 
     private void AddToSavedSupportCardsComponents(SupportBuildingCard supportCard)
     {
-        SupportCardParts supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
+        SupportCardParts supportCardParts = ScriptableObject.CreateInstance<SupportCardParts>();
         supportCardParts.Init(supportCard.supportCardParts);
 
         savedSupportCardsComponents.Add(supportCardParts);
