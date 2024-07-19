@@ -53,7 +53,9 @@ public class TurretCardPlayCostCalculator : ScriptableObject
 
         float playCost = earningsPerSecond * returnOnInvestmentPeriod * _pricingFactor;
 
-        return (int)playCost;
+        int roundedPlayCost = Mathf.RoundToInt(playCost / 10f) * 10;
+
+        return roundedPlayCost;
     }
 
 
