@@ -12,13 +12,23 @@ public class CardStatConfig : ScriptableObject
 
     [Header("UPGRADE")]
     [Expandable] [SerializeField] private CardStatUpgradeConfig _upgradeConfig;
-    [SerializeField, Min(0)] private int _startingLevel = 0;
+
+    [Space(40)]
+    [ShowNonSerializedField] private float _valueLevel1;
+    [ShowNonSerializedField] private float _valueLevel2;
+    [ShowNonSerializedField] private float _valueLevel3;
 
 
-
-    public float ComputeValueByLevel(int upgradeLevel, float baseValueBonus = 0f)
+    private void OnValidate()
     {
-        return _upgradeConfig.ComputeValue(_baseValue + baseValueBonus, _startingLevel + upgradeLevel);
+        _valueLevel1 = ComputeValueByLevel(1);
+        _valueLevel2 = ComputeValueByLevel(2);
+        _valueLevel3 = ComputeValueByLevel(3);
+    }
+
+    public float ComputeValueByLevel(int upgradeLevel, float valueBonus = 0f)
+    {
+        return _upgradeConfig.ComputeValue(_baseValue, upgradeLevel) + valueBonus;
     }
 
 }
