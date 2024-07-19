@@ -16,7 +16,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] private TMP_Text costText;
     [SerializeField] private Image costCurrencyImage;
 
-    [SerializeField] private List<int> upgradeCosts = new List<int>();
+    [SerializeField] private CardStatUpgradeCostsConfig _upgradeCostsConfig;
+    private int CurrentUpgradeCosts => _upgradeCostsConfig.GetCostByLevel(currentBuildingLevel+1);
     
     [SerializeField] private Color32 disalbedTextColor;
 
@@ -101,7 +102,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         IsWindowOpen = false;
         hasGameFinished = false;
 
-        costText.text = upgradeCosts[0].ToString();
+        costText.text = _upgradeCostsConfig.GetCostByLevel(1).ToString();
 
         visible = false;
 
@@ -327,7 +328,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         if (canUpgradeStat)
         {
-            currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
+            currencyCounter.SubtractCurrency(CurrentUpgradeCosts);
 
             NextLevel();
             statLevel++;
@@ -347,7 +348,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     protected void DoUpgradeAllTurretStats()
     {
-        currencyCounter.SubtractCurrency(upgradeCosts[currentBuildingLevel]);
+        currencyCounter.SubtractCurrency(CurrentUpgradeCosts);
 
         NextLevel();
 
@@ -379,7 +380,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     public bool HasEnoughCurrencyToLevelUp()
     {
-        return currencyCounter.HasEnoughCurrency(upgradeCosts[currentBuildingLevel]);
+        return currencyCounter.HasEnoughCurrency(CurrentUpgradeCosts);
     }
 
     private void NextLevel()
@@ -399,7 +400,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         if (currentBuildingLevel < maxLevels)
         {
             //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // A
-            costText.text = upgradeCosts[currentBuildingLevel].ToString();
+            costText.text = CurrentUpgradeCosts.ToString();
         }
         else
         {
