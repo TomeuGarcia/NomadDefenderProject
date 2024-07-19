@@ -12,7 +12,7 @@ public class FIMultiSocketSwitch : AFacilityInteractable
     [SerializeField] private Transform _button;
     [SerializeField] private Transform _buttonMR;
     [SerializeField] private Light _multiSocketSwitchLight;
-    [SerializeField] private List<Light> _roomLight = new();
+    [SerializeField] private FlickeringLightGroup _roomLightGroup;
     [SerializeField] private Transform _roomLightMR;
 
     [Header("PARAMETERS")]
@@ -51,10 +51,7 @@ public class FIMultiSocketSwitch : AFacilityInteractable
         _button.DOLocalRotate(new Vector3(0.0f, 0.0f, _buttonSwitchRotation), _buttonSwitchDuration)
             .SetEase(_buttonEase);
 
-        foreach (var light in _roomLight)
-        {
-            light.gameObject.SetActive(true);
-        }
+        _roomLightGroup.Activate();
 
         _computerButton.ChangeElectricityState(true);
 
@@ -72,10 +69,7 @@ public class FIMultiSocketSwitch : AFacilityInteractable
         _button.DOLocalRotate(new Vector3(0.0f, 0.0f, -_buttonSwitchRotation), _buttonSwitchDuration)
             .SetEase(_buttonEase);
 
-        foreach (var light in _roomLight)
-        {
-            light.gameObject.SetActive(false);
-        }
+        _roomLightGroup.Deactivate();
 
         _computerButton.ChangeElectricityState(false);
 

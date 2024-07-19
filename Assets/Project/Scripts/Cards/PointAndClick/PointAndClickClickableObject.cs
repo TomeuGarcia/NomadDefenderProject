@@ -17,22 +17,22 @@ public class PointAndClickClickableObject : MonoBehaviour
         if (_outline != null)
         {
             _highlighted = true;
-            _outline.enabled = true;
+            //_outline.enabled = true;
         }
         else
         {
-            _outline = gameObject.AddComponent<Outline>();
+            //_outline = gameObject.AddComponent<Outline>();
             _highlighted = true;
         }
     }
 
     private void OnMouseExit()
     {
-        if (_outline != null)
-        {
-            _highlighted = false;
-            _outline.enabled = false;
-        }
+        //if (_outline != null)
+        //{
+            //_highlighted = false;
+            //_outline.enabled = false;
+        //}
     }
 
     private void OnMouseDown()

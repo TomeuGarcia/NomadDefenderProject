@@ -23,6 +23,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private Transform _bootUpTextParent;
     [SerializeField] private TextDecoder _engageDecoder;
     [SerializeField] private GameObject _titleTextShadow;
+    [SerializeField] private FlickeringLightGroup _flickeringLightGroup;
     [SerializeField] private List<BootUpFragment> _bootUpTexts = new();
 
     [Header("PARAMETERS")]
@@ -77,6 +78,7 @@ public class FIComputerButton : AFacilityInteractable
         _screenParent.gameObject.SetActive(true);
         yield return new WaitForSeconds(_firstBlackScreenTime);
 
+        _flickeringLightGroup.Activate();
         _blackScreen.gameObject.SetActive(false);
         _blueScreen.gameObject.SetActive(true);
         _screenLight.color = _screenBlueLightColor;
@@ -133,6 +135,7 @@ public class FIComputerButton : AFacilityInteractable
         _on = false;
         yield return MoveButton();
 
+        _flickeringLightGroup.Deactivate();
         _buttonLight.color = _buttonLightOffColor;
         _engageDecoder.gameObject.SetActive(false);
         _screenParent.gameObject.SetActive(false);
@@ -150,6 +153,8 @@ public class FIComputerButton : AFacilityInteractable
 
     public void ChangeElectricityState(bool state)
     {
+        _flickeringLightGroup.Deactivate();
+
         _buttonLight.gameObject.SetActive(state);
         _buttonMat.SetFloat("_Activate", state ? 1 : 0);
 
