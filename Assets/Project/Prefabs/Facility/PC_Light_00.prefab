@@ -48,6 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _light: {fileID: 180826430632255206}
+  _flicker: 1
+  _lightMR: {fileID: 0}
+  _lightMatCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _startAnimationCurves: []
   _endAnimationCurves: []
   _intensityRange: {x: 0, y: 0}
@@ -125,7 +133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4308221171430615896
 Transform:
   m_ObjectHideFlags: 0

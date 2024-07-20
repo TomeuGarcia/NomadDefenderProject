@@ -42,6 +42,7 @@ public class FacilityFlickeringLight : MonoBehaviour
 
     public void Activate()
     {
+        _light.gameObject.SetActive(true);
         ChooseNextAction();
     }
 
@@ -52,6 +53,7 @@ public class FacilityFlickeringLight : MonoBehaviour
         _light.DOKill();
 
         _light.intensity = _defaultIntensity;
+        _light.gameObject.SetActive(false);
         if (_lightMR != null)
         {
             _lightMat.SetFloat(MaterialProperties.Activate, 0.0f);
