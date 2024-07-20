@@ -17,7 +17,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] private Image costCurrencyImage;
 
     [SerializeField] private CardStatUpgradeCostsConfig _upgradeCostsConfig;
-    private int CurrentUpgradeCosts => _upgradeCostsConfig.GetCostByLevel(currentBuildingLevel+1);
+    private int CurrentUpgradeCosts => _upgradeCostsConfig.GetCostByLevel(CurrentBuildingLevel+1);
     
     [SerializeField] private Color32 disalbedTextColor;
 
@@ -66,13 +66,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     private CurrencyCounter currencyCounter = null;
 
     private float xOffset;
-    private const int maxSupportStatLevel = 3;
     protected const int maxUpgradeCount = 3;
-    protected int currentBuildingLevel = 0;
+    public int CurrentBuildingLevel { get; protected set; } = 0;
 
-    protected int attackLvl;
-    protected int cadenceLvl;
-    protected int rangeLvl;
     protected int supportLvl;
 
     private bool visible;
@@ -84,7 +80,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType, int upgradeLevel);
     public BuildingUpgraderEvent OnUpgrade;
-    private void InvokeOnUpgrade(TurretUpgradeType upgradeType) { if (OnUpgrade != null) OnUpgrade(upgradeType, currentBuildingLevel); }
+    protected void InvokeOnUpgrade(TurretUpgradeType upgradeType) { OnUpgrade?.Invoke(upgradeType, CurrentBuildingLevel); }
 
 
     private void Awake()
@@ -176,22 +172,18 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public virtual void InitTurret(TurretBuilding turret, CurrencyCounter newCurrencyCounter, 
-        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+    public virtual void InitTurret(TurretBuilding turretBuilding, ITurretStatsStateSource turretStatsState, int numberOfUpgrades, 
+        CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
-        attackLvl = 0;
-        cadenceLvl = 0;
-        rangeLvl = 0;
-
         currencyCounter = newCurrencyCounter;
         currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public virtual void InitSupport(SupportBuilding supportBuilding, 
+        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        rangeLvl = 0;
         supportLvl = 0;
 
         currencyCounter = newCurrencyCounter;
@@ -289,89 +281,19 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         return !allStatsAreMaxed;
     }
 
-    public TurretUpgradeType GetRandomStatUpgradeType(bool includeSupport)
-    {
-        TurretUpgradeType randomUpgrade = (TurretUpgradeType)Random.Range(0, (int)TurretUpgradeType.SUPPORT + (includeSupport ? 1 : 0));
-        return randomUpgrade;
-    }
+    public virtual void FreeTurretUpgrade() { }
 
-    public void FreeTurretUpgrade(TurretUpgradeType turretUpgradeType)
-    {
-        //NextLevel();
-        //CheckStopParticlesCanUpgrade();
-
-        if (turretUpgradeType == TurretUpgradeType.ATTACK)
-        {
-            attackLvl++;
-            _building.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
-        }
-        else if (turretUpgradeType == TurretUpgradeType.CADENCE)
-        {
-            cadenceLvl++;
-            _building.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
-        }
-        else if (turretUpgradeType == TurretUpgradeType.RANGE)
-        {
-            rangeLvl++;
-            _building.Upgrade(TurretUpgradeType.RANGE, rangeLvl);            
-        }
-
-        UpdateAllStatsView();
-
-        InvokeOnUpgrade(turretUpgradeType);
-        CheckStopParticlesCanUpgrade();
-    }
-
-    protected bool TryUpgradeStat(ref int statLevel, TurretUpgradeType upgradeType)
-    {
-        bool canUpgradeStat = CanUpgrade();
-
-        if (canUpgradeStat)
-        {
-            currencyCounter.SubtractCurrency(CurrentUpgradeCosts);
-
-            NextLevel();
-            statLevel++;
-            _building.Upgrade(upgradeType, statLevel);
-
-            CheckStopParticlesCanUpgrade();            
-            PlayPositiveAnimationTextCostPunch();
-            InvokeOnUpgrade(upgradeType);
-        }
-        else
-        {
-            PlayNegativeAnimationTextCostPunch();            
-        }
-
-        return canUpgradeStat;
-    }
-
-    protected void DoUpgradeAllTurretStats()
+    protected void SpendUpgradeCost()
     {
         currencyCounter.SubtractCurrency(CurrentUpgradeCosts);
-
-        NextLevel();
-
-        attackLvl++;
-        cadenceLvl++;
-        rangeLvl++;
-        _building.Upgrade(TurretUpgradeType.ATTACK, attackLvl);
-        _building.Upgrade(TurretUpgradeType.CADENCE, cadenceLvl);
-        _building.Upgrade(TurretUpgradeType.RANGE, rangeLvl);
-
-        CheckStopParticlesCanUpgrade();
-        PlayPositiveAnimationTextCostPunch();
-        InvokeOnUpgrade(TurretUpgradeType.ATTACK);
-        InvokeOnUpgrade(TurretUpgradeType.CADENCE);
-        InvokeOnUpgrade(TurretUpgradeType.RANGE);
     }
 
 
     protected bool CanUpgrade()
     {
-        if (IsCardUpgradedToMax(currentBuildingLevel)) return false;
+        if (IsCardUpgradedToMax(CurrentBuildingLevel)) return false;
 
-        return currentBuildingLevel < maxUpgradeCount && HasEnoughCurrencyToLevelUp();
+        return CurrentBuildingLevel < maxUpgradeCount && HasEnoughCurrencyToLevelUp();
     }
     protected bool IsCardUpgradedToMax(int levelToCheck)
     {
@@ -383,21 +305,21 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         return currencyCounter.HasEnoughCurrency(CurrentUpgradeCosts);
     }
 
-    private void NextLevel()
+    protected void NextLevel()
     {
-        currentBuildingLevel++;
+        CurrentBuildingLevel++;
         UpdateLevelText();
 
-        if(OnTurretUpgrade != null) { OnTurretUpgrade(currentBuildingLevel); }
-    }
+        if (OnTurretUpgrade != null) { OnTurretUpgrade(CurrentBuildingLevel); }
+    }   
 
     private void UpdateLevelText()
     {
-        lvlText.text = currentBuildingLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
-        quickLevelDisplayText.text = currentBuildingLevel + "/" + maxLevels;
+        lvlText.text = CurrentBuildingLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
+        quickLevelDisplayText.text = CurrentBuildingLevel + "/" + maxLevels;
 
         //if (currentLevel < maxUpgradeCount)
-        if (currentBuildingLevel < maxLevels)
+        if (CurrentBuildingLevel < maxLevels)
         {
             //lvlText.text = "LVL " + currentLevel.ToString() + "/" + maxLevels.ToString(); // A
             costText.text = CurrentUpgradeCosts.ToString();
@@ -498,7 +420,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     }
     protected void PlayPositiveAnimationTextCostPunch()
     {
-        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(currentBuildingLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
+        PlayAnimationTextCostPunch(Color.cyan, IsCardUpgradedToMax(CurrentBuildingLevel) ? disalbedTextColor : Color.white, 0.4f, 0.3f, 8);
     }
     protected void PlayNegativeAnimationTextCostPunch()
     {
@@ -550,7 +472,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     protected bool IsBuildingUpgradeAvailable()
     {
-        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(currentBuildingLevel) && HasEnoughCurrencyToLevelUp();
+        return buildingOwnerWasPlaced && !canUpgardeParticlesAreActive && !IsCardUpgradedToMax(CurrentBuildingLevel) && HasEnoughCurrencyToLevelUp();
     }
     private void CheckStartParticlesCanUpgrade()
     {
@@ -563,7 +485,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
             ShowCanUpgradeText();
         }
 
-        if (!IsCardUpgradedToMax(currentBuildingLevel))
+        if (!IsCardUpgradedToMax(CurrentBuildingLevel))
         {
             if (HasEnoughCurrencyToLevelUp())
             {
@@ -581,9 +503,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     protected bool IsBuildingUpgradeNotAvailable()
     {
-        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(currentBuildingLevel) || !HasEnoughCurrencyToLevelUp());
+        return buildingOwnerWasPlaced && canUpgardeParticlesAreActive && (IsCardUpgradedToMax(CurrentBuildingLevel) || !HasEnoughCurrencyToLevelUp());
     }
-    private void CheckStopParticlesCanUpgrade()
+    protected void CheckStopParticlesCanUpgrade()
     {
         if (IsBuildingUpgradeNotAvailable())
         {
@@ -593,7 +515,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
             HideCanUpgradeText();
         }
 
-        if (!IsCardUpgradedToMax(currentBuildingLevel))
+        if (!IsCardUpgradedToMax(CurrentBuildingLevel))
         {
             if (HasEnoughCurrencyToLevelUp())
             {

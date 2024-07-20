@@ -32,7 +32,7 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
         this.currentChainedTarget = 0;
 
-        this.damage = owner.stats.damage;
+        this.damage = owner.Stats.Damage;
         this.damage = (int)((float)this.damage * damageMultiplier);
         this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
 

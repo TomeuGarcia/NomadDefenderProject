@@ -5,12 +5,12 @@ using UnityEngine;
 public class TurretDamageStatState : ITurretDamageState
 {
     private readonly CardStatConfig _stat;
-    public StatValueBonus StatValueBonus { get; private set; }
+    public StatValueBonus BaseStatMultiplicationBonus { get; private set; }
 
     public TurretDamageStatState(CardStatConfig stat)
     {
         _stat = stat;
-        StatValueBonus = new StatValueBonus();
+        BaseStatMultiplicationBonus = new StatValueBonus();
     }
 
 
@@ -20,7 +20,7 @@ public class TurretDamageStatState : ITurretDamageState
 
     public int GetDamageByLevel(int upgradeLevel)
     {
-        return (int)_stat.ComputeValueByLevel(upgradeLevel, StatValueBonus.AccumulatedBonusSum);
+        return (int)_stat.ComputeValueByLevel(upgradeLevel, BaseStatMultiplicationBonus.AccumulatedBonusSum);
     }
 
     public string GetDamageByLevelText(int upgradeLevel)

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -55,12 +55,9 @@ public class SelfHurtUpgradeStatLogic : MonoBehaviour
     {
         UnsubscribeEvents();
 
-        await Task.Delay(300);
+        await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
-        TurretUpgradeType lowestStat = owner.Upgrader.GetRandomStatUpgradeType(false);
-        if (lowestStat == TurretUpgradeType.NONE) return;
-
-        owner.Upgrader.FreeTurretUpgrade(lowestStat);
+        owner.Upgrader.FreeTurretUpgrade();
 
         ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position).TakeDamage(damageAmount);
 

@@ -6,6 +6,7 @@ public class TurretStatsSnapshot
 {
     public int Damage { get; private set; }
     public float ShotsPerSecond { get; private set; }
+    public float ShotsPerSecondInverted { get; private set; }
     public float RadiusRange { get; private set; }
 
     public TurretStatsSnapshot(int damage, float shotsPerSecond, float radiusRange)
@@ -18,6 +19,7 @@ public class TurretStatsSnapshot
         Damage = damage;
         ShotsPerSecond = shotsPerSecond;
         RadiusRange = radiusRange;
+        ShotsPerSecondInverted = 1f / shotsPerSecond;
     }
 
     public bool HasDamage()

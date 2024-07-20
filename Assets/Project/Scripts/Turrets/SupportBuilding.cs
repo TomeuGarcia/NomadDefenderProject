@@ -55,7 +55,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitSupport(currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(this, currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -72,12 +72,12 @@ public class SupportBuilding : RangeBuilding
         this.stats = stats;
     }
 
-    public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
+    public void ApplyStatsUpgrade(int newStatsLevel)
     {
-        basePart.Upgrade(this, newStatLevel);
+        basePart.Upgrade(this, newStatsLevel);
 
         if (visualUpgrades.Length == 0) return;
-        if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+        if (visualUpgrades[newStatsLevel - 1] != null) visualUpgrades[newStatsLevel - 1].SetActive(true);
 
         InvokeOnBuildingUpgraded();
     }

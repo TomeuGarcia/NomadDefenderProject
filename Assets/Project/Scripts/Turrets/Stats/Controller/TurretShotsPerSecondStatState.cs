@@ -5,13 +5,13 @@ using UnityEngine;
 public class TurretShotsPerSecondStatState : ITurretShotsPerSecondState
 {
     private readonly CardStatConfig _stat;
-    public StatValueBonus StatValueBonus { get; private set; }
+    public StatValueBonus BaseStatMultiplicationBonus { get; private set; }
 
 
     public TurretShotsPerSecondStatState(CardStatConfig stat)
     {
         _stat = stat;
-        StatValueBonus = new StatValueBonus();
+        BaseStatMultiplicationBonus = new StatValueBonus();
     }
 
 
@@ -24,7 +24,7 @@ public class TurretShotsPerSecondStatState : ITurretShotsPerSecondState
 
     public float GetShotsPerSecondByLevel(int upgradeLevel)
     {
-        return _stat.ComputeValueByLevel(upgradeLevel, StatValueBonus.AccumulatedBonusSum);
+        return _stat.ComputeValueByLevel(upgradeLevel, BaseStatMultiplicationBonus.AccumulatedBonusSum);
     }
     public float GetShotsPerSecondInvertedByLevel(int upgradeLevel)
     {

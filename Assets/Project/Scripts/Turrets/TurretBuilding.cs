@@ -5,15 +5,9 @@ using UnityEngine;
 
 public class TurretBuilding : RangeBuilding
 {
-    public struct TurretBuildingStats
-    {
-        public int playCost;
-        public int damage;
-        public float range;
-        public float cadence;
-    }
-
-    [HideInInspector] public TurretBuildingStats stats;
+    private TurretCardStatsController _statsController;
+    public TurretStatsSnapshot Stats { get; private set; }
+    public ITurretStatsBonusController StatsBonusController => _statsController;
 
     public TurretCardParts TurretCardParts { get; private set; }
 
@@ -114,18 +108,23 @@ public class TurretBuilding : RangeBuilding
         TimeSinceLastShot = 0.0f;
         currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
-
+        
         TDGameManager.OnGameFinishStart += PrintData;
     }
 
     private void OnDestroy()
     {
+        if (_statsController != null)
+        {
+            _statsController.OnStatsUpdatedWithBonusEvent -= RefreshStatsWithUpgradeLevel;
+        }
+        
         TDGameManager.OnGameFinishStart -= PrintData;
     }
 
     private void PrintData()
     {
-        _testingSnapshot.SetRange(stats.range);
+        _testingSnapshot.SetRange(Stats.RadiusRange);
         _testingSnapshot.Print();
     }
 
@@ -154,8 +153,11 @@ public class TurretBuilding : RangeBuilding
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
     }
 
-    public void Init(TurretBuildingStats turretStats, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
+    public void Init(TurretCardStatsController statsController, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
+        _statsController = statsController;
+        _statsController.OnStatsUpdatedWithBonusEvent += RefreshStatsWithUpgradeLevel;
+
         TurretCardParts = turretCardParts;
         this.TurretPartAttack = turretCardParts.turretPartAttack;
         TurretPartBody turretPartBody = turretCardParts.turretPartBody;
@@ -164,8 +166,8 @@ public class TurretBuilding : RangeBuilding
         bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
+        InitStats();
 
-        InitStats(turretStats);
         BodyType = turretCardParts.turretPartBody.bodyType;
 
 
@@ -175,13 +177,13 @@ public class TurretBuilding : RangeBuilding
         bodyPart.Init(turretAttack.materialForTurret);
 
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.Init(this, stats.range);
-
-        TimeSinceLastShot = currentShootTimer = Mathf.Max(stats.cadence - 0.2f, 0f);
+        basePart.Init(this, Stats.RadiusRange);
         UpdateRange();
+        
+        TimeSinceLastShot = currentShootTimer = Mathf.Max(Stats.ShotsPerSecondInverted - 0.2f, 0f);
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitTurret(this, currencyCounter,
+        Upgrader.InitTurret(this, _statsController, CardLevel, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
@@ -210,37 +212,33 @@ public class TurretBuilding : RangeBuilding
 
     protected override void UpdateRange()
     {
-        basePart.baseCollider.UpdateRange(stats.range);
+        basePart.baseCollider.UpdateRange(Stats.RadiusRange);
     }
 
 
-    private void InitStats(TurretBuildingStats stats)
+    private void InitStats()
     {
-        this.stats = stats;
+        Stats = new TurretStatsSnapshot(
+            _statsController.DamageStatState.BaseDamage,
+            _statsController.ShotsPerSecondStatState.BaseShotsPerSecond,
+            _statsController.RadiusRangeStatState.BaseRadiusRange
+        );
     }
-    public void UpdateStats(TurretBuildingStats stats)
+    private void UpdateStats(TurretStatsSnapshot stats)
     {
-        InitStats(stats);
+        Stats = stats;
         UpdateRange();
     }
 
-    public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
-    {
-        switch(upgradeType)
-        {
-            case TurretUpgradeType.ATTACK:
-                stats.damage = TurretCardParts.turretPartBody.GetDamageByLevel(newStatLevel);
-                break;
-            case TurretUpgradeType.CADENCE:
-                stats.cadence = TurretCardParts.turretPartBody.GetShotsPerSecondInvertedByLevel(newStatLevel);
-                break;
-            case TurretUpgradeType.RANGE:
-                stats.range = TurretCardParts.turretPartBase.GetRangeByLevel(newStatLevel);
-                UpdateRange();
-                break;
-        }
 
+    public void ApplyStatsUpgrade()
+    {
+        RefreshStatsWithUpgradeLevel();
         InvokeOnBuildingUpgraded();
+    }
+    private void RefreshStatsWithUpgradeLevel()
+    {
+        UpdateStats(_statsController.MakeStatsSnapshotFromLevel(Upgrader.CurrentBuildingLevel));
     }
 
     private void UpdateShoot()
@@ -250,7 +248,7 @@ public class TurretBuilding : RangeBuilding
         _testingSnapshot.UpdateTotalTimePlaced(deltaTime);
         TimeSinceLastShot += deltaTime;
 
-        if (currentShootTimer < stats.cadence)
+        if (currentShootTimer < Stats.ShotsPerSecondInverted)
         {            
             currentShootTimer += deltaTime;
             _testingSnapshot.UpdateTimeTargetingEnemies(deltaTime);

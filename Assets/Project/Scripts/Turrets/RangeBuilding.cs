@@ -254,7 +254,6 @@ public abstract class RangeBuilding : Building
     }
 
 
-    public abstract void Upgrade(TurretUpgradeType upgradeType, int newStatLevel);
     protected void InvokeOnBuildingUpgraded()
     {
         if (OnBuildingUpgraded != null) OnBuildingUpgraded();

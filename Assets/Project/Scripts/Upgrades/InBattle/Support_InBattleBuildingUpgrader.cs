@@ -19,6 +19,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private TurretPartBase turretPartBase;
 
+    private SupportBuilding _supportBuilding;
+
 
     protected override void AwakeInit()
     {
@@ -29,9 +31,11 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _abilityUpgradeStat.Init(this);
     }
 
-    public override void InitSupport(CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public override void InitSupport(SupportBuilding supportBuilding, 
+        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        base.InitSupport(newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
+        _supportBuilding = supportBuilding;
+        base.InitSupport(supportBuilding, newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
         supportIcon.sprite = abilitySprite;
         supportIcon.color = abilityColor;
 
@@ -43,14 +47,10 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         UpdateSupportBar();
     }
 
-    private void DoUpgradeSupport()
-    {
-        UpdateNextUpgradeDescriptionText();
-    }
 
     protected override void UpdateSupportBar()
     {
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
         _abilityUpgradeStat.UpdateView("TODO", isCardUpgradedToMax);
 
         if (isCardUpgradedToMax)
@@ -100,7 +100,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         float t1 = 0.1f;
         float t3 = 0.3f;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -217,22 +217,34 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpdateNextUpgradeDescriptionText()
     {
-        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(currentBuildingLevel + 1);
+        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(CurrentBuildingLevel + 1);
     }
 
 
 
     private void OnUpgradeSupportButtonClicked()
     {
-        if (TryUpgradeStat(ref supportLvl, TurretUpgradeType.SUPPORT))
+        if (CanUpgrade())
         {
+            SpendUpgradeCost();
+            UpgradeAllSupportStats();
+            UpdateNextUpgradeDescriptionText();
             UpdateSupportBar();
-            DoUpgradeSupport();
         }
         else
         {
-            OnCanNotUpgradeSupport();
+            PlayNegativeAnimationTextCostPunch();
         }
+    }
+
+    private void UpgradeAllSupportStats()
+    {
+        NextLevel();
+        _supportBuilding.ApplyStatsUpgrade(CurrentBuildingLevel);
+
+        CheckStopParticlesCanUpgrade();
+        PlayPositiveAnimationTextCostPunch();
+        InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
     }
 
     /*

@@ -5,12 +5,12 @@ using UnityEngine;
 public class TurretRadiusRangeStatState : ITurretRadiusRangeState
 {
     private readonly CardStatConfig _stat;
-    public StatValueBonus StatValueBonus { get; private set; }
+    public StatValueBonus BaseStatMultiplicationBonus { get; private set; }
 
     public TurretRadiusRangeStatState(CardStatConfig stat)
     {
         _stat = stat;
-        StatValueBonus = new StatValueBonus();
+        BaseStatMultiplicationBonus = new StatValueBonus();
     }
 
     public float BaseRadiusRange => GetRadiusRangeByLevel(0);
@@ -19,7 +19,7 @@ public class TurretRadiusRangeStatState : ITurretRadiusRangeState
 
     public float GetRadiusRangeByLevel(int upgradeLevel)
     {
-        return _stat.ComputeValueByLevel(upgradeLevel, StatValueBonus.AccumulatedBonusSum);
+        return _stat.ComputeValueByLevel(upgradeLevel, BaseStatMultiplicationBonus.AccumulatedBonusSum);
     }
 
     public string GetRadiusRangeByLevelText(int upgradeLevel)
