@@ -6,7 +6,7 @@ using UnityEngine;
 public class TurretBuilding : RangeBuilding
 {
     private TurretCardStatsController _statsController;
-    public TurretStatsSnapshot Stats { get; private set; }
+    public TurretStatsSnapshot Stats => _statsController.CurrentStats;
     public ITurretStatsBonusController StatsBonusController => _statsController;
 
     public TurretCardParts TurretCardParts { get; private set; }
@@ -31,7 +31,8 @@ public class TurretBuilding : RangeBuilding
     public TurretPartBody.BodyType BodyType { get; private set; }
 
     private TurretPartAttack_Prefab turretAttack;
-    public TurretPartAttack TurretPartAttack { get; private set; }
+    public TurretPartAttack TurretPartAttack { get; 
+        private set; }
     
 
     [Header("HOLDERS")]
@@ -116,9 +117,11 @@ public class TurretBuilding : RangeBuilding
     {
         if (_statsController != null)
         {
-            _statsController.OnStatsUpdatedWithBonusEvent -= RefreshStatsWithUpgradeLevel;
+            _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
         }
-        
+
+        _statsController.ResetUpgradeLevel();
+
         TDGameManager.OnGameFinishStart -= PrintData;
     }
 
@@ -156,7 +159,7 @@ public class TurretBuilding : RangeBuilding
     public void Init(TurretCardStatsController statsController, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
         _statsController = statsController;
-        _statsController.OnStatsUpdatedWithBonusEvent += RefreshStatsWithUpgradeLevel;
+        _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
         TurretCardParts = turretCardParts;
         this.TurretPartAttack = turretCardParts.turretPartAttack;
@@ -166,7 +169,6 @@ public class TurretBuilding : RangeBuilding
         bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardParts.cardLevel;
-        InitStats();
 
         BodyType = turretCardParts.turretPartBody.bodyType;
 
@@ -183,7 +185,7 @@ public class TurretBuilding : RangeBuilding
         TimeSinceLastShot = currentShootTimer = Mathf.Max(Stats.ShotsPerSecondInverted - 0.2f, 0f);
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitTurret(this, _statsController, CardLevel, currencyCounter,
+        Upgrader.InitTurret(this, _statsController, _statsController, CardLevel, currencyCounter,
                             hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
@@ -216,30 +218,11 @@ public class TurretBuilding : RangeBuilding
     }
 
 
-    private void InitStats()
+    private void OnControllerUpdatedStats()
     {
-        Stats = new TurretStatsSnapshot(
-            _statsController.DamageStatState.BaseDamage,
-            _statsController.ShotsPerSecondStatState.BaseShotsPerSecond,
-            _statsController.RadiusRangeStatState.BaseRadiusRange
-        );
-    }
-    private void UpdateStats(TurretStatsSnapshot stats)
-    {
-        Stats = stats;
         UpdateRange();
     }
 
-
-    public void ApplyStatsUpgrade()
-    {
-        RefreshStatsWithUpgradeLevel();
-        InvokeOnBuildingUpgraded();
-    }
-    private void RefreshStatsWithUpgradeLevel()
-    {
-        UpdateStats(_statsController.MakeStatsSnapshotFromLevel(Upgrader.CurrentBuildingLevel));
-    }
 
     private void UpdateShoot()
     {

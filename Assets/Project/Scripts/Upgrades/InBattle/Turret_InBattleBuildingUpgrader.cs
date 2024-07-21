@@ -36,10 +36,13 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
-    public override void InitTurret(TurretBuilding turretBuilding, ITurretStatsStateSource turretStatsState, int numberOfUpgrades, 
+    public override void InitTurret(TurretBuilding turretBuilding, 
+        IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
+        int numberOfUpgrades, 
         CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
-        base.InitTurret(turretBuilding, turretStatsState, numberOfUpgrades, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
+        base.InitTurret(turretBuilding, buildingUpgradesController, turretStatsState, numberOfUpgrades, newCurrencyCounter, 
+            hasPassiveAbility, basePassiveSprite, basePassiveColor);
 
         _turretBuilding = turretBuilding;
         _turretStatsState = turretStatsState;
@@ -234,7 +237,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     {
         NextLevel();
 
-        _turretBuilding.ApplyStatsUpgrade();
+        _turretBuilding.InvokeOnBuildingUpgraded();
 
         CheckStopParticlesCanUpgrade();
         PlayPositiveAnimationTextCostPunch();

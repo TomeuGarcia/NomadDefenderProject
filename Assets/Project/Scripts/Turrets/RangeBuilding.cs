@@ -254,7 +254,7 @@ public abstract class RangeBuilding : Building
     }
 
 
-    protected void InvokeOnBuildingUpgraded()
+    public void InvokeOnBuildingUpgraded()
     {
         if (OnBuildingUpgraded != null) OnBuildingUpgraded();
     }

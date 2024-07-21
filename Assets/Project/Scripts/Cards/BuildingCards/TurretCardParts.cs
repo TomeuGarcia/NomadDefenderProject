@@ -29,7 +29,7 @@ public class TurretCardParts : GroupedCardParts
             turretPartBody.DamageStat,
             turretPartBody.ShotsPerSecondStat,
             turretPartBase.RadiusRangeStat
-            );
+        );
     }
 
     public void InitCopyingReferences(TurretCardParts other)

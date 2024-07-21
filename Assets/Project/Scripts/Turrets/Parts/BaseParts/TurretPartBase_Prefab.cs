@@ -127,8 +127,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
     protected void UpdateAreaPlaneSize(SupportBuilding supportOwner, MeshRenderer specialAreaPlaneMesh, Material specialAreaPlaneMaterial)
     {
-        float planeRange = supportOwner.stats.range * 2 + 1; //only for square
-        float range = supportOwner.stats.range;
+        float planeRange = supportOwner.Stats.RadiusRange * 2 + 1; //only for square
+        float range = supportOwner.Stats.RadiusRange;
 
         specialAreaPlaneMesh.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
         specialAreaPlaneMaterial.SetFloat("_TileNum", planeRange);

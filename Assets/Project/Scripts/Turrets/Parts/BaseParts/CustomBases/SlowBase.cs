@@ -50,8 +50,8 @@ public class SlowBase : TurretPartBase_Prefab
     }
     private void UpdateAreaPlaneSize(SupportBuilding supportOwner)
     {
-        float planeRange = supportOwner.stats.range * 2 + 1; //only for square
-        float range = supportOwner.stats.range;
+        float planeRange = supportOwner.Stats.RadiusRange * 2 + 1; //only for square
+        float range = supportOwner.Stats.RadiusRange;
 
         slowPlane.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
         slowPlaneMaterial = slowPlane.GetComponent<MeshRenderer>().materials[0];

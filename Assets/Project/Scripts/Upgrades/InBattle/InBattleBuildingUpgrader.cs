@@ -67,9 +67,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     private float xOffset;
     protected const int maxUpgradeCount = 3;
-    public int CurrentBuildingLevel { get; protected set; } = 0;
+    public int CurrentBuildingLevel => _buildingUpgradesController.CurrentUpgradeLevel;
+    private IBuildingUpgradesController _buildingUpgradesController;
 
-    protected int supportLvl;
 
     private bool visible;
 
@@ -172,19 +172,22 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         lastScroll = Input.mouseScrollDelta.y;
     }
 
-    public virtual void InitTurret(TurretBuilding turretBuilding, ITurretStatsStateSource turretStatsState, int numberOfUpgrades, 
-        CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+    public virtual void InitTurret(TurretBuilding turretBuilding, 
+        IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
+        int numberOfUpgrades, CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
+        _buildingUpgradesController = buildingUpgradesController;
         currencyCounter = newCurrencyCounter;
         currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
-    public virtual void InitSupport(SupportBuilding supportBuilding, 
+    public virtual void InitSupport(SupportBuilding supportBuilding,
+        IBuildingUpgradesController buildingUpgradesController,
         CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        supportLvl = 0;
+        _buildingUpgradesController = buildingUpgradesController;
 
         currencyCounter = newCurrencyCounter;
         currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
@@ -275,7 +278,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         bool allStatsAreMaxed = false;
         if (isSupport) 
         {
-            allStatsAreMaxed = supportLvl >= maxLevels;
+            allStatsAreMaxed = CurrentBuildingLevel >= maxLevels;
         }
 
         return !allStatsAreMaxed;
@@ -307,7 +310,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     protected void NextLevel()
     {
-        CurrentBuildingLevel++;
+        _buildingUpgradesController.IncrementUpgradeLevel();
         UpdateLevelText();
 
         if (OnTurretUpgrade != null) { OnTurretUpgrade(CurrentBuildingLevel); }

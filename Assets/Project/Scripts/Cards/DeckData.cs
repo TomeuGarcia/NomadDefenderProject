@@ -23,13 +23,13 @@ public class DeckData : ScriptableObject
         {
             TurretCardParts otherComponents = other.starterTurretCardsComponents[i];
 
-            TurretPartAttack turretPartAttack = ScriptableObject.CreateInstance<TurretPartAttack>();
+            TurretPartAttack turretPartAttack = ScriptableObject.Instantiate(otherComponents.turretPartAttack);
             turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
             
             TurretPartBody turretPartBody = ScriptableObject.CreateInstance<TurretPartBody>();
             turretPartBody.InitAsCopy(otherComponents.turretPartBody);
             
-            TurretPartBase turretPartBase = ScriptableObject.CreateInstance<TurretPartBase>();
+            TurretPartBase turretPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
             turretPartBase.InitAsCopy(otherComponents.turretPartBase);
             
             TurretPassiveBase turretPassiveBase = ScriptableObject.CreateInstance<TurretPassiveBase>();
@@ -46,7 +46,7 @@ public class DeckData : ScriptableObject
         {
             SupportCardParts otherComponents = other.starterSupportCardsComponents[i];
 
-            TurretPartBase supportPartBase = ScriptableObject.CreateInstance<TurretPartBase>();
+            TurretPartBase supportPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
             supportPartBase.InitAsCopy(otherComponents.turretPartBase);
 
 
@@ -94,7 +94,7 @@ public class DeckData : ScriptableObject
         cards.Add(supportCard);
 
         SupportCardParts supportCardParts = ScriptableObject.CreateInstance<SupportCardParts>();
-        supportCardParts.Init(supportCard.supportCardParts);
+        supportCardParts.InitCopyingReferences(supportCard.supportCardParts);
 
         starterSupportCardsComponents.Add(supportCardParts);
     }
@@ -149,7 +149,7 @@ public class DeckData : ScriptableObject
     private void AddToSavedSupportCardsComponents(SupportBuildingCard supportCard)
     {
         SupportCardParts supportCardParts = ScriptableObject.CreateInstance<SupportCardParts>();
-        supportCardParts.Init(supportCard.supportCardParts);
+        supportCardParts.InitCopyingReferences(supportCard.supportCardParts);
 
         savedSupportCardsComponents.Add(supportCardParts);
     }

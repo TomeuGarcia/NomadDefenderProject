@@ -31,11 +31,15 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _abilityUpgradeStat.Init(this);
     }
 
-    public override void InitSupport(SupportBuilding supportBuilding, 
+    public override void InitSupport(SupportBuilding supportBuilding,
+        IBuildingUpgradesController buildingUpgradesController,
         CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
         _supportBuilding = supportBuilding;
-        base.InitSupport(supportBuilding, newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
+        maxLevels = maxUpgradeCount;
+
+        base.InitSupport(supportBuilding, buildingUpgradesController, 
+            newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
         supportIcon.sprite = abilitySprite;
         supportIcon.color = abilityColor;
 
@@ -43,7 +47,6 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         UpdateNextUpgradeDescriptionText();
 
-        maxLevels = maxUpgradeCount;
         UpdateSupportBar();
     }
 

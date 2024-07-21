@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBonusController
+public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBonusController, IBuildingUpgradesController
 {
     private readonly TurretDamageStatState _damageStatState;
     private readonly TurretShotsPerSecondStatState _shotsPerSecondStatState;
@@ -12,9 +12,12 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
     public ITurretShotsPerSecondState ShotsPerSecondStatState => _shotsPerSecondStatState;
     public ITurretRadiusRangeState RadiusRangeStatState => _radiusRangeStatState;
 
-    public Action OnStatsUpdatedWithBonusEvent;
 
     public TurretStatsSnapshot CurrentStats { get; private set; }
+    public int CurrentUpgradeLevel { get; private set; }
+
+    public Action OnStatsUpdated;
+
 
 
     public TurretCardStatsController(CardStatConfig damageStat, CardStatConfig shotsPerSecondStat, CardStatConfig radiusRangeStat)
@@ -22,15 +25,35 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
         _damageStatState = new TurretDamageStatState(damageStat);
         _shotsPerSecondStatState = new TurretShotsPerSecondStatState(shotsPerSecondStat);
         _radiusRangeStatState = new TurretRadiusRangeStatState(radiusRangeStat);
+
+        CurrentUpgradeLevel = 0;
+        CurrentStats = new TurretStatsSnapshot(
+            _damageStatState.GetDamageByLevel(CurrentUpgradeLevel),
+            _shotsPerSecondStatState.GetShotsPerSecondByLevel(CurrentUpgradeLevel),
+            _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
+        );
     }
 
-    public TurretStatsSnapshot MakeStatsSnapshotFromLevel(int upgradeLevel)
+    private void UpdateCurrentStats()
     {
-        return new TurretStatsSnapshot(
-            _damageStatState.GetDamageByLevel(upgradeLevel),
-            _shotsPerSecondStatState.GetShotsPerSecondByLevel(upgradeLevel),
-            _radiusRangeStatState.GetRadiusRangeByLevel(upgradeLevel)
+        CurrentStats.Reset(
+            _damageStatState.GetDamageByLevel(CurrentUpgradeLevel),
+            _shotsPerSecondStatState.GetShotsPerSecondByLevel(CurrentUpgradeLevel),
+            _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
         );
+        
+        OnStatsUpdated?.Invoke();
+    }
+
+    public void IncrementUpgradeLevel()
+    {
+        ++CurrentUpgradeLevel;
+        UpdateCurrentStats();
+    }
+
+    public void ResetUpgradeLevel()
+    {
+        CurrentUpgradeLevel = 0;
     }
 
     public void AddBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
@@ -48,7 +71,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
             _radiusRangeStatState.BaseStatMultiplicationBonus.AddBonus(bonusStatsMultiplication.RadiusRangePer1);
         }
 
-        OnStatsUpdatedWithBonus();
+        UpdateCurrentStats();
     }
 
     public void RemoveBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
@@ -66,11 +89,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
             _radiusRangeStatState.BaseStatMultiplicationBonus.RemoveBonus(bonusStatsMultiplication.RadiusRangePer1);
         }
 
-        OnStatsUpdatedWithBonus();
+        UpdateCurrentStats();
     }
 
-    private void OnStatsUpdatedWithBonus()
-    {
-        OnStatsUpdatedWithBonusEvent?.Invoke();
-    }
 }

@@ -84,10 +84,14 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
+
 
     private void SubscribeToEvents()
     {
-        _owner.OnDestroyed += UnsubscribeToEvents;
         _owner.OnBuildingUpgraded += CheckIsBerserkSetupHyperStats;
 
         PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
@@ -95,7 +99,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
     private void UnsubscribeToEvents()
     {
-        _owner.OnDestroyed -= UnsubscribeToEvents;
         _owner.OnBuildingUpgraded -= CheckIsBerserkSetupHyperStats;
 
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;

@@ -275,12 +275,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         return highestHealth;
     }
 
-    public PathLocation GetHealthiestLocation(Vector3 quearierPosition)
+    public bool GetHealthiestLocation(Vector3 quearierPosition, out PathLocation healthiestLocation)
     {
         int highestHealth = -1;
         float closestDistance = 1000;
         float distanceThreshold = 0.5f;
-        PathLocation healthiestLocation = null;
+        healthiestLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
@@ -303,15 +303,15 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
             }
         }
 
-        return healthiestLocation;
+        return healthiestLocation != null;
     }
 
-    public PathLocation GetMostDamagedLocation(Vector3 quearierPosition)
+    public bool GetMostDamagedLocation(Vector3 quearierPosition, out PathLocation mostDamagedLocation)
     {
         int lowestHealth = 1000;
         float closestDistance = 1000;
         float distanceThreshold = 0.5f;
-        PathLocation mostDamagedLocation = null;
+        mostDamagedLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
@@ -334,6 +334,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
             }
         }
 
-        return mostDamagedLocation;
+        return mostDamagedLocation != null;
     }
 }

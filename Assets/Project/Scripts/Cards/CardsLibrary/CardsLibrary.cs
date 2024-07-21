@@ -48,7 +48,7 @@ public class CardsLibrary : ScriptableObject
     public SupportCardParts GetConsumableSupportCardParts(SupportCardParts holderParts)
     {
         SupportCardParts parts = ScriptableObject.CreateInstance<SupportCardParts>();
-        parts.Init(holderParts);
+        parts.InitCopyingReferences(holderParts);
 
         return parts;
     }
