@@ -34,7 +34,6 @@ public class FadingTextCharacter : RecyclableObject
 
     public async Task PlayAppearAnimation(FadingTextConfig.CharacterAnimation appearAnimationConfig)
     {
-        _textsHolder.DOComplete();
         _textsHolder.PunchScale(appearAnimationConfig.ScalePunch);
         _textsHolder.PunchRotation(appearAnimationConfig.RotationPunch);
 

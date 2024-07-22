@@ -8,7 +8,6 @@ using NaughtyAttributes;
 public class CardStatView : MonoBehaviour
 {
     [Header("CONFIG")]
-    [SerializeField] private CardStatViewMetaType _metaType;
     [Required] [SerializeField] private CardStatViewConfig _config;
     [SerializeField] private bool _configureOnAwake = true;
     
@@ -39,8 +38,8 @@ public class CardStatView : MonoBehaviour
         _iconImage.sprite = _config.Icon;
         _iconImage.color = _config.IconColor;
 
-        gameObject.name = _metaType.GetGameObjectName(_config.Name);
-        _valueText.gameObject.name = _metaType.GetValueGameObjectName(_config.Name);
+        gameObject.name = _config.GameObjectName;
+        _valueText.gameObject.name = _config.ValueGameObjectName;
         _valueText.color = _config.TextColor;
     }
 

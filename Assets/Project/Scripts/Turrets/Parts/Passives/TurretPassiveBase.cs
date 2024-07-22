@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPassiveBase", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "TurretPassiveBase")]
+[CreateAssetMenu(fileName = "TurretPassiveBase", menuName = "TurretParts/TurretPassiveBase")]
 public class TurretPassiveBase : ScriptableObject
 {
     [System.Serializable]

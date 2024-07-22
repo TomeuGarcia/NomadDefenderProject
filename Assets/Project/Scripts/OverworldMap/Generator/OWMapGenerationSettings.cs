@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "NewOWMapGenerationSettings", 
-    menuName = SOAssetPaths.MAP_OVERWORLD + "OWMapGenerationSettings")]
+[CreateAssetMenu(fileName = "NewOWMapGenerationSettings", menuName = "Map/OWMapGenerationSettings")]
 public class OWMapGenerationSettings : ScriptableObject
 {
     [Header("MAP LENGTH")]

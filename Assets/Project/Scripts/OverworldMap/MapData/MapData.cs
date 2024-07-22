@@ -4,8 +4,7 @@ using UnityEngine;
 
 
 
-[CreateAssetMenu(fileName = "NewMapData", 
-    menuName = SOAssetPaths.MAP + "MapData")]
+[CreateAssetMenu(fileName = "NewMapData", menuName = "Map/MapData")]
 public class MapData : ScriptableObject
 {
     [System.Serializable]

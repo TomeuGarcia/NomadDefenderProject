@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "EnemyWaveSpawner", 
-    menuName = SOAssetPaths.ENEMY_WAVES + "EnemyWaveSpawner")]
+[CreateAssetMenu(fileName = "EnemyWaveSpawner", menuName = "Enemies/EnemyWaveSpawner")]
 public class EnemyWaveSpawner : ScriptableObject
 {
     [SerializeField, Tooltip("Enemy stats will increase each round ddepending on this coef")]
@@ -170,9 +168,10 @@ public class EnemyWaveSpawner : ScriptableObject
         if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
     }
 
-    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour)
-    {
-        yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform)
+    {        
+        yield return new WaitForSeconds(delayWaveStart * GameTime.TimeScale);
+
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
         if (activeEnemies == 0) // If empty wave, end
@@ -187,10 +186,10 @@ public class EnemyWaveSpawner : ScriptableObject
 
                 for (int i = 0; i < enemyInWave.NumberOfSpawns; ++i)
                 {
-                    yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(enemyInWave.DelayBeforeSpawn));
+                    yield return new WaitForSeconds(enemyInWave.DelayBeforeSpawn * GameTime.TimeScale);
                     if (stopForced) break;
                     
-                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+                    SpawnEnemy(enemyInWave.EnemyTypeN, spawnTransform);
 
                 }                
             }

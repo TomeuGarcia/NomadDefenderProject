@@ -51,7 +51,7 @@ public class HurtedThresholdProjectile : HomingProjectile
 
     private int ComputeDamage()
     {
-        int damage = (int)(turretOwner.Stats.Damage);
+        int damage = (int)(turretOwner.stats.damage);
 
         int highestHealth = ServiceLocator.GetInstance().TDLocationsUtils.GetHighestLocationHealth();
 

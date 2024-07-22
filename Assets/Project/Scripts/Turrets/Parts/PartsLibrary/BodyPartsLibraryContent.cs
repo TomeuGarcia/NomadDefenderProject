@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BodyPartsLibraryContent", 
-    menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "BodyPartsLibraryContent")]
+[CreateAssetMenu(fileName = "BodyPartsLibraryContent", menuName = "TurretParts/BodyPartsLibraryContent")]
 public class BodyPartsLibraryContent : ScriptableObject
 {
     [Header("BODIES")]

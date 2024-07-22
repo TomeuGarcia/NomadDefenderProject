@@ -8,38 +8,27 @@ using TMPro;
 public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 {
     [SerializeField] InBattleUpgradeStat _abilityUpgradeStat;
-    [SerializeField] private StatUpgradeButton _supportUpgradeButton;
-
     [SerializeField] private Image supportIcon;
 
     [Header("Upgrade Descriptions")]
+    [SerializeField] private TextMeshProUGUI nextUpgradeText;
     [SerializeField] private TextMeshProUGUI nextUpgradeDescriptionText;
     [SerializeField] private CanvasGroup cgNextUpgradeDescription;
     private bool isAbilityButtonHovered = false;
 
     private TurretPartBase turretPartBase;
 
-    private SupportBuilding _supportBuilding;
-
 
     protected override void AwakeInit()
     {
         base.AwakeInit();
 
-        _supportUpgradeButton.Init(OnUpgradeSupportButtonClicked, OnSupportButtonHovered, OnSupportButtonUnhovered);
-
-        _abilityUpgradeStat.Init(this);
+        _abilityUpgradeStat.Init(this, OnUpgradeSupportButtonClicked, OnSupportButtonHovered, OnSupportButtonUnhovered);
     }
 
-    public override void InitSupport(SupportBuilding supportBuilding,
-        IBuildingUpgradesController buildingUpgradesController,
-        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+    public override void InitSupport(int newRangeLvl, CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
     {
-        _supportBuilding = supportBuilding;
-        maxLevels = maxUpgradeCount;
-
-        base.InitSupport(supportBuilding, buildingUpgradesController, 
-            newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
+        base.InitSupport(newRangeLvl, newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
         supportIcon.sprite = abilitySprite;
         supportIcon.color = abilityColor;
 
@@ -47,14 +36,19 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         UpdateNextUpgradeDescriptionText();
 
+        maxLevels = maxUpgradeCount;
         UpdateSupportBar();
     }
 
+    private void DoUpgradeSupport()
+    {
+        UpdateNextUpgradeDescriptionText();
+    }
 
     protected override void UpdateSupportBar()
     {
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
-        _abilityUpgradeStat.UpdateView("TODO", isCardUpgradedToMax);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
+        _abilityUpgradeStat.UpdateView("TODO", isCardUpgradedToMax, IsStatMaxed(rangeLvl));
 
         if (isCardUpgradedToMax)
         {
@@ -64,13 +58,13 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void DisableButtons()
     {
-        _supportUpgradeButton.DisableButton();        
+        _abilityUpgradeStat.DisableButton();
     }
 
 
     protected override void CheckHoveredButtonsCanNowUpgrade()
     {
-        if (_supportUpgradeButton.IsButtonHovered) _supportUpgradeButton.SetHighlighted();
+        if (_abilityUpgradeStat.IsButtonHovered && CanUpgrade(attackLvl)) _abilityUpgradeStat.SetBarAndButtonHighlighted();
     }
 
 
@@ -98,12 +92,11 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgNextUpgradeDescription.alpha = 0f;
 
         _abilityUpgradeStat.SetupOpenAnimation();
-        _supportUpgradeButton.SetupOpenAnimation();
 
 
         float t1 = 0.1f;
         float t3 = 0.3f;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -113,8 +106,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgLvlText.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
 
-        yield return _supportUpgradeButton.PlayOpenAnimation(t1, !isCardUpgradedToMax, t1);
-        yield return _abilityUpgradeStat.PlayOpenAnimation(t1);
+        yield return _abilityUpgradeStat.PlayOpenAnimation(t1, !IsStatMaxed(attackLvl) && !isCardUpgradedToMax, t1);
 
 
         cgCostText.DOFade(1f, t1);
@@ -125,7 +117,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         openAnimationCoroutine = null;
 
-        _supportUpgradeButton.ButtonFadeIn();
+        _abilityUpgradeStat.ButtonFadeIn();
     }
 
 
@@ -158,7 +150,6 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgNextUpgradeDescription.alpha = 1f;
 
         _abilityUpgradeStat.SetupCloseAnimation();
-        _supportUpgradeButton.SetupCloseAnimation();
 
         float t1 = 0.075f;
         float t2 = 0.15f;
@@ -168,7 +159,6 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         cgCostText.DOFade(0f, t1);
         yield return new WaitForSeconds(t1);
 
-        yield return _supportUpgradeButton.PlayCloseAnimation(t1);
         yield return _abilityUpgradeStat.PlayCloseAnimation(t1);
 
         cgNextUpgradeDescription.DOFade(0f, t1);
@@ -185,69 +175,64 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         closeAnimationCoroutine = null;
         newUiParent.gameObject.SetActive(false);
 
-        _supportUpgradeButton.StopButtonFade(false, false);
+        _abilityUpgradeStat.StopButtonFade(false, false);
     }
 
 
 
     public void OnSupportButtonHovered()
     {
-        bool highlight = CanUpgrade();
+        bool highlight = CanUpgrade(supportLvl);
         //float fillValue = (float)(supportLvl + 1) * supportFillBarCoef
-        //_supportUpgradeButton.OnButtonHovered();
+        _abilityUpgradeStat.OnButtonHovered(highlight, IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(supportLvl), "TODO n");
+
+        StopAllButtonsFade(false, highlight);
     }
 
     public void OnSupportButtonUnhovered()
     {
         // (float)supportLvl * supportFillBarCoef
-        //_supportUpgradeButton.OnButtonUnhovered();
-        _supportUpgradeButton.ButtonFadeIn();
+        _abilityUpgradeStat.OnButtonUnhovered(IsCardUpgradedToMax(currentBuildingLevel), IsStatMaxed(supportLvl), "TODO");
+
+        _abilityUpgradeStat.ButtonFadeIn();
     }
 
     private void StopAllButtonsFade(bool abilityFadeOut, bool highlight)
     {
-        abilityFadeOut = abilityFadeOut && _supportUpgradeButton.IsButtonInteractable;
-        bool abilityHighlight = highlight && !abilityFadeOut && _supportUpgradeButton.IsButtonInteractable;
+        abilityFadeOut = abilityFadeOut && _abilityUpgradeStat.IsButtonInteractable;
+        bool abilityHighlight = highlight && !abilityFadeOut && _abilityUpgradeStat.IsButtonInteractable;
 
-        _supportUpgradeButton.StopButtonFade(abilityFadeOut, abilityHighlight);
+        _abilityUpgradeStat.StopButtonFade(abilityFadeOut, abilityHighlight);
     }
 
     protected override void OnCanNotUpgradeSupport()
     {
-        _supportUpgradeButton.ButtonPressedErrorFadeInOut();
+        _abilityUpgradeStat.ButtonPressedErrorFadeInOut();
     }
 
 
     private void UpdateNextUpgradeDescriptionText()
     {
-        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(CurrentBuildingLevel + 1);
+        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(currentBuildingLevel + 1);
+        if (currentBuildingLevel >= 3)
+        {
+            nextUpgradeText.color = disabledColor;
+        }
     }
 
 
 
     private void OnUpgradeSupportButtonClicked()
     {
-        if (CanUpgrade())
+        if (TryUpgradeStat(ref supportLvl, TurretUpgradeType.SUPPORT))
         {
-            SpendUpgradeCost();
-            UpgradeAllSupportStats();
-            UpdateNextUpgradeDescriptionText();
             UpdateSupportBar();
+            DoUpgradeSupport();
         }
         else
         {
-            PlayNegativeAnimationTextCostPunch();
+            OnCanNotUpgradeSupport();
         }
-    }
-
-    private void UpgradeAllSupportStats()
-    {
-        NextLevel();
-        _supportBuilding.ApplyStatsUpgrade(CurrentBuildingLevel);
-
-        CheckStopParticlesCanUpgrade();
-        PlayPositiveAnimationTextCostPunch();
-        InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
     }
 
     /*

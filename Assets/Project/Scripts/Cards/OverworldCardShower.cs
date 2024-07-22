@@ -176,6 +176,8 @@ public class OverworldCardShower : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         backToMapButton.gameObject.SetActive(false);
         showDeckButton.gameObject.SetActive(true);
+
+        Debug.Log("back");
     }
 
 

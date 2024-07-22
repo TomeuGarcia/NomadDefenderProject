@@ -4,8 +4,7 @@ using UnityEngine;
 using NaughtyAttributes;
 
 
-[CreateAssetMenu(fileName = "EnemyTypesCollection", 
-    menuName = SOAssetPaths.ENEMY_TYPES + "EnemyTypesCollection")]
+[CreateAssetMenu(fileName = "EnemyTypesCollection", menuName = "Enemies/Types/EnemyTypesCollection")]
 public class AllEnemyTypeConfigsCollection : ScriptableObject
 {
     [Expandable] [SerializeField] private EnemyTypeConfig[] _enemyTypes;

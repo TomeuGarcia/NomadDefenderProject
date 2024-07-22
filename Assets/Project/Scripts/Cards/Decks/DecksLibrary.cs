@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "DeckLibrary_NAME", 
-    menuName = SOAssetPaths.CARDS_LIBRARIES + "DeckLibrary")]
+[CreateAssetMenu(fileName = "DeckLibrary", menuName = "Cards/DeckLibrary")]
 public class DecksLibrary : ScriptableObject
 {
     [Header("STARTER DECK DATA")]

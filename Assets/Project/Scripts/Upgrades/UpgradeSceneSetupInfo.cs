@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "UpgradeSceneSetupInfo", 
-    menuName = SOAssetPaths.MAP_SCENES + "UpgradeSceneSetupInfo")]
+[CreateAssetMenu(fileName = "UpgradeSceneSetupInfo", menuName = "Map/UpgradeSceneSetupInfo")]
 public class UpgradeSceneSetupInfo : ScriptableObject
 {
     public NodeEnums.ProgressionState CurrentNodeProgressionState { get; private set; }

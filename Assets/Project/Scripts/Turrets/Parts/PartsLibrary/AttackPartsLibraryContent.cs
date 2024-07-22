@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "AttackPartsLibraryContent", 
-    menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "AttackPartsLibraryContent")]
+[CreateAssetMenu(fileName = "AttackPartsLibraryContent", menuName = "TurretParts/AttackPartsLibraryContent")]
 public class AttackPartsLibraryContent : ScriptableObject
 {
     [Header("ATTACKS")]

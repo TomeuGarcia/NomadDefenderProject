@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "NewMapScenesLibrary", 
-    menuName = SOAssetPaths.MAP_SCENES + "MapScenesLibrary")]
+[CreateAssetMenu(fileName = "NewMapScenesLibrary", menuName = "Map/MapScenesLibrary")]
 public class MapScenesLibrary : ScriptableObject
 {
     [Header("UPGRADE SCENE'S NAMES")]

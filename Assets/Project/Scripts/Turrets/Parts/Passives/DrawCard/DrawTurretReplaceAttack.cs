@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "DeployDrawTurretCardReplaceAttack", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "DeployDrawTurretCardReplaceAttack")]
+[CreateAssetMenu(fileName = "DeployDrawTurretCardReplaceAttack", menuName = "TurretPassives/DeployDrawTurretCardReplaceAttack")]
 public class DrawTurretReplaceAttack : BasePassive
 {
     private TurretBuilding owner;

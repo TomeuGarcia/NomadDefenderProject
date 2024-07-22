@@ -1,8 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "SelfHurtUpgradeStat", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "SelfHurtUpgradeStat")]
+[CreateAssetMenu(fileName = "SelfHurtUpgradeStat", menuName = "TurretPassives/SelfHurtUpgradeStat")]
 public class SelfHurtUpgradeStat : BasePassive
 {
     [SerializeField] private SelfHurtUpgradeStatLogic logicPrefab;

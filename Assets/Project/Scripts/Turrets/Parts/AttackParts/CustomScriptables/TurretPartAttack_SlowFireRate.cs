@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "TurretPartAttack_SlowFireRate", 
-    menuName = SOAssetPaths.TURRET_PARTS_ATTACKS + "TurretPartAttack_SlowFireRate")]
+[CreateAssetMenu(fileName = "TurretPartAttack_SlowFireRate", menuName = "TurretParts/TurretPartAttack_SlowFireRate")]
 public class TurretPartAttack_SlowFireRate : TurretPartAttack
 {
     [Space(40)]

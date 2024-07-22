@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartBase", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASES + "TurretPartBase")]
+[CreateAssetMenu(fileName = "TurretPartBase", menuName = "TurretParts/TurretPartBase")]
 public class TurretPartBase : ScriptableObject
 {
+    public static int[] rangePerLvl = new int[] { 1, 2, 3, 4, 5 };
+
+
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
-    [SerializeField] private CardStatConfig _radiusRangeStat;
-    public CardStatConfig RadiusRangeStat => _radiusRangeStat;
+    [SerializeField, Range(1, 5), Tooltip("{ 1, 2, 3, 4, 5 }")] public int rangeLvl;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -33,9 +34,14 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade2Description;
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
-    public float BaseRange => GetRangeByLevel(0);
-    public string BaseRangeText => GetRangeByLevelText(0);
 
+    public int Range => GetRangeByLevel(rangeLvl);
+    public string RangeText => GetRangeByLevelText(rangeLvl);
+
+    public float GetRangePer1()
+    {
+        return (float)rangeLvl / (float)5;
+    }
 
     public bool HasAbilitySprite()
     {
@@ -46,7 +52,7 @@ public class TurretPartBase : ScriptableObject
     public void InitAsCopy(TurretPartBase other)
     {
         this.cost = other.cost;
-        this._radiusRangeStat = other._radiusRangeStat;
+        this.rangeLvl = other.rangeLvl;
 
         this.prefab = other.prefab;
 
@@ -99,15 +105,15 @@ public class TurretPartBase : ScriptableObject
 
     public void SetStatTexts(TMP_Text rangeText)
     {
-        rangeText.text = BaseRangeText;
+        rangeText.text = RangeText;
     }
 
-    public float GetRangeByLevel(int level)
+    public int GetRangeByLevel(int level)
     {
-        return _radiusRangeStat.ComputeValueByLevel(level);
+        return rangePerLvl[level - 1];
     }
     public string GetRangeByLevelText(int level)
     {
-        return GetRangeByLevel(level).ToString("0.0").Replace(',', '.');
+        return GetRangeByLevel(level).ToString();
     }
 }

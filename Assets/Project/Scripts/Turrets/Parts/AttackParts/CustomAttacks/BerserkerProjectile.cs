@@ -44,7 +44,7 @@ public class BerserkerProjectile : HomingProjectile
 
     private int ComputeDamage()
     {
-        int damage = turretOwner.Stats.Damage;
+        int damage = (int)(turretOwner.stats.damage);
 
         trailRenderer.widthMultiplier = BerserkerTurretBuildingVisuals.IsBerserkEnabled ? 2.5f : 1.0f;
 

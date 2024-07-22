@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewOWMapDecoratorUtils", 
-    menuName = SOAssetPaths.MAP_OVERWORLD + "OWMapDecoratorUtils")]
+[CreateAssetMenu(fileName = "NewOWMapDecoratorUtils", menuName = "Map/OWMapDecoratorUtils")]
 public class OWMapDecoratorUtils : ScriptableObject
 {
 

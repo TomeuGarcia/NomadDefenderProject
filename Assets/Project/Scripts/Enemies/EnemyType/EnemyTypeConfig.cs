@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyType_NAME", 
-    menuName = SOAssetPaths.ENEMY_TYPES + "EnemyTypeConfig")]
+[CreateAssetMenu(fileName = "EnemyType_NAME", menuName = "Enemies/Types/EnemyTypeConfig")]
 public class EnemyTypeConfig : ScriptableObject
 {
     [System.Serializable]
@@ -25,6 +24,6 @@ public class EnemyTypeConfig : ScriptableObject
 
 
     [SerializeField] private Stats _baseStats;
-
+    [SerializeField] public Enemy.EnemyType type;
     public Stats BaseStats => _baseStats;
 }

@@ -302,6 +302,6 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSteamWishlist()
     {
-        Application.OpenURL("steam://openurl/https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
+        Application.OpenURL("https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
     }
 }

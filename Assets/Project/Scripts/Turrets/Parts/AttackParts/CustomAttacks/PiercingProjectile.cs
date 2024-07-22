@@ -38,7 +38,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         this.targetEnemy = targetEnemy;
 
         this.currentDamageMultiplier = startDamageMultiplier;
-        this.damage = (int)((float)owner.Stats.Damage * currentDamageMultiplier);
+        this.damage = (int)((float)owner.stats.damage * currentDamageMultiplier);
         this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
 
         queueDamageAmount = targetEnemy.QueueDamage(damage);
@@ -79,8 +79,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
     private void ComputeGoalPosition()
     {
-        goalPos = transform.position + ((targetEnemy.Position - transform.position).normalized * 
-            (turretOwner.Stats.RadiusRange + turretOwner.Stats.RadiusRange * extraDistanceCoef));
+        goalPos = transform.position + ((targetEnemy.Position - transform.position).normalized * (turretOwner.stats.range + turretOwner.stats.range * extraDistanceCoef));
         goalPos.y = transform.position.y;
     }
 
@@ -127,6 +126,6 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         currentDamageMultiplier += damageMultiplierIncrement;
         currentDamageMultiplier = Mathf.Min(currentDamageMultiplier, maxDamageMultiplier);
 
-        this.damage = (int)((float)turretOwner.Stats.Damage * currentDamageMultiplier);
+        this.damage = (int)((float)turretOwner.stats.damage * currentDamageMultiplier);
     }
 }

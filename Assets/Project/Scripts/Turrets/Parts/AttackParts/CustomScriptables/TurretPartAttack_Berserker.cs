@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartAttack_Berserker", 
-    menuName = SOAssetPaths.TURRET_PARTS_ATTACKS + "TurretPartAttack_Berserker")]
+[CreateAssetMenu(fileName = "TurretPartAttack_Berserker", menuName = "TurretParts/TurretPartAttack_Berserker")]
 public class TurretPartAttack_Berserker : TurretPartAttack
 {
     [Space(40)]

@@ -4,10 +4,12 @@ using System.ComponentModel;
 using UnityEngine;
 using TMPro;
 
-[CreateAssetMenu(fileName = "TurretPartBody", 
-    menuName = SOAssetPaths.TURRET_PARTS + "TurretPartBody")]
+[CreateAssetMenu(fileName = "TurretPartBody", menuName = "TurretParts/TurretPartBody")]
+
 public class TurretPartBody : ScriptableObject
 {
+    public static int[] damagePerLvl = new int[] { 12, 20, 40, 60, 80 };
+    public static float[] cadencePerLvl = new float[] { 2f, 1.33f, 1f, 0.66f, 0.33f };
     
     public enum BodyType
     {
@@ -20,10 +22,8 @@ public class TurretPartBody : ScriptableObject
 
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
-    [SerializeField] private CardStatConfig _damageStat;
-    [SerializeField] private CardStatConfig _shotsPerSecondStat;
-    public CardStatConfig DamageStat => _damageStat;
-    public CardStatConfig ShotsPerSecondStat => _shotsPerSecondStat;
+    [SerializeField, Range(1, 6), Tooltip("{ 12, 20, 40, 60, 80  }")] public int damageLvl;
+    [SerializeField, Range(1, 6), Tooltip("{ 1.5f, 1f, 0.75f, 0.5f, 0.25f }")] public int cadenceLvl;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -38,20 +38,26 @@ public class TurretPartBody : ScriptableObject
     [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
 
 
-    public int BaseDamage => GetDamageByLevel(0); 
-    public string BaseDamageText => GetDamageByLevelText(0);
+    public int Damage => GetDamageByLevel(damageLvl); 
+    public string DamageText => GetDamageByLevelText(damageLvl);
+    public float Cadence => GetCadenceByLevel(cadenceLvl);
+    public string CadenceText => GetCadenceByLevelText(cadenceLvl);
 
-    public float BaseShotsPerSecond => GetShotsPerSecondByLevel(0);
-    public string BaseShotsPerSecondText => GetShotsPerSecondByLevelText(0);
-    public float BaseShotsPerSecondInverted => GetShotsPerSecondInvertedByLevel(0);
+    public float GetDamagePer1()
+    {
+        return (float)damageLvl / (float)5;
+    }
+
+    public float GetCadencePer1()
+    {
+        return (float)cadenceLvl / (float)5;
+    }
 
     public void InitAsCopy(TurretPartBody other)
     {
         this.cost = other.cost;
-        
-        this._damageStat = other._damageStat;
-        this._shotsPerSecondStat = other._shotsPerSecondStat;
-
+        this.damageLvl = other.damageLvl;
+        this.cadenceLvl = other.cadenceLvl;
         this.prefab = other.prefab;
         this.materialTextureMap = other.materialTextureMap;
 
@@ -86,14 +92,13 @@ public class TurretPartBody : ScriptableObject
 
     public void SetStatTexts(TMP_Text damageText, TMP_Text fireRateText)
     {
-        damageText.text = BaseDamageText;
-        fireRateText.text = BaseShotsPerSecondText;
+        damageText.text = DamageText;
+        fireRateText.text = CadenceText;
     }
-
 
     public int GetDamageByLevel(int level)
     {
-        return (int)_damageStat.ComputeValueByLevel(level);
+        return damagePerLvl[level - 1];
     }
 
     public string GetDamageByLevelText(int level)
@@ -101,17 +106,12 @@ public class TurretPartBody : ScriptableObject
         return GetDamageByLevel(level).ToString();
     }
 
-
-    public float GetShotsPerSecondByLevel(int level)
+    public float GetCadenceByLevel(int level)
     {
-        return _shotsPerSecondStat.ComputeValueByLevel(level);
+        return cadencePerLvl[level - 1];
     }
-    public string GetShotsPerSecondByLevelText(int level)
+    public string GetCadenceByLevelText(int level)
     {
-        return GetShotsPerSecondByLevel(level).ToString("0.0").Replace(',', '.');
-    }
-    public float GetShotsPerSecondInvertedByLevel(int level)
-    {
-        return 1f / GetShotsPerSecondByLevel(level);
+        return (1f / GetCadenceByLevel(level)).ToString("0.0").Replace(',', '.');
     }
 }

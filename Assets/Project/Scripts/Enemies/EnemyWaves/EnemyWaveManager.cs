@@ -20,7 +20,7 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] bool isTutorial;
     private int currentWaves = 0;
     private int activeWaves = 0;
-    private ITDGameState _tdGameState;
+    private bool started = false;
 
     private IEnumerator[] waveCoroutines;
     private Vector3 lastEnemyPos;
@@ -66,22 +66,13 @@ public class EnemyWaveManager : MonoBehaviour
 
 
         StartCoroutine(SetupEnemyPathFollowerTrails());
-
         
-        Enemy.OnEnemyDeathGlobal += OnEnemyDeath;
-        Enemy.OnEnemySuicide += OnEnemyDeath;
-    }
 
-    private void Start()
-    {
-        _tdGameState = ServiceLocator.GetInstance().TDGameState;
         StartCoroutine(WaitForStart());
-    }
 
-    private void OnDestroy()
-    {
-        Enemy.OnEnemyDeathGlobal -= OnEnemyDeath;
-        Enemy.OnEnemySuicide -= OnEnemyDeath;
+        HandBuildingCards.OnCardPlayed += StartAfterFirstCardPlayed;
+        Enemy.OnEnemyDeathDropCurrency += OnEnemyDeath;
+        Enemy.OnEnemySuicide += OnEnemyDeath;
     }
 
     private void OnEnable()
@@ -146,12 +137,16 @@ public class EnemyWaveManager : MonoBehaviour
         PrintConsoleLine(TextTypes.INSTRUCTION, "Play a card to start Enemy Waves",true);
     }
 
-
+    private void StartAfterFirstCardPlayed()
+    {
+        HandBuildingCards.OnCardPlayed -= StartAfterFirstCardPlayed;
+        started = true;
+    }
 
 
     private IEnumerator WaitForStart()
     {
-        yield return new WaitUntil(() => _tdGameState.FirstCardWasPlayed);
+        yield return new WaitUntil(() => started);
 
         // Start all parallel waves at once
         for (int i = 0; i < enemyWaveSpawners.Length; i++)
@@ -176,7 +171,7 @@ public class EnemyWaveManager : MonoBehaviour
         //}
 
         ++currentWaves;
-        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this);
+        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform);
         StartCoroutine(waveCoroutines[index]);
 
 

@@ -5,8 +5,7 @@ using UnityEngine;
 
 
 
-[CreateAssetMenu(fileName = "DeployHealBase", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "DeployHealBase")]
+[CreateAssetMenu(fileName = "DeployHealBase", menuName = "TurretPassives/DeployHealBase")]
 public class HealBase : BasePassive
 {
     [SerializeField] private HealBaseLogic logicPrefab;

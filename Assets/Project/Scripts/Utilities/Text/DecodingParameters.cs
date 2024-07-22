@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DecodingParameters", 
-    menuName = SOAssetPaths.UI_TEXTS + "DecodingParameters")]
+[CreateAssetMenu(fileName = "DecodingParameters", menuName = "UI/Text/DecodingParameters")]
 public class DecodingParameters : ScriptableObject
 {
     [Header("GENERAL PARAMETERS")]

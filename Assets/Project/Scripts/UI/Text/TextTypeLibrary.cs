@@ -17,8 +17,7 @@ public class TextType
     [HideInInspector] public string closeingContextColor = "</color>";
 };
 
-[CreateAssetMenu(fileName = "TextTypeLibrary", 
-    menuName = SOAssetPaths.UI_TEXTS + "TextTypeLibrary")]
+[CreateAssetMenu(fileName = "TextTypeLibrary", menuName = "UI/Text/TextTypeLibrary")]
 public class TextTypeLibrary : ScriptableObject
 {
     public List<TextType> textTypes;

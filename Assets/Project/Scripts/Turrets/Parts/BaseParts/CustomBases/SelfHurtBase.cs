@@ -59,6 +59,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
             owner.OnHideRangePlane -= OnRangePlaneHidden;
             PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
         }
+        PathLocation.OnHealthChanged -= ConnectBinderWithPathLocation;
 
         rotatingMesh.DOKill();
     }
@@ -69,6 +70,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
         
         owner = turretOwner;
         owner.OnPlaced += OnOwnerBuildingPlaced;        
+        PathLocation.OnHealthChanged += ConnectBinderWithPathLocation;
 
         UpdateExplosionDamage();
 
@@ -86,8 +88,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         UpdateExplosionDamage();
 
-        float planeRange = supportBuilding.Stats.RadiusRange * 2 + 1; //only for square
-        float range = supportBuilding.Stats.RadiusRange;
+        float planeRange = supportBuilding.stats.range * 2 + 1; //only for square
+        float range = supportBuilding.stats.range;
 
         rangePlane.transform.localScale = Vector3.one * (planeRange / 10f);
         rangePlaneMaterial = rangePlane.material;
@@ -143,11 +145,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
     private async void DamageHealthiestLocation(int damage)
     {
         await Task.Delay(200);
-
-        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position, out PathLocation pathLocation))
-        {
-            pathLocation.TakeDamage(damage);
-        }        
+        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position);
+        pathLocation.TakeDamage(damage);
     }
 
     private void OnPathLocationTakesDamage(PathLocation pathLocation)
@@ -185,12 +184,10 @@ public class SelfHurtBase : TurretPartBase_Prefab
     {
         ShowNodeBinder();
         ConnectBinderWithPathLocation();
-        PathLocation.OnHealthChanged += ConnectBinderWithPathLocation;
     }
     public override void GotDisabledPlacing()
     {
         HideNodeBinder();
-        PathLocation.OnHealthChanged -= ConnectBinderWithPathLocation;
     }
     public override void GotMovedWhenPlacing()
     {
@@ -220,9 +217,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void ConnectBinderWithPathLocation()
     {
-        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position, out PathLocation healthiestLocation))
-        {
-            TurretBinderUtils.UpdateTurretBinder(nodeBinderMesh.transform, healthiestLocation.transform, bindOriginTransform);
-        }               
+        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position);
+        TurretBinderUtils.UpdateTurretBinder(nodeBinderMesh.transform, pathLocation.transform, bindOriginTransform);
     }
 }

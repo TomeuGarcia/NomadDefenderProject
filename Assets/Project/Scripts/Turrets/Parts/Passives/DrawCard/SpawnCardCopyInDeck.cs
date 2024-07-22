@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DeploySpawnCopyInDeck", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "DeploySpawnCopyInDeck")]
+[CreateAssetMenu(fileName = "DeploySpawnCopyInDeck", menuName = "TurretPassives/DeploySpawnCopyInDeck")]
 public class SpawnCardCopyInDeck : BasePassive
 {
     private TurretBuilding owner;
@@ -32,7 +31,7 @@ public class SpawnCardCopyInDeck : BasePassive
         await Task.Delay(500);
 
         TurretCardParts partsCopy = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
-        partsCopy.InitCopyingReferences(owner.TurretCardParts);
+        partsCopy.Init(owner.TurretCardParts);
         partsCopy.cardCost += costIncrement;
 
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(partsCopy);

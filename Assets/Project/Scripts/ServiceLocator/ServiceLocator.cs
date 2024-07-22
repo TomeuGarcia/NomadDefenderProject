@@ -8,12 +8,10 @@ public class ServiceLocator : MonoBehaviour
     static private ServiceLocator instance;
 
     public CardDrawer CardDrawer { get; set; }
-    public ITDGameState TDGameState { get; set; }
     public TDLocationsUtils TDLocationsUtils { get; set; }
     public TDTurretBinderHelper TDTurretBinderHelper { get; set; }
     public CurrencyCounter CurrencyCounter { get; set; }
     public IFadingTextsFactory FadingTextFactory { get; set; }
-    public ITDCurrencySpawnService CurrencySpawnService { get; set; }
 
 
     private void Awake()

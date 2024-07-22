@@ -5,8 +5,7 @@ using Scripts.ObjectPooling;
 using NaughtyAttributes;
 
 
-[CreateAssetMenu(fileName = "FadingTextFactoryConfig_NAME", 
-    menuName = SOAssetPaths.UI_FADING_TEXTS + "FadingTextFactoryConfig")]
+[CreateAssetMenu(fileName = "FadingTextFactoryConfig_NAME", menuName = "UI/FadingTexts/FadingTextFactoryConfig")]
 public class FadingTextsFactoryConfig : ScriptableObject
 {
     [Header("POOLS")]

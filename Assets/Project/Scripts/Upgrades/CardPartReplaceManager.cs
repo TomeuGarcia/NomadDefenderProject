@@ -48,8 +48,9 @@ public class CardPartReplaceManager : MonoBehaviour
     private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
 
 
-    [Header("UPDATE CARD PLAY COST")]
-    [SerializeField] private CardUpgradeTurretPlayCostConfig _playCostsConfig;
+    [Header("SUBTRACT CARD PLAY COST")]
+    [SerializeField, Range(5, 50)] private int playCostSubtractAmountSamePart = 50;
+
 
     [Header("COMPONENTS")]
     [SerializeField] private MouseOverNotifier buttonMouseOverNotifier;
@@ -375,20 +376,18 @@ public class CardPartReplaceManager : MonoBehaviour
         {
             case PartType.ATTACK:
                 {
-                    CardPartAttack cardPartAttack = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>();
-                    selectedCard.SetNewPartAttack(cardPartAttack.turretPartAttack);
+                    selectedCard.SetNewPartAttack(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack);
                 }
                 break;
             case PartType.BODY:
                 {
-                    CardPartBody cardPartBody = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>();
-                    selectedCard.SetNewPartBody(cardPartBody.turretPartBody);
+                    selectedCard.SetNewPartBody(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBody>().turretPartBody);
                 }
                 break;
             case PartType.BASE:
                 {
-                    CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();
-                    selectedCard.SetNewPartBase(cardPartBase.turretPartBase, cardPartBase.turretPassiveBase);
+                    selectedCard.SetNewPartBase(cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase,
+                                                cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase);
                 }
                 break;
             default: 
@@ -396,6 +395,82 @@ public class CardPartReplaceManager : MonoBehaviour
         }
     }
 
+
+    
+    private IEnumerator ReplecementAnimation()
+    {
+        upgradeCardHolder.StopInteractions();
+        cardPartHolder.StopInteractions();
+
+
+        float partMoveDuration = 0.2f;
+        float flipDuration = 0.4f;
+        float moveDuration = 0.5f;
+
+        Transform upgradedCardTransform = upgradeCardHolder.selectedCard.CardTransform;
+        Vector3 upgradedCardStartPos = upgradedCardTransform.position;
+        Transform partTransform = cardPartHolder.selectedCardPart.CardTransform;
+
+
+        yield return new WaitForSeconds(0.1f);
+
+
+        // Audio
+        GameAudioManager.GetInstance().PlayCardPartSwap();
+        yield return new WaitForSeconds(0.2f);
+
+        // Move part towards card
+        partTransform.DOMove(upgradedCardStartPos, partMoveDuration);
+        yield return new WaitForSeconds(partMoveDuration);
+        partTransform.DOMove(partTransform.position + Vector3.up * -0.2f, 0.2f);
+
+        // Rise up card
+        upgradedCardTransform.DOMove(upgradedCardStartPos + (upgradedCardTransform.forward * -0.5f), moveDuration);
+        yield return new WaitForSeconds(moveDuration);
+
+        // Flip down
+        upgradedCardTransform.DOLocalRotate(Vector3.up * 180f, flipDuration);
+        yield return new WaitForSeconds(flipDuration + 0.1f);
+
+
+        // EXECUTE REPLACEMENT
+        TurretBuildingCard selectedCard = upgradeCardHolder.selectedCard as TurretBuildingCard;
+        ReplacePartInCard(selectedCard);
+        InvokeReplacementStart();
+
+
+        bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
+        selectedCard.PlayLevelUpAnimation();
+
+
+        // Flip up
+        upgradedCardTransform.DOLocalRotate(Vector3.up * 360f, flipDuration);
+        yield return new WaitForSeconds(flipDuration);
+
+        // Rise down card
+        upgradedCardTransform.DOMove(upgradedCardStartPos, moveDuration);
+        yield return new WaitForSeconds(moveDuration);
+
+        // Hide parts
+        cardPartHolder.Hide(0.5f, 0.2f);
+        yield return new WaitForSeconds(1f);
+
+        if (replacedWithSamePart) yield return new WaitForSeconds(1.5f);
+
+
+        yield return new WaitUntil(() => canFinalRetrieveCard);
+
+        // Enable FINAL retreieve card
+        //upgradeCardHolder.EnableFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
+
+        consoleDialog.Clear();
+        PrintConsoleLine(TextTypes.SYSTEM, "Combination done successfully", false, 0f);
+
+
+        upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
+    }
     
 
 
@@ -588,7 +663,7 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
+        if (replacedWithSamePart) selectedCard.SubtractPlayCost(playCostSubtractAmountSamePart);
         selectedCard.PlayLevelUpAnimation();
 
 
@@ -647,7 +722,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
 
         previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
-            partType, _playCostsConfig);
+            partType, playCostSubtractAmountSamePart);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)

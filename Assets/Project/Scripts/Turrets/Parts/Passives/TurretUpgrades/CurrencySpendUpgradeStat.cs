@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "CurrencySpendUpgradeStat", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "CurrencySpendUpgradeStat")]
+[CreateAssetMenu(fileName = "CurrencySpendUpgradeStat", menuName = "TurretPassives/CurrencySpendUpgradeStat")]
 public class CurrencySpendUpgradeStat : BasePassive
 {
     [SerializeField] private CurrencyUpgradeStatLogic logicPrefab;

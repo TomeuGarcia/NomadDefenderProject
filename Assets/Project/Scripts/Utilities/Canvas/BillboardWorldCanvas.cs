@@ -10,11 +10,8 @@ public class BillboardWorldCanvas : MonoBehaviour
 
     private void Update()
     {
-        if (Camera.main)
-        {
-            Vector3 cameraDirection = Camera.main.transform.forward;
-            canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
-        }
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        canvasTransform.rotation = Quaternion.LookRotation(cameraDirection);
     }
 
 }

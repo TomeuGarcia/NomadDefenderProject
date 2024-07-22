@@ -1,7 +1,5 @@
 
-using System;
 using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -25,19 +23,6 @@ public class GameTime
             yield return null;
         }
         TimeScale = endTimeScale;
-    }
-
-
-    public static IEnumerator WaitForSeconds(float duration)
-    {
-        duration = Mathf.Max(duration, 0);
-        float timer = 0;
-
-        while (timer < duration)
-        {
-            timer += DeltaTime;
-            yield return null;
-        }
     }
 
 }

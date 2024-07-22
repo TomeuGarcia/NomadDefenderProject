@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "EnemyWaveFinishSpawnCopyInHand", 
-    menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "EnemyWaveFinishSpawnCopyInHand")]
+[CreateAssetMenu(fileName = "EnemyWaveFinishSpawnCopyInHand", menuName = "TurretPassives/EnemyWaveFinishSpawnCopyInHand")]
 public class SpawnCardCopyInHand : BasePassive
 {
     private TurretBuilding owner;
@@ -55,7 +54,7 @@ public class SpawnCardCopyInHand : BasePassive
         await Task.Delay(100);
 
         TurretCardParts partsCopy = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
-        partsCopy.InitCopyingReferences(owner.TurretCardParts);
+        partsCopy.Init(owner.TurretCardParts);
         partsCopy.turretPassiveBase = baseNullPassive;
 
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;

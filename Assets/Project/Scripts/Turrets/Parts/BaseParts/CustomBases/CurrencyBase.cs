@@ -43,8 +43,8 @@ public class CurrencyBase : TurretPartBase_Prefab
         supportBuilding.OnEnemyEnterRange += EnemyBloomsCube;
         supportBuilding.OnEnemyExitRange += EnemyDoesNotBloomCube;
 
-        float planeRange = supportBuilding.Stats.RadiusRange * 2 + 1; //only for square
-        float range = supportBuilding.Stats.RadiusRange;
+        float planeRange = supportBuilding.stats.range * 2 + 1; //only for square
+        float range = supportBuilding.stats.range;
 
 
         currencyPlane.transform.localScale = Vector3.one * (planeRange / 10f);

@@ -6,7 +6,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor.Tilemaps;
 
-[CreateAssetMenu(fileName = "PrefabBrush_NAME", menuName = SOAssetPaths.LEVEL_CREATION_BRUSHES + "PrefabBrush")]
+[CreateAssetMenu(fileName = "Prefab brush", menuName = "Brushes/Prefab brush")]
 [CustomGridBrush(false, true, false, "Prefab brush")]
 public class PrefabBrush : GameObjectBrush
 {
