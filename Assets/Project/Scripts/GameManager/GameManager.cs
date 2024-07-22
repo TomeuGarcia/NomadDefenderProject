@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
         gameOverSubtitleTextDecoder.Activate();
 
         yield return new WaitForSeconds(4.0f);
-        mapSceneLoader.LoadMainMenuScene(1f);
+        mapSceneLoader.LoadFacilityScene(1f);
 
         for (int i = 0; i < 3; ++i)
         {

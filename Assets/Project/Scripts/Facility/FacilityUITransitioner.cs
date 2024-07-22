@@ -16,6 +16,7 @@ public class FacilityUITransitioner : MonoBehaviour
     [SerializeField] private GameObject _completedText;
     [SerializeField] private ScriptedSequence _scriptedSequence;
     [SerializeField] private Image _loadingBar;
+    [SerializeField] private FacilityManager _facilityManager;
 
     [Header("PARAMETERS")]
     [SerializeField] private AnimationCurve _loadingCurve;
@@ -69,7 +70,7 @@ public class FacilityUITransitioner : MonoBehaviour
         StartCoroutine(ConsoleLineSpam());
         yield return new WaitForSeconds(_consoleLinesTime);
 
-        SceneLoader.GetInstance().LoadDeckSelector();
+        _facilityManager.TransitionToNextScene();
     }
 
     private IEnumerator PoppingText()

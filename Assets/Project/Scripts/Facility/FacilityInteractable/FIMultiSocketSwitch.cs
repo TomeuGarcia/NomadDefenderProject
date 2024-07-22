@@ -76,4 +76,9 @@ public class FIMultiSocketSwitch : AFacilityInteractable
         _manager.IsMultiSocketOn = false;
         yield return null;
     }
+
+    public override void InteractedStart()
+    {
+        StartCoroutine(TurnOn());
+    }
 }

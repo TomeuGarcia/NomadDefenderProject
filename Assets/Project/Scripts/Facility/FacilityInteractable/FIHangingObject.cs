@@ -15,7 +15,7 @@ public class FIHangingObject : AFacilityInteractable
 
     private Vector3 _positionDifference;
 
-    private void Awake()
+    protected override void DoAwake()
     {
         _positionDifference = _transformForceB.position - _transformForceA.position;
     }

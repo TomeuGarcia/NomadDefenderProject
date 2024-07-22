@@ -83,16 +83,17 @@ public class MapSceneLoader : MonoBehaviour
         }
     }
 
-    public void LoadMainMenuScene(float delay)
+    public void LoadFacilityScene(float delay)
     {
-        StartCoroutine(DoLoadMainMenuScene(delay));
+        StartCoroutine(DoLoadFacilityScene(delay));
     }
-    private IEnumerator DoLoadMainMenuScene(float delay)
+    private IEnumerator DoLoadFacilityScene(float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        SceneLoader.GetInstance().StartLoadMainMenu();
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
+        ServiceLocator.GetInstance().RunInfo.SetComeFromRun(true);
+        ServiceLocator.GetInstance().RunInfo.SetWonRun(false);
+        SceneLoader.GetInstance().LoadFacility();
     }
 
 

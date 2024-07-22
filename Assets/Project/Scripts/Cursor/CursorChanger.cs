@@ -20,7 +20,12 @@ public class CursorChanger : MonoBehaviour
     [SerializeField] private CursorSet _facilityCursor;
     [SerializeField] private CursorSet _computerCursor;
 
-    private CursorContext _cursorContext = CursorContext.FACILITY;
+    private CursorContext _cursorContext = CursorContext.COMPUTER;
+
+    private void Start()
+    {
+        ServiceLocator.GetInstance().CursorChanger = this;
+    }
 
     public void ChangeCursorContext(CursorContext cursorContext)
     {

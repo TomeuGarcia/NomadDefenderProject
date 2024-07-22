@@ -9,8 +9,15 @@ public class PointAndClickClickableObject : MonoBehaviour
 {
     private Outline _outline;
     private bool _highlighted = false;
-    
-    [SerializeField] private UnityEvent _onClick = new UnityEvent();
+
+    private CursorChanger _cursorChanger;
+
+    [SerializeField] private AFacilityInteractable _interactable;
+
+    private void Awake()
+    {
+        _cursorChanger = ServiceLocator.GetInstance().CursorChanger;
+    }
 
     private void OnMouseEnter()
     {
@@ -24,22 +31,30 @@ public class PointAndClickClickableObject : MonoBehaviour
             //_outline = gameObject.AddComponent<Outline>();
             _highlighted = true;
         }
+
+        if (_interactable.CanInteract())
+        {
+            _cursorChanger.HoverCursor();
+        }
     }
 
     private void OnMouseExit()
     {
         //if (_outline != null)
         //{
-            //_highlighted = false;
-            //_outline.enabled = false;
+        //  _highlighted = false;
+        //  _outline.enabled = false;
         //}
+
+        _cursorChanger.RegularCursor();
     }
 
     private void OnMouseDown()
     {
         if (_highlighted)
         {
-            _onClick.Invoke();
+            //_onClick.Invoke();
+            _interactable.Interact();
         }
     }
 }

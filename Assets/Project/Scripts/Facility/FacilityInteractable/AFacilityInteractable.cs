@@ -11,6 +11,13 @@ public abstract class AFacilityInteractable : MonoBehaviour
     [SerializeField] protected bool _needsPermissionToInteract = true;
     [SerializeField] protected float _duration;
 
+    private void Awake()
+    {
+        DoAwake();
+    }
+
+    protected virtual void DoAwake() { }
+
     public void Init(FacilityPointAndClickManager manager)
     {
         _manager = manager;
@@ -18,10 +25,11 @@ public abstract class AFacilityInteractable : MonoBehaviour
     }
 
     protected virtual void DoInit() { }
+    public virtual void InteractedStart() { }
 
     public void Interact()
     {
-        if(!_needsPermissionToInteract || _manager.CanInteract)
+        if(CanInteract())
         {
             _manager.DisableInteractions();
             StartCoroutine(InteractionCoroutine());
@@ -39,5 +47,10 @@ public abstract class AFacilityInteractable : MonoBehaviour
     protected void FinishedInteraction()
     {
         _manager.FinishedInteraction();
+    }
+
+    public bool CanInteract()
+    {
+        return (!_needsPermissionToInteract || _manager.CanInteract);
     }
 }

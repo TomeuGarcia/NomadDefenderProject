@@ -22,7 +22,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private Transform _backgroundMap;
     [SerializeField] private Transform _bootUpTextParent;
     [SerializeField] private TextDecoder _titleDecoder;
-    [SerializeField] private string _titleText;
+    [SerializeField, TextArea] private string _titleText;
     [SerializeField] private GameObject _titleTextShadow;
     [SerializeField] private FlickeringLightGroup _flickeringLightGroup;
     [SerializeField] private List<BootUpFragment> _bootUpTexts = new();
@@ -48,7 +48,7 @@ public class FIComputerButton : AFacilityInteractable
     private float _defaultButtonZPosition;
     private Color32 _defaultScreenLightColor;
 
-    private void Awake()
+    protected override void DoAwake()
     {
         _buttonMat = _button.GetComponent<MeshRenderer>().material;
         _defaultButtonZPosition = _button.localPosition.z;
@@ -68,14 +68,18 @@ public class FIComputerButton : AFacilityInteractable
             else
             {
                 yield return TurnOn();
-
-                _titleDecoder.ResetDecoder();
-                _titleDecoder.gameObject.SetActive(true);
-                _titleDecoder.SetTextStrings(_titleText);
-                _titleDecoder.Activate();
-                _titleDecoder.NextLine();
+                DecodeTitleText();
             }
         }
+    }
+
+    private void DecodeTitleText()
+    {
+        _titleDecoder.ResetDecoder();
+        _titleDecoder.gameObject.SetActive(true);
+        _titleDecoder.SetTextStrings(_titleText);
+        _titleDecoder.Activate();
+        _titleDecoder.NextLine();
     }
 
     private IEnumerator TurnOn()
@@ -173,5 +177,13 @@ public class FIComputerButton : AFacilityInteractable
 
         _buttonLight.color = _buttonLightOffColor;
         _screenParent.gameObject.SetActive(false);
+    }
+
+    public override void InteractedStart()
+    {
+        DecodeTitleText();
+        _titleTextShadow.gameObject.SetActive(true);
+        _buttonLight.color = _buttonLightOnColor;
+        _screenParent.gameObject.SetActive(true);
     }
 }
