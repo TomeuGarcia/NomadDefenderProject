@@ -190,7 +190,7 @@ public class EnemyWaveSpawner : ScriptableObject
                     yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(enemyInWave.DelayBeforeSpawn));
                     if (stopForced) break;
                     
-                    SpawnEnemy(enemyInWave.EnemyTypeN, spawnTransform);
+                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
 
                 }                
             }

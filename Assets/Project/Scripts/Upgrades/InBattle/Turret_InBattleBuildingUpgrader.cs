@@ -15,13 +15,14 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private GameObject quickHoverBasePassiveImageHolder;
     [SerializeField] private Image quickHoverBasePassiveImage;
 
-    private TurretBuilding _turret;
-    private string DamageStatValueText => _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl);
-    private string NextDamageStatValueText => _turret.TurretCardParts.turretPartBody.GetDamageByLevelText(attackLvl+1);
-    private string FireRateStatValueText => _turret.TurretCardParts.turretPartBody.GetShotsPerSecondByLevelText(cadenceLvl);
-    private string NextFireRateStatValueText => _turret.TurretCardParts.turretPartBody.GetShotsPerSecondByLevelText(cadenceLvl+1);
-    private string RangeStatValueText => _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl);
-    private string NextRangeStatValueText => _turret.TurretCardParts.turretPartBase.GetRangeByLevelText(rangeLvl+1);
+    private TurretBuilding _turretBuilding;
+    private ITurretStatsStateSource _turretStatsState;
+    private string DamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel);
+    private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel + 1);
+    private string FireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel);
+    private string NextFireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel + 1);
+    private string RangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel);
+    private string NextRangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel + 1);
 
     protected override void AwakeInit()
     {
@@ -35,17 +36,21 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
-    public override void InitTurret(TurretBuilding turret, CurrencyCounter newCurrencyCounter,
-        bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+    public override void InitTurret(TurretBuilding turretBuilding, 
+        IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
+        int numberOfUpgrades, 
+        CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
     {
-        base.InitTurret(turret, newCurrencyCounter, hasPassiveAbility, basePassiveSprite, basePassiveColor);
+        base.InitTurret(turretBuilding, buildingUpgradesController, turretStatsState, numberOfUpgrades, newCurrencyCounter, 
+            hasPassiveAbility, basePassiveSprite, basePassiveColor);
 
-        _turret = turret;
-        maxLevels = _turret.CardLevel;
+        _turretBuilding = turretBuilding;
+        _turretStatsState = turretStatsState;
+        maxLevels = numberOfUpgrades;
 
         if (hasPassiveAbility)
         {
-            quickHoverBasePassiveImageHolder.gameObject.SetActive(true);
+            quickHoverBasePassiveImageHolder.SetActive(true);
             quickHoverBasePassiveImage.sprite = basePassiveSprite;
             quickHoverBasePassiveImage.color = basePassiveColor;
         }
@@ -59,7 +64,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void UpdateAllStatsView()
     {
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
 
         _damageUpgradeStat.UpdateView(DamageStatValueText, isCardUpgradedToMax);
         _fireRateUpgradeStat.UpdateView(FireRateStatValueText, isCardUpgradedToMax);
@@ -113,7 +118,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         float t1 = 0.075f;
         float t3 = t1 * 3;
-        bool isCardUpgradedToMax = IsCardUpgradedToMax(currentBuildingLevel);
+        bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
 
         barImage.DOFillAmount(1f, t1);
         backgroundImage.DOFillAmount(1f, t3);
@@ -217,7 +222,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
         if (canUpgradeStat)
         {
-            DoUpgradeAllTurretStats();
+            SpendUpgradeCost();
+            UpgradeAllTurretStats();
             UpdateAllStatsView();
         }
         else
@@ -225,6 +231,24 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             PlayNegativeAnimationTextCostPunch();
             OnCanNotUpgradeStats();
         }
+    }
+
+    private void UpgradeAllTurretStats()
+    {
+        NextLevel();
+
+        _turretBuilding.InvokeOnBuildingUpgraded();
+
+        CheckStopParticlesCanUpgrade();
+        PlayPositiveAnimationTextCostPunch();
+        InvokeOnUpgrade(TurretUpgradeType.ATTACK);
+        InvokeOnUpgrade(TurretUpgradeType.CADENCE);
+        InvokeOnUpgrade(TurretUpgradeType.RANGE);
+    }
+
+    public override void FreeTurretUpgrade() 
+    { 
+        UpgradeAllTurretStats(); 
     }
 
     private void OnUpgradeAllStatsButtonHovered()

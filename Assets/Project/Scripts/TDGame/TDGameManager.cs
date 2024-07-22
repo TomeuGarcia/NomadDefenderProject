@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TDGameManager : MonoBehaviour, TDLocationsUtils
+public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 {
     [Header("CONFIG")]
     [SerializeField] private TDGameManagerConfig _config;
@@ -18,6 +18,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
     [SerializeField] private Transform victoryTextTransform;
     [SerializeField] private GameObject defeatHolder;
     [SerializeField] private Transform defeatTextTransform;
+
 
 
     public delegate void TDGameManagerAction();
@@ -45,9 +46,13 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
     [SerializeField] private Material tilesMaterial;
     [SerializeField] private Material outerPlanesMaterial;
 
+    public bool FirstCardWasPlayed { get; private set; } = false;
+
+    public bool GameHasFinished { get; private set; } = false;
 
     private void Awake()
     {
+        ServiceLocator.GetInstance().TDGameState = this;
         ServiceLocator.GetInstance().TDLocationsUtils = this;
 
         victoryHolder.SetActive(false);
@@ -59,11 +64,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         numAliveLocations = pathLocations.Length;        
 
         InitLocationsVisuals();
-    }    
+    }
 
 
     private void OnEnable()
-    {
+    {        
+        HandBuildingCards.OnCardPlayed += EnableFirstCardPlayed;
         EnemyWaveManager.OnAllWavesFinished += CheckVictory;
 
         for (int i = 0; i < pathLocations.Length; ++i)
@@ -74,6 +80,11 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
     private void OnDisable()
     {
+        if (!FirstCardWasPlayed)
+        {
+            HandBuildingCards.OnCardPlayed -= EnableFirstCardPlayed;
+        }
+        
         EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
 
         for (int i = 0; i < pathLocations.Length; ++i)
@@ -108,6 +119,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         outerPlanesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
         outerPlanesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);
         outerPlanesMaterial.SetVector("_ErrorOriginOffset2", Vector3.one * -1000);
+    }
+
+    private void EnableFirstCardPlayed()
+    {
+        HandBuildingCards.OnCardPlayed -= EnableFirstCardPlayed;
+        FirstCardWasPlayed = true;
     }
 
 
@@ -158,7 +175,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
 
 
         if (OnGameOverStart != null) OnGameOverStart();
-        if (OnGameFinishStart != null) OnGameFinishStart();
+        CommonFinishGame();
     }
 
     private void CheckVictory()
@@ -176,6 +193,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         Debug.Log("Victory");
 
         StartCoroutine(VictoryAnimation());
+        CommonFinishGame();
+    }
+
+    private void CommonFinishGame()
+    {
+        GameHasFinished = true;
         if (OnGameFinishStart != null) OnGameFinishStart();
     }
 
@@ -275,12 +298,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
         return highestHealth;
     }
 
-    public PathLocation GetHealthiestLocation(Vector3 quearierPosition)
+    public bool GetHealthiestLocation(Vector3 quearierPosition, out PathLocation healthiestLocation)
     {
         int highestHealth = -1;
         float closestDistance = 1000;
         float distanceThreshold = 0.5f;
-        PathLocation healthiestLocation = null;
+        healthiestLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
@@ -303,15 +326,15 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
             }
         }
 
-        return healthiestLocation;
+        return healthiestLocation != null;
     }
 
-    public PathLocation GetMostDamagedLocation(Vector3 quearierPosition)
+    public bool GetMostDamagedLocation(Vector3 quearierPosition, out PathLocation mostDamagedLocation)
     {
         int lowestHealth = 1000;
         float closestDistance = 1000;
         float distanceThreshold = 0.5f;
-        PathLocation mostDamagedLocation = null;
+        mostDamagedLocation = null;
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
@@ -334,6 +357,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils
             }
         }
 
-        return mostDamagedLocation;
+        return mostDamagedLocation != null;
     }
 }

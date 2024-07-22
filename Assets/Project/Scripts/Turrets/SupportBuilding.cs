@@ -5,13 +5,10 @@ using DG.Tweening;
 
 public class SupportBuilding : RangeBuilding
 {
-    public struct SupportBuildingStats
-    {
-        public int playCost;
-        [SerializeField, Min(1)] public float range;
-    }
+    private SupportCardStatsController _statsController;
+    public SupportStatsSnapshot Stats => _statsController.CurrentStats;
 
-    [HideInInspector] public SupportBuildingStats stats;
+
     private TurretPartBase turretPartBase;
 
 
@@ -41,21 +38,30 @@ public class SupportBuilding : RangeBuilding
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
     }
 
-
-
-    public void Init(SupportBuildingStats stats, TurretPartBase turretPartBase, CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
+    private void OnDestroy()
     {
-        InitStats(stats);
+        if (_statsController != null)
+        {
+            _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
+        }
+    }
+
+
+    public void Init(SupportCardStatsController statsController, TurretPartBase turretPartBase, 
+        CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
+    {
+        _statsController = statsController;
+        _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
         this.turretPartBase = turretPartBase;
 
         basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.InitAsSupportBuilding(this, stats.range);
+        basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
 
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitSupport(currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, turretPartBase);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);
@@ -63,29 +69,26 @@ public class SupportBuilding : RangeBuilding
 
     protected override void UpdateRange()
     {
-        basePart.baseCollider.UpdateRange(stats.range);
+        basePart.baseCollider.UpdateRange(Stats.RadiusRange);
+    }
+    private void OnControllerUpdatedStats()
+    {
+        UpdateRange();
     }
 
-
-    public void InitStats(SupportBuildingStats stats)
+    public void ApplyStatsUpgrade(int newStatsLevel)
     {
-        this.stats = stats;
-    }
-
-    public override void Upgrade(TurretUpgradeType upgradeType, int newStatLevel)
-    {
-        basePart.Upgrade(this, newStatLevel);
+        basePart.Upgrade(this, newStatsLevel);
 
         if (visualUpgrades.Length == 0) return;
-        if (visualUpgrades[newStatLevel - 1] != null) visualUpgrades[newStatLevel - 1].SetActive(true);
+        if (visualUpgrades[newStatsLevel - 1] != null) visualUpgrades[newStatsLevel - 1].SetActive(true);
 
         InvokeOnBuildingUpgraded();
     }
+
     public void UpgradeRangeIncrementingLevel()
     {
-        int newStatLevel = 1; // IDK - Tomeu
-        stats.range = turretPartBase.GetRangeByLevel(newStatLevel);
-        UpdateRange();
+        _statsController.IncrementUpgradeLevel();
     }
 
     protected override void DisableFunctionality()

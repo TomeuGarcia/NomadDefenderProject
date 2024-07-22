@@ -26,9 +26,9 @@ public class CardStatConfig : ScriptableObject
         _valueLevel3 = ComputeValueByLevel(3);
     }
 
-    public float ComputeValueByLevel(int upgradeLevel, float valueBonus = 0f)
+    public float ComputeValueByLevel(int upgradeLevel, float baseValueBonusMultiplier = 0f)
     {
-        return _upgradeConfig.ComputeValue(_baseValue, upgradeLevel) + valueBonus;
+        return _upgradeConfig.ComputeValue(_baseValue, upgradeLevel) + (_baseValue * baseValueBonusMultiplier);
     }
 
 }

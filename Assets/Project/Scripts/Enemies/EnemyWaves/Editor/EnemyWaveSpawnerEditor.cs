@@ -69,8 +69,8 @@ public class EnemyWaveSpawnerEditor : Editor
             EnemyWave enemyWave = _enemyWaveSpawnerInspected.EnemyWaves[i];
             int waveCurrency = 0;
             foreach (EnemyInWave enemyInWave in enemyWave.enemiesInWave)
-            {
-                waveCurrency += enemyInWave.EnemyTypeN.BaseStats.CurrencyDrop;
+            {                
+                waveCurrency += enemyInWave.EnemyType.BaseStats.CurrencyDrop * enemyInWave.numberOfSpawns;
             }
 
             EditorGUILayout.LabelField($" {i}. {waveCurrency} ", _header2LabelStyle);
@@ -198,10 +198,12 @@ public class EnemyWaveSpawnerEditor : Editor
         GUILayout.Label("ENEMY TYPE LEGEND");
         GUI.color = Color.white;
 
+        /*
         for (int enemyTypeI = 0; enemyTypeI < (int)Enemy.EnemyType.COUNT; ++enemyTypeI)
         {
             GUILayout.Label(((Enemy.EnemyType)enemyTypeI).ToString() + " = " + enemyTypeI.ToString());
         }
+        */
     }
 
 }

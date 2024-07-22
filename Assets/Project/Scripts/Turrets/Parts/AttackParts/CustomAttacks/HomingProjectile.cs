@@ -20,7 +20,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
 
         this.targetEnemy = targetEnemy;
 
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, owner.stats.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, owner.Stats.Damage, passiveDamageModifier);
 
         targetEnemy.QueueDamage(damage);
 

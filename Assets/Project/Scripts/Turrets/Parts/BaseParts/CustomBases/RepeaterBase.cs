@@ -418,7 +418,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private float GetTurretRangeDistance(TurretBuilding turretBuilding)
     {
-        return ((turretBuilding.stats.range + 0.5f) / 2f) + 0.15f; // Weird formula...
+        return ((turretBuilding.Stats.RadiusRange + 0.5f) / 2f) + 0.15f; // Weird formula...
     }
 
 

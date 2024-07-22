@@ -63,8 +63,8 @@ public class CloseRangeDamageProjectile : HomingProjectile
         float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
         float distanceInverse = 1f / distance;
 
-        int baseDamage = (int)(turretOwner.stats.damage * baseDamagePer1);
-        int baseDamageRemaining = (int)(turretOwner.stats.damage * (1f - baseDamagePer1));
+        int baseDamage = (int)(turretOwner.Stats.Damage * baseDamagePer1);
+        int baseDamageRemaining = (int)(turretOwner.Stats.Damage * (1f - baseDamagePer1));
         int bonusDamage = (int)(baseDamageRemaining * distanceInverse * distanceInverseMultiplier);
 
         return baseDamage + bonusDamage;

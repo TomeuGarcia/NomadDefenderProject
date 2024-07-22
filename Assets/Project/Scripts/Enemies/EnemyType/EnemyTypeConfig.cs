@@ -25,6 +25,6 @@ public class EnemyTypeConfig : ScriptableObject
 
 
     [SerializeField] private Stats _baseStats;
-    [SerializeField] public Enemy.EnemyType type;
+
     public Stats BaseStats => _baseStats;
 }
