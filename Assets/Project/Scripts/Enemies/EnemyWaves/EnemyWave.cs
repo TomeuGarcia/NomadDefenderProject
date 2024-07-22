@@ -6,26 +6,23 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyInWave
 {
-    [SerializeField, SerializeReference] public EnemyTypeConfig _enemyType;
-    [SerializeField, SerializeReference] public Enemy.EnemyType enemyType;
+    [SerializeField, SerializeReference] private EnemyTypeConfig _enemyType;
     [SerializeField, SerializeReference] public float delayBeforeSpawn;
     [SerializeField, SerializeReference, Min(1)] public int numberOfSpawns = 1;
 
-    public EnemyTypeConfig EnemyTypeN => _enemyType;
-    public Enemy.EnemyType EnemyType => enemyType;
+    public EnemyTypeConfig EnemyType => _enemyType;
     public float DelayBeforeSpawn => delayBeforeSpawn;
     public float NumberOfSpawns => numberOfSpawns;
 
 
     public EnemyInWave()
     {
-        this.enemyType = Enemy.EnemyType.BASIC;
         this.delayBeforeSpawn = 1.0f;
         this.numberOfSpawns = 1;
     }
-    public EnemyInWave(Enemy.EnemyType enemyType, float delayBeforeSpawn)
+    public EnemyInWave(EnemyTypeConfig enemyType, float delayBeforeSpawn)
     {
-        this.enemyType = enemyType;
+        _enemyType = enemyType;
         this.delayBeforeSpawn = delayBeforeSpawn;
         this.numberOfSpawns = 1;
     }

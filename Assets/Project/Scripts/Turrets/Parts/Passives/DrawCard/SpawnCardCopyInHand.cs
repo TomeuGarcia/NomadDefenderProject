@@ -55,7 +55,7 @@ public class SpawnCardCopyInHand : BasePassive
         await Task.Delay(100);
 
         TurretCardParts partsCopy = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
-        partsCopy.Init(owner.TurretCardParts);
+        partsCopy.InitCopyingReferences(owner.TurretCardParts);
         partsCopy.turretPassiveBase = baseNullPassive;
 
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;

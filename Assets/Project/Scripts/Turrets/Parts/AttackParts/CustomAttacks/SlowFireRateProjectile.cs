@@ -51,7 +51,7 @@ public class SlowFireRateProjectile : HomingProjectile
         float curveCoefficient = currentTime / MAX_CADENCE_TIME;
         float curveValue = damageRateCurve.Evaluate(curveCoefficient);
 
-        int damage = (int)(curveValue * turretOwner.stats.damage * maxDamageMultiplier);
+        int damage = (int)(curveValue * turretOwner.Stats.Damage * maxDamageMultiplier);
         return damage;        
     }
 

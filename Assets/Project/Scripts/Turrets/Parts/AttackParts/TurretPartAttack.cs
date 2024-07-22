@@ -41,9 +41,8 @@ public class TurretPartAttack : ScriptableObject
     }
 
 
-    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
-    {
-    }
+    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial) 
+    {    }
 
 
     // Operator Overloads

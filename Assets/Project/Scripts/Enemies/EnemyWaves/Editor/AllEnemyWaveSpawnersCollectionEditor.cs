@@ -59,32 +59,12 @@ public class AllEnemyWaveSpawnersCollectionEditor : Editor
     {
         Undo.RecordObject(_enemyWaveSpawnersCollectionInspected, "Update EnemyWaveSpawner Collection");
 
-        EnemyWaveSpawner[] enemyWaveSpawners = FindAssetsHelper.GetAllAssetsInProject<EnemyWaveSpawner>(OnEnemyWaveSpawnerFindCallback);
+        EnemyWaveSpawner[] enemyWaveSpawners = FindAssetsHelper.GetAllAssetsInProject<EnemyWaveSpawner>();
         _enemyWaveSpawnersCollectionInspected.UpdateEnemyWaveSpawners(enemyWaveSpawners);
 
         _enemyWaveSpawnersTotal = enemyWaveSpawners.Length;
 
         EditorUtility.SetDirty(_enemyWaveSpawnersCollectionInspected);
-    }
-
-    private void OnEnemyWaveSpawnerFindCallback(EnemyWaveSpawner enemyWaveSpawner)
-    {
-        return;
-
-        enemyWaveSpawner.ValidateJSONFormat();
-        EnemyWaveJSONManager.LoadEnemyWave(enemyWaveSpawner, false);
-        
-        foreach ( EnemyWave enemyWave in enemyWaveSpawner.EnemyWaves)
-        {
-            foreach (EnemyInWave enemyInWave in enemyWave.enemiesInWave)
-            {
-                enemyInWave._enemyType = _enemyWaveSpawnersCollectionInspected.GetEnemey(enemyInWave.EnemyType);
-
-                
-            }
-            
-        }
-        EditorUtility.SetDirty(enemyWaveSpawner);
     }
 
 }

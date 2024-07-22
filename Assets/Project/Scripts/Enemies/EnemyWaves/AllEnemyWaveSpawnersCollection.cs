@@ -17,18 +17,5 @@ public class AllEnemyWaveSpawnersCollection : ScriptableObject
         _allEnemyWaveSpawners = allEnemyWaveSpawners;
     }
 
-    public EnemyTypeConfig GetEnemey(Enemy.EnemyType et)
-    {
-        foreach (EnemyTypeConfig enemyType in enemyTypesColl.EnemyTypes)
-        {
-            if (et == enemyType.type)
-            {
-                return enemyType;
-            }
-        }
-
-        return null;
-    }
-
 }
 

@@ -5,16 +5,6 @@ using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyType { 
-        BASIC, // 0
-        FAST,  // 1
-        TANK,BASIC_ARMORED, // 2
-        FAST_ARMORED,TANK_ARMORED, // 3
-        ARMOR_TRUCK,  // 4
-        HEALTH_TRUCK, // 5
-        COUNT
-    }
-
     [Header("Attack")]
     [SerializeField] private EnemyAttackGeneralConfig _attackGeneralConfig;
     
@@ -51,8 +41,8 @@ public class Enemy : MonoBehaviour
     protected HealthSystem healthSystem;
 
     public delegate void EnemyAction(Enemy enemy);
-    public static EnemyAction OnEnemyDeathDropCurrency;
     public static EnemyAction OnEnemySuicide;
+    public static EnemyAction OnEnemyDeathGlobal;
     public EnemyAction OnEnemyDeath;
     public EnemyAction OnEnemyDeactivated;
 
@@ -144,7 +134,7 @@ public class Enemy : MonoBehaviour
                     pathLocation.TakeDamage(damage);
                     collidedWithLocation = true;
 
-                    if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+                    //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
                 }
             }
         }
@@ -229,7 +219,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        if (OnEnemyDeathDropCurrency != null) OnEnemyDeathDropCurrency(this);
+        if (OnEnemyDeathGlobal != null) OnEnemyDeathGlobal(this);
         if (OnEnemyDeath != null) OnEnemyDeath(this);
         Deactivation();
     }

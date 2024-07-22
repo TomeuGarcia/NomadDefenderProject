@@ -32,7 +32,7 @@ public class SpawnCardCopyInDeck : BasePassive
         await Task.Delay(500);
 
         TurretCardParts partsCopy = ScriptableObject.CreateInstance("TurretCardParts") as TurretCardParts;
-        partsCopy.Init(owner.TurretCardParts);
+        partsCopy.InitCopyingReferences(owner.TurretCardParts);
         partsCopy.cardCost += costIncrement;
 
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(partsCopy);
