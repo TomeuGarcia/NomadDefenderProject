@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "AllEnemyWaveSpawnersCollection", menuName = "Enemies/AllEnemyWaveSpawnersCollection")]
+[CreateAssetMenu(fileName = "AllEnemyWaveSpawnersCollection", 
+    menuName = SOAssetPaths.ENEMY_WAVES + "AllEnemyWaveSpawnersCollection")]
 public class AllEnemyWaveSpawnersCollection : ScriptableObject
 {
     [Expandable] [SerializeField] private EnemyWaveSpawner[] _allEnemyWaveSpawners;
@@ -14,19 +15,6 @@ public class AllEnemyWaveSpawnersCollection : ScriptableObject
     public void UpdateEnemyWaveSpawners(EnemyWaveSpawner[] allEnemyWaveSpawners)
     {
         _allEnemyWaveSpawners = allEnemyWaveSpawners;
-    }
-
-    public EnemyTypeConfig GetEnemey(Enemy.EnemyType et)
-    {
-        foreach (EnemyTypeConfig enemyType in enemyTypesColl.EnemyTypes)
-        {
-            if (et == enemyType.type)
-            {
-                return enemyType;
-            }
-        }
-
-        return null;
     }
 
 }

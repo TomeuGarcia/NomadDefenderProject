@@ -66,7 +66,7 @@ MonoBehaviour:
     type: 3}
   cardPartBasePrefab: {fileID: 3900070926476808981, guid: d882f06068a8e6a42aeed588a7064e48,
     type: 3}
-  playCostSubtractAmountSamePart: 40
+  _playCostsConfig: {fileID: 11400000, guid: 5e364d0fad0022341b9efeb690bf9c10, type: 2}
   buttonMouseOverNotifier: {fileID: 0}
   cardPlacerToParent: {fileID: 0}
   cardPartPlacerToParent: {fileID: 0}
@@ -394,7 +394,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -443,6 +445,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4295452663846789672}
     m_Modifications:
     - target: {fileID: 2849090365032789595, guid: d1d30d22428d2cd4ea2f86440a774e51,
@@ -561,6 +564,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1d30d22428d2cd4ea2f86440a774e51, type: 3}
 --- !u!224 &7989712783989866307 stripped
 RectTransform:
@@ -585,6 +591,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4295452665841441035}
     m_Modifications:
     - target: {fileID: 9066549113980888875, guid: d1c2bd284d35f234db234b9444d06b50,
@@ -703,6 +710,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7989712785675900560}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1c2bd284d35f234db234b9444d06b50, type: 3}
 --- !u!114 &360986106233380882 stripped
 MonoBehaviour:

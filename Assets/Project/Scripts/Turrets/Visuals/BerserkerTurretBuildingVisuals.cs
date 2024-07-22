@@ -38,9 +38,7 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     }
 
 
-
-    private TurretBuilding.TurretBuildingStats _defaultStats;
-    private TurretBuilding.TurretBuildingStats _hyperStats;
+    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(3.0f, 0.25f, 2.0f);
 
     private const float HYPER_DAMAGE_MULTIPLIER = 3.0f;
     private const float HYPER_CADENCE_MULTIPLIER = 0.25f;
@@ -86,10 +84,14 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
+
 
     private void SubscribeToEvents()
     {
-        _owner.OnDestroyed += UnsubscribeToEvents;
         _owner.OnBuildingUpgraded += CheckIsBerserkSetupHyperStats;
 
         PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
@@ -97,7 +99,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
     private void UnsubscribeToEvents()
     {
-        _owner.OnDestroyed -= UnsubscribeToEvents;
         _owner.OnBuildingUpgraded -= CheckIsBerserkSetupHyperStats;
 
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
@@ -158,19 +159,12 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
     private void SetupHyperStats()
     {
-        _defaultStats = _owner.stats;
-
-        _hyperStats = _owner.stats;
-        _hyperStats.damage = (int)(_hyperStats.damage * HYPER_DAMAGE_MULTIPLIER);
-        _hyperStats.cadence *= HYPER_CADENCE_MULTIPLIER;
-        _hyperStats.range *= HYPER_RANGE_MULTIPLIER;
-
-        _owner.UpdateStats(_hyperStats);
+        _owner.StatsBonusController.AddBonusStatsMultiplication(_hyperStatsMultiplier);
     }
 
     private void ResetStats()
     {
-        _owner.UpdateStats(_defaultStats);
+        _owner.StatsBonusController.RemoveBonusStatsMultiplication(_hyperStatsMultiplier);
     }
 
 

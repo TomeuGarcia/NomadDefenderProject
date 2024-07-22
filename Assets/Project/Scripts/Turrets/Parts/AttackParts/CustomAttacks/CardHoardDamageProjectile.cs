@@ -49,8 +49,8 @@ public class CardHoardDamageProjectile : HomingProjectile
 
         trailRenderer.widthMultiplier = 0.2f + (numberOfCardsInHand * 0.4f);
 
-        int baseDamage = turretOwner.stats.damage;
-        int bonusDamage = (int)(turretOwner.stats.damage * damageIncrementPer1  * numberOfCardsInHand);
+        int baseDamage = turretOwner.Stats.Damage;
+        int bonusDamage = (int)(turretOwner.Stats.Damage * damageIncrementPer1  * numberOfCardsInHand);
 
         return baseDamage + bonusDamage;
     }

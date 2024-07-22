@@ -12,7 +12,6 @@ using static TurretBuildingCard;
 public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 {
     public SupportCardParts supportCardParts { get; private set; }
-    private SupportBuilding.SupportBuildingStats supportBuildingStats;
 
     
     [Header("CARD INFO")]
@@ -35,6 +34,10 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
+    private SupportCardStatsController StatsController => supportCardParts.StatsController;
+    private int PlayCost { get; set; }
+
+
 
     public void Awake()
     {
@@ -51,26 +54,26 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(supportBuildingStats, supportCardParts.turretPartBase, currencyCounter, 
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, supportCardParts.turretPartBase, currencyCounter, 
             abilityImage.sprite, abilityImage.color);
         copyBuildingPrefab.SetActive(false);
     }
 
     public override int GetCardPlayCost()
     {
-        return supportBuildingStats.playCost;
+        return PlayCost;
     }
 
     public override void UpdatePlayCost(int newPlayCost)
     {
-        supportBuildingStats.playCost = newPlayCost;
+        PlayCost = newPlayCost;
         InitCostText();
     }
 
     public void ResetParts(SupportCardParts supportCardParts)
     {
         this.supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
-        this.supportCardParts.Init(supportCardParts);
+        this.supportCardParts.InitCopyingReferences(supportCardParts);
         Init();
     }
     protected override void GetMaterialsRefs()
@@ -82,8 +85,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitStatsFromTurretParts()
     {
-        supportBuildingStats.playCost = supportCardParts.GetCardCost();
-        supportBuildingStats.range = supportCardParts.turretPartBase.Range;
+        PlayCost = supportCardParts.GetCardCost();
     }
 
     protected override void InitVisuals()

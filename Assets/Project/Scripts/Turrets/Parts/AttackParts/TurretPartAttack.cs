@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretPartAttack", menuName = "TurretParts/TurretPartAttack")]
+[CreateAssetMenu(fileName = "TurretPartAttack", 
+    menuName = SOAssetPaths.TURRET_PARTS + "TurretPartAttack")]
 public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
     [SerializeField, Min(0)] public int cost;
+    [SerializeField, Min(0)] public float _numberOfHittableTargets = 1f;
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -23,6 +25,9 @@ public class TurretPartAttack : ScriptableObject
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] public string abilityDescription;
 
+    public float NumberOfHittableTargets => _numberOfHittableTargets;
+
+
     public void InitAsCopy(TurretPartAttack other)
     {
         this.cost = other.cost;
@@ -36,9 +41,8 @@ public class TurretPartAttack : ScriptableObject
     }
 
 
-    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
-    {
-    }
+    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial) 
+    {    }
 
 
     // Operator Overloads

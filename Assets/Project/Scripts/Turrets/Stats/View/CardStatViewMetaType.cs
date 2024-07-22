@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "CardStatMetaType_NAME", menuName = "Cards/CardStatMetaType")]
-public class CardStatMetaType : ScriptableObject
+[CreateAssetMenu(fileName = "CardStatMetaType_NAME", 
+    menuName = SOAssetPaths.CARDS_STATS + "CardStatMetaType")]
+public class CardStatViewMetaType : ScriptableObject
 {
     [SerializeField] private string _typeName = "CardStat";
 

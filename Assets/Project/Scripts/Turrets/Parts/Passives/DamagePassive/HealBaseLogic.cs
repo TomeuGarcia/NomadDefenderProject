@@ -50,9 +50,10 @@ public class HealBaseLogic : MonoBehaviour
     {
         await Task.Delay(300);
 
-        PathLocation mostDamagedLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation(owner.Position);
-
-        mostDamagedLocation.Heal(healAmount);
+        if (ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation(owner.Position, out PathLocation mostDamagedLocation))
+        {
+            mostDamagedLocation.Heal(healAmount);
+        }        
     }
 
 
@@ -93,8 +94,10 @@ public class HealBaseLogic : MonoBehaviour
 
     private void ConnectBinderWithPathLocation()
     {
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation(owner.Position);
-        TurretBinderUtils.UpdateTurretBinder(binder.Transform, pathLocation.transform, owner.BinderPointTransform);
+        if (ServiceLocator.GetInstance().TDLocationsUtils.GetMostDamagedLocation(owner.Position, out PathLocation mostDamagedLocation))
+        {
+            TurretBinderUtils.UpdateTurretBinder(binder.Transform, mostDamagedLocation.transform, owner.BinderPointTransform);
+        }        
     }
 
     private void OnPathLocationHealthChanged()

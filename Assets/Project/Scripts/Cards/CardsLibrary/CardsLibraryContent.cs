@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CATEGORY_CardsLibraryContent", menuName = "Cards/CardsLibraryContent")]
+[CreateAssetMenu(fileName = "CATEGORY_CardsLibraryContent", menuName = 
+    SOAssetPaths.CARDS_LIBRARIES + "CardsLibraryContent")]
 public class CardsLibraryContent : ScriptableObject
 {
     [System.Serializable]

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -55,14 +55,14 @@ public class SelfHurtUpgradeStatLogic : MonoBehaviour
     {
         UnsubscribeEvents();
 
-        await Task.Delay(300);
+        await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
-        TurretUpgradeType lowestStat = owner.Upgrader.GetLowestStatUpgradeType(false);
-        if (lowestStat == TurretUpgradeType.NONE) return;
+        owner.Upgrader.FreeTurretUpgrade();
 
-        owner.Upgrader.FreeTurretUpgrade(lowestStat);
-
-        ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position).TakeDamage(damageAmount);
+        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position, out PathLocation pathLocatioon))
+        {
+            pathLocatioon.TakeDamage(damageAmount);
+        }
 
         HideBinder();
     }
@@ -100,8 +100,10 @@ public class SelfHurtUpgradeStatLogic : MonoBehaviour
 
     private void ConnectBinderWithPathLocation()
     {
-        PathLocation pathLocation = ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position);
-        TurretBinderUtils.UpdateTurretBinder(binder.Transform, pathLocation.transform, owner.BinderPointTransform);
+        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position, out PathLocation pathLocation))
+        {
+            TurretBinderUtils.UpdateTurretBinder(binder.Transform, pathLocation.transform, owner.BinderPointTransform);
+        }        
     }
 
     private void OnPathLocationHealthChanged()
