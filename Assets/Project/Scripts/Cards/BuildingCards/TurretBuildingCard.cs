@@ -60,6 +60,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     private TurretCardStatsController StatsController => turretCardParts.StatsController;
+    public ITurretStatsBonusController StatsBonusController => StatsController;
     private int PlayCost { get; set; }
 
 

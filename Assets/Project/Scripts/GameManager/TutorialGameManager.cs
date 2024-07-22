@@ -16,12 +16,13 @@ public class TutorialGameManager : GameManager
     [SerializeField] private AttackPartsLibraryContent attacksContent;
     [SerializeField] private BodyPartsLibraryContent bodiesContent;
     [SerializeField] private BasePartsLibraryContent basesContent;
+    [SerializeField] private BonusStatsPartsLibraryContent bonusStatsContent;
 
 
     private void Start()
     {
         cardLibrary.SetContent(cardsContent);
-        partLibrary.SetContent(attacksContent, bodiesContent, basesContent);
+        partLibrary.SetContent(attacksContent, bodiesContent, basesContent, bonusStatsContent);
     }
 
     protected override void StartVictory()

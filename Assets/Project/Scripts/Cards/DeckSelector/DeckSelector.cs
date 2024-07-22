@@ -83,7 +83,8 @@ public class DeckSelector : MonoBehaviour
         SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
 
         LibrariesManager.GetInstance().CardsLibrary.SetContent(runContent.cardsContent);
-        LibrariesManager.GetInstance().PartsLibrary.SetContent(runContent.attacksContent, runContent.bodiesContent, runContent.basesContent);
+        LibrariesManager.GetInstance().PartsLibrary.SetContent(runContent.attacksContent, runContent.bodiesContent, 
+            runContent.basesContent, runContent.bonusStatsContent);
 
         StartCoroutine(DoOnDeckSelected(selectableDeck));
     }
