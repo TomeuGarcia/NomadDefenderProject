@@ -39,5 +39,5 @@ public static class SOAssetPaths
     public const string CARDS_BUILDINGS = CARDS + "BuildingCards/";
     public const string CARDS_DECKS = CARDS + "Decks/";
     public const string CARDS_STATS = CARDS + "Stats/";
-
+    public const string CARDS_VIEW = CARDS + "View/";
 }

@@ -22,6 +22,8 @@ public abstract class BuildingCard : MonoBehaviour
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
 
+    [Header("CONFIG")]
+    [SerializeField] private CardMotionConfig _motionConfig;
 
     [Header("BUILDING PREFAB")]
     [SerializeField] public GameObject buildingPrefab;
@@ -86,6 +88,8 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     protected Material cardMaterial;
+
+    [SerializeField] private Transform _rotationEffectsHolder;
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -232,6 +236,13 @@ public abstract class BuildingCard : MonoBehaviour
                 if (OnCardInfoSelected != null) OnCardInfoSelected(this);
             }
         }
+
+
+        float rotationTime = (_motionConfig.HoveredRotationEffect.RotationSpeed * Time.time) + gameObject.GetInstanceID();
+        Vector3 rotationEffect =
+            Vector3.right * (Mathf.Sin(rotationTime) * _motionConfig.HoveredRotationEffect.MaxRotationAngles) +
+            Vector3.up * (Mathf.Cos(rotationTime) * _motionConfig.HoveredRotationEffect.MaxRotationAngles);
+        _rotationEffectsHolder.localRotation = Quaternion.Euler(rotationEffect);
     }
 
 
@@ -299,6 +310,7 @@ public abstract class BuildingCard : MonoBehaviour
         ImmediateStandardState();/////
 
         RootCardTransform.DOMove(finalPosition, duration)
+            .SetEase(_motionConfig.Repositioning_Move_Ease)
             .OnComplete(EndRepositioning);
     }
     private void EndRepositioning()
@@ -355,8 +367,10 @@ public abstract class BuildingCard : MonoBehaviour
         DisableMouseInteraction();
 
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime);
+        CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime)
+            .SetEase(_motionConfig.ToStandard_Move_Ease);
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
+            .SetEase(_motionConfig.ToStandard_Rot_Ease)
             .OnComplete(() => {
                 EnableMouseInteraction();
                 if (repositionColliderOnEnd) RepositionColliderToCardTransform();
@@ -371,11 +385,13 @@ public abstract class BuildingCard : MonoBehaviour
         if (useAdditionalOffset) moveBy += hoverAdditionalOffset;
 
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableLocalMoveBy(moveBy, hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(moveBy, hoverTime)
+            .SetEase(_motionConfig.Hovered_Move_Ease);
 
         if (rotate)
         {
-            CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime);
+            CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime)
+                .SetEase(_motionConfig.Hovered_Rot_Ease);
         }
     }
 
@@ -404,7 +420,9 @@ public abstract class BuildingCard : MonoBehaviour
         DisableMouseInteraction();
 
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime).OnComplete(() => {
+        CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime)
+            .SetEase(_motionConfig.Selected_Move_Ease)
+            .OnComplete(() => {
             if (enableInteractionOnEnd) EnableMouseInteraction();
             if (repositionColliderOnEnd) RepositionColliderToCardTransform();
         });
