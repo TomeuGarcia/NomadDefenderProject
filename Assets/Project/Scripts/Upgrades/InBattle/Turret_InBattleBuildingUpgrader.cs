@@ -235,6 +235,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpgradeAllTurretStats()
     {
+        _buildingUpgradesController.IncrementUpgradeLevel();
         NextLevel();
 
         _turretBuilding.InvokeOnBuildingUpgraded();

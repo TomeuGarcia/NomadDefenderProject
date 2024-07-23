@@ -78,7 +78,7 @@ public class SupportBuilding : RangeBuilding
 
     public void ApplyStatsUpgrade(int newStatsLevel)
     {
-        basePart.Upgrade(this, newStatsLevel);
+        //basePart.Upgrade(this, newStatsLevel); // DONT UPGRADE RANGE EVERY TIME
 
         if (visualUpgrades.Length == 0) return;
         if (visualUpgrades[newStatsLevel - 1] != null) visualUpgrades[newStatsLevel - 1].SetActive(true);

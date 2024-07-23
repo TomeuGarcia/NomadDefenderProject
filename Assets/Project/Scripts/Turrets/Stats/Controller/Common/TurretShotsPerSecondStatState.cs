@@ -13,6 +13,12 @@ public class TurretShotsPerSecondStatState : ITurretShotsPerSecondState
         _stat = stat;
         BaseStatMultiplicationBonus = new StatValueBonus();
     }
+    
+    public TurretShotsPerSecondStatState(CardStatConfig stat, StatValueBonus baseStatMultiplicationBonus)
+    {
+        _stat = ScriptableObject.Instantiate(stat);
+        BaseStatMultiplicationBonus = new StatValueBonus(baseStatMultiplicationBonus);
+    }
 
 
     public float BaseShotsPerSecond => GetShotsPerSecondByLevel(0);
@@ -32,7 +38,7 @@ public class TurretShotsPerSecondStatState : ITurretShotsPerSecondState
     }
     public string GetShotsPerSecondByLevelText(int upgradeLevel)
     {
-        return GetShotsPerSecondByLevel(upgradeLevel).ToString().Replace(',', '.');
+        return GetShotsPerSecondByLevel(upgradeLevel).ToString("0.0").Replace(',', '.');
     }
 
 }

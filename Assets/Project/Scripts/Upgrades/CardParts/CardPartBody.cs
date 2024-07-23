@@ -50,7 +50,8 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
         //bodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor); // Projectile color     ???? WHAT TO DO ????
         bodyMaterial.SetColor("_PaintColor", defaultColorTurretPartAttack.materialColor);
 
-        turretPartBody.SetStatTexts(_damageStatValueText, _fireRateStatValueText);
+        _damageStatValueText.text = turretPartBody.DamageStat.GetBaseValueText(true);
+        _fireRateStatValueText.text = turretPartBody.ShotsPerSecondStat.GetBaseValueText(false);
     }
 
 

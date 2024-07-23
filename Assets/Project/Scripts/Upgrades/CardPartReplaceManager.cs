@@ -433,7 +433,7 @@ public class CardPartReplaceManager : MonoBehaviour
             case PartType.BONUS_STATS:
                 {
                     CardPartBonusStats cardPartBonusStats = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
-                    cardPartBonusStats.ApplyStatsModification(selectedCard.StatsBonusController);
+                    selectedCard.AddPermanentBonusStats(cardPartBonusStats);
                 }
                 break;
             default: 
@@ -676,6 +676,7 @@ public class CardPartReplaceManager : MonoBehaviour
         TurretPartBody turretPartBody = null;
         TurretPartBase turretPartBase = null;
         TurretPassiveBase turretPassiveBase = null;
+        CardPartBonusStats cardPartBonusStats = null;
 
         if (partType == PartType.ATTACK)
         {
@@ -690,9 +691,13 @@ public class CardPartReplaceManager : MonoBehaviour
             turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
             turretPassiveBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase;
         }
+        else if (partType == PartType.BONUS_STATS)
+        {
+            cardPartBonusStats = selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
+        }
 
-        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
-            partType, _playCostsConfig);
+        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, cardPartBonusStats,
+            selectedCard, partType, _playCostsConfig);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)

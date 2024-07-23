@@ -14,7 +14,7 @@ public class TurretStatsUpgradeModel : ScriptableObject
         public StatString(int value)
         {
             IsNull = value == 0;
-            Value = (value < 0 ? "-" : "+") + ' ' + Mathf.Abs(value).ToString() + '%';
+            Value = (value < 0 ? "-" : "+") + Mathf.Abs(value).ToString() + '%';
         }
     }
 

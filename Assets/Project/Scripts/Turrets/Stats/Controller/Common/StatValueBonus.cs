@@ -12,6 +12,11 @@ public class StatValueBonus
         _valueBonuses = new List<float>();
         UpdateAccumulatedBonusSum();
     }
+    public StatValueBonus(StatValueBonus other)
+    {
+        _valueBonuses = new List<float>(other._valueBonuses);
+        UpdateAccumulatedBonusSum();
+    }
 
     private void UpdateAccumulatedBonusSum()
     {
