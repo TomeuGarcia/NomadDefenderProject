@@ -120,8 +120,6 @@ public class TurretBuilding : RangeBuilding
             _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
         }
 
-        _statsController.ResetUpgradeLevel();
-
         TDGameManager.OnGameFinishStart -= PrintData;
     }
 
@@ -158,7 +156,7 @@ public class TurretBuilding : RangeBuilding
 
     public void Init(TurretCardStatsController statsController, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
     {
-        _statsController = statsController;
+        _statsController = statsController;        
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
         TurretCardParts = turretCardParts;

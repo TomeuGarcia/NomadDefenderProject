@@ -31,4 +31,15 @@ public class CardStatConfig : ScriptableObject
         return _upgradeConfig.ComputeValue(_baseValue, upgradeLevel) + (_baseValue * baseValueBonusMultiplier);
     }
 
+
+    public string GetBaseValueText(bool isInt)
+    {
+        float value = ComputeValueByLevel(0);
+        if (isInt)
+        {
+            return ((int)value).ToString();
+        }
+
+        return value.ToString("0.0").Replace(',', '.');
+    }
 }

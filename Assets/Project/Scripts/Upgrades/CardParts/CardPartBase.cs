@@ -53,8 +53,8 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
     {
         baseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
         baseMaterial.SetColor("_Color", turretPartBase.materialColor);
-
-        turretPartBase.SetStatTexts(_rangeStatValueText);
+        
+        _rangeStatValueText.text = turretPartBase.RadiusRangeStat.GetBaseValueText(false);
 
 
         hasBasePassiveAbility = turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);

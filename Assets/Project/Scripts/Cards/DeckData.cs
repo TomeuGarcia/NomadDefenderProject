@@ -26,7 +26,7 @@ public class DeckData : ScriptableObject
             TurretPartAttack turretPartAttack = ScriptableObject.Instantiate(otherComponents.turretPartAttack);
             turretPartAttack.InitAsCopy(otherComponents.turretPartAttack);
             
-            TurretPartBody turretPartBody = ScriptableObject.CreateInstance<TurretPartBody>();
+            TurretPartBody turretPartBody = ScriptableObject.Instantiate(otherComponents.turretPartBody);
             turretPartBody.InitAsCopy(otherComponents.turretPartBody);
             
             TurretPartBase turretPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);

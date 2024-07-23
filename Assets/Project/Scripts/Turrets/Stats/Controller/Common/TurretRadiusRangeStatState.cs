@@ -12,6 +12,11 @@ public class TurretRadiusRangeStatState : ITurretRadiusRangeState
         _stat = stat;
         BaseStatMultiplicationBonus = new StatValueBonus();
     }
+    public TurretRadiusRangeStatState(CardStatConfig stat, StatValueBonus baseStatMultiplicationBonus)
+    {
+        _stat = ScriptableObject.Instantiate(stat);
+        BaseStatMultiplicationBonus = new StatValueBonus(baseStatMultiplicationBonus);
+    }
 
     public float BaseRadiusRange => GetRadiusRangeByLevel(0);
 
@@ -24,6 +29,6 @@ public class TurretRadiusRangeStatState : ITurretRadiusRangeState
 
     public string GetRadiusRangeByLevelText(int upgradeLevel)
     {
-        return GetRadiusRangeByLevel(upgradeLevel).ToString().Replace(',', '.');
+        return GetRadiusRangeByLevel(upgradeLevel).ToString("0.0").Replace(',', '.');
     }
 }

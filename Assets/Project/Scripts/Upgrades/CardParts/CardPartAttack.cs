@@ -18,7 +18,8 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
 
 
     [Header("PART")]
-    [SerializeField] public TurretPartAttack turretPartAttack;
+    [SerializeField] private TurretPartAttack turretPartAttack;
+    public TurretPartAttack TurretPartAttack => turretPartAttack;
 
 
     [Header("VISUALS")]
@@ -34,6 +35,11 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     protected override void AwakeInit()
     {
         base.AwakeInit();
+    }
+
+    public void Configure(TurretPartAttack turretPartAttack)
+    {
+        this.turretPartAttack = turretPartAttack;
     }
 
     public override void Init()

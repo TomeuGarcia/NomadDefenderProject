@@ -96,7 +96,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         material.SetColor("_Color", turretPartBase.materialColor);
 
         // Canvas
-        turretPartBase.SetStatTexts(_rangeStatValueText);
+        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseRadiusRangeText;        
         abilityImage.transform.parent.gameObject.SetActive(true);
 
         abilityImage.sprite = turretPartBase.abilitySprite;

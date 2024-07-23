@@ -12,7 +12,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 
     private static string[] upgardeTypesToText =
     {
-        "NewCard", "Projectile", "Base", "Body"
+        "NewCard", "Projectile", "Base", "Body", "BonusStats"
     };
 
 

@@ -12,6 +12,12 @@ public class TurretDamageStatState : ITurretDamageState
         _stat = stat;
         BaseStatMultiplicationBonus = new StatValueBonus();
     }
+    
+    public TurretDamageStatState(CardStatConfig stat, StatValueBonus baseStatMultiplicationBonusToCopy)
+    {
+        _stat = ScriptableObject.Instantiate(stat);
+        BaseStatMultiplicationBonus = new StatValueBonus(baseStatMultiplicationBonusToCopy);
+    }
 
 
     public int BaseDamage => GetDamageByLevel(0);
