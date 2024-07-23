@@ -269,7 +269,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.5f);
 
-        scriptedSequence.NextLine(); //15
+        scriptedSequence.NextLine(); //15 PLACE A TURRET ON THE MAP 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() => waveStarted );
 
@@ -283,7 +283,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         
 
-        //First Wave 1/1
+        //First Wave 1/3
         scriptedSequence.NextLine();//18
         
         //Second Wave (2/2)
@@ -293,6 +293,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
 
+        //STARTS UPGRADE TURRET TUTORIAL
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(150) );
         yield return new WaitForSeconds(0.5f); //Extra wait
         scriptedSequence.Clear();
@@ -313,12 +314,15 @@ public class BattleTutorialManager : MonoBehaviour
 
         GameTime.SetTimeScale(1f);
 
+        //STARTS UPGRADE TURRET TUTORIAL
+        
+        
+        //Last Wave
         yield return new WaitUntil(() => wavesCounter > 2);
         scriptedSequence.Clear();
 
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
-
-        //Last Wave
+        
         scriptedSequence.NextLine(); //23
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(4.0f);
