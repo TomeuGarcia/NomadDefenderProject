@@ -17,6 +17,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private TurretBuilding _turretBuilding;
     private ITurretStatsStateSource _turretStatsState;
+
+    protected override int CurrentBuildingLevel => _buildingUpgradesController.CurrentUpgradeLevel;
     private string DamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel);
     private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel + 1);
     private string FireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel);

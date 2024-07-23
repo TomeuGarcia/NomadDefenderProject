@@ -76,13 +76,9 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
     }
 
-    public void ApplyStatsUpgrade(int newStatsLevel)
+    public void ApplyUpgrade(int newStatsLevel)
     {
-        //basePart.Upgrade(this, newStatsLevel); // DONT UPGRADE RANGE EVERY TIME
-
-        if (visualUpgrades.Length == 0) return;
-        if (visualUpgrades[newStatsLevel - 1] != null) visualUpgrades[newStatsLevel - 1].SetActive(true);
-
+        basePart.Upgrade(this, newStatsLevel);
         InvokeOnBuildingUpgraded();
     }
 
@@ -154,10 +150,10 @@ public class SupportBuilding : RangeBuilding
 
     private void PlayUpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
-        StartCoroutine(UpgradeAnimation(upgradeType));
+        StartCoroutine(UpgradeAnimation(upgradeType, upgradeLevel));
     }
 
-    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType)
+    private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
         basePart.DOComplete();
         basePart.MeshTransform.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
@@ -169,6 +165,11 @@ public class SupportBuilding : RangeBuilding
         GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
         upgradeParticles.Play();
+
+        if (visualUpgrades.Length > 0)
+        {
+            if (visualUpgrades[upgradeLevel - 1] != null) visualUpgrades[upgradeLevel - 1].SetActive(true);
+        }        
     }
 
 

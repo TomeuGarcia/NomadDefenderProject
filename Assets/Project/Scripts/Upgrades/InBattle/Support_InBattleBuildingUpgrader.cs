@@ -21,6 +21,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private SupportBuilding _supportBuilding;
 
+    protected override int CurrentBuildingLevel { get => _currentSupportLevel; }
+    private int _currentSupportLevel;
 
     protected override void AwakeInit()
     {
@@ -37,6 +39,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     {
         _supportBuilding = supportBuilding;
         maxLevels = maxUpgradeCount;
+        _currentSupportLevel = 0;
 
         base.InitSupport(supportBuilding, buildingUpgradesController, 
             newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
@@ -44,6 +47,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         supportIcon.color = abilityColor;
 
         this.turretPartBase = turretPartBase;
+
 
         UpdateNextUpgradeDescriptionText();
 
@@ -242,8 +246,10 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpgradeAllSupportStats()
     {
+        //_buildingUpgradesController.IncrementUpgradeLevel(); // DON'T UPGARDE STATS EVERY TIME!
+        ++_currentSupportLevel;
         NextLevel();
-        _supportBuilding.ApplyStatsUpgrade(CurrentBuildingLevel);
+        _supportBuilding.ApplyUpgrade(CurrentBuildingLevel);
 
         CheckStopParticlesCanUpgrade();
         PlayPositiveAnimationTextCostPunch();

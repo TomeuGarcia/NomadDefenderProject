@@ -67,7 +67,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     private float xOffset;
     protected const int maxUpgradeCount = 3;
-    public int CurrentBuildingLevel => _buildingUpgradesController.CurrentUpgradeLevel;
+    protected abstract int CurrentBuildingLevel { get; }
     protected IBuildingUpgradesController _buildingUpgradesController;
 
 
