@@ -18,18 +18,13 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
     [Header("CANVAS COMPONENTS")]
     [SerializeField] private Image basePassiveImage;
-    [SerializeField] private TextMeshProUGUI _rangeStatValueText;
-    [SerializeField] private CanvasGroup cgRange;
     [SerializeField] private CanvasGroup cgPassive;
+    [SerializeField] private TMP_Text _basePassiveNameText;
+
 
     [Header("PART")]
-    [SerializeField] public TurretPartBase turretPartBase;
     [SerializeField] public TurretPassiveBase turretPassiveBase;
 
-    [Header("VISUALS")]
-    //[SerializeField] private MeshRenderer baseMeshRenderer;
-    [SerializeField] private Image baseImage;
-    private Material baseMaterial;
 
 
     private bool hasBasePassiveAbility;
@@ -41,22 +36,10 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
 
 
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-        //baseMaterial = baseMeshRenderer.material;
-        baseMaterial = new Material(baseImage.material);
-        baseImage.material = baseMaterial;
-    }
+
 
     public override void Init()
     {
-        baseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
-        baseMaterial.SetColor("_Color", turretPartBase.materialColor);
-        
-        _rangeStatValueText.text = turretPartBase.RadiusRangeStat.GetBaseValueText(false);
-
-
         hasBasePassiveAbility = turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
         if (hasBasePassiveAbility)
         {
@@ -64,11 +47,13 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
             basePassiveImage.sprite = turretPassiveBase.visualInformation.sprite;
             basePassiveImage.color = turretPassiveBase.visualInformation.color;
+
+            _basePassiveNameText.text = "/" + turretPassiveBase.passive.abilityName;
         }
         else
         {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }
+        }        
     }
 
 
@@ -93,14 +78,20 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
         for (int i = 0; i < 8; ++i)
         {
-            cgRange.DOFade(0f, t1);
+            foreach (CanvasGroup cg in cgsInfoHide)
+            {
+                cg.DOFade(0f, t1);
+            }            
             yield return new WaitForSeconds(t1);
 
-            cgRange.DOFade(1f, t1);
+
+            foreach (CanvasGroup cg in cgsInfoHide)
+            {
+                cg.DOFade(1f, t1);
+            }
             GameAudioManager.GetInstance().PlayCardInfoShown();
             yield return new WaitForSeconds(t1);
         }
-
 
         yield return new WaitForSeconds(delayBeforeAbility);
         

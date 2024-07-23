@@ -217,10 +217,7 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private void ResetAvailableUpgradeTypes()
     {
-        for (int i = 0; i < (int)NodeEnums.UpgradeType.COUNT; ++i)
-        {
-            availableUpgradeTypes.Add((NodeEnums.UpgradeType)i);
-        }
+        availableUpgradeTypes.AddRange(dUtils.AvailableUpgrades);
     }
     private bool NoAvailableUpgradeTypesLeft()
     {
