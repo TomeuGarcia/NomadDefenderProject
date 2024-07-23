@@ -53,6 +53,8 @@ public class SelectableDeck : MonoBehaviour
         [SerializeField] public AttackPartsLibraryContent attacksContent;
         [SerializeField] public BodyPartsLibraryContent bodiesContent;
         [SerializeField] public BasePartsLibraryContent basesContent;
+        [SerializeField] public BonusStatsPartsLibraryContent bonusStatsContent;
+
     }
 
     [System.Serializable]

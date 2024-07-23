@@ -48,8 +48,11 @@ public class HealthHUD : MonoBehaviour
             armorImage.enabled = false;
             //feedback to destroy armor
 
-            armorBreak = ArmorBreak();
-            StartCoroutine(armorBreak);
+            if (gameObject.activeInHierarchy)
+            {
+                armorBreak = ArmorBreak();
+                StartCoroutine(armorBreak);
+            }            
         }
     }
 

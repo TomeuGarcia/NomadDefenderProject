@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBonusController, IBuildingUpgradesController
 {
-    private readonly TurretDamageStatState _damageStatState;
-    private readonly TurretShotsPerSecondStatState _shotsPerSecondStatState;
-    private readonly TurretRadiusRangeStatState _radiusRangeStatState;
+    private TurretDamageStatState _damageStatState;
+    private TurretShotsPerSecondStatState _shotsPerSecondStatState;
+    private TurretRadiusRangeStatState _radiusRangeStatState;
     
     public ITurretDamageState DamageStatState => _damageStatState;
     public ITurretShotsPerSecondState ShotsPerSecondStatState => _shotsPerSecondStatState;
@@ -33,8 +33,25 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
             _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
         );
     }
+    
 
-    private void UpdateCurrentStats()
+    public TurretCardStatsController(TurretCardStatsController statsControllerToCopy,
+        CardStatConfig damageStat, CardStatConfig shotsPerSecondStat, CardStatConfig radiusRangeStat)
+    {
+        _damageStatState = new TurretDamageStatState(damageStat, statsControllerToCopy._damageStatState.BaseStatMultiplicationBonus);
+        _shotsPerSecondStatState = new TurretShotsPerSecondStatState(shotsPerSecondStat, statsControllerToCopy._shotsPerSecondStatState.BaseStatMultiplicationBonus);
+        _radiusRangeStatState = new TurretRadiusRangeStatState(radiusRangeStat, statsControllerToCopy._radiusRangeStatState.BaseStatMultiplicationBonus);
+
+        CurrentUpgradeLevel = 0;
+        CurrentStats = new TurretStatsSnapshot(
+            _damageStatState.GetDamageByLevel(CurrentUpgradeLevel),
+            _shotsPerSecondStatState.GetShotsPerSecondByLevel(CurrentUpgradeLevel),
+            _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
+        );        
+    }
+    
+
+    public void UpdateCurrentStats()
     {
         CurrentStats.Reset(
             _damageStatState.GetDamageByLevel(CurrentUpgradeLevel),
@@ -54,6 +71,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
     public void ResetUpgradeLevel()
     {
         CurrentUpgradeLevel = 0;
+        UpdateCurrentStats();
     }
 
     public void AddBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)

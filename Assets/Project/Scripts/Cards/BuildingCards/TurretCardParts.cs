@@ -25,11 +25,7 @@ public class TurretCardParts : GroupedCardParts
         this.cardCost = cardCost;
         this.cardLevel = cardLevel;
 
-        StatsController = new TurretCardStatsController(
-            turretPartBody.DamageStat,
-            turretPartBody.ShotsPerSecondStat,
-            turretPartBase.RadiusRangeStat
-        );
+        InitStatsController();
     }
 
     public void InitCopyingReferences(TurretCardParts other)
@@ -44,12 +40,17 @@ public class TurretCardParts : GroupedCardParts
         this.StatsController = other.StatsController;
         if (this.StatsController == null)
         {
-            StatsController = new TurretCardStatsController(
-                turretPartBody.DamageStat,
-                turretPartBody.ShotsPerSecondStat,
-                turretPartBase.RadiusRangeStat
-            );
+            InitStatsController();
         }
+    }
+
+    public void InitStatsController()
+    {
+        StatsController = new TurretCardStatsController(
+            turretPartBody.DamageStat,
+            turretPartBody.ShotsPerSecondStat,
+            turretPartBase.RadiusRangeStat
+        );
     }
 
     private void OnValidate()

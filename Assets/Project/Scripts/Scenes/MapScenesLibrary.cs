@@ -12,6 +12,7 @@ public class MapScenesLibrary : ScriptableObject
     [SerializeField] private string replaceAttackPart;
     [SerializeField] private string replaceBodyPart;
     [SerializeField] private string replaceBasePart;
+    [SerializeField] private string addBonusStatsPart;
 
 
     [Header("\n\nBATTLE SCENE'S NAMES")]
@@ -47,6 +48,7 @@ public class MapScenesLibrary : ScriptableObject
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_ATTACK_PART] = replaceAttackPart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BODY_PART] = replaceBodyPart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BASE_PART] = replaceBasePart;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART] = addBonusStatsPart;
 
         sceneNames = new MapSceneLoader.SceneNames(sceneNamesArray);
     }

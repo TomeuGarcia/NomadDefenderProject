@@ -44,7 +44,9 @@ public class EditorTurretCardParts : Editor
         GUILayout.Label("\nBody Preview:");
         if (turretPartBody != null)
         {
-            GUILayout.Label(" - " + turretPartBody.partName + (" (D" + turretPartBody.BaseDamageText) + (", C" + turretPartBody.BaseShotsPerSecondText) + ")");
+            GUILayout.Label(" - " + turretPartBody.partName +
+                (" (D" + turretPartBody.DamageStat.ComputeValueByLevel(0)) + 
+                (", C" + turretPartBody.ShotsPerSecondStat.ComputeValueByLevel(0)) + ")");
             GUILayout.Box(turretPartBody.materialTextureMap,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
@@ -59,7 +61,7 @@ public class EditorTurretCardParts : Editor
         GUILayout.Label("\nBase Preview:");
         if (turretPartBase != null)
         {
-            GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.BaseRangeText) + ")");
+            GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.RadiusRangeStat.ComputeValueByLevel(0)) + ")");
             GUILayout.Box(turretPartBase.materialTexture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }

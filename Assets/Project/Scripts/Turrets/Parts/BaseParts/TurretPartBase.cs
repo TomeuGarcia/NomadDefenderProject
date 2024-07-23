@@ -33,10 +33,6 @@ public class TurretPartBase : ScriptableObject
     [SerializeField, TextArea(2, 5)] public string upgrade2Description;
     [SerializeField, TextArea(2, 5)] public string upgrade3Description;
 
-    public float BaseRange => GetRangeByLevel(0);
-    public string BaseRangeText => GetRangeByLevelText(0);
-
-
     public bool HasAbilitySprite()
     {
         return abilitySprite != null;
@@ -96,18 +92,4 @@ public class TurretPartBase : ScriptableObject
         return "";
     }
 
-
-    public void SetStatTexts(TMP_Text rangeText)
-    {
-        rangeText.text = BaseRangeText;
-    }
-
-    public float GetRangeByLevel(int level)
-    {
-        return _radiusRangeStat.ComputeValueByLevel(level);
-    }
-    public string GetRangeByLevelText(int level)
-    {
-        return GetRangeByLevel(level).ToString("0.0").Replace(',', '.');
-    }
 }

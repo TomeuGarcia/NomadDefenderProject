@@ -11,6 +11,7 @@ public static class SOAssetPaths
     public const string TURRET_PARTS_ATTACKS = TURRET_PARTS + "Attacks/";
     public const string TURRET_PARTS_BASES = TURRET_PARTS + "Bases/";
     public const string TURRET_PARTS_BASEPASSIVES = TURRET_PARTS + "BasePassives/";
+    public const string TURRET_PARTS_BONUSSTATS = TURRET_PARTS + "BonusStats/";
 
     public const string BUILDINGS = MENU_ROOT + "Buildings/";
 

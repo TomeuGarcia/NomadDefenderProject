@@ -38,13 +38,6 @@ public class TurretPartBody : ScriptableObject
     [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
 
 
-    public int BaseDamage => GetDamageByLevel(0); 
-    public string BaseDamageText => GetDamageByLevelText(0);
-
-    public float BaseShotsPerSecond => GetShotsPerSecondByLevel(0);
-    public string BaseShotsPerSecondText => GetShotsPerSecondByLevelText(0);
-    public float BaseShotsPerSecondInverted => GetShotsPerSecondInvertedByLevel(0);
-
     public void InitAsCopy(TurretPartBody other)
     {
         this.cost = other.cost;
@@ -84,34 +77,4 @@ public class TurretPartBody : ScriptableObject
         return base.GetHashCode();
     }
 
-    public void SetStatTexts(TMP_Text damageText, TMP_Text fireRateText)
-    {
-        damageText.text = BaseDamageText;
-        fireRateText.text = BaseShotsPerSecondText;
-    }
-
-
-    public int GetDamageByLevel(int level)
-    {
-        return (int)_damageStat.ComputeValueByLevel(level);
-    }
-
-    public string GetDamageByLevelText(int level)
-    {
-        return GetDamageByLevel(level).ToString();
-    }
-
-
-    public float GetShotsPerSecondByLevel(int level)
-    {
-        return _shotsPerSecondStat.ComputeValueByLevel(level);
-    }
-    public string GetShotsPerSecondByLevelText(int level)
-    {
-        return GetShotsPerSecondByLevel(level).ToString("0.0").Replace(',', '.');
-    }
-    public float GetShotsPerSecondInvertedByLevel(int level)
-    {
-        return 1f / GetShotsPerSecondByLevel(level);
-    }
 }

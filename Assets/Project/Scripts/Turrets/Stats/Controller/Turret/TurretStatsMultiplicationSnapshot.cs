@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
- [System.Serializable]
 public class TurretStatsMultiplicationSnapshot
 {
     public float DamagePer1 { get; private set; }
@@ -23,14 +22,14 @@ public class TurretStatsMultiplicationSnapshot
 
     public bool HasDamage()
     {
-        return DamagePer1 != 0f;
+        return !DamagePer1.AlmostZero();
     }
     public bool HasShotsPerSecond()
     {
-        return ShotsPerSecondPer1 != 0f;
+        return !ShotsPerSecondPer1.AlmostZero();
     }
     public bool HasRadiusRange()
     {
-        return RadiusRangePer1 != 0f;
+        return !RadiusRangePer1.AlmostZero();
     }
 }

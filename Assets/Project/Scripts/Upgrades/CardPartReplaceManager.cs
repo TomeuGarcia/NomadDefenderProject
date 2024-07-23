@@ -30,7 +30,7 @@ public class CardPartReplaceManager : MonoBehaviour
     public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
     public CardPartHolder CardPartHolder => cardPartHolder;
 
-    public enum PartType { ATTACK, BODY, BASE }
+    public enum PartType { ATTACK, BODY, BASE, BONUS_STATS }
     [Header("TYPE")]
     [SerializeField] private int numCards = 3;
     [SerializeField] private int numParts = 3;
@@ -42,10 +42,13 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private GameObject cardPartBodyPrefab;
     [Header("BASE")]
     [SerializeField] private GameObject cardPartBasePrefab;
+    [Header("BONUS STATS")]
+    [SerializeField] private GameObject cardPartBonusStatsPrefab;
 
     private TurretPartAttack[] tutorialTurretPartAttacks;
     private TurretPartBody[] tutorialTurretPartBodies;
     private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
+    private TurretStatsUpgradeModel[] tutorialTurretStatBonusModels;
 
 
     [Header("UPDATE CARD PLAY COST")]
@@ -158,12 +161,14 @@ public class CardPartReplaceManager : MonoBehaviour
             if (partType == PartType.ATTACK) InitAttacksRandom();
             else if (partType == PartType.BODY) InitBodiesRandom();
             else if (partType == PartType.BASE) InitBasesRandom();
+            else if (partType == PartType.BONUS_STATS) InitBonusStatsRandom();
         }
         else
         {
             if (partType == PartType.ATTACK) InitAttacksTutorial();
             else if (partType == PartType.BODY) InitBodiesTutorial();
             else if (partType == PartType.BASE) InitBasesTutorial();
+            else if (partType == PartType.BONUS_STATS) InitBonusStatsTutorial();
         }
 
 
@@ -201,7 +206,7 @@ public class CardPartReplaceManager : MonoBehaviour
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].turretPartAttack = attacks[i];
+            parts[i].Configure(attacks[i]);
         }
         cardPartHolder.Init(parts);
 
@@ -264,6 +269,40 @@ public class CardPartReplaceManager : MonoBehaviour
 
         PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's BASE with a new one", true, 2f);
     }
+
+
+
+    public void AwakeSetupTutorialStatBonuses(TurretStatsUpgradeModel[] turretStatBonusModels)
+    {
+        partsCreatedByTutorial = true;
+        tutorialTurretStatBonusModels = turretStatBonusModels;
+    }
+    private void InitBonusStatsTutorial()
+    {
+        numParts = tutorialTurretStatBonusModels.Length;
+        InitStatBonuses(tutorialTurretStatBonusModels);
+    }
+    private void InitBonusStatsRandom()
+    {
+        InitStatBonuses(LibrariesManager.GetInstance()
+            .PartsLibrary.GetRandomTurretStatsUpgradeModel(numParts, numPartsIfPerfect, false, progressionState));
+    }
+    private void InitStatBonuses(TurretStatsUpgradeModel[] statBonuses)
+    {
+        CardPartBonusStats[] parts = new CardPartBonusStats[numParts];
+        for (int i = 0; i < numParts; ++i)
+        {
+            parts[i] = Instantiate(cardPartBonusStatsPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBonusStats>();
+            parts[i].Configure(statBonuses[i]);
+        }
+        cardPartHolder.Init(parts);
+
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Add permanent stats to a turret", true, 2f);
+    }
+
+
+
+
 
 
 
@@ -376,7 +415,7 @@ public class CardPartReplaceManager : MonoBehaviour
             case PartType.ATTACK:
                 {
                     CardPartAttack cardPartAttack = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>();
-                    selectedCard.SetNewPartAttack(cardPartAttack.turretPartAttack);
+                    selectedCard.SetNewPartAttack(cardPartAttack.TurretPartAttack);
                 }
                 break;
             case PartType.BODY:
@@ -389,6 +428,12 @@ public class CardPartReplaceManager : MonoBehaviour
                 {
                     CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();
                     selectedCard.SetNewPartBase(cardPartBase.turretPartBase, cardPartBase.turretPassiveBase);
+                }
+                break;
+            case PartType.BONUS_STATS:
+                {
+                    CardPartBonusStats cardPartBonusStats = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
+                    selectedCard.AddPermanentBonusStats(cardPartBonusStats);
                 }
                 break;
             default: 
@@ -631,10 +676,11 @@ public class CardPartReplaceManager : MonoBehaviour
         TurretPartBody turretPartBody = null;
         TurretPartBase turretPartBase = null;
         TurretPassiveBase turretPassiveBase = null;
+        CardPartBonusStats cardPartBonusStats = null;
 
         if (partType == PartType.ATTACK)
         {
-            turretPartAttack = selectedCardPart.gameObject.GetComponent<CardPartAttack>().turretPartAttack;
+            turretPartAttack = selectedCardPart.gameObject.GetComponent<CardPartAttack>().TurretPartAttack;
         }
         else if (partType == PartType.BODY)
         {
@@ -645,9 +691,13 @@ public class CardPartReplaceManager : MonoBehaviour
             turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
             turretPassiveBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase;
         }
+        else if (partType == PartType.BONUS_STATS)
+        {
+            cardPartBonusStats = selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
+        }
 
-        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, selectedCard, 
-            partType, _playCostsConfig);
+        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, cardPartBonusStats,
+            selectedCard, partType, _playCostsConfig);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)
