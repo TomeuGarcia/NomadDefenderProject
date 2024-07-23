@@ -6,6 +6,17 @@ using UnityEngine;
     menuName = SOAssetPaths.MAP_OVERWORLD + "OWMapDecoratorUtils")]
 public class OWMapDecoratorUtils : ScriptableObject
 {
+    [SerializeField] private NodeEnums.UpgradeType[] _availableUpgrades = new[]
+    {
+        NodeEnums.UpgradeType.REPLACE_ATTACK_PART,
+        NodeEnums.UpgradeType.REPLACE_BODY_PART,
+        NodeEnums.UpgradeType.REPLACE_BASE_PART,
+        NodeEnums.UpgradeType.NEW_TURRET_CARD,
+        NodeEnums.UpgradeType.ADD_BONUS_STATS_PART
+    };
+
+    public NodeEnums.UpgradeType[] AvailableUpgrades => _availableUpgrades;
+
 
     public List<Texture> upgradeNodeTextures;
     public List<Texture> battleNodeTextures;

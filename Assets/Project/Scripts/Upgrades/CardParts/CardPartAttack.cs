@@ -25,6 +25,7 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     [Header("VISUALS")]
     //[SerializeField] private MeshRenderer attackMeshRenderer;
     [SerializeField] private Image attackImage;
+    [SerializeField] private TMP_Text _attackNameText;
 
 
     [Header("DESCRIPTION")]
@@ -46,6 +47,7 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     {
         attackImage.sprite = turretPartAttack.abilitySprite;
         attackImage.color = turretPartAttack.materialColor;
+        _attackNameText.text = "/"+turretPartAttack.abilityName;
     }
 
     protected override void DoShowInfo()

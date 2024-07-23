@@ -262,7 +262,6 @@ public class CardPartReplaceManager : MonoBehaviour
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPartBase = basesAndPassives[i].turretPartBase;
             parts[i].turretPassiveBase = basesAndPassives[i].turretPassiveBase;
         }
         cardPartHolder.Init(parts);
@@ -426,8 +425,8 @@ public class CardPartReplaceManager : MonoBehaviour
                 break;
             case PartType.BASE:
                 {
-                    CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();
-                    selectedCard.SetNewPartBase(cardPartBase.turretPartBase, cardPartBase.turretPassiveBase);
+                    CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();                    
+                    selectedCard.SetNewPartBasePassive(cardPartBase.turretPassiveBase);
                 }
                 break;
             case PartType.BONUS_STATS:
@@ -688,7 +687,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         else if (partType == PartType.BASE)
         {
-            turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
+            //turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
             turretPassiveBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase;
         }
         else if (partType == PartType.BONUS_STATS)

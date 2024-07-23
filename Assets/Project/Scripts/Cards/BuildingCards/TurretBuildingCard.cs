@@ -198,15 +198,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         return turretCardParts.turretPartBody == newTurretPartBody;
     }
 
-    public void SetNewPartBase(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
+    public void SetNewPartBasePassive(TurretPassiveBase newTurretPassiveBase)
     {
-        ReplacedWithSamePart = HasSameBasePart(newTurretPartBase, newTurretPassiveBase); // Check replaced with same part
-
-        //int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
-        int costHolder = turretCardParts.turretPartBase.cost + turretCardParts.turretPassiveBase.cost;
-
-        turretCardParts.turretPartBase = newTurretPartBase;
-        turretCardParts.turretPartBase.cost = costHolder;
+        ReplacedWithSamePart = HasSameBasePassivePart(newTurretPassiveBase); // Check replaced with same part
 
         turretCardParts.turretPassiveBase = newTurretPassiveBase;
         turretCardParts.turretPassiveBase.cost = 0;
@@ -221,11 +215,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
-    public bool HasSameBasePart(TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase)
+    public bool HasSameBasePassivePart(TurretPassiveBase newTurretPassiveBase)
     {
-        return turretCardParts.turretPartBase == newTurretPartBase &&
-               turretCardParts.turretPassiveBase == newTurretPassiveBase &&
-               turretCardParts.turretPartBase.RadiusRangeStat.ComputeValueByLevel(0).AlmostEquals(newTurretPartBase.RadiusRangeStat.ComputeValueByLevel(0));
+        return turretCardParts.turretPassiveBase == newTurretPassiveBase;
     }
 
     protected override void SetupCardInfo()
@@ -463,14 +455,14 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         // BASE
         //if (newTurretPartBase == null && newTurretPassiveBase == null)
+        newTurretPartBase = originalCard.turretCardParts.turretPartBase;
         if (partType != CardPartReplaceManager.PartType.BASE)
         {
-            newTurretPartBase = originalCard.turretCardParts.turretPartBase;
             newTurretPassiveBase = originalCard.turretCardParts.turretPassiveBase;
         }
         else
         {
-            replacingWithSamePart = originalCard.HasSameBasePart(newTurretPartBase, newTurretPassiveBase);
+            replacingWithSamePart = originalCard.HasSameBasePassivePart(newTurretPassiveBase);
         }
 
 
