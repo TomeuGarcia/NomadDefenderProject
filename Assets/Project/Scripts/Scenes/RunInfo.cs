@@ -13,7 +13,7 @@ public class RunInfo : MonoBehaviour
     private bool _wonRun = false;
     public bool WonRun => _wonRun;
 
-    private void OnEnable()
+    private void Start()
     {
         ServiceLocator.GetInstance().RunInfo = this;
     }

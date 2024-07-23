@@ -14,6 +14,7 @@ public class FIMultiSocketSwitch : AFacilityInteractable
     [SerializeField] private Light _multiSocketSwitchLight;
     [SerializeField] private FlickeringLightGroup _roomLightGroup;
     [SerializeField] private Transform _roomLightMR;
+    [SerializeField] private RandomSoundsCollection _switchAudio;
 
     [Header("PARAMETERS")]
     [SerializeField] private Color32 _onLightColor;
@@ -35,6 +36,8 @@ public class FIMultiSocketSwitch : AFacilityInteractable
 
     protected override IEnumerator DoInteract()
     {
+        _switchAudio.PlayRandomSound();
+
         if (_on) yield return TurnOff();
         else yield return TurnOn();
 

@@ -7,7 +7,7 @@ public class CursorSet
 {
     public CursorData _regularData;
     public CursorData _hoverData;
-    //public CursorData _unavilableData;
+    public CursorData _forbiddenData;
 }
 
 public enum CursorContext
@@ -22,6 +22,14 @@ public class CursorChanger : MonoBehaviour
 
     private CursorContext _cursorContext = CursorContext.COMPUTER;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            SetCursor(_computerCursor._hoverData);
+        }
+    }
+
     private void Start()
     {
         ServiceLocator.GetInstance().CursorChanger = this;
@@ -30,18 +38,6 @@ public class CursorChanger : MonoBehaviour
     public void ChangeCursorContext(CursorContext cursorContext)
     {
         _cursorContext = cursorContext;
-    }
-
-    public void HoverCursor()
-    {
-        if(_cursorContext == CursorContext.FACILITY)
-        {
-            SetCursor(_facilityCursor._hoverData);
-        }
-        else if(_cursorContext == CursorContext.COMPUTER)
-        {
-            SetCursor(_computerCursor._hoverData);
-        }
     }
 
     public void RegularCursor()
@@ -53,6 +49,30 @@ public class CursorChanger : MonoBehaviour
         else if (_cursorContext == CursorContext.COMPUTER)
         {
             SetCursor(_computerCursor._regularData);
+        }
+    }
+
+    public void HoverCursor()
+    {
+        if (_cursorContext == CursorContext.FACILITY)
+        {
+            SetCursor(_facilityCursor._hoverData);
+        }
+        else if (_cursorContext == CursorContext.COMPUTER)
+        {
+            SetCursor(_computerCursor._hoverData);
+        }
+    }
+
+    public void ForbiddenCursor()
+    {
+        if (_cursorContext == CursorContext.FACILITY)
+        {
+            SetCursor(_facilityCursor._forbiddenData);
+        }
+        else if (_cursorContext == CursorContext.COMPUTER)
+        {
+            SetCursor(_computerCursor._forbiddenData);
         }
     }
 

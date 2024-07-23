@@ -38,6 +38,14 @@ public class PointAndClickClickableObject : MonoBehaviour
         }
     }
 
+    private void OnMouseOver()
+    {
+        if (_interactable.CanInteract())
+        {
+            _cursorChanger.HoverCursor();
+        }
+    }
+
     private void OnMouseExit()
     {
         //if (_outline != null)

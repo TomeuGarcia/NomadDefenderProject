@@ -25,14 +25,19 @@ public class FacilityCameraTransitioner : AFacilityInteractable
     [SerializeField] private Ease _verticalEase;
     [SerializeField] private Ease _rotationEase;
 
+    private bool _hasInteracted = false;
+
+    protected override bool ExtraInteractionConditions()
+    {
+        return _manager.IsPCOn && !_hasInteracted;
+    }
+
     protected override IEnumerator DoInteract()
     {
-        if(_manager.IsPCOn)
-        {
-            TransitionToComputer();
+        _hasInteracted = true;
+        TransitionToComputer();
 
-            yield return new WaitForSeconds(_duration);
-        }
+        yield return new WaitForSeconds(_duration);
     }
 
     public void TransitionToComputer()

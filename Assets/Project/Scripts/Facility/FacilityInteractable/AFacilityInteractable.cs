@@ -51,6 +51,11 @@ public abstract class AFacilityInteractable : MonoBehaviour
 
     public bool CanInteract()
     {
-        return (!_needsPermissionToInteract || _manager.CanInteract);
+        return ((!_needsPermissionToInteract || _manager.CanInteract) && ExtraInteractionConditions());
+    }
+
+    protected virtual bool ExtraInteractionConditions()
+    {
+        return true;
     }
 }

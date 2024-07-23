@@ -20,12 +20,20 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private Transform _screenParent;
     [SerializeField] private Light _screenLight;
     [SerializeField] private Transform _backgroundMap;
+    [SerializeField] private Transform _bootupLogo;
     [SerializeField] private Transform _bootUpTextParent;
     [SerializeField] private TextDecoder _titleDecoder;
     [SerializeField, TextArea] private string _titleText;
     [SerializeField] private GameObject _titleTextShadow;
     [SerializeField] private FlickeringLightGroup _flickeringLightGroup;
     [SerializeField] private List<BootUpFragment> _bootUpTexts = new();
+
+    [Header("AUDIO")]
+    [SerializeField] private RandomSoundsCollection _computerButtonAudio;
+    [SerializeField] private RandomSoundsCollection _computerStartupAudio;
+    [SerializeField] private RandomSoundsCollection _computerNoiseStartupAudio;
+    [SerializeField] private RandomSoundsCollection _computerNoiseBackgroundAudio;
+    [SerializeField] private RandomSoundsCollection _computerNoiseShutDownAudio;
 
     [Header("PARAMETERS")]
     [SerializeField] private Color32 _buttonLightOnColor;
@@ -36,6 +44,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private float _buttonMoveWait;
     [SerializeField] private Ease _buttonMoveEase;
     [SerializeField] private float _firstBlackScreenTime;
+    [SerializeField] private float _bootupLogoTime;
     [SerializeField] private float _showTextTime;
     [SerializeField] private float _deformedTextTime;
     [SerializeField] private float _blueScreenTime;
@@ -53,23 +62,28 @@ public class FIComputerButton : AFacilityInteractable
         _buttonMat = _button.GetComponent<MeshRenderer>().material;
         _defaultButtonZPosition = _button.localPosition.z;
         _defaultScreenLightColor = _screenLight.color;
+        _bootupLogo.gameObject.SetActive(false);
+    }
+
+    protected override bool ExtraInteractionConditions()
+    {
+        return _manager.IsMultiSocketOn;
     }
 
     protected override IEnumerator DoInteract()
     {
-        if(_manager.IsMultiSocketOn)
-        {
-            if (_manager.IsPCOn)
-            {
-                yield return TurnOff();
+        _computerButtonAudio.PlayRandomSound();
 
-                yield return new WaitForSeconds(_duration);
-            }
-            else
-            {
-                yield return TurnOn();
-                DecodeTitleText();
-            }
+        if (_manager.IsPCOn)
+        {
+            yield return TurnOff();
+
+            yield return new WaitForSeconds(_duration);
+        }
+        else
+        {
+            yield return TurnOn();
+            DecodeTitleText();
         }
     }
 
@@ -88,11 +102,18 @@ public class FIComputerButton : AFacilityInteractable
         _manager.IsPCOn = true;
         yield return MoveButton();
 
+        _computerNoiseStartupAudio.PlayRandomSound();
+
         _buttonLight.color = _buttonLightOnColor;
 
         _blackScreen.gameObject.SetActive(true);
         _screenParent.gameObject.SetActive(true);
         yield return new WaitForSeconds(_firstBlackScreenTime);
+
+        _bootupLogo.gameObject.SetActive(true);
+        _computerStartupAudio.PlayRandomSound();
+        yield return new WaitForSeconds(_bootupLogoTime);
+        _bootupLogo.gameObject.SetActive(false);
 
         _flickeringLightGroup.Activate();
         _blackScreen.gameObject.SetActive(false);
@@ -137,12 +158,15 @@ public class FIComputerButton : AFacilityInteractable
         _titleTextShadow.gameObject.SetActive(true);
         yield return new WaitForSeconds(_deformedMapTime);
         _backgroundMap.localScale = Vector3.one;
+        _computerNoiseBackgroundAudio.StartPlaying();
     }
 
     private IEnumerator TurnOff()
     {
         _manager.IsPCOn = false;
         yield return MoveButton();
+
+        ComputerTurnOffAudio();
 
         _flickeringLightGroup.Deactivate();
         _buttonLight.color = _buttonLightOffColor;
@@ -165,6 +189,7 @@ public class FIComputerButton : AFacilityInteractable
         if(!state && _manager.IsPCOn)
         {
             _manager.IsPCOn = false;
+            ComputerTurnOffAudio();
         }
 
         _titleDecoder.ResetDecoder();
@@ -185,5 +210,11 @@ public class FIComputerButton : AFacilityInteractable
         _titleTextShadow.gameObject.SetActive(true);
         _buttonLight.color = _buttonLightOnColor;
         _screenParent.gameObject.SetActive(true);
+    }
+
+    private void ComputerTurnOffAudio()
+    {
+        _computerNoiseBackgroundAudio.StopSound();
+        _computerNoiseShutDownAudio.PlayRandomSound();
     }
 }
