@@ -5,26 +5,26 @@ using UnityEngine;
 public class CardMotionEffectsController : MonoBehaviour
 {
     [SerializeField] private Transform _rotationEffectsTransform;
-    private FloatingCardMotion _hoveredEffect;
+    private FloatingCardMotion _floatingEffect;
 
     public void Init(CardMotionConfig.RotationEffect hoveredRotationEffect)
     {
-        _hoveredEffect = new FloatingCardMotion(_rotationEffectsTransform, hoveredRotationEffect);
+        _floatingEffect = new FloatingCardMotion(_rotationEffectsTransform, hoveredRotationEffect);
     }
 
     private void Update()
     {
-        _hoveredEffect.Update();
+        _floatingEffect.Update();
     }
 
     public void StartHoverMotion()
     {
-        _hoveredEffect.Start();
+        _floatingEffect.Finish();
     }
     
     public void FinishHoverMotion()
     {
-        _hoveredEffect.Finish();
+        _floatingEffect.Finish();
     }
 
 }

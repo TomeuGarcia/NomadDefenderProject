@@ -38,10 +38,10 @@ public class CardMotionConfig : ScriptableObject
     {
         [SerializeField] private Vector2 _maxRotationAngles = Vector2.one * 5.0f;
         [SerializeField, Min(0)] private float _rotationSpeed = 1.0f;
-        [SerializeField, Min(0)] private float _startFinishDuration = 0.2f;
+        [SerializeField, Min(0)] private float _transitionDuration = 0.2f;
         public Vector2 MaxRotationAngles => _maxRotationAngles;
         public float RotationSpeed => _rotationSpeed;
-        public float StartFinishDuration => _startFinishDuration;
+        public float TransitionDuration => _transitionDuration;
     }
 
 

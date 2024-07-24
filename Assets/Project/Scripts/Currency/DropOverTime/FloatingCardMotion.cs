@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class FloatingCardMotion
 {
@@ -20,6 +21,7 @@ public class FloatingCardMotion
     {
         float rotationTime = (_rotationEffect.RotationSpeed * Time.time) + _effectTransform.gameObject.GetInstanceID();
         Vector2 rotationAngles = _rotationEffect.MaxRotationAngles * _effectAmount;
+
         Vector3 localRotationEuler = new Vector3(
             Mathf.Sin(rotationTime) * rotationAngles.x,
             Mathf.Cos(rotationTime) * rotationAngles.y,
@@ -32,11 +34,22 @@ public class FloatingCardMotion
 
     public void Start()
     {
-        _effectAmount = 0f;
+        TransitionEffectValue(1f);
     }
 
     public void Finish()
     {
-        _effectAmount = 0f;
+        TransitionEffectValue(0f);
+    }
+
+    private void TransitionEffectValue(float finalValue)
+    {
+        float effectAmount = _effectAmount;
+        DOTween.To(
+            () => effectAmount,
+            (value) => _effectAmount = effectAmount = value,
+            finalValue,
+            _rotationEffect.TransitionDuration
+        );
     }
 }

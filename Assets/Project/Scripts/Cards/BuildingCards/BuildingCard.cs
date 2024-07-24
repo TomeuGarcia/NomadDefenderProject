@@ -46,7 +46,7 @@ public abstract class BuildingCard : MonoBehaviour
     public Transform CardTransform => cardHolder;
 
     public const float unhoverTime = 0.1f;
-    public const float hoverTime = 0.05f; // This numebr needs to be VERY SMALL
+    public const float hoverTime = 0.05f; // This number needs to be VERY SMALL
     public const float toStandardTime = 0.1f;
     public const float selectedTime = 0.3f;
 
@@ -70,7 +70,7 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 hoverAdditionalOffset = Vector3.zero;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
-    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.34f;
+    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
