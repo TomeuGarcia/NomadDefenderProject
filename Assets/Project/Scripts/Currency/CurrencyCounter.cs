@@ -19,7 +19,9 @@ public class CurrencyCounter : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private Color startColorAddedCurrencyText;
     [SerializeField] private Color endColorAddedCurrencyText;
-    [SerializeField] private Color colorSpentCurrencyText;
+    [SerializeField] private TweenColorConfig _addedCurrencyColorPunch;
+    [SerializeField] private TweenColorConfig _spentCurrencyColorPunch;
+    [SerializeField] private TweenColorConfig _notEnoughCurrencyColorPunch;
 
     bool isSubtracting = false;
     int remainingAmountToSubtract = 0;
@@ -107,7 +109,7 @@ public class CurrencyCounter : MonoBehaviour
 
     private void AddCurrency(int amount)
     {
-        StartCoroutine("ShowAddedCurrency", amount);
+        StartCoroutine(ShowAddedCurrency(amount));
         currencyCount += amount;
         UpdateCurrencyCountText(currencyCount);
 
@@ -132,8 +134,8 @@ public class CurrencyCounter : MonoBehaviour
 
         currencyCountText.DOComplete();
         currencyCountText.transform.DOComplete();
-        currencyCountText.color = colorSpentCurrencyText;
-        currencyCountText.DOBlendableColor(startColorAddedCurrencyText, amount * Time.deltaTime * 0.9f);
+        currencyCountText.color = Color.white;
+        currencyCountText.PunchColor(_spentCurrencyColorPunch);
         currencyCountText.transform.DOPunchPosition(Vector3.down * 40f, 0.5f, 6);
 
         int subtractAmountPerTick = 5;
@@ -161,7 +163,6 @@ public class CurrencyCounter : MonoBehaviour
     {
         addedCurrencyText.gameObject.SetActive(true);
         addedCurrencyText.text = "+" + amount.ToString();
-        addedCurrencyText.color = startColorAddedCurrencyText;
 
         // Reset
         addedCurrencyText.transform.DOComplete();
@@ -178,9 +179,11 @@ public class CurrencyCounter : MonoBehaviour
         //addedCurrencyText.transform.DOLocalMove(Vector3.up, 1.5f);
 
         currencyCountTextHolder.DOPunchScale(Vector3.one * 0.8f, 0.25f, 4);
+
+        addedCurrencyText.color = Color.white;
+        addedCurrencyText.PunchColor(_addedCurrencyColorPunch);
         yield return new WaitForSeconds(0.25f);
 
-        addedCurrencyText.DOBlendableColor(endColorAddedCurrencyText, 1f);
         yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.gameObject.SetActive(false);
@@ -189,10 +192,13 @@ public class CurrencyCounter : MonoBehaviour
     public void PlayNotEnoughCurrencyAnimation()
     {
         currencyCountText.DOComplete();
+        currencyImage.DOComplete();
         currencyCountText.transform.DOComplete();
 
-        currencyCountText.DOBlendableColor(colorSpentCurrencyText, 0.25f)
-            .OnComplete(() => currencyCountText.DOBlendableColor(startColorAddedCurrencyText, 0.25f));
+        currencyCountText.color = Color.white;
+        currencyCountText.PunchColor(_notEnoughCurrencyColorPunch);
+        currencyImage.color = Color.white;
+        currencyImage.PunchColor(_notEnoughCurrencyColorPunch);
 
         currencyCountText.transform.DOPunchScale(Vector3.one * 0.6f, 0.5f, 6);
     }

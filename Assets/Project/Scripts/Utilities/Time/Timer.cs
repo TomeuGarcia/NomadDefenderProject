@@ -6,7 +6,9 @@ public class Timer
 {
     public float Duration { get; set; }
     public float CurrentTime { get; private set; }
-    
+    public float Ratio01 => Mathf.Clamp01(CurrentTime / Duration);
+
+
     public Timer(float duration)
     {
         Duration = duration;

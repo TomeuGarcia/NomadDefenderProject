@@ -6,6 +6,7 @@ public class CurrencyOverTimeDropManager : MonoBehaviour
 {
     [Header("TEMP. CURRENCY DROP")]
     [SerializeField] private CurrencyDropOverTimeConfig _currencyDropOverTime;
+    [SerializeField] private CurrencyDropOverTimeCanvasView _view;
     private CurrencyOverTimeDropper _currencyOverTimeDropper;
 
     private bool _canGenerateCurrency;
@@ -14,7 +15,7 @@ public class CurrencyOverTimeDropManager : MonoBehaviour
 
     private void Start()
     {
-        _currencyOverTimeDropper = new CurrencyOverTimeDropper(_currencyDropOverTime, ServiceLocator.GetInstance().CurrencySpawnService);
+        _currencyOverTimeDropper = new CurrencyOverTimeDropper(_currencyDropOverTime, ServiceLocator.GetInstance().CurrencySpawnService, _view);
         _canGenerateCurrency = false;
 
         StartCoroutine(ControlCanGenerateCurrency());        
@@ -37,9 +38,11 @@ public class CurrencyOverTimeDropManager : MonoBehaviour
         ITDGameState tdGameState = ServiceLocator.GetInstance().TDGameState;
 
         yield return new WaitUntil(() => tdGameState.FirstCardWasPlayed);
+        _currencyOverTimeDropper.Start();
         _canGenerateCurrency = true;
         yield return new WaitUntil(() => tdGameState.GameHasFinished);
         _canGenerateCurrency = false;
+        _currencyOverTimeDropper.Finish();
     }
 
 }
