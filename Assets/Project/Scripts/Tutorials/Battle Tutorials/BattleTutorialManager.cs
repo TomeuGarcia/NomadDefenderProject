@@ -57,9 +57,16 @@ public class BattleTutorialManager : MonoBehaviour
     private bool firstUpgradeDone = false;
 
 
+    [SerializeField] private BuildingPlacer _buildingPlacer;
+    private int _placedBuildingsCounter;
+    private bool PlacedSecondBuilding => _placedBuildingsCounter >= 2;
+    
+
     private void Awake()
     {
         tutoCardDrawer.finishRedrawSetup = false;
+
+        _placedBuildingsCounter = 0;
     }
 
     void Start()
@@ -91,6 +98,8 @@ public class BattleTutorialManager : MonoBehaviour
         EnemyWaveManager.OnStartNewWaves += WaveFinished;
         EnemyWaveManager.OnAllWavesFinished += AllWavesFinished;
         InBattleBuildingUpgrader.OnTurretUpgrade += CheckFirstUpgrade;
+
+        _buildingPlacer.OnBuildingPlaced += OnBuildingPlaced;
     }
     private void OnDisable()
     {
@@ -99,6 +108,8 @@ public class BattleTutorialManager : MonoBehaviour
         EnemyWaveManager.OnStartNewWaves -= WaveFinished;
         EnemyWaveManager.OnAllWavesFinished -= AllWavesFinished;
         InBattleBuildingUpgrader.OnTurretUpgrade -= CheckFirstUpgrade;
+        
+        _buildingPlacer.OnBuildingPlaced -= OnBuildingPlaced;
     }
 
     private void WaveFinished()
@@ -124,18 +135,23 @@ public class BattleTutorialManager : MonoBehaviour
         InBattleBuildingUpgrader.OnTurretUpgrade -= CheckFirstUpgrade;
     }
 
+    private void OnBuildingPlaced()
+    {
+        _placedBuildingsCounter++;
+    }
+    
     IEnumerator Tutorial()
     {
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine(); //0
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
 
         scriptedSequence.NextLine(); //1
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         //Black Image animation
         for (float i = 1.0f; i < 0.0f; i -= 0.01f)
@@ -158,7 +174,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //2
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.75f);
 
         scriptedSequence.Clear();
 
@@ -171,31 +187,30 @@ public class BattleTutorialManager : MonoBehaviour
 
         tutoCardDrawer.ActivateCurrencyUI();
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
+        //Currency Finished showing
 
-
+        
         scriptedSequence.NextLine(); //4
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0) );
         yield return null;
 
         scriptedSequence.Clear();
-
-        //Currency Finished showing
-
+        
 
         //Starts Cards Tutorial
         tutoCardDrawer.DoGameStartSetup();
 
         scriptedSequence.NextLine(); //Initializing User's Deck Line 5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.0f);
 
         scriptedSequence.NextLine(); //6
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
-        yield return new WaitForSeconds(1.0f); 
+        yield return new WaitForSeconds(0.5f); 
         tutoCardDrawer.tutorialCard.isInteractable = false;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
 
 
         //Cards Visuals
@@ -203,45 +218,45 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
         tutoCardDrawer.tutorialCard.showTurret = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
         scriptedSequence.Clear();
 
 
         //Cards Stats
         scriptedSequence.NextLine();// 8
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
 
         //Cost
         scriptedSequence.NextLine();// 9
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         tutoCardDrawer.tutorialCard.showPlayCost = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         //Attack
         scriptedSequence.NextLine();// 10
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showAttackStat = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         //Cadency
         scriptedSequence.NextLine();// 11
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showCadenceStat = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         //Range
         scriptedSequence.NextLine();// 12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         tutoCardDrawer.tutorialCard.showRangeStat = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
 
 
         scriptedSequence.NextLine();// 13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.75f);
 
         //Finishes Cards Tutorial
 
@@ -252,7 +267,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.FinishRedraws();
         tutoCardDrawer.tutorialCard.isInteractable = true;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
        
 
@@ -285,41 +300,57 @@ public class BattleTutorialManager : MonoBehaviour
 
         //First Wave 1/1
         scriptedSequence.NextLine();//18
-        
-        //Second Wave (2/2)
+
+        //Second Wave (2/3)
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
         scriptedSequence.NextLine(); //19
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
+        //Place Another Turret
+        yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(120) );
+        scriptedSequence.NextLine(); //20 Place another Turret
+        GameTime.SetTimeScale(0f);
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitUntil(() =>  PlacedSecondBuilding);
+        scriptedSequence.Clear();
+        GameTime.SetTimeScale(1f);
+        
+        //Wave 3/3
+        yield return new WaitUntil(() => wavesCounter > 2 );
+        scriptedSequence.NextLine(); //21 Wave 3/3
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
+        //START UPGRADE TURRET TUTORIAL
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(150) );
         yield return new WaitForSeconds(0.5f); //Extra wait
         scriptedSequence.Clear();
 
         GameTime.SetTimeScale(0f);
 
-        scriptedSequence.NextLine();//20
+        scriptedSequence.NextLine();//22
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.5f);
 
-        scriptedSequence.NextLine(); //21
+        scriptedSequence.NextLine(); //23
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitUntil(() => firstUpgradeDone == true);
 
-        scriptedSequence.NextLine(); //22
+        scriptedSequence.NextLine(); //24
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.5f);
-
         GameTime.SetTimeScale(1f);
+        //FINISH UPGRADE TURRET TUTORIAL
+       
+        
+        
 
-        yield return new WaitUntil(() => wavesCounter > 2);
-        scriptedSequence.Clear();
-
+        //Last Wave (4/3)
+        yield return new WaitUntil(() => wavesCounter > 3);
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
-
-        //Last Wave
-        scriptedSequence.NextLine(); //23
+        scriptedSequence.Clear();
+        
+        scriptedSequence.NextLine(); //25 Defense Finished?
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(4.0f);
 
@@ -340,16 +371,7 @@ public class BattleTutorialManager : MonoBehaviour
         globalVolume.profile = glitchVol;
         yield return new WaitForSecondsRealtime(0.1f);
         globalVolume.profile = initVol;
-
-        scriptedSequence.NextLine(); //24
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.5f);
-
-
-
-        scriptedSequence.NextLine(); //25
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
+        
 
         scriptedSequence.NextLine(); //26
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -367,10 +389,6 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.25f);
 
-        scriptedSequence.NextLine(); //29
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
         scriptedSequence.NextLine(); //30
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.25f);
@@ -379,30 +397,32 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.25f);
 
-        //Random Bullshit Text
         scriptedSequence.NextLine(); //32
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
 
         scriptedSequence.NextLine(); //33
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
 
+        //Random Bullshit Text
         scriptedSequence.NextLine(); //34
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine();//35
-        yield return new WaitForSecondsRealtime(1.0f);
+        scriptedSequence.NextLine(); //35
+        yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine();//36
-        yield return new WaitForSecondsRealtime(1.0f);
+        scriptedSequence.NextLine(); //36
+        yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine();//37
         yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();//38
-        yield return new WaitForSecondsRealtime(0.75f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();//39
-        yield return new WaitForSecondsRealtime(0.75f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         scriptedSequence.NextLine();//40
         yield return new WaitForSecondsRealtime(0.75f);
@@ -417,7 +437,8 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.75f);
 
         scriptedSequence.NextLine();//44
-        yield return new WaitForSecondsRealtime(2.8f);
+        yield return new WaitForSecondsRealtime(0.75f);
+        
 
         //Finish scene and load next
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);

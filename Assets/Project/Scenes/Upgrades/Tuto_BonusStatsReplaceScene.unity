@@ -806,13 +806,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 957460241}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b23a02a1aa0684ab55ce2f03f64a59, type: 3}
+  m_Script: {fileID: 11500000, guid: 7756cfd69f9c6a44a9c643502e1599de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardPartReplaceManager: {fileID: 1740730097}
   scriptedSequence: {fileID: 1298702379}
-  tutorialBodies:
-  - {fileID: 11400000, guid: 7ebac30fc41f68e42b6e0ff582a06099, type: 2}
+  tutorialBonusStats:
+  - {fileID: 11400000, guid: 07291938f90a03e4aac4b5892e3be682, type: 2}
 --- !u!1 &970423795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,20 +1173,16 @@ MonoBehaviour:
   dialogSystem: {fileID: 159266060}
   textLines:
   - textType: 0
-    text: Calibrating BODY combination upgrade...
+    text: Calibrating PERMANENT STATS upgrade...
     clearTime: 0
   - textType: 0
-    text: Loading new <color=#E36818>Spammer</color> body card...
+    text: Loading new <color=#E36818>Bonus</color> stats card...
     clearTime: 0
   - textType: 0
-    text: 'Loading Body card stats: <color=#cd004b>ATTACK</color> and <color=#ccb068>FIRE
-      RATE</color>'
+    text: Stats will be permanently added to your card
     clearTime: 0
   - textType: 3
-    text: Effectuate combination
-    clearTime: 0
-  - textType: 0
-    text: Card stats will be <color=#FF003E>OVERWRITTEN</color>
+    text: Effectuate Combination
     clearTime: 0
   - textType: 0
     text: Successful combination status.
@@ -1487,6 +1483,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CardPartReplaceSceneGOs
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542422250985626142, guid: 7fc0408d20011c14bb99a89593676711,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7262441960210938099, guid: 7fc0408d20011c14bb99a89593676711,
         type: 3}
