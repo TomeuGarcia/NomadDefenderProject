@@ -21,6 +21,8 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if(!gameObject.activeInHierarchy) return;
+
         if (_outline != null)
         {
             _highlighted = true;
@@ -32,22 +34,20 @@ public class PointAndClickClickableObject : MonoBehaviour
             _highlighted = true;
         }
 
-        if (_interactable.CanInteract())
-        {
-            _cursorChanger.HoverCursor();
-        }
+        MouseHoverCheck(true);
     }
 
     private void OnMouseOver()
     {
-        if (_interactable.CanInteract())
-        {
-            _cursorChanger.HoverCursor();
-        }
+        if (!gameObject.activeInHierarchy) return;
+
+        MouseHoverCheck(false);
     }
 
     private void OnMouseExit()
     {
+        if (!gameObject.activeInHierarchy) return;
+
         //if (_outline != null)
         //{
         //  _highlighted = false;
@@ -55,14 +55,43 @@ public class PointAndClickClickableObject : MonoBehaviour
         //}
 
         _cursorChanger.RegularCursor();
+        if(_interactable.CanInteract())
+        {
+            _interactable.Unhovered();
+        }
     }
 
     private void OnMouseDown()
     {
+        if (!gameObject.activeInHierarchy) return;
+
         if (_highlighted)
         {
             //_onClick.Invoke();
             _interactable.Interact();
         }
+    }
+
+    private void MouseHoverCheck(bool recent)
+    {
+        if (_interactable.CanInteract())
+        {
+            _cursorChanger.HoverCursor();
+            if(recent)
+            {
+                _interactable.Hovered();
+            }
+            return;
+        }
+        else if (_interactable.WaitingToInteract())
+        {
+            _cursorChanger.ForbiddenCursor();
+            return;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        _cursorChanger.RegularCursor();
     }
 }

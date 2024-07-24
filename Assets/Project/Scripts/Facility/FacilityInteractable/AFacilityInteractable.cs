@@ -54,8 +54,16 @@ public abstract class AFacilityInteractable : MonoBehaviour
         return ((!_needsPermissionToInteract || _manager.CanInteract) && ExtraInteractionConditions());
     }
 
+    public bool WaitingToInteract()
+    {
+        return !_manager.CanInteract;
+    }
+
     protected virtual bool ExtraInteractionConditions()
     {
         return true;
     }
+
+    public virtual void Hovered() { }
+    public virtual void Unhovered() { }
 }

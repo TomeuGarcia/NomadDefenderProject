@@ -9,13 +9,15 @@ public class FacilityManager : MonoBehaviour
     [SerializeField] private FacilityPointAndClickManager _facilityPointAndClick;
     [SerializeField] private List<AFacilityInteractable> _startOnInteractables = new();
 
+    private CursorChanger _cursorChanger;
+
     private bool _isNewGame;
 
     private void Awake()
     {
         //TODO - Play Facility Music (if any)
 
-        //TODO - CursorChanger (if FACITY cursor exists)
+        _cursorChanger = ServiceLocator.GetInstance().CursorChanger;
     }
 
     private void Start()
@@ -31,6 +33,10 @@ public class FacilityManager : MonoBehaviour
             if(ServiceLocator.GetInstance().RunInfo.ComeFromRun)
             {
                 ComeFromRun();
+            }
+            else
+            {
+                StartWithOpenSetup();
             }
         }
     }
@@ -72,5 +78,10 @@ public class FacilityManager : MonoBehaviour
         {
             interactable.InteractedStart();
         }
+    }
+
+    private void OnDisable()
+    {
+        _cursorChanger.RegularCursor();
     }
 }

@@ -1,7 +1,10 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class BootUpFragment
@@ -22,6 +25,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private Transform _backgroundMap;
     [SerializeField] private Transform _bootupLogo;
     [SerializeField] private Transform _bootUpTextParent;
+    [SerializeField] private List<Image> _titleArrows = new();
     [SerializeField] private TextDecoder _titleDecoder;
     [SerializeField, TextArea] private string _titleText;
     [SerializeField] private GameObject _titleTextShadow;
@@ -56,6 +60,7 @@ public class FIComputerButton : AFacilityInteractable
     private Material _buttonMat;
     private float _defaultButtonZPosition;
     private Color32 _defaultScreenLightColor;
+    private Color32 _defaultTextColor;
 
     protected override void DoAwake()
     {
@@ -63,6 +68,9 @@ public class FIComputerButton : AFacilityInteractable
         _defaultButtonZPosition = _button.localPosition.z;
         _defaultScreenLightColor = _screenLight.color;
         _bootupLogo.gameObject.SetActive(false);
+        _defaultTextColor = _titleDecoder.textComponent.color;
+
+        SetTitleArrowState(false);
     }
 
     protected override bool ExtraInteractionConditions()
@@ -83,17 +91,20 @@ public class FIComputerButton : AFacilityInteractable
         else
         {
             yield return TurnOn();
-            DecodeTitleText();
+            StartCoroutine(DecodeTitleText());
         }
     }
 
-    private void DecodeTitleText()
+    private IEnumerator DecodeTitleText()
     {
         _titleDecoder.ResetDecoder();
         _titleDecoder.gameObject.SetActive(true);
         _titleDecoder.SetTextStrings(_titleText);
         _titleDecoder.Activate();
         _titleDecoder.NextLine();
+        yield return new WaitUntil(() => _titleDecoder.IsDoneDecoding() == true);
+
+        SetTitleArrowState(true);
     }
 
     private IEnumerator TurnOn()
@@ -170,6 +181,7 @@ public class FIComputerButton : AFacilityInteractable
 
         _flickeringLightGroup.Deactivate();
         _buttonLight.color = _buttonLightOffColor;
+        SetTitleArrowState(false);
         _titleDecoder.gameObject.SetActive(false);
         _screenParent.gameObject.SetActive(false);
 
@@ -186,10 +198,20 @@ public class FIComputerButton : AFacilityInteractable
 
     public void ChangeElectricityState(bool state)
     {
-        if(!state && _manager.IsPCOn)
+        StopAllCoroutines();
+
+        if (!state && _manager.IsPCOn)
         {
             _manager.IsPCOn = false;
             ComputerTurnOffAudio();
+        }
+
+        _titleDecoder.textComponent.color = _defaultTextColor;
+
+        SetTitleArrowState(false);
+        foreach (Image arrow in _titleArrows)
+        {
+            arrow.color = _defaultTextColor;
         }
 
         _titleDecoder.ResetDecoder();
@@ -206,7 +228,7 @@ public class FIComputerButton : AFacilityInteractable
 
     public override void InteractedStart()
     {
-        DecodeTitleText();
+        StartCoroutine(DecodeTitleText());
         _titleTextShadow.gameObject.SetActive(true);
         _buttonLight.color = _buttonLightOnColor;
         _screenParent.gameObject.SetActive(true);
@@ -216,5 +238,13 @@ public class FIComputerButton : AFacilityInteractable
     {
         _computerNoiseBackgroundAudio.StopSound();
         _computerNoiseShutDownAudio.PlayRandomSound();
+    }
+
+    private void SetTitleArrowState(bool newState)
+    {
+        foreach (Image arrow in _titleArrows)
+        {
+            arrow.gameObject.SetActive(newState);
+        }
     }
 }

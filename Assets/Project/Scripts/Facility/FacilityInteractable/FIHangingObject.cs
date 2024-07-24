@@ -41,6 +41,7 @@ public class FIHangingObject : AFacilityInteractable
     protected override IEnumerator DoInteract()
     {
         _interacted = true;
+        _lightHangSound.PlayRandomSoundWithVolumeCoef(1.0f);
         float randomCoef = Random.Range(0.0f, 1.0f);
         _rb.AddForceAtPosition(new Vector3(0, Random.Range(_strenghtRange.x, _strenghtRange.y), 0), _transformForceA.position + _positionDifference * randomCoef, ForceMode.Impulse);
 

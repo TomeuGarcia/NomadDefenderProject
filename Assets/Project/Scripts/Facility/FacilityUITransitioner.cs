@@ -33,6 +33,13 @@ public class FacilityUITransitioner : MonoBehaviour
         _completedText.gameObject.SetActive(false);
     }
 
+    public void PrepareLoading()
+    {
+        _titleText.gameObject.SetActive(false);
+        _titleTextShadow.gameObject.SetActive(false);
+        GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
     public void StartLoading()
     {
         StartCoroutine(LoadingSequence());
@@ -43,8 +50,6 @@ public class FacilityUITransitioner : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(PoppingText());
-        _titleText.gameObject.SetActive(false);
-        _titleTextShadow.gameObject.SetActive(false);
         _loadingText.gameObject.SetActive(true);
         _loadingText.Activate();
         _percentageText.gameObject.SetActive(true);
