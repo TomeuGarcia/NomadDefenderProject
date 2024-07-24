@@ -103,6 +103,11 @@ public class SceneLoader : MonoBehaviour
     }
 
 
+    public void LoadFacility()
+    {
+        StartCoroutine(DoLoadScene(LoadFacilityScene));
+    }
+
     public void LoadDeckSelector()
     {
         StartCoroutine(DoLoadScene(LoadDeckSelectorScene));
@@ -139,6 +144,10 @@ public class SceneLoader : MonoBehaviour
     private void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
+    }
+    private void LoadFacilityScene()
+    {
+        SceneManager.LoadScene("Facility");
     }
     private void LoadDeckSelectorScene()
     {

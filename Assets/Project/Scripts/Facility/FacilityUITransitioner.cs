@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +9,14 @@ public class FacilityUITransitioner : MonoBehaviour
 {
     [Header("REFERENCES")]
     [SerializeField] private TextDecoder _titleText;
+    [SerializeField] private GameObject _titleTextShadow;
     [SerializeField] private TextDecoder _loadingText;
+    [SerializeField] private TMP_Text _percentageText;
     [SerializeField] private TextDecoder _poppingText;
     [SerializeField] private GameObject _completedText;
     [SerializeField] private ScriptedSequence _scriptedSequence;
     [SerializeField] private Image _loadingBar;
+    [SerializeField] private FacilityManager _facilityManager;
 
     [Header("PARAMETERS")]
     [SerializeField] private AnimationCurve _loadingCurve;
@@ -29,6 +33,13 @@ public class FacilityUITransitioner : MonoBehaviour
         _completedText.gameObject.SetActive(false);
     }
 
+    public void PrepareLoading()
+    {
+        _titleText.gameObject.SetActive(false);
+        _titleTextShadow.gameObject.SetActive(false);
+        GameAudioManager.GetInstance().PlayCardSelected();
+    }
+
     public void StartLoading()
     {
         StartCoroutine(LoadingSequence());
@@ -36,15 +47,15 @@ public class FacilityUITransitioner : MonoBehaviour
 
     private IEnumerator LoadingSequence()
     {
-        _titleText.Activate();
         yield return new WaitForSeconds(0.5f);
 
         StartCoroutine(PoppingText());
-        _titleText.gameObject.SetActive(false);
         _loadingText.gameObject.SetActive(true);
         _loadingText.Activate();
+        _percentageText.gameObject.SetActive(true);
+        StartCoroutine(PercentileAddition());
         _loadingBar.gameObject.SetActive(true);
-        
+
         DOTween.To(() => _loadingBar.fillAmount,
             x => _loadingBar.fillAmount = x,
             1.0f,
@@ -53,16 +64,18 @@ public class FacilityUITransitioner : MonoBehaviour
         yield return new WaitForSeconds(_loadingBardTime + 0.75f);
 
         _loadingText.gameObject.SetActive(false);
+        _percentageText.gameObject.SetActive(false);
         _loadingBar.gameObject.SetActive(false);
         _poppingText.gameObject.SetActive(false);
         _completedText.gameObject.SetActive(true);
         GameAudioManager.GetInstance().PlayCardSelected();
         yield return new WaitForSeconds(_completedWaitingTime);
 
+        _completedText.gameObject.SetActive(false);
         StartCoroutine(ConsoleLineSpam());
         yield return new WaitForSeconds(_consoleLinesTime);
 
-        SceneLoader.GetInstance().LoadDeckSelector();
+        _facilityManager.TransitionToNextScene();
     }
 
     private IEnumerator PoppingText()
@@ -78,6 +91,17 @@ public class FacilityUITransitioner : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenLines);
             currentLines++;
         }
+    }
+
+    private IEnumerator PercentileAddition()
+    {
+        while (_loadingBar.fillAmount < 1.0f)
+        {
+            _percentageText.text = (_loadingBar.fillAmount * 100).ToString("00") + "%";
+            yield return null;
+        }
+
+        _percentageText.text = "100%";
     }
 
     private IEnumerator ConsoleLineSpam()
