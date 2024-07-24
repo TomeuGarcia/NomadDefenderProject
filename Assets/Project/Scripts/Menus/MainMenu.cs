@@ -143,16 +143,9 @@ public class MainMenu : MonoBehaviour
             TutorialsSaverLoader.GetInstance().ResetTutorials();
         }
 
-        StartCoroutine(DoPlayNewGame());
+        ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
+        StartCoroutine(DoPlay());
     }
-    private IEnumerator DoPlayNewGame()
-    {
-        yield return new WaitForSeconds(0.3f);
-
-        //Load First Scene
-        SceneLoader.GetInstance().StartLoadTutorialGame();
-    }
-
 
     public void Play()
     {
@@ -164,15 +157,15 @@ public class MainMenu : MonoBehaviour
 
         //PauseMenu.GetInstance().gameCanBePaused = true;
 
+        ServiceLocator.GetInstance().RunInfo.SetNewGame(false);
         StartCoroutine(DoPlay());
     }
     private IEnumerator DoPlay()
     {
         yield return new WaitForSeconds(0.3f);
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
-        //Load First Scene        
-        SceneLoader.GetInstance().LoadDeckSelector();
-        //SceneLoader.GetInstance().StartLoadNormalGame(true);
+
+        ServiceLocator.GetInstance().RunInfo.SetComeFromRun(false);
+        SceneLoader.GetInstance().LoadFacility();
     }
 
     public void Credits()
@@ -302,6 +295,6 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSteamWishlist()
     {
-        Application.OpenURL("steam://openurl/https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
+        Application.OpenURL("https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
     }
 }

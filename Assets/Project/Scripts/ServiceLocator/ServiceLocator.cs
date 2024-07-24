@@ -14,6 +14,8 @@ public class ServiceLocator : MonoBehaviour
     public CurrencyCounter CurrencyCounter { get; set; }
     public IFadingTextsFactory FadingTextFactory { get; set; }
     public ITDCurrencySpawnService CurrencySpawnService { get; set; }
+    public RunInfo RunInfo { get; set; }
+    public CursorChanger CursorChanger { get; set; }
 
 
     private void Awake()
@@ -29,11 +31,8 @@ public class ServiceLocator : MonoBehaviour
         }
     }
 
-
     public static ServiceLocator GetInstance()
     {
         return instance;
     }
-
-
 }

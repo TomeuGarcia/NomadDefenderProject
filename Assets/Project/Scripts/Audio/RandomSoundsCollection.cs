@@ -51,6 +51,11 @@ public class RandomSoundsCollection : MonoBehaviour
     {
         keepPlaying = false;
     }
+    public void StopSound()
+    {
+        keepPlaying = false;
+        audioSource.Stop();
+    }
 
     private IEnumerator PlaySoundsLoop(PlayRandomSoundsFunction playRandomSoundsFunction)
     {
@@ -65,10 +70,16 @@ public class RandomSoundsCollection : MonoBehaviour
         }
     }
 
-    private void PlayRandomSound()
+    public void PlayRandomSound()
     {
         RandomSound randomSound = randomSounds[Random.Range(0, randomSounds.Length)];
         PlayRandomSound(randomSound);
+    }
+
+    public void PlayRandomSoundWithVolumeCoef(float volumeCoef)
+    {
+        RandomSound randomSound = randomSounds[Random.Range(0, randomSounds.Length)];
+        PlayRandomSound(randomSound, volumeCoef);
     }
 
     private void PlayRandomPooledSound()
@@ -92,12 +103,11 @@ public class RandomSoundsCollection : MonoBehaviour
         PlayRandomSound(randomSound);
     }
 
-    private void PlayRandomSound(RandomSound randomSound)
+    private void PlayRandomSound(RandomSound randomSound, float volumeCoef = 1.0f)
     {
         audioSource.clip = randomSound.audioClip;
-        audioSource.volume = Random.Range(randomSound.minVolume, randomSound.maxVolume);
+        audioSource.volume = Random.Range(randomSound.minVolume, randomSound.maxVolume) * volumeCoef;
         audioSource.pitch = Random.Range(randomSound.minPitch, randomSound.maxPitch);
         audioSource.Play();
     }
-
 }
