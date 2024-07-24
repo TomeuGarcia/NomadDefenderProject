@@ -1,86 +1,76 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using static SupportBuilding;
 
 public class CurrencyBase : TurretPartBase_Prefab
 {
     [Header("CURRENCY BASE")]
-    [SerializeField] private List<int> quantityToIncreaseCurrencyDrop;
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
+    [SerializeField] private GameObject _colliderHolder;
     private Material topCubeMaterial;
-    [SerializeField] private GameObject currencyPlane;
-    private Material currencyPlaneMaterial;
     [SerializeField] private float duration;
-    private List<Enemy> enemies = new List<Enemy>();
     private float positionMovement = 0;
 
+    [System.Serializable]
+    private struct DropConfigsByLevel
+    {
+        [SerializeField] private CurrencyDropOverTimeConfig _default;
+        [SerializeField] private CurrencyDropOverTimeConfig[] _configsByLevel;
+
+        public CurrencyDropOverTimeConfig GetConfigByLevel(int level)
+        {
+            if (level < 1)
+            {
+                return _default;
+            }
+
+            return _configsByLevel[level - 1];
+        }
+    }
+
+    [Header("DROP CONFIG")]
+    private CurrencyOverTimeDropper _currencyOverTimeDropper;
+    [SerializeField] private DropConfigsByLevel _dropConfigsByLevel;
+    [SerializeField] private CurrencyDropOverTimeCanvasView _dropProgressionView;
+
+
     private int currentLvl = 0;
+    private bool _canGenerateCurrency;
+
+
     private void Awake()
     {
         AwakeInit();
-        currencyPlane.SetActive(false);
         topCubeMaterial = cubeMeshRenderer.material;
-    }
-    public override void Init(TurretBuilding turretOwner, float turretRange)
-    {
-        base.Init(turretOwner, turretRange);
-        //owner = turretOwner;
-        turretOwner.OnEnemyEnterRange += IncreaseCurrencyDrop;
-        turretOwner.OnEnemyExitRange += DecreaseCurrencyDrop;
-        turretOwner.OnEnemyEnterRange += EnemyBloomsCube;
-        turretOwner.OnEnemyExitRange += EnemyDoesNotBloomCube;
+        currentLvl = 0;
 
+        _currencyOverTimeDropper = new CurrencyOverTimeDropper(_dropConfigsByLevel.GetConfigByLevel(currentLvl),
+            ServiceLocator.GetInstance().CurrencySpawnService, _dropProgressionView);
+        _canGenerateCurrency = false;
+
+        _currencyOverTimeDropper.OnCurrencyDropped += OnCurrencyDropped;
     }
 
-    public override void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
+    private void OnDestroy()
     {
-        base.InitAsSupportBuilding(supportBuilding, supportRange);
-        supportBuilding.OnEnemyEnterRange += IncreaseCurrencyDrop;   
-        supportBuilding.OnEnemyExitRange += DecreaseCurrencyDrop;
-        supportBuilding.OnEnemyEnterRange += EnemyBloomsCube;
-        supportBuilding.OnEnemyExitRange += EnemyDoesNotBloomCube;
-
-        float planeRange = supportBuilding.Stats.RadiusRange * 2 + 1; //only for square
-        float range = supportBuilding.Stats.RadiusRange;
-
-
-        currencyPlane.transform.localScale = Vector3.one * (planeRange / 10f);
-        currencyPlaneMaterial = currencyPlane.GetComponent<MeshRenderer>().materials[0];
-        currencyPlaneMaterial.SetFloat("_TileNum", planeRange);
+        _currencyOverTimeDropper.OnCurrencyDropped -= OnCurrencyDropped;
     }
 
     public override void OnGetPlaced()
     {
-        currencyPlane.SetActive(true);
-    }
-    override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatnewStatLevel)
-    {
-        base.Upgrade(ownerSupportBuilding, newStatnewStatLevel);
-        foreach (Enemy e in enemies)
-        {
-            e.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
-        }
-        currentLvl = newStatnewStatLevel;
-        
-        foreach (Enemy e in enemies)
-        {
-            e.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
-        }
-    }
-    private void IncreaseCurrencyDrop(Enemy enemy)
-    {
-        enemy.currencyDrop += quantityToIncreaseCurrencyDrop[currentLvl];
-        enemies.Add(enemy);
+        StartCoroutine(CurrencyDropControl());
+        _colliderHolder.SetActive(false);
+        _currencyOverTimeDropper.SetSpawnPosition(topCube.position);
     }
 
-    private void DecreaseCurrencyDrop(Enemy enemy)
+    override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {
-        enemy.currencyDrop -= quantityToIncreaseCurrencyDrop[currentLvl];
-        enemies.Remove(enemy);
+        base.Upgrade(ownerSupportBuilding, newStatLevel);
+
+        _currencyOverTimeDropper.SetConfig(_dropConfigsByLevel.GetConfigByLevel(newStatLevel));
     }
+
 
     public override void SetDefaultMaterial()
     {
@@ -95,32 +85,38 @@ public class CurrencyBase : TurretPartBase_Prefab
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         positionMovement += 0.01f;
 
         topCube.Rotate(Vector3.up * 0.1f, Space.World);
         topCube.position = new Vector3(topCube.position.x, topCube.position.y + (Mathf.Sin(positionMovement) / 4000.0f), topCube.position.z);
-        //Do animation up-down
+        
+
+        if (_canGenerateCurrency)
+        {
+            _currencyOverTimeDropper.Update();
+        }
     }
 
-    public void DoBloomCube(Enemy enemy)
+
+    private IEnumerator CurrencyDropControl()
+    {
+        ITDGameState gameState = ServiceLocator.GetInstance().TDGameState;
+        _currencyOverTimeDropper.Start();
+        _canGenerateCurrency = true;
+
+        yield return new WaitUntil(() => gameState.GameHasFinished);
+        _currencyOverTimeDropper.Finish();
+        _canGenerateCurrency = false;
+    }
+
+
+    private void OnCurrencyDropped()
     {
         StartCoroutine(BloomCube());
     }
-
-    public void EnemyBloomsCube(Enemy enemy)
-    {
-        enemy.OnEnemyDeath += DoBloomCube;
-    }
-
-    public void EnemyDoesNotBloomCube(Enemy enemy)
-    {
-        enemy.OnEnemyDeath -= DoBloomCube;
-    }
-
-    IEnumerator BloomCube()
+    private IEnumerator BloomCube()
     {
         float tParam = 0.0f;
 

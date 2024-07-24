@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class CurrencyOverTimeDropper
 {
-    private readonly CurrencyDropOverTimeConfig _config;
+    private CurrencyDropOverTimeConfig _config;
     private readonly ITDCurrencySpawnService _currencySpawner;
     private readonly ICurrencyDropOverTimeView _view;
     private readonly Timer _dropTimer;
+    private Vector3 _spawnPosition;
 
     private static Vector3 TEMP_CURRENCY_SPAWN_POSITION = new Vector3(0,-1000,0);
+
+    public Action OnCurrencyDropped;
 
     public CurrencyOverTimeDropper(CurrencyDropOverTimeConfig config, ITDCurrencySpawnService currencySpawner,
         ICurrencyDropOverTimeView view)
@@ -18,6 +20,7 @@ public class CurrencyOverTimeDropper
         _currencySpawner = currencySpawner;
         _view = view;
         _dropTimer = new Timer(_config.DropPerioid);
+        _spawnPosition = TEMP_CURRENCY_SPAWN_POSITION;
 
         _config.OnValuesUpdated += OnConfigValuesUpdated;
     }
@@ -51,11 +54,25 @@ public class CurrencyOverTimeDropper
 
     private void DropCurrency()
     {
-        _currencySpawner.SpawnCurrency(_config.DropValue, TEMP_CURRENCY_SPAWN_POSITION);
+        _currencySpawner.SpawnCurrency(_config.DropValue, _spawnPosition);
+        OnCurrencyDropped?.Invoke();
     }
 
     private void OnConfigValuesUpdated()
     {
         _dropTimer.Duration = _config.DropPerioid;
+    }
+
+    public void SetConfig(CurrencyDropOverTimeConfig config)
+    {
+        _config.OnValuesUpdated -= OnConfigValuesUpdated;
+        _config = config;
+        _config.OnValuesUpdated += OnConfigValuesUpdated;
+        OnConfigValuesUpdated();
+    }
+
+    public void SetSpawnPosition(Vector3 spawnPosition)
+    {
+        _spawnPosition = spawnPosition;
     }
 }

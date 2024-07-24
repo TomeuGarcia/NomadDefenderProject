@@ -26,6 +26,7 @@ public class CurrencyCounter : MonoBehaviour
     bool isSubtracting = false;
     int remainingAmountToSubtract = 0;
     Coroutine lastSubtractCoroutine;
+    private Coroutine _addCurrencyAnimation;
 
     public delegate void CurrencyCounterAction();
     public event CurrencyCounterAction OnCurrencyAdded;
@@ -44,6 +45,8 @@ public class CurrencyCounter : MonoBehaviour
         UpdateCurrencyCountText(currencyCount);
 
         addedCurrencyText.gameObject.SetActive(false);
+
+        _addCurrencyAnimation = null;
     }
 
     private void Update()
@@ -106,15 +109,21 @@ public class CurrencyCounter : MonoBehaviour
     {
         currencyCountText.text = count.ToString();
     }
-
+    
     private void AddCurrency(int amount)
     {
-        StartCoroutine(ShowAddedCurrency(amount));
+        if (_addCurrencyAnimation != null)
+        {
+            StopCoroutine(_addCurrencyAnimation);
+        }
+
+        _addCurrencyAnimation = StartCoroutine(ShowAddedCurrency(amount));
         currencyCount += amount;
         UpdateCurrencyCountText(currencyCount);
 
         if (OnCurrencyAdded != null) OnCurrencyAdded();
     }
+
 
     public void SubtractCurrency(int amount)
     {
@@ -187,6 +196,8 @@ public class CurrencyCounter : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         addedCurrencyText.gameObject.SetActive(false);
+
+        _addCurrencyAnimation = null;
     }
 
     public void PlayNotEnoughCurrencyAnimation()
