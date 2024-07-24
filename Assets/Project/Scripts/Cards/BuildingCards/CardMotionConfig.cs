@@ -36,10 +36,12 @@ public class CardMotionConfig : ScriptableObject
     [System.Serializable]
     public class RotationEffect
     {
-        [SerializeField] private float _maxRotationAngles = 5.0f;
+        [SerializeField] private Vector2 _maxRotationAngles = Vector2.one * 5.0f;
         [SerializeField, Min(0)] private float _rotationSpeed = 1.0f;
-        public float MaxRotationAngles => _maxRotationAngles;
+        [SerializeField, Min(0)] private float _startFinishDuration = 0.2f;
+        public Vector2 MaxRotationAngles => _maxRotationAngles;
         public float RotationSpeed => _rotationSpeed;
+        public float StartFinishDuration => _startFinishDuration;
     }
 
 

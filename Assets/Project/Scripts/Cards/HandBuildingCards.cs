@@ -70,7 +70,7 @@ public class HandBuildingCards : MonoBehaviour
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
 
-
+    private float TotalDepthBetweenCards => -0.5f;
 
 
     private void OnValidate()
@@ -167,7 +167,7 @@ public class HandBuildingCards : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = HandTransform.right * displacementStep * i;
             Vector3 heightDisplacement = HandTransform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = HandTransform.forward * (-0.2f * iRatio);
+            Vector3 depthDisplacement = HandTransform.forward * (TotalDepthBetweenCards * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
             Vector3 finalPosition = initHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
@@ -254,7 +254,7 @@ public class HandBuildingCards : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = HandTransform.right * displacementStep * i;
             Vector3 heightDisplacement = HandTransform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = HandTransform.forward * (-0.2f * iRatio);
+            Vector3 depthDisplacement = HandTransform.forward * (TotalDepthBetweenCards * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
             Vector3 finalPosition = hiddenHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;
@@ -289,7 +289,7 @@ public class HandBuildingCards : MonoBehaviour
             float iRatio = ratio * (i + 0.5f);
             Vector3 widthDisplacement = HandTransform.right * displacementStep * i;
             Vector3 heightDisplacement = HandTransform.up * cardsHeightCurve.Evaluate(iRatio);
-            Vector3 depthDisplacement = HandTransform.forward * (-0.2f * iRatio);
+            Vector3 depthDisplacement = HandTransform.forward * (TotalDepthBetweenCards * iRatio);
             Quaternion rotation = Quaternion.AngleAxis(cardsRotationCurve.Evaluate(iRatio), Vector3.forward);
 
             Vector3 finalPosition = initHandPosition + startDisplacement + widthDisplacement + heightDisplacement + depthDisplacement;

@@ -43,7 +43,7 @@ public class CurrencyOverTimeDropper
     public void Update()
     {
         _dropTimer.Update(GameTime.DeltaTime);
-        _view.Update(_dropTimer.Ratio01);
+        _view.UpdateProgressView(_dropTimer.Ratio01);
         if (_dropTimer.HasFinished())
         {
             _dropTimer.Reset();

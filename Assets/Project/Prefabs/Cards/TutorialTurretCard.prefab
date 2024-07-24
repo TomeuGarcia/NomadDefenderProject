@@ -1247,6 +1247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8436797292709200460}
   - component: {fileID: 7555017279591878770}
+  - component: {fileID: 1733295007331473105}
   - component: {fileID: 8436797292709200466}
   m_Layer: 10
   m_Name: TutorialTurretCard
@@ -1287,6 +1288,7 @@ MonoBehaviour:
   cardLocation: 0
   cardState: 0
   _motionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
+  _motionEffectsController: {fileID: 1733295007331473105}
   buildingPrefab: {fileID: 5698239489495674828, guid: da7a74ed2ca99ab4b9118acd96a8f3ba,
     type: 3}
   copyBuildingPrefab: {fileID: 0}
@@ -1301,7 +1303,6 @@ MonoBehaviour:
   isShowingInfo: 0
   cardMeshRenderer: {fileID: 179400717421244522}
   interfaceCanvasGroup: {fileID: 8436797293034456911}
-  _rotationEffectsHolder: {fileID: 1085237598900315424}
   cgsInfoHide:
   - {fileID: 3461327007161611810}
   - {fileID: 4731958532111265936}
@@ -1345,6 +1346,19 @@ MonoBehaviour:
   showCadenceStat: 0
   showAttackStat: 0
   showPlayCost: 0
+--- !u!114 &1733295007331473105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436797292709200463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd2dd91dcca0a14295599d4d7913158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationEffectsTransform: {fileID: 1085237598900315424}
 --- !u!65 &8436797292709200466
 BoxCollider:
   m_ObjectHideFlags: 0

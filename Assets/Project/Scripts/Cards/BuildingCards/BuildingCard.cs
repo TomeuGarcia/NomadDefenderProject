@@ -22,8 +22,9 @@ public abstract class BuildingCard : MonoBehaviour
     public enum CardStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardStates cardState = CardStates.STANDARD;
 
-    [Header("CONFIG")]
+    [Header("MOTION")]
     [SerializeField] private CardMotionConfig _motionConfig;
+    [SerializeField] private CardMotionEffectsController _motionEffectsController;
 
     [Header("BUILDING PREFAB")]
     [SerializeField] public GameObject buildingPrefab;
@@ -69,7 +70,7 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 hoverAdditionalOffset = Vector3.zero;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
-    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
+    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.34f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
@@ -88,8 +89,6 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     protected Material cardMaterial;
-
-    [SerializeField] private Transform _rotationEffectsHolder;
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -236,13 +235,6 @@ public abstract class BuildingCard : MonoBehaviour
                 if (OnCardInfoSelected != null) OnCardInfoSelected(this);
             }
         }
-
-
-        float rotationTime = (_motionConfig.HoveredRotationEffect.RotationSpeed * Time.time) + gameObject.GetInstanceID();
-        Vector3 rotationEffect =
-            Vector3.right * (Mathf.Sin(rotationTime) * _motionConfig.HoveredRotationEffect.MaxRotationAngles) +
-            Vector3.up * (Mathf.Cos(rotationTime) * _motionConfig.HoveredRotationEffect.MaxRotationAngles);
-        _rotationEffectsHolder.localRotation = Quaternion.Euler(rotationEffect);
     }
 
 
@@ -257,6 +249,8 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
+        _motionEffectsController.Init(_motionConfig.HoveredRotationEffect);
+
         cardColliderOffset = cardCollider.center;
 
         this.cardBuildingType = cardBuildingType;
@@ -355,14 +349,14 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void ImmediateStandardState()
     {
-        cardState = CardStates.STANDARD;
+        SetCardState(CardStates.STANDARD);
         //CardTransform.DOComplete(true);
         CardTransform.localPosition = local_standardPosition;
         //CardTransform.localRotation = Quaternion.Euler(local_standardRotation_euler);
     }
     public void StandardState(bool repositionColliderOnEnd = false, float duration = BuildingCard.unhoverTime)
     {
-        cardState = CardStates.STANDARD;
+        SetCardState(CardStates.STANDARD);
 
         DisableMouseInteraction();
 
@@ -379,7 +373,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void HoveredState(bool rotate = true, bool useAdditionalOffset = false)
     {
-        cardState = CardStates.HOVERED;
+        SetCardState(CardStates.HOVERED);
 
         Vector3 moveBy = (CardTransform.localRotation * HoveredTranslationWorld);
         if (useAdditionalOffset) moveBy += hoverAdditionalOffset;
@@ -393,13 +387,25 @@ public abstract class BuildingCard : MonoBehaviour
             CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime)
                 .SetEase(_motionConfig.Hovered_Rot_Ease);
         }
+
+        _motionEffectsController.StartHoverMotion();
+    }
+
+    private void SetCardState(CardStates newCardState)
+    {
+        if (cardState == CardStates.HOVERED)
+        {
+            _motionEffectsController.FinishHoverMotion();
+        }
+
+        cardState = newCardState;
     }
 
 
     bool repositionColliderOnEnd, enableInteractionOnEnd = false;
     public void SelectedState(bool useDragAndDrop, bool repositionColliderOnEnd = false, bool enableInteractionOnEnd = false)
     {
-        cardState = CardStates.SELECTED;
+        SetCardState(CardStates.SELECTED);
 
         this.repositionColliderOnEnd = repositionColliderOnEnd;
         this.enableInteractionOnEnd = enableInteractionOnEnd;

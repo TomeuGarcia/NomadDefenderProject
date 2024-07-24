@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 8436797292709200460}
   - component: {fileID: 8436797292709200466}
   - component: {fileID: 2198697777562756413}
+  - component: {fileID: 5830606690554930900}
   m_Layer: 10
   m_Name: SupportCard
   m_TagString: Untagged
@@ -797,6 +798,7 @@ MonoBehaviour:
   cardLocation: 0
   cardState: 0
   _motionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
+  _motionEffectsController: {fileID: 5830606690554930900}
   buildingPrefab: {fileID: 5698239489495674828, guid: 523a7e436a6390242ade999d137b7199,
     type: 3}
   copyBuildingPrefab: {fileID: 0}
@@ -811,7 +813,6 @@ MonoBehaviour:
   isShowingInfo: 0
   cardMeshRenderer: {fileID: 3403755984230960314}
   interfaceCanvasGroup: {fileID: 8436797293034456911}
-  _rotationEffectsHolder: {fileID: 374519592482291124}
   cgsInfoHide:
   - {fileID: 4701946779586725980}
   - {fileID: 3815957422693145386}
@@ -831,6 +832,19 @@ MonoBehaviour:
   abilityImage: {fileID: 8521076531209727037}
   leftDescriptionPosition: {fileID: 55434787172332147}
   rightDescriptionPosition: {fileID: 5763998244258541307}
+--- !u!114 &5830606690554930900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436797292709200463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd2dd91dcca0a14295599d4d7913158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationEffectsTransform: {fileID: 374519592482291124}
 --- !u!1 &8436797293034456905
 GameObject:
   m_ObjectHideFlags: 0
