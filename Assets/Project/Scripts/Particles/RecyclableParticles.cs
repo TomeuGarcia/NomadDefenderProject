@@ -24,6 +24,11 @@ public class RecyclableParticles : RecyclableObject
     }
 
 
+    public void Stop()
+    {
+        _particles.Stop();
+    }
+
     public void SetMaterial(Material material)
     {
         ParticleSystemRenderer particleRenderer = _particles.GetComponentInChildren<ParticleSystemRenderer>();

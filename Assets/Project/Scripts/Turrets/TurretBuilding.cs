@@ -42,7 +42,7 @@ public class TurretBuilding : RangeBuilding
 
     [Header("PARTICLES")]
     [SerializeField] protected ParticleSystem placedParticleSystem;
-    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private Transform _upgradeParticlesPosition;
 
 
     public int CardLevel { get; private set; }
@@ -391,27 +391,13 @@ public class TurretBuilding : RangeBuilding
     private IEnumerator UpgradeAnimation(TurretUpgradeType upgradeType, int upgradeLevel)
     {
         bodyHolder.DOComplete();
-        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
-        
-
-        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
-        if (upgradeType == TurretUpgradeType.ATTACK)
-        {            
-            particleRenderer.sharedMaterial = buildingsUtils.AttackUpgradeParticleMat;
-        }
-        else if (upgradeType == TurretUpgradeType.CADENCE)
-        {
-            particleRenderer.sharedMaterial = buildingsUtils.CadencyUpgradeParticleMat;
-        }
-        else //(upgradeType == TurretUpgradeType.RANGE)
-        {
-            particleRenderer.sharedMaterial = buildingsUtils.RangeUpgradeParticleMat;
-        }
-
+        bodyHolder.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);       
 
         GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
-        upgradeParticles.Play();
+
+        ServiceLocator.GetInstance().GeneralParticleFactory
+            .SpawnTurretUpgradeParticles(upgradeType, _upgradeParticlesPosition.position, Quaternion.identity);
 
         bodyPart.PlayUpgradeAnimation(upgradeLevel);
     }

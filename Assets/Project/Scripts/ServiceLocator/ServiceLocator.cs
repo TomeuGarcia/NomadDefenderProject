@@ -16,6 +16,7 @@ public class ServiceLocator : MonoBehaviour
     public ITDCurrencySpawnService CurrencySpawnService { get; set; }
     public RunInfo RunInfo { get; set; }
     public CursorChanger CursorChanger { get; set; }
+    public IGeneralParticleFactory GeneralParticleFactory { get; set; }
 
 
     private void Awake()
