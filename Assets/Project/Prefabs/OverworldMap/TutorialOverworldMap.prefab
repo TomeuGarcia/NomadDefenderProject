@@ -61,6 +61,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f03237748a0f62a4cb878e3063911d76, type: 2}
   - {fileID: 11400000, guid: 6f68cb0e273d1354fb87d3b61c55c252, type: 2}
   useTestOverPool: 1
+  useProceduralMap: 0
   mapSceneLoader: {fileID: 8485875724773115229}
   owMapPawn: {fileID: 2813399844669948103}
   cardDisplayer: {fileID: 0}
@@ -159,7 +160,7 @@ MonoBehaviour:
   - levelI: 3
     nodeI: 0
     progressionState: 0
-    upgradeType: 3
+    upgradeType: 4
     numNextLevelNodes: 1
   - levelI: 4
     nodeI: 0
@@ -184,6 +185,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1897838225408051678}
     m_Modifications:
     - target: {fileID: 4497347751966086021, guid: ee6e81dc5b152e34b9b417e7d87bfd75,
@@ -247,6 +249,9 @@ PrefabInstance:
       value: OWMap_AmbienceAudio
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee6e81dc5b152e34b9b417e7d87bfd75, type: 3}
 --- !u!4 &20488842013388026 stripped
 Transform:
@@ -271,6 +276,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1897838225408051678}
     m_Modifications:
     - target: {fileID: 258575568821950019, guid: 4e67164a059227448845f4d773d39dce,
@@ -364,6 +370,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e67164a059227448845f4d773d39dce, type: 3}
 --- !u!114 &2813399844669948103 stripped
 MonoBehaviour:

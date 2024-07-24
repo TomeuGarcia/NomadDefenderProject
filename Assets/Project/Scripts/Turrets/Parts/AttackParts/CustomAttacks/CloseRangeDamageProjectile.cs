@@ -11,7 +11,7 @@ public class CloseRangeDamageProjectile : HomingProjectile
     [Header("STATS")]
     [SerializeField, Range(0f, 1f)] private float baseDamagePer1 = 0.25f;
     [SerializeField, Min(0f)] private float distanceInverseMultiplier = 1.0f;
-
+    [SerializeField] private AnimationCurve _damageMultiplierOverDistance = AnimationCurve.EaseInOut(0,2,10,0);
 
     private void OnDisable()
     {
@@ -61,13 +61,8 @@ public class CloseRangeDamageProjectile : HomingProjectile
     private int ComputeDamage()
     {
         float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
-        float distanceInverse = 1f / distance;
-
-        int baseDamage = (int)(turretOwner.Stats.Damage * baseDamagePer1);
-        int baseDamageRemaining = (int)(turretOwner.Stats.Damage * (1f - baseDamagePer1));
-        int bonusDamage = (int)(baseDamageRemaining * distanceInverse * distanceInverseMultiplier);
-
-        return baseDamage + bonusDamage;
+        int baseDamage = turretOwner.Stats.Damage;
+        return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
     }
 
 

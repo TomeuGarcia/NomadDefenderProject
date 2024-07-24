@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,9 +11,13 @@ public class DamageRangeProjectile : HomingProjectile
     private Coroutine growInSizeCoroutine = null;
 
     [Header("STATS")]
-    [SerializeField, Range(0f, 1f)] private float baseDamagePer1 = 0.75f;
-    [SerializeField, Min(0f)] private float distanceMultiplier = 1.0f;
+    [SerializeField] private AnimationCurve _damageMultiplierOverDistance = AnimationCurve.EaseInOut(0,0,10,4);
 
+
+    private void Start()
+    {
+        _damageMultiplierOverDistance.postWrapMode = WrapMode.Clamp;
+    }
 
     private void OnDisable()
     {
@@ -63,12 +68,8 @@ public class DamageRangeProjectile : HomingProjectile
     private int ComputeDamage()
     {
         float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
-
-        int baseDamage = (int)(turretOwner.Stats.Damage * baseDamagePer1);
-        int baseDamageRemaining = (int)(turretOwner.Stats.Damage * (1f - baseDamagePer1));
-        int bonusDamage = (int)(baseDamageRemaining * distance * distanceMultiplier);
-
-        return baseDamage + bonusDamage;
+        int baseDamage = turretOwner.Stats.Damage;
+        return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
     }
 
 
