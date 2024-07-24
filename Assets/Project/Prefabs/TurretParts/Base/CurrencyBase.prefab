@@ -122,7 +122,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.2, y: 0.1}
+  m_AnchoredPosition: {x: -0.2, y: 0.2}
   m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &244135786315354888
@@ -406,7 +406,6 @@ MonoBehaviour:
   placedParticleSystem: {fileID: 2356110352872133714}
   topCube: {fileID: 979149680244550677}
   cubeMeshRenderer: {fileID: 2139872367243723891}
-  _colliderHolder: {fileID: 8336233891609876287}
   duration: 0.25
   _dropConfigsByLevel:
     _default: {fileID: 11400000, guid: 2070ecc08609f9544b6d10d98c72ccbe, type: 2}
@@ -507,7 +506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -584,7 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -730,7 +729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1643,7 +1642,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 6930537121671595639}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8336233891609876287}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e95455ad847f2c4f9556fa83048867d, type: 3}
@@ -1652,12 +1651,6 @@ MonoBehaviour:
 --- !u!4 &8336233891609876282 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1413697368647160141, guid: 03fd90217426cbf409b4b50c1a2ea86f,
-    type: 3}
-  m_PrefabInstance: {fileID: 6930537121671595639}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8336233891609876287 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1413697368647160136, guid: 03fd90217426cbf409b4b50c1a2ea86f,
     type: 3}
   m_PrefabInstance: {fileID: 6930537121671595639}
   m_PrefabAsset: {fileID: 0}

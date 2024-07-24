@@ -7,7 +7,6 @@ public class CurrencyBase : TurretPartBase_Prefab
     [Header("CURRENCY BASE")]
     [SerializeField] private Transform topCube;
     [SerializeField] private MeshRenderer cubeMeshRenderer;
-    [SerializeField] private GameObject _colliderHolder;
     private Material topCubeMaterial;
     [SerializeField] private float duration;
     private float positionMovement = 0;
@@ -60,7 +59,6 @@ public class CurrencyBase : TurretPartBase_Prefab
     public override void OnGetPlaced()
     {
         StartCoroutine(CurrencyDropControl());
-        _colliderHolder.SetActive(false);
         _currencyOverTimeDropper.SetSpawnPosition(topCube.position);
     }
 
