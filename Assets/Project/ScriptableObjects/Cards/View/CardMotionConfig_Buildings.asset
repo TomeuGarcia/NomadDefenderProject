@@ -18,7 +18,11 @@ MonoBehaviour:
   _hovered_Move_Ease: 4
   _hovered_Rot_Ease: 4
   _selected_Move_Ease: 4
-  _hoveredRotationEffect:
-    _maxRotationAngles: {x: 8, y: 12}
+  _idleRotationEffect:
+    _maxRotationAngles: {x: 5, y: 10}
     _rotationSpeed: 1
-    _startFinishDuration: 0.2
+    _transitionDuration: 0.2
+  _hoveredMouseRotationEffect:
+    _maxRotationAngles: {x: 50, y: 50}
+    _rotationSpeed: 1
+    _transitionDuration: 0.2

@@ -249,7 +249,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected virtual void AwakeInit(CardBuildingType cardBuildingType)
     {
-        _motionEffectsController.Init(_motionConfig.HoveredRotationEffect);
+        _motionEffectsController.Init(_motionConfig.IdleRotationEffect, _motionConfig.HoveredMouseRotationEffect);
 
         cardColliderOffset = cardCollider.center;
 

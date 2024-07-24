@@ -47,8 +47,10 @@ public class CardMotionConfig : ScriptableObject
 
     [Space(20)]
     [Header("ROTATION EFFECT")]
-    [SerializeField] private RotationEffect _hoveredRotationEffect;
-    public RotationEffect HoveredRotationEffect => _hoveredRotationEffect;
+    [SerializeField] private RotationEffect _idleRotationEffect;
+    [SerializeField] private RotationEffect _hoveredMouseRotationEffect;
+    public RotationEffect IdleRotationEffect => _idleRotationEffect;
+    public RotationEffect HoveredMouseRotationEffect => _hoveredMouseRotationEffect;
 
 
 }

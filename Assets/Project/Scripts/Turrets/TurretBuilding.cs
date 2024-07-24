@@ -343,6 +343,7 @@ public class TurretBuilding : RangeBuilding
 
         bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
      
+        
         placedParticleSystem.gameObject.SetActive(true);
         placedParticleSystem.Play();
 
