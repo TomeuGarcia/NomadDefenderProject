@@ -308,7 +308,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
         //Place Another Turret
-        yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(120) );
+        yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(140) );
         scriptedSequence.NextLine(); //20 Place another Turret
         GameTime.SetTimeScale(0f);
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -341,9 +341,6 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         GameTime.SetTimeScale(1f);
         //FINISH UPGRADE TURRET TUTORIAL
-       
-        
-        
 
         //Last Wave (4/3)
         yield return new WaitUntil(() => wavesCounter > 3);
