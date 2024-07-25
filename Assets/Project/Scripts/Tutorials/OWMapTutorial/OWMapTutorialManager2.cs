@@ -76,6 +76,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
     IEnumerator Tutorial()
     {
         cameraMovement.CanDrag(false);
+        DisableLastNodes();
         yield return new WaitForSeconds(2.0f);
 
         if (testing)
@@ -89,7 +90,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
             yield break;
         }
 
-        DisableLastNodes();
+        
         yield return new WaitForSeconds(1.0f);
 
 

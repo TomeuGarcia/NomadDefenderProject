@@ -28,12 +28,23 @@ public class TutoTurretCard : TurretBuildingCard
 
     private delegate void PlayAudioFunction();
 
+    private float _displacementInDuration = 0.5f;
+    private float _displacementOutDuration = 0.75f;
+    private Vector3 _positionDisplacement = new Vector3(0f, 1f, 0f);
+    private Vector3 _scaleDisplacement = Vector3.one * 1.5f;
+
+    public bool FinishedAnimation => !isPlayingDrawAnimation;
+
+    [SerializeField] private Transform _animationTransform;
+
+
 
     protected override IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
     {
+
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
-
+        
 
         for (int i = 0; i < cgsInfoHide.Length; ++i)
         {
@@ -43,6 +54,9 @@ public class TutoTurretCard : TurretBuildingCard
         {
             otherCfDrawAnimation[i].alpha = 0f;
         }
+
+        DisableMouseInteraction();
+
 
 
         float startStep = 10f;
@@ -58,7 +72,9 @@ public class TutoTurretCard : TurretBuildingCard
 
 
         yield return new WaitForSeconds(drawAnimWaitDurationBeforeBlink);
-
+        transform.DOComplete();
+        transform.DOBlendableMoveBy(_positionDisplacement, _displacementInDuration).SetEase(Ease.InOutSine);
+        transform.DOScale(_scaleDisplacement, _displacementInDuration).SetEase(Ease.InOutSine);
 
         float tBlink = drawAnimBlinkDuration / drawAnimNumBlinks;
         for (int i = 0; i < drawAnimNumBlinks; ++i)
@@ -108,7 +124,39 @@ public class TutoTurretCard : TurretBuildingCard
         //yield return StartCoroutine(ShowCanvasGroupElement(basePassiveIconCg, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
 
 
+        yield return new WaitForSeconds(0.5f);
+
+
+        DisableMouseInteraction();
+        MotionEffectsController.DisableMotion();
+        transform.DOComplete();
+        transform.DOBlendableMoveBy(-_positionDisplacement, _displacementOutDuration)
+            .SetEase(Ease.InOutSine);
+        transform.DOScale(Vector3.one, _displacementOutDuration)
+            .SetEase(Ease.InOutSine);
+
+        Quaternion startRotation = transform.localRotation;
+        float spinRotation = 0f;
+        DOTween.To(
+            () => spinRotation,
+            (spinRotationValue) => {
+                spinRotation = spinRotationValue;
+                _animationTransform.localRotation = startRotation * Quaternion.Euler(0, spinRotation, 0); 
+            },
+            360f,
+            _displacementOutDuration
+            )
+            .SetEase(Ease.InOutCubic);
+
+        yield return new WaitForSeconds(_displacementOutDuration + 0.25f);
+
+        EnableMouseInteraction();
+        isInteractable = true;
+        MotionEffectsController.EnableMotion();
+        
+
         canInfoInteract = true;
+        canBeHovered = true;
         isPlayingDrawAnimation = false;
         cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
 
@@ -153,4 +201,25 @@ public class TutoTurretCard : TurretBuildingCard
         yield return new WaitForSeconds(t1);
     }
 
+
+
+    public override void ShowInfo()
+    {
+        if (!FinishedAnimation)
+        {
+            return;
+        }
+
+        base.ShowInfo();
+    }
+
+    public override void HideInfo()
+    {
+        if (!FinishedAnimation)
+        {
+            return;
+        }
+
+        base.HideInfo();
+    }
 }

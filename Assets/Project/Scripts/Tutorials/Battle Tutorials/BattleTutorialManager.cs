@@ -10,6 +10,7 @@ using static InBattleBuildingUpgrader;
 
 public class BattleTutorialManager : MonoBehaviour
 {
+    [SerializeField] private CardMotionConfig _cardsMotionConfig;
 
     //Needs
     //CurrencyBackgroundImg (can set alpha to 0)
@@ -142,6 +143,7 @@ public class BattleTutorialManager : MonoBehaviour
     
     IEnumerator Tutorial()
     {
+        _cardsMotionConfig.SetTutorialDisplayMode();
 
         yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine(); //0
@@ -201,6 +203,7 @@ public class BattleTutorialManager : MonoBehaviour
         //Starts Cards Tutorial
         tutoCardDrawer.DoGameStartSetup();
 
+
         scriptedSequence.NextLine(); //Initializing User's Deck Line 5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.0f);
@@ -256,16 +259,18 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();// 13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitUntil(() => tutoCardDrawer.tutorialCard.FinishedAnimation);
 
         //Finishes Cards Tutorial
+        _cardsMotionConfig.SetTDGameplayHandMode();
 
 
-        
         //Skips Redraw
         scriptedSequence.Clear();
         tutoCardDrawer.FinishRedraws();
-        tutoCardDrawer.tutorialCard.isInteractable = true;
+
+        yield return new WaitForSeconds(1.5f);
+        
 
         yield return new WaitForSeconds(0.5f);
 
