@@ -218,12 +218,7 @@ public class OWMapTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() == true);
         yield return new WaitForSeconds(1.0f);
         scriptedSequence.Clear();
-
-        //if (testing)
-        //{
-        //    owMapTuto2.StartTutorial();
-        //    yield break;
-        //}
+        
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 

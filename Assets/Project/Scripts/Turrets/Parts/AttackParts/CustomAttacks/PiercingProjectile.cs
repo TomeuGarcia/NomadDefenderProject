@@ -19,6 +19,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     [SerializeField, Min(0)] private float startDamageMultiplier = 0.5f;
     [SerializeField, Min(1)] private float maxDamageMultiplier = 2.0f;
     [SerializeField, Min(0)] private float damageMultiplierIncrement = 0.25f;
+    [SerializeField] private float _distance = 15;
     private float currentDamageMultiplier = 0f;
 
 
@@ -79,8 +80,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
     private void ComputeGoalPosition()
     {
-        goalPos = transform.position + ((targetEnemy.Position - transform.position).normalized * 
-            (turretOwner.Stats.RadiusRange + turretOwner.Stats.RadiusRange * extraDistanceCoef));
+        goalPos = transform.position + ((targetEnemy.Position - transform.position).normalized *_distance);
         goalPos.y = transform.position.y;
     }
 
