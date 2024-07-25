@@ -28,8 +28,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6171406187309365499}
-  m_RootOrder: 2
+  m_Father: {fileID: 2813886449337726383}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &894752554980579166
 GameObject:
@@ -148,8 +148,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6171406187309365499}
-  m_RootOrder: 1
+  m_Father: {fileID: 2813886449337726383}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2960225694200550442
 GameObject:
@@ -179,12 +179,44 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2813886449337726383}
+  m_Father: {fileID: 3900070926476808982}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3133001244595309961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2813886449337726383}
+  m_Layer: 10
+  m_Name: CardRotationEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2813886449337726383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133001244595309961}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
   - {fileID: 1432308980689129014}
   - {fileID: 1309547610471818874}
   - {fileID: 6098636378003380257}
   - {fileID: 3900070927855245639}
-  m_Father: {fileID: 3900070926476808982}
-  m_RootOrder: 0
+  m_Father: {fileID: 6171406187309365499}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3900070926281709075
 GameObject:
@@ -249,6 +281,7 @@ GameObject:
   - component: {fileID: 3900070926476808982}
   - component: {fileID: 3900070926476808968}
   - component: {fileID: 920600008922308739}
+  - component: {fileID: 8138548683769636879}
   m_Layer: 10
   m_Name: Body_CardPart
   m_TagString: Untagged
@@ -306,6 +339,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardState: 0
+  _motionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
+  _motionEffectsController: {fileID: 8138548683769636879}
   layerMaskMouseDragPlane:
     serializedVersion: 2
     m_Bits: 4096
@@ -330,6 +365,19 @@ MonoBehaviour:
     type: 2}
   leftDescriptionPosition: {fileID: 1309547610471818874}
   rightDescriptionPosition: {fileID: 6098636378003380257}
+--- !u!114 &8138548683769636879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900070926476808981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd2dd91dcca0a14295599d4d7913158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationEffectsTransform: {fileID: 2813886449337726383}
 --- !u!1 &3900070927855245638
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,8 +410,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3900070926281709076}
-  m_Father: {fileID: 6171406187309365499}
-  m_RootOrder: 3
+  m_Father: {fileID: 2813886449337726383}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -439,12 +487,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6171406187309365499}
+    m_TransformParent: {fileID: 2813886449337726383}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}
@@ -570,17 +618,17 @@ PrefabInstance:
     - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.33397114
+      value: 0.30709326
       objectReference: {fileID: 0}
     - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.7403537
+      value: 0.78708565
       objectReference: {fileID: 0}
     - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.8962264
+      value: 0.9716981
       objectReference: {fileID: 0}
     - target: {fileID: 4880989308449009505, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}

@@ -16,5 +16,6 @@ public class InitSceneInstaller : MonoBehaviour
     public void Install(ServiceLocator serviceLocator)
     {
         serviceLocator.GeneralParticleFactory = new GeneralParticleFactory(_particlesParent, _particlesFactoryConfig);
+        serviceLocator.CameraHelp = new CameraHelpService();
     }
 }

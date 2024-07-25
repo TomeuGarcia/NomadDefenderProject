@@ -208,6 +208,7 @@ public class CardPartHolder : MonoBehaviour
         cardDragBoundsCollider.gameObject.SetActive(true);
 
         selectedCardPart = card;
+        selectedCardPart.MotionEffectsController.DisableMotion();
         selectedCardPart.SelectedState(true, repositionColliderOnEnd: true);
 
         selectedCardPart.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
@@ -296,6 +297,7 @@ public class CardPartHolder : MonoBehaviour
         selectedCardPart.OnCardSelectedNotHovered -= RetrieveCardWithSound;
         SetStandardCard(card);
 
+        selectedCardPart.MotionEffectsController.EnableMotion();
         selectedCardPart.HideInfo();
         selectedCardPart = null;
 

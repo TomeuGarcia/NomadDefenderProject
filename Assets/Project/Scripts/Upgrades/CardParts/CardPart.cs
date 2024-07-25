@@ -10,6 +10,11 @@ public abstract class CardPart : MonoBehaviour
     public enum CardPartStates { STANDARD, HOVERED, SELECTED }
     [HideInInspector] public CardPartStates cardState = CardPartStates.STANDARD;
 
+    [Header("MOTION")]
+    [SerializeField] private CardMotionConfig _motionConfig;
+    [SerializeField] private CardMotionEffectsController _motionEffectsController;
+    public CardMotionEffectsController MotionEffectsController =>_motionEffectsController;
+
     [Header("DRAG & DROP")]
     [SerializeField] private LayerMask layerMaskMouseDragPlane;
     private bool isDraggingToSelect = false;
@@ -41,6 +46,7 @@ public abstract class CardPart : MonoBehaviour
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.04f;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
+    private Vector3 HoveredTranslationWorld => _motionConfig.CurrentDisplacements.Hovered;
 
     [HideInInspector] public bool isShowingInfo;
     protected bool canInfoInteract = true;
@@ -73,8 +79,12 @@ public abstract class CardPart : MonoBehaviour
     }
     protected virtual void AwakeInit()
     {
+        _motionEffectsController.Init(_motionConfig.IdleRotationEffect, _motionConfig.HoveredMouseRotationEffect);
         cardColliderOffset = cardCollider.center;
         isShowInfoAnimationPlaying = false;
+
+        cardState = CardPartStates.HOVERED;
+        SetCardState(CardPartStates.STANDARD);
     }
 
     private void OnMouseEnter()
@@ -158,7 +168,7 @@ public abstract class CardPart : MonoBehaviour
 
     public void StandardState(bool repositionColliderOnEnd = false, float duration = BuildingCard.toStandardTime)
     {
-        cardState = CardPartStates.STANDARD;
+        SetCardState(CardPartStates.STANDARD);
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(standardPosition - CardTransform.position, duration)        
@@ -167,15 +177,15 @@ public abstract class CardPart : MonoBehaviour
 
     public void HoveredState()
     {
-        cardState = CardPartStates.HOVERED;
+        SetCardState(CardPartStates.HOVERED);
 
-        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * BuildingCard.HoveredTranslationWorld, BuildingCard.hoverTime);
+        CardTransform.DOBlendableLocalMoveBy(CardTransform.localRotation * HoveredTranslationWorld, BuildingCard.hoverTime);
     }
 
     bool repositionColliderOnEnd = false;
     public void SelectedState(bool useDragAndDrop, bool repositionColliderOnEnd = false)
     {
-        cardState = CardPartStates.SELECTED;
+        SetCardState(CardPartStates.SELECTED);
 
         this.repositionColliderOnEnd = repositionColliderOnEnd;
         
@@ -188,6 +198,21 @@ public abstract class CardPart : MonoBehaviour
         {
             GoToSelectedPosition();
         }
+    }
+
+    private void SetCardState(CardPartStates newCardState)
+    {
+        if (cardState == CardPartStates.HOVERED)
+        {
+            _motionEffectsController.FinishHoverMotion();
+        }
+
+        if (newCardState == CardPartStates.HOVERED)
+        {
+            _motionEffectsController.StartHoverMotion();
+        }
+
+        cardState = newCardState;
     }
 
     public void GoToSelectedPosition()

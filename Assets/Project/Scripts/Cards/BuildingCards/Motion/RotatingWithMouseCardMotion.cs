@@ -5,41 +5,46 @@ using DG.Tweening;
 
 public class RotatingWithMouseCardMotion
 {
+    private ICameraHelpService _cameraHelp;
     private Transform _effectTransform;
     private CardMotionConfig.RotationEffect _rotationEffect;
     private float _effectAmount;
 
+    private Camera CardsCamera => _cameraHelp.CardsCamera;
 
-    public RotatingWithMouseCardMotion(Transform effectTransform, CardMotionConfig.RotationEffect rotationEffect)
+
+    public RotatingWithMouseCardMotion(ICameraHelpService cameraHelp, Transform effectTransform, CardMotionConfig.RotationEffect rotationEffect)
     {
+        _cameraHelp = cameraHelp;
         _effectTransform = effectTransform;
         _rotationEffect = rotationEffect;
         _effectAmount = 0f;
     }
 
-    public void Update()
+    public void Update(float effectMultiplicator)
     {
-        return;
-
-        Camera camera = Camera.main;
-        if (camera == null || _effectAmount.AlmostZero())
-        {
+        if (_effectAmount.AlmostZero())
+        {            
             return;
         }
 
-        Vector3 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 mousePositionOffset = mousePosition - _effectTransform.position;
+        Vector2 mousePosition = Input.mousePosition;
+        Vector2 cardScreenPosition = CardsCamera.WorldToScreenPoint(_effectTransform.position);
 
-        Vector2 tilt = new Vector2(-mousePositionOffset.y, mousePositionOffset.x);
-        Debug.Log(tilt);
+        Vector2 screenOffset = mousePosition - cardScreenPosition;
+        screenOffset.x /= Screen.currentResolution.width;
+        screenOffset.y /= Screen.currentResolution.height;
+        screenOffset.x = Mathf.Min(1, screenOffset.x / 0.1f);
+        screenOffset.y = Mathf.Min(1, screenOffset.y / 0.1f);
 
-        Vector2 rotationAngles = _rotationEffect.MaxRotationAngles * _effectAmount;
+        Vector2 rotationAngles = _rotationEffect.MaxRotationAngles * (_effectAmount * effectMultiplicator);
 
-        Vector3 localRotationEuler = new Vector3(
-            Mathf.Sin(tilt.x) * rotationAngles.x,
-            Mathf.Cos(tilt.y) * rotationAngles.y,
-            0f
+        Vector2 tilt = new Vector2(
+            screenOffset.y * rotationAngles.x, 
+            -screenOffset.x * rotationAngles.y
         );
+
+        Vector3 localRotationEuler = new Vector3(tilt.x, tilt.y, 0f);
 
         _effectTransform.localRotation = Quaternion.Euler(localRotationEuler);
     }
@@ -63,6 +68,7 @@ public class RotatingWithMouseCardMotion
             (value) => _effectAmount = effectAmount = value,
             finalValue,
             _rotationEffect.TransitionDuration
-        );
+        )
+        .SetEase(Ease.InOutSine);
     }
 }

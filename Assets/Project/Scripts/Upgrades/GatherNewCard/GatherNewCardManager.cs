@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
 {
+    [Header("Camera")]
+    [SerializeField] private Camera _sceneCamera;
+
     [Header("UPGRADE SETUP")]
     [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
 
@@ -45,6 +48,7 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_sceneCamera);
         Init();
         CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
     }
@@ -204,8 +208,8 @@ public class GatherNewCardManager : MonoBehaviour
         {            
             deckCreator.AddNewSupportCardToDeck(selectedCard as SupportBuildingCard);
         }
-        
 
+        selectedCard.MotionEffectsController.DisableMotion();
         StartCoroutine(SelectCardAnimation());
 
         // Audio
@@ -239,10 +243,13 @@ public class GatherNewCardManager : MonoBehaviour
         Quaternion upsideDown = Quaternion.AngleAxis(180f, cards[0].RootCardTransform.forward);
         for (int i = 0; i < numCards; ++i)
         {
-            endPositions[i] = cards[i].RootCardTransform.localPosition;
-            startPositions[i] = cards[i].RootCardTransform.localPosition + (cards[i].RootCardTransform.forward * -3f);
-            cards[i].RootCardTransform.localPosition = startPositions[i];
-            cards[i].RootCardTransform.localRotation = upsideDown;
+            BuildingCard card = cards[i];
+            endPositions[i] = card.RootCardTransform.localPosition;
+            startPositions[i] = card.RootCardTransform.localPosition + (card.RootCardTransform.forward * -3f);
+            card.RootCardTransform.localPosition = startPositions[i];
+            card.RootCardTransform.localRotation = upsideDown;
+
+            card.MotionEffectsController.DisableMotion();
         }
 
         //yield return new WaitForSeconds(1f);
@@ -277,6 +284,11 @@ public class GatherNewCardManager : MonoBehaviour
         PrintConsoleLine(TextTypes.INSTRUCTION, "choose a new CARD for your deck",true);
 
         yield return new WaitForSeconds(1.0f);
+
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.MotionEffectsController.EnableMotion();
+        }
 
         //CONTAINTERS
         if (numCards == 3)
@@ -338,6 +350,10 @@ public class GatherNewCardManager : MonoBehaviour
         selectedCard.RootCardTransform.DOMove(centerPos, centerMoveDuration);
         yield return new WaitForSeconds(centerMoveDuration);
 
+        foreach (BuildingCard itCard in cards)
+        {
+            itCard.MotionEffectsController.DisableMotion();
+        }
 
         //CONTAINTERS
         if (numCards == 3)
@@ -355,7 +371,6 @@ public class GatherNewCardManager : MonoBehaviour
             StartCoroutine(rightCardConteiner.Deactivate());
             yield return new WaitForSeconds(0.5f);
         }
-
 
         Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
         selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);

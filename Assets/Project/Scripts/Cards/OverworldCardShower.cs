@@ -33,7 +33,10 @@ public class OverworldCardShower : MonoBehaviour
 
     Dictionary<BuildingCard, Vector3> positions;
 
-
+    private void Awake()
+    {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
+    }
 
     void Start()
     {

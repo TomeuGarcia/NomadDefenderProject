@@ -53,4 +53,29 @@ public class CardMotionConfig : ScriptableObject
     public RotationEffect HoveredMouseRotationEffect => _hoveredMouseRotationEffect;
 
 
+
+
+    [System.Serializable]
+    public class CardStateDisplacements
+    {
+        [SerializeField] private Vector3 _hovered;
+        public Vector3 Hovered => _hovered;       
+    }
+
+    [Space(20)]
+    [Header("INTERACTION DISPLACEMENTS")]
+    [SerializeField] private CardStateDisplacements _gameplayHandDisplacements;
+    [SerializeField] private CardStateDisplacements _upgradesDisplacements;
+    public CardStateDisplacements CurrentDisplacements { get; private set; }
+
+
+    public void SetTDGameplayHandMode()
+    {
+        CurrentDisplacements = _gameplayHandDisplacements;
+    }
+    public void SetUpgradeSceneMode()
+    {
+        CurrentDisplacements = _upgradesDisplacements;
+    }
+
 }

@@ -25,6 +25,7 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("MOTION")]
     [SerializeField] private CardMotionConfig _motionConfig;
     [SerializeField] private CardMotionEffectsController _motionEffectsController;
+    public CardMotionEffectsController MotionEffectsController => _motionEffectsController;
 
     [Header("BUILDING PREFAB")]
     [SerializeField] public GameObject buildingPrefab;
@@ -70,7 +71,7 @@ public abstract class BuildingCard : MonoBehaviour
     public Vector3 hoverAdditionalOffset = Vector3.zero;
 
     private Vector3 HoveredTranslation => CardTransform.up * 0.2f + CardTransform.forward * -0.14f;
-    public static Vector3 HoveredTranslationWorld => Vector3.up * 0.2f + Vector3.forward * -0.14f;
+    public Vector3 HoveredTranslationWorld => _motionConfig.CurrentDisplacements.Hovered;
     public Vector3 SelectedPosition => CardTransform.position + (CardTransform.up * 1.3f) + (-CardTransform.right * 1.3f);
 
 
@@ -276,6 +277,9 @@ public abstract class BuildingCard : MonoBehaviour
         isShowingInfo = false;
 
         isInteractable = true;
+
+        cardState = CardStates.HOVERED;
+        SetCardState(CardStates.STANDARD);
     }
 
 
@@ -387,8 +391,6 @@ public abstract class BuildingCard : MonoBehaviour
             CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime)
                 .SetEase(_motionConfig.Hovered_Rot_Ease);
         }
-
-        _motionEffectsController.StartHoverMotion();
     }
 
     private void SetCardState(CardStates newCardState)
@@ -396,6 +398,11 @@ public abstract class BuildingCard : MonoBehaviour
         if (cardState == CardStates.HOVERED)
         {
             _motionEffectsController.FinishHoverMotion();
+        }
+
+        if (newCardState == CardStates.HOVERED)
+        {
+            _motionEffectsController.StartHoverMotion();
         }
 
         cardState = newCardState;
