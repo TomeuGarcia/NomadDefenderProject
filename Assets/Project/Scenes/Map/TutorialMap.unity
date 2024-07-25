@@ -5684,11 +5684,11 @@ MonoBehaviour:
     width: 0.2
   m_Looped: 0
   m_Waypoints:
-  - position: {x: 0, y: 4.5, z: 8}
+  - position: {x: 0, y: 4.5, z: 4}
     roll: 0
-  - position: {x: 0, y: 1, z: 17}
+  - position: {x: 0, y: 1, z: 13}
     roll: 0
-  - position: {x: 0, y: 8, z: 43}
+  - position: {x: 0, y: 8, z: 39}
     roll: 0
 --- !u!4 &678937593
 Transform:
@@ -11365,7 +11365,7 @@ PrefabInstance:
     - target: {fileID: 3690509224487993954, guid: cb0c2d2be2faaf543b960466702252c4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 35
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 3690509224487993954, guid: cb0c2d2be2faaf543b960466702252c4,
         type: 3}
@@ -14218,7 +14218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622336005}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: -0.3, z: 3.550027}
+  m_LocalPosition: {x: 0, y: -0.3, z: 3.150027}
   m_LocalScale: {x: 0.25, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14820,7 +14820,7 @@ PrefabInstance:
     - target: {fileID: 3690509224487993954, guid: cb0c2d2be2faaf543b960466702252c4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 35
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 3690509224487993954, guid: cb0c2d2be2faaf543b960466702252c4,
         type: 3}
@@ -19338,8 +19338,13 @@ PrefabInstance:
       objectReference: {fileID: 1229604194}
     - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
-      propertyPath: upgradeLevels.Array.size
+      propertyPath: battleLevels.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: upgradeLevels.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
@@ -19354,17 +19359,32 @@ PrefabInstance:
     - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
       propertyPath: emptyLevels.Array.data[0].levelI
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
       propertyPath: emptyLevels.Array.data[1].levelI
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
       propertyPath: battleLevels.Array.data[2].levelI
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[0].progressionState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: emptyLevels.Array.data[1].progressionState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2637262688121507641, guid: c86e5c6bf41f3594485a0fb1afea4748,
+        type: 3}
+      propertyPath: battleLevels.Array.data[1].progressionState
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2751831903000843238, guid: c86e5c6bf41f3594485a0fb1afea4748,
         type: 3}
@@ -19565,7 +19585,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5745141275893628020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.35000002, z: -1.75}
+  m_LocalPosition: {x: 0, y: -0.35000002, z: -5.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
