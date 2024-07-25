@@ -35,9 +35,13 @@ public class FacilityCameraTransitioner : AFacilityInteractable
     private bool _hasInteracted = false;
     private Color32 _defaultTextColor;
 
+    private RunInfo _runInfo;
+
     protected override void DoAwake()
     {
         _defaultTextColor = _titleText.color;
+
+        _runInfo = ServiceLocator.GetInstance().RunInfo;
     }
 
     protected override bool ExtraInteractionConditions()
@@ -73,7 +77,12 @@ public class FacilityCameraTransitioner : AFacilityInteractable
         mySequence.Insert(0.0f, _targetTransform.DOMoveZ(_positionGoal.z, _horizontalTime).SetEase(_horizontalEase));
         mySequence.Insert(0.0f, _targetTransform.DOMoveY(_positionGoal.y, _verticalTime).SetEase(_verticalEase));
         mySequence.Insert(0.0f, _targetTransform.DORotate(_rotationGoal, _rotationTime).SetEase(_rotationEase));
-        mySequence.OnComplete(_facilityUITransitioner.StartLoading);
+
+        if(_runInfo.IsNewGame) {
+            mySequence.OnComplete(_facilityUITransitioner.StartLoading);
+        } else {
+            mySequence.OnComplete(_facilityUITransitioner.TransitionToNextScene);
+        }
     }
 
     public override void Hovered()
