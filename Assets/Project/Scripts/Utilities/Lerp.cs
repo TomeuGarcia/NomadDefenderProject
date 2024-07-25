@@ -5,7 +5,7 @@ public class Lerp : MonoBehaviour
 {
     [Header("LERP FUNCTIONS")]
     [SerializeField] AnimationCurve colorLerpFunction;
-    [SerializeField] AnimationCurve positionLerpFunction;
+    [SerializeField] public AnimationCurve positionLerpFunction;
     [SerializeField] AnimationCurve scaleLerpFunction;
 
     //Color lerp varialbes
