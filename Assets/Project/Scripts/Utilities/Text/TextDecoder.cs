@@ -125,7 +125,11 @@ public class TextDecoder : MonoBehaviour
         //skip to startDecodingIndex
         indexChar = decodingParameters.startDecodingIndex;
 
-        while (indexChar <= textStrings[currentIndexLine].Length)
+        int length = decodingParameters.ignoreTags
+            ? textStrings[currentIndexLine].Length - 1
+            : textStrings[currentIndexLine].Length;
+
+        while (indexChar <= length)
         {
             //skip all the tags
             if (decodingParameters.ignoreTags && textStrings[currentIndexLine][indexChar] == '<')

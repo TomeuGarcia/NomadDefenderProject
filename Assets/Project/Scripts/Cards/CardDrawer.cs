@@ -14,6 +14,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] protected BattleHUD battleHUD;
     [SerializeField] private DeckCreator deckCreator;
     [SerializeField] private TurretCardParts testTurretCardParts;
+    [SerializeField] private SpriteRenderer warningBackground;
 
     [Header("REDRAWS UI")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
@@ -25,6 +26,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private Image[] redrawsLeftWireImages;
     [SerializeField] private Image leftWireImage;
     [SerializeField] private Image rightWireImage;
+    [SerializeField] private TextDecoder hintDecoder;
+    [SerializeField, TextArea] private string hintText;
     private static Color fadedInColor = Color.cyan;
     private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);
     private static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
@@ -369,7 +372,13 @@ public class CardDrawer : MonoBehaviour
 
         appearSequence.AppendCallback(() => cgFinishRedrawsButton.blocksRaycasts = true);
         appearSequence.AppendCallback(() => ButtonFadeIn(finishRedrawsButton, finishRedrawsButtonText, true) );
-        
+
+        //warningBackground.
+
+        hintDecoder.SetTextStrings(hintText);
+        hintDecoder.Activate();
+
+
     }
 
     private void PlayEndRedrawHUDAnimation()
@@ -397,6 +406,8 @@ public class CardDrawer : MonoBehaviour
         disappearSequence.Join(rightWireImage.DOFillAmount(0f, t3));
 
         disappearSequence.AppendCallback( () => redrawCanvasGameObject.SetActive(false) );
+
+        hintDecoder.ClearDecoder();
     }
 
 

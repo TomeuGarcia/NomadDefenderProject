@@ -62,6 +62,11 @@ public class SelectableDeck : MonoBehaviour
     {
         [SerializeField] private Vector3 displacement;
         [SerializeField] private Vector3 maxRotationAngle;
+        [SerializeField] private AnimationCurve _rotationEase;
+        [SerializeField] private AnimationCurve _movementEase;
+        
+        public AnimationCurve RotationEase => _rotationEase;
+        public AnimationCurve MovementEase => _movementEase;
 
         public Vector3 DisplacementBetweenCards => displacement;
         public Vector3 RandomRotationAngle => new Vector3(Random.Range(-maxRotationAngle.x, maxRotationAngle.x), 
@@ -122,7 +127,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void InitSpawnCards(DeckCreator deckCreator)
     {
-        deckCreator.SpawnCardsAndResetDeckData(deckData, out cards);
+        deckCreator.SpawnCardsAndResetDeckData(deckData, out cards);       
     }
 
     public void InitArrangeCards(ArrangeCardsData arrangeCardsData)
@@ -138,6 +143,8 @@ public class SelectableDeck : MonoBehaviour
 
             card.RootCardTransform.localRotation = Quaternion.Euler(arrangeCardsData.RandomRotationAngle + Vector3.right * 90f);
             card.RootCardTransform.localPosition = i * arrangeCardsData.DisplacementBetweenCards;
+
+            card.MotionEffectsController.DisableMotion();
         }
     }
 
@@ -160,24 +167,26 @@ public class SelectableDeck : MonoBehaviour
     }
 
 
-    public IEnumerator ArrangeCardsFromFirst(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
+    public IEnumerator ArrangeCardsFromFirst(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent,
+        bool isFloating)
     {
         FinishedArranging = false;
         for (int i = 0; i < cards.Length; ++i)
         {
-            ArrangeCard(cards[i], i, motionDuration, arrangeCardsData, newParent);
+            ArrangeCard(cards[i], i, motionDuration, arrangeCardsData, newParent, isFloating);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
         FinishedArranging = true;
     }
     
-    public IEnumerator ArrangeCardsFromLast(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent)
+    public IEnumerator ArrangeCardsFromLast(float motionDuration, float delayBetweenCards, ArrangeCardsData arrangeCardsData, Transform newParent, 
+        bool isFloating)
     {
         FinishedArranging = false;
         for (int i = cards.Length - 1; i >= 0; --i)
         {           
-            ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent);
+            ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent, isFloating);
             GameAudioManager.GetInstance().PlayCardInfoMoveShown();
 
             yield return new WaitForSeconds(delayBetweenCards);
@@ -185,12 +194,24 @@ public class SelectableDeck : MonoBehaviour
         FinishedArranging = true;
     }
 
-    private void ArrangeCard(BuildingCard card, int i, float motionDuration, ArrangeCardsData arrangeCardsData, Transform newParent)
+    private void ArrangeCard(BuildingCard card, int i, float motionDuration, ArrangeCardsData arrangeCardsData, Transform newParent, 
+        bool isFloating)
     {
         card.RootCardTransform.SetParent(newParent);
 
-        card.RootCardTransform.DOLocalRotateQuaternion(Quaternion.Euler(arrangeCardsData.RandomRotationAngle + faceUpRotationOffset), motionDuration).SetEase(Ease.OutCubic);
-        card.RootCardTransform.DOLocalMove(i * arrangeCardsData.DisplacementBetweenCards, motionDuration).SetEase(Ease.OutCubic);
+        card.RootCardTransform.DOLocalRotateQuaternion(Quaternion.Euler(arrangeCardsData.RandomRotationAngle + faceUpRotationOffset), motionDuration)
+            .SetEase(arrangeCardsData.RotationEase);
+        card.RootCardTransform.DOLocalMove(i * arrangeCardsData.DisplacementBetweenCards, motionDuration)
+            .SetEase(arrangeCardsData.MovementEase);
+
+        if (isFloating)
+        {
+            card.MotionEffectsController.EnableMotion();
+        }
+        else
+        {
+            card.MotionEffectsController.DisableMotion();
+        }
     }
 
     public void EnableCardsMouseInteraction()
@@ -207,7 +228,7 @@ public class SelectableDeck : MonoBehaviour
         foreach (BuildingCard card in cards)
         {
             card.DisableMouseInteraction();
-            card.canDisplayInfoIfNotInteractable = false;
+            card.canDisplayInfoIfNotInteractable = false;            
         }
     }
 

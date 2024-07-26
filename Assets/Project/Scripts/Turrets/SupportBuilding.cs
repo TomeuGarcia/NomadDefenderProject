@@ -18,7 +18,7 @@ public class SupportBuilding : RangeBuilding
 
 
     [Header("PARTICLES")]
-    [SerializeField] private ParticleSystem upgradeParticles;
+    [SerializeField] private Transform _upgradeParticlesPosition;
     
 
 
@@ -159,12 +159,11 @@ public class SupportBuilding : RangeBuilding
         basePart.MeshTransform.DOPunchScale(Vector3.up * 0.5f, 0.7f, 5);
 
 
-        ParticleSystemRenderer particleRenderer = upgradeParticles.GetComponentInChildren<ParticleSystemRenderer>();
-        particleRenderer.sharedMaterial = buildingsUtils.SupportUpgradeParticleMat;
-
         GameAudioManager.GetInstance().PlayInBattleBuildingUpgrade();
         yield return new WaitForSeconds(0.25f);
-        upgradeParticles.Play();
+
+        ServiceLocator.GetInstance().GeneralParticleFactory
+            .SpawnTurretUpgradeParticles(upgradeType, _upgradeParticlesPosition.position, Quaternion.identity);
 
         if (visualUpgrades.Length > 0)
         {

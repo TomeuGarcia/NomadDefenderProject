@@ -225,6 +225,7 @@ public class UpgradeCardHolder : MonoBehaviour
         cardDragBoundsCollider.gameObject.SetActive(true);
 
         selectedCard = card;
+        selectedCard.MotionEffectsController.DisableMotion();
         selectedCard.SelectedState(true, repositionColliderOnEnd: true, enableInteractionOnEnd: true);
 
         selectedCard.OnDragMouseUp += CheckSnapCardAtSelectedPosition;
@@ -305,6 +306,7 @@ public class UpgradeCardHolder : MonoBehaviour
     public void RetrieveCard(BuildingCard card)
     {
         selectedCard.OnCardSelectedNotHovered -= RetrieveCardWithSound;
+        selectedCard.MotionEffectsController.EnableMotion();
         SetStandardCard(card);
         card.HideInfo();
 

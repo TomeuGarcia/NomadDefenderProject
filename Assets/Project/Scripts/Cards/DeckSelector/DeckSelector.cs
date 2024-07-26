@@ -17,7 +17,8 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private DeckSelectorVisuals deckSelectorVisuals;
     [SerializeField] private SelectableDeck.ArrangeCardsData pileUpArrangeCardsData;
     [SerializeField] private SelectableDeck.ArrangeCardsData selectedArrangeCardsData;
-    [SerializeField] private Transform selectedDeckHolder;    
+    [SerializeField] private Transform selectedDeckHolder;
+    [SerializeField] private CardMotionConfig _cardsMotionConfig;
 
     [Header("SELECTABLE DECKS")]
     [SerializeField] private SelectableDeck[] selectableDecks;
@@ -34,6 +35,11 @@ public class DeckSelector : MonoBehaviour
 
     private float currentFill = 0.0f;
 
+    private void Awake()
+    {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(Camera.main);
+        _cardsMotionConfig.SetUpgradeSceneMode();
+    }
 
     private void Start()
     {
@@ -66,10 +72,11 @@ public class DeckSelector : MonoBehaviour
     {
         for (int i = 0; i < selectableDecks.Length; ++i)
         {
-            selectableDecks[i].InitReferences(this);
-            selectableDecks[i].InitSpawnCards(deckCreator);
-            selectableDecks[i].InitArrangeCards(pileUpArrangeCardsData);
-            selectableDecks[i].SetNotSelected();
+            SelectableDeck selectableDeck = selectableDecks[i];
+            selectableDeck.InitReferences(this);
+            selectableDeck.InitSpawnCards(deckCreator);
+            selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
+            selectableDeck.SetNotSelected();
         }
 
         deckSelectorVisuals.Init();
@@ -100,7 +107,7 @@ public class DeckSelector : MonoBehaviour
             previouslySelectedDeck.DisableCardsMouseInteraction();
 
 
-            yield return StartCoroutine(previouslySelectedDeck.ArrangeCardsFromFirst(0.2f, 0.0f, pileUpArrangeCardsData, previouslySelectedDeck.CardsHolder));
+            yield return StartCoroutine(previouslySelectedDeck.ArrangeCardsFromFirst(0.2f, 0.0f, pileUpArrangeCardsData, previouslySelectedDeck.CardsHolder, false));
             yield return new WaitUntil(() => previouslySelectedDeck.FinishedArranging);
             GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         }
@@ -117,7 +124,7 @@ public class DeckSelector : MonoBehaviour
         }
 
 
-        yield return StartCoroutine(currentlySelectedDeck.ArrangeCardsFromLast(0.25f, 0.1f, selectedArrangeCardsData, selectedDeckHolder));
+        yield return StartCoroutine(currentlySelectedDeck.ArrangeCardsFromLast(0.25f, 0.1f, selectedArrangeCardsData, selectedDeckHolder, true));
 
         currentlySelectedDeck.EnableCardsMouseInteraction();
 

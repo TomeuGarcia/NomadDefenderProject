@@ -14,12 +14,14 @@ public class UpgradeMachineControl : MonoBehaviour
     [Header("Left")]
     [SerializeField] private MeshRenderer leftArm;
     [SerializeField] private UpgradeCardSlot leftCardSlot;
+    [SerializeField] private TMP_Text leftInsertCardText;
     [SerializeField] private List<MeshRenderer> leftCables = new List<MeshRenderer>();
     [SerializeField] private Light leftLight;
 
     [Header("Right")]
     [SerializeField] private MeshRenderer rightArm;
     [SerializeField] private UpgradeCardSlot rightCardSlot;
+    [SerializeField] private TMP_Text rightInsertCardText;
     [SerializeField] private List<MeshRenderer> rightCables = new List<MeshRenderer>();
     [SerializeField] private Light rightLight;
 
@@ -59,6 +61,9 @@ public class UpgradeMachineControl : MonoBehaviour
         StartCoroutine(Activate());
         StartCoroutine(LightBlink(rightLight));
         //SCREEN TURN ON
+
+        leftInsertCardText.alpha = 0f;
+        rightInsertCardText.alpha = 0f;
     }
     private void OnDestroy()
     {
@@ -102,6 +107,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     void Update()
     {
+        return;
         //left
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -141,24 +147,29 @@ public class UpgradeMachineControl : MonoBehaviour
     {
         leftCardSlot.ResetStartTime();
         leftCardSlot.PulsePanel(1);
+        leftInsertCardText.DOFade(1f, 0.1f);
     }
     public void LeftPanelStopPulsing()
     {
         leftCardSlot.PulsePanel(0);
+        leftInsertCardText.DOFade(0f, 0.1f);
     }
     
     public void RightPanelStartPulsing()
     {
         rightCardSlot.ResetStartTime();
         rightCardSlot.PulsePanel(1);
+        rightInsertCardText.DOFade(1f, 0.1f);
     }
     public void RightPanelStopPulsing()
     {
         rightCardSlot.PulsePanel(0);
+        rightInsertCardText.DOFade(0f, 0.1f);
     }
 
     public void SelectLeftCard()
     {
+        leftInsertCardText.DOFade(0f, 0.1f);
         leftCardSlot.PulsePanel(1);
         StartCoroutine(MaterialLerp.FloatLerp(armOffFD, new Material[1] { leftArm.materials[1] }));
 
@@ -197,6 +208,7 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void SelectRightCard()
     {
+        rightInsertCardText.DOFade(0f, 0.1f);
         rightCardSlot.PulsePanel(1);
         StartCoroutine(MaterialLerp.FloatLerp(armOffFD, new Material[1] { rightArm.materials[1] }));
 

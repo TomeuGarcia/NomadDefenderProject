@@ -75,6 +75,11 @@ public class FacilityUITransitioner : MonoBehaviour
         StartCoroutine(ConsoleLineSpam());
         yield return new WaitForSeconds(_consoleLinesTime);
 
+        TransitionToNextScene();
+    }
+
+    public void TransitionToNextScene()
+    {
         _facilityManager.TransitionToNextScene();
     }
 

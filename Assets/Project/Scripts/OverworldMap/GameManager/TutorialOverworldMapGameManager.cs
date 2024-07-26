@@ -62,7 +62,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     {
         if (!IsCurrentNodeBattle()) return;
         battleCounter++;
-        if (battleCounter < 3) return;
+        if (battleCounter < 2) return;
 
         owMapTutorial2.StartTutorial();
         mapSceneLoader.OnSceneFromMapUnloaded -= MapTutorialAfterSecondBattle;
