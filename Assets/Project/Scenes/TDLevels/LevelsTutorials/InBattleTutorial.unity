@@ -4550,6 +4550,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5132183943179100464, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5576661055574051303, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_Alpha
@@ -4573,6 +4578,11 @@ PrefabInstance:
     - target: {fileID: 6609533211544911166, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609533211544911166, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7475089954422099972, guid: ac4314825bb9b65479c003072040fe74,
@@ -4709,6 +4719,7 @@ MonoBehaviour:
   battleHUD: {fileID: 1635650533}
   deckCreator: {fileID: 0}
   testTurretCardParts: {fileID: 0}
+  warningBackground: {fileID: 1112238737}
   redrawCanvasGameObject: {fileID: 1635650535}
   redrawsLeftCounterText: {fileID: 495573788}
   cgRedrawsLeftText: {fileID: 495573789}
@@ -4719,11 +4730,17 @@ MonoBehaviour:
   - {fileID: 1950005116}
   leftWireImage: {fileID: 495573790}
   rightWireImage: {fileID: 495573787}
+  hintDecoder: {fileID: 648564148}
+  warningAppearTime: 1
+  warningAppearEase: 8
+  warningDisappearTime: 1
+  warningDisappearEase: 8
+  hintText: <color=#FF9500>HOLD</color> to <color=#FF9500>REDRAW</color> a card
   numCardsHandStart: 1
   cardsToDrawPerWave: 2
   cheatDrawCardActivated: 1
   canRedraw: 1
-  canDisplaySpeedUp: 0
+  canDisplaySpeedUp: 1
   displayRedrawsOnGameStart: 0
   finishRedrawSetup: 1
   tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
@@ -9613,6 +9630,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 647462189}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &648564148 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8833424009315867650, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &651219875
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11193,6 +11222,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 736763078}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &737672334 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6737276504905484473, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &744020335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11201,6 +11242,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1070375451031603768}
     m_Modifications:
+    - target: {fileID: 1654476511406378755, guid: 490b73a9b4c82ce47bd1c6d7eefd2cd6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6183369776943425441, guid: 490b73a9b4c82ce47bd1c6d7eefd2cd6,
         type: 3}
       propertyPath: pathLocations.Array.size
@@ -11269,6 +11315,11 @@ PrefabInstance:
     - target: {fileID: 6195562928705511367, guid: 490b73a9b4c82ce47bd1c6d7eefd2cd6,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8824108290996676326, guid: 490b73a9b4c82ce47bd1c6d7eefd2cd6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -17398,6 +17449,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4462334117611481589, guid: 8b7d88645f6c9584398e27f9c102de41,
     type: 3}
   m_PrefabInstance: {fileID: 1109752424}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1112238737 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4192551820180830658, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1112890406
 GameObject:
@@ -30341,6 +30398,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
+      propertyPath: textLines.Array.data[15].text
+      value: Drag to PLACE a turret on the map
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308264895389281425, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
       propertyPath: textLines.Array.data[45].text
       value: 01101000011011110110110001100001011010000110111101101100011000010110110011010101100101100101010101010100010101001010010010100
       objectReference: {fileID: 0}
@@ -30603,7 +30665,7 @@ PrefabInstance:
         type: 3}
       propertyPath: speedUpButton
       value: 
-      objectReference: {fileID: 314651048}
+      objectReference: {fileID: 737672334}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: tDGameManager
@@ -30634,6 +30696,11 @@ PrefabInstance:
       propertyPath: enemyWaveManager
       value: 
       objectReference: {fileID: 4485851063868794197}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: speedUpButtonHolder
+      value: 
+      objectReference: {fileID: 314651048}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: currencyBackgroundImg

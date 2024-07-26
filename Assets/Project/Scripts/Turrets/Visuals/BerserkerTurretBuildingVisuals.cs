@@ -38,15 +38,10 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     }
 
 
-    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(3.0f, 0.25f, 2.0f);
-
-    private const float HYPER_DAMAGE_MULTIPLIER = 3.0f;
-    private const float HYPER_CADENCE_MULTIPLIER = 0.25f;
-    private const float HYPER_RANGE_MULTIPLIER = 2.0f;
+    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(3.0f, 4f, 2.0f);
 
     private static bool _firstBerserkerPlaced = false;
     private const float BERSERK_START_DURATION = 2.0f;
-    private const float BERSERK_DURATION_INCREMENT = 0.25f;
     private static float _berserkDuration;
     private float _berserkTimer;
     private Coroutine _berserkModeCoroutine;
@@ -140,8 +135,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         StopBerserkVisuals();
         IsBerserkEnabled = false;
         _berserkModeCoroutine = null;
-
-        _berserkDuration += BERSERK_DURATION_INCREMENT;
     }
 
     private bool IsInBerserkMode()
@@ -153,7 +146,7 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     {
         if (IsInBerserkMode())
         {
-            SetupHyperStats();
+            //SetupHyperStats();
         }
     }
 

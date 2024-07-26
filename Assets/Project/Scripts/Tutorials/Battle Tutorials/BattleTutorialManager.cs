@@ -21,13 +21,12 @@ public class BattleTutorialManager : MonoBehaviour
     [SerializeField] private GameObject currencyBackgroundImg;
 
     //Speed Up Button (can set alpha to 0)
-    [SerializeField] private GameObject speedUpButton;
+    [SerializeField] private GameObject speedUpButtonHolder;
+    [SerializeField] private SpeedUpButton speedUpButton;
 
     //DeckUI (can set alpha to 0)
     [SerializeField] private GameObject deckInterface;
 
-    //Card Drawer -> Canvas -> BackgroundImage (can set alpha to 0)
-    [SerializeField] private GameObject redrawInterface;
 
 
     [SerializeField] private CanvasGroup blackImg;
@@ -77,14 +76,11 @@ public class BattleTutorialManager : MonoBehaviour
         currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 0;
         currencyBackgroundImg.SetActive(false);
 
-        speedUpButton.GetComponent<CanvasGroup>().alpha = 0;
-        speedUpButton.SetActive(false);
+        speedUpButtonHolder.GetComponent<CanvasGroup>().alpha = 0;
+        speedUpButtonHolder.SetActive(false);
 
         deckInterface.GetComponent<CanvasGroup>().alpha = 0;
         deckInterface.SetActive(false);
-
-        //redrawInterface.GetComponent<CanvasGroup>().alpha = 0;
-        //redrawInterface.SetActive(false);
 
         blackImg.alpha = 1.0f;
 
@@ -347,14 +343,19 @@ public class BattleTutorialManager : MonoBehaviour
         GameTime.SetTimeScale(1f);
         //FINISH UPGRADE TURRET TUTORIAL
 
+
         //Last Wave (4/3)
         yield return new WaitUntil(() => wavesCounter > 3);
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
         scriptedSequence.Clear();
-        
+
+        // Disable Time speed (x3 etc.)
+        speedUpButton.CompletelyDisableTimeSpeed();
+        speedUpButtonHolder.SetActive(false);
+
         scriptedSequence.NextLine(); //25 Defense Finished?
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(4.0f);
+        yield return new WaitForSeconds(4.0f);
 
 
         GameAudioManager.GetInstance().MusicFadeOut(1f);
