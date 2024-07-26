@@ -229,15 +229,15 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //TODO YEAH YEAH
 
-        speedUpButton.GetComponent<CanvasGroup>().DOFade(1f, 0.1f);
-        speedUpButton.SetActive(true);
-        _changeGameSpeedHolder.DOFade(1f, 0.1f);
-
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
         scriptedSequence.NextLine(); //13 -> Wave 2 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
+        yield return new WaitForSecondsRealtime(0.5f);
+        speedUpButton.GetComponent<CanvasGroup>().DOFade(1f, 0.1f);
+        speedUpButton.SetActive(true);
+        _changeGameSpeedHolder.DOFade(1f, 0.1f);
 
         yield return new WaitUntil(() => wavesCounter > 2);
         scriptedSequence.Clear();

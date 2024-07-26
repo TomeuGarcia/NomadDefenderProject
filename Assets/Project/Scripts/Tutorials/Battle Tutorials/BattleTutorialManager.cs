@@ -27,8 +27,6 @@ public class BattleTutorialManager : MonoBehaviour
     //DeckUI (can set alpha to 0)
     [SerializeField] private GameObject deckInterface;
 
-    //Card Drawer -> Canvas -> BackgroundImage (can set alpha to 0)
-    [SerializeField] private GameObject redrawInterface;
 
 
     [SerializeField] private CanvasGroup blackImg;
@@ -83,9 +81,6 @@ public class BattleTutorialManager : MonoBehaviour
 
         deckInterface.GetComponent<CanvasGroup>().alpha = 0;
         deckInterface.SetActive(false);
-
-        //redrawInterface.GetComponent<CanvasGroup>().alpha = 0;
-        //redrawInterface.SetActive(false);
 
         blackImg.alpha = 1.0f;
 

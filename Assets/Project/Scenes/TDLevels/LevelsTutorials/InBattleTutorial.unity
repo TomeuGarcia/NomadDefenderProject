@@ -4709,6 +4709,7 @@ MonoBehaviour:
   battleHUD: {fileID: 1635650533}
   deckCreator: {fileID: 0}
   testTurretCardParts: {fileID: 0}
+  warningBackground: {fileID: 941276147}
   redrawCanvasGameObject: {fileID: 1635650535}
   redrawsLeftCounterText: {fileID: 495573788}
   cgRedrawsLeftText: {fileID: 495573789}
@@ -4719,6 +4720,12 @@ MonoBehaviour:
   - {fileID: 1950005116}
   leftWireImage: {fileID: 495573790}
   rightWireImage: {fileID: 495573787}
+  hintDecoder: {fileID: 1026197485}
+  warningAppearTime: 1
+  warningAppearEase: 8
+  warningDisappearTime: 1
+  warningDisappearEase: 8
+  hintText: <color=#FF9500>HOLD</color> to <color=#FF9500>REDRAW</color> a card
   numCardsHandStart: 1
   cardsToDrawPerWave: 2
   cheatDrawCardActivated: 1
@@ -14393,6 +14400,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 938523011}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &941276147 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4192551820180830658, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &947913956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15900,6 +15913,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1024512495}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1026197485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8833424009315867650, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1026591840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30636,11 +30661,6 @@ PrefabInstance:
       propertyPath: currencyCounter
       value: 
       objectReference: {fileID: 314651050}
-    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
-        type: 3}
-      propertyPath: redrawInterface
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: enemyWaveManager
