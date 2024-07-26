@@ -146,7 +146,7 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     {
         if (IsInBerserkMode())
         {
-            SetupHyperStats();
+            //SetupHyperStats();
         }
     }
 
