@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ITurretStatsBonusController
 {
-    void AddBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication);
-    void RemoveBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication);
+    void AddBonusBaseStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication);
+    void RemoveBonusBaseStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication);
 }

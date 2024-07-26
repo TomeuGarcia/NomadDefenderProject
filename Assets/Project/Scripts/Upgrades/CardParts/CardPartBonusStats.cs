@@ -81,7 +81,7 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
 
     public void ApplyStatsModification(ITurretStatsBonusController turretCardStatsController)
     {
-        turretCardStatsController.AddBonusStatsMultiplication(_statsSnapshotUpgrade);
+        turretCardStatsController.AddBonusBaseStatsMultiplication(_statsSnapshotUpgrade);
     }
 
 

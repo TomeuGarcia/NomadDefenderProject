@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviour
         victoryHolder.SetActive(true);
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
+
+        StarterDecksUnlocker.GetInstance().UnlockNextDeck();
     }
     private IEnumerator DoStartVictory()
     {

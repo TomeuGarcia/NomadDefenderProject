@@ -25,15 +25,21 @@ public class SelectableDeck : MonoBehaviour
     private Material pulsingMaterial;
     private int isSelectedPropertyId;
 
-    public Color DeckColor {get; private set;}
-
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
+
+    [Header("UNLOCK")]
+    [SerializeField] private GameObject _unlockedCardsHolder;
+    [SerializeField] private GameObject _lock;    
+
+
+    public Color DeckColor {get; private set;}
 
     private BuildingCard[] cards;
     private DeckSelector deckSelector;
 
     private bool isSelected;
+    private bool _isUnlocked;
 
 
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
@@ -151,7 +157,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void SetEnabledInteraction(bool isEnabled)
     {
-        interactionCollider.enabled = isEnabled;
+        interactionCollider.enabled = isEnabled && _isUnlocked;
     }
 
     public void DisableShowInfo()
@@ -274,6 +280,16 @@ public class SelectableDeck : MonoBehaviour
 
         GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         ChangeBorderLight(secondMaterialLightName,  1.0f,0.0f, 0.2f);
+    }
+
+
+    public void InitState(bool isUnlocked)
+    {
+        _isUnlocked = isUnlocked;
+        _unlockedCardsHolder.SetActive(isUnlocked);
+        _lock.SetActive(!isUnlocked);
+
+        SetEnabledInteraction(isUnlocked);
     }
 
 }

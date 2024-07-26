@@ -74,7 +74,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
         UpdateCurrentStats();
     }
 
-    public void AddBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
+    public void AddBonusBaseStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
     {
         if (bonusStatsMultiplication.HasDamage())
         {
@@ -92,7 +92,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
         UpdateCurrentStats();
     }
 
-    public void RemoveBonusStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
+    public void RemoveBonusBaseStatsMultiplication(TurretStatsMultiplicationSnapshot bonusStatsMultiplication)
     {
         if (bonusStatsMultiplication.HasDamage())
         {

@@ -57,9 +57,16 @@ public class DeckSelector : MonoBehaviour
         startSimulationFlashMesh2.material = startSimulationFlashMaterial;
     }
 
+    private void Update()
+    {
+        UpdateCheatInputs();
+    }
+
 
     private void Init()
     {
+        int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+
         for (int i = 0; i < selectableDecks.Length; ++i)
         {
             SelectableDeck selectableDeck = selectableDecks[i];
@@ -67,6 +74,9 @@ public class DeckSelector : MonoBehaviour
             selectableDeck.InitSpawnCards(deckCreator);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
             selectableDeck.SetNotSelected();
+
+            bool isUnlocked = i < numberOfUnlockedDecks;
+            selectableDeck.InitState(isUnlocked);
         }
 
         deckSelectorVisuals.Init();
@@ -185,5 +195,27 @@ public class DeckSelector : MonoBehaviour
     }
 
 
+    private void UpdateCheatInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.L) && Input.GetKey(KeyCode.LeftShift))
+        {
+            StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
+            int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+            for (int i = 0; i < selectableDecks.Length; ++i)
+            {
+                StarterDecksUnlocker.GetInstance().UnlockNextDeck();
+                selectableDecks[i].InitState(i < numberOfUnlockedDecks);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.U) && Input.GetKey(KeyCode.LeftShift))
+        {
+            int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+            for (int i = numberOfUnlockedDecks-1; i < selectableDecks.Length; ++i)
+            {
+                selectableDecks[i].InitState(true);
+            }
+            StarterDecksUnlocker.GetInstance().UnlockRemainengDecks();
+        }
+    }
 
 }
