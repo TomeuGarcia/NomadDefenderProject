@@ -18,7 +18,7 @@ public class FacilityManager : MonoBehaviour
         //TODO - Play Facility Music (if any)
 
         _cursorChanger = ServiceLocator.GetInstance().CursorChanger;
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        PauseMenu.GetInstance().GameCanBePaused = true;
     }
 
     private void Start()
@@ -84,6 +84,6 @@ public class FacilityManager : MonoBehaviour
     private void OnDisable()
     {
         _cursorChanger.RegularCursor();
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
     }
 }

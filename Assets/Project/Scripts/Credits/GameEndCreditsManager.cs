@@ -11,7 +11,7 @@ public class GameEndCreditsManager : MonoBehaviour
     private void Start()
     {
         creditsDisplayer.StartCredits();
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
     }
 
 

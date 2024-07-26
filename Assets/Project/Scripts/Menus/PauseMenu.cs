@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour
     float lastTimeScale;
     [SerializeField] GameObject pauseMenuUI;
     [SerializeField] private CanvasGroup interactionCanvasGroup;
-    public bool gameCanBePaused;
+    public bool GameCanBePaused { get; set; } = true;
     [SerializeField] TextManager textManager;
 
     private Button button;
@@ -35,9 +35,10 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         //textManager.SetActive(false);
+        optionsMenuUI.Init();
+
         optionsMenuUI.gameObject.SetActive(false);
         pauseMenuUI.SetActive(false);
-
         surrenderText.gameObject.SetActive(false);
     }
     private void Awake()
@@ -98,7 +99,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
-        if (!gameCanBePaused) return;
+        if (!GameCanBePaused) return;
 
         if (button != null)
         {
@@ -120,6 +121,8 @@ public class PauseMenu : MonoBehaviour
         interactionCanvasGroup.interactable = true;
 
         OWMap_Node.IsGlobalInteractable = false;
+
+        CardDescriptionDisplayer.GetInstance().HideCardDescription();
     }
 
     public void MainMenuOptions()

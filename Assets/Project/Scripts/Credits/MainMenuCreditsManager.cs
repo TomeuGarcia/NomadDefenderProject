@@ -29,13 +29,13 @@ public class MainMenuCreditsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
 
         creditsDisplayer.OnCreditsFinished += ReturnToMainMenu;
     }
     private void OnDisable()
     {
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        PauseMenu.GetInstance().GameCanBePaused = true;
 
         creditsDisplayer.OnCreditsFinished -= ReturnToMainMenu;
     }

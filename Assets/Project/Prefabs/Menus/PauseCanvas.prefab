@@ -90,19 +90,7 @@ MonoBehaviour:
   m_Value: 0.652
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8557069508780406447}
-        m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetSFXMixerVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1292011336480010504
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3116387843780907453}
   - component: {fileID: 3116387843780907455}
+  - component: {fileID: 1101183926398705125}
   - component: {fileID: 3116387843780907454}
   - component: {fileID: 3116387843780907448}
   m_Layer: 5
@@ -527,6 +516,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3116387843780907452}
   m_CullTransparentMesh: 1
+--- !u!114 &1101183926398705125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3116387843780907452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff432bdd7f4147c4684da14de6675770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rectTransform: {fileID: 3116387843780907453}
+  _anchoredPosition: {x: 0, y: -120, z: 0}
 --- !u!114 &3116387843780907454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1997,6 +2000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3116387845317177147}
   - component: {fileID: 3116387845317177142}
+  - component: {fileID: 2252893712020823597}
   - component: {fileID: 3116387845317177141}
   - component: {fileID: 3116387845317177140}
   - component: {fileID: 4984315473609300720}
@@ -2025,7 +2029,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 146.91907}
+  m_AnchoredPosition: {x: 0, y: 140}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &3116387845317177142
@@ -2036,6 +2040,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3116387845317177146}
   m_CullTransparentMesh: 1
+--- !u!114 &2252893712020823597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3116387845317177146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff432bdd7f4147c4684da14de6675770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rectTransform: {fileID: 3116387845317177147}
+  _anchoredPosition: {x: 0, y: 146.91907, z: 0}
 --- !u!114 &3116387845317177141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2263,6 +2281,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textManager: {fileID: 3908466580928660926}
   audioMixersController: {fileID: 7168264968352346646}
+  _masterSoundSlider: {fileID: 7807012915237846660}
+  _musicSlider: {fileID: 7584691673361716970}
+  _sfxSlider: {fileID: 6246227547063280284}
 --- !u!114 &3908466580928660926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2674,19 +2695,7 @@ MonoBehaviour:
   m_Value: 0.652
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8557069508780406447}
-        m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetMusicMixerVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4762952883875904547
 GameObject:
   m_ObjectHideFlags: 0
@@ -2913,19 +2922,7 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8557069508780406447}
-        m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetMasterMixerVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &6078469368328822852
 GameObject:
   m_ObjectHideFlags: 0

@@ -94,7 +94,7 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         originalTitleString = titleTextDecoder.textStrings[0];
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.2f);
     }
 

@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         overworldMapGameManager.OnVictory -= StartVictory;
         overworldMapGameManager.OnGameOver -= StartGameOver;
 
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        PauseMenu.GetInstance().GameCanBePaused = true;
     }
 
 
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         victoryHolder.SetActive(false);
         gameOverHolder.SetActive(false);
 
-        PauseMenu.GetInstance().gameCanBePaused = true;
+        PauseMenu.GetInstance().GameCanBePaused = true;
     }
 
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator DoStartVictory()
     {
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
 
         yield return new WaitForSeconds(2.0f);        
         victoryTitleTextDecoder.Activate();
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator DoStartGameOver()
     {
-        PauseMenu.GetInstance().gameCanBePaused = false;
+        PauseMenu.GetInstance().GameCanBePaused = false;
 
         yield return new WaitForSeconds(2.0f);
         gameOverTitleTextDecoder.Activate();
