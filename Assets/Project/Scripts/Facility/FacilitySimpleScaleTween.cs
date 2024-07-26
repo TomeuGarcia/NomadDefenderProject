@@ -14,11 +14,6 @@ public class FacilitySimpleScaleTween : MonoBehaviour
     private Vector3 _initialScale;
     private Vector3 _finalScale;
 
-    private void Awake()
-    {
-        _initialScale = transform.localScale;
-        _finalScale = _initialScale + _scaleOffset;
-    }
 
     public void OnEnable()
     {
@@ -27,6 +22,8 @@ public class FacilitySimpleScaleTween : MonoBehaviour
 
     private void ToOffsetedScale()
     {
+        _initialScale = transform.localScale;
+        _finalScale = _initialScale + _scaleOffset;
         transform.DOScale(_finalScale, _toOffsetTime).SetEase(_toOffsetEase).OnComplete(ToInitialScale);
     }
 

@@ -72,14 +72,19 @@ public class SpeedUpButton : MonoBehaviour
         UpdateTimeSpeed();
     }
 
-    private void ResetTimeOnGameEnd()
+    public void CompletelyDisableTimeSpeed()
     {
-        gameFinished = true;
         current = 0;
         UpdateTimeSpeed();
 
         incrementButton.enabled = false;
         decrementButton.enabled = false;
+    }
+
+    private void ResetTimeOnGameEnd()
+    {
+        gameFinished = true;
+        CompletelyDisableTimeSpeed();
     }
 
     private void UpdateTimeSpeed()
