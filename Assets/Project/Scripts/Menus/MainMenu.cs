@@ -31,17 +31,23 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder quitTextDecoder;
 
     [Header("STEAM")]
-    [SerializeField, Min(0)] private float _startDelay = 0.5f;
+    [SerializeField, Min(0)] private float _steamStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _steamCanvasGroup;
     [SerializeField] private TextDecoder _steamDecoder;
-    [SerializeField] private TweenColorConfig _colorTextFade;
-    [SerializeField] private TMP_Text _steamText;
+
+    [Header("UPCOMING CHANGES")]
+    [SerializeField, Min(0)] private float _upcomingChangesStartDelay = 2.5f;
+    [SerializeField] private CanvasGroup _upcomingChangesCanvasGroup;
+    [SerializeField] private TextDecoder _upcomingChangesDecoder;
 
 
     [Header("MATERIALS SETUP")]
     [SerializeField] private Material obstacleTilesMaterial;
     [SerializeField] private Material tilesMaterial;
     [SerializeField] private Material outerPlanesMaterial;
+
+    [Header("COMING CHANGES")]
+    [SerializeField] private ComingChangesMenu _comingChangesMenu;
 
 
     private int titleClickCount = 0;
@@ -50,6 +56,8 @@ public class MainMenu : MonoBehaviour
     private bool canInteract = true;
 
     private bool skipFirstBattle = false;
+
+    public const string STEAM_WISHLIST_LINK = "https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english";
 
 
     private void Awake()
@@ -274,27 +282,37 @@ public class MainMenu : MonoBehaviour
     private IEnumerator PlayShowSteamAnimation()
     {
         _steamCanvasGroup.alpha = 0;
-        yield return new WaitForSeconds(_startDelay);
+        _upcomingChangesCanvasGroup.alpha = 0;
+        yield return StartCoroutine(PlayShowItemAnimation(_steamCanvasGroup, _steamStartDelay, _steamDecoder));
+        yield return StartCoroutine(PlayShowItemAnimation(_upcomingChangesCanvasGroup, _upcomingChangesStartDelay, _upcomingChangesDecoder));
+    }
+    
+    private IEnumerator PlayShowItemAnimation(CanvasGroup canvasGroup, float startDelay, TextDecoder textDecoder)
+    {        
+        yield return new WaitForSeconds(startDelay);
 
         float blinkDuration = 0.1f;
 
         for (int i = 0; i < 2; ++i)
         {
             GameAudioManager.GetInstance().PlayCardInfoShown();
-            _steamCanvasGroup.alpha = 1;
+            canvasGroup.alpha = 1;
             yield return new WaitForSeconds(blinkDuration);
-            _steamCanvasGroup.alpha = 0;
+            canvasGroup.alpha = 0;
             yield return new WaitForSeconds(blinkDuration);
         }
-        _steamCanvasGroup.alpha = 1;
+        canvasGroup.alpha = 1;
 
-        _steamDecoder.Activate();
-
-        _steamText.PunchColor(_colorTextFade);
+        textDecoder.Activate();
     }
 
     public void OpenSteamWishlist()
     {
-        Application.OpenURL("https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english");
+        Application.OpenURL(STEAM_WISHLIST_LINK);
+    }
+    
+    public void OpenComingChanges()
+    {
+        _comingChangesMenu.Open();
     }
 }

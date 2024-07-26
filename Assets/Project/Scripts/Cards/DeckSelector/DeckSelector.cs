@@ -25,7 +25,6 @@ public class DeckSelector : MonoBehaviour
     private SelectableDeck currentlySelectedDeck;
 
     [Header("UI")]
-    [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button startSimulationButton;
     [SerializeField] private MeshRenderer runButtonMesh;
     [SerializeField] private MeshRenderer runInnerButtonMesh;
@@ -47,7 +46,6 @@ public class DeckSelector : MonoBehaviour
 
         startSimulationButton.interactable = false;
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
-        mainMenuButton.onClick.AddListener(OnMainMenuButtonPressed);
 
         CardDescriptionDisplayer.GetInstance()?.SetCamera(Camera.main);
 
@@ -57,14 +55,6 @@ public class DeckSelector : MonoBehaviour
         startSimulationFlashMaterial = startSimulationFlashMesh.material;
         startSimulationFlashMesh.material = startSimulationFlashMaterial;
         startSimulationFlashMesh2.material = startSimulationFlashMaterial;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            BackToMainMenu();
-        }
     }
 
 
@@ -194,31 +184,6 @@ public class DeckSelector : MonoBehaviour
         SceneLoader.GetInstance().StartLoadNormalGame(true);
     }
 
-    private async void OnMainMenuButtonPressed()
-    {
-        mainMenuButton.enabled = false;
-
-        float duration = 0.5f;
-        mainMenuButton.transform.DOPunchScale(Vector3.one * 0.4f, duration, 6);
-        GameAudioManager.GetInstance().PlayCardSelected();
-
-        startSimulationButton.interactable = false;
-
-        await Task.Delay((int)(duration * 1000));
-
-        BackToMainMenu();
-    }
-
-    private void BackToMainMenu()
-    {
-        if (currentlySelectedDeck != null)
-        {
-            currentlySelectedDeck.DisableCardsMouseInteraction();
-            currentlySelectedDeck.DisableShowInfo();
-        }
-
-        SceneLoader.GetInstance().StartLoadMainMenu();
-    }
 
 
 }
