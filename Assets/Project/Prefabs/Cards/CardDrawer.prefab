@@ -489,7 +489,7 @@ Transform:
   m_Children:
   - {fileID: 6721149145531417726}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2683057792737234630
 MonoBehaviour:
@@ -520,6 +520,10 @@ MonoBehaviour:
   leftWireImage: {fileID: 2895229233581026855}
   rightWireImage: {fileID: 6045285961151147884}
   hintDecoder: {fileID: 3561719670969413435}
+  warningAppearTime: 1
+  warningAppearEase: 8
+  warningDisappearTime: 1
+  warningDisappearEase: 8
   hintText: <color=#FF9500>HOLD</color> to <color=#FF9500>REDRAW</color> a card
   numCardsHandStart: 3
   cardsToDrawPerWave: 2

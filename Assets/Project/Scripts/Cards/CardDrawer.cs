@@ -16,6 +16,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private TurretCardParts testTurretCardParts;
     [SerializeField] private SpriteRenderer warningBackground;
 
+    private Material warningBackgroundMat;
+
     [Header("REDRAWS UI")]
     [SerializeField] protected GameObject redrawCanvasGameObject; // works for 1 waveSpawner
     [SerializeField] private TextMeshProUGUI redrawsLeftCounterText;
@@ -27,6 +29,10 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private Image leftWireImage;
     [SerializeField] private Image rightWireImage;
     [SerializeField] private TextDecoder hintDecoder;
+    [SerializeField] private float warningAppearTime;
+    [SerializeField] private Ease warningAppearEase;
+    [SerializeField] private float warningDisappearTime;
+    [SerializeField] private Ease warningDisappearEase;
     [SerializeField, TextArea] private string hintText;
     private static Color fadedInColor = Color.cyan;
     private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);
@@ -56,7 +62,6 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
 
         EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
-
     }
 
     private void OnDisable()
@@ -73,6 +78,8 @@ public class CardDrawer : MonoBehaviour
     private void Start()
     {
         GameStartSetup(2f, displayRedrawsOnGameStart, finishRedrawSetup);
+
+        warningBackgroundMat = warningBackground.material;
     }
 
 
@@ -373,7 +380,8 @@ public class CardDrawer : MonoBehaviour
         appearSequence.AppendCallback(() => cgFinishRedrawsButton.blocksRaycasts = true);
         appearSequence.AppendCallback(() => ButtonFadeIn(finishRedrawsButton, finishRedrawsButtonText, true) );
 
-        //warningBackground.
+        warningBackground.gameObject.SetActive(true);
+        warningBackgroundMat.DOFloat(1.0f, MaterialProperties.Activate, warningAppearTime).SetEase(warningAppearEase);
 
         hintDecoder.SetTextStrings(hintText);
         hintDecoder.Activate();
@@ -406,6 +414,9 @@ public class CardDrawer : MonoBehaviour
         disappearSequence.Join(rightWireImage.DOFillAmount(0f, t3));
 
         disappearSequence.AppendCallback( () => redrawCanvasGameObject.SetActive(false) );
+
+        warningBackgroundMat.DOFloat(0.0f, MaterialProperties.Activate, warningDisappearTime).SetEase(warningDisappearEase)
+            .OnComplete(()=>warningBackground.gameObject.SetActive(false));
 
         hintDecoder.ClearDecoder();
     }
