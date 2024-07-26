@@ -146,7 +146,7 @@ public class TutoTurretCard : TurretBuildingCard
             360f,
             _displacementOutDuration
             )
-            .SetEase(Ease.InOutCubic);
+            .SetEase(Ease.InOutQuad);
 
         yield return new WaitForSeconds(_displacementOutDuration + 0.25f);
 

@@ -14,11 +14,6 @@ public class FacilitySimplePositionTween : MonoBehaviour
     private Vector3 _initialPosition;
     private Vector3 _finalPosition;
 
-    private void Awake()
-    {
-        _initialPosition = transform.localPosition;
-        _finalPosition = _initialPosition + _positinOffset;
-    }
 
     public void OnEnable()
     {
@@ -27,6 +22,8 @@ public class FacilitySimplePositionTween : MonoBehaviour
 
     private void MoveToOffsetedPosition()
     {
+        _initialPosition = transform.localPosition;
+        _finalPosition = _initialPosition + _positinOffset;
         transform.DOLocalMove(_finalPosition, _toOffsetTime).SetEase(_toOffsetEase).OnComplete(MoveToInitialPosition);
     }
 

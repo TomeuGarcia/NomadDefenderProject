@@ -28,6 +28,7 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     //Speed Up Button (can set alpha to 0)
     [SerializeField] private GameObject speedUpButton;
+    [SerializeField] private CanvasGroup _changeGameSpeedHolder;
 
     //Card Drawer -> Canvas -> BackgroundImage (can set alpha to 0)
     [SerializeField] private GameObject redrawInterface;
@@ -54,6 +55,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         speedUpButton.GetComponent<CanvasGroup>().alpha = 0;
         speedUpButton.SetActive(false);
 
+        _changeGameSpeedHolder.alpha = 0;
 
         //redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
         //redrawInterface.SetActive(false);
@@ -226,17 +228,23 @@ public class BattleTutorialManager2 : MonoBehaviour
 
 
         //TODO YEAH YEAH
-        
+
+        speedUpButton.GetComponent<CanvasGroup>().DOFade(1f, 0.1f);
+        speedUpButton.SetActive(true);
+        _changeGameSpeedHolder.DOFade(1f, 0.1f);
+
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
         scriptedSequence.NextLine(); //13 -> Wave 2 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        
+
+
         yield return new WaitUntil(() => wavesCounter > 2);
         scriptedSequence.Clear();
         scriptedSequence.NextLine(); //14 -> Wave 3 / 3
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
+        _changeGameSpeedHolder.DOFade(0f, 0.1f);
     }
 
     private void PlaceSelectedBuilding(Tile tile, BuildingCard selectedBuildingCard)

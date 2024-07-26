@@ -4723,7 +4723,7 @@ MonoBehaviour:
   cardsToDrawPerWave: 2
   cheatDrawCardActivated: 1
   canRedraw: 1
-  canDisplaySpeedUp: 0
+  canDisplaySpeedUp: 1
   displayRedrawsOnGameStart: 0
   finishRedrawSetup: 1
   tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
@@ -13337,6 +13337,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 781e4fd35b2f0d84e9777fc7e084126e, type: 3}
+--- !u!114 &842659377 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6737276504905484473, guid: ac4314825bb9b65479c003072040fe74,
+    type: 3}
+  m_PrefabInstance: {fileID: 314651045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &844695591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30603,7 +30615,7 @@ PrefabInstance:
         type: 3}
       propertyPath: speedUpButton
       value: 
-      objectReference: {fileID: 314651048}
+      objectReference: {fileID: 842659377}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: tDGameManager
@@ -30634,6 +30646,11 @@ PrefabInstance:
       propertyPath: enemyWaveManager
       value: 
       objectReference: {fileID: 4485851063868794197}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: speedUpButtonHolder
+      value: 
+      objectReference: {fileID: 314651048}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: currencyBackgroundImg
