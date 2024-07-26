@@ -76,6 +76,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
     IEnumerator Tutorial()
     {
         cameraMovement.CanDrag(false);
+        DisableLastNodes();
         yield return new WaitForSeconds(2.0f);
 
         if (testing)
@@ -89,7 +90,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
             yield break;
         }
 
-        DisableLastNodes();
+        
         yield return new WaitForSeconds(1.0f);
 
 
@@ -234,9 +235,10 @@ public class OWMapTutorialManager2 : MonoBehaviour
         GameAudioManager.GetInstance().PlayDroneBuildUp(0.0f, 10.0f, 7.5f);
         //Starts Opening door
         float doorLerpTime = 4.0f;
-        float offset = 1.0f;
-        doorSides[0].LerpPosition(new Vector3(10046.1f + offset, 4.5f, 41.64484f), doorLerpTime);
-        doorSides[1].LerpPosition(new Vector3(10063.94f - offset, 4.5f, 41.64484f), doorLerpTime);
+        float offset = 5.0f;
+
+        doorSides[0].transform.DOLocalMoveX(doorSides[0].transform.localPosition.x - offset, doorLerpTime).SetEase(doorSides[0].positionLerpFunction);
+        doorSides[1].transform.DOLocalMoveX(doorSides[1].transform.localPosition.x + offset, doorLerpTime).SetEase(doorSides[1].positionLerpFunction);
         //CAMERA SHAKE
         StartCoroutine(CameraShake(doorLerpTime));
         StartCoroutine(LastCameraMovement());

@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -164,9 +164,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -238,9 +246,20 @@ MonoBehaviour:
   m_Dithering: 1
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,14 +367,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 1
+  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
   m_LightLayerMask: 1
+  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
   m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 1
 --- !u!1 &497238727
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +432,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8046663148399722901, guid: 36a8c95af325b8645bf8a418ff4c490c,
@@ -473,6 +496,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36a8c95af325b8645bf8a418ff4c490c, type: 3}
 --- !u!114 &1004317208 stripped
 MonoBehaviour:
@@ -516,6 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -674,6 +701,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1132811092675339963, guid: e303a0f07f8616c47a248d6fa47533ba,
@@ -736,12 +764,20 @@ PrefabInstance:
       propertyPath: deckCreator
       value: 
       objectReference: {fileID: 1004317208}
+    - target: {fileID: 1132811092675339964, guid: e303a0f07f8616c47a248d6fa47533ba,
+        type: 3}
+      propertyPath: _sceneCamera
+      value: 
+      objectReference: {fileID: 330585545}
     - target: {fileID: 1132811092675339965, guid: e303a0f07f8616c47a248d6fa47533ba,
         type: 3}
       propertyPath: m_Name
       value: GatherNewCardManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e303a0f07f8616c47a248d6fa47533ba, type: 3}
 --- !u!224 &4267870699822547330
 RectTransform:
@@ -780,60 +816,88 @@ MonoBehaviour:
   textLines:
   - textType: 0
     text: Starting Simulation 0...
+    clearTime: 0
   - textType: 0
     text: Level Loaded
+    clearTime: 0
   - textType: 0
     text: Preparing Tutorial
+    clearTime: 0
   - textType: 0
     text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+    clearTime: 0
   - textType: 0
     text: Connecting to server
+    clearTime: 0
   - textType: 0
     text: Recovering User currency
+    clearTime: 0
   - textType: 0
     text: Loading User Currency...
+    clearTime: 0
   - textType: 0
     text: Currency Loaded Successfully
+    clearTime: 0
   - textType: 0
     text: Waiting for User <color=#47B13A>Input</color>.<color=#F5550C>Space</color>
+    clearTime: 0
   - textType: 0
     text: Creating First Card...
+    clearTime: 0
   - textType: 0
     text: 'Creating Cards Stats:'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats: <color=#1DFF5F>RANGE</color>'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats:  <color=#FFF345>CADENCY</color>'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats:  <color=#FF003E>ATTACK</color>'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats: COST'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats:  <color=#F5550C>PROJECTILE</color>'
+    clearTime: 0
   - textType: 0
     text: '/Cards Stats: <color=#3EB6F4>PASSIVE</color>'
+    clearTime: 0
   - textType: 0
     text: Card Stats Created Successfully
+    clearTime: 0
   - textType: 0
     text: <color=#FF003E>ERROR 5680</color>. Destroying Card...
+    clearTime: 0
   - textType: 0
     text: Redraw Initializing
+    clearTime: 0
   - textType: 0
     text: '/Redraw: Activating...'
+    clearTime: 0
   - textType: 0
     text: '/Redraw: Successfully showing'
+    clearTime: 0
   - textType: 0
     text: '/Redraw: Generatin Info...'
+    clearTime: 0
   - textType: 0
     text: '/Redraw/Info: Click a Card to redraw it'
+    clearTime: 0
   - textType: 0
     text: '/Redraw/Info: Redraw ends when no redraws left or finish button clicked'
+    clearTime: 0
   - textType: 0
     text: '/Redraw: Waiting User to finish Redraw...'
+    clearTime: 0
   - textType: 0
     text: '/Redraw: Finished'
+    clearTime: 0
   - textType: 0
     text: Initializing User's Deck
+    clearTime: 0
 --- !u!1 &4267870699822547333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,7 +1087,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1108,15 +1174,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c066430697a5641b62cc89748379fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutoCardDrawer: {fileID: 0}
+  hand: {fileID: 0}
+  enemyWaveManager: {fileID: 0}
   currencyBackgroundImg: {fileID: 0}
   speedUpButton: {fileID: 0}
   deckInterface: {fileID: 0}
   redrawInterface: {fileID: 0}
-  card: {fileID: 0}
-  attackStat: {fileID: 0}
-  cadencyStat: {fileID: 0}
-  rangeStat: {fileID: 0}
-  projectile: {fileID: 0}
-  passive: {fileID: 0}
-  cost: {fileID: 0}
+  blackImg: {fileID: 0}
   scriptedSequence: {fileID: 4267870699822547331}
+  currencyCounter: {fileID: 0}
+  wavesCounter: 0
+  tDGameManager: {fileID: 0}
+  globalVolume: {fileID: 0}
+  initVol: {fileID: 0}
+  glitchVol: {fileID: 0}
+  _buildingPlacer: {fileID: 0}

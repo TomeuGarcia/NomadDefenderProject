@@ -22,6 +22,26 @@ public class BuildingsUtils : ScriptableObject
     [SerializeField] private Material supportUpgradeParticleMat;
     public Material SupportUpgradeParticleMat => supportUpgradeParticleMat;
 
+    public Material GetUpgradeMaterialByType(TurretUpgradeType upgradeType)
+    {
+        if (upgradeType == TurretUpgradeType.ATTACK)
+        {
+            return attackUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.CADENCE)
+        {
+            return cadencyUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.RANGE)
+        {
+            return rangeUpgradeParticleMat;
+        }
+        else if (upgradeType == TurretUpgradeType.SUPPORT)
+        {
+            return supportUpgradeParticleMat;
+        }
+        return null;
+    }
 
 
 

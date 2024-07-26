@@ -28,10 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1266439348910079147}
-  - {fileID: 8848289542655546227}
-  - {fileID: 4672877860597540036}
-  - {fileID: 3900070927855245639}
+  - {fileID: 7351228263344208338}
   m_Father: {fileID: 3900070926476808982}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -125,6 +122,7 @@ GameObject:
   - component: {fileID: 3900070926476808982}
   - component: {fileID: 3900070926476808968}
   - component: {fileID: 3802500786164923965}
+  - component: {fileID: 4415604468371418722}
   m_Layer: 10
   m_Name: StatsUpgrade_CardPart
   m_TagString: Untagged
@@ -182,6 +180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardState: 0
+  _motionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
+  _motionEffectsController: {fileID: 4415604468371418722}
   layerMaskMouseDragPlane:
     serializedVersion: 2
     m_Bits: 4096
@@ -195,6 +195,29 @@ MonoBehaviour:
   _damageItem: {fileID: 8489410344378918000}
   _shotsPerSecondItem: {fileID: 8538395017617599790}
   _radiusRangeItem: {fileID: 7085190432902842050}
+  leftDescriptionPosition: {fileID: 8848289542655546227}
+  rightDescriptionPosition: {fileID: 4672877860597540036}
+  _descriptionHelper:
+    _upgradeSprite: {fileID: 21300000, guid: 0721662cfeba7ab43bd44e93db32a6d5, type: 3}
+    _damageViewConfig: {fileID: 11400000, guid: 95f79cef23c25734a9d39eaa22ac060f,
+      type: 2}
+    _shotsPerSecondViewConfig: {fileID: 11400000, guid: 9ff4a7e442ef7b240969fe7314521e51,
+      type: 2}
+    _radiusRangeViewConfig: {fileID: 11400000, guid: bb83a686e23e3aa49bc138350749fee5,
+      type: 2}
+--- !u!114 &4415604468371418722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900070926476808981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd2dd91dcca0a14295599d4d7913158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationEffectsTransform: {fileID: 7351228263344208338}
 --- !u!1 &3900070927855245638
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,8 +251,8 @@ RectTransform:
   m_Children:
   - {fileID: 3900070926281709076}
   - {fileID: 7845143932511277285}
-  m_Father: {fileID: 3149524289891366645}
-  m_RootOrder: 3
+  m_Father: {fileID: 7351228263344208338}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -327,8 +350,43 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+  m_Father: {fileID: 7351228263344208338}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9038355435151431512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7351228263344208338}
+  m_Layer: 10
+  m_Name: CardRotationEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7351228263344208338
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9038355435151431512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1266439348910079147}
+  - {fileID: 8848289542655546227}
+  - {fileID: 4672877860597540036}
+  - {fileID: 3900070927855245639}
   m_Father: {fileID: 3149524289891366645}
-  m_RootOrder: 2
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9114379409938310430
 GameObject:
@@ -358,8 +416,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3149524289891366645}
-  m_RootOrder: 1
+  m_Father: {fileID: 7351228263344208338}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9208544486623161268
 GameObject:
@@ -503,12 +561,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3149524289891366645}
+    m_TransformParent: {fileID: 7351228263344208338}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}
@@ -941,17 +999,17 @@ PrefabInstance:
     - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.33397114
+      value: 0.30709326
       objectReference: {fileID: 0}
     - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.7403537
+      value: 0.78708565
       objectReference: {fileID: 0}
     - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.8962264
+      value: 0.9716981
       objectReference: {fileID: 0}
     - target: {fileID: 2565026174679003895, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
@@ -961,12 +1019,12 @@ PrefabInstance:
     - target: {fileID: 7603746477136393009, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Name
-      value: CardStat_FireRate_Holder
+      value: CardStat_Shots per Second_Holder
       objectReference: {fileID: 0}
     - target: {fileID: 7845359954770794972, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Name
-      value: FireRate_Value_Text
+      value: Shots per Second_Value_Text
       objectReference: {fileID: 0}
     - target: {fileID: 8848677043506809638, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}

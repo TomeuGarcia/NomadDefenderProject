@@ -40,4 +40,6 @@ public static class SOAssetPaths
     public const string CARDS_DECKS = CARDS + "Decks/";
     public const string CARDS_STATS = CARDS + "Stats/";
     public const string CARDS_VIEW = CARDS + "View/";
+
+    public const string VFX = MENU_ROOT + "VFX/";
 }

@@ -376,8 +376,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 911165925631531269}
-  m_RootOrder: 1
+  m_Father: {fileID: 8753769988623435467}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3900070926281709075
 GameObject:
@@ -441,6 +441,7 @@ GameObject:
   - component: {fileID: 3900070926476808982}
   - component: {fileID: 3900070926476808968}
   - component: {fileID: 7692917665473869292}
+  - component: {fileID: 755954383760640265}
   m_Layer: 10
   m_Name: Base_CardPart
   m_TagString: Untagged
@@ -498,6 +499,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardState: 0
+  _motionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
+  _motionEffectsController: {fileID: 755954383760640265}
   layerMaskMouseDragPlane:
     serializedVersion: 2
     m_Bits: 4096
@@ -517,6 +520,19 @@ MonoBehaviour:
   turretPassiveBase: {fileID: 0}
   leftDescriptionPosition: {fileID: 7223957219893547253}
   rightDescriptionPosition: {fileID: 8638661832283414299}
+--- !u!114 &755954383760640265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900070926476808981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd2dd91dcca0a14295599d4d7913158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationEffectsTransform: {fileID: 8753769988623435467}
 --- !u!1 &3900070927855245638
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,8 +565,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3900070926281709076}
-  m_Father: {fileID: 911165925631531269}
-  m_RootOrder: 3
+  m_Father: {fileID: 8753769988623435467}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -789,8 +805,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 911165925631531269}
-  m_RootOrder: 2
+  m_Father: {fileID: 8753769988623435467}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8061919928490951063
 GameObject:
@@ -820,12 +836,44 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8753769988623435467}
+  m_Father: {fileID: 3900070926476808982}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8431772887847137673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8753769988623435467}
+  m_Layer: 0
+  m_Name: CardRotationEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8753769988623435467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431772887847137673}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
   - {fileID: 7427421433611448886}
   - {fileID: 7223957219893547253}
   - {fileID: 8638661832283414299}
   - {fileID: 3900070927855245639}
-  m_Father: {fileID: 3900070926476808982}
-  m_RootOrder: 0
+  m_Father: {fileID: 911165925631531269}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6960657424612398557
 PrefabInstance:
@@ -833,12 +881,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 911165925631531269}
+    m_TransformParent: {fileID: 8753769988623435467}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 56edac881a2d28d47821b8b717cf4c56,
         type: 3}

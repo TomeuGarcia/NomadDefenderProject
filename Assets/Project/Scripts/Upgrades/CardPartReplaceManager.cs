@@ -92,6 +92,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(mouseDragCamera);
         BuildingCard.MouseDragCamera = mouseDragCamera;
         CardPart.MouseDragCamera = mouseDragCamera;
 
@@ -102,6 +103,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void Start()
     {
         deckCards = deckData.GetCardsReference();
+        previewTurretCard.MotionEffectsController.DisableMotion();
 
         SetButtonNotReady();
         Init();
@@ -210,7 +212,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's PROJECTILE with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Change turret PROJECTILE", true, 2f);
     }
 
 
@@ -238,7 +240,7 @@ public class CardPartReplaceManager : MonoBehaviour
             parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's BODY with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY", true, 2f);
     }
 
     public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
@@ -266,7 +268,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Combine a turret's BASE with a new one", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Change turret ABILITY", true, 2f);
     }
 
 
@@ -471,7 +473,7 @@ public class CardPartReplaceManager : MonoBehaviour
         else
         {
             UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
-        }
+        }        
     }
 
     private void PartWasSelected()

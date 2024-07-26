@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1900d12131202d841bd6d12774e9e724, type: 3}
-  m_Name: CardMotionConfig_Buildings
+  m_Name: CardMotionConfig_BuildingCards
   m_EditorClassIdentifier: 
   _repositioning_Move_Ease: 4
   _toStandard_Move_Ease: 4
@@ -18,7 +18,17 @@ MonoBehaviour:
   _hovered_Move_Ease: 4
   _hovered_Rot_Ease: 4
   _selected_Move_Ease: 4
-  _hoveredRotationEffect:
+  _idleRotationEffect:
     _maxRotationAngles: {x: 8, y: 12}
     _rotationSpeed: 1
-    _startFinishDuration: 0.2
+    _transitionDuration: 0.2
+  _hoveredMouseRotationEffect:
+    _maxRotationAngles: {x: 17, y: 42}
+    _rotationSpeed: 1
+    _transitionDuration: 0.2
+  _gameplayHandDisplacements:
+    _hovered: {x: 0, y: 0.2, z: -0.8}
+  _upgradesDisplacements:
+    _hovered: {x: 0, y: 0.2, z: -0.14}
+  _tutorialDisplayDisplacements:
+    _hovered: {x: 0, y: 0, z: -0.14}

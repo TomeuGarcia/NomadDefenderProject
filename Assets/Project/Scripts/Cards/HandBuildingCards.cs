@@ -11,6 +11,9 @@ public class HandBuildingCards : MonoBehaviour
     [SerializeField] private Camera handCamera;
     [SerializeField] private Transform handCameraTransform;
 
+    [Header("CARDS CONFIG")]
+    [SerializeField] private CardMotionConfig _cardsMotionConfig;
+
     [Header("HAND")]
     [SerializeField] private Transform cardHolder;
     [SerializeField] private Transform buildingsHolder;
@@ -70,7 +73,8 @@ public class HandBuildingCards : MonoBehaviour
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
 
-    private float TotalDepthBetweenCards => -0.5f;
+    private float TotalDepthBetweenCards => -0.8f;
+
 
 
     private void OnValidate()
@@ -81,8 +85,10 @@ public class HandBuildingCards : MonoBehaviour
     }
 
     private void Awake()
-    {        
+    {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(handCamera);
         BuildingCard.MouseDragCamera = handCamera;
+        _cardsMotionConfig.SetTDGameplayHandMode();
 
         cards = new List<BuildingCard>();
         redrawsLeft = initialRedraws;
@@ -103,6 +109,10 @@ public class HandBuildingCards : MonoBehaviour
         CheckCardsCost();
     }
 
+    private void OnDestroy()
+    {
+        _cardsMotionConfig.SetUpgradeSceneMode();
+    }
 
 
     private void OnEnable()
