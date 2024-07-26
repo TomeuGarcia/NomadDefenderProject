@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 public class BattleTutorialManager2 : MonoBehaviour
 {
@@ -14,13 +15,13 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     [SerializeField] private PathLocation firstBase;
 
-    [SerializeField] private TurretCardParts watcherCardScriptableObject;
+    [SerializeField] private TurretCardParts[] watcherCardScriptableObjects;
 
-    [SerializeField] private GameObject obstacleTile;
+    [SerializeField] private GameObject[] obstacleTiles;
 
     [SerializeField] private DeckCreator deckCreator;
 
-    [SerializeField] private Tile watcherCardTile;
+    [SerializeField] private Tile[] watcherCardTiles;
     [SerializeField] private BuildingPlacer buildingPlacer;
 
     [SerializeField] private CurrencyCounter currencyCounter;
@@ -38,7 +39,7 @@ public class BattleTutorialManager2 : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
 
 
-    [SerializeField] private ParticleSystem turretSpawnParticles;
+    [SerializeField] private ParticleSystem[] turretSpawnParticles;
     
     private bool waveStarted = false;
     private int wavesCounter = 0;
@@ -60,7 +61,10 @@ public class BattleTutorialManager2 : MonoBehaviour
         //redrawInterface.GetComponent<CanvasGroup>().alpha = 0.0f;
         //redrawInterface.SetActive(false);
 
-        watcherCardTile.gameObject.SetActive(false);
+        foreach(Tile tile in watcherCardTiles)
+        {
+            tile.gameObject.SetActive(false);
+        }
 
         //Make cards no interactable
         SetCardsNonInteractable();
@@ -200,25 +204,40 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //Create new turret
 
-        TurretBuildingCard card = deckCreator.GetUninitializedNewTurretCard();
-        card.ResetParts(watcherCardScriptableObject);
+        TurretBuildingCard[] cards = new TurretBuildingCard[2];
+        for (int i = 0; i < cards.Length; i++)
+        {
+            cards[i] = deckCreator.GetUninitializedNewTurretCard();
+            cards[i].ResetParts(watcherCardScriptableObjects[i]);
+            cards[i].CreateCopyBuildingPrefab(this.transform, currencyCounter);
+        }
 
-        
-
-        
-
-        card.CreateCopyBuildingPrefab(this.transform, currencyCounter);
-
-        turretSpawnParticles.Play();
+        foreach (ParticleSystem spawnParticles in turretSpawnParticles)
+        {
+            spawnParticles.Play();
+        }
         yield return new WaitForSecondsRealtime(0.5f);
         //Place new Turret
-        obstacleTile.SetActive(false);
-        watcherCardTile.gameObject.SetActive(true);
+        foreach (GameObject obstacleTile in obstacleTiles)
+        {
+            obstacleTile.SetActive(false);
+        }
+        foreach (Tile watcherCardTile in watcherCardTiles)
+        {
+            watcherCardTile.gameObject.SetActive(true);
+        }
+        
+        //obstacleTiles.SetActive(false);
+        //watcherCardTiles.gameObject.SetActive(true);
 
         GameAudioManager.GetInstance().PlayWatcherCard();
         yield return new WaitForSeconds(1.0f);
 
-        PlaceSelectedBuilding(watcherCardTile, card);
+        for (int i = 0; i < watcherCardTiles.Length; i++)
+        {
+            PlaceSelectedBuilding(watcherCardTiles[i], cards[i]);
+        }
+        //PlaceSelectedBuilding(watcherCardTiles, card);
         
         //Wait until Wathcer's turret is placed
         yield return new WaitForSecondsRealtime(0.25f);

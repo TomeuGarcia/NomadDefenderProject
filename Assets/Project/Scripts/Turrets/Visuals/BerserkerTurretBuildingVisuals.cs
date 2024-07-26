@@ -152,12 +152,12 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
 
     private void SetupHyperStats()
     {
-        _owner.StatsBonusController.AddBonusStatsMultiplication(_hyperStatsMultiplier);
+        _owner.StatsBonusController.AddBonusBaseStatsMultiplication(_hyperStatsMultiplier);
     }
 
     private void ResetStats()
     {
-        _owner.StatsBonusController.RemoveBonusStatsMultiplication(_hyperStatsMultiplier);
+        _owner.StatsBonusController.RemoveBonusBaseStatsMultiplication(_hyperStatsMultiplier);
     }
 
 

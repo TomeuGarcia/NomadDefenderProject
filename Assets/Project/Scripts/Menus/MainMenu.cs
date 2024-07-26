@@ -150,6 +150,7 @@ public class MainMenu : MonoBehaviour
         {
             TutorialsSaverLoader.GetInstance().ResetTutorials();
         }
+        StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
 
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());
