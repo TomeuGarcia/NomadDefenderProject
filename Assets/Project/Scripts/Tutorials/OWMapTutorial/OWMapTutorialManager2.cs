@@ -124,27 +124,7 @@ public class OWMapTutorialManager2 : MonoBehaviour
         scriptedSequence.NextLine(); //5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2.0f);
-
-
-        scriptedSequence.NextLine(); //6 -> It better not happen again
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.5f);
-
-        scriptedSequence.NextLine(); //7 -> I won't be always around...
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
         
-        scriptedSequence.NextLine(); //8 
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
-        
-        scriptedSequence.NextLine(); //9 
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
-        
-        scriptedSequence.NextLine(); //10 
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(2.0f);
         
         scriptedSequence.NextLine(); //11 
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
