@@ -317,6 +317,7 @@ public class CardPartReplaceManager : MonoBehaviour
         {
             if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
             {
+                /*
                 if (deckCards[cardI].GetCardLevel() < 3)
                 {
                     notMaxLevelCards.Add(deckCards[cardI]);
@@ -325,6 +326,10 @@ public class CardPartReplaceManager : MonoBehaviour
                 {
                     maxLevelCards.Add(deckCards[cardI]);
                 }
+                */
+
+                // Quick fix to not filter maxed cards
+                notMaxLevelCards.Add(deckCards[cardI]);
             }            
         }
 
