@@ -75,11 +75,14 @@ public class CardDrawer : MonoBehaviour
         EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
     }
 
+    private void Awake()
+    {
+        warningBackgroundMat = warningBackground.material;
+    }
+
     private void Start()
     {
         GameStartSetup(2f, displayRedrawsOnGameStart, finishRedrawSetup);
-
-        warningBackgroundMat = warningBackground.material;
     }
 
 
@@ -415,6 +418,11 @@ public class CardDrawer : MonoBehaviour
 
         disappearSequence.AppendCallback( () => redrawCanvasGameObject.SetActive(false) );
 
+        if (warningBackgroundMat == null)
+        {
+            warningBackgroundMat = warningBackground.material;
+        }
+        
         warningBackgroundMat.DOFloat(0.0f, MaterialProperties.Activate, warningDisappearTime).SetEase(warningDisappearEase)
             .OnComplete(()=>warningBackground.gameObject.SetActive(false));
 

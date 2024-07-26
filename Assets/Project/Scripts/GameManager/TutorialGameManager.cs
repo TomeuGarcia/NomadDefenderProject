@@ -38,7 +38,7 @@ public class TutorialGameManager : GameManager
 
     public void LoadRegularGame()
     {
-        SceneLoader.GetInstance().LoadNormalGameNoAnim();
+        SceneLoader.GetInstance().LoadDeckSelector();
     }
 
 }
