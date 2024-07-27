@@ -34,7 +34,7 @@ public class CurrencyDropOverTimeCanvasView : MonoBehaviour, ICurrencyDropOverTi
 
     public void UpdateProgressView(float value01)
     {
-        _fillImage.fillAmount = value01.ToSine01();
+        _fillImage.fillAmount = value01;
     }
 
     public void PlayDropAnimation()
