@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
 
 
     protected HealthSystem healthSystem;
+    private EnemyAttackDestination _attackDestination;
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemySuicide;
@@ -79,8 +80,6 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        ResetEnemy();
-
         pathFollower.OnPathEndReached += Attack;
     }
 
@@ -117,29 +116,11 @@ public class Enemy : MonoBehaviour
         pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
     }
 
-    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance)
+    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
     {
+        _attackDestination = attackDestination;
         pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
-    }
-
-
-    private void TryAttackPathLocation(GameObject hitObject)
-    {
-        if (!collidedWithLocation)
-        {
-            if (hitObject.TryGetComponent<PathLocation>(out PathLocation pathLocation))
-            {
-                if (pathLocation.CanTakeDamage())
-                {
-                    pathLocation.TakeDamage(damage);
-                    collidedWithLocation = true;
-
-                    //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
-                }
-            }
-        }
-
-        Suicide();
+        ResetEnemy();
     }
 
 
@@ -155,14 +136,17 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        //Vector3 launchDirection = (transformToMove.forward + (transformToMove.up * 0.2f)).normalized;
-        //rb.AddForce(launchDirection * 20f, ForceMode.Impulse);
+        PathLocation pathLocation = _attackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
 
-        if (Physics.Raycast(Position, pathFollower.MoveDirection, out RaycastHit hit, 10, 
-            _attackGeneralConfig.PathLocationAttackLayer, QueryTriggerInteraction.Collide))
+        if (pathLocation.CanTakeDamage())
         {
-            TryAttackPathLocation(hit.collider.gameObject);
+            pathLocation.TakeDamage(damage);
+            collidedWithLocation = true;
+
+            //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
         }
+
+        Suicide();
     }
 
     public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)

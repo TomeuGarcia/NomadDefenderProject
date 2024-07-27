@@ -19,7 +19,7 @@ public class AudioMixersController : MonoBehaviour
     [SerializeField] private AudioMixerAndParameters sfxAudioMixer;
 
 
-    private const float AUDIO_MULTIPLIER = 3;
+    private const float AUDIO_MULTIPLIER = 1.5f;
 
 
     public void SetMasterMixerVolume(float sliderValue)

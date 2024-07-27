@@ -4934,6 +4934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef637fd1335f17489f40d6cb7e2a850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useRealtime: 1
   _toOffsetTime: 0.4
   _toOffsetEase: 15
   _toInitialtime: 0.8
@@ -14424,7 +14425,7 @@ PrefabInstance:
     - target: {fileID: 141818259572173214, guid: 4a43c701bcfc8c9439711421f3765a9a,
         type: 3}
       propertyPath: m_Name
-      value: PathEnd
+      value: PathEnd_1
       objectReference: {fileID: 0}
     - target: {fileID: 4207083098588260928, guid: 4a43c701bcfc8c9439711421f3765a9a,
         type: 3}
@@ -28453,6 +28454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef637fd1335f17489f40d6cb7e2a850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useRealtime: 1
   _toOffsetTime: 0.4
   _toOffsetEase: 15
   _toInitialtime: 0.8
@@ -28631,7 +28633,7 @@ PrefabInstance:
     - target: {fileID: 141818259572173214, guid: 4a43c701bcfc8c9439711421f3765a9a,
         type: 3}
       propertyPath: m_Name
-      value: PathEnd
+      value: PathEnd_2
       objectReference: {fileID: 0}
     - target: {fileID: 4207083098588260928, guid: 4a43c701bcfc8c9439711421f3765a9a,
         type: 3}
@@ -30191,7 +30193,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
+      propertyPath: _pathsEndData.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
       propertyPath: startPathNodes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
@@ -30212,6 +30224,48 @@ PrefabInstance:
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: enemyWaveSpawners.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 323d2e2769eba1c4fb47550490a1f27a,
+        type: 2}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[0]._endNode
+      value: 
+      objectReference: {fileID: 2050947043}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[1]._endNode
+      value: 
+      objectReference: {fileID: 952667799}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[0]._endLocation
+      value: 
+      objectReference: {fileID: 773636323}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[1]._endLocation
+      value: 
+      objectReference: {fileID: 1394346054}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[0]._startNode
+      value: 
+      objectReference: {fileID: 846017159}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[1]._startNode
+      value: 
+      objectReference: {fileID: 846017159}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[0]._enemyWaveSpawner
+      value: 
+      objectReference: {fileID: 11400000, guid: 323d2e2769eba1c4fb47550490a1f27a,
+        type: 2}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[1]._enemyWaveSpawner
       value: 
       objectReference: {fileID: 11400000, guid: 323d2e2769eba1c4fb47550490a1f27a,
         type: 2}

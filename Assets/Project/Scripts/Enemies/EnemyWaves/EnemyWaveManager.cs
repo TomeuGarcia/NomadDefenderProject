@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEditor;
 using DG.Tweening;
-
 public class EnemyWaveManager : MonoBehaviour
 {
     [SerializeField] private Transform enemySpawnTransform;
@@ -11,9 +11,42 @@ public class EnemyWaveManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI debugText; // works for 1 waveSpawner
 
-    [SerializeField] private EnemyWaveSpawner[] enemyWaveSpawners;
-    [SerializeField] private PathNode[] startPathNodes;
-    private EnemyWaveInfoDisplayer[] enemyWaveInfoDisplayers;
+
+    [System.Serializable]
+    private class PathStartData
+    {
+        [SerializeField] private EnemyWaveSpawner _enemyWaveSpawner;
+        [SerializeField] private PathNode _startNode;
+
+        public PathNode StartNode => _startNode;
+        public EnemyWaveSpawner EnemyWaveSpawner => _enemyWaveSpawner;
+        public Coroutine ActiveWaveCoroutine { get; private set; }
+        public EnemyWaveInfoDisplayer WaveDisplayer { get; private set; }
+
+        public void InitWaveDisplayer(EnemyWaveInfoDisplayer _waveDisplayer)
+        {
+            WaveDisplayer = _waveDisplayer;
+            _waveDisplayer.Init(_startNode, _enemyWaveSpawner);
+        }
+
+        public void SetActiveWaveCoroutine(Coroutine activeWaveCoroutine)
+        {
+            ActiveWaveCoroutine = activeWaveCoroutine;
+        }
+    }
+
+    [System.Serializable]
+    public class PathEndData
+    {
+        [SerializeField] private PathNode _endNode;
+        [SerializeField] private PathLocation _endLocation;
+        public PathNode EndNode => _endNode;
+        public PathLocation EndLocation => _endLocation;
+    }
+
+    [SerializeField] private PathStartData[] _pathsStartData;
+    [SerializeField] private PathEndData[] _pathsEndData;
+
 
     [SerializeField] ConsoleDialogSystem consoleDialog;
 
@@ -22,7 +55,6 @@ public class EnemyWaveManager : MonoBehaviour
     private int activeWaves = 0;
     private ITDGameState _tdGameState;
 
-    private IEnumerator[] waveCoroutines;
     private Vector3 lastEnemyPos;
 
     [SerializeField] TextLine textLine;
@@ -43,27 +75,22 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
 
-    
-
-
+    private EnemyAttackDestination _enemiesAttackDestination;
 
     private void Awake()
     {
         //canvas.SetActive(false);
-        activeWaves = enemyWaveSpawners.Length;
+        _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
+        activeWaves = _pathsStartData.Length;
 
-        enemyWaveInfoDisplayers = new EnemyWaveInfoDisplayer[enemyWaveSpawners.Length];
-
-        for (int i = 0; i< enemyWaveSpawners.Length; i++)
+        for (int i = 0; i< _pathsStartData.Length; i++)
         {
-            PathNode startPathNode = startPathNodes[i];
-            enemyWaveSpawners[i].Init(startPathNode);
+            PathStartData pathStartData = _pathsStartData[i];
+            PathNode startPathNode = pathStartData.StartNode;
+            pathStartData.EnemyWaveSpawner.Init(startPathNode);
 
-            enemyWaveInfoDisplayers[i] = Instantiate(enemyWaveInfoPrefab, startPathNode.transform);
-            enemyWaveInfoDisplayers[i].Init(startPathNode, enemyWaveSpawners[i]);
+            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform));
         }
-        waveCoroutines = new IEnumerator[enemyWaveSpawners.Length];
-
 
         StartCoroutine(SetupEnemyPathFollowerTrails());
 
@@ -91,10 +118,11 @@ public class EnemyWaveManager : MonoBehaviour
         TDGameManager.OnGameOverStart += PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
 
-        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        for (int i = 0; i < _pathsStartData.Length; i++)
         {
-            enemyWaveSpawners[i].OnWaveFinished += FinishWave;
-            enemyWaveSpawners[i].OnLastWaveFinished += FinishLastWave;
+            EnemyWaveSpawner enemyWaveSpawner = _pathsStartData[i].EnemyWaveSpawner;
+            enemyWaveSpawner.OnWaveFinished += FinishWave;
+            enemyWaveSpawner.OnLastWaveFinished += FinishLastWave;
         }
 
         if (enemyPathFollowerTrails != null)
@@ -112,10 +140,11 @@ public class EnemyWaveManager : MonoBehaviour
         TDGameManager.OnGameOverStart -= PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit -= ForceStopWaves;
 
-        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        for (int i = 0; i < _pathsStartData.Length; i++)
         {
-            enemyWaveSpawners[i].OnWaveFinished -= FinishWave;
-            enemyWaveSpawners[i].OnLastWaveFinished -= FinishLastWave;
+            EnemyWaveSpawner enemyWaveSpawner = _pathsStartData[i].EnemyWaveSpawner;
+            enemyWaveSpawner.OnWaveFinished -= FinishWave;
+            enemyWaveSpawner.OnLastWaveFinished -= FinishLastWave;
         }
 
         if (enemyPathFollowerTrails != null)
@@ -128,11 +157,11 @@ public class EnemyWaveManager : MonoBehaviour
 
         if (activeWaves > 0)
         {
-            for (int waveCoroutineI = 0; waveCoroutineI < waveCoroutines.Length; ++waveCoroutineI)
+            for (int waveCoroutineI = 0; waveCoroutineI < _pathsStartData.Length; ++waveCoroutineI)
             {
-                if (waveCoroutines[waveCoroutineI] != null)
+                if (_pathsStartData[waveCoroutineI].ActiveWaveCoroutine != null)
                 {
-                    StopCoroutine(waveCoroutines[waveCoroutineI]);
+                    StopCoroutine(_pathsStartData[waveCoroutineI].ActiveWaveCoroutine);
                 }
             }
             // TODO fix enemy Factory
@@ -154,9 +183,9 @@ public class EnemyWaveManager : MonoBehaviour
         yield return new WaitUntil(() => _tdGameState.FirstCardWasPlayed);
 
         // Start all parallel waves at once
-        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        for (int i = 0; i < _pathsStartData.Length; i++)
         {
-            StartWave(enemyWaveSpawners[i], enemySpawnTransform, i);
+            StartWave(_pathsStartData[i].EnemyWaveSpawner, enemySpawnTransform, i);
         }
 
         StopEnemyPathFollowerTrails();
@@ -176,8 +205,8 @@ public class EnemyWaveManager : MonoBehaviour
         //}
 
         ++currentWaves;
-        waveCoroutines[index] = enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this);
-        StartCoroutine(waveCoroutines[index]);
+        _pathsStartData[index].SetActiveWaveCoroutine(
+            StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this, _enemiesAttackDestination)));
 
 
         //set the textline.text to the needed string and call dialog system.printLine
@@ -246,9 +275,9 @@ public class EnemyWaveManager : MonoBehaviour
             ////////
 
 
-            for (int i = 0; i < enemyWaveSpawners.Length; i++)
+            for (int i = 0; i < _pathsStartData.Length; i++)
             {
-                StartCoroutine(StartNextWave(enemyWaveSpawners[i], i));
+                StartCoroutine(StartNextWave(_pathsStartData[i].EnemyWaveSpawner, i));
             }
             PrintConsoleLine(TextTypes.SYSTEM, "Waiting for new wave...");
             
@@ -280,9 +309,9 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void ForceStopWaves()
     {
-        for (int i = 0; i < enemyWaveSpawners.Length; i++)
+        for (int i = 0; i < _pathsStartData.Length; i++)
         {
-            enemyWaveSpawners[i].ForceStopWave();
+            _pathsStartData[i].EnemyWaveSpawner.ForceStopWave();
         }
     }
 
@@ -299,13 +328,15 @@ public class EnemyWaveManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         
-        enemyPathFollowerTrails = new PathFollower[startPathNodes.Length];
-        for (int i = 0; i < startPathNodes.Length; ++i)
+        enemyPathFollowerTrails = new PathFollower[_pathsStartData.Length];
+        for (int i = 0; i < _pathsStartData.Length; ++i)
         {
-            enemyPathFollowerTrails[i] = Instantiate(enemyPathTrailPrefab, startPathNodes[i].Position + enemyPathFollowerTrailsPositionOffset, Quaternion.identity,
+            enemyPathFollowerTrails[i] = Instantiate(enemyPathTrailPrefab, 
+                _pathsStartData[i].StartNode.Position + enemyPathFollowerTrailsPositionOffset, Quaternion.identity,
                 enemySpawnTransform).GetComponent<PathFollower>();
 
-            enemyPathFollowerTrails[i].Init(startPathNodes[i].GetNextNode(), startPathNodes[i].GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
+            enemyPathFollowerTrails[i].Init(_pathsStartData[i].StartNode.GetNextNode(), 
+                _pathsStartData[i].StartNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
             enemyPathFollowerTrails[i].SetMoveSpeed(0f);
             enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
         }
@@ -337,7 +368,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             if (enemyPathFollowerTrails[i] == enemyPathFollowerTrail)
             {
-                StartCoroutine(DoResetEnemyPathFollowerTrailToStart(enemyPathFollowerTrail, startPathNodes[i]));
+                StartCoroutine(DoResetEnemyPathFollowerTrailToStart(enemyPathFollowerTrail, _pathsStartData[i].StartNode));
                 return;
             }
         }
@@ -370,9 +401,9 @@ public class EnemyWaveManager : MonoBehaviour
 
     public void HideWaveSpawnersInfoDisplay()
     {
-        foreach (var enemyWaveInfoDisplayer in enemyWaveInfoDisplayers)
+        for (int i = 0; i < _pathsStartData.Length; ++i)
         {
-            enemyWaveInfoDisplayer.Hide();
+            _pathsStartData[i].WaveDisplayer.Hide();
         }
     }
 
