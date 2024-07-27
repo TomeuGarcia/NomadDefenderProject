@@ -14,7 +14,8 @@ public class ComingChangesMenu : MonoBehaviour
     {
         _backButton.onClick.AddListener(OnBackButtonPressed);
         _wishlistButton.onClick.AddListener(OnWishlistButtonPressed);
-        Close();
+
+        InstantClose();
     }
 
     public void Open()
@@ -31,7 +32,11 @@ public class ComingChangesMenu : MonoBehaviour
             .OnComplete(() => _menuHolderGroup.gameObject.SetActive(false));
     }
 
-
+    private void InstantClose()
+    {
+        _menuHolderGroup.alpha = 0;
+        _menuHolderGroup.gameObject.SetActive(false);
+    }
 
     private void OnBackButtonPressed()
     {
