@@ -10,7 +10,7 @@ public class ComingChangesMenu : MonoBehaviour
     [SerializeField] private Button _backButton;
     [SerializeField] private Button _wishlistButton;
 
-    private void Awake()
+    private void Start()
     {
         _backButton.onClick.AddListener(OnBackButtonPressed);
         _wishlistButton.onClick.AddListener(OnWishlistButtonPressed);

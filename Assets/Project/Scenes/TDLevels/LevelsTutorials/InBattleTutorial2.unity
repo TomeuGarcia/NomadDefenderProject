@@ -21812,6 +21812,7 @@ MonoBehaviour:
   battleHUD: {fileID: 1554980247}
   deckCreator: {fileID: 0}
   testTurretCardParts: {fileID: 0}
+  warningBackground: {fileID: 0}
   redrawCanvasGameObject: {fileID: 1554980251}
   redrawsLeftCounterText: {fileID: 176669780}
   cgRedrawsLeftText: {fileID: 176669779}
@@ -21822,6 +21823,12 @@ MonoBehaviour:
   - {fileID: 176669775}
   leftWireImage: {fileID: 176669774}
   rightWireImage: {fileID: 176669773}
+  hintDecoder: {fileID: 0}
+  warningAppearTime: 0
+  warningAppearEase: 0
+  warningDisappearTime: 0
+  warningDisappearEase: 0
+  hintText: 
   numCardsHandStart: 1
   cardsToDrawPerWave: 2
   cheatDrawCardActivated: 1
@@ -29524,7 +29531,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
+      propertyPath: _pathsEndData.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
       propertyPath: startPathNodes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
@@ -29545,6 +29562,38 @@ PrefabInstance:
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: enemyWaveSpawners.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4cde05cd9325df64894de765a8423bc3,
+        type: 2}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[0]._endNode
+      value: 
+      objectReference: {fileID: 836667045}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsEndData.Array.data[0]._endLocation
+      value: 
+      objectReference: {fileID: 1335723085}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[0]._startNode
+      value: 
+      objectReference: {fileID: 1681086430}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[1]._startNode
+      value: 
+      objectReference: {fileID: 1681086430}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[0]._enemyWaveSpawner
+      value: 
+      objectReference: {fileID: 11400000, guid: 4cde05cd9325df64894de765a8423bc3,
+        type: 2}
+    - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
+        type: 3}
+      propertyPath: _pathsStartData.Array.data[1]._enemyWaveSpawner
       value: 
       objectReference: {fileID: 11400000, guid: 4cde05cd9325df64894de765a8423bc3,
         type: 2}
