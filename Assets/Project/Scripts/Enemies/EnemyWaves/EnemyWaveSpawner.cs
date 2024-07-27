@@ -170,7 +170,8 @@ public class EnemyWaveSpawner : ScriptableObject
         if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
     }
 
-    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour)
+    public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour,
+        EnemyAttackDestination attackDestination)
     {
         yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
@@ -190,7 +191,7 @@ public class EnemyWaveSpawner : ScriptableObject
                     yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(enemyInWave.DelayBeforeSpawn));
                     if (stopForced) break;
                     
-                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform);
+                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform, attackDestination);
 
                 }                
             }
@@ -199,7 +200,7 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    private void SpawnEnemy(EnemyTypeConfig enemyType, Transform spawnTransform)
+    private void SpawnEnemy(EnemyTypeConfig enemyType, Transform spawnTransform, EnemyAttackDestination attackDestination)
     {
         if (OnEnemySpawn != null) OnEnemySpawn(this);
 
@@ -220,7 +221,7 @@ public class EnemyWaveSpawner : ScriptableObject
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
         Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.3f, 0.3f)) + 
                                (spawnedEnemy.transformToMove.forward * Random.Range(-0.3f, 0.3f));
-        spawnedEnemy.SpawnedInit(startNode, randomOffset, totalDistance);
+        spawnedEnemy.SpawnedInit(startNode, randomOffset, totalDistance, attackDestination);
         /////////////
 
         spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;

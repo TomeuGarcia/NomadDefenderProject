@@ -36,7 +36,7 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
     [System.Serializable]
-    private class PathEndData
+    public class PathEndData
     {
         [SerializeField] private PathNode _endNode;
         [SerializeField] private PathLocation _endLocation;
@@ -75,11 +75,12 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
 
-   
+    private EnemyAttackDestination _enemiesAttackDestination;
 
     private void Awake()
     {
         //canvas.SetActive(false);
+        _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
         activeWaves = _pathsStartData.Length;
 
         for (int i = 0; i< _pathsStartData.Length; i++)
@@ -204,7 +205,8 @@ public class EnemyWaveManager : MonoBehaviour
         //}
 
         ++currentWaves;
-        _pathsStartData[index].SetActiveWaveCoroutine(StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this)));
+        _pathsStartData[index].SetActiveWaveCoroutine(
+            StartCoroutine(enemyWaveSpawner.SpawnCurrentWaveEnemies(enemySpawnTransform, this, _enemiesAttackDestination)));
 
 
         //set the textline.text to the needed string and call dialog system.printLine
