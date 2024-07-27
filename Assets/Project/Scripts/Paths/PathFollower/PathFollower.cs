@@ -14,6 +14,7 @@ public class PathFollower : MonoBehaviour
 
     // Target Node
     private PathNode targetNode = null;
+    public PathNode CurrentTargetNode => targetNode;
     private Quaternion _targetRotation;
     public Vector3 MoveDirection { get; private set; }
     [SerializeField, Min(0f)] public float moveSpeed = 10f;

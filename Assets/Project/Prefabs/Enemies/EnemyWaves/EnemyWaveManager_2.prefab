@@ -264,7 +264,6 @@ MonoBehaviour:
   canvas: {fileID: 5322127762132719498}
   enemyWaveInfoPrefab: {fileID: -3766317850578778623, guid: 0476d49e8fbdcd348b0bf4575efe077e,
     type: 3}
-  enemyWaveInfoPositionOffset: {x: 0, y: 1, z: 0}
   debugText: {fileID: 7980987454900972555}
   enemyWaveSpawners:
   - {fileID: 11400000, guid: a3f103612bafa264b885789986b04462, type: 2}
@@ -272,6 +271,17 @@ MonoBehaviour:
   startPathNodes:
   - {fileID: 0}
   - {fileID: 0}
+  _pathsStartData:
+  - _enemyWaveSpawner: {fileID: 11400000, guid: a3f103612bafa264b885789986b04462,
+      type: 2}
+    _startNode: {fileID: 0}
+    _endNode: {fileID: 0}
+    _endLocation: {fileID: 0}
+  - _enemyWaveSpawner: {fileID: 11400000, guid: 149cfcba380be6f4b94e9ceca275d4b8,
+      type: 2}
+    _startNode: {fileID: 0}
+    _endNode: {fileID: 0}
+    _endLocation: {fileID: 0}
   consoleDialog: {fileID: 5326053019949012135}
   isTutorial: 0
   textLine:
@@ -383,7 +393,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -463,6 +475,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6889316534582160495}
     m_Modifications:
     - target: {fileID: 9066549113980888875, guid: d1c2bd284d35f234db234b9444d06b50,
@@ -576,6 +589,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1c2bd284d35f234db234b9444d06b50, type: 3}
 --- !u!224 &5326053019949012134 stripped
 RectTransform:
