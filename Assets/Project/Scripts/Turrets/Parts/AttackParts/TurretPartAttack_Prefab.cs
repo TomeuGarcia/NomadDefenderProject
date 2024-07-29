@@ -71,6 +71,11 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     {
     }
 
+    public virtual bool QueuesDamageToEnemies()
+    {
+        return true;
+    }
+
     void Update()
     {
         if (!disappearing)

@@ -131,4 +131,9 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
         this.damage = (int)((float)turretOwner.Stats.Damage * currentDamageMultiplier);
     }
+
+    public override bool QueuesDamageToEnemies()
+    {
+        return false;
+    }
 }

@@ -44,7 +44,7 @@ public class FakeEnemy : Enemy
     }
     public override float GetTargetPriorityBonus()
     {
-        return 10000f;
+        return -10000f;
     }
 
     public override void GetStunned(float duration)

@@ -258,18 +258,7 @@ public class TurretBuilding : RangeBuilding
 
     private void ComputeNextTargetedEnemy()
     {
-        targetedEnemy = null;
-
-        int enemyI = 0;
-        while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
-        {
-            ++enemyI;
-        }
-
-        if (enemyI < enemies.Count)
-        {
-            targetedEnemy = enemies[enemyI];
-        }       
+        targetedEnemy = GetBestEnemyTarget();  
     }
 
     private bool TargetEnemyExists()
