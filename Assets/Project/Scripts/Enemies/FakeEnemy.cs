@@ -133,4 +133,9 @@ public class FakeEnemy : Enemy
         return colliderBounds;
     }
 
+    public override bool CanBeAttackedByMultiCastProjectiles()
+    {
+        return false;
+    }
+
 }

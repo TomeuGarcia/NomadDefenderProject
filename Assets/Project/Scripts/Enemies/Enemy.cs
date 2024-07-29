@@ -272,4 +272,9 @@ public class Enemy : MonoBehaviour
     {
         return Position;
     }
+
+    public virtual bool CanBeAttackedByMultiCastProjectiles()
+    {
+        return true;
+    }
 }
