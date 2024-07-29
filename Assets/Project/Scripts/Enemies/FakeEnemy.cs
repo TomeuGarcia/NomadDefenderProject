@@ -42,7 +42,7 @@ public class FakeEnemy : Enemy
     {
         return canBeTargeted;
     }
-    public override float GetTargetNegativePriorityBonus()
+    public override float GetTargetPriorityBonus()
     {
         return 10000f;
     }

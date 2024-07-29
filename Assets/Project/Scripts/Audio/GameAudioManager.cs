@@ -307,12 +307,12 @@ public class GameAudioManager : MonoBehaviour
     public void PausedMusicPitch()
     {
         musicAudioSource.pitch = 0.85f;
-        musicAudioSource.volume = 0.05f;
+        musicAudioSource.volume = 0.25f;
     }
     public void NormalMusicPitch()
     {
         musicAudioSource.pitch = 1f;
-        musicAudioSource.volume = 0.1f;
+        musicAudioSource.volume = 0.5f;
     }
     // UI
     public void PlayUiButtonPressed()
@@ -413,7 +413,7 @@ public class GameAudioManager : MonoBehaviour
         //cardsAudioSource3.clip = cardRedrawConfirmation;
         cardsAudioSource3.clip = cardSelected;
         cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
-        cardsAudioSource3.volume = 0.18f;
+        cardsAudioSource3.volume = 0.9f;
 
         cardsAudioSource3.Play();
     }
@@ -449,7 +449,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsInfoAudioSource.clip = cardInfoElement;
         cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
-        cardsInfoAudioSource.volume = 0.05f;
+        cardsInfoAudioSource.volume = 0.25f;
 
         cardsInfoAudioSource.Play();
     }
@@ -457,7 +457,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsInfoAudioSource.clip = cardInfoElementMoves;
         cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
-        cardsInfoAudioSource.volume = 0.08f;
+        cardsInfoAudioSource.volume = 0.4f;
 
         cardsInfoAudioSource.Play();
     }
@@ -466,7 +466,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsInfoAudioSource.clip = cardInfoElement;
         cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        cardsInfoAudioSource.volume = 0.05f;
+        cardsInfoAudioSource.volume = 0.25f;
 
         cardsInfoAudioSource.Play();
     }
@@ -474,7 +474,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsInfoAudioSource.clip = cardInfoElementMoves;
         cardsInfoAudioSource.pitch = Random.Range(0.9f, 1.0f);
-        cardsInfoAudioSource.volume = 0.08f;
+        cardsInfoAudioSource.volume = 0.4f;
 
         cardsInfoAudioSource.Play();
     }
@@ -483,7 +483,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsInfoAudioSource.clip = cardInfoElement;
         cardsInfoAudioSource.pitch = pitch;
-        cardsInfoAudioSource.volume = 0.05f;
+        cardsInfoAudioSource.volume = 0.25f;
 
         cardsInfoAudioSource.Play();
     }
@@ -570,7 +570,7 @@ public class GameAudioManager : MonoBehaviour
     {
         upgradesAudioSource3.clip = cardPlacedOnUpgradeHolder;
         upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
-        upgradesAudioSource3.volume = 0.05f;
+        upgradesAudioSource3.volume = 0.25f;
 
         upgradesAudioSource3.Play();
     }
@@ -578,7 +578,7 @@ public class GameAudioManager : MonoBehaviour
     {
         upgradesAudioSource3.clip = cardRetreivedFromUpgradeHolder;
         upgradesAudioSource3.pitch = Random.Range(0.9f, 1.1f);
-        upgradesAudioSource3.volume = 0.05f;
+        upgradesAudioSource3.volume = 0.25f;
 
         upgradesAudioSource3.Play();
     }
@@ -665,7 +665,7 @@ public class GameAudioManager : MonoBehaviour
     {
         battleCursedWiresAudioSource.clip = cursedWiresWave;
         battleCursedWiresAudioSource.pitch = 1.0f;
-        battleCursedWiresAudioSource.volume = 0.6f;
+        battleCursedWiresAudioSource.volume = 1.0f;
 
         battleCursedWiresAudioSource.Play();
     }
@@ -674,7 +674,7 @@ public class GameAudioManager : MonoBehaviour
     {
         battleCursedWiresAudioSource.clip = stageVictory;
         battleCursedWiresAudioSource.pitch = 1.0f;
-        battleCursedWiresAudioSource.volume = 0.3f;
+        battleCursedWiresAudioSource.volume = 1.0f;
 
         battleCursedWiresAudioSource.Play();
     }
@@ -834,7 +834,7 @@ public class GameAudioManager : MonoBehaviour
     {
         cardsAudioSource3.clip = cardSelected;
         cardsAudioSource3.pitch = Random.Range(1.5f, 1.6f);
-        cardsAudioSource3.volume = 0.1f;
+        cardsAudioSource3.volume = 0.5f;
 
         cardsAudioSource3.Play();
     }
@@ -868,7 +868,7 @@ public class GameAudioManager : MonoBehaviour
     public void PlaySmokeBurst()
     {
         effectsAudioSource.clip = smokeBurst;
-        effectsAudioSource.volume = 0.1f;
+        effectsAudioSource.volume = 0.5f;
         effectsAudioSource.pitch = 1.0f;
 
         effectsAudioSource.Play();
@@ -876,7 +876,7 @@ public class GameAudioManager : MonoBehaviour
     public void PlayReplaceMachineLoad()
     {
         effectsAudioSource.clip = replaceMachineLoad;
-        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.volume = 1.0f;
         effectsAudioSource.pitch = 1.3f;
 
         effectsAudioSource.Play();
@@ -884,7 +884,7 @@ public class GameAudioManager : MonoBehaviour
     public void PlayEnterBerserker()
     {
         effectsAudioSource.clip = berserker;
-        effectsAudioSource.volume = 0.5f;
+        effectsAudioSource.volume = 1.0f;
         effectsAudioSource.pitch = 0.85f;
 
         effectsAudioSource.Play();
@@ -892,7 +892,7 @@ public class GameAudioManager : MonoBehaviour
     public void PlayExitBerserker()
     {
         effectsAudioSource.clip = berserker;
-        effectsAudioSource.volume = 0.4f;
+        effectsAudioSource.volume = 1.0f;
         effectsAudioSource.pitch = 1.5f;
 
         effectsAudioSource.Play();

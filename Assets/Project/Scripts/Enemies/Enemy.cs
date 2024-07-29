@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
-    public virtual float GetTargetNegativePriorityBonus()
+    public virtual float GetTargetPriorityBonus()
     {
         return 0f;
     }
