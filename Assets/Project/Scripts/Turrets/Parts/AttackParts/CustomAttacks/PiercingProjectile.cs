@@ -42,7 +42,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         this.damage = (int)((float)owner.Stats.Damage * currentDamageMultiplier);
         this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
 
-        queueDamageAmount = targetEnemy.QueueDamage(damage);
+        //queueDamageAmount = targetEnemy.QueueDamage(damage);
 
         if (owner.baseDamagePassive != null)
             SetPassiveDamageModifier(owner.baseDamagePassive);
@@ -89,10 +89,12 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     {
         yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
 
+        /*
         if(!targetEnemy.IsDead() && !hitTargetEnemy)
         {
             targetEnemy.RemoveQueuedDamage(queueDamageAmount);
         }
+        */
 
         arrow.SetActive(false);
         damageCollider.enabled = false;
@@ -128,5 +130,10 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         currentDamageMultiplier = Mathf.Min(currentDamageMultiplier, maxDamageMultiplier);
 
         this.damage = (int)((float)turretOwner.Stats.Damage * currentDamageMultiplier);
+    }
+
+    public override bool QueuesDamageToEnemies()
+    {
+        return false;
     }
 }

@@ -19,9 +19,6 @@ public class AudioMixersController : MonoBehaviour
     [SerializeField] private AudioMixerAndParameters sfxAudioMixer;
 
 
-    private const float AUDIO_MULTIPLIER = 1.5f;
-
-
     public void SetMasterMixerVolume(float sliderValue)
     {
         SetMixerVolume(masterAudioMixer, sliderValue);
@@ -38,7 +35,7 @@ public class AudioMixersController : MonoBehaviour
 
     private void SetMixerVolume(AudioMixerAndParameters maixerAndParams, float value01)
     {
-        maixerAndParams.audioMixer.SetFloat(maixerAndParams.volumeParameterName, Mathf.Log10(value01 * AUDIO_MULTIPLIER) * 20f);
+        maixerAndParams.audioMixer.SetFloat(maixerAndParams.volumeParameterName, Mathf.Log10(value01) * 20f);
     }
 
 }

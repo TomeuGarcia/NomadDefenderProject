@@ -71,6 +71,11 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     {
     }
 
+    public virtual bool QueuesDamageToEnemies()
+    {
+        return true;
+    }
+
     void Update()
     {
         if (!disappearing)
@@ -113,7 +118,9 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         {
             Enemy enemy = colliders[collidersI].gameObject.GetComponent<Enemy>();
 
-            if (enemy != targetedEnemy && !enemy.DiesFromQueuedDamage())
+            if (enemy != targetedEnemy && 
+                enemy.CanBeAttackedByMultiCastProjectiles() &&
+                !enemy.DiesFromQueuedDamage())
             {
                 enemies.Add(enemy);
             }

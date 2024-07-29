@@ -42,9 +42,9 @@ public class FakeEnemy : Enemy
     {
         return canBeTargeted;
     }
-    public override float GetTargetNegativePriorityBonus()
+    public override float GetTargetPriorityBonus()
     {
-        return 10000f;
+        return -10000f;
     }
 
     public override void GetStunned(float duration)
@@ -131,6 +131,11 @@ public class FakeEnemy : Enemy
     {
         colliderBounds.center = boxCollider.transform.position;
         return colliderBounds;
+    }
+
+    public override bool CanBeAttackedByMultiCastProjectiles()
+    {
+        return false;
     }
 
 }

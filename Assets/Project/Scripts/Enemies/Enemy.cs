@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
-    public virtual float GetTargetNegativePriorityBonus()
+    public virtual float GetTargetPriorityBonus()
     {
         return 0f;
     }
@@ -227,7 +227,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
-        queuedDamage -= amount;
+        queuedDamage = (int)Mathf.Max(queuedDamage - amount, 0f);
     }
 
     public virtual bool DiesFromQueuedDamage()
@@ -271,5 +271,10 @@ public class Enemy : MonoBehaviour
     public virtual Vector3 GetPosition()
     {
         return Position;
+    }
+
+    public virtual bool CanBeAttackedByMultiCastProjectiles()
+    {
+        return true;
     }
 }

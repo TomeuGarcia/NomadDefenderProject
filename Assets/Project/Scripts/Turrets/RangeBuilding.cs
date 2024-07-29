@@ -120,7 +120,7 @@ public abstract class RangeBuilding : Building
 
         enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
-        enemies.Sort(SortEnemies);
+        //SortEnemies();
     }
 
     protected void RemoveEnemy(Enemy enemy)
@@ -135,18 +135,42 @@ public abstract class RangeBuilding : Building
 
         enemies.Remove(enemyToDelete);
 
-        enemies.Sort(SortEnemies);
+        //SortEnemies();
     }
 
-    private int SortEnemies(Enemy e1, Enemy e2)
+    private void SortEnemies()
+    {
+        enemies.Sort(DoSortEnemies);
+    }
+
+
+    public Enemy GetBestEnemyTarget()
+    {
+        SortEnemies();
+
+        int enemyI = 0;
+        while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
+        {
+            ++enemyI;
+        }
+
+        Enemy targetedEnemy = null;
+        if (enemyI < enemies.Count)
+        {
+            targetedEnemy = enemies[enemyI];
+        }
+        return targetedEnemy;
+    }
+
+    private int DoSortEnemies(Enemy e1, Enemy e2)
     {
         return enemySortFunction(e1, e2);
     }
 
     public static int SortByDistanceLeftToEnd(Enemy e1, Enemy e2)
     {
-        float enemy1Value = e1.PathFollower.DistanceLeftToEnd + e1.GetTargetNegativePriorityBonus();
-        float enemy2Value = e2.PathFollower.DistanceLeftToEnd + e2.GetTargetNegativePriorityBonus();
+        float enemy1Value = e1.PathFollower.DistanceLeftToEnd + e1.GetTargetPriorityBonus();
+        float enemy2Value = e2.PathFollower.DistanceLeftToEnd + e2.GetTargetPriorityBonus();
         return enemy1Value.CompareTo(enemy2Value);
     }
 

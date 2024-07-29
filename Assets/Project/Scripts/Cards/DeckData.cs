@@ -32,7 +32,7 @@ public class DeckData : ScriptableObject
             TurretPartBase turretPartBase = ScriptableObject.Instantiate(otherComponents.turretPartBase);
             turretPartBase.InitAsCopy(otherComponents.turretPartBase);
             
-            TurretPassiveBase turretPassiveBase = ScriptableObject.CreateInstance<TurretPassiveBase>();
+            TurretPassiveBase turretPassiveBase = ScriptableObject.Instantiate(otherComponents.turretPassiveBase);
             turretPassiveBase.InitAsCopy(otherComponents.turretPassiveBase);
 
 
