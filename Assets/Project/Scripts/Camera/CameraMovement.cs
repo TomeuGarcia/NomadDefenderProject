@@ -10,7 +10,7 @@ using static UnityEngine.UI.Image;
 
 public class CameraMovement : MonoBehaviour
 {
-    const float MAX_DRAG_DISTANCE = 8f;
+    const float MAX_DRAG_DISTANCE = 3f;
     Vector3 cameraOriginPos;
     Vector3 cameraDragPos;
     Vector3 cameraZoomPos = Vector3.zero;

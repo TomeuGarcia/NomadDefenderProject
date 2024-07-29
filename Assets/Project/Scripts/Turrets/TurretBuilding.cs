@@ -219,6 +219,7 @@ public class TurretBuilding : RangeBuilding
     private void OnControllerUpdatedStats()
     {
         UpdateRange();
+        upgrader.OnStatsUpdated();
     }
 
 

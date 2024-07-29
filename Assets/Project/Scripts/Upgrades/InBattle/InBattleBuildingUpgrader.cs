@@ -195,6 +195,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
     }
 
+    public virtual void OnStatsUpdated()
+    {
+        UpdateAllStatsView();
+    }
+
     public void OnBuildingOwnerPlaced()
     {
         buildingOwnerWasPlaced = true;

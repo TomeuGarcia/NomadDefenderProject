@@ -64,6 +64,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         UpdateAllStatsView();
     }
 
+
     protected override void UpdateAllStatsView()
     {
         bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
@@ -226,7 +227,6 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         {
             SpendUpgradeCost();
             UpgradeAllTurretStats();
-            UpdateAllStatsView();
         }
         else
         {

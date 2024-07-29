@@ -38,10 +38,10 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     }
 
 
-    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(3.0f, 4f, 2.0f);
+    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(0.0f, 4f, 3.0f);
 
     private static bool _firstBerserkerPlaced = false;
-    private const float BERSERK_START_DURATION = 2.0f;
+    private const float BERSERK_START_DURATION = 4.0f;
     private static float _berserkDuration;
     private float _berserkTimer;
     private Coroutine _berserkModeCoroutine;
