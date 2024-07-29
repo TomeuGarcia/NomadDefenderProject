@@ -82,7 +82,6 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         owner = supportBuilding;
         owner.OnPlaced += OnOwnerBuildingPlaced;
-        PathLocation.OnHealthChanged += ConnectBinderWithPathLocation;
 
         UpdateExplosionDamage();
 
@@ -220,7 +219,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void ConnectBinderWithPathLocation()
     {
-        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(owner.Position, out PathLocation healthiestLocation))
+        if (ServiceLocator.GetInstance().TDLocationsUtils.GetHealthiestLocation(transform.position, out PathLocation healthiestLocation))
         {
             TurretBinderUtils.UpdateTurretBinder(nodeBinderMesh.transform, healthiestLocation.transform, bindOriginTransform);
         }               

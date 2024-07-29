@@ -120,7 +120,7 @@ public abstract class RangeBuilding : Building
 
         enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
-        //SortEnemies();
+        SortEnemies();
     }
 
     protected void RemoveEnemy(Enemy enemy)
@@ -135,7 +135,7 @@ public abstract class RangeBuilding : Building
 
         enemies.Remove(enemyToDelete);
 
-        //SortEnemies();
+        SortEnemies();
     }
 
     private void SortEnemies()
@@ -146,7 +146,7 @@ public abstract class RangeBuilding : Building
 
     public Enemy GetBestEnemyTarget()
     {
-        SortEnemies();
+        //SortEnemies();
 
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
