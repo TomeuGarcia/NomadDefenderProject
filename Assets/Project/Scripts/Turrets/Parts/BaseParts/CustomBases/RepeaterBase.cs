@@ -214,8 +214,6 @@ public class RepeaterBase : TurretPartBase_Prefab
         {
             fakeEnemy.SetCanBeTargeted(true);
         }
-        
-        //if (enemy.IsFakeEnemy) return;
     }
 
     private void RemoveEnemyFromRepeatTargets(Enemy enemy)
