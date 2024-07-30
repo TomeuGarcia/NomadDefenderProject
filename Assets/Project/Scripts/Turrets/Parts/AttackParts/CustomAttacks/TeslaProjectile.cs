@@ -84,12 +84,12 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
         if (isChaining)
         {
-            targetEnemy.TakeDamage(this, chainTargetedDamage[currentChainedTarget]);
+            DamageTargetEnemy(chainTargetedDamage[currentChainedTarget]);
             ++currentChainedTarget;
         }
         else
         {
-            targetEnemy.TakeDamage(this, damage);
+            DamageTargetEnemy(damage);
 
 
             chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);

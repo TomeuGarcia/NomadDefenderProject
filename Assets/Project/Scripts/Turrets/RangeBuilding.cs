@@ -7,6 +7,7 @@ using UnityEngine;
 public abstract class RangeBuilding : Building
 {
     protected List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> Enemies => enemies;
 
     [Header("COMPONENTS")]
     [SerializeField] private MouseOverNotifier meshMouseNotifier;
@@ -116,11 +117,10 @@ public abstract class RangeBuilding : Building
 
     private void AddEnemy(Enemy enemy)
     {
-        if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
-
         enemy.OnEnemyDeactivated += DeleteEnemyFromList;
         enemies.Add(enemy);
-        SortEnemies();
+        if (OnEnemyEnterRange != null) OnEnemyEnterRange(enemy);
+        //SortEnemies();
     }
 
     protected void RemoveEnemy(Enemy enemy)
@@ -132,10 +132,9 @@ public abstract class RangeBuilding : Building
     private void DeleteEnemyFromList(Enemy enemyToDelete)
     {
         if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
-
         enemies.Remove(enemyToDelete);
 
-        SortEnemies();
+        //SortEnemies();
     }
 
     private void SortEnemies()
@@ -143,10 +142,18 @@ public abstract class RangeBuilding : Building
         enemies.Sort(DoSortEnemies);
     }
 
-
-    public Enemy GetBestEnemyTarget()
+    public Enemy GetBestEnemyTarget(Enemy currentlyTargetedEnemy)
     {
-        //SortEnemies();
+        if (currentlyTargetedEnemy != null &&
+            currentlyTargetedEnemy.CanBeTargeted() &&
+            !currentlyTargetedEnemy.DiesFromQueuedDamage() &&
+            enemies.Contains(currentlyTargetedEnemy))
+        {
+            return currentlyTargetedEnemy;
+        }
+
+
+        SortEnemies();
 
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())

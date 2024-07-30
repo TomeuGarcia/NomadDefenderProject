@@ -259,7 +259,7 @@ public class TurretBuilding : RangeBuilding
 
     private void ComputeNextTargetedEnemy()
     {
-        targetedEnemy = GetBestEnemyTarget();  
+        targetedEnemy = GetBestEnemyTarget(targetedEnemy);  
     }
 
     private bool TargetEnemyExists()

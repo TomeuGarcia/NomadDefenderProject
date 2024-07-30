@@ -34,6 +34,7 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     public Vector3 Position => transform.position;
 
 
+
     protected PassiveDamageModifier passiveDamageModifier;
 
     protected bool disappearing = false;
@@ -62,7 +63,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     {
         turretOwner = owner;
     }
-
     protected virtual void DoUpdate()
     {
     }
@@ -102,7 +102,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         SetPassiveDamageModifier(DefaultDamage);
 
         gameObject.SetActive(false);
-
         disappearing = false;
     }
 
@@ -145,4 +144,9 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         return Vector3.Distance(e1.Position, Position).CompareTo(Vector3.Distance(e2.Position, Position));
     }
 
+
+    protected void DamageTargetEnemy(int damage)
+    {
+        targetEnemy.TakeDamage(this, damage);
+    }
 }

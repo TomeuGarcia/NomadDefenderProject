@@ -124,7 +124,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        enemy.TakeDamage(this, damage);
+        DamageTargetEnemy(damage);
 
         currentDamageMultiplier += damageMultiplierIncrement;
         currentDamageMultiplier = Mathf.Min(currentDamageMultiplier, maxDamageMultiplier);

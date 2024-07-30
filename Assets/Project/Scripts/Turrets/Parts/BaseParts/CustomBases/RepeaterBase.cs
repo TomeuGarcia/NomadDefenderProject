@@ -31,12 +31,13 @@ public class RepeaterBase : TurretPartBase_Prefab
     [SerializeField] private Material outsideRangeMaterial;
 
 
-    private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
     bool allEnemiesInRangeAreFake = false;
 
     private int currentLvl = 0;
+
+    private RangeBuilding _ownerBuilding;
 
     private class EnemyInDamageQueue
     {
@@ -87,7 +88,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Update()
     {
-        if (repeatTargetEnemies.Count > 0)
+        if (targetedEnemy != null)
         {
             LookAtTargetEnemy();
         }
@@ -98,6 +99,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         base.Init(turretOwner, turretRange);
 
+        _ownerBuilding = turretOwner;
         turretOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         turretOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
@@ -107,6 +109,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         base.InitAsSupportBuilding(supportOwner, supportRange);
 
+        _ownerBuilding = supportOwner;
         supportOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         supportOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
@@ -203,17 +206,21 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
     {
-        if (enemy.IsFakeEnemy) return;
-
-        repeatTargetEnemies.Add(enemy);
-        fakeEnemy.SetCanBeTargeted(true);
+        if (enemy.IsFakeEnemy)
+        {
+            _ownerBuilding.Enemies.Remove(enemy);
+        }
+        else
+        {
+            fakeEnemy.SetCanBeTargeted(true);
+        }
+        
+        //if (enemy.IsFakeEnemy) return;
     }
 
     private void RemoveEnemyFromRepeatTargets(Enemy enemy)
     {
-        repeatTargetEnemies.Remove(enemy);
-
-        if (repeatTargetEnemies.Count == 0)
+        if (_ownerBuilding.Enemies.Count == 0)
         {
             fakeEnemy.SetCanBeTargeted(false);
         }        
@@ -279,16 +286,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeNextTargetedEnemy()
     {
-        targetedEnemy = null;
-
-        for (int i = 0; i < repeatTargetEnemies.Count; ++i)
-        {
-            if (repeatTargetEnemies[i].CanBeTargeted() && !repeatTargetEnemies[i].DiesFromQueuedDamage())
-            {
-                targetedEnemy = repeatTargetEnemies[i];
-                break;
-            }
-        }
+        targetedEnemy = _ownerBuilding.GetBestEnemyTarget(targetedEnemy);
     }
 
 
@@ -318,7 +316,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void LookAtTargetEnemy()
     {
-        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : repeatTargetEnemies[0].Position;    
+        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;    
 
         Quaternion targetRot = Quaternion.LookRotation((lookPosition - rotateTransform.position).normalized, rotateTransform.up);
 
@@ -331,17 +329,12 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeTargetAndAssignFakeEnemyPosition(out Vector3 enemyPosition, out bool foundTarget)
     {
-        ComputeNextTargetedEnemy();
+        //ComputeNextTargetedEnemy();
 
         foundTarget = targetedEnemy != null;
-
-        if (!foundTarget)
-        {
-            enemyPosition = Vector3.zero;
-            return;
-        }
-
-        enemyPosition = targetedEnemy.GetPosition();
+        enemyPosition = foundTarget
+            ? targetedEnemy.GetPosition()
+            : Vector3.zero;
     }
 
 

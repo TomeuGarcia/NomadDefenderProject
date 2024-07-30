@@ -56,7 +56,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        targetEnemy.TakeDamage(this, damage);
+        DamageTargetEnemy(damage);
 
         Disappear();
     }
