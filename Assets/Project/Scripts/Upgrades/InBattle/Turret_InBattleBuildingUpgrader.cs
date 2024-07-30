@@ -19,12 +19,12 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     private ITurretStatsStateSource _turretStatsState;
 
     protected override int CurrentBuildingLevel => _buildingUpgradesController.CurrentUpgradeLevel;
-    private string DamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel);
-    private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel + 1);
-    private string FireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel);
-    private string NextFireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel + 1);
-    private string RangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel);
-    private string NextRangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel + 1);
+    private string DamageStatValueText => _turretStatsState.DamageStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
+    private string FireRateStatValueText => _turretStatsState.ShotsPerSecondInvertedStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextFireRateStatValueText => _turretStatsState.ShotsPerSecondInvertedStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
+    private string RangeStatValueText => _turretStatsState.RadiusRangeStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextRangeStatValueText => _turretStatsState.RadiusRangeStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
 
     protected override void AwakeInit()
     {

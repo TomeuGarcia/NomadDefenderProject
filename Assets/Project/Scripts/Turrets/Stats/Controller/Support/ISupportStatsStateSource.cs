@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ISupportStatsStateSource
 {
-    public ITurretRadiusRangeState RadiusRangeStatState { get; }
+    public ITurretStatState RadiusRangeStatState { get; }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ITurretStatsStateSource
 {
-    public ITurretDamageState DamageStatState { get; }
-    public ITurretShotsPerSecondState ShotsPerSecondStatState { get; }
-    public ITurretRadiusRangeState RadiusRangeStatState { get; }
+    public ITurretStatState DamageStatState { get; }
+    public ITurretStatState ShotsPerSecondInvertedStatState { get; }
+    public ITurretStatState RadiusRangeStatState { get; }
 }

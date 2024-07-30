@@ -102,9 +102,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
         // Canvas
-        _damageStatValueText.text = StatsController.DamageStatState.BaseDamageText;
-        _fireRateStatValueText.text = StatsController.ShotsPerSecondStatState.BaseShotsPerSecondText;
-        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseRadiusRangeText;
+        _damageStatValueText.text = StatsController.DamageStatState.BaseValueText;
+        _fireRateStatValueText.text = StatsController.ShotsPerSecondInvertedStatState.BaseValueText;
+        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;
 
 
         SetAttackIcon(turretPartAttack);
@@ -509,12 +509,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         attackImage.color = newTurretPartAttack.materialColor;
 
         cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
-        _damageStatValueText.text = tempStatsController.DamageStatState.BaseDamageText;
-        _fireRateStatValueText.text = tempStatsController.ShotsPerSecondStatState.BaseShotsPerSecondText;
+        _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;
+        _fireRateStatValueText.text = tempStatsController.ShotsPerSecondInvertedStatState.BaseValueText;
 
         cardBaseMaterial.SetTexture("_Texture", newTurretPartBase.materialTexture);
         cardBaseMaterial.SetColor("_Color", newTurretPartBase.materialColor);
-        _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseRadiusRangeText;
+        _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseValueText;
 
         InstantUpdatePlayCost(playCostsConfig.ComputeCardPlayCostIncrement(!replacingWithSamePart, this));
 

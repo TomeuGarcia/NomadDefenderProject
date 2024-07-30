@@ -5,21 +5,29 @@ using UnityEngine;
 public class TurretStatsSnapshot
 {
     public int Damage { get; private set; }
-    public float ShotsPerSecond { get; private set; }
-    public float ShotsPerSecondInverted { get; private set; }
+    public float ShotsPerSecondInverted { 
+        get => _shotsPerSecondInverted; 
+        private set {
+            _shotsPerSecondInverted = value;
+            _hasShotsPerSecond = value.AlmostZero();
+        } 
+    }
     public float RadiusRange { get; private set; }
 
-    public TurretStatsSnapshot(int damage, float shotsPerSecond, float radiusRange)
+    private float _shotsPerSecondInverted;
+    private bool _hasShotsPerSecond;
+
+
+    public TurretStatsSnapshot(int damage, float shotsPerSecondInverted, float radiusRange)
     {
-        Reset(damage, shotsPerSecond, radiusRange);
+        Reset(damage, shotsPerSecondInverted, radiusRange);
     }
 
-    public void Reset(int damage, float shotsPerSecond, float radiusRange)
+    public void Reset(int damage, float shotsPerSecondInverted, float radiusRange)
     {
         Damage = damage;
-        ShotsPerSecond = shotsPerSecond;
         RadiusRange = radiusRange;
-        ShotsPerSecondInverted = 1f / shotsPerSecond;
+        ShotsPerSecondInverted = shotsPerSecondInverted;
     }
 
     public bool HasDamage()
@@ -28,10 +36,10 @@ public class TurretStatsSnapshot
     }
     public bool HasShotsPerSecond()
     {
-        return ShotsPerSecond != 0;
+        return _hasShotsPerSecond;
     }
     public bool HasRadiusRange()
     {
-        return RadiusRange != 0;
+        return RadiusRange.AlmostZero();
     }
 }
