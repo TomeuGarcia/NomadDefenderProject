@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PreviewBuilding_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: d2b6ae71aa9d35042a693b35b456e5c6,
+  m_Name: OwMapNode_ToSelect_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: be7692b2877feb242ae69f37b2e71bcf,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 7363c7964ca244d48a4b58baae2842f6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,21 +42,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EmissionCoef: 1.76
-    - _MaxAlpha: 0.2
-    - _MaxNoiseScale: 0.5
-    - _MinAlpha: 0.05
-    - _MinNoiseScale: 5
+    - _Appear: 0
+    - _ColorSpeed: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0.05
-    - _StripeFactor: 0.2
-    - _StripeWidth: 0.1
     m_Colors:
-    - _Color: {r: 0, g: 1, b: 0.078431375, a: 1}
-    - _Color2: {r: 0, g: 0, b: 0, a: 0}
+    - _Color_A: {r: 1.4980394, g: 1.4980394, b: 1.4980394, a: 0}
+    - _Color_B: {r: 0.16509432, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2782236158093070226
+--- !u!114 &2320663317529389511
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
