@@ -1,9 +1,11 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
@@ -17,8 +19,8 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
     [Header("DECK DATA")]
-    [SerializeField] private DeckData deckData;
-    private List<BuildingCard> deckCards;
+    [SerializeField] private CardDeckInUseData _deckInUse;
+    private BuildingCard[] deckCards;
 
     [Header("MACHINE")]
     [SerializeField] private UpgradeMachineControl upgradeMachineControl;
@@ -102,7 +104,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Start()
     {
-        deckCards = deckData.GetCardsReference();
+        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards();
         previewTurretCard.MotionEffectsController.DisableMotion();
 
         SetButtonNotReady();
@@ -111,6 +113,14 @@ public class CardPartReplaceManager : MonoBehaviour
         PlayCardAndCardPartsAppearAnimation();
 
         UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
+    }
+
+    private void OnDestroy()
+    {
+        foreach (BuildingCard buildingCard in deckCards)
+        {
+            Destroy(buildingCard.gameObject);
+        }
     }
 
     private void OnEnable()
@@ -175,7 +185,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
-        for (int i = 0; i < deckCards.Count; ++i)
+        for (int i = 0; i < deckCards.Length; ++i)
         {
             if (!randomCards.Contains(deckCards[i]))
             {
@@ -313,7 +323,7 @@ public class CardPartReplaceManager : MonoBehaviour
         List<BuildingCard> maxLevelCards = new List<BuildingCard>();
         List<BuildingCard> notMaxLevelCards = new List<BuildingCard>();
         
-        for (int cardI = 0; cardI < deckCards.Count; ++cardI)
+        for (int cardI = 0; cardI < deckCards.Length; ++cardI)
         {
             if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
             {
@@ -414,7 +424,7 @@ public class CardPartReplaceManager : MonoBehaviour
     
     private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
-        selectedCard.IncrementCardLevel(1);
+        selectedCard.IncrementCardLevel(1, false);
 
         switch (partType)
         {

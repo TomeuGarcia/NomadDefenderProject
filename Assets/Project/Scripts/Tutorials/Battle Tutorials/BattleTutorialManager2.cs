@@ -15,11 +15,10 @@ public class BattleTutorialManager2 : MonoBehaviour
 
     [SerializeField] private PathLocation firstBase;
 
-    [SerializeField] private TurretCardParts[] watcherCardScriptableObjects;
+    [SerializeField] private TurretCardDataModel[] watcherCardScriptableObjects;
 
     [SerializeField] private GameObject[] obstacleTiles;
 
-    [SerializeField] private DeckCreator deckCreator;
 
     [SerializeField] private Tile[] watcherCardTiles;
     [SerializeField] private BuildingPlacer buildingPlacer;
@@ -204,11 +203,11 @@ public class BattleTutorialManager2 : MonoBehaviour
 
         //Create new turret
 
+        ICardSpawnService cardSpawnService = ServiceLocator.GetInstance().CardSpawnService;
         TurretBuildingCard[] cards = new TurretBuildingCard[2];
         for (int i = 0; i < cards.Length; i++)
         {
-            cards[i] = deckCreator.GetUninitializedNewTurretCard();
-            cards[i].ResetParts(watcherCardScriptableObjects[i]);
+            cards[i] = cardSpawnService.MakeNewTurretCard_FromDataModel(watcherCardScriptableObjects[i]);
             cards[i].CreateCopyBuildingPrefab(this.transform, currencyCounter);
         }
 

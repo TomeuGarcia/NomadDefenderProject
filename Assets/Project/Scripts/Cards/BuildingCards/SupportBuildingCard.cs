@@ -5,13 +5,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ICardDescriptionProvider;
-using static SupportBuilding;
-using static TurretBuildingCard;
 
 
 public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 {
-    public SupportCardParts supportCardParts { get; private set; }
+    public SupportCardData CardData { get; private set; }
+    public SupportCardPartsGroup CardParts => CardData.SharedPartsGroup;
 
     
     [Header("CARD INFO")]
@@ -34,7 +33,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
-    private SupportCardStatsController StatsController => supportCardParts.StatsController;
+    private SupportCardStatsController StatsController => CardData.StatsController;
     private int PlayCost { get; set; }
 
 
@@ -54,7 +53,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, supportCardParts.turretPartBase, currencyCounter, 
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, CardParts.Base, currencyCounter, 
             abilityImage.sprite, abilityImage.color);
         copyBuildingPrefab.SetActive(false);
     }
@@ -70,12 +69,12 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         InitCostText();
     }
 
-    public void ResetParts(SupportCardParts supportCardParts)
+    public void InitWithData(SupportCardData cardData)
     {
-        this.supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
-        this.supportCardParts.InitCopyingReferences(supportCardParts);
+        CardData = cardData;
         Init();
     }
+    
     protected override void GetMaterialsRefs()
     {
         //material = baseMeshRenderer.material;
@@ -85,12 +84,12 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitStatsFromTurretParts()
     {
-        PlayCost = supportCardParts.GetCardCost();
+        PlayCost = CardData.PlayCost;
     }
 
     protected override void InitVisuals()
     {
-        TurretPartBase turretPartBase = supportCardParts.turretPartBase;
+        TurretPartBase turretPartBase = CardParts.Base;
         //Mesh Materials
         material.SetTexture("_Texture", turretPartBase.materialTexture);
         material.SetColor("_Color", turretPartBase.materialColor);
@@ -103,14 +102,6 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         abilityImage.color = turretPartBase.spriteColor;
     }
 
-
-    public void SetNewPartBase(TurretPartBase newPartBase)
-    {
-        int costHolder = supportCardParts.turretPartBase.cost;
-        supportCardParts.turretPartBase = newPartBase;
-        supportCardParts.turretPartBase.cost = costHolder;
-        Init();
-    }
 
     protected override void SetupCardInfo()
     {
@@ -141,7 +132,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
         setupData[0] = null;
 
-        TurretPartBase turretPartBase = supportCardParts.turretPartBase;
+        TurretPartBase turretPartBase = CardParts.Base;
         setupData[1] = new ICardDescriptionProvider.SetupData(
             turretPartBase.abilityName,
             turretPartBase.abilityDescription,

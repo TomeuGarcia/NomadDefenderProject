@@ -6,11 +6,10 @@ using UnityEngine.UI;
 
 public class OverworldCardShower : MonoBehaviour
 {
-    [Header("DECK DATA")]
-    [SerializeField] private DeckData deckData;
+    [Header("DECK IN USE")]
+    [SerializeField] private CardDeckInUseData _deckInUse;
 
     [Header("DEPENDENCIES")]
-    [SerializeField] private DeckCreator deckCreator;
     [SerializeField] private Camera followCamera;
 
     [Header("CAMERA")]
@@ -22,7 +21,7 @@ public class OverworldCardShower : MonoBehaviour
     [SerializeField] private CanvasGroup showDeckButtonCG;
     [SerializeField] private bool showButtons = true;
 
-    private List<BuildingCard> cards;
+    private BuildingCard[] cards;
     private Vector3 prevCameraPos;
     private Quaternion prevCameraRot;
     private static bool showingDeck;
@@ -91,7 +90,8 @@ public class OverworldCardShower : MonoBehaviour
         backToMapButton.gameObject.SetActive(false);
 
         showingDeck = false;
-        cards = new List<BuildingCard>(deckData.GetCards());
+
+        cards = _deckInUse.SpawnCurrentDeckBuildingCards();
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardUnhovered += SetStandardCard;
@@ -130,23 +130,18 @@ public class OverworldCardShower : MonoBehaviour
     public void ResetAll ()
     {
         //DestroyAllCards();
-        ResetDeckData();
         Init();
     }
 
 
     public void DestroyAllCards()
     {
-        for(int i = 0; i < cards.Count; i++)
+        for(int i = 0; i < cards.Length; i++)
         {
             Destroy(cards[i].gameObject);
         }
     }
-
-    private void ResetDeckData()
-    {
-        deckCreator.SpawnDefaultDeckDataCards();
-    }
+    
     public void OnShowDeck()
     {
         CardDescriptionDisplayer.GetInstance().SetCamera(cardShowerCamera);
@@ -259,7 +254,7 @@ public class OverworldCardShower : MonoBehaviour
     IEnumerator setCardsInPlace()
     {
         positions = new Dictionary<BuildingCard, Vector3>();
-        float numCards = cards.Count;
+        float numCards = cards.Length;
         float yOffset = 3.7f;
         currentSelectedCard = null;
         foreach (BuildingCard itCard in cards)
@@ -268,7 +263,7 @@ public class OverworldCardShower : MonoBehaviour
             itCard.transform.position = new Vector3(0, 3, 3.5f);
             itCard.StandardState();
         }
-        for (int i = 0; i < cards.Count; ++i)
+        for (int i = 0; i < cards.Length; ++i)
         {
             if (i % 8 == 0)
             {

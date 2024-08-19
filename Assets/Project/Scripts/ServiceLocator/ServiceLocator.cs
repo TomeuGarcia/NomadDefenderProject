@@ -18,6 +18,7 @@ public class ServiceLocator : MonoBehaviour
     public CursorChanger CursorChanger { get; set; }
     public IGeneralParticleFactory GeneralParticleFactory { get; set; }
     public ICameraHelpService CameraHelp { get; set; }
+    public ICardSpawnService CardSpawnService { get; set; }
 
 
     private void Awake()

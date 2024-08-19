@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 using TMPro;
 using DG.Tweening;
 
@@ -12,10 +11,8 @@ public class CardDrawer : MonoBehaviour
     [SerializeField] private HandBuildingCards hand;
     [SerializeField] protected DeckBuildingCards deck;
     [SerializeField] protected BattleHUD battleHUD;
-    [SerializeField] private DeckCreator deckCreator;
-    [SerializeField] private TurretCardParts testTurretCardParts;
     [SerializeField] private SpriteRenderer warningBackground;
-
+    
     private Material warningBackgroundMat;
 
     [Header("REDRAWS UI")]
@@ -96,9 +93,7 @@ public class CardDrawer : MonoBehaviour
         DrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup);
 
         hand.Init();
-
-        deck.GetDeckData().SetStarterCardComponentsAsSaved();
-
+        
         //HandBuildingCards.OnCardPlayed += StartDrawOverTime;
     }
 
@@ -492,10 +487,10 @@ public class CardDrawer : MonoBehaviour
     }
 
 
-    public TurretBuildingCard SpawnTurretCardInDeck(TurretCardParts turretCardParts)
+    public TurretBuildingCard SpawnTurretCardInDeck(TurretCardData turretCardData)
     {
-        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
-        turretCard.ResetParts(turretCardParts);
+        TurretBuildingCard turretCard = ServiceLocator.GetInstance().CardSpawnService
+            .MakeNewTurretCard_FromData(turretCardData);
 
         deck.AddCardToDeckBottom(turretCard);
 
@@ -503,10 +498,10 @@ public class CardDrawer : MonoBehaviour
 
         return turretCard;
     }
-    public TurretBuildingCard SpawnTurretCardInHand(TurretCardParts turretCardParts)
+    public TurretBuildingCard SpawnTurretCardInHand(TurretCardData turretCardData)
     {
-        TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
-        turretCard.ResetParts(turretCardParts);
+        TurretBuildingCard turretCard = ServiceLocator.GetInstance().CardSpawnService
+            .MakeNewTurretCard_FromData(turretCardData);
 
         deck.AddCardToDeckTop(turretCard);
         DrawTopCard();

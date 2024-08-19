@@ -16,7 +16,8 @@ public class GatherNewCardManager : MonoBehaviour
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
     private CardsLibrary cardsLibrary;
-    [SerializeField] private DeckCreator deckCreator;
+    [SerializeField] private CardDeckInUseData _deckInUse;
+    private ICardSpawnService _cardSpawnService;
 
     [SerializeField, Min(1)] private int numCards;
     private BuildingCard[] cards;
@@ -57,6 +58,7 @@ public class GatherNewCardManager : MonoBehaviour
     {
         cardsLibrary = LibrariesManager.GetInstance().CardsLibrary;
         cardsLibrary.InitSetup();
+        _cardSpawnService = ServiceLocator.GetInstance().CardSpawnService;
 
         // NodeEnums.HealthState.GREATLY_DAMAGED        --> 2 Turret Cards
         // NodeEnums.HealthState.SLIGHTLY_DAMAGED       --> 2-3 Turret Cards + 50% 0-1 Support Cards
@@ -70,7 +72,7 @@ public class GatherNewCardManager : MonoBehaviour
 
 
         int numSupportCards = 1; // Random.Range(0, 2); // 50%
-        turretCardsLevel = -1; // If >0 overwrites card level // TurretCardParts.MAX_CARD_LEVEL;
+        turretCardsLevel = 1; // TurretCardParts.MAX_CARD_LEVEL;
 
 
         cards = new BuildingCard[numCards];
@@ -93,19 +95,14 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void CreateNTurretCards(int totalAmount, int perfectAmount, NodeEnums.ProgressionState progressionState)
     {
-        TurretCardParts[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(progressionState, totalAmount, perfectAmount); // Generate 
-        turretCardPartsSet = cardsLibrary.GetConsumableTurretCardPartsSet(turretCardPartsSet); // Setup to create new cards
+        TurretCardDataModel[] turretCardPartsSet = cardsLibrary.GetRandomByProgressionTurretCardPartsSet(progressionState, totalAmount, perfectAmount); // Generate 
 
         for (int i = 0; i < totalAmount; i++)
         {
-            TurretBuildingCard turretCard = deckCreator.GetUninitializedNewTurretCard();
-
-            if (turretCardsLevel > 0)
-            {
-                turretCardPartsSet[i].cardLevel = turretCardsLevel;
-            }
-
-            turretCard.ResetParts(turretCardPartsSet[i]);
+            TurretBuildingCard turretCard = _cardSpawnService.MakeNewTurretCard_FromDataModel(turretCardPartsSet[i]);
+            
+            int levelIncrement = turretCardsLevel - turretCardPartsSet[i].cardLevel;
+            turretCard.IncrementCardLevel(levelIncrement);
 
             cards[i] = turretCard;
         }
@@ -113,13 +110,11 @@ public class GatherNewCardManager : MonoBehaviour
 
     private void CreateNSupportCards(int startIndex, int numSupportCards, NodeEnums.ProgressionState progressionState)
     {
-        SupportCardParts[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(progressionState, numSupportCards); // Generate 
-        supportCardPartsSet = cardsLibrary.GetConsumableSupportCardPartsSet(supportCardPartsSet); // Setup to create new cards
+        SupportCardDataModel[] supportCardPartsSet = cardsLibrary.GetRandomSupportCardPartsSet(progressionState, numSupportCards); // Generate 
 
         for (int i = 0; i < numSupportCards; i++)
         {
-            SupportBuildingCard turretCard = deckCreator.GetUninitializedNewSupportCard();
-            turretCard.ResetParts(supportCardPartsSet[i]);
+            SupportBuildingCard turretCard = _cardSpawnService.MakeNewSupportCard_FromDataModel(supportCardPartsSet[i]);
 
             cards[i + startIndex] = turretCard;
         }
@@ -200,13 +195,15 @@ public class GatherNewCardManager : MonoBehaviour
         //selectedCard.OnCardInfoSelected -= SetCardShowInfo;
 
 
-        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET) 
+        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            deckCreator.AddNewTurretCardToDeck(selectedCard as TurretBuildingCard);
+            TurretBuildingCard turretBuildingCard = selectedCard as TurretBuildingCard;
+            _deckInUse.AddTurretCardToDeck(turretBuildingCard.CardData.OriginalModel);
         }
         else if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
         {            
-            deckCreator.AddNewSupportCardToDeck(selectedCard as SupportBuildingCard);
+            SupportBuildingCard supportBuildingCard = selectedCard as SupportBuildingCard;
+            _deckInUse.AddSupportCardToDeck(supportBuildingCard.CardData.OriginalModel);
         }
 
         selectedCard.MotionEffectsController.DisableMotion();

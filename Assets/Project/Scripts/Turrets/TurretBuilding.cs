@@ -9,7 +9,7 @@ public class TurretBuilding : RangeBuilding
     public TurretStatsSnapshot Stats => _statsController.CurrentStats;
     public ITurretStatsBonusController StatsBonusController => _statsController;
 
-    public TurretCardParts TurretCardParts { get; private set; }
+    public TurretCardData CardData { get; private set; }
 
     private TurretPartBody_Prefab bodyPart;
     public Transform BodyPartTransform => bodyPart.transform;
@@ -158,24 +158,26 @@ public class TurretBuilding : RangeBuilding
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
     }
 
-    public void Init(TurretCardStatsController statsController, TurretCardParts turretCardParts, CurrencyCounter currencyCounter)
+    public void Init(TurretCardStatsController statsController, TurretCardData turretCardData, CurrencyCounter currencyCounter)
     {
         _statsController = statsController;        
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
-        TurretCardParts = turretCardParts;
-        this.TurretPartAttack = turretCardParts.turretPartAttack;
-        TurretPartBody turretPartBody = turretCardParts.turretPartBody;
-        TurretPartBase turretPartBase = turretCardParts.turretPartBase;
-        TurretPassiveBase turretPassiveBase = turretCardParts.turretPassiveBase;
+        CardData = turretCardData;
+
+        TurretCardPartsGroup parts = turretCardData.SharedPartsGroup;
+        TurretPartAttack = parts.Projectile;
+        TurretPartBody turretPartBody = parts.Body;
+        TurretPartBase turretPartBase = parts.Base;
+        TurretPassiveBase turretPassiveBase = parts.Passive;
         bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
-        CardLevel = turretCardParts.cardLevel;
+        CardLevel = turretCardData.CardUpgradeLevel;
 
-        BodyType = turretCardParts.turretPartBody.bodyType;
+        BodyType = turretPartBody.bodyType;
 
 
-        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
+        turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
@@ -192,7 +194,7 @@ public class TurretBuilding : RangeBuilding
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         //PASSIVE
-        basePassive = turretCardParts.turretPassiveBase.passive;
+        basePassive = parts.Passive.passive;
         basePassive.ApplyEffects(this);
 
         DisableFunctionality();

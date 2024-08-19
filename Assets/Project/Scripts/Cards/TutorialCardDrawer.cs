@@ -35,7 +35,9 @@ public class TutorialCardDrawer : CardDrawer
         deck.Init();
 
         // Transform the 1st card in the deck (1st DeckData turret) into a Tutorial Card
-        tutorialCard.ResetParts(deck.GetAndRemoveCard(0).GetComponent<TurretBuildingCard>().turretCardParts); 
+        TurretBuildingCard topCardInDeck = deck.GetAndRemoveCard(0).GetComponent<TurretBuildingCard>();
+        
+        tutorialCard.InitWithData(new TurretCardData(topCardInDeck.CardData));
 
         deck.AddCardToDeckTop(tutorialCard); // Adding the tutorial card to the top     
 

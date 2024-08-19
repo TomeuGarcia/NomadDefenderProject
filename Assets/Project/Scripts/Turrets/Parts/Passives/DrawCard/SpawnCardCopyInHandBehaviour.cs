@@ -51,14 +51,13 @@ public class SpawnCardCopyInHandBehaviour : MonoBehaviour
     {
         await Task.Delay(System.TimeSpan.FromSeconds(0.1f));
 
-        TurretCardParts partsCopy = ScriptableObject.CreateInstance<TurretCardParts>();
-        partsCopy.InitCopyingReferences(_owner.TurretCardParts);
-        partsCopy.turretPassiveBase = _baseNullPassive;
-
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;
         int numberOfCards = cardDrawer.GetCardsInHand().Length + 1;
-
-        partsCopy.cardCost += _costIncrement * numberOfCards;
-        cardDrawer.SpawnTurretCardInHand(partsCopy);
+        
+        TurretCardData turretCardData = new TurretCardData(_owner.CardData);
+        turretCardData.SetPassiveAbility(_baseNullPassive);
+        turretCardData.IncrementPlayCost(_costIncrement * numberOfCards);
+        
+        ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInHand(turretCardData);
     }
 }
