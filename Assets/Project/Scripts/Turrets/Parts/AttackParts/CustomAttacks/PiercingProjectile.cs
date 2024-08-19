@@ -44,8 +44,8 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
         //queueDamageAmount = targetEnemy.QueueDamage(damage);
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         ComputeGoalPosition();
         transform.LookAt(goalPos);
@@ -68,8 +68,8 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         this.currentDamageMultiplier = startDamageMultiplier;
         this.damage = precomputedDamage;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         ComputeGoalPosition();
         transform.LookAt(goalPos);

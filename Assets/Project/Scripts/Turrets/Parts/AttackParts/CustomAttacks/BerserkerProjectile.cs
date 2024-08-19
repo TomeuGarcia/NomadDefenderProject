@@ -13,8 +13,8 @@ public class BerserkerProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         this.targetEnemy = targetEnemy;
 
@@ -31,8 +31,8 @@ public class BerserkerProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         this.targetEnemy = targetEnemy;
 

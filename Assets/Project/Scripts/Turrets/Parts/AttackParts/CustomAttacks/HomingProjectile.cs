@@ -15,8 +15,8 @@ public class HomingProjectile : TurretPartAttack_Prefab
     {
         turretOwner = owner;
 
-        if(owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if(owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         this.targetEnemy = targetEnemy;
 
@@ -33,8 +33,8 @@ public class HomingProjectile : TurretPartAttack_Prefab
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         this.targetEnemy = targetEnemy;
         this.damage = precomputedDamage;

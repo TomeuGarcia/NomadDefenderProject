@@ -15,9 +15,13 @@ public class TurretBuilding : RangeBuilding
     public Transform BodyPartTransform => bodyPart.transform;
     public Transform BinderPointTransform => bodyPart.binderPoint;
 
-    public PassiveDamageModifier baseDamagePassive;
+    public PassiveDamageModifier BaseDamagePassive { get; private set; }
     private BasePassive basePassive;
 
+    public void SetBaseDamagePassive(PassiveDamageModifier baseDamagePassive)
+    {
+        BaseDamagePassive = baseDamagePassive;
+    }
 
     public float TimeSinceLastShot { get; private set; }
 

@@ -6,9 +6,9 @@ public abstract class BaseDamagePassive : BasePassive
 {
     public override void ApplyEffects(TurretBuilding owner)
     {
-        owner.baseDamagePassive = PassiveDamageModifier;
+        owner.SetBaseDamagePassive(PassiveDamageModifier);
     }
 
-    public abstract int PassiveDamageModifier(int damage, HealthSystem healthSystem);
+    protected abstract int PassiveDamageModifier(int damage, HealthSystem healthSystem);
 }
 

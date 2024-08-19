@@ -39,8 +39,8 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         targetEnemy.QueueDamage(this.damage);
 
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish(false));
@@ -58,8 +58,8 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         this.damage = precomputedDamage;
 
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        if (owner.BaseDamagePassive != null)
+            SetPassiveDamageModifier(owner.BaseDamagePassive);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish(false));
