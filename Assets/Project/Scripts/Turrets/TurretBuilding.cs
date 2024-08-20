@@ -23,20 +23,15 @@ public class TurretBuilding : RangeBuilding
         BaseDamagePassive = baseDamagePassive;
     }
 
-    public float TimeSinceLastShot { get; private set; }
+    private ProjectileShootingController _shootingController;
+    public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
 
-    private float currentShootTimer;
-    private Vector3 lastTargetedPosition;
     public Vector3 Position => transform.position;
-
-    private Enemy targetedEnemy;
-
-
-    public TurretPartBody.BodyType BodyType { get; private set; }
+    
+    public TurretPartBody.BodyType BodyType => bodyPart.BodyType;
 
     private TurretPartAttack_Prefab turretAttack;
-    public TurretPartAttack TurretPartAttack { get; 
-        private set; }
+    public TurretPartAttack TurretPartAttack { get; private set; }
     
 
     [Header("HOLDERS")]
@@ -62,7 +57,7 @@ public class TurretBuilding : RangeBuilding
     public event TurretBuildingEvent OnGotMovedWhenPlacing;
 
     private TestingSnapshot _testingSnapshot;
-    private struct TestingSnapshot
+    public class TestingSnapshot
     {
         private string _turretName;
         private float _turretRange;
@@ -110,8 +105,6 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
-        TimeSinceLastShot = 0.0f;
-        currentShootTimer = 0.0f;
         placedParticleSystem.gameObject.SetActive(false);
         
         TDGameManager.OnGameFinishStart += PrintData;
@@ -137,15 +130,10 @@ public class TurretBuilding : RangeBuilding
     {
         if (!isFunctional) return;
 
-        ComputeNextTargetedEnemy();
+        _shootingController.UpdateShoot(out bool targetEnemyExists);
 
-        UpdateShoot();
-        if (bodyPart.lookAtTarget)
+        if (bodyPart.lookAtTarget && targetEnemyExists)
         {
-            if (TargetEnemyExists())
-            {
-                lastTargetedPosition = targetedEnemy.Position;
-            }
             LookAtTarget();
         }
     }
@@ -153,7 +141,7 @@ public class TurretBuilding : RangeBuilding
 
     private void LookAtTarget()
     {
-        Vector3 lookDirection = Vector3.ProjectOnPlane(lastTargetedPosition - bodyPart.transform.position, Vector3.up).normalized;
+        Vector3 lookDirection = Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up).normalized;
         Quaternion targetRot = Quaternion.LookRotation(lookDirection, Vector3.up);
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
     }
@@ -173,19 +161,15 @@ public class TurretBuilding : RangeBuilding
 
         CardLevel = turretCardData.CardUpgradeLevel;
 
-        BodyType = turretPartBody.bodyType;
-
-
         turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
-        bodyPart.Init(turretAttack.materialForTurret);
+        bodyPart.Init(turretPartBody.bodyType, turretAttack.materialForTurret);
 
         basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, Stats.RadiusRange);
         UpdateRange();
         
-        TimeSinceLastShot = currentShootTimer = Mathf.Max(Stats.ShotsPerSecondInverted - 0.2f, 0f);
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
         Upgrader.InitTurret(this, _statsController, _statsController, CardLevel, currencyCounter,
@@ -198,8 +182,10 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
-        string dataTestingName = turretPartBody.name + "--" + "_" + turretPassiveBase.name + "--" + TurretPartAttack.name;
+        string dataTestingName = turretPartBody.name + "--" + turretPassiveBase.name + "--" + TurretPartAttack.name;
         _testingSnapshot = new TestingSnapshot(dataTestingName);
+        
+        _shootingController = new ProjectileShootingController(this, Stats, turretAttack, bodyPart, _testingSnapshot);
     }
 
     public void ResetAttackPart(TurretPartAttack turretPartAttack)
@@ -226,89 +212,21 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         upgrader.OnStatsUpdated();
     }
-
-
-    private void UpdateShoot()
+    
+    public void OnEnemyShot(Enemy shotEnemy)
     {
-        float deltaTime = Time.deltaTime * GameTime.TimeScale;
-
-        _testingSnapshot.UpdateTotalTimePlaced(deltaTime);
-        TimeSinceLastShot += deltaTime;
-
-        if (currentShootTimer < Stats.ShotsPerSecondInverted)
-        {            
-            currentShootTimer += deltaTime;
-            _testingSnapshot.UpdateTimeTargetingEnemies(deltaTime);
-            return;
+        if (shotEnemy.DiesFromQueuedDamage())
+        {
+            RemoveEnemy(shotEnemy);
         }
         
-        if (!TargetEnemyExists()) return;
-
-        currentShootTimer = 0.0f;
-
-        DoShootEnemyLogic(targetedEnemy);
-
-
-        //// Code used when turrets used to have targetAmount stat:
-        /*
-        for (int i = 0; i < stats.targetAmount; i++)
-        {
-            if (i <= enemies.Count - 1)
-            {
-                DoShootEnemyLogic(enemies[i]);
-            }
-        }
-        */
+        PlayShootAnimation();
     }
-
-
-    private void ComputeNextTargetedEnemy()
+    private void PlayShootAnimation()
     {
-        targetedEnemy = GetBestEnemyTarget(targetedEnemy);  
+        bodyPart.transform.DOComplete();
+        bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
     }
-
-    private bool TargetEnemyExists()
-    {
-        return targetedEnemy != null;
-    }
-
-
-    private void DoShootEnemyLogic(Enemy enemyTarget)
-    {
-        if (enemyTarget.DiesFromQueuedDamage())
-        {
-            RemoveEnemy(enemyTarget);
-        }
-        else
-        {
-            Shoot(enemyTarget);
-            bodyPart.transform.DOComplete();
-            bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
-        }
-    }
-
-    private void Shoot(Enemy enemyTarget)
-    {
-        Vector3 shootPoint = bodyPart.GetNextShootingPoint();
-        TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(turretAttack.GetAttackType, shootPoint, Quaternion.identity)
-            .GetComponent<TurretPartAttack_Prefab>();
-
-        currentAttack.transform.parent = BaseHolder;
-        currentAttack.gameObject.SetActive(true);
-        currentAttack.ProjectileShotInit(enemyTarget, this);
-
-
-        // Spawn particle
-        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, bodyPart.transform.rotation);
-        particles.SetActive(true);
-        particles.transform.parent = BaseHolder;
-
-
-        // Audio
-        GameAudioManager.GetInstance().PlayProjectileShot(BodyType);
-        TimeSinceLastShot = 0.0f;
-    }
-
 
 
     protected override void DisableFunctionality()
@@ -416,5 +334,5 @@ public class TurretBuilding : RangeBuilding
         SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
     }
 
-
+    
 }

@@ -28,9 +28,12 @@ public class TurretPartBody_Prefab : MonoBehaviour
     [Header("TURRET UPGRADE VISUALS")]
     [SerializeField] private GameObject[] turretUpgradeVisuals;
 
+    public TurretPartBody.BodyType BodyType { get; private set; }
 
-    public virtual void Init(Material projectileMaterial)
+
+    public virtual void Init(TurretPartBody.BodyType bodyType, Material projectileMaterial)
     {
+        BodyType = bodyType;
         InitMaterials(projectileMaterial);
 
         InitTurretUpgradeVisuals(0);
