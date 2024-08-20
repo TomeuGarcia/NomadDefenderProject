@@ -99,7 +99,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         for (int i = 0; i < totalAmount; i++)
         {
-            TurretBuildingCard turretCard = _cardSpawnService.MakeNewTurretCard_FromDataModel(turretCardPartsSet[i]);
+            TurretBuildingCard turretCard = _cardSpawnService.MakeNewTurretCard_FromDataModel(turretCardPartsSet[i], cardHolder);
             
             int levelIncrement = turretCardsLevel - turretCardPartsSet[i].CardLevel;
             turretCard.IncrementCardLevel(levelIncrement);
@@ -114,7 +114,7 @@ public class GatherNewCardManager : MonoBehaviour
 
         for (int i = 0; i < numSupportCards; i++)
         {
-            SupportBuildingCard turretCard = _cardSpawnService.MakeNewSupportCard_FromDataModel(supportCardPartsSet[i]);
+            SupportBuildingCard turretCard = _cardSpawnService.MakeNewSupportCard_FromDataModel(supportCardPartsSet[i], cardHolder);
 
             cards[i + startIndex] = turretCard;
         }

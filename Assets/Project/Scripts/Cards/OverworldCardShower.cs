@@ -91,7 +91,7 @@ public class OverworldCardShower : MonoBehaviour
 
         showingDeck = false;
 
-        cards = _deckInUse.SpawnCurrentDeckBuildingCards();
+        cards = _deckInUse.SpawnCurrentDeckBuildingCards(transform);
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardUnhovered += SetStandardCard;

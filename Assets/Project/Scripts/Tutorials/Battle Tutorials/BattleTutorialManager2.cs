@@ -207,7 +207,7 @@ public class BattleTutorialManager2 : MonoBehaviour
         TurretBuildingCard[] cards = new TurretBuildingCard[2];
         for (int i = 0; i < cards.Length; i++)
         {
-            cards[i] = cardSpawnService.MakeNewTurretCard_FromDataModel(watcherCardScriptableObjects[i]);
+            cards[i] = cardSpawnService.MakeNewTurretCard_FromDataModel(watcherCardScriptableObjects[i], transform);
             cards[i].CreateCopyBuildingPrefab(this.transform, currencyCounter);
         }
 

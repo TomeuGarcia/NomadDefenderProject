@@ -20,7 +20,7 @@ public class DeckBuildingCards : MonoBehaviour
 
     public void Init()
     {
-        cards = new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards());
+        cards = new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform));
 
         float upStep = 0.1f;
         float numCards = cards.Count;

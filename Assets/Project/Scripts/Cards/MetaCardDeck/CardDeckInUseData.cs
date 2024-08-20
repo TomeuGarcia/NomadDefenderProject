@@ -29,9 +29,9 @@ public class CardDeckInUseData : ScriptableObject
     }
 
 
-    public BuildingCard[] SpawnCurrentDeckBuildingCards()
+    public BuildingCard[] SpawnCurrentDeckBuildingCards(Transform cardsParent)
     {
-        return _cardSpawnService.MakeAllCardsFromDeck(_currentDeckContent);
+        return _cardSpawnService.MakeAllCardsFromDeck(_currentDeckContent, cardsParent);
     }
     
 }

@@ -95,15 +95,6 @@ public class SelectableDeck : MonoBehaviour
         isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
-    private void OnDestroy()
-    {
-        foreach (BuildingCard buildingCard in _cards)
-        {
-            Destroy(buildingCard.gameObject);
-        }
-    }
-
-
     private void OnMouseDown()
     {
         deckSelector.OnDeckSelected(this);
@@ -142,7 +133,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void InitSpawnCards(ICardSpawnService cardSpawnService)
     {
-        _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent());
+        _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent(), cardsHolder);
     }
 
     public void InitArrangeCards(ArrangeCardsData arrangeCardsData)

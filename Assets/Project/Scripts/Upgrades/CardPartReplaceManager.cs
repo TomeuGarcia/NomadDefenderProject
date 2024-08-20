@@ -27,6 +27,7 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private GameObject incompletePreviewCard;
 
     [Header("HOLDERS")]
+    [SerializeField] private Transform _cardSpawnHolder;
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
     public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
@@ -104,7 +105,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Start()
     {
-        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards();
+        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder);
         previewTurretCard.MotionEffectsController.DisableMotion();
 
         SetButtonNotReady();
@@ -113,14 +114,6 @@ public class CardPartReplaceManager : MonoBehaviour
         PlayCardAndCardPartsAppearAnimation();
 
         UpdatePreviewCard_MissingParts(previewTurretCard, true, true);
-    }
-
-    private void OnDestroy()
-    {
-        foreach (BuildingCard buildingCard in deckCards)
-        {
-            Destroy(buildingCard.gameObject);
-        }
     }
 
     private void OnEnable()

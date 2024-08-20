@@ -13,7 +13,7 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
     }
 
 
-    public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent)
+    public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent)
     {
         TurretCardData[] turretCardsData = deckContent.TurretCardsData;
         SupportCardData[] supportCardsData = deckContent.SupportCardsData;
@@ -22,11 +22,11 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
 
         for (int cardsI = 0; cardsI < turretCardsData.Length; ++cardsI)
         {
-            buildingCards[cardsI] = MakeNewTurretCard_FromData(turretCardsData[cardsI]);
+            buildingCards[cardsI] = MakeNewTurretCard_FromData(turretCardsData[cardsI], parent);
         }
         for (int cardsI = turretCardsData.Length, i = 0; i < supportCardsData.Length; ++cardsI, ++i)
         {
-            buildingCards[cardsI] = MakeNewSupportCard_FromData(supportCardsData[i]);
+            buildingCards[cardsI] = MakeNewSupportCard_FromData(supportCardsData[i], parent);
         }
         
         return buildingCards;
@@ -34,27 +34,27 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
 
         
     
-    public TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData)
+    public TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData, Transform parent)
     {
-        TurretBuildingCard turretCard = Instantiate(_turretCardPrefab, transform);
+        TurretBuildingCard turretCard = Instantiate(_turretCardPrefab, parent);
         turretCard.InitWithData(cardData);
         return turretCard;
     }
-    private SupportBuildingCard MakeNewSupportCard_FromData(SupportCardData cardData)
+    private SupportBuildingCard MakeNewSupportCard_FromData(SupportCardData cardData, Transform parent)
     {
-        SupportBuildingCard supportCard = Instantiate(_supportCardPrefab, transform);
+        SupportBuildingCard supportCard = Instantiate(_supportCardPrefab, parent);
         supportCard.InitWithData(cardData);
         return supportCard;
     }
     
     
-    public TurretBuildingCard MakeNewTurretCard_FromDataModel(TurretCardDataModel cardDataModel)
+    public TurretBuildingCard MakeNewTurretCard_FromDataModel(TurretCardDataModel cardDataModel, Transform parent)
     {
-        return MakeNewTurretCard_FromData(new TurretCardData(cardDataModel));
+        return MakeNewTurretCard_FromData(new TurretCardData(cardDataModel), parent);
     }
-    public SupportBuildingCard MakeNewSupportCard_FromDataModel(SupportCardDataModel cardDataModel)
+    public SupportBuildingCard MakeNewSupportCard_FromDataModel(SupportCardDataModel cardDataModel, Transform parent)
     {
-        return MakeNewSupportCard_FromData(new SupportCardData(cardDataModel));
+        return MakeNewSupportCard_FromData(new SupportCardData(cardDataModel), parent);
     }
     
 

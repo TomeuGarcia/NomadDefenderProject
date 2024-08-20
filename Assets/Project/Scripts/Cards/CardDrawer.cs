@@ -490,7 +490,7 @@ public class CardDrawer : MonoBehaviour
     public TurretBuildingCard SpawnTurretCardInDeck(TurretCardData turretCardData)
     {
         TurretBuildingCard turretCard = ServiceLocator.GetInstance().CardSpawnService
-            .MakeNewTurretCard_FromData(turretCardData);
+            .MakeNewTurretCard_FromData(turretCardData, transform);
 
         deck.AddCardToDeckBottom(turretCard);
 
@@ -501,7 +501,7 @@ public class CardDrawer : MonoBehaviour
     public TurretBuildingCard SpawnTurretCardInHand(TurretCardData turretCardData)
     {
         TurretBuildingCard turretCard = ServiceLocator.GetInstance().CardSpawnService
-            .MakeNewTurretCard_FromData(turretCardData);
+            .MakeNewTurretCard_FromData(turretCardData, transform);
 
         deck.AddCardToDeckTop(turretCard);
         DrawTopCard();
