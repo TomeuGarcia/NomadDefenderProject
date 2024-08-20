@@ -22,13 +22,13 @@ public class EditorSupportCardParts : Editor
     }
 
 
-    private void DrawBasePreview(TurretPartBase turretPartBase)
+    private void DrawBasePreview(SupportPartBase turretPartBase)
     {
         GUILayout.Label("\nBase Preview:");
         if (turretPartBase != null)
         {
             GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.RadiusRangeStat.ComputeValueByLevel(0)) + ")");
-            GUILayout.Box(turretPartBase.materialTexture,
+            GUILayout.Box(turretPartBase.BasePartPrimitive.MaterialTexture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
         else

@@ -8,20 +8,20 @@ using UnityEngine;
 public class AttackPartsLibraryContent : ScriptableObject
 {
     [Header("ATTACKS")]
-    [SerializeField] private PartsLibrary.AttacksByProgressionState earlyAttacks;
-    [SerializeField] private PartsLibrary.AttacksByProgressionState midAttacks;
-    [SerializeField] private PartsLibrary.AttacksByProgressionState lateAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _earlyAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _midAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _lateAttacks;
 
     private void OnValidate()
     {
-        earlyAttacks.progressionState = NodeEnums.ProgressionState.EARLY;
-        midAttacks.progressionState = NodeEnums.ProgressionState.MID;
-        lateAttacks.progressionState = NodeEnums.ProgressionState.LATE;
+        _earlyAttacks.progressionState = NodeEnums.ProgressionState.EARLY;
+        _midAttacks.progressionState = NodeEnums.ProgressionState.MID;
+        _lateAttacks.progressionState = NodeEnums.ProgressionState.LATE;
     }
 
-    public PartsLibrary.AttacksByProgressionState[] GetArrayByProgression()
+    public PartsLibrary.PartsByProgressionState<TurretPartAttack>[] GetArrayByProgression()
     {
-        return new PartsLibrary.AttacksByProgressionState[3] { earlyAttacks, midAttacks, lateAttacks };
+        return new PartsLibrary.PartsByProgressionState<TurretPartAttack>[3] { _earlyAttacks, _midAttacks, _lateAttacks };
     }
 
 

@@ -89,10 +89,10 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitVisuals()
     {
-        TurretPartBase turretPartBase = CardParts.Base;
+        SupportPartBase turretPartBase = CardParts.Base;
         //Mesh Materials
-        material.SetTexture("_Texture", turretPartBase.materialTexture);
-        material.SetColor("_Color", turretPartBase.materialColor);
+        material.SetTexture("_Texture", turretPartBase.BasePartPrimitive.MaterialTexture);
+        material.SetColor("_Color", turretPartBase.BasePartPrimitive.MaterialColor);
 
         // Canvas
         _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;        
@@ -132,7 +132,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
         setupData[0] = null;
 
-        TurretPartBase turretPartBase = CardParts.Base;
+        SupportPartBase turretPartBase = CardParts.Base;
         setupData[1] = new ICardDescriptionProvider.SetupData(
             turretPartBase.abilityName,
             turretPartBase.abilityDescription,

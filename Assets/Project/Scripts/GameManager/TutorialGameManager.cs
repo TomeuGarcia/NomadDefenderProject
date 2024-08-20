@@ -15,7 +15,7 @@ public class TutorialGameManager : GameManager
     [SerializeField] private CardsLibraryContent cardsContent;
     [SerializeField] private AttackPartsLibraryContent attacksContent;
     [SerializeField] private BodyPartsLibraryContent bodiesContent;
-    [SerializeField] private BasePartsLibraryContent basesContent;
+    [SerializeField] private PassivesLibraryContent basesContent;
     [SerializeField] private BonusStatsPartsLibraryContent bonusStatsContent;
 
 

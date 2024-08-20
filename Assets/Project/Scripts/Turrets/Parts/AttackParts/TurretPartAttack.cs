@@ -7,7 +7,6 @@ using UnityEngine;
 public class TurretPartAttack : ScriptableObject
 {
     [Header("STATS")]
-    [SerializeField, Min(0)] public int cost;
     [SerializeField, Min(0)] public float _numberOfHittableTargets = 1f;
 
     [Header("PREFAB")]
@@ -27,19 +26,7 @@ public class TurretPartAttack : ScriptableObject
 
     public float NumberOfHittableTargets => _numberOfHittableTargets;
 
-
-    public void InitAsCopy(TurretPartAttack other)
-    {
-        this.cost = other.cost;
-        this.prefab = other.prefab;
-        this.texture = other.texture;
-        this.abilitySprite = other.abilitySprite;
-        this.materialColor = other.materialColor;
-
-        this.abilityName = other.abilityName;
-        this.abilityDescription = other.abilityDescription;
-    }
-
+    
 
     public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial) 
     {    }
@@ -55,16 +42,6 @@ public class TurretPartAttack : ScriptableObject
     public static bool operator !=(TurretPartAttack obj1, TurretPartAttack obj2)
     {
         return !(obj1 == obj2);
-    }
-
-    public override bool Equals(object o)
-    {
-        return base.Equals(o);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
     }
 
 }

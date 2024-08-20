@@ -733,6 +733,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CardPartReplaceSceneGOs
       objectReference: {fileID: 0}
+    - target: {fileID: 5542422250985626142, guid: 7fc0408d20011c14bb99a89593676711,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7262441960210938099, guid: 7fc0408d20011c14bb99a89593676711,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1392,10 +1397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPartReplaceManager: {fileID: 943232208}
   scriptedSequence: {fileID: 825538438}
-  tutorialBaseAndPassive:
-  - turretPartBase: {fileID: 11400000, guid: c8d4bbcaf16c5f948bc36d3c447b95e3, type: 2}
-    turretPassiveBase: {fileID: 11400000, guid: f14592b72e74df64186a82e4d0fb0f87,
-      type: 2}
+  _tutorialBaseAndPassive:
+  - {fileID: 11400000, guid: f14592b72e74df64186a82e4d0fb0f87, type: 2}
 --- !u!1 &1788141607
 GameObject:
   m_ObjectHideFlags: 0

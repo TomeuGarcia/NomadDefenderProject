@@ -59,7 +59,7 @@ public class SelectableDeck : MonoBehaviour
         [SerializeField] public CardsLibraryContent cardsContent;
         [SerializeField] public AttackPartsLibraryContent attacksContent;
         [SerializeField] public BodyPartsLibraryContent bodiesContent;
-        [SerializeField] public BasePartsLibraryContent basesContent;
+        [SerializeField] public PassivesLibraryContent basesContent;
         [SerializeField] public BonusStatsPartsLibraryContent bonusStatsContent;
 
     }
@@ -115,7 +115,7 @@ public class SelectableDeck : MonoBehaviour
     {
         if (_deck == null || supportSprite == null || mainProjectileSprite == null) return;
 
-        TurretPartBase supportBasePart = _deck.MainSupportCardDataModel().SharedPartsGroup.Base;
+        SupportPartBase supportBasePart = _deck.MainSupportCardDataModel().SharedPartsGroup.Base;
         supportSprite.sprite = supportBasePart.abilitySprite;
         supportSprite.color = supportBasePart.spriteColor;
         DeckColor = supportBasePart.spriteColor;

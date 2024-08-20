@@ -168,7 +168,6 @@ public class TurretBuilding : RangeBuilding
         TurretCardPartsGroup parts = turretCardData.SharedPartsGroup;
         TurretPartAttack = parts.Projectile;
         TurretPartBody turretPartBody = parts.Body;
-        TurretPartBase turretPartBase = parts.Base;
         TurretPassiveBase turretPassiveBase = parts.Passive;
         bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
@@ -182,7 +181,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretAttack.materialForTurret);
 
-        basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, Stats.RadiusRange);
         UpdateRange();
         
@@ -199,7 +198,7 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
-        string dataTestingName = turretPartBody.name + "--" + turretPartBase.name + "_" + turretPassiveBase.name + "--" + TurretPartAttack.name;
+        string dataTestingName = turretPartBody.name + "--" + "_" + turretPassiveBase.name + "--" + TurretPartAttack.name;
         _testingSnapshot = new TestingSnapshot(dataTestingName);
     }
 

@@ -185,7 +185,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     public virtual void InitSupport(SupportBuilding supportBuilding,
         IBuildingUpgradesController buildingUpgradesController,
-        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, SupportPartBase turretPartBase)
     {
         _buildingUpgradesController = buildingUpgradesController;
 

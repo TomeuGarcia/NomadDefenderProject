@@ -7,19 +7,19 @@ using UnityEngine;
 public class BonusStatsPartsLibraryContent : ScriptableObject
 {
     [Header("BONUS STATS")]
-    [SerializeField] private PartsLibrary.BonusStatsByProgressionState earlyBonusStats;
-    [SerializeField] private PartsLibrary.BonusStatsByProgressionState midBonusStats;
-    [SerializeField] private PartsLibrary.BonusStatsByProgressionState lateBonusStats;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretStatsUpgradeModel> _earlyBonusStats;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretStatsUpgradeModel> _midBonusStats;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretStatsUpgradeModel> _lateBonusStats;
 
     private void OnValidate()
     {
-        earlyBonusStats.progressionState = NodeEnums.ProgressionState.EARLY;
-        midBonusStats.progressionState = NodeEnums.ProgressionState.MID;
-        lateBonusStats.progressionState = NodeEnums.ProgressionState.LATE;
+        _earlyBonusStats.progressionState = NodeEnums.ProgressionState.EARLY;
+        _midBonusStats.progressionState = NodeEnums.ProgressionState.MID;
+        _lateBonusStats.progressionState = NodeEnums.ProgressionState.LATE;
     }
 
-    public PartsLibrary.BonusStatsByProgressionState[] GetArrayByProgression()
+    public PartsLibrary.PartsByProgressionState<TurretStatsUpgradeModel>[] GetArrayByProgression()
     {
-        return new PartsLibrary.BonusStatsByProgressionState[3] { earlyBonusStats, midBonusStats, lateBonusStats };
+        return new PartsLibrary.PartsByProgressionState<TurretStatsUpgradeModel>[3] { _earlyBonusStats, _midBonusStats, _lateBonusStats };
     }
 }

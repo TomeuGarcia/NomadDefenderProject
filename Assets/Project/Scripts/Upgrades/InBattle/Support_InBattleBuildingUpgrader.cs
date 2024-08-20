@@ -17,7 +17,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private CanvasGroup cgNextUpgradeDescription;
     private bool isAbilityButtonHovered = false;
 
-    private TurretPartBase turretPartBase;
+    private SupportPartBase turretPartBase;
 
     private SupportBuilding _supportBuilding;
 
@@ -35,7 +35,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     public override void InitSupport(SupportBuilding supportBuilding,
         IBuildingUpgradesController buildingUpgradesController,
-        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, SupportPartBase turretPartBase)
     {
         _supportBuilding = supportBuilding;
         maxLevels = maxUpgradeCount;

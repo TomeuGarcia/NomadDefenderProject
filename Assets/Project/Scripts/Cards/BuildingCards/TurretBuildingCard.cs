@@ -93,13 +93,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         TurretPartAttack turretPartAttack = CardParts.Projectile;
         TurretPartBody turretPartBody = CardParts.Body;
-        TurretPartBase turretPartBase = CardParts.Base;
 
         // Mesh Materials
         cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
 
-        cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
-        cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
+        cardBaseMaterial.SetTexture("_Texture", turretPartBody.BasePartPrimitive.MaterialTexture);
+        cardBaseMaterial.SetColor("_Color", turretPartBody.BasePartPrimitive.MaterialColor);
 
 
         // Canvas
@@ -417,7 +416,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     public void PreviewChangeVisuals(TurretPartAttack newTurretPartAttack, TurretPartBody newTurretPartBody,
-                                     TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase,
+                                     TurretPassiveBase newTurretPassiveBase,
                                      CardPartBonusStats cardPartBonusStats,
                                      TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
                                      CardUpgradeTurretPlayCostConfig playCostsConfig)
@@ -452,7 +451,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         // BASE
         //if (newTurretPartBase == null && newTurretPassiveBase == null)
-        newTurretPartBase = originalCard.CardParts.Base;
         if (partType != CardPartReplaceManager.PartType.BASE)
         {
             newTurretPassiveBase = originalCard.CardParts.Passive;
@@ -484,12 +482,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         CardData.SetPlayCost(originalCard.PlayCost);
         CardParts.SetBody(newTurretPartBody);
         CardParts.SetProjectile(newTurretPartAttack);
-        CardParts.SetBaseAbility(newTurretPartBase);
         CardParts.SetPassiveAbility(newTurretPassiveBase);
         
 
         TurretCardStatsController tempStatsController = new TurretCardStatsController(originalCard.StatsController,
-            newTurretPartBody.DamageStat, newTurretPartBody.ShotsPerSecondStat, newTurretPartBase.RadiusRangeStat);
+            newTurretPartBody.DamageStat, newTurretPartBody.ShotsPerSecondStat, newTurretPartBody.RadiusRangeStat);
 
         if (partType == CardPartReplaceManager.PartType.BONUS_STATS)
         {
@@ -508,8 +505,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;
         _fireRateStatValueText.text = tempStatsController.ShotsPerSecondInvertedStatState.BaseValueText;
 
-        cardBaseMaterial.SetTexture("_Texture", newTurretPartBase.materialTexture);
-        cardBaseMaterial.SetColor("_Color", newTurretPartBase.materialColor);
+        cardBaseMaterial.SetTexture("_Texture", newTurretPartBody.BasePartPrimitive.MaterialTexture);
+        cardBaseMaterial.SetColor("_Color", newTurretPartBody.BasePartPrimitive.MaterialColor);
         _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseValueText;
 
         PlayCost = CardData.PlayCost;

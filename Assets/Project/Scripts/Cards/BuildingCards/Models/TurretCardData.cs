@@ -26,7 +26,7 @@ public class TurretCardData
         OriginalModel = other.OriginalModel;
         PlayCost = other.PlayCost;
         CardUpgradeLevel = other.CardUpgradeLevel;
-        SharedPartsGroup = other.SharedPartsGroup;
+        SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
         
         StatsController = other.StatsController;
         if (StatsController == null)
@@ -41,7 +41,7 @@ public class TurretCardData
         StatsController = new TurretCardStatsController(
             SharedPartsGroup.Body.DamageStat,
             SharedPartsGroup.Body.ShotsPerSecondStat,
-            SharedPartsGroup.Base.RadiusRangeStat
+            SharedPartsGroup.Body.RadiusRangeStat
         );
     }
 

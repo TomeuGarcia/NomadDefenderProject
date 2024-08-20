@@ -9,7 +9,7 @@ public class SupportBuilding : RangeBuilding
     public SupportStatsSnapshot Stats => _statsController.CurrentStats;
 
 
-    private TurretPartBase turretPartBase;
+    private SupportPartBase turretPartBase;
 
 
     [SerializeField]GameObject[] visualUpgrades;
@@ -47,7 +47,7 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    public void Init(SupportCardStatsController statsController, TurretPartBase turretPartBase, 
+    public void Init(SupportCardStatsController statsController, SupportPartBase turretPartBase, 
         CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
         _statsController = statsController;
@@ -55,7 +55,7 @@ public class SupportBuilding : RangeBuilding
 
         this.turretPartBase = turretPartBase;
 
-        basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
 
         UpdateRange();

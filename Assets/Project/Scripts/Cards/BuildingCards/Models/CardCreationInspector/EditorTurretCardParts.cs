@@ -20,7 +20,6 @@ public class EditorTurretCardParts : Editor
 
         DrawAttackPreview(parts.Projectile);
         DrawBodyPreview(parts.Body);
-        DrawBasePreview(parts.Base);
         DrawPassiveBasePreview(parts.Passive);     
     }
 
@@ -47,31 +46,21 @@ public class EditorTurretCardParts : Editor
         {
             GUILayout.Label(" - " + turretPartBody.partName +
                 (" (D" + turretPartBody.DamageStat.ComputeValueByLevel(0)) + 
-                (", C" + turretPartBody.ShotsPerSecondStat.ComputeValueByLevel(0)) + ")");
+                (", C" + turretPartBody.ShotsPerSecondStat.ComputeValueByLevel(0)) + 
+                (", R" + turretPartBody.RadiusRangeStat.ComputeValueByLevel(0)) +
+                ")");
             GUILayout.Box(turretPartBody.materialTextureMap,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
+            
+            GUILayout.Box(turretPartBody.BasePartPrimitive.MaterialTexture,
+                GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
         else
         {
             GUILayout.Label("MISSING BODY PART", "red");
         }
     }
-
-    private void DrawBasePreview(TurretPartBase turretPartBase)
-    {
-        GUILayout.Label("\nBase Preview:");
-        if (turretPartBase != null)
-        {
-            GUILayout.Label(" - " + turretPartBase.abilityName + (" (R" + turretPartBase.RadiusRangeStat.ComputeValueByLevel(0)) + ")");
-            GUILayout.Box(turretPartBase.materialTexture,
-                          GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
-        }
-        else
-        {
-            GUILayout.Label("MISSING BASE PART", "red");
-        }
-    }
-
+    
     private void DrawPassiveBasePreview(TurretPassiveBase turretPassiveBase)
     {
         GUILayout.Label("\nPassive Base Preview:");
