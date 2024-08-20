@@ -14,8 +14,8 @@ public class TurretCardData
     public TurretCardData(TurretCardDataModel model)
     {
         OriginalModel = model;
-        PlayCost = model.cardCost;
-        CardUpgradeLevel = model.cardLevel;
+        PlayCost = model.CardPlayCost;
+        CardUpgradeLevel = model.CardLevel;
         SharedPartsGroup = model.MakePartsGroup();
         
         MakeStatsControllerFromParts();

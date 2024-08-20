@@ -10,7 +10,7 @@ public class SupportCardData
     public SupportCardData(SupportCardDataModel model)
     {
         OriginalModel = model;
-        PlayCost = model.cardCost;
+        PlayCost = model.CardPlayCost;
         SharedPartsGroup = model.MakePartsGroup();
 
         MakeStatsControllerFromParts();
