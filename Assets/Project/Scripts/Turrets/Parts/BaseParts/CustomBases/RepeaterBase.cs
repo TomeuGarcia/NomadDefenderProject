@@ -218,7 +218,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void RemoveEnemyFromRepeatTargets(Enemy enemy)
     {
-        if (_ownerBuilding.Enemies.Count == 0)
+        if (_ownerBuilding.Enemies.Count <= 1)
         {
             fakeEnemy.SetCanBeTargeted(false);
         }        
