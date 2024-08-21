@@ -28,17 +28,15 @@ public class DamageRangeProjectile : HomingProjectile
         }
     }
 
+    /*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
-
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
+        
         this.targetEnemy = targetEnemy;
 
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(damage);
 
@@ -52,9 +50,6 @@ public class DamageRangeProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         this.targetEnemy = targetEnemy;
 
         this.damage = precomputedDamage;
@@ -64,14 +59,20 @@ public class DamageRangeProjectile : HomingProjectile
 
         growInSizeCoroutine = StartCoroutine(GrowSizeOvertime());
     }
+    */
+    
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {
         float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
         int baseDamage = turretOwner.Stats.Damage;
         return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
     }
 
+    protected override void OnShotInitialized()
+    {
+        growInSizeCoroutine = StartCoroutine(GrowSizeOvertime());
+    }
 
     private IEnumerator GrowSizeOvertime()
     {        

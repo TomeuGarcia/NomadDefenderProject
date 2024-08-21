@@ -11,4 +11,6 @@ public enum TurretPassiveAbilityType
     WaveFinishSpawnCardCopyInHand,
     
     SelfHurtUpgradeStats
+    
+    
 }

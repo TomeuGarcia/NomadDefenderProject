@@ -11,17 +11,15 @@ public class SlowFireRateProjectile : HomingProjectile
     public const float MAX_CADENCE_TIME = 5.0f;
 
 
+    /*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         this.targetEnemy = targetEnemy;
 
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(damage);
 
@@ -34,17 +32,15 @@ public class SlowFireRateProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         this.targetEnemy = targetEnemy;
         this.damage = precomputedDamage;
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
     }
+    */
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {        
         float currentTime = Mathf.Min(turretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
         

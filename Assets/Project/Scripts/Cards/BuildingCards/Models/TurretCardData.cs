@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class TurretCardData
 {
-    public TurretCardDataModel OriginalModel { get; private set; }
+    public readonly TurretCardDataModel OriginalModel;
+    public readonly TurretCardPartsGroup SharedPartsGroup;
     public int PlayCost { get; private set; }
     public int CardUpgradeLevel { get; private set; }
-    public TurretCardPartsGroup SharedPartsGroup { get; private set; }
     public TurretCardStatsController StatsController { get; private set; }
+
+    
+    private readonly TurretPassiveAbilitiesController _passiveAbilitiesController;
     
 
     public TurretCardData(TurretCardDataModel model)
@@ -19,6 +22,9 @@ public class TurretCardData
         SharedPartsGroup = model.MakePartsGroup();
         
         MakeStatsControllerFromParts();
+
+        _passiveAbilitiesController = new TurretPassiveAbilitiesController(
+            this, OriginalModel.PassiveAbilityModels, ServiceLocator.GetInstance().TurretAbilityFactory);
     }
     
     public TurretCardData(TurretCardData other)
@@ -33,6 +39,9 @@ public class TurretCardData
         {
             MakeStatsControllerFromParts();
         }
+        
+        _passiveAbilitiesController = new TurretPassiveAbilitiesController(
+            this, other._passiveAbilitiesController, ServiceLocator.GetInstance().TurretAbilityFactory);
     }
     
     
@@ -74,5 +83,14 @@ public class TurretCardData
     public void SetPassiveAbility(TurretPassiveBase passiveAbility)
     {
         SharedPartsGroup.SetPassiveAbility(passiveAbility);
+    }
+    
+    public void AddPassiveAbility(TurretPassiveAbilityDataModel passiveAbilityModel)
+    {
+        _passiveAbilitiesController.AddPassiveAbility(passiveAbilityModel);
+    }
+    public void RemovePassiveAbility(TurretPassiveAbilityDataModel passiveAbilityModel)
+    {
+        _passiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
     }
 }

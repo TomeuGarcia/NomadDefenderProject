@@ -41,16 +41,12 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private class EnemyInDamageQueue
     {
-        public EnemyInDamageQueue(TurretPartAttack_Prefab projectile, Enemy enemy, int damage)
+        public EnemyInDamageQueue(TurretDamageAttack damageAttack)
         {
-            this.projectile = projectile;
-            this.enemy = enemy;
-            this.damage = damage;
+            DamageAttack = damageAttack;
         }
 
-        public TurretPartAttack_Prefab projectile;
-        public Enemy enemy;
-        public int damage;
+        public readonly TurretDamageAttack DamageAttack;
     }
     private List<EnemyInDamageQueue> enemiesInDamageQueue = new List<EnemyInDamageQueue>();
 
@@ -68,7 +64,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnEnable()
     {
-        fakeEnemy.OnDamageCompute += ComputeTargetAndComputeDamage;        
+        fakeEnemy.OnWillBeAttackedByTurret += ComputeTargetAndComputeDamage;        
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
         fakeEnemy.OnGetPosition += ComputeTargetAndAssignFakeEnemyPosition;
 
@@ -78,7 +74,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnDisable()
     {
-        fakeEnemy.OnDamageCompute -= ComputeTargetAndComputeDamage;
+        fakeEnemy.OnWillBeAttackedByTurret -= ComputeTargetAndComputeDamage;
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
         fakeEnemy.OnGetPosition -= ComputeTargetAndAssignFakeEnemyPosition;
 
@@ -225,25 +221,27 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void ComputeTargetAndComputeDamage(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource)
+    private void ComputeTargetAndComputeDamage(TurretDamageAttack damageAttack)
     {
         ComputeNextTargetedEnemy();
-
+        
+        
         if (targetedEnemy == null)
         {
-            resultDamage = 0;
             return;
         }
 
-        resultDamage = targetedEnemy.ComputeDamageWithPassive(projectileSource, damageAmount, modifier);
-        resultDamage += (int)(resultDamage * currentDamagePer1Increment);
+        int resultDamage = (int)(damageAttack.Damage * currentDamagePer1Increment);
 
-        if (projectileSource.QueuesDamageToEnemies())
+        TurretDamageAttack repeatedDamageAttack = 
+            new TurretDamageAttack(damageAttack.ProjectileSource, targetedEnemy, resultDamage);
+
+        if (damageAttack.ProjectileSource.QueuesDamageToEnemies())
         {
-            targetedEnemy.QueueDamage(resultDamage);
+            targetedEnemy.QueueDamage(repeatedDamageAttack);
         }        
 
-        enemiesInDamageQueue.Add(new EnemyInDamageQueue(projectileSource, targetedEnemy, resultDamage));
+        enemiesInDamageQueue.Add(new EnemyInDamageQueue(repeatedDamageAttack));
     }
 
 
@@ -251,7 +249,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         for (int i = 0; i < enemiesInDamageQueue.Count; ++i)
         {
-            if (enemiesInDamageQueue[i].projectile == projectileSource)
+            if (enemiesInDamageQueue[i].DamageAttack.ProjectileSource == projectileSource)
             {
                 EnemyInDamageQueue temp = enemiesInDamageQueue[i];
                 enemiesInDamageQueue.RemoveAt(i);
@@ -269,8 +267,10 @@ public class RepeaterBase : TurretPartBase_Prefab
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
 
         if (enemyInDamageQueue == null) return;
+        
+        
 
-        Shoot(enemyInDamageQueue.enemy, enemyInDamageQueue.projectile, enemyInDamageQueue.damage);
+        Shoot(enemyInDamageQueue.DamageAttack);
 
         /*
         if (currentLvl > 0)
@@ -288,8 +288,10 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void Shoot(Enemy enemyTarget, TurretPartAttack_Prefab projectileSource, int precomputedDamage)
+    private void Shoot(TurretDamageAttack repeatedDamageAttack)
     {
+        TurretPartAttack_Prefab projectileSource = repeatedDamageAttack.ProjectileSource;
+        
         TurretPartAttack_Prefab.AttackType attackType = projectileSource.GetAttackType;
         Vector3 spawnPosition = shootPoint.position;
 
@@ -299,7 +301,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         newProjectile.transform.parent = projectileSource.GetTurretOwner().BaseHolder;
         newProjectile.gameObject.SetActive(true);
-        newProjectile.ProjectileShotInit_PrecomputedAndQueued(enemyTarget, projectileSource.GetTurretOwner(), precomputedDamage);
+        newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileSource.GetTurretOwner(), repeatedDamageAttack);
 
 
         // Spawn particle

@@ -1,7 +1,10 @@
-namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Factory
+using System;
+using UnityEngine;
+
+public class TurretAbilityFactoryInstaller : MonoBehaviour
 {
-    public class TurretAbilityFactoryInstaller
+    private void Start()
     {
-        
+        ServiceLocator.GetInstance().TurretAbilityFactory = new TurretAbilityFactory();
     }
 }

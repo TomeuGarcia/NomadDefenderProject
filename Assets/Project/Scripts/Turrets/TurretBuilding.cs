@@ -15,13 +15,9 @@ public class TurretBuilding : RangeBuilding
     public Transform BodyPartTransform => bodyPart.transform;
     public Transform BinderPointTransform => bodyPart.binderPoint;
 
-    public PassiveDamageModifier BaseDamagePassive { get; private set; }
     private BasePassive basePassive;
 
-    public void SetBaseDamagePassive(PassiveDamageModifier baseDamagePassive)
-    {
-        BaseDamagePassive = baseDamagePassive;
-    }
+
 
     private ProjectileShootingController _shootingController;
     public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
@@ -132,7 +128,7 @@ public class TurretBuilding : RangeBuilding
 
         _shootingController.UpdateShoot(out bool targetEnemyExists);
 
-        if (bodyPart.lookAtTarget && targetEnemyExists)
+        if (bodyPart.lookAtTarget)
         {
             LookAtTarget();
         }

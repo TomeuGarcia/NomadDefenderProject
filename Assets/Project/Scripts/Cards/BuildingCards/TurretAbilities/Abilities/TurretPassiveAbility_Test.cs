@@ -1,7 +1,7 @@
-namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Abilities
+public class TurretPassiveAbility_Test : ATurretPassiveAbility
 {
-    public class TurretPassiveAbility_Test
+    public TurretPassiveAbility_Test(TurretPassiveAbilityDataModel originalModel) 
+        : base(originalModel)
     {
-        
     }
 }

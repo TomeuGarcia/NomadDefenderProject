@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate int PassiveDamageModifier(int damage, HealthSystem healthSystem);
 public class TurretPartAttack_Prefab : MonoBehaviour
 {
     protected TurretBuilding turretOwner;
@@ -23,6 +22,10 @@ public class TurretPartAttack_Prefab : MonoBehaviour
         CARD_HOARD
     }
 
+
+    protected TurretDamageAttack _damageAttack;
+    
+    
     protected Enemy targetEnemy;
     protected int damage;
     [SerializeField] protected AttackType attackType;
@@ -34,32 +37,18 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     public Vector3 Position => transform.position;
 
 
-
-    protected PassiveDamageModifier passiveDamageModifier;
-
+    
     protected bool disappearing = false;
 
-    protected void Awake()
-    {
-        SetPassiveDamageModifier(DefaultDamage);
-    }
 
-    public int DefaultDamage(int damage, HealthSystem healthSystem)
-    {
-        return damage;
-    }
-
-    protected void SetPassiveDamageModifier(PassiveDamageModifier newPassiveDamageModifier)
-    {
-        passiveDamageModifier = newPassiveDamageModifier;
-    }
-
+    
     public virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
     }
 
-    public virtual void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
+    public virtual void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, 
+        TurretDamageAttack precomputedDamageAttack)
     {
         turretOwner = owner;
     }
@@ -67,9 +56,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     {
     }
 
-    protected virtual void OnEnemyTriggerEnter(Enemy enemy)
-    {
-    }
 
     public virtual bool QueuesDamageToEnemies()
     {
@@ -99,8 +85,6 @@ public class TurretPartAttack_Prefab : MonoBehaviour
 
     protected void Disable()
     {
-        SetPassiveDamageModifier(DefaultDamage);
-
         gameObject.SetActive(false);
         disappearing = false;
     }
@@ -139,14 +123,19 @@ public class TurretPartAttack_Prefab : MonoBehaviour
     }
 
 
-    public int SortByClosestToProjectile(Enemy e1, Enemy e2)
+    private int SortByClosestToProjectile(Enemy e1, Enemy e2)
     {
         return Vector3.Distance(e1.Position, Position).CompareTo(Vector3.Distance(e2.Position, Position));
     }
 
 
-    protected void DamageTargetEnemy(int damage)
+    protected void DamageTargetEnemy(TurretDamageAttack damageAttack)
     {
-        targetEnemy.TakeDamage(this, damage);
+        targetEnemy.TakeDamage(damageAttack);
+    }
+    
+    protected virtual void OnShotInitialized()
+    {
+        targetEnemy.OnWillBeAttacked(_damageAttack);
     }
 }

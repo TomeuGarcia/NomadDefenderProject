@@ -8,20 +8,25 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
 
 
     public TurretPassiveAbilitiesController(TurretCardData cardDataOwner,
-        ITurretAbilityFactory abilityFactory)
+        TurretPassiveAbilityDataModel[] startingPassiveAbilities, ITurretAbilityFactory abilityFactory)
     {
-        _passiveAbilities = new List<ATurretPassiveAbility>(3);
         _abilityFactory = abilityFactory;
         _cardDataOwner = cardDataOwner;
+        
+        _passiveAbilities = new List<ATurretPassiveAbility>(startingPassiveAbilities.Length);
+        foreach (TurretPassiveAbilityDataModel passiveAbilityModel in startingPassiveAbilities)
+        {
+            AddPassiveAbility(passiveAbilityModel);
+        }
     }
     
     public TurretPassiveAbilitiesController(TurretCardData cardDataOwner,
         TurretPassiveAbilitiesController other, ITurretAbilityFactory abilityFactory)
     {
-        _passiveAbilities = new List<ATurretPassiveAbility>(other._passiveAbilities.Count);
         _abilityFactory = abilityFactory;
         _cardDataOwner = cardDataOwner;
 
+        _passiveAbilities = new List<ATurretPassiveAbility>(other._passiveAbilities.Count);
         foreach (ATurretPassiveAbility passiveAbility in _passiveAbilities)
         {
             AddPassiveAbility(passiveAbility.OriginalModel);
@@ -98,19 +103,19 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
 
-    public void OnBeforeShootingEnemy()
+    public void OnBeforeShootingEnemy(TurretDamageAttack damageAttack)
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnBeforeShootingEnemy();
+            passiveAbility.OnBeforeShootingEnemy(damageAttack);
         }
     }
 
-    public void OnAfterShootingEnemy()
+    public void OnAfterShootingEnemy(TurretDamageAttackResult damageAttackResult)
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnAfterShootingEnemy();
+            passiveAbility.OnAfterShootingEnemy(damageAttackResult);
         }
     } 
 }

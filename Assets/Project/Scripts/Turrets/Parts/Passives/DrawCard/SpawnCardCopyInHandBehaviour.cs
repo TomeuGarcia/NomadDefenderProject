@@ -55,7 +55,7 @@ public class SpawnCardCopyInHandBehaviour : MonoBehaviour
         int numberOfCards = cardDrawer.GetCardsInHand().Length + 1;
         
         TurretCardData turretCardData = new TurretCardData(_owner.CardData);
-        turretCardData.SetPassiveAbility(_baseNullPassive);
+        //turretCardData.SetPassiveAbility(_baseNullPassive); // COMMENTED BECAUSE IT WILL BE DELETED LATER
         turretCardData.IncrementPlayCost(_costIncrement * numberOfCards);
         
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInHand(turretCardData);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,6 @@ public class CloseRangeDamageProjectile : HomingProjectile
     private Coroutine decreaseInSizeCoroutine;
 
     [Header("STATS")]
-    [SerializeField, Range(0f, 1f)] private float baseDamagePer1 = 0.25f;
-    [SerializeField, Min(0f)] private float distanceInverseMultiplier = 1.0f;
     [SerializeField] private AnimationCurve _damageMultiplierOverDistance = AnimationCurve.EaseInOut(0,2,10,0);
 
     private void OnDisable()
@@ -22,17 +21,14 @@ public class CloseRangeDamageProjectile : HomingProjectile
         }
     }
 
-
+/*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         this.targetEnemy = targetEnemy;
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
         
         targetEnemy.QueueDamage(damage);
 
@@ -46,23 +42,25 @@ public class CloseRangeDamageProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         this.targetEnemy = targetEnemy;
         this.damage = precomputedDamage;
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
 
-        decreaseInSizeCoroutine = StartCoroutine(DecreaseSizeOvertime());
     }
+    */
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {
         float distance = Vector3.Distance(targetEnemy.GetPosition(), transform.position);
         int baseDamage = turretOwner.Stats.Damage;
         return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
+    }
+
+    private void OnServerInitialized()
+    {
+        decreaseInSizeCoroutine = StartCoroutine(DecreaseSizeOvertime());
     }
 
 

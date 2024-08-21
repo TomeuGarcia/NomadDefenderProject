@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeslaProjectile : TurretPartAttack_Prefab
+public class TeslaProjectile : HomingProjectile
 {
-    [SerializeField] private Lerp lerp;
-
     [Header("STATS")]
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.5f;
@@ -14,11 +12,11 @@ public class TeslaProjectile : TurretPartAttack_Prefab
     [SerializeField, Min(0f)] private float chainRadius;
     [SerializeField, Min(0f)] private float stunDuration;
 
-    private int currentChainedTarget;
-    private Enemy[] chainTargetedEnemies;
-    private int[] chainTargetedDamage;
+    private int _currentChainedTarget;
+    private Enemy[] _chainTargetedEnemies;
+    private TurretDamageAttack[] _chainTargetedDamage;
 
-
+/*
     protected override void DoUpdate()
     {
     }
@@ -34,13 +32,10 @@ public class TeslaProjectile : TurretPartAttack_Prefab
 
         this.damage = owner.Stats.Damage;
         this.damage = (int)((float)this.damage * damageMultiplier);
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(this.damage);
-
-
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
+        
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish(false));
@@ -58,9 +53,6 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         this.damage = precomputedDamage;
 
 
-        if (owner.BaseDamagePassive != null)
-            SetPassiveDamageModifier(owner.BaseDamagePassive);
-
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish(false));
     }
@@ -71,61 +63,81 @@ public class TeslaProjectile : TurretPartAttack_Prefab
         yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
         EnemyHit(isChaining);
     }
+    */
 
+    private bool _isChaining;
 
-    void EnemyHit(bool isChaining)
+    protected override void OnShotInitialized()
     {
-        GameObject hitParticles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+        base.OnShotInitialized();
+        _isChaining = false;
+        _currentChainedTarget = 0;
+    }
+
+    protected override void OnEnemyReached()
+    {
+        GameObject hitParticles = ProjectileParticleFactory.GetInstance()
+            .GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
         hitParticles.gameObject.SetActive(true);
         hitParticles.transform.parent = gameObject.transform.parent;
-
         
         targetEnemy.GetStunned(stunDuration);
 
-        if (isChaining)
+        
+        if (_isChaining)
         {
-            DamageTargetEnemy(chainTargetedDamage[currentChainedTarget]);
-            ++currentChainedTarget;
+            DoChainedEnemyHit();
         }
         else
         {
-            DamageTargetEnemy(damage);
-
-
-            chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
-            chainTargetedDamage = new int[chainTargetedEnemies.Length];
-            for (int i = 0; i < chainTargetedEnemies.Length; i++)
-            {
-                chainTargetedDamage[i] = chainTargetedEnemies[i].ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
-                chainTargetedEnemies[i].QueueDamage(chainTargetedDamage[i]);
-            }
-
-            
-            Vector3 wavePosition = Position;
-            wavePosition.y = turretOwner.Position.y;
-
-            //GameObject waveParticles = ProjectileParticleFactory.GetInstance()
-            //    .GetAttackParticlesGameObject(ProjectileParticleFactory.ProjectileParticleType.TESLA_WAVE, wavePosition, Quaternion.identity);
-            //waveParticles.gameObject.SetActive(true);
-            //waveParticles.transform.parent = gameObject.transform.parent;
-            //waveParticles.transform.localScale = Vector3.one * (chainRadius * 2f);
+            DoTargetedEnemyHit();
         }
 
 
-        if (currentChainedTarget < chainTargetedEnemies.Length)
+        if (_currentChainedTarget < _chainTargetedEnemies.Length)
         {
-            targetEnemy = chainTargetedEnemies[currentChainedTarget];
-
+            targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
             lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed / 2.0f);
-            StartCoroutine(WaitForLerpFinish(true));            
+            StartCoroutine(WaitForLerpFinish());            
         }
         else
         {
-            //StopAllCoroutines();
             Disappear();
         }
     }
 
+    private void DoTargetedEnemyHit()
+    {
+        DamageTargetEnemy(_damageAttack);
 
 
+        _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
+        _chainTargetedDamage = new TurretDamageAttack[_chainTargetedEnemies.Length];
+        for (int i = 0; i < _chainTargetedEnemies.Length; i++)
+        {
+            Enemy chainedEnemy = _chainTargetedEnemies[i];
+            
+            _chainTargetedDamage[i] =
+                new TurretDamageAttack(_damageAttack.ProjectileSource, chainedEnemy, _damageAttack.Damage);
+            chainedEnemy.QueueDamage(_chainTargetedDamage[i]);
+        }
+        
+        _isChaining = true;
+    }
+    
+    private void DoChainedEnemyHit()
+    {
+        DamageTargetEnemy(_chainTargetedDamage[_currentChainedTarget]);
+        ++_currentChainedTarget;
+    }
+
+
+    protected override int ComputeDamage()
+    {
+        this.damage = turretOwner.Stats.Damage;
+        this.damage = (int)((float)this.damage * damageMultiplier);
+
+        return this.damage;
+    }
+    
 }

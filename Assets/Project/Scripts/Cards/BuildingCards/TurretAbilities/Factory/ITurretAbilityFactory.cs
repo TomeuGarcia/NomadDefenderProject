@@ -1,5 +1,5 @@
 
 public interface ITurretAbilityFactory
 {
-    ATurretPassiveAbility MakePassiveAbilityFromType(TurretPassiveAbilityType abilityType);
+    ATurretPassiveAbility MakePassiveAbilityFromType(TurretPassiveAbilityDataModel abilityDataModel);
 }
