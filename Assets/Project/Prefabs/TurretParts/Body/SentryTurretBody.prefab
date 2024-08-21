@@ -137,6 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6082083359724565835}
   - component: {fileID: 4012727072143204407}
+  - component: {fileID: 1079721912561730600}
   m_Layer: 0
   m_Name: SentryTurretBody
   m_TagString: Untagged
@@ -207,6 +208,23 @@ MonoBehaviour:
   - {fileID: 7413741752074086162}
   - {fileID: 5016809807180726033}
   - {fileID: 8986336419041312302}
+--- !u!114 &1079721912561730600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6082083359724565836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ccf07d4740bd4479610e8974388424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _turretHead: {fileID: 6082083359724565835}
+  _duration: 1
+  _strength: 0.025
+  _vibrato: 10
+  _randomness: 90
 --- !u!1 &6387950654494282749
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +450,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8777655822628473891}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -543,6 +562,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!23 &159390413927867487 stripped
 MeshRenderer:
@@ -561,6 +583,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8777655822628473891}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -683,6 +706,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!4 &2773246333705732996 stripped
 Transform:
@@ -701,6 +727,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1290752891317709442}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c224b7e648ccb3e44bb69b6bc52aec92,
@@ -794,6 +821,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c224b7e648ccb3e44bb69b6bc52aec92, type: 3}
 --- !u!4 &4840980583528937717 stripped
 Transform:
@@ -812,6 +842,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1290752891317709442}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -923,6 +954,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!23 &5753995981525791621 stripped
 MeshRenderer:
@@ -941,6 +975,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6866761020713591726}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -1058,6 +1093,9 @@ PrefabInstance:
       value: miniSentry
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!23 &5188458657657565592 stripped
 MeshRenderer:
@@ -1076,6 +1114,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1290752891317709442}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -1198,6 +1237,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!4 &7812738175185788166 stripped
 Transform:
@@ -1216,6 +1258,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1290752891317709442}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c224b7e648ccb3e44bb69b6bc52aec92,
@@ -1309,6 +1352,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c224b7e648ccb3e44bb69b6bc52aec92, type: 3}
 --- !u!23 &7415716433144527528 stripped
 MeshRenderer:

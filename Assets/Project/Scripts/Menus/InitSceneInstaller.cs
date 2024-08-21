@@ -6,7 +6,8 @@ public class InitSceneInstaller : MonoBehaviour
 {
     [Header("PARTICLES")]
     [SerializeField] private Transform _particlesParent;
-    [SerializeField] private GeneralParticleFactoryConfig _particlesFactoryConfig;
+    [SerializeField] private GeneralParticleFactoryConfig _generalParticlesFactoryConfig;
+    [SerializeField] private ParticleFactoryConfig _particlesFactoryConfig;
 
     private void Awake()
     {
@@ -15,7 +16,8 @@ public class InitSceneInstaller : MonoBehaviour
 
     public void Install(ServiceLocator serviceLocator)
     {
-        serviceLocator.GeneralParticleFactory = new GeneralParticleFactory(_particlesParent, _particlesFactoryConfig);
+        serviceLocator.GeneralParticleFactory = new GeneralParticleFactory(_particlesParent, _generalParticlesFactoryConfig);
+        serviceLocator.ParticleFactory = new ParticleFactory(_particlesFactoryConfig, _particlesParent);
         serviceLocator.CameraHelp = new CameraHelpService();
     }
 }

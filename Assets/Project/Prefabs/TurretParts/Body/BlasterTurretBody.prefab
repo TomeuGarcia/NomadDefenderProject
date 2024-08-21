@@ -327,6 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6901535849871159827}
   - component: {fileID: 4328199890081654639}
+  - component: {fileID: 6907266956459257262}
   m_Layer: 0
   m_Name: BlasterTurretBody
   m_TagString: Untagged
@@ -398,6 +399,23 @@ MonoBehaviour:
   - {fileID: 5803697889624805879}
   - {fileID: 6148948705023348208}
   - {fileID: 318721686127469215}
+--- !u!114 &6907266956459257262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901535849871159828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ccf07d4740bd4479610e8974388424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _turretHead: {fileID: 6901535849871159827}
+  _duration: 1
+  _strength: 0.025
+  _vibrato: 8
+  _randomness: 90
 --- !u!1 &8124442393416328207
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +538,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8559354261558128611}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -603,6 +622,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!23 &1139801698387071194 stripped
 MeshRenderer:
@@ -621,6 +643,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 363904842118600570}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f5c482388c71964dadfe488044a5728,
@@ -699,6 +722,9 @@ PrefabInstance:
       value: chimney_detailed_UPG_3 (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5c482388c71964dadfe488044a5728, type: 3}
 --- !u!4 &4370781936500648041 stripped
 Transform:
@@ -711,6 +737,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6901535849871159827}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 8b1c9814c96a89a49877e55aefeff91d,
@@ -774,6 +801,13 @@ PrefabInstance:
       value: turret_double
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -606448188789465409, guid: 8b1c9814c96a89a49877e55aefeff91d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7050595552286264547}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b1c9814c96a89a49877e55aefeff91d, type: 3}
 --- !u!23 &2575660707322403010 stripped
 MeshRenderer:
@@ -804,6 +838,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 5192368100055179100}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c224b7e648ccb3e44bb69b6bc52aec92,
@@ -888,6 +923,9 @@ PrefabInstance:
       value: rail_UPG_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c224b7e648ccb3e44bb69b6bc52aec92, type: 3}
 --- !u!4 &5146272107105754017 stripped
 Transform:
@@ -906,6 +944,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 5192368100055179100}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c224b7e648ccb3e44bb69b6bc52aec92,
@@ -984,6 +1023,9 @@ PrefabInstance:
       value: rail (1)_UPG_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c224b7e648ccb3e44bb69b6bc52aec92, type: 3}
 --- !u!4 &5068767648638221020 stripped
 Transform:
@@ -1002,6 +1044,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7520216065574043466}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f5c482388c71964dadfe488044a5728,
@@ -1080,6 +1123,9 @@ PrefabInstance:
       value: chimney_detailed_UPG_3 (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5c482388c71964dadfe488044a5728, type: 3}
 --- !u!4 &6830943815666303516 stripped
 Transform:
@@ -1092,6 +1138,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7121595753874296021}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f5c482388c71964dadfe488044a5728,
@@ -1170,6 +1217,9 @@ PrefabInstance:
       value: chimney_detailed_UPG_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5c482388c71964dadfe488044a5728, type: 3}
 --- !u!4 &6481295779420071639 stripped
 Transform:
@@ -1182,6 +1232,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8559354261558128611}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 13b8fd4bb06e6ad468731e94f010e7f9,
@@ -1265,6 +1316,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b8fd4bb06e6ad468731e94f010e7f9, type: 3}
 --- !u!4 &7827415786640339342 stripped
 Transform:
@@ -1283,6 +1337,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7121595753874296021}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f5c482388c71964dadfe488044a5728,
@@ -1361,6 +1416,9 @@ PrefabInstance:
       value: chimney_detailed_UPG_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5c482388c71964dadfe488044a5728, type: 3}
 --- !u!4 &8338057302387414036 stripped
 Transform:
@@ -1373,6 +1431,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 5192368100055179100}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f5c482388c71964dadfe488044a5728,
@@ -1451,6 +1510,9 @@ PrefabInstance:
       value: chimney_detailed_UPG_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5c482388c71964dadfe488044a5728, type: 3}
 --- !u!4 &9079750659536377266 stripped
 Transform:
