@@ -1,6 +1,7 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 
 
@@ -18,13 +19,84 @@ public class EditorTurretCardParts : Editor
         TurretCardDataModel cardDataModel = target as TurretCardDataModel;
         TurretCardPartsGroup parts = cardDataModel.SharedPartsGroup;
 
+        
+        EditorGUILayout.Space(20);
+        DrawAssetName(cardDataModel);
         DrawAttackPreview(parts.Projectile);
         DrawBodyPreview(parts.Body);
         DrawPassiveBasePreview(parts.Passive);     
     }
 
 
-    private void DrawAttackPreview(TurretPartAttack turretPartAttack)
+    private void DrawAssetName(TurretCardDataModel cardDataModel)
+    {
+        string assetName = "";
+        EditorGUILayout.BeginHorizontal();
+        {
+            assetName = GenerateAssetName(cardDataModel);
+            
+            EditorGUILayout.LabelField("Asset Name should be:", GUILayout.Width(EditorGUIUtility.labelWidth - 4));
+            EditorGUILayout.SelectableLabel(assetName, EditorStyles.textField, 
+                GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+            if (GUILayout.Button("Copy"))
+            {
+                GUIUtility.systemCopyBuffer = assetName;
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.BeginHorizontal();
+        {
+            bool assetHasCorrectName = cardDataModel.name == assetName;
+            var style = new GUIStyle();
+            style.normal.textColor = assetHasCorrectName ? Color.green : Color.yellow;
+            string feedbackText = assetHasCorrectName ? "Asset Name is correct" : "Asset Name doesn't match";
+            EditorGUILayout.LabelField(feedbackText,  style);
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+    
+    private string GenerateAssetName(TurretCardDataModel cardDataModel)
+    {
+        if (!cardDataModel.SharedPartsGroup.Body ||
+            !cardDataModel.SharedPartsGroup.Projectile)
+        {
+            return "MISSING PARTS";
+        }
+        
+        string name = "";
+        
+        name += AbilityNameWithCapital(cardDataModel.SharedPartsGroup.Body.partName);
+        name += "_" + cardDataModel.CardPlayCost;
+        name += "_L" + cardDataModel.CardLevel;
+        name += "_" + AbilityNameWithCapital(cardDataModel.SharedPartsGroup.Projectile.abilityName);
+
+        foreach (ATurretPassiveAbilityDataModel passiveAbilityModel in cardDataModel.PassiveAbilityModels)
+        {
+            if (!passiveAbilityModel)
+            {
+                name += "_MISSING";
+                continue;
+            }
+            name += "_" + AbilityNameWithCapital(passiveAbilityModel.Name);
+        }
+
+        return name;
+    }
+
+    private string AbilityNameWithCapital(string abilityName)
+    {
+        char capital = Char.ToUpper(abilityName[0]);
+        if (capital == abilityName[0])
+        {
+            return abilityName;
+        }
+        
+        return capital + abilityName.Substring(1, abilityName.Length-1);
+    }
+    
+    private void DrawAttackPreview(TurretPartProjectileDataModel turretPartAttack)
     {
         GUILayout.Label("\nAttack Preview:");
         if (turretPartAttack != null)

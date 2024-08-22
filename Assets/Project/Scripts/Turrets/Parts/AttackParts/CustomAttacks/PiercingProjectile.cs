@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
-public class PiercingProjectile : TurretPartAttack_Prefab
+public class PiercingProjectile : ATurretProjectileBehaviour
 {
     [SerializeField] private Lerp lerp;
     [SerializeField] private TrailRenderer trailRenderer;
@@ -22,9 +22,9 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     private float _currentDamageMultiplier = 0f;
     private Vector3 _goalPosition;
 
-    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
+    protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-        turretOwner = owner;
+        base.ProjectileShotInit(base.targetEnemy, owner);
 
         trailRenderer.Clear();
         arrow.SetActive(true);
@@ -41,7 +41,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
         OnShotInitialized();
     }
 
-    public override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
+    protected override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
     {
         ProjectileShotInit(precomputedDamageAttack.Target, owner);
     }
@@ -78,7 +78,8 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
     private void EnemyHit(Enemy enemy)
     {
-        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, enemy.MeshTransform.position, Quaternion.identity);
+        GameObject temp = ProjectileParticleFactory.GetInstance()
+            .GetAttackParticlesGameObject(ProjectileType, enemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
@@ -98,7 +99,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
     {
         return this.damage;
         this._currentDamageMultiplier = startDamageMultiplier;
-        this.damage = (int)((float)turretOwner.Stats.Damage * _currentDamageMultiplier);
+        this.damage = (int)((float)TurretOwner.Stats.Damage * _currentDamageMultiplier);
 
         return this.damage;
     }

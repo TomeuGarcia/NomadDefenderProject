@@ -8,9 +8,9 @@ using UnityEngine;
 public class AttackPartsLibraryContent : ScriptableObject
 {
     [Header("ATTACKS")]
-    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _earlyAttacks;
-    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _midAttacks;
-    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartAttack> _lateAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartProjectileDataModel> _earlyAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartProjectileDataModel> _midAttacks;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartProjectileDataModel> _lateAttacks;
 
     private void OnValidate()
     {
@@ -19,9 +19,9 @@ public class AttackPartsLibraryContent : ScriptableObject
         _lateAttacks.progressionState = NodeEnums.ProgressionState.LATE;
     }
 
-    public PartsLibrary.PartsByProgressionState<TurretPartAttack>[] GetArrayByProgression()
+    public PartsLibrary.PartsByProgressionState<TurretPartProjectileDataModel>[] GetArrayByProgression()
     {
-        return new PartsLibrary.PartsByProgressionState<TurretPartAttack>[3] { _earlyAttacks, _midAttacks, _lateAttacks };
+        return new PartsLibrary.PartsByProgressionState<TurretPartProjectileDataModel>[3] { _earlyAttacks, _midAttacks, _lateAttacks };
     }
 
 

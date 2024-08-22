@@ -48,7 +48,7 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BONUS STATS")]
     [SerializeField] private GameObject cardPartBonusStatsPrefab;
 
-    private TurretPartAttack[] tutorialTurretPartAttacks;
+    private TurretPartProjectileDataModel[] tutorialTurretPartAttacks;
     private TurretPartBody[] tutorialTurretPartBodies;
     private TurretPassiveBase[] tutorialTurretPassives;
     private TurretStatsUpgradeModel[] tutorialTurretStatBonusModels;
@@ -190,7 +190,7 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
-    public void AwakeSetupTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    public void AwakeSetupTutorialAttacks(TurretPartProjectileDataModel[] turretPartAttacks)
     {
         partsCreatedByTutorial = true;
         tutorialTurretPartAttacks = turretPartAttacks;
@@ -205,7 +205,7 @@ public class CardPartReplaceManager : MonoBehaviour
         InitAttacks(LibrariesManager.GetInstance().PartsLibrary
             .GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, false, progressionState));
     }
-    private void InitAttacks(TurretPartAttack[] attacks)
+    private void InitAttacks(TurretPartProjectileDataModel[] attacks)
     {
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
@@ -681,7 +681,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
         incompletePreviewCard.SetActive(false);
 
-        TurretPartAttack turretPartAttack = null;
+        TurretPartProjectileDataModel turretPartAttack = null;
         TurretPartBody turretPartBody = null;
         TurretPassiveBase turretPassiveBase = null;
         CardPartBonusStats cardPartBonusStats = null;

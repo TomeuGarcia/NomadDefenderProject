@@ -120,7 +120,7 @@ public class SelectableDeck : MonoBehaviour
         supportSprite.color = supportBasePart.spriteColor;
         DeckColor = supportBasePart.spriteColor;
 
-        TurretPartAttack mainTurretAttackPart = _deck.MainTurretCardDataModel().SharedPartsGroup.Projectile;
+        TurretPartProjectileDataModel mainTurretAttackPart = _deck.MainTurretCardDataModel().SharedPartsGroup.Projectile;
         mainProjectileSprite.sprite = mainTurretAttackPart.abilitySprite;
         mainProjectileSprite.color = mainTurretAttackPart.materialColor;
     }

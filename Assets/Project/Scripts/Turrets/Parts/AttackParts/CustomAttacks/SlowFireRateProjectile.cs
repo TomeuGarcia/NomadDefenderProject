@@ -42,12 +42,12 @@ public class SlowFireRateProjectile : HomingProjectile
 
     protected override int ComputeDamage()
     {        
-        float currentTime = Mathf.Min(turretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
+        float currentTime = Mathf.Min(TurretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
         
         float curveCoefficient = currentTime / MAX_CADENCE_TIME;
         float curveValue = damageRateCurve.Evaluate(curveCoefficient);
 
-        int damage = (int)(curveValue * turretOwner.Stats.Damage * maxDamageMultiplier);
+        int damage = (int)(curveValue * TurretOwner.Stats.Damage * maxDamageMultiplier);
         return damage;        
     }
 

@@ -27,7 +27,7 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
     //[SerializeField] private MeshRenderer bodyMeshRenderer;
     [SerializeField] private Image bodyImage;
     private Material bodyMaterial;
-    [SerializeField] private TurretPartAttack defaultColorTurretPartAttack;
+    [SerializeField] private TurretPartProjectileDataModel defaultColorTurretPartAttack;
 
 
     [Header("DESCRIPTION")]

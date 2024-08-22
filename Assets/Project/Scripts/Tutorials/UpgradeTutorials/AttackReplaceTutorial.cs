@@ -8,7 +8,7 @@ public class AttackReplaceTutorial : MonoBehaviour
     private Tutorials tutoType;
     private bool cardShowedInfo;
 
-    [SerializeField] TurretPartAttack[] tutorialAttacks;
+    [SerializeField] TurretPartProjectileDataModel[] tutorialAttacks;
 
 
     private void Awake()
@@ -51,7 +51,7 @@ public class AttackReplaceTutorial : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        //Calibrating projectile replacement upgrade…
+        //Calibrating projectile replacement upgradeâ€¦
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -66,7 +66,7 @@ public class AttackReplaceTutorial : MonoBehaviour
         scriptedSequence.Clear();
 
 
-        //Loading High Voltage projectile card…
+        //Loading High Voltage projectile cardâ€¦
         //[HIGH VOLTAGE CARD PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -76,7 +76,7 @@ public class AttackReplaceTutorial : MonoBehaviour
         //scriptedSequence.Clear();
 
 
-        //Display/Conceal a card’s ability using <color=#47B13A>Input</color>.<color=#F5550C>RightClick</color>
+        //Display/Conceal a cardâ€™s ability using <color=#47B13A>Input</color>.<color=#F5550C>RightClick</color>
         //[WAIT FOR PLAYER TO VIEW ABILITY]
         //[CLEAR]
         scriptedSequence.NextLine();

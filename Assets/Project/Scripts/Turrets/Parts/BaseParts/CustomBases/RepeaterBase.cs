@@ -245,7 +245,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private EnemyInDamageQueue PopEnemyInDamageQueue(TurretPartAttack_Prefab projectileSource)
+    private EnemyInDamageQueue PopEnemyInDamageQueue(ATurretProjectileBehaviour projectileSource)
     {
         for (int i = 0; i < enemiesInDamageQueue.Count; ++i)
         {
@@ -262,7 +262,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
-    private void RepeatProjectile(TurretPartAttack_Prefab projectileSource)
+    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource)
     {        
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
 
@@ -290,22 +290,26 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Shoot(TurretDamageAttack repeatedDamageAttack)
     {
-        TurretPartAttack_Prefab projectileSource = repeatedDamageAttack.ProjectileSource;
+        ATurretProjectileBehaviour projectileSource = repeatedDamageAttack.ProjectileSource;
         
-        TurretPartAttack_Prefab.AttackType attackType = projectileSource.GetAttackType;
+        ATurretProjectileBehaviour.Type projectileType = projectileSource.ProjectileType;
         Vector3 spawnPosition = shootPoint.position;
 
-        TurretPartAttack_Prefab newProjectile = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(attackType, spawnPosition, Quaternion.identity)
-            .GetComponent<TurretPartAttack_Prefab>();
+        ATurretProjectileBehaviour newProjectile = 
+            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileType, spawnPosition, Quaternion.identity)
+            .GetComponent<ATurretProjectileBehaviour>();
 
+        TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
-        newProjectile.transform.parent = projectileSource.GetTurretOwner().BaseHolder;
+        newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.gameObject.SetActive(true);
-        newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileSource.GetTurretOwner(), repeatedDamageAttack);
+        newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
+            projectileTurret, repeatedDamageAttack);
 
 
         // Spawn particle
-        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(newProjectile.GetAttackType, spawnPosition, Quaternion.identity);
+        GameObject particles = ProjectileParticleFactory.GetInstance()
+            .GetAttackParticlesGameObject(projectileType, spawnPosition, Quaternion.identity);
         particles.SetActive(true);
         particles.transform.parent = gameObject.transform.parent;
 

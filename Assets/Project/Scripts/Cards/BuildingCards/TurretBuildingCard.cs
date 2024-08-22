@@ -91,7 +91,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitVisuals()
     {
-        TurretPartAttack turretPartAttack = CardParts.Projectile;
+        TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
         TurretPartBody turretPartBody = CardParts.Body;
 
         // Mesh Materials
@@ -127,7 +127,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         UpdateCardLevelText();
     }
 
-    private void SetAttackIcon(TurretPartAttack turretPartAttack)
+    private void SetAttackIcon(TurretPartProjectileDataModel turretPartAttack)
     {
         attackImage.sprite = turretPartAttack.abilitySprite;
         attackImage.color = turretPartAttack.materialColor;
@@ -167,14 +167,14 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         Init();
     }
     
-    public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
+    public void SetNewPartAttack(TurretPartProjectileDataModel newTurretPartAttack)
     {
         ReplacedWithSamePart = HasSameAttackPart(newTurretPartAttack); // Check replaced with same part
         CardParts.SetProjectile(newTurretPartAttack);
         
         Init();
     }
-    public bool HasSameAttackPart(TurretPartAttack newTurretPartAttack)
+    public bool HasSameAttackPart(TurretPartProjectileDataModel newTurretPartAttack)
     {
         return CardParts.Projectile == newTurretPartAttack;
     }
@@ -379,7 +379,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
 
-        TurretPartAttack turretPartAttack = CardParts.Projectile;
+        TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
         setupData[0] = new ICardDescriptionProvider.SetupData(
             turretPartAttack.abilityName,
             turretPartAttack.abilityDescription,
@@ -415,7 +415,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
 
-    public void PreviewChangeVisuals(TurretPartAttack newTurretPartAttack, TurretPartBody newTurretPartBody,
+    public void PreviewChangeVisuals(TurretPartProjectileDataModel newTurretPartAttack, TurretPartBody newTurretPartBody,
                                      TurretPassiveBase newTurretPassiveBase,
                                      CardPartBonusStats cardPartBonusStats,
                                      TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
@@ -527,12 +527,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
-    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack, float delayBeforeAnimation)
+    public void InBattleReplaceAttack(TurretPartProjectileDataModel newTurretPartAttack, float delayBeforeAnimation)
     {
-        TurretPartAttack oldTurretPartAttack = CardParts.Projectile;
+        TurretPartProjectileDataModel oldTurretPartAttack = CardParts.Projectile;
         CardParts.SetProjectile(newTurretPartAttack);
 
-        turretBuilding.ResetAttackPart(newTurretPartAttack);
+        turretBuilding.ResetProjectilePart(newTurretPartAttack);
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
 

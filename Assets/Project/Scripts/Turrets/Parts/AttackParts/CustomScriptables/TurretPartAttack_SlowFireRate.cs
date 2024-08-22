@@ -5,7 +5,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartAttack_SlowFireRate", 
     menuName = SOAssetPaths.TURRET_PARTS_ATTACKS + "TurretPartAttack_SlowFireRate")]
-public class TurretPartAttack_SlowFireRate : TurretPartAttack
+public class TurretPartAttack_SlowFireRate : TurretPartProjectileDataModel
 {
     [Space(40)]
     [SerializeField] private SlowFireRateTurretBuildingVisuals slowFireRateVisualsPrefab;

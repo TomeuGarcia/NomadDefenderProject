@@ -10,9 +10,8 @@ public class TurretCardData
     public int CardUpgradeLevel { get; private set; }
     public TurretCardStatsController StatsController { get; private set; }
 
-    
-    private readonly TurretPassiveAbilitiesController _passiveAbilitiesController;
-    
+    public TurretPassiveAbilitiesController PassiveAbilitiesController { get; private set; }
+
 
     public TurretCardData(TurretCardDataModel model)
     {
@@ -23,7 +22,7 @@ public class TurretCardData
         
         MakeStatsControllerFromParts();
 
-        _passiveAbilitiesController = new TurretPassiveAbilitiesController(
+        PassiveAbilitiesController = new TurretPassiveAbilitiesController(
             this, OriginalModel.PassiveAbilityModels);
     }
     
@@ -40,8 +39,8 @@ public class TurretCardData
             MakeStatsControllerFromParts();
         }
         
-        _passiveAbilitiesController = new TurretPassiveAbilitiesController(
-            this, other._passiveAbilitiesController);
+        PassiveAbilitiesController = new TurretPassiveAbilitiesController(
+            this, other.PassiveAbilitiesController);
     }
     
     
@@ -80,6 +79,10 @@ public class TurretCardData
 
     
     
+    public void SetProjectilePart(TurretPartProjectileDataModel projectileDataModel)
+    {
+        SharedPartsGroup.SetProjectile(projectileDataModel);
+    }
     public void SetPassiveAbility(TurretPassiveBase passiveAbility)
     {
         SharedPartsGroup.SetPassiveAbility(passiveAbility);
@@ -87,10 +90,10 @@ public class TurretCardData
     
     public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
-        _passiveAbilitiesController.AddPassiveAbility(passiveAbilityModel);
+        PassiveAbilitiesController.AddPassiveAbility(passiveAbilityModel);
     }
     public void RemovePassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
-        _passiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
+        PassiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
     }
 }

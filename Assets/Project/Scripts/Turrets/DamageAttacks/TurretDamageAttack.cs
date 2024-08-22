@@ -3,11 +3,11 @@
 
 public class TurretDamageAttack
 {
-    public readonly TurretPartAttack_Prefab ProjectileSource;
+    public readonly ATurretProjectileBehaviour ProjectileSource;
     public readonly Enemy Target;
     public int Damage { get; private set; }
     
-    public TurretDamageAttack(TurretPartAttack_Prefab projectileSource, Enemy target, int defaultDamage)
+    public TurretDamageAttack(ATurretProjectileBehaviour projectileSource, Enemy target, int defaultDamage)
     {
         ProjectileSource = projectileSource;
         Target = target;

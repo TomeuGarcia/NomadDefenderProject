@@ -3,45 +3,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class HomingProjectile : TurretPartAttack_Prefab
+public class HomingProjectile : ATurretProjectileBehaviour
 {
     [SerializeField] protected Lerp lerp;
-
-    protected override void DoUpdate()
-    {
-    }
-
-
-    public void NEW_ProjectileShotInit(Enemy targetEnemy, TurretBuilding turretOwner)
-    {
-        base.ProjectileShotInit(targetEnemy, turretOwner);
-
-        this.targetEnemy = targetEnemy;
-
-        _damageAttack = new TurretDamageAttack(this, targetEnemy, turretOwner.Stats.Damage);
-        
-        
-        
-        
-        targetEnemy.QueueDamage(_damageAttack);
-        
-        
-    }
     
-
-    public sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
+    
+    protected sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         base.ProjectileShotInit(targetEnemy, owner);
         this.targetEnemy = targetEnemy;
-
-        // TODO: NOTIFY ABILITIES
         
-        /*
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, owner.Stats.Damage);
-        targetEnemy.QueueDamage(damage);
-        */
-
         _damageAttack = new TurretDamageAttack(this, targetEnemy, ComputeDamage());
+        
         targetEnemy.QueueDamage(_damageAttack);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
@@ -50,9 +23,9 @@ public class HomingProjectile : TurretPartAttack_Prefab
         OnShotInitialized();
     }
 
-    public sealed override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
+    protected sealed override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
     {
-        turretOwner = owner;
+        base.ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
 
         this.targetEnemy = precomputedDamageAttack.Target;
         _damageAttack = precomputedDamageAttack;
@@ -78,7 +51,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
     private void EnemyHit()
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+            .GetAttackParticlesGameObject(ProjectileType, targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
@@ -90,7 +63,7 @@ public class HomingProjectile : TurretPartAttack_Prefab
 
     protected virtual int ComputeDamage()
     {
-        return turretOwner.Stats.Damage;
+        return TurretOwner.Stats.Damage;
     }
 
     

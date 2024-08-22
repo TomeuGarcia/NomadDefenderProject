@@ -46,7 +46,7 @@ public class HurtedThresholdProjectile : HomingProjectile
 
     protected override int ComputeDamage()
     {
-        int damage = (int)(turretOwner.Stats.Damage);
+        int damage = (int)(TurretOwner.Stats.Damage);
 
         int highestHealth = ServiceLocator.GetInstance().TDLocationsUtils.GetHighestLocationHealth();
 

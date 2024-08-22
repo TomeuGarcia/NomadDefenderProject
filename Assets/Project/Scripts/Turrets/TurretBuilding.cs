@@ -11,6 +11,10 @@ public class TurretBuilding : RangeBuilding
 
     public TurretCardData CardData { get; private set; }
 
+    private ITurretObjectLiftimeCycle _abilitiesObjectLifetimeCycle;
+    private ITurretPlacingLifetimeCycle _abilitiesPlacingLifetimeCycle;
+    
+
     private TurretPartBody_Prefab bodyPart;
     public Transform BodyPartTransform => bodyPart.transform;
     public Transform BinderPointTransform => bodyPart.binderPoint;
@@ -26,9 +30,8 @@ public class TurretBuilding : RangeBuilding
     
     public TurretPartBody.BodyType BodyType => bodyPart.BodyType;
 
-    private TurretPartAttack_Prefab turretAttack;
-    public Material MaterialForTurret => turretAttack.materialForTurret;
-    public TurretPartAttack TurretPartAttack { get; private set; }
+    public Material MaterialForTurret => ProjectileDataModel.MaterialForTurret;
+    public TurretPartProjectileDataModel ProjectileDataModel { get; private set; }
     
 
     [Header("HOLDERS")]
@@ -115,6 +118,7 @@ public class TurretBuilding : RangeBuilding
         }
 
         TDGameManager.OnGameFinishStart -= PrintData;
+        _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
     }
 
     private void PrintData()
@@ -149,19 +153,20 @@ public class TurretBuilding : RangeBuilding
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
         CardData = turretCardData;
+        ProjectileDataModel = CardData.SharedPartsGroup.Projectile;
+        _abilitiesObjectLifetimeCycle = CardData.PassiveAbilitiesController;
+        _abilitiesPlacingLifetimeCycle = CardData.PassiveAbilitiesController;
 
         TurretCardPartsGroup parts = turretCardData.SharedPartsGroup;
-        TurretPartAttack = parts.Projectile;
         TurretPartBody turretPartBody = parts.Body;
         TurretPassiveBase turretPassiveBase = parts.Passive;
         bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardData.CardUpgradeLevel;
 
-        turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
-        bodyPart.Init(turretPartBody.bodyType, turretAttack.materialForTurret);
+        bodyPart.Init(turretPartBody.bodyType, ProjectileDataModel.MaterialForTurret);
 
         basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, Stats.RadiusRange);
@@ -179,18 +184,19 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
-        string dataTestingName = turretPartBody.name + "--" + turretPassiveBase.name + "--" + TurretPartAttack.name;
+        string dataTestingName = turretPartBody.name + "--" + turretPassiveBase.name + "--" + ProjectileDataModel.name;
         _testingSnapshot = new TestingSnapshot(dataTestingName);
         
-        _shootingController = new ProjectileShootingController(this, Stats, turretAttack, bodyPart, _testingSnapshot);
+        _shootingController = new ProjectileShootingController(this, Stats, ProjectileDataModel, bodyPart,
+           CardData.PassiveAbilitiesController, _testingSnapshot);
+        
+        _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
     }
 
-    public void ResetAttackPart(TurretPartAttack turretPartAttack)
+    public void ResetProjectilePart(TurretPartProjectileDataModel newProjectilePart)
     {
-        this.TurretPartAttack = turretPartAttack;
-
-        this.turretAttack = TurretPartAttack.prefab.GetComponent<TurretPartAttack_Prefab>();
-        bodyPart.ResetProjectileMaterial(turretAttack.materialForTurret);
+        ProjectileDataModel = newProjectilePart;
+        bodyPart.ResetProjectileMaterial(MaterialForTurret);
     }
     public void ResetBodyMaterial(Material newMaterial)
     {        
@@ -261,26 +267,31 @@ public class TurretBuilding : RangeBuilding
 
         InvokeOnPlaced();
 
-        TurretPartAttack.OnTurretPlaced(this, turretAttack.materialForTurret);
+        ProjectileDataModel.OnTurretPlaced(this, MaterialForTurret);
+        
         if (OnGotPlaced != null) OnGotPlaced();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlaced();
     }
     public override void GotEnabledPlacing()
     {
         basePart.GotEnabledPlacing();
 
         if (OnGotEnabledPlacing != null) OnGotEnabledPlacing();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlacingStart();
     }
     public override void GotDisabledPlacing()
     {
         basePart.GotDisabledPlacing();
 
         if (OnGotDisabledPlacing != null) OnGotDisabledPlacing();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlacingFinish();
     }
     public override void GotMovedWhenPlacing()
     {
         basePart.GotMovedWhenPlacing();
 
         if (OnGotMovedWhenPlacing != null) OnGotMovedWhenPlacing();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlacingMove();
     }
 
     public override void ShowQuickLevelUI()

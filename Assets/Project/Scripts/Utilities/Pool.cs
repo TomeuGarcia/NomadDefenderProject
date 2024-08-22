@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,20 @@ public class Pool : MonoBehaviour
     private bool missingObjects = true;
 
     private List<GameObject> objects = new List<GameObject>();
+    
+    public interface IListener
+    {
+        void OnObjectInstantiated(GameObject gameObject);
+    }
+
+    public IListener _listener = null;
 
 
     void Awake()
     {
         ResetObjectsList();
     }
-
+    
     public void ResetObjectsList()
     {
         objects = new List<GameObject>();
@@ -42,8 +50,10 @@ public class Pool : MonoBehaviour
         if(missingObjects)
         {
             GameObject obj = Instantiate(pooledObject);
+            _listener.OnObjectInstantiated(obj);
             obj.SetActive(false);
             objects.Add(obj);
+            
             return obj;
         }
 
@@ -68,6 +78,7 @@ public class Pool : MonoBehaviour
         if(missingObjects)
         {
             GameObject obj = Instantiate(pooledObject);
+            _listener.OnObjectInstantiated(obj);
             obj.SetActive(false);
 
             obj.gameObject.transform.position = position;
@@ -106,6 +117,7 @@ public class Pool : MonoBehaviour
         if (missingObjects)
         {
             GameObject obj = Instantiate(pooledObject, spawnTransform);
+            _listener.OnObjectInstantiated(obj);
             obj.SetActive(false);
 
             obj.gameObject.transform.position = position;
@@ -117,4 +129,5 @@ public class Pool : MonoBehaviour
 
         return null;
     }
+
 }

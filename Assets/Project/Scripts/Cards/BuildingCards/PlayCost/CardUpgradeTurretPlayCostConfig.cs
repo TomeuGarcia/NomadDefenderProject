@@ -27,9 +27,9 @@ public class CardUpgradeTurretPlayCostConfig : ScriptableObject
             if (_useCalculator)
             {
                 TurretPartBody body = turretCard.CardParts.Body;
-                TurretPartAttack attack = turretCard.CardParts.Projectile;
+                TurretPartProjectileDataModel attack = turretCard.CardParts.Projectile;
                 TurretCardPlayCostCalculator.InputData turretData = new TurretCardPlayCostCalculator.InputData(
-                    (int)body.DamageStat.ComputeValueByLevel(0), body.ShotsPerSecondStat.ComputeValueByLevel(0), attack.NumberOfHittableTargets);
+                    (int)body.DamageStat.ComputeValueByLevel(0), body.ShotsPerSecondStat.ComputeValueByLevel(0), 1);
                 return _calculator.ComputePlayCost(turretData) - turretCard.GetCardPlayCost();
             }
 

@@ -24,7 +24,7 @@ public class PartsLibrary : ScriptableObject
     }
 
 
-    private PartsByProgressionState<TurretPartAttack>[] _attacksByProgressionStates;
+    private PartsByProgressionState<TurretPartProjectileDataModel>[] _attacksByProgressionStates;
     private PartsByProgressionState<TurretPartBody>[] _bodiesByProgressionStates;
     private PartsByProgressionState<TurretPassiveBase>[] _passivesByProgressionStates;
     private PartsByProgressionState<TurretStatsUpgradeModel>[] _bonusStatsByProgressionStates;
@@ -41,7 +41,7 @@ public class PartsLibrary : ScriptableObject
 
 
     // ATTACK PARTS
-    private PartsByProgressionState<TurretPartAttack> GetAttacksByProgressionState(NodeEnums.ProgressionState progressionState)
+    private PartsByProgressionState<TurretPartProjectileDataModel> GetAttacksByProgressionState(NodeEnums.ProgressionState progressionState)
     {
         for (int i = 0; i < _attacksByProgressionStates.Length; ++i)
         {
@@ -52,11 +52,11 @@ public class PartsLibrary : ScriptableObject
         return _attacksByProgressionStates[0];
     }
 
-    public TurretPartAttack[] GetRandomTurretPartAttacks(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    public TurretPartProjectileDataModel[] GetRandomTurretPartAttacks(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
         totalAmount = Mathf.Min(totalAmount, _attacksByProgressionStates.Length);
-        PartsByProgressionState<TurretPartAttack> attacksByProgressionState = GetAttacksByProgressionState(progressionState);
-        HashSet<TurretPartAttack> holderPartsSet = new HashSet<TurretPartAttack>();
+        PartsByProgressionState<TurretPartProjectileDataModel> attacksByProgressionState = GetAttacksByProgressionState(progressionState);
+        HashSet<TurretPartProjectileDataModel> holderPartsSet = new HashSet<TurretPartProjectileDataModel>();
 
         if (perfect)
         {

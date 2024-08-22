@@ -6,8 +6,9 @@ public class ProjectileShootingController
     private readonly TurretBuilding _turretOwner;
     private readonly TurretStatsSnapshot _stats;
     private readonly TurretBuilding.TestingSnapshot _testingSnapshot;
-    private readonly TurretPartAttack_Prefab _projectilePrefab;
+    private readonly TurretPartProjectileDataModel _projectileDataModel;
     private readonly TurretPartBody_Prefab _body;
+    private readonly ITurretShootingLifetimeCycle _turretShootingLifetimeCycle;
     private float _shootTimer;
     public float TimeSinceLastShot { get; private set; }
     public Vector3 LastTargetedPosition { get; private set; }
@@ -16,14 +17,16 @@ public class ProjectileShootingController
     
     public ProjectileShootingController(TurretBuilding turretOwner,
         TurretStatsSnapshot stats, 
-        TurretPartAttack_Prefab projectilePrefab, TurretPartBody_Prefab body, 
+        TurretPartProjectileDataModel projectileDataModel, TurretPartBody_Prefab body, 
+        ITurretShootingLifetimeCycle turretShootingLifetimeCycle,
         TurretBuilding.TestingSnapshot testingSnapshot)
     {
         _turretOwner = turretOwner;
         _stats = stats;
         _testingSnapshot = testingSnapshot;
-        _projectilePrefab = projectilePrefab;
+        _projectileDataModel = projectileDataModel;
         _body = body;
+        _turretShootingLifetimeCycle = turretShootingLifetimeCycle;
 
         _targetingController = new ProjectileTargetingController(turretOwner);
         
@@ -65,18 +68,18 @@ public class ProjectileShootingController
     private void Shoot(Enemy targetedEnemy)
     {
         Vector3 shootPoint = _body.GetNextShootingPoint();
-        TurretPartAttack_Prefab currentAttack = ProjectileAttacksFactory.GetInstance()
-            .GetAttackGameObject(_projectilePrefab.GetAttackType, shootPoint, Quaternion.identity)
-            .GetComponent<TurretPartAttack_Prefab>();
+        ATurretProjectileBehaviour currentAttack = ProjectileAttacksFactory.GetInstance()
+            .GetAttackGameObject(_projectileDataModel.ProjectileType, shootPoint, Quaternion.identity)
+            .GetComponent<ATurretProjectileBehaviour>();
 
         currentAttack.transform.parent = _turretOwner.transform;
         currentAttack.gameObject.SetActive(true);
-        currentAttack.ProjectileShotInit(targetedEnemy, _turretOwner);
+        currentAttack.ProjectileShotInit(_turretShootingLifetimeCycle, targetedEnemy, _turretOwner);
 
 
         // Spawn particle
         GameObject particles = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(currentAttack.GetAttackType, shootPoint, _body.transform.rotation);
+            .GetAttackParticlesGameObject(currentAttack.ProjectileType, shootPoint, _body.transform.rotation);
         particles.SetActive(true);
         particles.transform.parent = _turretOwner.transform;
 

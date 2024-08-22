@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tutorial2CardDrawer : CardDrawer
 {
 
-    [SerializeField] TurretPartAttack turretPartAttackToSortFirst;
+    [SerializeField] TurretPartProjectileDataModel turretPartAttackToSortFirst;
 
     protected override void SetupDeck()
     {

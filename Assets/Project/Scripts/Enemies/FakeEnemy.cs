@@ -6,7 +6,7 @@ public class FakeEnemy : Enemy
 {
     private bool canBeTargeted = true;
 
-    public delegate void FakeEnemyAction(TurretPartAttack_Prefab projectile);
+    public delegate void FakeEnemyAction(ATurretProjectileBehaviour projectile);
     public event FakeEnemyAction OnAttackedByProjectile;
 
     public delegate void FakeEnemyComputeDamageAction(TurretDamageAttack damageAttack);

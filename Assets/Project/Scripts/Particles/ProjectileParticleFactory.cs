@@ -59,7 +59,7 @@ public class ProjectileParticleFactory : MonoBehaviour
         }
     }
 
-    public GameObject GetAttackParticlesGameObject(TurretPartAttack_Prefab.AttackType attackType, Vector3 position, Quaternion rotation)
+    public GameObject GetAttackParticlesGameObject(ATurretProjectileBehaviour.Type attackType, Vector3 position, Quaternion rotation)
     {
         return GetAttackParticlesGameObject(AttackTypeToProjectileParticleType(attackType), position, rotation);
     }
@@ -77,27 +77,29 @@ public class ProjectileParticleFactory : MonoBehaviour
         }
     }
 
-    private ProjectileParticleType AttackTypeToProjectileParticleType(TurretPartAttack_Prefab.AttackType attackType)
+    private ProjectileParticleType AttackTypeToProjectileParticleType(ATurretProjectileBehaviour.Type attackType)
     {
         ProjectileParticleType projectileParticleType = ProjectileParticleType.BASIC;
 
-        if (attackType == TurretPartAttack_Prefab.AttackType.BASIC)
+        if (attackType == ATurretProjectileBehaviour.Type.Homing)
         {
             projectileParticleType = ProjectileParticleType.BASIC;
         }
-        else if (attackType == TurretPartAttack_Prefab.AttackType.TESLA)
+        else if (attackType == ATurretProjectileBehaviour.Type.HomingChaining)
         {
             projectileParticleType = ProjectileParticleType.TESLA;
         }
-        else if (attackType == TurretPartAttack_Prefab.AttackType.LONG_RANGE)
+        /*
+        else if (attackType == ATurretProjectileBehaviour.Type.LONG_RANGE)
         {
             projectileParticleType = ProjectileParticleType.LONG_RANGE;
         }
-        else if (attackType == TurretPartAttack_Prefab.AttackType.CLOSE_RANGE)
+        else if (attackType == ATurretProjectileBehaviour.Type.CLOSE_RANGE)
         {
             projectileParticleType = ProjectileParticleType.CLOSE_RANGE;
         }
-        else if (attackType == TurretPartAttack_Prefab.AttackType.PIERCING)
+        */
+        else if (attackType == ATurretProjectileBehaviour.Type.Piercing)
         {
             projectileParticleType = ProjectileParticleType.PIERCING;
         }

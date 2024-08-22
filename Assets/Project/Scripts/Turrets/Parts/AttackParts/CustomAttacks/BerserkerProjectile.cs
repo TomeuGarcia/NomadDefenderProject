@@ -39,7 +39,7 @@ public class BerserkerProjectile : HomingProjectile
 
     protected override int ComputeDamage()
     {
-        int damage = turretOwner.Stats.Damage;
+        int damage = TurretOwner.Stats.Damage;
         return damage;
     }
 

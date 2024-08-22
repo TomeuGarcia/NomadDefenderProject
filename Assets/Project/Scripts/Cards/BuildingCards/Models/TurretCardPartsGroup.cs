@@ -3,11 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public class TurretCardPartsGroup
 {
-    [SerializeField] private TurretPartAttack _projectile;
+    [SerializeField] private TurretPartProjectileDataModel _projectile;
     [SerializeField] private TurretPartBody _body;
     [SerializeField] private TurretPassiveBase[] _passives;
     
-    public TurretPartAttack Projectile => _projectile;
+    public TurretPartProjectileDataModel Projectile => _projectile;
     public TurretPartBody Body => _body;
     public TurretPassiveBase Passive => _passives[0];
 
@@ -20,7 +20,7 @@ public class TurretCardPartsGroup
         other._passives.CopyTo(_passives, 0);
     }
 
-    public void SetProjectile(TurretPartAttack projectile)
+    public void SetProjectile(TurretPartProjectileDataModel projectile)
     {
         _projectile = projectile;
     }
