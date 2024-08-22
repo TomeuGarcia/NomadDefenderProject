@@ -3,15 +3,17 @@ using System.Threading.Tasks;
 
 public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
 {
-    private readonly int _damageAmount = 1;
     private TurretBuilding _turretOwner;
     private TurretBinder _binder;
     private bool _isSubscribed;
+
+    private readonly TPADataModel_SelfHurtUpgradeStats _abilityDataModel;
     
-    public TurretPassiveAbility_SelfHurtUpgradeStats(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_SelfHurtUpgradeStats(TPADataModel_SelfHurtUpgradeStats originalModel) 
         : base(originalModel)
     {
-        ApplyDescriptionCorrection("DAMAGE_VALUE", _damageAmount);
+        _abilityDataModel = originalModel;
+        ApplyDescriptionCorrection(_abilityDataModel.DamageAmount);
     }
 
 
@@ -74,7 +76,7 @@ public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
         if (ServiceLocator.GetInstance().TDLocationsUtils
             .GetHealthiestLocation(_turretOwner.Position, out PathLocation pathLocation))
         {
-            pathLocation.TakeDamage(_damageAmount);
+            pathLocation.TakeDamage(_abilityDataModel.DamageAmount.Value);
         }
 
         HideBinder();

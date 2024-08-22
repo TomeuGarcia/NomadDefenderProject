@@ -24,7 +24,7 @@ public class TurretCardData
         MakeStatsControllerFromParts();
 
         _passiveAbilitiesController = new TurretPassiveAbilitiesController(
-            this, OriginalModel.PassiveAbilityModels, ServiceLocator.GetInstance().TurretAbilityFactory);
+            this, OriginalModel.PassiveAbilityModels);
     }
     
     public TurretCardData(TurretCardData other)
@@ -41,7 +41,7 @@ public class TurretCardData
         }
         
         _passiveAbilitiesController = new TurretPassiveAbilitiesController(
-            this, other._passiveAbilitiesController, ServiceLocator.GetInstance().TurretAbilityFactory);
+            this, other._passiveAbilitiesController);
     }
     
     
@@ -85,11 +85,11 @@ public class TurretCardData
         SharedPartsGroup.SetPassiveAbility(passiveAbility);
     }
     
-    public void AddPassiveAbility(TurretPassiveAbilityDataModel passiveAbilityModel)
+    public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
         _passiveAbilitiesController.AddPassiveAbility(passiveAbilityModel);
     }
-    public void RemovePassiveAbility(TurretPassiveAbilityDataModel passiveAbilityModel)
+    public void RemovePassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
         _passiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
     }

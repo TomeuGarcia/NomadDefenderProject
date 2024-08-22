@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0aadc08069b43fca04789b5cd71dc65, type: 3}
+  m_Script: {fileID: 11500000, guid: 985cfe7dae3746ea818033f9695d3836, type: 3}
   m_Name: TurretAbility_Restore
   m_EditorClassIdentifier: 
-  _abilityType: 2
   _viewConfig:
     _sprite: {fileID: 21300000, guid: 1dd8139ee3f76574fb389779b864f9ba, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: 1dd8139ee3f76574fb389779b864f9ba, type: 3}
@@ -21,4 +20,8 @@ MonoBehaviour:
       rgba: 4286177311
   _name: restore
   _description: When played, heal the most damaged alive Node by the amount of this
-    card's level [HEAL_VALUE].
+    card's level [HEAL_AMOUNT].
+  _healAmount:
+    _name: HEAL_AMOUNT
+    _isDynamic: 1
+    _constantValue: 0

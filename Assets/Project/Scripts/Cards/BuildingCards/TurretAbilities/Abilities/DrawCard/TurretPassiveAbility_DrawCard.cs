@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 public class TurretPassiveAbility_DrawCard : ATurretPassiveAbility
 {
 
-    public TurretPassiveAbility_DrawCard(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_DrawCard(TPADataModel_DrawCard originalModel) 
         : base(originalModel)
     {
     }

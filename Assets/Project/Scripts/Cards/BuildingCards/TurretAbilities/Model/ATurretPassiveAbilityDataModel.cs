@@ -1,16 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TurretAbility_NAME", 
-    menuName = SOAssetPaths.CARDS_ABILITIES + "TurretPassiveAbilityDataModel")]
-public class TurretPassiveAbilityDataModel : ScriptableObject
-{
-    [Header("TYPE")]
-    [SerializeField] private TurretPassiveAbilityType _abilityType;
 
-    [Header("VIEW")] 
+public abstract class ATurretPassiveAbilityDataModel : ScriptableObject
+{
+    [Header("DEFAULTS")]
+    [Header("View")] 
     [SerializeField] private ViewConfig _viewConfig;
     
-    [Header("DESCRIPTION")] 
+    [Header("Description")] 
     [SerializeField] private string _name;
     [SerializeField, TextArea(2, 5)] private string _description;
     
@@ -29,9 +26,10 @@ public class TurretPassiveAbilityDataModel : ScriptableObject
     }
     
     
-    public TurretPassiveAbilityType AbilityType => _abilityType;
     public ViewConfig View => _viewConfig;
     public string Name => _name;
     public string Description => _description;
-    
+
+
+    public abstract ATurretPassiveAbility MakePassiveAbility();
 }

@@ -5,7 +5,7 @@ public class TurretPassiveAbility_MostDistantEnemySorting : ATurretPassiveAbilit
     private TurretBuilding _turretOwner;
     
     
-    public TurretPassiveAbility_MostDistantEnemySorting(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_MostDistantEnemySorting(ATurretPassiveAbilityDataModel originalModel) 
         : base(originalModel)
     {
     }

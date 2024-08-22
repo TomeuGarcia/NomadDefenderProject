@@ -3,27 +3,29 @@ using System.Threading.Tasks;
 
 public class TurretPassiveAbility_HealLocation : ATurretPassiveAbility
 {
-    private int _healAmount;
     private TurretBuilding _turretOwner;
     private TurretBinder _binder;
 
+    private readonly TPADataModel_HealLocation _abilityDataModel;
+    private int _healAmount;
     
-    public TurretPassiveAbility_HealLocation(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_HealLocation(TPADataModel_HealLocation originalModel) 
         : base(originalModel)
     {
+        _abilityDataModel = originalModel;
     }
 
 
     public override void OnAddedToTurretCard(TurretCardData cardData)
     {
         _healAmount = cardData.CardUpgradeLevel;
-        ApplyDescriptionCorrection("HEAL_VALUE", _healAmount);
+        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
     }
 
     public override void OnTurretCardUpgraded(TurretCardData cardData)
     {
         _healAmount = cardData.CardUpgradeLevel;
-        ApplyDescriptionCorrection("HEAL_VALUE", _healAmount);
+        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)

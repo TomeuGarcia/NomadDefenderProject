@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
 {
     private TurretBuilding _turretOwner;
-    private readonly int _costIncrement = 50;
     
+    private readonly TPADataModel_SpawnCardCopyInDeck _abilityDataModel;
+
     
-    public TurretPassiveAbility_SpawnCardCopyInDeck(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_SpawnCardCopyInDeck(TPADataModel_SpawnCardCopyInDeck originalModel) 
         : base(originalModel)
     {
-        ApplyDescriptionCorrection("COST_INCREMENT_VALUE", _costIncrement);
+        _abilityDataModel = originalModel;
+        ApplyDescriptionCorrection(_abilityDataModel.CostIncrement);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)
@@ -29,7 +31,7 @@ public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
         await Task.Delay(TimeSpan.FromSeconds(delayBeforeSpawningCard));
 
         TurretCardData turretCardData = new TurretCardData(_turretOwner.CardData);
-        turretCardData.IncrementPlayCost(_costIncrement);
+        turretCardData.IncrementPlayCost(_abilityDataModel.CostIncrement.Value);
         
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(turretCardData);
     }

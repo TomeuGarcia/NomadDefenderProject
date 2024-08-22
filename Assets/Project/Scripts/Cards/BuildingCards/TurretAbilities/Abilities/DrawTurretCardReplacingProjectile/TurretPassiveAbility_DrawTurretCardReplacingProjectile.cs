@@ -4,7 +4,7 @@ public class TurretPassiveAbility_DrawTurretCardReplacingProjectile : ATurretPas
 {
     private TurretBuilding _turretOwner;
     
-    public TurretPassiveAbility_DrawTurretCardReplacingProjectile(TurretPassiveAbilityDataModel originalModel) 
+    public TurretPassiveAbility_DrawTurretCardReplacingProjectile(TPADataModel_DrawTurretCardReplacingProjectile originalModel) 
         : base(originalModel)
     {
     }

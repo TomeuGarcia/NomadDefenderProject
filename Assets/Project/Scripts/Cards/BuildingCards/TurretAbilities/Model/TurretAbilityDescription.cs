@@ -13,11 +13,11 @@ public class TurretAbilityDescription
         Description = description;
     }
 
-    public void ApplyDescriptionModifications(Dictionary<string, int> keywordsToValues)
+    public void ApplyDescriptionModifications(Dictionary<string, string> keywordsToValues)
     {
-        foreach (KeyValuePair<string,int> keywordToValue in keywordsToValues)
+        foreach (KeyValuePair<string,string> keywordToValue in keywordsToValues)
         {
-            Description = Description.Replace(keywordToValue.Key, keywordToValue.Value.ToString());
+            Description = Description.Replace(keywordToValue.Key, keywordToValue.Value);
         }
     }
     

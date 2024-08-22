@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public abstract class ATurretPassiveAbility
 {
-    public readonly TurretPassiveAbilityDataModel OriginalModel;
+    public readonly ATurretPassiveAbilityDataModel OriginalModel;
     public string AbilityName => _description.Name;
     public string AbilityDescription
     {
@@ -15,26 +15,34 @@ public abstract class ATurretPassiveAbility
     }
 
     private readonly TurretAbilityDescription _description;
-    private readonly Dictionary<string, int> _descriptionCorrections;
+    private readonly Dictionary<string, string> _descriptionCorrections;
 
 
-    protected ATurretPassiveAbility(TurretPassiveAbilityDataModel originalModel)
+    protected ATurretPassiveAbility(ATurretPassiveAbilityDataModel originalModel)
     {
         OriginalModel = originalModel;
         
         _description = new TurretAbilityDescription(OriginalModel.Name, OriginalModel.Description);
-        _descriptionCorrections = new Dictionary<string, int>();
+        _descriptionCorrections = new Dictionary<string, string>();
     }
 
-    protected void ApplyDescriptionCorrection(string keyword, int value)
+    protected void ApplyDescriptionCorrection(string name, int value)
     {
-        if (_descriptionCorrections.ContainsKey(keyword))
+        ApplyDescriptionCorrection(name, value.ToString());
+    }
+    protected void ApplyDescriptionCorrection(AbilityDescriptionVariable constantVariable)
+    {
+        ApplyDescriptionCorrection(constantVariable.Name, constantVariable.ValueAsString());
+    }
+    protected void ApplyDescriptionCorrection(string name, string value)
+    {
+        if (_descriptionCorrections.ContainsKey(name))
         {
-            _descriptionCorrections[keyword] = value;
+            _descriptionCorrections[name] = value;
             return;
         }
         
-        _descriptionCorrections.Add(keyword, value);
+        _descriptionCorrections.Add(name, value);
     }
     
     

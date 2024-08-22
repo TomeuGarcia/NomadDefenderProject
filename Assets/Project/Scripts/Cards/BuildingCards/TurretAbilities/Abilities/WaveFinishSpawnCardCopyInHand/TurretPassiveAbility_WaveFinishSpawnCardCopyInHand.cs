@@ -4,14 +4,18 @@ using System.Threading.Tasks;
 
 public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassiveAbility
 {
-    private readonly int _costIncrementPerCard = 10;
     private TurretBuilding _turretOwner;
     private bool _isSubscribed;
     
-    public TurretPassiveAbility_WaveFinishSpawnCardCopyInHand(TurretPassiveAbilityDataModel originalModel) 
+    private readonly TPADataModel_WaveFinishSpawnCardCopyInHand _abilityDataModel;
+
+    
+    
+    public TurretPassiveAbility_WaveFinishSpawnCardCopyInHand(TPADataModel_WaveFinishSpawnCardCopyInHand originalModel) 
         : base(originalModel)
     {
-        ApplyDescriptionCorrection("COST_INCREMENT_VALUE", _costIncrementPerCard);
+        _abilityDataModel = originalModel;
+        ApplyDescriptionCorrection(_abilityDataModel.CostIncrementPerCard);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)
@@ -57,7 +61,7 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
         
         TurretCardData turretCardDataCopy = new TurretCardData(_turretOwner.CardData);
         turretCardDataCopy.RemovePassiveAbility(OriginalModel);
-        turretCardDataCopy.IncrementPlayCost(_costIncrementPerCard * numberOfCards);
+        turretCardDataCopy.IncrementPlayCost(_abilityDataModel.CostIncrementPerCard.Value * numberOfCards);
         
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInHand(turretCardDataCopy);
     }
