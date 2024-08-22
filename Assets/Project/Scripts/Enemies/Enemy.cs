@@ -5,9 +5,6 @@ using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("Attack")]
-    [SerializeField] private EnemyAttackGeneralConfig _attackGeneralConfig;
-    
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
     public Transform MeshTransform => meshRenderer.transform;
@@ -39,6 +36,7 @@ public class Enemy : MonoBehaviour
 
 
     protected HealthSystem healthSystem;
+    public HealthSystem HealthSystem => healthSystem;
     private EnemyAttackDestination _attackDestination;
 
     public delegate void EnemyAction(Enemy enemy);

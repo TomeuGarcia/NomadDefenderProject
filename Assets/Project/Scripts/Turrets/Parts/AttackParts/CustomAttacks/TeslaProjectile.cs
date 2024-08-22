@@ -81,7 +81,7 @@ public class TeslaProjectile : HomingProjectile
         hitParticles.gameObject.SetActive(true);
         hitParticles.transform.parent = gameObject.transform.parent;
         
-        targetEnemy.GetStunned(stunDuration);
+        //targetEnemy.GetStunned(stunDuration); // Already on HighVoltage ability
 
         
         if (_isChaining)

@@ -34,7 +34,7 @@ public abstract class ATurretPassiveAbility
     {
         ApplyDescriptionCorrection(constantVariable.Name, constantVariable.ValueAsString());
     }
-    protected void ApplyDescriptionCorrection(string name, string value)
+    private void ApplyDescriptionCorrection(string name, string value)
     {
         if (_descriptionCorrections.ContainsKey(name))
         {
@@ -58,6 +58,7 @@ public abstract class ATurretPassiveAbility
     public virtual void OnTurretPlacingMove() { } 
     public virtual void OnTurretPlaced() { } 
     
-    public virtual void OnBeforeShootingEnemy(TurretDamageAttack damageAttack) { } 
-    public virtual void OnAfterShootingEnemy(TurretDamageAttackResult damageAttackResult) { } 
+    public virtual void OnBeforeShootingEnemy() { } 
+    public virtual void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack) { } 
+    public virtual void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult) { } 
 }

@@ -14,7 +14,7 @@ public class TurretPartAttack_SlowFireRate : TurretPartAttack
     {
         SlowFireRateTurretBuildingVisuals slowFireRateVisuals = GameObject.Instantiate(slowFireRateVisualsPrefab, owner.transform);
 
-        slowFireRateVisuals.TurretPlacedInit(owner);
+        slowFireRateVisuals.TurretPlacedInit(owner, SlowFireRateProjectile.MAX_CADENCE_TIME);
     }
 
 }

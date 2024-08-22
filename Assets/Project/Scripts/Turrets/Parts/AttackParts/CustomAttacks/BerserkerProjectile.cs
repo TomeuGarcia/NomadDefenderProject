@@ -46,6 +46,6 @@ public class BerserkerProjectile : HomingProjectile
     protected override void OnShotInitialized()
     {
         base.OnShotInitialized();
-        trailRenderer.widthMultiplier = BerserkerTurretBuildingVisuals.IsBerserkEnabled ? 2.5f : 1.0f;
+        //trailRenderer.widthMultiplier = BerserkerTurretBuildingVisuals.IsBerserkEnabled ? 2.5f : 1.0f;
     }
 }

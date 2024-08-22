@@ -49,7 +49,7 @@ public class CloseRangeDamageProjectile : HomingProjectile
         StartCoroutine(WaitForLerpFinish());
 
     }
-    */
+    
 
     protected override int ComputeDamage()
     {
@@ -57,8 +57,9 @@ public class CloseRangeDamageProjectile : HomingProjectile
         int baseDamage = turretOwner.Stats.Damage;
         return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
     }
+    */
 
-    private void OnServerInitialized()
+    protected override void OnShotInitialized()
     {
         decreaseInSizeCoroutine = StartCoroutine(DecreaseSizeOvertime());
     }

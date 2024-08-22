@@ -96,6 +96,7 @@ public class PiercingProjectile : TurretPartAttack_Prefab
 
     private int ComputeDamage()
     {
+        return this.damage;
         this._currentDamageMultiplier = startDamageMultiplier;
         this.damage = (int)((float)turretOwner.Stats.Damage * _currentDamageMultiplier);
 

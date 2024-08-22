@@ -11,6 +11,7 @@ public class SlowFireRateTurretBuildingVisuals : MonoBehaviour
     [SerializeField] private Image _durationFillImage;
     [SerializeField] private Image _insideImage;
     private bool _isMax;
+    private float _maxTimeBetweenShots;
 
     private Color originalFillImageColor;
     private Color originalInsideImageColor;
@@ -28,15 +29,16 @@ public class SlowFireRateTurretBuildingVisuals : MonoBehaviour
     }
 
 
-    public void TurretPlacedInit(TurretBuilding owner)
+    public void TurretPlacedInit(TurretBuilding owner, float maxTimeBetweenShots)
     {
-        _owner = owner;        
+        _owner = owner;
+        _maxTimeBetweenShots = maxTimeBetweenShots;
     }
 
 
     private void UpdateFillAmount()
     {
-        float timePer1 = _owner.TimeSinceLastShot / SlowFireRateProjectile.MAX_CADENCE_TIME;
+        float timePer1 = _owner.TimeSinceLastShot / _maxTimeBetweenShots;
 
         bool reachedMax = timePer1 > 0.999f;
         if (reachedMax && !_isMax)

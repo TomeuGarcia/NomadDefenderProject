@@ -10,6 +10,7 @@ public interface ITurretPassiveAbilitiesNotifier
     void OnTurretPlacingMove();
     void OnTurretPlaced();
 
-    void OnBeforeShootingEnemy(TurretDamageAttack damageAttack);
-    void OnAfterShootingEnemy(TurretDamageAttackResult damageAttackResult);
+    void OnBeforeShootingEnemy();
+    void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack);
+    void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult);
 }

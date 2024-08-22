@@ -59,7 +59,7 @@ public class DamageRangeProjectile : HomingProjectile
 
         growInSizeCoroutine = StartCoroutine(GrowSizeOvertime());
     }
-    */
+    
     
 
     protected override int ComputeDamage()
@@ -68,7 +68,8 @@ public class DamageRangeProjectile : HomingProjectile
         int baseDamage = turretOwner.Stats.Damage;
         return (int)(baseDamage * _damageMultiplierOverDistance.Evaluate(distance));
     }
-
+*/
+    
     protected override void OnShotInitialized()
     {
         growInSizeCoroutine = StartCoroutine(GrowSizeOvertime());

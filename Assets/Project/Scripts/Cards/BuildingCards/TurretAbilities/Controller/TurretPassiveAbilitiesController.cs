@@ -99,19 +99,28 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
 
-    public void OnBeforeShootingEnemy(TurretDamageAttack damageAttack)
+
+    public void OnBeforeShootingEnemy()
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnBeforeShootingEnemy(damageAttack);
+            passiveAbility.OnBeforeShootingEnemy();
+        }  
+    }
+    
+    public void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnBeforeDamagingEnemy(damageAttack);
         }
     }
 
-    public void OnAfterShootingEnemy(TurretDamageAttackResult damageAttackResult)
+    public void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult)
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnAfterShootingEnemy(damageAttackResult);
+            passiveAbility.OnAfterDamagingEnemy(damageAttackResult);
         }
     } 
 }

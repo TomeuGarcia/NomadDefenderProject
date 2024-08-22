@@ -27,6 +27,7 @@ public class TurretBuilding : RangeBuilding
     public TurretPartBody.BodyType BodyType => bodyPart.BodyType;
 
     private TurretPartAttack_Prefab turretAttack;
+    public Material MaterialForTurret => turretAttack.materialForTurret;
     public TurretPartAttack TurretPartAttack { get; private set; }
     
 

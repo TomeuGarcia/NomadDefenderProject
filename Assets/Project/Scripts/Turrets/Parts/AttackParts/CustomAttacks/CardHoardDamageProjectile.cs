@@ -38,9 +38,15 @@ public class CardHoardDamageProjectile : HomingProjectile
     }
 */
 
+    protected override void OnShotInitialized()
+    {
+        int numberOfCardsInHand = ServiceLocator.GetInstance().CardDrawer.GetCardsInHand().Length;
+        trailRenderer.widthMultiplier = 0.2f + (numberOfCardsInHand * 0.4f);
+    }
 
+    /*
     protected override int ComputeDamage()
-    {        
+    {
         int numberOfCardsInHand = ServiceLocator.GetInstance().CardDrawer.GetCardsInHand().Length;
 
         trailRenderer.widthMultiplier = 0.2f + (numberOfCardsInHand * 0.4f);
@@ -50,5 +56,6 @@ public class CardHoardDamageProjectile : HomingProjectile
 
         return baseDamage + bonusDamage;
     }
+    */
 
 }
