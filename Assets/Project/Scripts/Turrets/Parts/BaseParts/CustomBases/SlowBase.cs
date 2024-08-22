@@ -19,7 +19,7 @@ public class SlowBase : TurretPartBase_Prefab
     private static Dictionary<Enemy, SlowData> slowedEnemies = new Dictionary<Enemy, SlowData>();
     [SerializeField] private ParticleTypes _slowBreakParticleType;
 
-    private float _particleLookAtHeightOffset = 0.5f;
+    private float _particleLookAtHeightOffset = 0f;
 
     private Material slowPlaneMaterial;
 
