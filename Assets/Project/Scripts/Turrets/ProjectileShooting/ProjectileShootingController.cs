@@ -5,7 +5,6 @@ public class ProjectileShootingController
 {
     private readonly TurretBuilding _turretOwner;
     private readonly TurretStatsSnapshot _stats;
-    private readonly TurretBuilding.TestingSnapshot _testingSnapshot;
     private readonly TurretPartProjectileDataModel _projectileDataModel;
     private readonly TurretPartBody_Prefab _body;
     private readonly ITurretShootingLifetimeCycle _turretShootingLifetimeCycle;
@@ -18,12 +17,10 @@ public class ProjectileShootingController
     public ProjectileShootingController(TurretBuilding turretOwner,
         TurretStatsSnapshot stats, 
         TurretPartProjectileDataModel projectileDataModel, TurretPartBody_Prefab body, 
-        ITurretShootingLifetimeCycle turretShootingLifetimeCycle,
-        TurretBuilding.TestingSnapshot testingSnapshot)
+        ITurretShootingLifetimeCycle turretShootingLifetimeCycle)
     {
         _turretOwner = turretOwner;
         _stats = stats;
-        _testingSnapshot = testingSnapshot;
         _projectileDataModel = projectileDataModel;
         _body = body;
         _turretShootingLifetimeCycle = turretShootingLifetimeCycle;
@@ -45,13 +42,11 @@ public class ProjectileShootingController
         }
         
         float deltaTime = GameTime.DeltaTime;
-        _testingSnapshot.UpdateTotalTimePlaced(deltaTime);
         TimeSinceLastShot += deltaTime;
 
         if (_shootTimer < _stats.ShotsPerSecondInverted)
         {            
             _shootTimer += deltaTime;
-            _testingSnapshot.UpdateTimeTargetingEnemies(deltaTime);
             return;
         }
 

@@ -11,9 +11,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private InBattleUpgradeStat _rangeUpgradeStat;
     [SerializeField] private StatUpgradeButton _allStatsUpgradeButton;
 
-    [Header("QUICK DISPLAY UI EXTRAS")]
-    [SerializeField] private GameObject quickHoverBasePassiveImageHolder;
-    [SerializeField] private Image quickHoverBasePassiveImage;
+    [Header("QUICK DISPLAY UI EXTRAS")] 
+    [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
 
     private TurretBuilding _turretBuilding;
     private ITurretStatsStateSource _turretStatsState;
@@ -41,29 +40,31 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public override void InitTurret(TurretBuilding turretBuilding, 
         IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
         int numberOfUpgrades, 
-        CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+        CurrencyCounter newCurrencyCounter, 
+        TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
         base.InitTurret(turretBuilding, buildingUpgradesController, turretStatsState, numberOfUpgrades, newCurrencyCounter, 
-            hasPassiveAbility, basePassiveSprite, basePassiveColor);
+            iconsDisplayData);
 
         _turretBuilding = turretBuilding;
         _turretStatsState = turretStatsState;
         maxLevels = numberOfUpgrades;
-
-        if (hasPassiveAbility)
-        {
-            quickHoverBasePassiveImageHolder.SetActive(true);
-            quickHoverBasePassiveImage.sprite = basePassiveSprite;
-            quickHoverBasePassiveImage.color = basePassiveColor;
-        }
-        else
-        {
-            quickHoverBasePassiveImageHolder.gameObject.SetActive(false);
-        }
-
+        
+        UpdateIcons(iconsDisplayData);
         UpdateAllStatsView();
     }
 
+    private void UpdateIcons(TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
+    {
+        for (int i = 0; i < iconsDisplayData.Length; ++i)
+        {
+            _iconDisplays[i].Init(iconsDisplayData[i]);
+        }
+        for (int i = iconsDisplayData.Length; i < _iconDisplays.Length; ++i)
+        {
+            _iconDisplays[i].InitHidden();
+        }
+    }
 
     protected override void UpdateAllStatsView()
     {

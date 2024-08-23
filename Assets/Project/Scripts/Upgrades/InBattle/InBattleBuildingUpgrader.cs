@@ -174,7 +174,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     public virtual void InitTurret(TurretBuilding turretBuilding, 
         IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
-        int numberOfUpgrades, CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+        int numberOfUpgrades, CurrencyCounter newCurrencyCounter, TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
         _buildingUpgradesController = buildingUpgradesController;
         currencyCounter = newCurrencyCounter;

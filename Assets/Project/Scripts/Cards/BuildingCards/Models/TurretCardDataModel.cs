@@ -18,7 +18,6 @@ public class TurretCardDataModel : ScriptableObject
     [SerializeField] private TurretCardPartsGroup _partsGroup;
     [SerializeField] private ATurretPassiveAbilityDataModel[] _passiveAbilities = Array.Empty<ATurretPassiveAbilityDataModel>();
     
-    
     public int CardLevel => _cardLevel;
     public int CardPlayCost => _cardPlayCost;
     public TurretCardPartsGroup SharedPartsGroup => _partsGroup;
@@ -28,4 +27,26 @@ public class TurretCardDataModel : ScriptableObject
 
     private const int MIN_CARD_LEVEL = 1;
     public const int MAX_CARD_LEVEL = 3;
+
+
+    
+    private void OnValidate()
+    {
+        LimitPassiveAbilitiesCount();
+    }
+    
+    
+    private void LimitPassiveAbilitiesCount()
+    {
+        if (_passiveAbilities.Length <= ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET)
+        {
+            return;
+        }
+        
+        ATurretPassiveAbilityDataModel[] tempPassiveAbilities =
+            new ATurretPassiveAbilityDataModel[ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET];
+            
+        Array.Copy(_passiveAbilities, 0, 
+            tempPassiveAbilities, 0, ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET);
+    }
 }

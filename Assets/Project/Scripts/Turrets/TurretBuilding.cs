@@ -56,47 +56,6 @@ public class TurretBuilding : RangeBuilding
     public event TurretBuildingEvent OnGotDisabledPlacing;
     public event TurretBuildingEvent OnGotMovedWhenPlacing;
 
-    private TestingSnapshot _testingSnapshot;
-    public class TestingSnapshot
-    {
-        private string _turretName;
-        private float _turretRange;
-        private float _totalTimePlaced;
-        private float _timeTargetingEnemies;
-
-        public TestingSnapshot(string turretName)
-        {
-            _turretName = turretName;
-            _turretRange = 0;
-            _totalTimePlaced = 0;
-            _timeTargetingEnemies = 0;
-        }
-
-        public void SetRange(float turretRange)
-        {
-            _turretRange = turretRange;
-        }
-        
-        public void UpdateTotalTimePlaced(float deltaTime)
-        {
-            _totalTimePlaced += deltaTime;
-        }
-        
-        public void UpdateTimeTargetingEnemies(float deltaTime)
-        {
-            _timeTargetingEnemies += deltaTime;
-        }
-
-        public void Print()
-        {
-            Debug.Log(_turretName + ": " + 
-                "Range: " + _turretRange + " | " +
-                "Total time placed: " + _totalTimePlaced + " | " +
-                "Time targeting enemies: " + _timeTargetingEnemies);
-        }
-    }
-
-
     void Awake()
     {
         AwakeInit();
@@ -106,8 +65,6 @@ public class TurretBuilding : RangeBuilding
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
         placedParticleSystem.gameObject.SetActive(false);
-        
-        TDGameManager.OnGameFinishStart += PrintData;
     }
 
     private void OnDestroy()
@@ -117,15 +74,10 @@ public class TurretBuilding : RangeBuilding
             _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
         }
 
-        TDGameManager.OnGameFinishStart -= PrintData;
         _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
     }
 
-    private void PrintData()
-    {
-        _testingSnapshot.SetRange(Stats.RadiusRange);
-        _testingSnapshot.Print();
-    }
+
 
     private void Update()
     {
@@ -173,9 +125,9 @@ public class TurretBuilding : RangeBuilding
         UpdateRange();
         
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
-
+        
         Upgrader.InitTurret(this, _statsController, _statsController, CardLevel, currencyCounter,
-                            hasBasePassive, turretPassiveBase.visualInformation.sprite, turretPassiveBase.visualInformation.color);
+            CardData.MakeIconsDisplayData());
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         //PASSIVE
@@ -184,11 +136,9 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
-        string dataTestingName = turretPartBody.name + "--" + turretPassiveBase.name + "--" + ProjectileDataModel.name;
-        _testingSnapshot = new TestingSnapshot(dataTestingName);
         
         _shootingController = new ProjectileShootingController(this, Stats, ProjectileDataModel, bodyPart,
-           CardData.PassiveAbilitiesController, _testingSnapshot);
+           CardData.PassiveAbilitiesController);
         
         _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
     }

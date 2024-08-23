@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 public abstract class ATurretPassiveAbility
 {
+    public const int MAX_AMOUNT_FOR_TURRET = 3;
+    
+    
     public readonly ATurretPassiveAbilityDataModel OriginalModel;
     public string AbilityName => _description.Name;
     public string AbilityDescription

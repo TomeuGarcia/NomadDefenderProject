@@ -7,7 +7,7 @@ using UnityEditor;
 
 [CustomEditor(typeof(TurretCardDataModel))]
 [CanEditMultipleObjects]
-public class EditorTurretCardParts : Editor
+public class TurretCardDataModelEditor : Editor
 {
     private const float width = 96f;
     private const float height = 96f;
@@ -22,9 +22,9 @@ public class EditorTurretCardParts : Editor
         
         EditorGUILayout.Space(20);
         DrawAssetName(cardDataModel);
-        DrawAttackPreview(parts.Projectile);
-        DrawBodyPreview(parts.Body);
-        DrawPassiveBasePreview(parts.Passive);     
+        EditorGUILayout.Space(20);
+        DrawBodyAndProjectilePreview(parts.Body, parts.Projectile);
+        DrawPassiveBasePreview(cardDataModel.PassiveAbilityModels);     
     }
 
 
@@ -96,56 +96,78 @@ public class EditorTurretCardParts : Editor
         return capital + abilityName.Substring(1, abilityName.Length-1);
     }
     
-    private void DrawAttackPreview(TurretPartProjectileDataModel turretPartAttack)
+    private void DrawBodyAndProjectilePreview(TurretPartBody turretPartBody, TurretPartProjectileDataModel turretPartProjectile)
     {
-        GUILayout.Label("\nAttack Preview:");
-        if (turretPartAttack != null)
-        {
-            GUILayout.Label(" - " + turretPartAttack.abilityName);            
-            GUILayout.Box(turretPartAttack.texture,
-                          GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
-        }
-        else
-        {
-            GUILayout.Label("MISSING ATTACK PART", "red");
-        }
-    }
+        EditorGUILayout.BeginHorizontal();
 
-    private void DrawBodyPreview(TurretPartBody turretPartBody)
-    {
-        GUILayout.Label("\nBody Preview:");
+        
+        EditorGUILayout.BeginVertical();
         if (turretPartBody != null)
         {
-            GUILayout.Label(" - " + turretPartBody.partName +
-                (" (D" + turretPartBody.DamageStat.ComputeValueByLevel(0)) + 
-                (", C" + turretPartBody.ShotsPerSecondStat.ComputeValueByLevel(0)) + 
-                (", R" + turretPartBody.RadiusRangeStat.ComputeValueByLevel(0)) +
-                ")");
+            GUILayout.Label("BODY: " + AbilityNameWithCapital(turretPartBody.partName));            
             GUILayout.Box(turretPartBody.materialTextureMap,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
-            
-            GUILayout.Box(turretPartBody.BasePartPrimitive.MaterialTexture,
-                GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
         }
         else
         {
-            GUILayout.Label("MISSING BODY PART", "red");
+            GUILayout.Label("Missing BODY part", "red");
         }
+        EditorGUILayout.EndVertical();
+        
+        EditorGUILayout.BeginVertical();
+        if (turretPartProjectile != null)
+        {
+            GUILayout.Label("PROJECTILE: " + AbilityNameWithCapital(turretPartProjectile.abilityName));            
+            GUILayout.Box(turretPartProjectile.texture,
+                          GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
+            EditorGUILayout.ColorField(turretPartProjectile.materialColor, 
+                GUILayout.MinHeight(16), GUILayout.MinWidth(width), GUILayout.MaxHeight(16), GUILayout.MaxWidth(width));
+        }
+        else
+        {
+            GUILayout.Label("Missing PROJECTILE part", "red");
+        }
+        EditorGUILayout.EndVertical();
+        
+        
+        EditorGUILayout.EndHorizontal();
     }
     
-    private void DrawPassiveBasePreview(TurretPassiveBase turretPassiveBase)
+    private void DrawPassiveBasePreview(ATurretPassiveAbilityDataModel[] passiveAbilities)
     {
-        GUILayout.Label("\nPassive Base Preview:");
-        if (turretPassiveBase != null)
+        GUILayout.Label("\nPASSIVES:");
+
+        if (passiveAbilities.Length == 0)
         {
-            GUILayout.Label(" - " + turretPassiveBase.passive.abilityName);
-            GUILayout.Box(turretPassiveBase.visualInformation.spriteAsTexture,
-                          GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
+            GUILayout.Label("(no passives)");
+            return;
         }
-        else
+        
+        
+        EditorGUILayout.BeginHorizontal();
+        
+        foreach (ATurretPassiveAbilityDataModel passiveAbilityDataModel in passiveAbilities)
         {
-            GUILayout.Label("MISSING PASSIVE BASE PART", "red");
+            if (passiveAbilityDataModel != null)
+            {
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label(AbilityNameWithCapital(passiveAbilityDataModel.Name));
+                GUILayout.Box(passiveAbilityDataModel.View.SpriteAsTexture, 
+                    GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
+                EditorGUILayout.ColorField(passiveAbilityDataModel.View.Color, 
+                    GUILayout.MinHeight(16), GUILayout.MinWidth(width), GUILayout.MaxHeight(16), GUILayout.MaxWidth(width));
+                EditorGUILayout.EndVertical();
+            }
+            else
+            {
+                GUILayout.Label("MISSING PASSIVE BASE PART", "red");
+            }
         }
+        
+        EditorGUILayout.EndHorizontal();
+        
+        
+
     }
 
 }

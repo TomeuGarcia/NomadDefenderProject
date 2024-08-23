@@ -5,6 +5,7 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
     private readonly List<ATurretPassiveAbility> _passiveAbilities;
     private readonly TurretCardData _cardDataOwner;
 
+    public List<ATurretPassiveAbility> PassiveAbilities => _passiveAbilities;
 
     public TurretPassiveAbilitiesController(TurretCardData cardDataOwner,
         ATurretPassiveAbilityDataModel[] startingPassiveAbilities)

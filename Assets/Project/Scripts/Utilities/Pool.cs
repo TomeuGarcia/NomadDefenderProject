@@ -50,7 +50,7 @@ public class Pool : MonoBehaviour
         if(missingObjects)
         {
             GameObject obj = Instantiate(pooledObject);
-            _listener.OnObjectInstantiated(obj);
+            _listener?.OnObjectInstantiated(obj);
             obj.SetActive(false);
             objects.Add(obj);
             
@@ -78,7 +78,7 @@ public class Pool : MonoBehaviour
         if(missingObjects)
         {
             GameObject obj = Instantiate(pooledObject);
-            _listener.OnObjectInstantiated(obj);
+            _listener?.OnObjectInstantiated(obj);
             obj.SetActive(false);
 
             obj.gameObject.transform.position = position;
@@ -117,7 +117,7 @@ public class Pool : MonoBehaviour
         if (missingObjects)
         {
             GameObject obj = Instantiate(pooledObject, spawnTransform);
-            _listener.OnObjectInstantiated(obj);
+            _listener?.OnObjectInstantiated(obj);
             obj.SetActive(false);
 
             obj.gameObject.transform.position = position;

@@ -96,4 +96,23 @@ public class TurretCardData
     {
         PassiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
     }
+
+
+    public TurretIconCanvasDisplay.ConfigData[] MakeIconsDisplayData()
+    {
+        TurretIconCanvasDisplay.ConfigData[] iconsDisplayData =
+            new TurretIconCanvasDisplay.ConfigData[1 + PassiveAbilitiesController.PassiveAbilities.Count];
+
+        iconsDisplayData[0] = new TurretIconCanvasDisplay.ConfigData(
+            SharedPartsGroup.Projectile.abilitySprite, SharedPartsGroup.Projectile.materialColor);
+
+        for (int i = 0; i < PassiveAbilitiesController.PassiveAbilities.Count; ++i)
+        {
+            ATurretPassiveAbilityDataModel.ViewConfig abilityView = PassiveAbilitiesController.PassiveAbilities[i]
+                .OriginalModel.View;
+            iconsDisplayData[1 + i] = new TurretIconCanvasDisplay.ConfigData(abilityView.Sprite, abilityView.Color);
+        }
+
+        return iconsDisplayData;
+    }
 }
