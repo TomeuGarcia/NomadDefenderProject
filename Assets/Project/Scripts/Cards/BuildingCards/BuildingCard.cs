@@ -381,6 +381,12 @@ public abstract class BuildingCard : MonoBehaviour
             });
     }
 
+    public void HoveredStateRedraw(bool rotate = true, bool useAdditionalOffset = false)
+    {
+        HoveredState(rotate, useAdditionalOffset);
+        RedrawHoverIndication(true);
+    }
+
     public void HoveredState(bool rotate = true, bool useAdditionalOffset = false)
     {
         SetCardState(CardStates.HOVERED);
@@ -527,14 +533,22 @@ public abstract class BuildingCard : MonoBehaviour
 
     public float borderFillValue01 = 0f;
     private Coroutine decreaseBorderFillCoroutine;
+    public void RedrawHoverIndication(bool isEnabled)
+    {
+        float value = isEnabled ? 1f : 0f;
+        if (discardIndicatorMaterial != null)
+        {
+            discardIndicatorMaterial.SetFloat("_Appear", value);
+        }
+    }
     public void SetBorderFillEnabled(bool isEnabled)
     {
         float value = isEnabled ? 1f : 0f;
         cardMaterial.SetFloat("_IsBorderFillEnabled", value);
         if (discardIndicatorMaterial != null)
         {
-            discardIndicatorMaterial.SetFloat("_Appear", value);
             discardIndicatorMaterial.SetFloat("_Fill", value);
+            discardIndicatorMaterial.SetFloat("_Appear", value);
         }
     }
     public void SetBorderFillValue(float fillValue01)
@@ -542,7 +556,6 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_BorderFillValue", fillValue01);
         if(discardIndicatorMaterial != null)
         {
-            discardIndicatorMaterial.SetFloat("_Appear", fillValue01);
             discardIndicatorMaterial.SetFloat("_Fill", fillValue01);
         }
     }
@@ -557,7 +570,6 @@ public abstract class BuildingCard : MonoBehaviour
             borderFillValue01 = 0f;
             if (discardIndicatorMaterial != null)
             {
-                discardIndicatorMaterial.SetFloat("_Appear", 0);
                 discardIndicatorMaterial.SetFloat("_Fill", 0);
             }
         }
