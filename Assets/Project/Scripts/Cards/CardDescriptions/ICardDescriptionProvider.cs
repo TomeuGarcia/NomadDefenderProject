@@ -4,25 +4,39 @@ public interface ICardDescriptionProvider
 {
     public class SetupData
     {
-        public string abilityName;
-        public string abilityDescription;
-        public Sprite icon;
-        public Color iconColor;
+        public readonly string AbilityName;
+        public readonly string AbilityDescription;
+        public readonly Sprite Icon;
+        public readonly Color IconColor;
 
         public SetupData()
         {
-            this.abilityName = "none";
-            this.abilityDescription = "No ability.";
-            this.icon = null;
-            this.iconColor = Color.black;
+            AbilityName = "none";
+            AbilityDescription = "No ability.";
+            Icon = null;
+            IconColor = Color.black;
         }
         public SetupData(string abilityName, string abilityDescription, Sprite icon, Color iconColor)
         {
-            this.abilityName = abilityName;
-            this.abilityDescription = abilityDescription;
-            this.icon = icon;
-            this.iconColor = iconColor;
+            AbilityName = abilityName;
+            AbilityDescription = abilityDescription;
+            Icon = icon;
+            IconColor = iconColor;
         }
+
+        private TurretPartProjectileDataModel _projectileDataModel;
+        private ATurretPassiveAbility[] _passiveAbilities;
+        
+        public void WithProjectile(TurretPartProjectileDataModel projectileDataModel)
+        {
+            
+        }
+        
+        public void WithPassiveAbilities(ATurretPassiveAbility[] passiveAbilities)
+        {
+            
+        }
+        
     }
 
     public class DescriptionCornerPositions
@@ -41,9 +55,9 @@ public interface ICardDescriptionProvider
     /// 
     /// </summary>
     /// <returns>Element 0 = Projectile Attack, Element 1 = Base Passive</returns>
-    public abstract SetupData[] GetAbilityDescriptionSetupData();
+    public SetupData[] GetAbilityDescriptionSetupData();
 
-    public abstract Vector3 GetCenterPosition();
+    public Vector3 GetCenterPosition();
 
 
     public DescriptionCornerPositions GetCornerPositions();

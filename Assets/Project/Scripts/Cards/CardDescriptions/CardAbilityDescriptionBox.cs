@@ -38,11 +38,11 @@ public class CardAbilityDescriptionBox : MonoBehaviour
 
     public void SetupTextsAndIcon(ICardDescriptionProvider.SetupData cardDescriptionSetupData)
     {
-        nameText.text = "/" + cardDescriptionSetupData.abilityName + ":";
-        descriptionText.text = cardDescriptionSetupData.abilityDescription;
+        nameText.text = "/" + cardDescriptionSetupData.AbilityName + ":";
+        descriptionText.text = cardDescriptionSetupData.AbilityDescription;
 
-        iconImage.sprite = cardDescriptionSetupData.icon;
-        iconImage.color = cardDescriptionSetupData.iconColor;
+        iconImage.sprite = cardDescriptionSetupData.Icon;
+        iconImage.color = cardDescriptionSetupData.IconColor;
     }
 
 

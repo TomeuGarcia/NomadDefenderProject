@@ -208,8 +208,6 @@ public class TurretBuilding : RangeBuilding
         Upgrader.OnBuildingOwnerPlaced();
 
         InvokeOnPlaced();
-
-        ProjectileDataModel.OnTurretPlaced(this, MaterialForTurret);
         
         if (OnGotPlaced != null) OnGotPlaced();
         _abilitiesPlacingLifetimeCycle.OnTurretPlaced();
