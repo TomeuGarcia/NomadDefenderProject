@@ -12,11 +12,7 @@ public class CardDeckAsset : ScriptableObject
     {
         return new CardDeckContent(_turretCards, _supportCards);
     }
-
-    public TurretCardDataModel MainTurretCardDataModel()
-    {
-        return _turretCards[^1];
-    }
+    
     public SupportCardDataModel MainSupportCardDataModel()
     {
         return _supportCards[^1];

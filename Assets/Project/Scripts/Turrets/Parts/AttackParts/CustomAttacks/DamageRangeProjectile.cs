@@ -80,7 +80,7 @@ public class DamageRangeProjectile : HomingProjectile
         trailRenderer.widthMultiplier = 1f;
         float scale = 1.1f;
 
-        while (Vector3.Distance(targetEnemy.Position, transform.position) > 0.1f)
+        while (Vector3.Distance(_targetEnemy.Position, transform.position) > 0.1f)
         {
             scale += scale * Time.deltaTime * 10f;
             trailRenderer.widthMultiplier = scale;

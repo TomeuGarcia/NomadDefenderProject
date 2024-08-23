@@ -29,6 +29,9 @@ public class SelectableDeck : MonoBehaviour
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
 
+    [Header("DECK ABILITIES")] 
+    [SerializeField] private ATurretPassiveAbilityDataModel _mainPassive;
+
     [Header("UNLOCK")]
     [SerializeField] private GameObject _unlockedCardsHolder;
     [SerializeField] private GameObject _lock;    
@@ -120,9 +123,8 @@ public class SelectableDeck : MonoBehaviour
         supportSprite.color = supportBasePart.spriteColor;
         DeckColor = supportBasePart.spriteColor;
 
-        TurretPartProjectileDataModel mainTurretAttackPart = _deck.MainTurretCardDataModel().SharedPartsGroup.Projectile;
-        mainProjectileSprite.sprite = mainTurretAttackPart.abilitySprite;
-        mainProjectileSprite.color = mainTurretAttackPart.materialColor;
+        mainProjectileSprite.sprite = _mainPassive.View.Sprite;
+        mainProjectileSprite.color = _mainPassive.View.Color;
     }
 
 

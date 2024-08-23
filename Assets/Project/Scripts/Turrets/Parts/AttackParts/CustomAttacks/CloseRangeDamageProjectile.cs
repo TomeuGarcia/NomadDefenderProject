@@ -70,7 +70,7 @@ public class CloseRangeDamageProjectile : HomingProjectile
         trailRenderer.widthMultiplier = 1f;
         float scale = 2f;
 
-        while (Vector3.Distance(targetEnemy.Position, transform.position) > 0.1f)
+        while (Vector3.Distance(_targetEnemy.Position, transform.position) > 0.1f)
         {
             scale -= Time.deltaTime * 16f;
             scale = Mathf.Clamp(scale, 0.15f, 10f);

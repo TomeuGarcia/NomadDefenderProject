@@ -83,11 +83,7 @@ public class TurretCardData
     {
         SharedPartsGroup.SetProjectile(projectileDataModel);
     }
-    public void SetPassiveAbility(TurretPassiveBase passiveAbility)
-    {
-        SharedPartsGroup.SetPassiveAbility(passiveAbility);
-    }
-    
+
     public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
         PassiveAbilitiesController.AddPassiveAbility(passiveAbilityModel);

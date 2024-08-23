@@ -26,7 +26,7 @@ public class PartsLibrary : ScriptableObject
 
     private PartsByProgressionState<TurretPartProjectileDataModel>[] _attacksByProgressionStates;
     private PartsByProgressionState<TurretPartBody>[] _bodiesByProgressionStates;
-    private PartsByProgressionState<TurretPassiveBase>[] _passivesByProgressionStates;
+    private PartsByProgressionState<ATurretPassiveAbilityDataModel>[] _passivesByProgressionStates;
     private PartsByProgressionState<TurretStatsUpgradeModel>[] _bonusStatsByProgressionStates;
 
 
@@ -113,7 +113,7 @@ public class PartsLibrary : ScriptableObject
 
 
     // BASE AND PASSIVE PARTS
-    private PartsByProgressionState<TurretPassiveBase> GetBasesAndPassivesByProgressionState(NodeEnums.ProgressionState progressionState)
+    private PartsByProgressionState<ATurretPassiveAbilityDataModel> GetBasesAndPassivesByProgressionState(NodeEnums.ProgressionState progressionState)
     {
         for (int i = 0; i < _passivesByProgressionStates.Length; ++i)
         {
@@ -124,11 +124,11 @@ public class PartsLibrary : ScriptableObject
         return _passivesByProgressionStates[0];
     }
 
-    public TurretPassiveBase[] GetRandomTurretPartBaseAndPassive(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    public ATurretPassiveAbilityDataModel[] GetRandomTurretPartBaseAndPassive(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
     {
         totalAmount = Mathf.Min(totalAmount, _passivesByProgressionStates.Length);
-        PartsByProgressionState<TurretPassiveBase> passiveByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
-        HashSet<TurretPassiveBase> holderPartsSet = new HashSet<TurretPassiveBase>();
+        PartsByProgressionState<ATurretPassiveAbilityDataModel> passiveByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
+        HashSet<ATurretPassiveAbilityDataModel> holderPartsSet = new HashSet<ATurretPassiveAbilityDataModel>();
 
         if (perfect)
         {

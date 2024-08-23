@@ -24,13 +24,13 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-        base.ProjectileShotInit(base.targetEnemy, owner);
+        base.ProjectileShotInit(base._targetEnemy, owner);
 
         trailRenderer.Clear();
         arrow.SetActive(true);
         damageCollider.enabled = true;
 
-        this.targetEnemy = targetEnemy;
+        this._targetEnemy = targetEnemy;
 
         ComputeGoalPosition();
         transform.LookAt(_goalPosition);
@@ -48,7 +48,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     private void ComputeGoalPosition()
     {
-        _goalPosition = transform.position + ((targetEnemy.Position - transform.position).normalized *_distance);
+        _goalPosition = transform.position + ((_targetEnemy.Position - transform.position).normalized *_distance);
         _goalPosition.y = transform.position.y;
     }
 
@@ -83,7 +83,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        _damageAttack = new TurretDamageAttack(this, enemy, ComputeDamage());
+        _damageAttack = CreateDamageAttack(_targetEnemy);
         DamageTargetEnemy(_damageAttack);
 
         _currentDamageMultiplier += damageMultiplierIncrement;
@@ -95,12 +95,8 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         return false;
     }
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {
-        return this.damage;
-        this._currentDamageMultiplier = startDamageMultiplier;
-        this.damage = (int)((float)TurretOwner.Stats.Damage * _currentDamageMultiplier);
-
-        return this.damage;
+        return TurretOwner.Stats.Damage;
     }
 }

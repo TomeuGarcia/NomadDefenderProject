@@ -22,40 +22,33 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
     [SerializeField] private TMP_Text _basePassiveNameText;
 
 
-    [Header("PART")]
-    [SerializeField] public TurretPassiveBase turretPassiveBase;
+    private ATurretPassiveAbility turretPassive;
+    public ATurretPassiveAbilityDataModel TurretPassiveModel => turretPassive.OriginalModel;
 
-
-
-    private bool hasBasePassiveAbility;
-
+    
 
     [Header("DESCRIPTION")]
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-
+    public void SetTurretPassive(ATurretPassiveAbilityDataModel turretPassiveModel)
+    {
+        turretPassive = turretPassiveModel.MakePassiveAbility();
+    }
 
 
     public override void Init()
     {
-        hasBasePassiveAbility = turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
+        basePassiveImage.transform.parent.gameObject.SetActive(true);
 
-            basePassiveImage.sprite = turretPassiveBase.visualInformation.sprite;
-            basePassiveImage.color = turretPassiveBase.visualInformation.color;
+        basePassiveImage.sprite = TurretPassiveModel.View.Sprite;
+        basePassiveImage.color = TurretPassiveModel.View.Color;
 
-            _basePassiveNameText.text = "/" + turretPassiveBase.passive.abilityName;
-        }
-        else
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }        
+        _basePassiveNameText.text = "/" + TurretPassiveModel.Name;    
     }
 
+    
 
     protected override void DoShowInfo()
     {
@@ -117,19 +110,12 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
         
         setupData[0] = null;
 
-        if (hasBasePassiveAbility)
-        {
-            setupData[1] = new ICardDescriptionProvider.SetupData(
-                turretPassiveBase.passive.abilityName,
-                turretPassiveBase.passive.abilityDescription,
-                turretPassiveBase.visualInformation.sprite,
-                turretPassiveBase.visualInformation.color
-            );
-        }
-        else
-        {
-            setupData[1] = new ICardDescriptionProvider.SetupData();
-        }
+        setupData[1] = new ICardDescriptionProvider.SetupData(
+            turretPassive.AbilityName,
+            turretPassive.AbilityDescription,
+            TurretPassiveModel.View.Sprite,
+            TurretPassiveModel.View.Color
+        );
                     
 
         return setupData;

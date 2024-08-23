@@ -76,7 +76,7 @@ public class HomingChainingProjectile : HomingProjectile
     protected override void OnEnemyReached()
     {
         GameObject hitParticles = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(ProjectileType, targetEnemy.MeshTransform.position, Quaternion.identity);
+            .GetAttackParticlesGameObject(ProjectileType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         hitParticles.gameObject.SetActive(true);
         hitParticles.transform.parent = gameObject.transform.parent;
         
@@ -95,8 +95,8 @@ public class HomingChainingProjectile : HomingProjectile
 
         if (_currentChainedTarget < _chainTargetedEnemies.Length)
         {
-            targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
-            lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed / 2.0f);
+            _targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
+            lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());            
         }
         else
@@ -110,14 +110,14 @@ public class HomingChainingProjectile : HomingProjectile
         DamageTargetEnemy(_damageAttack);
 
 
-        _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
+        _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(_targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
         _chainTargetedDamage = new TurretDamageAttack[_chainTargetedEnemies.Length];
         for (int i = 0; i < _chainTargetedEnemies.Length; i++)
         {
             Enemy chainedEnemy = _chainTargetedEnemies[i];
             
-            _chainTargetedDamage[i] =
-                new TurretDamageAttack(_damageAttack.ProjectileSource, chainedEnemy, _damageAttack.Damage);
+            _chainTargetedDamage[i] = CreateDamageAttack(chainedEnemy);
+                //new TurretDamageAttack(_damageAttack.ProjectileSource, chainedEnemy, _damageAttack.Damage);
             chainedEnemy.QueueDamage(_chainTargetedDamage[i]);
         }
         
@@ -133,10 +133,9 @@ public class HomingChainingProjectile : HomingProjectile
 
     protected override int ComputeDamage()
     {
-        this.damage = TurretOwner.Stats.Damage;
-        this.damage = (int)((float)this.damage * damageMultiplier);
-
-        return this.damage;
+        int damage = TurretOwner.Stats.Damage;
+        damage = (int)(damage * damageMultiplier);
+        return damage;
     }
     
 }

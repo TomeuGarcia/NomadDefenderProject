@@ -13,6 +13,8 @@ public class TurretPassiveAbility_HealLocation : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
+        _healAmount = 1;
+        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
     }
 
 

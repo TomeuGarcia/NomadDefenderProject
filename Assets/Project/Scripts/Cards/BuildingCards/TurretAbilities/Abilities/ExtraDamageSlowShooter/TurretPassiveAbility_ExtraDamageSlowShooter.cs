@@ -6,6 +6,8 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
     private TurretBuilding _turretOwner;
 
     private SlowFireRateTurretBuildingVisuals _slowFireRateVisuals;
+
+    private float _timeSinceLastShot;
     
     public TurretPassiveAbility_ExtraDamageSlowShooter(TPADataModel_ExtraDamageSlowShooter originalModel) 
         : base(originalModel)
@@ -25,16 +27,18 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
         _slowFireRateVisuals.TurretPlacedInit(_turretOwner, _abilityDataModel.MaxTimeBetweenShots);
     }
 
+    public override void OnBeforeShootingEnemy()
+    {
+        _timeSinceLastShot = _turretOwner.TimeSinceLastShot;
+    }
 
     public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
     {
-        float currentTime = Mathf.Min(_turretOwner.TimeSinceLastShot, _abilityDataModel.MaxTimeBetweenShots);
-        
-        float curveCoefficient = currentTime / _abilityDataModel.MaxTimeBetweenShots;
-        float curveValue = _abilityDataModel.DamageMultiplierOverTimePer1.Evaluate(curveCoefficient);
+        float currentTime = Mathf.Min(_timeSinceLastShot, _abilityDataModel.MaxTimeBetweenShots);
+        float curveValue = _abilityDataModel.DamageMultiplierOverTimePer1.Evaluate(currentTime);
 
-        int damage = (int)(curveValue * damageAttack.Damage);
-        
+        int damage = (int)Mathf.Max((curveValue * damageAttack.Damage), 1);
+
         damageAttack.UpdateDamage(damage);
         
     }

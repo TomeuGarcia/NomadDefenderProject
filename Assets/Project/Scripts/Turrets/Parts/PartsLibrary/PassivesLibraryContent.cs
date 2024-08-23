@@ -10,17 +10,21 @@ public class PassivesLibraryContent : ScriptableObject
     [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPassiveBase> _earlyBases;
     [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPassiveBase> _midBases;
     [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPassiveBase> _lateBases;
+    
+    [SerializeField] private PartsLibrary.PartsByProgressionState<ATurretPassiveAbilityDataModel> _earlyPassives;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<ATurretPassiveAbilityDataModel> _midPassives;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<ATurretPassiveAbilityDataModel> _latePassives;
 
     private void OnValidate()
     {
-        _earlyBases.progressionState = NodeEnums.ProgressionState.EARLY;
-        _midBases.progressionState = NodeEnums.ProgressionState.MID;
-        _lateBases.progressionState = NodeEnums.ProgressionState.LATE;
+        _earlyPassives.progressionState = NodeEnums.ProgressionState.EARLY;
+        _midPassives.progressionState = NodeEnums.ProgressionState.MID;
+        _latePassives.progressionState = NodeEnums.ProgressionState.LATE;
     }
 
-    public PartsLibrary.PartsByProgressionState<TurretPassiveBase>[] GetArrayByProgression()
+    public PartsLibrary.PartsByProgressionState<ATurretPassiveAbilityDataModel>[] GetArrayByProgression()
     {
-        return new PartsLibrary.PartsByProgressionState<TurretPassiveBase>[3] { _earlyBases, _midBases, _lateBases };
+        return new PartsLibrary.PartsByProgressionState<ATurretPassiveAbilityDataModel>[3] { _earlyPassives, _midPassives, _latePassives };
     }
 
 }

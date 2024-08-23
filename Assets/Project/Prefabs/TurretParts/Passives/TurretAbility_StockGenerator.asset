@@ -20,9 +20,11 @@ MonoBehaviour:
       rgba: 4291721472
   _name: stockGenerator
   _description: "While in hand, when an enemy wave finishes, spawn a copy of this
-    card in your hand without this ability that costs +COST_INCREMENT\u2666 for each
+    card in your hand without this ability with +COST_INCREMENT\u2666 cost for each
     card in hand."
   _costIncrementPerCard:
     _name: COST_INCREMENT
     _isDynamic: 0
+    _isFloat: 0
     _constantValue: 10
+    _floatConstantValue: 0

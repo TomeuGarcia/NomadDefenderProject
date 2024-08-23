@@ -8,13 +8,13 @@ public class BaseReplaceTutorial : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
     private Tutorials tutoType;
 
-    [SerializeField] TurretPassiveBase[] _tutorialBaseAndPassive;
+    [SerializeField] ATurretPassiveAbilityDataModel[] _tutorialPassives;
 
 
     private void Awake()
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
-        cardPartReplaceManager.AwakeSetupTutorialBases(_tutorialBaseAndPassive);
+        cardPartReplaceManager.AwakeSetupTutorialBases(_tutorialPassives);
     }
 
     void Start()

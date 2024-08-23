@@ -18,8 +18,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     protected TurretDamageAttack _damageAttack;
     
     
-    protected Enemy targetEnemy;
-    protected int damage;
+    protected Enemy _targetEnemy;
     public Type ProjectileType => _dataModel.ProjectileType;
     
     [SerializeField] protected float bulletSpeed = 2.0f;
@@ -43,10 +42,9 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
         Enemy targetEnemy, TurretBuilding owner)
     {
-        ProjectileShotInit(targetEnemy, owner);
-        
         _shootingLifetimeCycle = shootingLifetimeCycle;
         _shootingLifetimeCycle.OnBeforeShootingEnemy();
+        ProjectileShotInit(targetEnemy, owner);
     }
     protected virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
@@ -56,10 +54,9 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public void ProjectileShotInit_PrecomputedAndQueued(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
         TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
     {
-        ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
-        
         _shootingLifetimeCycle = shootingLifetimeCycle;
         _shootingLifetimeCycle.OnBeforeShootingEnemy();
+        ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
     }
     protected virtual void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, 
         TurretDamageAttack precomputedDamageAttack)
@@ -145,15 +142,23 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     }
 
 
+    protected TurretDamageAttack CreateDamageAttack(Enemy targetEnemy)
+    { 
+        TurretDamageAttack damageAttack = new TurretDamageAttack(this, targetEnemy, ComputeDamage());
+        _shootingLifetimeCycle.OnBeforeDamagingEnemy(damageAttack);
+        return damageAttack;
+    }
+    
     protected void DamageTargetEnemy(TurretDamageAttack damageAttack)
     {
-        _shootingLifetimeCycle.OnBeforeDamagingEnemy(_damageAttack);
-        TurretDamageAttackResult damageAttackResult = targetEnemy.TakeDamage(damageAttack);
+        TurretDamageAttackResult damageAttackResult = _targetEnemy.TakeDamage(damageAttack);
         _shootingLifetimeCycle.OnAfterDamagingEnemy(damageAttackResult);
     }
     
     protected virtual void OnShotInitialized()
     {
-        targetEnemy.OnWillBeAttacked(_damageAttack);
+        _targetEnemy.OnWillBeAttacked(_damageAttack);
     }
+
+    protected abstract int ComputeDamage();
 }

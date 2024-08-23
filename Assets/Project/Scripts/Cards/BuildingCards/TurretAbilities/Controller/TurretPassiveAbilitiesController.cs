@@ -25,15 +25,20 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         _cardDataOwner = cardDataOwner;
 
         _passiveAbilities = new List<ATurretPassiveAbility>(other._passiveAbilities.Count);
-        foreach (ATurretPassiveAbility passiveAbility in _passiveAbilities)
+        foreach (ATurretPassiveAbility othersPassiveAbility in other._passiveAbilities)
         {
-            AddPassiveAbility(passiveAbility.OriginalModel);
+            AddPassiveAbility(othersPassiveAbility.OriginalModel);
         }
     }
 
     public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)
     {
         ATurretPassiveAbility passiveAbility = passiveAbilityModel.MakePassiveAbility();
+        if (HasReachedPassiveAmountLimit())
+        {
+            RemovePassiveAbility(_passiveAbilities[0].OriginalModel);
+        }
+        
         _passiveAbilities.Add(passiveAbility);
         passiveAbility.OnAddedToTurretCard(_cardDataOwner);
     }
@@ -50,6 +55,28 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
 
+    public bool AlreadyContainsPassive(ATurretPassiveAbilityDataModel passiveAbilityDataModel)
+    {
+        foreach (ATurretPassiveAbility passiveAbility in _passiveAbilities)
+        {
+            if (passiveAbility.OriginalModel == passiveAbilityDataModel)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool HasPassiveAbilities()
+    {
+        return _passiveAbilities.Count > 0;
+    }
+    public bool HasReachedPassiveAmountLimit()
+    {
+        return _passiveAbilities.Count == ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET;
+    }
+    
 
 
     public void OnTurretCreated(TurretBuilding turretOwner)

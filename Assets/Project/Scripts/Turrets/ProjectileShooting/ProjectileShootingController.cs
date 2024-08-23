@@ -36,13 +36,14 @@ public class ProjectileShootingController
     {
         _targetingController.ComputeNextTargetedEnemy();
         targetEnemyExists = _targetingController.TargetEnemyExists();
+        
+        float deltaTime = GameTime.DeltaTime;
+        TimeSinceLastShot += deltaTime;
+        
         if (targetEnemyExists)
         {
             LastTargetedPosition = _targetingController.TargetedEnemy.Position;
         }
-        
-        float deltaTime = GameTime.DeltaTime;
-        TimeSinceLastShot += deltaTime;
 
         if (_shootTimer < _stats.ShotsPerSecondInverted)
         {            

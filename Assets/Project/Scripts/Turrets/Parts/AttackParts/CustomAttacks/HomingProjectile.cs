@@ -11,10 +11,10 @@ public class HomingProjectile : ATurretProjectileBehaviour
     protected sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         base.ProjectileShotInit(targetEnemy, owner);
-        this.targetEnemy = targetEnemy;
+        _targetEnemy = targetEnemy;
         
-        _damageAttack = new TurretDamageAttack(this, targetEnemy, ComputeDamage());
-        
+        _damageAttack = CreateDamageAttack(_targetEnemy);
+
         targetEnemy.QueueDamage(_damageAttack);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
@@ -27,10 +27,10 @@ public class HomingProjectile : ATurretProjectileBehaviour
     {
         base.ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
 
-        this.targetEnemy = precomputedDamageAttack.Target;
+        this._targetEnemy = precomputedDamageAttack.Target;
         _damageAttack = precomputedDamageAttack;
 
-        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
         
         OnShotInitialized();
@@ -51,7 +51,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     private void EnemyHit()
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(ProjectileType, targetEnemy.MeshTransform.position, Quaternion.identity);
+            .GetAttackParticlesGameObject(ProjectileType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
@@ -61,7 +61,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     }
 
 
-    protected virtual int ComputeDamage()
+    protected override int ComputeDamage()
     {
         return TurretOwner.Stats.Damage;
     }

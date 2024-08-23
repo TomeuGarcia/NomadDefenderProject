@@ -43,9 +43,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
-
-    bool hasBasePassiveAbility = false;
-
+    
 
     [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
@@ -110,6 +108,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     private void UpdateIcons()
     {
         TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, CardData.MakeIconsDisplayData());
+
+        UpdateTurretBodyImageColor();
     }
 
     
@@ -117,8 +117,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     {
         _iconDisplays[0].Init(
             new TurretIconCanvasDisplay.ConfigData(projectileModel.abilitySprite, projectileModel.materialColor));
-        
-        cardBodyMaterial.SetColor("_PaintColor", projectileModel.materialColor);
+
+        UpdateTurretBodyImageColor();
+    }
+
+    private void UpdateTurretBodyImageColor()
+    {
+        cardBodyMaterial.SetColor("_PaintColor", CardParts.Projectile.materialColor);
     }
 
     protected override void InitStatsFromTurretParts()
@@ -177,10 +182,10 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         return CardParts.Body == newTurretPartBody;
     }
 
-    public void SetNewPartBasePassive(TurretPassiveBase newTurretPassiveBase)
+    public void AddNewPassive(ATurretPassiveAbilityDataModel newTurretPassive)
     {
-        ReplacedWithSamePart = HasSameBasePassivePart(newTurretPassiveBase); // Check replaced with same part
-        CardParts.SetPassiveAbility(newTurretPassiveBase);
+        ReplacedWithSamePart = AlreadyHasPassive(newTurretPassive); // Check replaced with same part
+        CardData.AddPassiveAbility(newTurretPassive);
         
         Init();
     }
@@ -192,9 +197,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
-    public bool HasSameBasePassivePart(TurretPassiveBase newTurretPassiveBase)
+    public bool AlreadyHasPassive(ATurretPassiveAbilityDataModel newTurretPassive)
     {
-        return CardParts.Passive == newTurretPassiveBase;
+        return CardData.PassiveAbilitiesController.AlreadyContainsPassive(newTurretPassive);
     }
 
     protected override void SetupCardInfo()
@@ -373,14 +378,14 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
             turretPartAttack.materialColor
         );
 
-        if (hasBasePassiveAbility)
+        if (CardData.PassiveAbilitiesController.HasPassiveAbilities())
         {
-            TurretPassiveBase turretPartBase = CardParts.Passive;
+            ATurretPassiveAbility passiveAbility = CardData.PassiveAbilitiesController.PassiveAbilities[0];
             setupData[1] = new ICardDescriptionProvider.SetupData(
-                turretPartBase.passive.abilityName,
-                turretPartBase.passive.abilityDescription,
-                turretPartBase.visualInformation.sprite,
-                turretPartBase.visualInformation.color
+                passiveAbility.AbilityName,
+                passiveAbility.AbilityDescription,
+                passiveAbility.OriginalModel.View.Sprite,
+                passiveAbility.OriginalModel.View.Color
             );
         }
         else
@@ -402,7 +407,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     public void PreviewChangeVisuals(TurretPartProjectileDataModel newTurretPartAttack, TurretPartBody newTurretPartBody,
-                                     TurretPassiveBase newTurretPassiveBase,
+        ATurretPassiveAbilityDataModel newTurretPassive,
                                      CardPartBonusStats cardPartBonusStats,
                                      TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
                                      CardUpgradeTurretPlayCostConfig playCostsConfig)
@@ -439,11 +444,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         //if (newTurretPartBase == null && newTurretPassiveBase == null)
         if (partType != CardPartReplaceManager.PartType.BASE)
         {
-            newTurretPassiveBase = originalCard.CardParts.Passive;
+            newTurretPassive = null;
         }
         else
         {
-            replacingWithSamePart = originalCard.HasSameBasePassivePart(newTurretPassiveBase);
+            replacingWithSamePart = originalCard.AlreadyHasPassive(newTurretPassive);
         }
 
 
@@ -470,8 +475,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         CardData.SetPlayCost(originalCard.PlayCost);
         CardParts.SetBody(newTurretPartBody);
         CardParts.SetProjectile(newTurretPartAttack);
-        CardParts.SetPassiveAbility(newTurretPassiveBase);
-        
+        if (newTurretPassive)
+        {
+            CardData.AddPassiveAbility(newTurretPassive);
+        }
+
 
         TurretCardStatsController tempStatsController = new TurretCardStatsController(originalCard.StatsController,
             newTurretPartBody.DamageStat, newTurretPartBody.ShotsPerSecondStat, newTurretPartBody.RadiusRangeStat);
@@ -487,7 +495,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
         
-        SetAttackIcon(newTurretPartAttack);
+        UpdateIcons();
+        
+        //SetAttackIcon(newTurretPartAttack);
         //attackImage.sprite = newTurretPartAttack.abilitySprite;
         //attackImage.color = newTurretPartAttack.materialColor;
 
