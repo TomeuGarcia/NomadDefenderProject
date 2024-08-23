@@ -31,4 +31,17 @@ public class TurretIconCanvasDisplay : MonoBehaviour
     {
         _holder.SetActive(false);
     }
+    
+    
+    public static void InitDisplaysArray(TurretIconCanvasDisplay[] iconDisplays, ConfigData[] iconsDisplayData)
+    {
+        for (int i = 0; i < iconsDisplayData.Length; ++i)
+        {
+            iconDisplays[i].Init(iconsDisplayData[i]);
+        }
+        for (int i = iconsDisplayData.Length; i < iconDisplays.Length; ++i)
+        {
+            iconDisplays[i].InitHidden();
+        }
+    }
 }

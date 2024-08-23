@@ -56,14 +56,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpdateIcons(TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
-        for (int i = 0; i < iconsDisplayData.Length; ++i)
-        {
-            _iconDisplays[i].Init(iconsDisplayData[i]);
-        }
-        for (int i = iconsDisplayData.Length; i < _iconDisplays.Length; ++i)
-        {
-            _iconDisplays[i].InitHidden();
-        }
+        TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, iconsDisplayData);
     }
 
     protected override void UpdateAllStatsView()

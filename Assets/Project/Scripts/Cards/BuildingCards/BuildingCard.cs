@@ -89,7 +89,9 @@ public abstract class BuildingCard : MonoBehaviour
     [Header("VISUALS")]
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
+    [SerializeField] private MeshRenderer discardIndicatorMesh;
     protected Material cardMaterial;
+    protected Material discardIndicatorMaterial;
 
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -258,6 +260,10 @@ public abstract class BuildingCard : MonoBehaviour
         GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
+        if(discardIndicatorMesh != null)
+        {
+            discardIndicatorMaterial = discardIndicatorMesh.material;
+        }
         SetCannotBePlayedAnimation(false);
         cardMaterial.SetFloat("_RandomTimeAdd", Random.Range(0f, Mathf.PI));
 
@@ -373,6 +379,12 @@ public abstract class BuildingCard : MonoBehaviour
                 EnableMouseInteraction();
                 if (repositionColliderOnEnd) RepositionColliderToCardTransform();
             });
+    }
+
+    public void HoveredStateRedraw(bool rotate = true, bool useAdditionalOffset = false)
+    {
+        HoveredState(rotate, useAdditionalOffset);
+        RedrawHoverIndication(true);
     }
 
     public void HoveredState(bool rotate = true, bool useAdditionalOffset = false)
@@ -521,13 +533,31 @@ public abstract class BuildingCard : MonoBehaviour
 
     public float borderFillValue01 = 0f;
     private Coroutine decreaseBorderFillCoroutine;
+    public void RedrawHoverIndication(bool isEnabled)
+    {
+        float value = isEnabled ? 1f : 0f;
+        if (discardIndicatorMaterial != null)
+        {
+            discardIndicatorMaterial.SetFloat("_Appear", value);
+        }
+    }
     public void SetBorderFillEnabled(bool isEnabled)
     {
-        cardMaterial.SetFloat("_IsBorderFillEnabled", isEnabled ? 1f : 0f);
+        float value = isEnabled ? 1f : 0f;
+        cardMaterial.SetFloat("_IsBorderFillEnabled", value);
+        if (discardIndicatorMaterial != null)
+        {
+            discardIndicatorMaterial.SetFloat("_Fill", value);
+            discardIndicatorMaterial.SetFloat("_Appear", value);
+        }
     }
     public void SetBorderFillValue(float fillValue01)
     {
         cardMaterial.SetFloat("_BorderFillValue", fillValue01);
+        if(discardIndicatorMaterial != null)
+        {
+            discardIndicatorMaterial.SetFloat("_Fill", fillValue01);
+        }
     }
     public void ResetBorderFill()
     {
@@ -538,6 +568,10 @@ public abstract class BuildingCard : MonoBehaviour
         else
         {
             borderFillValue01 = 0f;
+            if (discardIndicatorMaterial != null)
+            {
+                discardIndicatorMaterial.SetFloat("_Fill", 0);
+            }
         }
     }
     public void StartDecreaseBorderFill()

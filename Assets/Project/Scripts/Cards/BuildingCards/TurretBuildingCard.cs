@@ -30,20 +30,16 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     [Header("VISUALS")]
-    //[SerializeField] private MeshRenderer attackMeshRenderer;
-    //[SerializeField] private MeshRenderer bodyMeshRenderer;
-    //[SerializeField] private MeshRenderer baseMeshRenderer;
-    [SerializeField] private Image attackImage;
     [SerializeField] private Image bodyImage;
     [SerializeField] private Image baseImage;
-    private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+    [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
+    
+    private Material cardBodyMaterial, cardBaseMaterial;
 
     [SerializeField] private TextMeshProUGUI _damageStatValueText;
     [SerializeField] private TextMeshProUGUI _fireRateStatValueText;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
-
-    [SerializeField] private Image basePassiveImage;
-
+    
     [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
@@ -81,8 +77,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         //cardAttackMaterial = attackMeshRenderer.material;
         //cardBodyMaterial = bodyMeshRenderer.material;
         //cardBaseMaterial = baseMeshRenderer.material;
-        cardAttackMaterial = new Material(attackImage.material);
-        attackImage.material = cardAttackMaterial;
         cardBodyMaterial = new Material(bodyImage.material);
         bodyImage.material = cardBodyMaterial;
         cardBaseMaterial = new Material(baseImage.material);
@@ -105,34 +99,26 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         _damageStatValueText.text = StatsController.DamageStatState.BaseValueText;
         _fireRateStatValueText.text = StatsController.ShotsPerSecondInvertedStatState.BaseValueText;
         _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;
-
-
-        SetAttackIcon(turretPartAttack);
-
-
-        hasBasePassiveAbility = CardParts.Passive.passive.GetType() != typeof(BaseNullPassive);
-
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
-
-            basePassiveImage.sprite = CardParts.Passive.visualInformation.sprite;
-            basePassiveImage.color = CardParts.Passive.visualInformation.color;
-        }
-        else {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }
+        
+        UpdateIcons();
+        
 
         // Level
         UpdateCardLevelText();
     }
 
-    private void SetAttackIcon(TurretPartProjectileDataModel turretPartAttack)
+    private void UpdateIcons()
     {
-        attackImage.sprite = turretPartAttack.abilitySprite;
-        attackImage.color = turretPartAttack.materialColor;
+        TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, CardData.MakeIconsDisplayData());
+    }
 
-        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor);
+    
+    private void SetAttackIcon(TurretPartProjectileDataModel projectileModel)
+    {
+        _iconDisplays[0].Init(
+            new TurretIconCanvasDisplay.ConfigData(projectileModel.abilitySprite, projectileModel.materialColor));
+        
+        cardBodyMaterial.SetColor("_PaintColor", projectileModel.materialColor);
     }
 
     protected override void InitStatsFromTurretParts()
@@ -461,6 +447,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         }
 
 
+        //TODO FIX
+        /*
         bool hasBasePassiveAbility = newTurretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
         if (hasBasePassiveAbility)
         {
@@ -473,7 +461,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         {
             basePassiveImage.transform.parent.gameObject.SetActive(false);
         }
-
+        */
 
 
 
@@ -498,8 +486,10 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         }
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
-        attackImage.sprite = newTurretPartAttack.abilitySprite;
-        attackImage.color = newTurretPartAttack.materialColor;
+        
+        SetAttackIcon(newTurretPartAttack);
+        //attackImage.sprite = newTurretPartAttack.abilitySprite;
+        //attackImage.color = newTurretPartAttack.materialColor;
 
         cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
         _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;

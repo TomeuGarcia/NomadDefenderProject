@@ -1,3 +1,4 @@
+using DG.Tweening;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,6 +119,13 @@ public class OWMap_Node : MonoBehaviour
     [SerializeField] private MaterialLerp.FloatData borderLerpData;
     private Material flashMaterial;
 
+    [SerializeField] private List<MeshRenderer> _selectableMeshes = new();
+    private List<Material> _selectableMaterials = new();
+    [SerializeField] private float _selectableAppearTime;
+    [SerializeField] private Ease _selectableAppearEase;
+    [SerializeField] private float _selectableDisappearTime;
+    [SerializeField] private Ease _selectableDisappearEase;
+
 
     // EVENTS
     public delegate void NodeHealthStateAction(NodeEnums.HealthState healthState);
@@ -169,6 +177,11 @@ public class OWMap_Node : MonoBehaviour
         flashMaterial = flashMeshRenderer.material;
         flashMaterial.SetFloat("_TimeOffset", Random.Range(0f, 1f));
         flashMeshRenderer.gameObject.SetActive(false);
+
+        for(int i = 0; i < _selectableMeshes.Count; i++)
+        {
+            _selectableMaterials.Add(_selectableMeshes[i].material);
+        }
     }
 
     public void InitTransform(int nodeI, int numLevelNodes, Vector3 mapRightDir, float nodeGapWidth)
@@ -238,6 +251,11 @@ public class OWMap_Node : MonoBehaviour
             cameFromConnection.StartIndicaton();
             UpdateBorderMaterial(true);
         }
+
+        foreach(Material mat in _selectableMaterials)
+        {
+            mat.DOFloat(1.0f, MaterialProperties.Appear, _selectableAppearTime).SetEase(_selectableAppearEase);
+        }
     }
 
     public void DisableInteraction()
@@ -253,6 +271,11 @@ public class OWMap_Node : MonoBehaviour
         {
             cameFromConnection.StopIndication();
             UpdateBorderMaterial(false);
+        }
+
+        foreach (Material mat in _selectableMaterials)
+        {
+            mat.DOFloat(0.0f, MaterialProperties.Appear, _selectableDisappearTime).SetEase(_selectableDisappearEase);
         }
     }
 
@@ -287,6 +310,9 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
+
+        //AAAAAAAAAAAAAAAAA
+
     }
     private void SetSelectedVisuals()
     {
@@ -455,6 +481,8 @@ public class OWMap_Node : MonoBehaviour
         {
             node.DisableInteraction();
         }
+
+        material.SetFloat("_HasBeatenNode", 1.0f);
     }
 
     public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
@@ -550,5 +578,4 @@ public class OWMap_Node : MonoBehaviour
         yield return null;
         mouseCollider.enabled = true;
     }
-
 }

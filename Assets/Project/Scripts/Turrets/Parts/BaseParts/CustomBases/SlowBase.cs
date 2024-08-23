@@ -17,13 +17,20 @@ public class SlowBase : TurretPartBase_Prefab
 
     [SerializeField] private GameObject slowPlane;
     private static Dictionary<Enemy, SlowData> slowedEnemies = new Dictionary<Enemy, SlowData>();
+    [SerializeField] private ParticleTypes _slowBreakParticleType;
+
+    private float _particleLookAtHeightOffset = 0f;
 
     private Material slowPlaneMaterial;
+
+    private IParticleFactory _particleFactory;
 
 
     private void Awake()
     {
         AwakeInit();
+
+        _particleFactory = ServiceLocator.GetInstance().ParticleFactory;
     }
 
     override public void Init(TurretBuilding turretOwner, float turretRange) 
@@ -94,6 +101,7 @@ public class SlowBase : TurretPartBase_Prefab
         {
             enemy.SetMoveSpeed(currentSlowSpeedCoef);
             slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = currentSlowSpeedCoef };
+            SpawnSlowBreakParticles(enemy);
         }
     }
 
@@ -106,8 +114,17 @@ public class SlowBase : TurretPartBase_Prefab
         if(slowedEnemies[enemy].slowQuantity == 0)
         {
             slowedEnemies.Remove(enemy);
+            SpawnSlowBreakParticles(enemy);
 
             enemy.SetMoveSpeed(1.0f);
         }
+    }
+
+    private void SpawnSlowBreakParticles(Enemy enemy)
+    {
+        Transform particle = _particleFactory
+            .Create(_slowBreakParticleType, transform.position + Vector3.up * _particleLookAtHeightOffset, Quaternion.identity);
+        particle.LookAt(enemy.Position);
+        particle.position = enemy.Position;
     }
 }

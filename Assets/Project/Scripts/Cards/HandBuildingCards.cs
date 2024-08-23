@@ -547,7 +547,15 @@ public class HandBuildingCards : MonoBehaviour
         if (isHandHidden && !isHandBeingShown) ShowHand();
 
         hoveredCard = card;
-        card.HoveredState(rotate: false);
+
+        if(isInRedrawPhase)
+        {
+            card.HoveredStateRedraw(rotate: false);
+        }
+        else
+        {
+            card.HoveredState(rotate: false);
+        }
 
         foreach (BuildingCard itCard in cards)
         {
@@ -583,6 +591,8 @@ public class HandBuildingCards : MonoBehaviour
         {
             itCard.OnCardHovered += SetHoveredCard;            
         }
+
+        card.RedrawHoverIndication(false);
     }
 
     private void EnablePlacingAfterDragged(BuildingCard cardToBePlaced)

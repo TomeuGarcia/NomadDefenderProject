@@ -19,9 +19,6 @@ public class TurretBuilding : RangeBuilding
     public Transform BodyPartTransform => bodyPart.transform;
     public Transform BinderPointTransform => bodyPart.binderPoint;
 
-    private BasePassive basePassive;
-
-
 
     private ProjectileShootingController _shootingController;
     public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
@@ -111,8 +108,6 @@ public class TurretBuilding : RangeBuilding
 
         TurretCardPartsGroup parts = turretCardData.SharedPartsGroup;
         TurretPartBody turretPartBody = parts.Body;
-        TurretPassiveBase turretPassiveBase = parts.Passive;
-        bool hasBasePassive = !(turretPassiveBase.passive is BaseNullPassive);
 
         CardLevel = turretCardData.CardUpgradeLevel;
 
@@ -130,9 +125,6 @@ public class TurretBuilding : RangeBuilding
             CardData.MakeIconsDisplayData());
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
-        //PASSIVE
-        basePassive = parts.Passive.passive;
-        basePassive.ApplyEffects(this);
 
         DisableFunctionality();
 
