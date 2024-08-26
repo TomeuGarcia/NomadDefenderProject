@@ -9,11 +9,12 @@ public class TurretPartAttack_Berserker : TurretPartProjectileDataModel
     [Space(40)]
     [SerializeField] private BerserkerTurretBuildingVisuals berserkerVisualsPrefab;
 
+    /*
     public override void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
     {
         BerserkerTurretBuildingVisuals berserkerVisuals = GameObject.Instantiate(berserkerVisualsPrefab, owner.transform);
 
         berserkerVisuals.TurretPlacedInit(owner, turretMaterial);
     }
-
+*/
 }

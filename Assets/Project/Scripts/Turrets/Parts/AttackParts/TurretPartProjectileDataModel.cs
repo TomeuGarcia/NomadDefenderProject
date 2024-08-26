@@ -22,13 +22,25 @@ public class TurretPartProjectileDataModel : ScriptableObject
 
     [Header("ABILITY INFO")]
     [Header("Name")]
-    [SerializeField] public string abilityName;
+    [SerializeField] private string _abilityName;
     [Header("Description")]
-    [SerializeField, TextArea(3, 5)] public string abilityDescription;
+    [SerializeField, TextArea(3, 5)] private string _abilityDescription;
+    [SerializeField] private CardAbilityKeyword[] _descriptionKeywords;
 
+    public string AbilityName => _abilityName;
 
-    public virtual void OnTurretPlaced(TurretBuilding owner, Material turretMaterial) 
-    {    }
+    public TurretAbilityDescription MakeAbilityDescription()
+    {
+        TurretAbilityDescription abilityDescription = 
+            new TurretAbilityDescription(_abilityName, _abilityDescription);
+
+        foreach (CardAbilityKeyword descriptionKeyword in _descriptionKeywords)
+        {
+            descriptionKeyword.ApplyDescriptionModifications(abilityDescription);
+        }
+        
+        return abilityDescription;
+    }
 
 
     // Operator Overloads

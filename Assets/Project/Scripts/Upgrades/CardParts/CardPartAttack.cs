@@ -33,10 +33,7 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-    }
+    private TurretAbilityDescription _projectileDescription;
 
     public void Configure(TurretPartProjectileDataModel turretPartAttack)
     {
@@ -45,9 +42,11 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
 
     public override void Init()
     {
+        _projectileDescription = turretPartAttack.MakeAbilityDescription();
+        
         attackImage.sprite = turretPartAttack.abilitySprite;
         attackImage.color = turretPartAttack.materialColor;
-        _attackNameText.text = "/"+turretPartAttack.abilityName;
+        _attackNameText.text = "/"+_projectileDescription.Name;
     }
 
     protected override void DoShowInfo()
@@ -69,8 +68,8 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
         ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
 
         setupData[0] = new ICardDescriptionProvider.SetupData(
-            turretPartAttack.abilityName,
-            turretPartAttack.abilityDescription,
+            _projectileDescription.Name,
+            _projectileDescription.Description,
             turretPartAttack.abilitySprite,
             turretPartAttack.materialColor
         );

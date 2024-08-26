@@ -10,11 +10,12 @@ public class TurretPartAttack_SlowFireRate : TurretPartProjectileDataModel
     [Space(40)]
     [SerializeField] private SlowFireRateTurretBuildingVisuals slowFireRateVisualsPrefab;
 
+    /*
     public override void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
     {
         SlowFireRateTurretBuildingVisuals slowFireRateVisuals = GameObject.Instantiate(slowFireRateVisualsPrefab, owner.transform);
 
         slowFireRateVisuals.TurretPlacedInit(owner, SlowFireRateProjectile.MAX_CADENCE_TIME);
     }
-
+*/
 }

@@ -26,6 +26,11 @@ public abstract class ATurretPassiveAbility
         OriginalModel = originalModel;
         
         _description = new TurretAbilityDescription(OriginalModel.Name, OriginalModel.Description);
+        foreach (CardAbilityKeyword descriptionKeyword in OriginalModel.DescriptionKeywords)
+        {
+            descriptionKeyword.ApplyDescriptionModifications(_description);
+        }
+        
         _descriptionCorrections = new Dictionary<string, string>();
     }
 

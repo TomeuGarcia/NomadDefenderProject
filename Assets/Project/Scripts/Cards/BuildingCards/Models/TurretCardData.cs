@@ -11,6 +11,8 @@ public class TurretCardData
     public TurretCardStatsController StatsController { get; private set; }
 
     public TurretPassiveAbilitiesController PassiveAbilitiesController { get; private set; }
+    public TurretAbilityDescription ProjectileDescription { get; private set; }
+
 
 
     public TurretCardData(TurretCardDataModel model)
@@ -24,6 +26,7 @@ public class TurretCardData
 
         PassiveAbilitiesController = new TurretPassiveAbilitiesController(
             this, OriginalModel.PassiveAbilityModels);
+        ProjectileDescription = model.SharedPartsGroup.Projectile.MakeAbilityDescription();
     }
     
     public TurretCardData(TurretCardData other)
@@ -41,6 +44,7 @@ public class TurretCardData
         
         PassiveAbilitiesController = new TurretPassiveAbilitiesController(
             this, other.PassiveAbilitiesController);
+        ProjectileDescription = other.SharedPartsGroup.Projectile.MakeAbilityDescription();
     }
     
     
@@ -82,6 +86,7 @@ public class TurretCardData
     public void SetProjectilePart(TurretPartProjectileDataModel projectileDataModel)
     {
         SharedPartsGroup.SetProjectile(projectileDataModel);
+        ProjectileDescription = projectileDataModel.MakeAbilityDescription();
     }
 
     public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)

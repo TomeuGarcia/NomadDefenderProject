@@ -70,7 +70,7 @@ public class TurretCardDataModelEditor : Editor
         name += AbilityNameWithCapital(cardDataModel.SharedPartsGroup.Body.partName);
         name += "_" + cardDataModel.CardPlayCost;
         name += "_L" + cardDataModel.CardLevel;
-        name += "_" + AbilityNameWithCapital(cardDataModel.SharedPartsGroup.Projectile.abilityName);
+        name += "_" + AbilityNameWithCapital(cardDataModel.SharedPartsGroup.Projectile.AbilityName);
 
         foreach (ATurretPassiveAbilityDataModel passiveAbilityModel in cardDataModel.PassiveAbilityModels)
         {
@@ -117,7 +117,7 @@ public class TurretCardDataModelEditor : Editor
         EditorGUILayout.BeginVertical();
         if (turretPartProjectile != null)
         {
-            GUILayout.Label("PROJECTILE: " + AbilityNameWithCapital(turretPartProjectile.abilityName));            
+            GUILayout.Label("PROJECTILE: " + AbilityNameWithCapital(turretPartProjectile.AbilityName));            
             GUILayout.Box(turretPartProjectile.texture,
                           GUILayout.MinHeight(height), GUILayout.MinWidth(width), GUILayout.MaxHeight(height), GUILayout.MaxWidth(width));
             EditorGUILayout.ColorField(turretPartProjectile.materialColor, 

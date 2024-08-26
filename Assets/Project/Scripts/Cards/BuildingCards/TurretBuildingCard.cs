@@ -372,8 +372,8 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
         TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
         setupData[0] = new ICardDescriptionProvider.SetupData(
-            turretPartAttack.abilityName,
-            turretPartAttack.abilityDescription,
+            CardData.ProjectileDescription.Name,
+            CardData.ProjectileDescription.Description,
             turretPartAttack.abilitySprite,
             turretPartAttack.materialColor
         );
