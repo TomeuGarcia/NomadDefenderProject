@@ -1,16 +1,18 @@
 
 using System.Collections.Generic;
 
-public class TurretAbilityDescription
+public class EditableCardAbilityDescription
 {
     public readonly string Name;
     public string Description { get; private set; }
+    public readonly CardAbilityKeyword[] Keywords;
     
 
-    public TurretAbilityDescription(string name, string description)
+    public EditableCardAbilityDescription(string name, string description, CardAbilityKeyword[] keywords)
     {
         Name = name;
         Description = description;
+        Keywords = keywords;
     }
 
     public void ApplyDescriptionModifications(Dictionary<string, string> keywordsToValues)

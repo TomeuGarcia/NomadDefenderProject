@@ -44,7 +44,7 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = false;
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
-        CardDescriptionDisplayer.GetInstance()?.SetCamera(Camera.main);
+        CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
         
 
         startSimulationFlashMaterial = startSimulationFlashMesh.material;

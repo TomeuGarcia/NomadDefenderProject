@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ProBuilder;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartProjectile_NAME", 
@@ -20,26 +21,14 @@ public class TurretPartProjectileDataModel : ScriptableObject
     public Material MaterialForTurret => _materialForTurret;
 
 
-    [Header("ABILITY INFO")]
-    [Header("Name")]
-    [SerializeField] private string _abilityName;
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string _abilityDescription;
-    [SerializeField] private CardAbilityKeyword[] _descriptionKeywords;
+    [Header("ABILITY INFO")] 
+    [SerializeField] private CardAbilityDescriptionModel _descriptionModel;
+    public string AbilityName => _descriptionModel.AbilityName;
+    
 
-    public string AbilityName => _abilityName;
-
-    public TurretAbilityDescription MakeAbilityDescription()
+    public EditableCardAbilityDescription MakeAbilityDescription()
     {
-        TurretAbilityDescription abilityDescription = 
-            new TurretAbilityDescription(_abilityName, _abilityDescription);
-
-        foreach (CardAbilityKeyword descriptionKeyword in _descriptionKeywords)
-        {
-            descriptionKeyword.ApplyDescriptionModifications(abilityDescription);
-        }
-        
-        return abilityDescription;
+        return _descriptionModel.MakeEditableDescription();
     }
 
 

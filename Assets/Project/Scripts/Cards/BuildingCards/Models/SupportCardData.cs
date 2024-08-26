@@ -6,6 +6,8 @@ public class SupportCardData
     public SupportCardPartsGroup SharedPartsGroup { get; private set; }
     public SupportCardStatsController StatsController { get; private set; }
 
+    public readonly EditableCardAbilityDescription[] AbilityDescriptions;
+
     
     public SupportCardData(SupportCardDataModel model)
     {
@@ -14,6 +16,8 @@ public class SupportCardData
         SharedPartsGroup = model.MakePartsGroup();
 
         MakeStatsControllerFromParts();
+
+        AbilityDescriptions = SharedPartsGroup.Base.MakeAbilityDescriptions();
     }
     
     public SupportCardData(SupportCardData other)
@@ -37,4 +41,8 @@ public class SupportCardData
         );
     }
     
+    public string GetUpgradeDescriptionByLevel(int level)
+    {
+        return AbilityDescriptions[level].Description;
+    }
 }

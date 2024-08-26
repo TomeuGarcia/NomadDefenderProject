@@ -6,13 +6,11 @@ public abstract class ATurretPassiveAbilityDataModel : ScriptableObject
     [Header("DEFAULTS")]
     [Header("View")] 
     [SerializeField] private ViewConfig _viewConfig;
-    
+
     [Header("Description")] 
-    [SerializeField] private string _name;
-    [SerializeField, TextArea(2, 5)] private string _description;
-    [SerializeField] private CardAbilityKeyword[] _descriptionKeywords;
-    
-    
+    [SerializeField] private CardAbilityDescriptionModel _descriptionModel;
+
+
     [System.Serializable]
     public class ViewConfig
     {
@@ -27,10 +25,13 @@ public abstract class ATurretPassiveAbilityDataModel : ScriptableObject
     
     
     public ViewConfig View => _viewConfig;
-    public string Name => _name;
-    public string Description => _description;
-    public CardAbilityKeyword[] DescriptionKeywords => _descriptionKeywords;
+    public string Name => _descriptionModel.AbilityName;
 
 
+    public EditableCardAbilityDescription MakeDescription()
+    {
+        return _descriptionModel.MakeEditableDescription();
+    }
+    
     public abstract ATurretPassiveAbility MakePassiveAbility();
 }

@@ -122,7 +122,7 @@ public class PauseMenu : MonoBehaviour
 
         OWMap_Node.IsGlobalInteractable = false;
 
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
     public void MainMenuOptions()

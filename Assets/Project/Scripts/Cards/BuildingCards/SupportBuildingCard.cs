@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 
 
-public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
+public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 {
     public SupportCardData CardData { get; private set; }
     public SupportCardPartsGroup CardParts => CardData.SharedPartsGroup;
@@ -53,7 +53,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, CardParts.Base, currencyCounter, 
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, CardData, currencyCounter, 
             abilityImage.sprite, abilityImage.color);
         copyBuildingPrefab.SetActive(false);
     }
@@ -115,27 +115,27 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     public override void ShowInfo()
     {
         base.ShowInfo();
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance()?.HideCardDescription();
+        CardTooltipDisplayManager.GetInstance()?.StopDisplayingTooltip();
     }
 
 
     // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
 
         setupData[0] = null;
 
         SupportPartBase turretPartBase = CardParts.Base;
-        setupData[1] = new ICardDescriptionProvider.SetupData(
-            turretPartBase.abilityName,
-            turretPartBase.abilityDescription,
+        setupData[1] = new ICardTooltipSource.SetupData(
+            CardData.AbilityDescriptions[0].Name,
+            CardData.AbilityDescriptions[0].Description,
             turretPartBase.abilitySprite,
             turretPartBase.spriteColor
         );
@@ -150,5 +150,10 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     public DescriptionCornerPositions GetCornerPositions()
     {
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
+
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return new CardTooltipDisplayData(_descriptionTooltipPositioning, CardParts.Base, CardData.AbilityDescriptions);
     }
 }

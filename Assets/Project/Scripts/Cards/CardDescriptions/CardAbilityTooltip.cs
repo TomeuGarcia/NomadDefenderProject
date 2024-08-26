@@ -1,5 +1,6 @@
 
 
+using System;
 using Scripts.ObjectPooling;
 using TMPro;
 using UnityEngine;
@@ -41,9 +42,16 @@ public class CardAbilityTooltip : RecyclableObject
     [SerializeField] private TextMeshProUGUI _descriptionText;
     [SerializeField] private Image _iconImage;
 
+    private Transform _originalParent;
+
+    private void Awake()
+    {
+        _originalParent = transform.parent;
+    }
+
     public void ParentToContainer(Transform container)
     {
-        transform.parent = container;
+        transform.SetParent(container);
     }
 
     public void SetContent(Content content)
@@ -53,13 +61,32 @@ public class CardAbilityTooltip : RecyclableObject
         
         _descriptionText.gameObject.SetActive(!string.IsNullOrEmpty(content.Description));
         _descriptionText.text = content.Description;
-        
-        _iconImage.gameObject.SetActive(content.HasIcon);
-        _iconImage.sprite = content.IconSprite;
-        _iconImage.color = content.IconColor;
+
+        if (content.HasIcon)
+        {
+            _iconImage.gameObject.SetActive(content.HasIcon);
+            _iconImage.sprite = content.IconSprite;
+            _iconImage.color = content.IconColor;
+        }
+        else
+        {
+            _iconImage?.gameObject.SetActive(false);
+        }
+    }
+    
+    internal override void RecycledInit() { }
+
+    internal override void RecycledReleased()
+    {
+        transform.SetParent(_originalParent);
     }
 
-
-    internal override void RecycledInit() { }
-    internal override void RecycledReleased() { }
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+    public void Hide()
+    {
+        Recycle();
+    }
 }

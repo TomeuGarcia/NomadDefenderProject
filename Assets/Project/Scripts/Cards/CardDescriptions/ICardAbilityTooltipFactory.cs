@@ -2,5 +2,6 @@ using UnityEngine;
 
 public interface ICardAbilityTooltipFactory
 {
-    CardAbilityTooltip CreateCardAbilityTooltip();
+    CardAbilityTooltip CreateAbilityTooltip();
+    CardAbilityTooltip CreateKeywordTooltip();
 }

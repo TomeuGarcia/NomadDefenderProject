@@ -18,10 +18,12 @@ MonoBehaviour:
     _color:
       serializedVersion: 2
       rgba: 4291721472
-  _name: stockGenerator
-  _description: "While in hand, when an enemy wave finishes, spawn a copy of this
-    card in your hand without this ability with +COST_INCREMENT\u2666 cost for each
-    card in hand."
+  _descriptionModel:
+    _abilityName: stockGenerator
+    _abilityDescription: "While in hand, when an EnemyWave finishes, spawn a copy
+      of this card in your hand without this ability with +COST_INCREMENT\u2666 cost
+      for each card in hand."
+    _descriptionKeywords: []
   _costIncrementPerCard:
     _name: COST_INCREMENT
     _isDynamic: 0

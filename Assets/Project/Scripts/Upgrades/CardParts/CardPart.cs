@@ -35,7 +35,10 @@ public abstract class CardPart : MonoBehaviour
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
     [HideInInspector] public bool hideInfoWhenSelected = true;
 
-
+    [Header("DESCRIPTION")]
+    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    
+    
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;

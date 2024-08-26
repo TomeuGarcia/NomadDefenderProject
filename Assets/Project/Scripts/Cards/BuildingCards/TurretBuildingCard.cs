@@ -3,10 +3,10 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 
 
-public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
+public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 {
     public TurretCardData CardData { get; private set; }
     public TurretCardPartsGroup CardParts => CardData.SharedPartsGroup;
@@ -49,7 +49,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     private bool playingPlayCostAnimation = false;
 
 
-    [Header("DESCRIPTION")]
+    [Header("DESCRIPTION")] 
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
@@ -217,16 +217,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public override void ShowInfo()
     {
         base.ShowInfo();
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance()?.HideCardDescription();
-        return;
-
-        if (isHideInfoAnimationPlaying) return;
+        CardTooltipDisplayManager.GetInstance()?.StopDisplayingTooltip();
     }
 
 
@@ -366,12 +363,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
 
         TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
-        setupData[0] = new ICardDescriptionProvider.SetupData(
+        setupData[0] = new ICardTooltipSource.SetupData(
             CardData.ProjectileDescription.Name,
             CardData.ProjectileDescription.Description,
             turretPartAttack.abilitySprite,
@@ -381,9 +378,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         if (CardData.PassiveAbilitiesController.HasPassiveAbilities())
         {
             ATurretPassiveAbility passiveAbility = CardData.PassiveAbilitiesController.PassiveAbilities[0];
-            setupData[1] = new ICardDescriptionProvider.SetupData(
-                passiveAbility.AbilityName,
-                passiveAbility.AbilityDescription,
+            setupData[1] = new ICardTooltipSource.SetupData(
+                passiveAbility.Name,
+                passiveAbility.Description,
                 passiveAbility.OriginalModel.View.Sprite,
                 passiveAbility.OriginalModel.View.Color
             );
@@ -524,6 +521,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public DescriptionCornerPositions GetCornerPositions()
     {
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
+
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return new CardTooltipDisplayData(_descriptionTooltipPositioning, CardData);
     }
 
 

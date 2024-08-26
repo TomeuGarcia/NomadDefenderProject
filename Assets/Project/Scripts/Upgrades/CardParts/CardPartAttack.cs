@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 using static TurretBuildingCard;
 
-public class CardPartAttack : CardPart, ICardDescriptionProvider
+public class CardPartAttack : CardPart, ICardTooltipSource
 {
     [Header("CARD INFO")]
     //[SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -33,7 +33,7 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-    private TurretAbilityDescription _projectileDescription;
+    private EditableCardAbilityDescription _projectileDescription;
 
     public void Configure(TurretPartProjectileDataModel turretPartAttack)
     {
@@ -51,23 +51,22 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
-
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
 
     // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
 
-        setupData[0] = new ICardDescriptionProvider.SetupData(
+        setupData[0] = new ICardTooltipSource.SetupData(
             _projectileDescription.Name,
             _projectileDescription.Description,
             turretPartAttack.abilitySprite,
@@ -89,4 +88,8 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
     }
 
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return new CardTooltipDisplayData(_descriptionTooltipPositioning, turretPartAttack, _projectileDescription);
+    }
 }

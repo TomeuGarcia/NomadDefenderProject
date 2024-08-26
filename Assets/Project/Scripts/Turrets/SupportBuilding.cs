@@ -47,13 +47,13 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    public void Init(SupportCardStatsController statsController, SupportPartBase turretPartBase, 
+    public void Init(SupportCardStatsController statsController, SupportCardData supportCardData, 
         CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
         _statsController = statsController;
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
-        this.turretPartBase = turretPartBase;
+        this.turretPartBase = supportCardData.SharedPartsGroup.Base;
 
         basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
@@ -61,7 +61,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, supportCardData);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);

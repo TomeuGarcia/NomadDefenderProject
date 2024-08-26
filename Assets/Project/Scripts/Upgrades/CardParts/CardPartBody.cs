@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 
-public class CardPartBody : CardPart, ICardDescriptionProvider
+public class CardPartBody : CardPart, ICardTooltipSource
 {
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -57,13 +57,13 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
 
@@ -91,11 +91,11 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
 
 
     // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
 
-        setupData[0] = new ICardDescriptionProvider.SetupData();
+        setupData[0] = new ICardTooltipSource.SetupData();
         setupData[1] = null;
 
 
@@ -113,4 +113,8 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
         return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
     }
 
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return new CardTooltipDisplayData(_descriptionTooltipPositioning);
+    }
 }

@@ -144,7 +144,7 @@ public class OverworldCardShower : MonoBehaviour
     
     public void OnShowDeck()
     {
-        CardDescriptionDisplayer.GetInstance().SetCamera(cardShowerCamera);
+        CardTooltipDisplayManager.GetInstance().SetDisplayCamera(cardShowerCamera);
 
         showingDeck = true;
 

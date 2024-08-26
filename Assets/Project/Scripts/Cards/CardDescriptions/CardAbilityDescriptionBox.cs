@@ -36,7 +36,7 @@ public class CardAbilityDescriptionBox : MonoBehaviour
         parentHolder.SetActive(false);        
     }
 
-    public void SetupTextsAndIcon(ICardDescriptionProvider.SetupData cardDescriptionSetupData)
+    public void SetupTextsAndIcon(ICardTooltipSource.SetupData cardDescriptionSetupData)
     {
         nameText.text = "/" + cardDescriptionSetupData.AbilityName + ":";
         descriptionText.text = cardDescriptionSetupData.AbilityDescription;

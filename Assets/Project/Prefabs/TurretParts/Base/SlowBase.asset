@@ -18,9 +18,6 @@ MonoBehaviour:
       type: 3}
     _materialTexture: {fileID: 2800000, guid: bf4379982e191864b89fb51da85becd7, type: 3}
     _materialColor: {r: 1, g: 1, b: 1, a: 1}
-  prefab: {fileID: 5424480766443835497, guid: 038017eaf44f88e449d3b968207b35f2, type: 3}
-  materialTexture: {fileID: 2800000, guid: bf4379982e191864b89fb51da85becd7, type: 3}
-  materialColor: {r: 1, g: 1, b: 1, a: 1}
   abilitySprite: {fileID: 21300000, guid: 607c5d511cae26f479a8da9e8a699050, type: 3}
   spriteColor:
     serializedVersion: 2
@@ -28,6 +25,23 @@ MonoBehaviour:
   abilityName: frostHolder
   abilityDescription: Enemies inside this area are slown down by 40% of their move
     speed.
+  _defaultAbilityDescription:
+    _abilityName: frostHolder
+    _abilityDescription: Enemies inside this area are slown down by 40% of their
+      move speed.
+    _descriptionKeywords: []
+  _lvl1AbilityDescription:
+    _abilityName: frostHolder - lvl 1
+    _abilityDescription: Reduce enemies' move speed by 50%.
+    _descriptionKeywords: []
+  _lvl2AbilityDescription:
+    _abilityName: frostHolder - lvl 2
+    _abilityDescription: Reduce enemies' move speed by 60%.
+    _descriptionKeywords: []
+  _lvl3AbilityDescription:
+    _abilityName: frostHolder - lvl 3
+    _abilityDescription: Reduce enemies' move speed by 80%.
+    _descriptionKeywords: []
   upgrade1Description: Reduce enemies' move speed by 50%.
   upgrade2Description: Reduce enemies' move speed by 60%.
   upgrade3Description: Reduce enemies' move speed by 80%.

@@ -8,23 +8,57 @@ public class CardTooltipDisplayGroup : MonoBehaviour
     [SerializeField] private CardAbilityTooltipColumn _abilitiesColumn;
     [SerializeField] private CardAbilityTooltipColumn _keywordsColumn;
 
-
-    private ICardAbilityTooltipFactory _cardAbilityTooltipFactory;
+    public bool IsDisplaying { get; private set; }
     
-
-    public void Configure(ICardAbilityTooltipFactory cardAbilityTooltipFactory)
+    
+    public void StartDisplayingTooltips(
+        ICardAbilityTooltipFactory tooltipFactory,
+        CardAbilityTooltip.Content[] abilityContents,
+        CardAbilityTooltip.Content[] keywordContents,
+        Camera displayCamera,
+        CardTooltipDisplayData.Positioning displayPositioning)
     {
-        _cardAbilityTooltipFactory = cardAbilityTooltipFactory;
+        gameObject.SetActive(true);
+        SpawnTooltips(tooltipFactory, abilityContents, keywordContents);
+        PositionTooltips(displayCamera, displayPositioning);
+        IsDisplaying = true;
     }
-    
-    
-    public void DisplayTooltips(ICardDescriptionProvider descriptionProvider)
+
+    private void SpawnTooltips(
+        ICardAbilityTooltipFactory tooltipFactory,
+        CardAbilityTooltip.Content[] abilityContents,
+        CardAbilityTooltip.Content[] keywordContents)
     {
-        // for all abilities - add to abilities column
-            // for all keywords - add to keywords column
-
-
-            descriptionProvider.GetAbilityDescriptionSetupData();
+        foreach (CardAbilityTooltip.Content abilityContent in abilityContents)
+        {
+            CardAbilityTooltip abilityTooltip = tooltipFactory.CreateAbilityTooltip();
+            abilityTooltip.SetContent(abilityContent);
+            _abilitiesColumn.AddTooltip(abilityTooltip);
+        }
+        
+        foreach (CardAbilityTooltip.Content keywordContent in keywordContents)
+        {
+            CardAbilityTooltip keywordTooltip = tooltipFactory.CreateKeywordTooltip();
+            keywordTooltip.SetContent(keywordContent);
+            _keywordsColumn.AddTooltip(keywordTooltip);
+        }
+        
+        _abilitiesColumn.ShowTooltips();
+        _keywordsColumn.ShowTooltips();
     }
-    
+
+    private void PositionTooltips(Camera displayCamera, CardTooltipDisplayData.Positioning displayPositioning)
+    {
+        // TODO
+        displayPositioning.TODO_GetCanvasDisplayPosition(displayCamera,
+            out bool displayRightSide, out Vector3 displayPosition);
+    }
+
+    public void StopDisplayingTooltips()
+    {
+        _abilitiesColumn.HideAndClearTooltips();
+        _keywordsColumn.HideAndClearTooltips();
+        gameObject.SetActive(false);
+        IsDisplaying = false;
+    }
 }

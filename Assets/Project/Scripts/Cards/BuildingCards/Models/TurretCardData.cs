@@ -11,7 +11,8 @@ public class TurretCardData
     public TurretCardStatsController StatsController { get; private set; }
 
     public TurretPassiveAbilitiesController PassiveAbilitiesController { get; private set; }
-    public TurretAbilityDescription ProjectileDescription { get; private set; }
+    public EditableCardAbilityDescription ProjectileDescription { get; private set; }
+
 
 
 

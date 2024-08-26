@@ -43,10 +43,12 @@ public class CardDescriptionDisplayer : MonoBehaviour
         MapSceneNotifier.OnMapSceneFinished -= HideCardDescription;
     }
 
+    /*
     public static CardDescriptionDisplayer GetInstance()
     {
         return instance;
     }
+    */
 
 
     private void Init()
@@ -81,7 +83,7 @@ public class CardDescriptionDisplayer : MonoBehaviour
     }
 
 
-    public void ShowCardDescription(ICardDescriptionProvider descriptionProvider)
+    public void ShowCardDescription(ICardTooltipSource descriptionProvider)
     {
         bool positionedAtTheRight = PositionCardInfo(descriptionProvider);
         SetupCardInfo(descriptionProvider);
@@ -111,9 +113,9 @@ public class CardDescriptionDisplayer : MonoBehaviour
 
 
     // true if positioned at right, false if left
-    private bool PositionCardInfo(ICardDescriptionProvider descriptionProvider)
+    private bool PositionCardInfo(ICardTooltipSource descriptionProvider)
     {
-        ICardDescriptionProvider.DescriptionCornerPositions cornerPositions = descriptionProvider.GetCornerPositions();
+        ICardTooltipSource.DescriptionCornerPositions cornerPositions = descriptionProvider.GetCornerPositions();
         Vector3 cardPositionInScreen = displayCamera.WorldToScreenPoint(descriptionProvider.GetCenterPosition());
 
         Vector3 displayPosition = descriptionProvider.GetCenterPosition();
@@ -154,9 +156,9 @@ public class CardDescriptionDisplayer : MonoBehaviour
         return positionAtTheRight;
     }
 
-    private void SetupCardInfo(ICardDescriptionProvider descriptionProvider)
+    private void SetupCardInfo(ICardTooltipSource descriptionProvider)
     {
-        ICardDescriptionProvider.SetupData[] setupData = descriptionProvider.GetAbilityDescriptionSetupData();
+        ICardTooltipSource.SetupData[] setupData = descriptionProvider.GetAbilityDescriptionSetupData();
 
         CardAbilityDescriptionBox attackDescriptionBox = GetAttackDescriptionBox();
         CardAbilityDescriptionBox baseDescriptionBox = GetBaseDescriptionBox();

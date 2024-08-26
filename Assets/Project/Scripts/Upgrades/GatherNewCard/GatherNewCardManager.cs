@@ -51,7 +51,7 @@ public class GatherNewCardManager : MonoBehaviour
     {
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_sceneCamera);
         Init();
-        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
+        CardTooltipDisplayManager.GetInstance().SetDisplayCamera(Camera.main);
     }
 
     private void Init()

@@ -26,7 +26,7 @@ public class CardAbilityKeyword : ScriptableObject
     public string Description => _description;
 
 
-    public void ApplyDescriptionModifications(TurretAbilityDescription abilityDescription)
+    public void ApplyDescriptionModifications(EditableCardAbilityDescription abilityDescription)
     {
         Dictionary<string, string> variableToKeyword = new Dictionary<string, string>()
         {

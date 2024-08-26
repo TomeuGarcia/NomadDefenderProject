@@ -20,17 +20,22 @@ public class SupportPartBase : ScriptableObject
     [SerializeField] public Color32 spriteColor;
 
     [Header("ABILITY INFO")]
-    [Header("Name")]
-    [SerializeField] public string abilityName;
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] public string abilityDescription;
+    [SerializeField] private CardAbilityDescriptionModel _defaultAbilityDescription;
+    [SerializeField] private CardAbilityDescriptionModel _lvl1AbilityDescription;
+    [SerializeField] private CardAbilityDescriptionModel _lvl2AbilityDescription;
+    [SerializeField] private CardAbilityDescriptionModel _lvl3AbilityDescription;
+    public string abilityName => _defaultAbilityDescription.AbilityName;
+    
+    public EditableCardAbilityDescription[] MakeAbilityDescriptions()
+    {
+        EditableCardAbilityDescription[] abilityDescriptions = new EditableCardAbilityDescription[4];
+        abilityDescriptions[0] = _defaultAbilityDescription.MakeEditableDescription();
+        abilityDescriptions[1] = _lvl1AbilityDescription.MakeEditableDescription();
+        abilityDescriptions[2] = _lvl2AbilityDescription.MakeEditableDescription();
+        abilityDescriptions[3] = _lvl3AbilityDescription.MakeEditableDescription();
 
-    [Header("UPGRADE DESCRIPTIONS")]
-    [SerializeField, TextArea(2, 5)] public string upgrade1Description;
-    [SerializeField, TextArea(2, 5)] public string upgrade2Description;
-    [SerializeField, TextArea(2, 5)] public string upgrade3Description;
-
-
+        return abilityDescriptions;
+    }
     
     // Operator Overloads
     public static bool operator ==(SupportPartBase obj1, SupportPartBase obj2)
@@ -42,15 +47,6 @@ public class SupportPartBase : ScriptableObject
     public static bool operator !=(SupportPartBase obj1, SupportPartBase obj2)
     {
         return !(obj1 == obj2);
-    }
-
-    public string GetUpgradeDescriptionByLevel(int level)
-    {
-        if (level == 1) return upgrade1Description;
-        else if (level == 2) return upgrade2Description;
-        else if (level == 3) return upgrade3Description;
-
-        return "";
     }
 
 }

@@ -16,5 +16,9 @@ public class SupportCardDataModel : ScriptableObject
     
     public int CardPlayCost => _cardPlayCost;
     public SupportCardPartsGroup SharedPartsGroup => _partsGroup;
-    public SupportCardPartsGroup MakePartsGroup() => new SupportCardPartsGroup(_partsGroup);
+
+    public SupportCardPartsGroup MakePartsGroup()
+    {
+        return new SupportCardPartsGroup(_partsGroup);
+    }
 }

@@ -6,18 +6,18 @@ public abstract class ATurretPassiveAbility
     
     
     public readonly ATurretPassiveAbilityDataModel OriginalModel;
-    public string AbilityName => _description.Name;
-    public string AbilityDescription
+    public string Name => AbilityDescription.Name;
+    public string Description
     {
         get
         {
-            _description.ApplyDescriptionModifications(_descriptionCorrections);
+            AbilityDescription.ApplyDescriptionModifications(_descriptionCorrections);
             _descriptionCorrections.Clear();
-            return _description.Description;
+            return AbilityDescription.Description;
         }
     }
 
-    private readonly TurretAbilityDescription _description;
+    public readonly EditableCardAbilityDescription AbilityDescription;
     private readonly Dictionary<string, string> _descriptionCorrections;
 
 
@@ -25,12 +25,8 @@ public abstract class ATurretPassiveAbility
     {
         OriginalModel = originalModel;
         
-        _description = new TurretAbilityDescription(OriginalModel.Name, OriginalModel.Description);
-        foreach (CardAbilityKeyword descriptionKeyword in OriginalModel.DescriptionKeywords)
-        {
-            descriptionKeyword.ApplyDescriptionModifications(_description);
-        }
-        
+        AbilityDescription = OriginalModel.MakeDescription();
+
         _descriptionCorrections = new Dictionary<string, string>();
     }
 

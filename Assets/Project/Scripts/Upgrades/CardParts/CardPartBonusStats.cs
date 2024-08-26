@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardPartBonusStats : CardPart, ICardDescriptionProvider
+public class CardPartBonusStats : CardPart, ICardTooltipSource
 {
     [SerializeField] private CardPartBonusStatsItem _damageItem;
     [SerializeField] private CardPartBonusStatsItem _shotsPerSecondItem;
@@ -21,6 +22,8 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
     private TurretStatsMultiplicationSnapshot _statsSnapshotUpgrade;
 
     [SerializeField] private DescriptionHelpReferences _descriptionHelper;
+    private EditableCardAbilityDescription _statsDescription;
+    
 
     [System.Serializable]
     public class DescriptionHelpReferences
@@ -31,6 +34,8 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
         [SerializeField] private CardStatViewConfig _radiusRangeViewConfig;
 
         public Sprite UpgradeSprite => _upgradeSprite;
+        public Color SpriteColor => Color.white;
+        public string Name => "_bonusStats";
 
         private string MakeStatString(TurretStatsUpgradeModel.StatString statString, CardStatViewConfig statsViewConfig)
         {            
@@ -56,6 +61,15 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
         {
             return MakeStatString(radiusRangeStatString, _radiusRangeViewConfig);
         }
+
+        public string MakeStatsString(TurretStatsUpgradeModel.StatString damageStatString,
+            TurretStatsUpgradeModel.StatString shotsPerSecondStatString,
+            TurretStatsUpgradeModel.StatString radiusRangeStatString)
+        {
+            return MakeDamageString(damageStatString) +
+                   MakeShotsPerSecondString(shotsPerSecondStatString) +
+                   MakeRadiusRangeString(radiusRangeStatString);
+        }
     }
 
 
@@ -71,6 +85,12 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
         _damageItem.Init(_damageStatString);
         _shotsPerSecondItem.Init(_shotsPerSecondStatString);
         _radiusRangeItem.Init(_radiusRangeStatString);
+        
+        _statsDescription = new EditableCardAbilityDescription(
+                _descriptionHelper.Name, 
+                _descriptionHelper.MakeStatsString(_damageStatString, _shotsPerSecondStatString, _radiusRangeStatString),
+                Array.Empty<CardAbilityKeyword>()
+            );
     }
 
     public override void Init()
@@ -87,26 +107,22 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
+        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
 
-        string damageDescription = _descriptionHelper.MakeDamageString(_damageStatString);
-        string shotsPerSecondDescription = _descriptionHelper.MakeShotsPerSecondString(_shotsPerSecondStatString);
-        string radiusRangeDescription = _descriptionHelper.MakeRadiusRangeString(_radiusRangeStatString);
-
-        setupData[0] = new ICardDescriptionProvider.SetupData(
+        setupData[0] = new ICardTooltipSource.SetupData(
             "bonusStats",
-            damageDescription + shotsPerSecondDescription + radiusRangeDescription,
+            _descriptionHelper.MakeStatsString(_damageStatString, _shotsPerSecondStatString, _radiusRangeStatString),
             _descriptionHelper.UpgradeSprite,
             Color.white
         );
@@ -121,8 +137,13 @@ public class CardPartBonusStats : CardPart, ICardDescriptionProvider
         return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
     }
 
-    public ICardDescriptionProvider.DescriptionCornerPositions GetCornerPositions()
+    public ICardTooltipSource.DescriptionCornerPositions GetCornerPositions()
     {
-        return new ICardDescriptionProvider.DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+        return new ICardTooltipSource.DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+    }
+    
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return new CardTooltipDisplayData(_descriptionTooltipPositioning, _descriptionHelper, _statsDescription);
     }
 }
