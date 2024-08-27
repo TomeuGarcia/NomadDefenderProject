@@ -185,8 +185,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public void AddNewPassive(ATurretPassiveAbilityDataModel newTurretPassive)
     {
         ReplacedWithSamePart = AlreadyHasPassive(newTurretPassive); // Check replaced with same part
-        CardData.AddPassiveAbility(newTurretPassive);
-        
+        if (!ReplacedWithSamePart)
+        {
+            CardData.AddPassiveAbility(newTurretPassive);
+        }
+
         Init();
     }
 
@@ -361,47 +364,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     }
 
 
-
-    // ICardDescriptionProvider OVERLOADS
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-
-        TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
-        setupData[0] = new ICardTooltipSource.SetupData(
-            CardData.ProjectileDescription.Name,
-            CardData.ProjectileDescription.Description,
-            turretPartAttack.abilitySprite,
-            turretPartAttack.materialColor
-        );
-
-        if (CardData.PassiveAbilitiesController.HasPassiveAbilities())
-        {
-            ATurretPassiveAbility passiveAbility = CardData.PassiveAbilitiesController.PassiveAbilities[0];
-            setupData[1] = new ICardTooltipSource.SetupData(
-                passiveAbility.Name,
-                passiveAbility.Description,
-                passiveAbility.OriginalModel.View.Sprite,
-                passiveAbility.OriginalModel.View.Color
-            );
-        }
-        else
-        {
-            setupData[1] = null;
-        }
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position;
-    }
-
-
-
-
-
+    
+    
 
     public void PreviewChangeVisuals(TurretPartProjectileDataModel newTurretPartAttack, TurretPartBody newTurretPartBody,
         ATurretPassiveAbilityDataModel newTurretPassive,
@@ -412,7 +376,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         bool replacingWithSamePart = false;
 
         // ATTACK
-        //if (newTurretPartAttack == null)
         if (partType != CardPartReplaceManager.PartType.ATTACK)
         {
             newTurretPartAttack = originalCard.CardParts.Projectile;
@@ -425,7 +388,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
         // BODY
-        //if (newTurretPartBody == null)
         if (partType != CardPartReplaceManager.PartType.BODY)
         {
             newTurretPartBody = originalCard.CardParts.Body;
@@ -438,7 +400,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
         // BASE
-        //if (newTurretPartBase == null && newTurretPassiveBase == null)
         if (partType != CardPartReplaceManager.PartType.BASE)
         {
             newTurretPassive = null;
@@ -446,24 +407,12 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         else
         {
             replacingWithSamePart = originalCard.AlreadyHasPassive(newTurretPassive);
+            if (replacingWithSamePart)
+            {
+                newTurretPassive = null;
+            }
         }
 
-
-        //TODO FIX
-        /*
-        bool hasBasePassiveAbility = newTurretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
-
-            basePassiveImage.sprite = newTurretPassiveBase.visualInformation.sprite;
-            basePassiveImage.color = newTurretPassiveBase.visualInformation.color;
-        }
-        else
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }
-        */
 
 
 
@@ -493,10 +442,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
         
         UpdateIcons();
-        
-        //SetAttackIcon(newTurretPartAttack);
-        //attackImage.sprite = newTurretPartAttack.abilitySprite;
-        //attackImage.color = newTurretPartAttack.materialColor;
+
 
         cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
         _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;
@@ -518,15 +464,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
 
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
-    public CardTooltipDisplayData MakeTooltipDisplayData()
-    {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning, CardData);
-    }
 
 
     public void InBattleReplaceAttack(TurretPartProjectileDataModel newTurretPartAttack, float delayBeforeAnimation)
@@ -564,4 +501,12 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     }
 
+    
+    
+        
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return CardTooltipDisplayData.MakeForTurretCard(_descriptionTooltipPositioning, CardData);
+    }
 }

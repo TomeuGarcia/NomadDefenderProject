@@ -19,11 +19,13 @@ public class CardAbilityKeyword : ScriptableObject
     [Header("Card Tooltip")]
     [SerializeField] private string _descriptionVariable = "KEYWORD_NAME";
     [SerializeField] private Color _descriptionVariableColor = Color.cyan;
+    [SerializeField] private bool _descriptionVariableBold = true;
     
     private string DescriptionVariablePlural => _descriptionVariable + 's';
 
     public string Name => _name;
     public string Description => _description;
+    public Color NameColor => _descriptionVariableColor;
 
 
     public void ApplyDescriptionModifications(EditableCardAbilityDescription abilityDescription)
@@ -43,10 +45,16 @@ public class CardAbilityKeyword : ScriptableObject
 
     private string NameForDescription(bool plural)
     {
-        return 
-            "<color=#" + ColorUtility.ToHtmlStringRGB(_descriptionVariableColor) + ">" +
-            (plural ? _namePlural : _name) +
-            "</color>";
+        string prefix = "<color=#" + ColorUtility.ToHtmlStringRGB(_descriptionVariableColor) + ">";
+        string suffix = "</color>";
+
+        if (_descriptionVariableBold)
+        {
+            prefix = prefix + "<b>";
+            suffix = "</b>" + suffix;
+        }
+            
+        return prefix + (plural ? _namePlural : _name) + suffix;
     }
     
 }

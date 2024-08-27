@@ -8,18 +8,15 @@ public class CardTooltipDisplayData
         public readonly EditableCardAbilityDescription AbilityDescription;
         public readonly Sprite AbilitySprite;
         public readonly Color AbilityColor;
+        public readonly bool FixedTooltipWidth;
 
-        public Element(EditableCardAbilityDescription abilityDescription, Sprite abilitySprite, Color abilityColor)
+        public Element(EditableCardAbilityDescription abilityDescription, Sprite abilitySprite, Color abilityColor, bool 
+            fixedTooltipWidth = true)
         {
             AbilityDescription = abilityDescription;
             AbilitySprite = abilitySprite;
             AbilityColor = abilityColor;
-        }
-        public Element(EditableCardAbilityDescription abilityDescription)
-        {
-            AbilityDescription = abilityDescription;
-            AbilitySprite = null;
-            AbilityColor = Color.black;
+            FixedTooltipWidth = fixedTooltipWidth;
         }
     }
 
@@ -34,7 +31,7 @@ public class CardTooltipDisplayData
         private Vector3 RightSpotPosition => _rightDisplaySpot.position;
         private Vector3 CenterPosition => _centerSpot.position;
 
-        private const float START_DISPLAYING_LEFT_SCREEN_PER1 = 0.80f;
+        private const float START_DISPLAYING_LEFT_SCREEN_PER1 = 0.55f;
         
         
         public void TODO_GetCanvasDisplayPosition(Camera displayCamera, 
@@ -57,15 +54,24 @@ public class CardTooltipDisplayData
     }
 
 
-    public readonly Element[] Elements;
     public readonly Positioning DisplayPositioning;
+    public readonly Element[] Elements;
 
-    
-    
-    public CardTooltipDisplayData(Positioning displayPositioning, TurretCardData turretCardData)
+
+    private CardTooltipDisplayData(Positioning displayPositioning, Element[] elements)
     {
         DisplayPositioning = displayPositioning;
-        
+        Elements = elements;
+    }
+    
+    public CardTooltipDisplayData()
+    {
+        // Placeholder constructor
+    }
+    
+
+    public static CardTooltipDisplayData MakeForTurretCard(Positioning displayPositioning, TurretCardData turretCardData)
+    {
         var projectileModel = turretCardData.SharedPartsGroup.Projectile;
         List<ATurretPassiveAbility> passiveAbilities = turretCardData.PassiveAbilitiesController.PassiveAbilities;
 
@@ -73,77 +79,81 @@ public class CardTooltipDisplayData
         elements.Add(ElementFromProjectile(projectileModel, turretCardData.ProjectileDescription));
         foreach (ATurretPassiveAbility passiveAbility in passiveAbilities)  
         {
-            elements.Add(ElementFromPassive(passiveAbility.OriginalModel, passiveAbility.AbilityDescription));
+            elements.Add(ElementFromPassive(passiveAbility.OriginalModel, passiveAbility.GetAbilityDescription()));
         }
-
-        Elements = elements.ToArray();
+        
+        return new CardTooltipDisplayData(displayPositioning, elements.ToArray());
     }
     
-    
-    public CardTooltipDisplayData(Positioning displayPositioning, 
-        TurretPartProjectileDataModel projectileModel, 
-        EditableCardAbilityDescription projectileDescription)
-    {
-        DisplayPositioning = displayPositioning;
-        Elements = new[]
-        {
-            ElementFromProjectile(projectileModel, projectileDescription)
-        };
-    }
-    
-    
-    public CardTooltipDisplayData(Positioning displayPositioning, 
-        ATurretPassiveAbilityDataModel passiveModel, 
-        EditableCardAbilityDescription passiveDescription)
-    {
-        DisplayPositioning = displayPositioning;
-        Elements = new[]
-        {
-            ElementFromPassive(passiveModel, passiveDescription)
-        };
-    }
 
-
-    public CardTooltipDisplayData(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForSupportCard(Positioning displayPositioning,
         SupportPartBase supportPartBase,
         EditableCardAbilityDescription[] defaultAndUpgradesDescriptions)
     {
-        DisplayPositioning = displayPositioning;
-        Elements = new[]
+        Element[] elements = new[]
         {
-            new Element(defaultAndUpgradesDescriptions[0], supportPartBase.abilitySprite, supportPartBase.spriteColor),
-            new Element(defaultAndUpgradesDescriptions[1]),
-            new Element(defaultAndUpgradesDescriptions[2]),
-            new Element(defaultAndUpgradesDescriptions[3])
+            ElementFromSupport(defaultAndUpgradesDescriptions[0], supportPartBase),
+            //ElementFromSupport(defaultAndUpgradesDescriptions[1], supportPartBase),
+            //ElementFromSupport(defaultAndUpgradesDescriptions[2], supportPartBase),
+            //ElementFromSupport(defaultAndUpgradesDescriptions[3], supportPartBase)
         };
+        
+        return new CardTooltipDisplayData(displayPositioning, elements);
     }
+
+
+    public static CardTooltipDisplayData MakeForProjectileCardPart(Positioning displayPositioning,
+        TurretPartProjectileDataModel projectileModel, EditableCardAbilityDescription projectileDescription)
+    {
+        Element[] elements = new[]
+        {
+            ElementFromProjectile(projectileModel, projectileDescription)
+        };
+        
+        return new CardTooltipDisplayData(displayPositioning, elements);
+    }
+
     
-    public CardTooltipDisplayData(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForCardPartPassive(Positioning displayPositioning,
+        ATurretPassiveAbilityDataModel passiveModel,
+        EditableCardAbilityDescription passiveDescription)
+    {
+        Element[] elements = new[]
+        {
+            ElementFromPassive(passiveModel, passiveDescription)
+        };
+        
+        return new CardTooltipDisplayData(displayPositioning, elements);
+    }
+
+    
+    public static CardTooltipDisplayData MakeForCardPartStatsUpgrade(Positioning displayPositioning,
         CardPartBonusStats.DescriptionHelpReferences descriptionHelper,
         EditableCardAbilityDescription statsDescription)
     {
-        DisplayPositioning = displayPositioning;
-        Elements = new[]
+        Element[] elements = new[]
         {
-            new Element(statsDescription, descriptionHelper.UpgradeSprite, descriptionHelper.SpriteColor)
+            new Element(statsDescription, descriptionHelper.UpgradeSprite, descriptionHelper.SpriteColor, false)
         };
-    }
-    
-    public CardTooltipDisplayData(Positioning displayPositioning)
-    {
-        // Placeholder constructor
-    }
+
+        return new CardTooltipDisplayData(displayPositioning, elements);
+    } 
     
     
-    private Element ElementFromProjectile(TurretPartProjectileDataModel projectileModel, 
+    
+    private static Element ElementFromProjectile(TurretPartProjectileDataModel projectileModel, 
         EditableCardAbilityDescription projectileDescription)
     {
         return new Element(projectileDescription, projectileModel.abilitySprite, projectileModel.materialColor);
     }
-    private Element ElementFromPassive(ATurretPassiveAbilityDataModel passiveModel, 
+    private static Element ElementFromPassive(ATurretPassiveAbilityDataModel passiveModel, 
         EditableCardAbilityDescription passiveDescription)
     {
         return new Element(passiveDescription, passiveModel.View.Sprite, passiveModel.View.Color);
     }
-    
+
+    private static Element ElementFromSupport(EditableCardAbilityDescription abilityDescription, SupportPartBase supportPartBase)
+    {
+        return new Element(abilityDescription, supportPartBase.abilitySprite, supportPartBase.spriteColor);
+    }
 }

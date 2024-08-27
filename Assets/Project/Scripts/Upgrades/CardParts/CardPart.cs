@@ -277,7 +277,7 @@ public abstract class CardPart : MonoBehaviour
         cardCollider.center = cardColliderOffset + CardTransform.localPosition;
     }
 
-        public void ShowInfo()
+    public void ShowInfo()
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
@@ -300,7 +300,7 @@ public abstract class CardPart : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         if (cardState != CardPartStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
 

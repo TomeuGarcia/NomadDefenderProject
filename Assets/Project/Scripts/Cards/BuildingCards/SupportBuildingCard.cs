@@ -125,35 +125,10 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
     }
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-
-        setupData[0] = null;
-
-        SupportPartBase turretPartBase = CardParts.Base;
-        setupData[1] = new ICardTooltipSource.SetupData(
-            CardData.AbilityDescriptions[0].Name,
-            CardData.AbilityDescriptions[0].Description,
-            turretPartBase.abilitySprite,
-            turretPartBase.spriteColor
-        );
-
-        return setupData;
-    }
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position;
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
+    // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning, CardParts.Base, CardData.AbilityDescriptions);
+        return CardTooltipDisplayData.MakeForSupportCard(_descriptionTooltipPositioning, CardParts.Base, 
+            CardData.AbilityDescriptions);
     }
 }

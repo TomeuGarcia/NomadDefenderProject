@@ -651,7 +651,7 @@ public abstract class BuildingCard : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         if (cardState != CardStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
 

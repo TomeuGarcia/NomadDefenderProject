@@ -103,36 +103,10 @@ public class CardPartBase : CardPart, ICardTooltipSource
 
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-        
-        setupData[0] = null;
-
-        setupData[1] = new ICardTooltipSource.SetupData(
-            turretPassive.Name,
-            turretPassive.Description,
-            TurretPassiveModel.View.Sprite,
-            TurretPassiveModel.View.Color
-        );
-                    
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
+    // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning, TurretPassiveModel, turretPassive.AbilityDescription);
+        return CardTooltipDisplayData.MakeForCardPartPassive(_descriptionTooltipPositioning, TurretPassiveModel, 
+            turretPassive.GetAbilityDescription());
     }
 }

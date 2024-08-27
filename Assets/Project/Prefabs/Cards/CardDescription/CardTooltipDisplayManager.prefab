@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4132483873989676546}
   - component: {fileID: 7974400672876595194}
+  - component: {fileID: 3054629496800773653}
   m_Layer: 5
   m_Name: ColumnsHolder
   m_TagString: Untagged
@@ -37,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 750, y: 540}
+  m_SizeDelta: {x: 700, y: 540}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7974400672876595194
 MonoBehaviour:
@@ -52,19 +53,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 18
+    m_Left: 0
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &3054629496800773653
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672949982769550466}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2034557484371641865
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +139,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 500
   m_TargetDisplay: 0
 --- !u!114 &8028476243351633286
 MonoBehaviour:
@@ -201,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36495bf8ae614805967b548530d2c8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tooltipsContainer: {fileID: 1870160147524009389}
+  _tooltipsParent: {fileID: 1870160147524009389}
 --- !u!114 &7340921640512407442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36495bf8ae614805967b548530d2c8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tooltipsContainer: {fileID: 1351344246704353651}
+  _tooltipsParent: {fileID: 1351344246704353651}
 --- !u!114 &5678662868048152137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,6 +473,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9802777bad0d4e9795bb077b2bf56cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _columnsLayoutGroup: {fileID: 7974400672876595194}
+  _columnsHolder: {fileID: 4132483873989676546}
+  _positioningHideCanvasGroup: {fileID: 3054629496800773653}
   _abilitiesColumn: {fileID: 319352275535998861}
   _keywordsColumn: {fileID: 6736147599572099399}
 --- !u!1 &9034045008805098685

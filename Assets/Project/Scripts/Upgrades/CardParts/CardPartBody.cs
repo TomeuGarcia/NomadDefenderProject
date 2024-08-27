@@ -90,31 +90,9 @@ public class CardPartBody : CardPart, ICardTooltipSource
 
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-
-        setupData[0] = new ICardTooltipSource.SetupData();
-        setupData[1] = null;
-
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
+    // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning);
+        return new CardTooltipDisplayData();
     }
 }

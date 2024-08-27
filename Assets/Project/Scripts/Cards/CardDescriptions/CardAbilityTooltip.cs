@@ -1,6 +1,7 @@
 
 
 using System;
+using DG.Tweening;
 using Scripts.ObjectPooling;
 using TMPro;
 using UnityEngine;
@@ -12,41 +13,56 @@ public class CardAbilityTooltip : RecyclableObject
     {
         public readonly string Name;
         public readonly string Description;
+        public readonly Color NameColor;
         public readonly Sprite IconSprite;
         public readonly Color IconColor;
+        public readonly bool FixedWidth;
 
         public bool HasIcon => IconSprite != null;
 
-        private Content(string name, string description, Sprite iconSprite, Color iconColor)
+        private Content(string name, string description, Color nameColor, Sprite iconSprite, Color iconColor,
+            bool fixedWidth)
         {
             Name = name;
             Description = description;
+            NameColor = nameColor;
             IconSprite = iconSprite;
             IconColor = iconColor;
+            FixedWidth = fixedWidth;
         }
 
-        public static Content MakeForPassiveAbility(string abilityName, string abilityDescription,
-            Sprite abilityIconSprite, Color abilityIconColor)
+        public static Content MakeForPassiveAbility(CardTooltipDisplayData.Element displayDataElement)
         {
-            return new Content(abilityName, abilityDescription, abilityIconSprite, abilityIconColor);
+            return new Content(
+                displayDataElement.AbilityDescription.NameForDisplay, 
+                displayDataElement.AbilityDescription.Description, 
+                Color.white,
+                displayDataElement.AbilitySprite, displayDataElement.AbilityColor,
+                displayDataElement.FixedTooltipWidth);
         }
 
-        public static Content MakeForAbilityKeyword(string keywordName, string keywordDescription)
+        public static Content MakeForAbilityKeyword(CardAbilityKeyword keyword)
         {
-            return new Content(keywordName, keywordDescription, null, Color.black);
+            return new Content(keyword.Name, keyword.Description, keyword.NameColor,
+                null, Color.black, true);
         }
     }
     
     [Header("COMPONENTS")]
+    [SerializeField] private RectTransform _contentHolder;
+    [SerializeField] private LayoutElement _layoutElement;
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descriptionText;
     [SerializeField] private Image _iconImage;
 
     private Transform _originalParent;
 
-    private void Awake()
+    public RectTransform ContentHolder => _contentHolder;
+    
+
+    public void SetOriginalParent(Transform originalParent)
     {
-        _originalParent = transform.parent;
+        _originalParent = originalParent;
     }
 
     public void ParentToContainer(Transform container)
@@ -58,6 +74,7 @@ public class CardAbilityTooltip : RecyclableObject
     {
         _nameText.gameObject.SetActive(!string.IsNullOrEmpty(content.Name));
         _nameText.text = content.Name;
+        _nameText.color = content.NameColor;
         
         _descriptionText.gameObject.SetActive(!string.IsNullOrEmpty(content.Description));
         _descriptionText.text = content.Description;
@@ -72,6 +89,8 @@ public class CardAbilityTooltip : RecyclableObject
         {
             _iconImage?.gameObject.SetActive(false);
         }
+
+        _layoutElement.enabled = content.FixedWidth;
     }
     
     internal override void RecycledInit() { }
@@ -84,9 +103,11 @@ public class CardAbilityTooltip : RecyclableObject
     public void Show()
     {
         gameObject.SetActive(true);
+        transform.DOPunchScale(Vector3.one * 0.05f, 0.15f);
     }
     public void Hide()
     {
         Recycle();
+        transform.DOComplete();
     }
 }

@@ -35,7 +35,7 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
 
         public Sprite UpgradeSprite => _upgradeSprite;
         public Color SpriteColor => Color.white;
-        public string Name => "_bonusStats";
+        public string Name => "bonusStats";
 
         private string MakeStatString(TurretStatsUpgradeModel.StatString statString, CardStatViewConfig statsViewConfig)
         {            
@@ -116,34 +116,11 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
         CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-
-        setupData[0] = new ICardTooltipSource.SetupData(
-            "bonusStats",
-            _descriptionHelper.MakeStatsString(_damageStatString, _shotsPerSecondStatString, _radiusRangeStatString),
-            _descriptionHelper.UpgradeSprite,
-            Color.white
-        );
-
-        setupData[1] = null;
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-    public ICardTooltipSource.DescriptionCornerPositions GetCornerPositions()
-    {
-        return new ICardTooltipSource.DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
     
+    // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning, _descriptionHelper, _statsDescription);
+        return CardTooltipDisplayData.MakeForCardPartStatsUpgrade(_descriptionTooltipPositioning, _descriptionHelper, 
+            _statsDescription);
     }
 }

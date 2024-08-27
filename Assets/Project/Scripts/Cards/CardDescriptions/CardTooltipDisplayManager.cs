@@ -23,6 +23,15 @@ public class CardTooltipDisplayManager : MonoBehaviour
         }
     }
     
+    private void OnEnable()
+    {
+        MapSceneNotifier.OnMapSceneFinished += StopDisplayingTooltip;
+    }
+    private void OnDisable()
+    {
+        MapSceneNotifier.OnMapSceneFinished -= StopDisplayingTooltip;
+    }
+    
     public static CardTooltipDisplayManager GetInstance()
     {
         return _instance;
@@ -65,11 +74,7 @@ public class CardTooltipDisplayManager : MonoBehaviour
         for (int i = 0; i < displayDataElements.Length; ++i)
         {
             CardTooltipDisplayData.Element displayDataElement = displayDataElements[i];
-            CardAbilityTooltip.Content tooltipContent = CardAbilityTooltip.Content.MakeForPassiveAbility(
-                displayDataElement.AbilityDescription.Name, displayDataElement.AbilityDescription.Description,
-                displayDataElement.AbilitySprite, displayDataElement.AbilityColor);
-            
-            abilityContents[i] = tooltipContent;
+            abilityContents[i] = CardAbilityTooltip.Content.MakeForPassiveAbility(displayDataElement);
 
             foreach (CardAbilityKeyword abilityKeyword in displayDataElement.AbilityDescription.Keywords)
             {
@@ -82,8 +87,7 @@ public class CardTooltipDisplayManager : MonoBehaviour
         int keywordsI = 0;
         foreach (CardAbilityKeyword abilityKeyword in keywordsSet)
         {
-            keywordContents[keywordsI++] = 
-                CardAbilityTooltip.Content.MakeForAbilityKeyword(abilityKeyword.Name, abilityKeyword.Description);
+            keywordContents[keywordsI++] = CardAbilityTooltip.Content.MakeForAbilityKeyword(abilityKeyword);
         }
     }
     

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 public class EditableCardAbilityDescription
 {
-    public readonly string Name;
+    public string Name { get; private set; }
+    public string NameForDisplay => '/' + Name;
     public string Description { get; private set; }
     public readonly CardAbilityKeyword[] Keywords;
     

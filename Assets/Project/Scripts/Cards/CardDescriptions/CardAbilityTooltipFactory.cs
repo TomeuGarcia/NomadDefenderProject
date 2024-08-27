@@ -21,12 +21,14 @@ public class CardAbilityTooltipFactory : MonoBehaviour, ICardAbilityTooltipFacto
     public CardAbilityTooltip CreateAbilityTooltip()
     {
         CardAbilityTooltip cardAbilityTooltip = _abilitiesTooltipsPool.Spawn<CardAbilityTooltip>(Vector3.zero, Quaternion.identity);
+        cardAbilityTooltip.SetOriginalParent(_tooltipsSpawnParent);
         return cardAbilityTooltip;
     }
     
     public CardAbilityTooltip CreateKeywordTooltip()
     {
         CardAbilityTooltip cardAbilityTooltip = _keywordsTooltipsPool.Spawn<CardAbilityTooltip>(Vector3.zero, Quaternion.identity);
+        cardAbilityTooltip.SetOriginalParent(_tooltipsSpawnParent);
         return cardAbilityTooltip;
     }
 }

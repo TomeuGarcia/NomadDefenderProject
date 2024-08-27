@@ -46,7 +46,7 @@ public class CardPartAttack : CardPart, ICardTooltipSource
         
         attackImage.sprite = turretPartAttack.abilitySprite;
         attackImage.color = turretPartAttack.materialColor;
-        _attackNameText.text = "/"+_projectileDescription.Name;
+        _attackNameText.text = _projectileDescription.NameForDisplay;
     }
 
     protected override void DoShowInfo()
@@ -61,35 +61,9 @@ public class CardPartAttack : CardPart, ICardTooltipSource
     }
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardTooltipSource.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardTooltipSource.SetupData[] setupData = new ICardTooltipSource.SetupData[2];
-
-        setupData[0] = new ICardTooltipSource.SetupData(
-            _projectileDescription.Name,
-            _projectileDescription.Description,
-            turretPartAttack.abilitySprite,
-            turretPartAttack.materialColor
-        );
-
-        setupData[1] = null;
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {        
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
+    // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return new CardTooltipDisplayData(_descriptionTooltipPositioning, turretPartAttack, _projectileDescription);
+        return CardTooltipDisplayData.MakeForProjectileCardPart(_descriptionTooltipPositioning, turretPartAttack, _projectileDescription);
     }
 }
