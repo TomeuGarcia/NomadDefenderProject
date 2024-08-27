@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
 using static CardPart;
+using Random = UnityEngine.Random;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -164,6 +166,11 @@ public abstract class BuildingCard : MonoBehaviour
     private void Awake()
     {
         AwakeInit(CardBuildingType.NONE);
+    }
+
+    private void OnDestroy()
+    {
+        HideInfo();
     }
 
     private void OnMouseEnter()

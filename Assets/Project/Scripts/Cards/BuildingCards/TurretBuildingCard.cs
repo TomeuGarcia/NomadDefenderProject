@@ -87,6 +87,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         TurretPartBody turretPartBody = CardParts.Body;
 
         // Mesh Materials
+        if (cardBodyMaterial == null)
+        {
+            GetMaterialsRefs();
+        }
+        
         cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
 
         cardBaseMaterial.SetTexture("_Texture", turretPartBody.BasePartPrimitive.MaterialTexture);
