@@ -15,24 +15,14 @@ public class TurretPassiveBase : ScriptableObject
         public Texture2D spriteAsTexture;
         public Color32 color;
     }
-
-    [Header("STATS")]
-    [SerializeField, Min(0)] public int cost;
-
+    
     [Header("PASSIVE")]
     public BasePassive passive;
 
     [Header("VISUALS")]
     public VisualInformation visualInformation;
 
-
-    public void InitAsCopy(TurretPassiveBase other)
-    {
-        this.cost = other.cost;
-        this.passive = other.passive;
-        this.visualInformation = other.visualInformation;
-    }
-
+    
 
     // Operator Overloads
     public static bool operator ==(TurretPassiveBase obj1, TurretPassiveBase obj2)
@@ -45,15 +35,5 @@ public class TurretPassiveBase : ScriptableObject
     {
         return !(obj1 == obj2);
     }
-
-    public override bool Equals(object o)
-    {
-        return base.Equals(o);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
+    
 }

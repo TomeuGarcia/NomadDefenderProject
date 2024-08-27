@@ -129,8 +129,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
     private void UpdateExplosionDamage()
     {
         explosionDamage = (int)(baseExplosionDamage * explosionDamagePer1Multiplier[currentLvl]);
+        
     }
-
 
 
 
@@ -167,8 +167,9 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         foreach (Enemy enemy in enemies)
         {
-            enemy.QueueDamage(explosionDamage);
-            enemy.TakeDamage(null, explosionDamage);
+            TurretDamageAttack explosionDamageAttack = new TurretDamageAttack(null, enemy, explosionDamage);
+            enemy.QueueDamage(explosionDamageAttack);
+            enemy.TakeDamage(explosionDamageAttack);
         }
     }
 

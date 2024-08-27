@@ -94,7 +94,7 @@ public class HandBuildingCards : MonoBehaviour
         redrawsLeft = initialRedraws;
         isPlayerHoveringTheCards = false;
 
-        CardDescriptionDisplayer.GetInstance().SetCamera(handCamera);
+        CardTooltipDisplayManager.GetInstance().SetDisplayCamera(handCamera);
     }
 
     public void Init()

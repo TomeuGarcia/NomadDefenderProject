@@ -39,7 +39,7 @@ public class DrawTurretReplaceAttack : BasePassive
 
         TurretBuildingCard turretCard = card as TurretBuildingCard;
                 
-        turretCard.InBattleReplaceAttack(owner.TurretPartAttack, 1.5f);
+        turretCard.InBattleReplaceAttack(owner.ProjectileDataModel, 1.5f);
     }
 
 }

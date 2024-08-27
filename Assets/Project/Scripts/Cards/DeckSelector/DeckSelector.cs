@@ -7,9 +7,6 @@ using UnityEngine.UI;
 
 public class DeckSelector : MonoBehaviour
 {
-    [Header("DECK CREATOR")]
-    [SerializeField] private DeckCreator deckCreator;
-
     [Header("DECK LIBRARY")]
     [SerializeField] private DecksLibrary deckLibrary;
 
@@ -47,10 +44,8 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = false;
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
-        CardDescriptionDisplayer.GetInstance()?.SetCamera(Camera.main);
-
-        // Avoid null references
-        deckCreator.DisableSaveOnDisable();
+        CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
+        
 
         startSimulationFlashMaterial = startSimulationFlashMesh.material;
         startSimulationFlashMesh.material = startSimulationFlashMaterial;
@@ -68,12 +63,13 @@ public class DeckSelector : MonoBehaviour
     private void Init()
     {
         int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+        ICardSpawnService cardSpawnService = ServiceLocator.GetInstance().CardSpawnService;
 
         for (int i = 0; i < selectableDecks.Length; ++i)
         {
             SelectableDeck selectableDeck = selectableDecks[i];
             selectableDeck.InitReferences(this);
-            selectableDeck.InitSpawnCards(deckCreator);
+            selectableDeck.InitSpawnCards(cardSpawnService);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
             selectableDeck.SetNotSelected();
 
@@ -87,7 +83,7 @@ public class DeckSelector : MonoBehaviour
 
     public void OnDeckSelected(SelectableDeck selectableDeck)
     {
-        deckLibrary.SetStarterDeck(selectableDeck.DeckData);
+        deckLibrary.SetStarterDeck(selectableDeck.Deck);
 
         SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
 

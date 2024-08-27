@@ -12,18 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbdc4193d67a034299e9efe3f20bfa0, type: 3}
   m_Name: RepeatBase
   m_EditorClassIdentifier: 
-  cost: 80
   _radiusRangeStat: {fileID: 11400000, guid: bd2544bca18697145a92cd31870a0212, type: 2}
-  prefab: {fileID: 3874636948466727763, guid: eae9427a0d7bac447b6c2b049d312a87, type: 3}
-  materialTexture: {fileID: 2800000, guid: cdb75b5da8a1ff04ea9325a9ffb1c554, type: 3}
-  materialColor: {r: 1, g: 1, b: 1, a: 1}
+  _basePartPrimitive:
+    _prefab: {fileID: 3874636948466727763, guid: eae9427a0d7bac447b6c2b049d312a87,
+      type: 3}
+    _materialTexture: {fileID: 2800000, guid: cdb75b5da8a1ff04ea9325a9ffb1c554, type: 3}
+    _materialColor: {r: 1, g: 1, b: 1, a: 1}
   abilitySprite: {fileID: 21300000, guid: eb5cc086746a9894ba3d506ff0af6493, type: 3}
   spriteColor:
     serializedVersion: 2
     rgba: 4291493720
-  abilityName: repeater
-  abilityDescription: Turrets prioritize shooting this building. The received projectiles
-    are repeated towards the enemies inside this area.
-  upgrade1Description: Repeated projectiles deal 50% more damage.
-  upgrade2Description: Repeated projectiles deal 100% more damage.
-  upgrade3Description: Increase repeat range by 1 tile.
+  _defaultAbilityDescription:
+    _abilityName: repeater
+    _abilityDescription: Turrets prioritize shooting this building. The received
+      projectiles are repeated towards the enemies inside this area.
+    _descriptionKeywords: []
+  _lvl1AbilityDescription:
+    _abilityName: UPG 1
+    _abilityDescription: Repeated projectiles deal 50% more damage.
+    _descriptionKeywords: []
+  _lvl2AbilityDescription:
+    _abilityName: UPG 2
+    _abilityDescription: Repeated projectiles deal 100% more damage.
+    _descriptionKeywords: []
+  _lvl3AbilityDescription:
+    _abilityName: UPG 3
+    _abilityDescription: Increase repeat range by 1 tile.
+    _descriptionKeywords: []

@@ -8,18 +8,15 @@ public class BerserkerProjectile : HomingProjectile
     [Header("VISUALS")]
     [SerializeField] private TrailRenderer trailRenderer;    
 
-
+/*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
         this.targetEnemy = targetEnemy;
 
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(damage);
 
@@ -30,10 +27,7 @@ public class BerserkerProjectile : HomingProjectile
     public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
     {
         turretOwner = owner;
-
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
+        
         this.targetEnemy = targetEnemy;
 
         this.damage = precomputedDamage;
@@ -41,14 +35,17 @@ public class BerserkerProjectile : HomingProjectile
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
     }
+    */
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {
-        int damage = turretOwner.Stats.Damage;
-
-        trailRenderer.widthMultiplier = BerserkerTurretBuildingVisuals.IsBerserkEnabled ? 2.5f : 1.0f;
-
+        int damage = TurretOwner.Stats.Damage;
         return damage;
     }
 
+    protected override void OnShotInitialized()
+    {
+        base.OnShotInitialized();
+        //trailRenderer.widthMultiplier = BerserkerTurretBuildingVisuals.IsBerserkEnabled ? 2.5f : 1.0f;
+    }
 }

@@ -1,13 +1,14 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static SelectableDeck;
+using Random = UnityEngine.Random;
 
 public class SelectableDeck : MonoBehaviour
 {
-    [Header("DECK DATA")]
-    [SerializeField] private DeckData deckData;
+    [Header("CARDS DECK")]
+    [SerializeField] private CardDeckAsset _deck;
 
     [Header("RUN CONTENT")]
     [SerializeField] private RunUpgradesContent runContent;
@@ -28,6 +29,9 @@ public class SelectableDeck : MonoBehaviour
     [SerializeField] private SpriteRenderer supportSprite;
     [SerializeField] private SpriteRenderer mainProjectileSprite;
 
+    [Header("DECK ABILITIES")] 
+    [SerializeField] private ATurretPassiveAbilityDataModel _mainPassive;
+
     [Header("UNLOCK")]
     [SerializeField] private GameObject _unlockedCardsHolder;
     [SerializeField] private GameObject _lock;    
@@ -35,7 +39,7 @@ public class SelectableDeck : MonoBehaviour
 
     public Color DeckColor {get; private set;}
 
-    private BuildingCard[] cards;
+    private BuildingCard[] _cards;
     private DeckSelector deckSelector;
 
     private bool isSelected;
@@ -45,7 +49,7 @@ public class SelectableDeck : MonoBehaviour
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
 
     public RunUpgradesContent RunContent => runContent;
-    public DeckData DeckData => deckData;
+    public CardDeckAsset Deck => _deck;
     public Transform CardsHolder => cardsHolder;
     public Vector3 Position => cardsHolder.position;
 
@@ -58,7 +62,7 @@ public class SelectableDeck : MonoBehaviour
         [SerializeField] public CardsLibraryContent cardsContent;
         [SerializeField] public AttackPartsLibraryContent attacksContent;
         [SerializeField] public BodyPartsLibraryContent bodiesContent;
-        [SerializeField] public BasePartsLibraryContent basesContent;
+        [SerializeField] public PassivesLibraryContent basesContent;
         [SerializeField] public BonusStatsPartsLibraryContent bonusStatsContent;
 
     }
@@ -94,7 +98,6 @@ public class SelectableDeck : MonoBehaviour
         isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
-
     private void OnMouseDown()
     {
         deckSelector.OnDeckSelected(this);
@@ -113,16 +116,15 @@ public class SelectableDeck : MonoBehaviour
 
     private void SetDeckSprites()
     {
-        if (deckData == null || supportSprite == null || mainProjectileSprite == null) return;
+        if (_deck == null || supportSprite == null || mainProjectileSprite == null) return;
 
-        TurretPartBase supportBasePart = deckData.starterSupportCardsComponents[deckData.starterSupportCardsComponents.Count - 1].turretPartBase;
+        SupportPartBase supportBasePart = _deck.MainSupportCardDataModel().SharedPartsGroup.Base;
         supportSprite.sprite = supportBasePart.abilitySprite;
         supportSprite.color = supportBasePart.spriteColor;
         DeckColor = supportBasePart.spriteColor;
 
-        TurretPartAttack mainTurretAttackPart = deckData.starterTurretCardsComponents[deckData.starterTurretCardsComponents.Count - 1].turretPartAttack;
-        mainProjectileSprite.sprite = mainTurretAttackPart.abilitySprite;
-        mainProjectileSprite.color = mainTurretAttackPart.materialColor;
+        mainProjectileSprite.sprite = _mainPassive.View.Sprite;
+        mainProjectileSprite.color = _mainPassive.View.Color;
     }
 
 
@@ -131,16 +133,16 @@ public class SelectableDeck : MonoBehaviour
         this.deckSelector = deckSelector;
     }
 
-    public void InitSpawnCards(DeckCreator deckCreator)
+    public void InitSpawnCards(ICardSpawnService cardSpawnService)
     {
-        deckCreator.SpawnCardsAndResetDeckData(deckData, out cards);       
+        _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent(), cardsHolder);
     }
 
     public void InitArrangeCards(ArrangeCardsData arrangeCardsData)
     {
-        for (int i = 0; i < cards.Length; ++i)
+        for (int i = 0; i < _cards.Length; ++i)
         {
-            BuildingCard card = cards[i];
+            BuildingCard card = _cards[i];
 
             card.DisableMouseInteraction();
             card.hideInfoWhenSelected = false;
@@ -162,7 +164,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void DisableShowInfo()
     {
-        foreach (BuildingCard card in cards)
+        foreach (BuildingCard card in _cards)
         {
             card.canDisplayInfoIfNotInteractable = false;
             if (card.isShowingInfo)
@@ -177,9 +179,9 @@ public class SelectableDeck : MonoBehaviour
         bool isFloating)
     {
         FinishedArranging = false;
-        for (int i = 0; i < cards.Length; ++i)
+        for (int i = 0; i < _cards.Length; ++i)
         {
-            ArrangeCard(cards[i], i, motionDuration, arrangeCardsData, newParent, isFloating);
+            ArrangeCard(_cards[i], i, motionDuration, arrangeCardsData, newParent, isFloating);
 
             yield return new WaitForSeconds(delayBetweenCards);
         }
@@ -190,9 +192,9 @@ public class SelectableDeck : MonoBehaviour
         bool isFloating)
     {
         FinishedArranging = false;
-        for (int i = cards.Length - 1; i >= 0; --i)
+        for (int i = _cards.Length - 1; i >= 0; --i)
         {           
-            ArrangeCard(cards[i], cards.Length-1 - i, motionDuration, arrangeCardsData, newParent, isFloating);
+            ArrangeCard(_cards[i], _cards.Length-1 - i, motionDuration, arrangeCardsData, newParent, isFloating);
             GameAudioManager.GetInstance().PlayCardInfoMoveShown();
 
             yield return new WaitForSeconds(delayBetweenCards);
@@ -222,7 +224,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void EnableCardsMouseInteraction()
     {
-        foreach (BuildingCard card in cards)
+        foreach (BuildingCard card in _cards)
         {
             card.ReenableMouseInteraction();
             card.canDisplayInfoIfNotInteractable = true;
@@ -231,7 +233,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void DisableCardsMouseInteraction()
     {
-        foreach (BuildingCard card in cards)
+        foreach (BuildingCard card in _cards)
         {
             card.DisableMouseInteraction();
             card.canDisplayInfoIfNotInteractable = false;            

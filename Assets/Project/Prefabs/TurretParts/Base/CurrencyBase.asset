@@ -12,17 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbdc4193d67a034299e9efe3f20bfa0, type: 3}
   m_Name: CurrencyBase
   m_EditorClassIdentifier: 
-  cost: 150
   _radiusRangeStat: {fileID: 11400000, guid: 3f2a9097d9744c147abff898761ce30f, type: 2}
-  prefab: {fileID: 5424480766443835497, guid: dc52eddf425f7104db0190ea80f74b33, type: 3}
-  materialTexture: {fileID: 2800000, guid: debe1a3769f78c044a20bfccd188c579, type: 3}
-  materialColor: {r: 1, g: 1, b: 1, a: 1}
+  _basePartPrimitive:
+    _prefab: {fileID: 5424480766443835497, guid: dc52eddf425f7104db0190ea80f74b33,
+      type: 3}
+    _materialTexture: {fileID: 2800000, guid: debe1a3769f78c044a20bfccd188c579, type: 3}
+    _materialColor: {r: 1, g: 1, b: 1, a: 1}
   abilitySprite: {fileID: 21300000, guid: 0c67f7bbe0b36e441b9b28558a43ea4d, type: 3}
   spriteColor:
     serializedVersion: 2
     rgba: 4294967295
-  abilityName: extractor
-  abilityDescription: "Gain +20\u2666 every 15 seconds."
-  upgrade1Description: Reduce production time by half.
-  upgrade2Description: Reduce production time by half.
-  upgrade3Description: Reduce production time by half.
+  _defaultAbilityDescription:
+    _abilityName: extractor
+    _abilityDescription: "Gain +20\u2666 every 15 seconds."
+    _descriptionKeywords: []
+  _lvl1AbilityDescription:
+    _abilityName: UPG 1
+    _abilityDescription: Reduce production time by half.
+    _descriptionKeywords: []
+  _lvl2AbilityDescription:
+    _abilityName: UPG 2
+    _abilityDescription: Reduce production time by half.
+    _descriptionKeywords: []
+  _lvl3AbilityDescription:
+    _abilityName: UPG 3
+    _abilityDescription: Reduce production time by half.
+    _descriptionKeywords: []

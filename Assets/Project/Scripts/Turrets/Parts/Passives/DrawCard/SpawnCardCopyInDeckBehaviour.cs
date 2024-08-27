@@ -31,10 +31,9 @@ public class SpawnCardCopyInDeckBehaviour : MonoBehaviour
     {
         await Task.Delay(System.TimeSpan.FromSeconds(0.5f));
 
-        TurretCardParts partsCopy = ScriptableObject.CreateInstance<TurretCardParts>();
-        partsCopy.InitCopyingReferences(_owner.TurretCardParts);
-        partsCopy.cardCost += _costIncrement;
-
-        ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(partsCopy);
+        TurretCardData turretCardData = new TurretCardData(_owner.CardData);
+        turretCardData.IncrementPlayCost(_costIncrement);
+        
+        ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(turretCardData);
     }
 }

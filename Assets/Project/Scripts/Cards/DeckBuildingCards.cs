@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DeckBuildingCards : MonoBehaviour
 {
-    [SerializeField] private DeckData deckData;
+    [SerializeField] private CardDeckInUseData deckInUse;
     
     private List<BuildingCard> cards;
 
@@ -20,7 +20,7 @@ public class DeckBuildingCards : MonoBehaviour
 
     public void Init()
     {
-        cards = new List<BuildingCard>(deckData.GetCards());
+        cards = new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform));
 
         float upStep = 0.1f;
         float numCards = cards.Count;
@@ -120,12 +120,6 @@ public class DeckBuildingCards : MonoBehaviour
     {
         cards.Insert(0, card);
         ArrangeCards();
-    }    
-
-
-    public DeckData GetDeckData()
-    {
-        return deckData;
     }
 
 }

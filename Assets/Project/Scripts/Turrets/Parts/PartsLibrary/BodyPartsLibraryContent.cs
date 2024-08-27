@@ -7,20 +7,20 @@ using UnityEngine;
 public class BodyPartsLibraryContent : ScriptableObject
 {
     [Header("BODIES")]
-    [SerializeField] private PartsLibrary.BodiesByProgressionState earlyBodies;
-    [SerializeField] private PartsLibrary.BodiesByProgressionState midBodies;
-    [SerializeField] private PartsLibrary.BodiesByProgressionState lateBodies;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartBody> _earlyBodies;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartBody> _midBodies;
+    [SerializeField] private PartsLibrary.PartsByProgressionState<TurretPartBody> _lateBodies;
 
     private void OnValidate()
     {
-        earlyBodies.progressionState = NodeEnums.ProgressionState.EARLY;
-        midBodies.progressionState = NodeEnums.ProgressionState.MID;
-        lateBodies.progressionState = NodeEnums.ProgressionState.LATE;
+        _earlyBodies.progressionState = NodeEnums.ProgressionState.EARLY;
+        _midBodies.progressionState = NodeEnums.ProgressionState.MID;
+        _lateBodies.progressionState = NodeEnums.ProgressionState.LATE;
     }
 
-    public PartsLibrary.BodiesByProgressionState[] GetArrayByProgression()
+    public PartsLibrary.PartsByProgressionState<TurretPartBody>[] GetArrayByProgression()
     {
-        return new PartsLibrary.BodiesByProgressionState[3] { earlyBodies, midBodies, lateBodies };
+        return new PartsLibrary.PartsByProgressionState<TurretPartBody>[3] { _earlyBodies, _midBodies, _lateBodies };
     }
 
 }

@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class BerserkerTurretBuildingVisuals : MonoBehaviour
 {
-    [SerializeField] private HurtedThresholdProjectile _berserkerProjectilePrefab;
     [SerializeField] private MeshRenderer _flashEffectMesh;
     private Material _flashEffectMaterial;
 
     private Material _turretMaterial;
-    private TurretBuilding _owner;
 
     private int _isBerserkEnabledProperty;
     private int _berserkEyesOffsetProperty;
@@ -36,23 +33,13 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         public Vector2 offset;
         public float scale;
     }
+    
 
-
-    private TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = new TurretStatsMultiplicationSnapshot(0.0f, 4f, 3.0f);
-
-    private static bool _firstBerserkerPlaced = false;
-    private const float BERSERK_START_DURATION = 4.0f;
-    private static float _berserkDuration;
-    private float _berserkTimer;
-    private Coroutine _berserkModeCoroutine;
-
-
-    public static bool IsBerserkEnabled { get; private set; }
+    //public static bool IsBerserkEnabled { get; private set; }
 
 
     public void TurretPlacedInit(TurretBuilding owner, Material material)
     {
-        _owner = owner;
         _turretMaterial = new Material(material);
         owner.ResetBodyMaterial(_turretMaterial);
 
@@ -66,109 +53,20 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
         BerserkEyesData eyesData = _bodyTypeToEyesData[owner.BodyType];
         _turretMaterial.SetVector(_berserkEyesOffsetProperty, eyesData.offset);
         _turretMaterial.SetFloat(_berserkEyesScaleProperty, eyesData.scale);
-
-        SubscribeToEvents();
-
+        
         StopBerserkVisuals(false);
-
-
-        if (!_firstBerserkerPlaced)
-        {
-            _firstBerserkerPlaced = true;
-            _berserkDuration = BERSERK_START_DURATION;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeToEvents();
     }
 
 
-    private void SubscribeToEvents()
-    {
-        _owner.OnBuildingUpgraded += CheckIsBerserkSetupHyperStats;
-
-        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
-    }
-
-    private void UnsubscribeToEvents()
-    {
-        _owner.OnBuildingUpgraded -= CheckIsBerserkSetupHyperStats;
-
-        PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
-
-        _firstBerserkerPlaced = false;
-    }
-
-
-
-    private void OnPathLocationTakesDamage(PathLocation pathLocation)
-    {
-        EnterBerserkMode();
-    }
-
-    private void EnterBerserkMode()
-    {
-        _berserkTimer += _berserkDuration;
-
-        if (!IsInBerserkMode())
-        {
-            _berserkModeCoroutine = StartCoroutine(BerserkMode());
-        }
-    }
-
-    private IEnumerator BerserkMode()
-    {
-        SetupHyperStats();
-        StartBerserkVisuals();
-        IsBerserkEnabled = true;
-
-        while (_berserkTimer > 0.0f)
-        {
-            _berserkTimer -= Time.deltaTime * GameTime.TimeScale;
-            yield return null;
-        }
-        _berserkTimer = 0.0f;
-
-        ResetStats();
-        StopBerserkVisuals();
-        IsBerserkEnabled = false;
-        _berserkModeCoroutine = null;
-    }
-
-    private bool IsInBerserkMode()
-    {
-        return _berserkModeCoroutine != null;
-    }
-
-    private void CheckIsBerserkSetupHyperStats()
-    {
-        if (IsInBerserkMode())
-        {
-            //SetupHyperStats();
-        }
-    }
-
-    private void SetupHyperStats()
-    {
-        _owner.StatsBonusController.AddBonusBaseStatsMultiplication(_hyperStatsMultiplier);
-    }
-
-    private void ResetStats()
-    {
-        _owner.StatsBonusController.RemoveBonusBaseStatsMultiplication(_hyperStatsMultiplier);
-    }
-
-
-    private void StartBerserkVisuals()
+    public void StartBerserkVisuals()
     {
         _turretMaterial.SetFloat(_isBerserkEnabledProperty, 1.0f);
         _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time);
 
         GameAudioManager.GetInstance().PlayEnterBerserker();
     }
-    private void StopBerserkVisuals(bool playAudio = true)
+    
+    public void StopBerserkVisuals(bool playAudio = true)
     {
         _turretMaterial.SetFloat(_isBerserkEnabledProperty, 0.0f);
 

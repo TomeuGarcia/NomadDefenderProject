@@ -19,6 +19,7 @@ public class ServiceLocator : MonoBehaviour
     public IGeneralParticleFactory GeneralParticleFactory { get; set; }
     public IParticleFactory ParticleFactory { get; set; }
     public ICameraHelpService CameraHelp { get; set; }
+    public ICardSpawnService CardSpawnService { get; set; }
 
 
     private void Awake()

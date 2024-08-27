@@ -11,17 +11,15 @@ public class SlowFireRateProjectile : HomingProjectile
     public const float MAX_CADENCE_TIME = 5.0f;
 
 
+    /*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
         this.targetEnemy = targetEnemy;
 
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(damage);
 
@@ -34,24 +32,22 @@ public class SlowFireRateProjectile : HomingProjectile
     {
         turretOwner = owner;
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
         this.targetEnemy = targetEnemy;
         this.damage = precomputedDamage;
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
     }
+    */
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {        
-        float currentTime = Mathf.Min(turretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
+        float currentTime = Mathf.Min(TurretOwner.TimeSinceLastShot, MAX_CADENCE_TIME);
         
         float curveCoefficient = currentTime / MAX_CADENCE_TIME;
         float curveValue = damageRateCurve.Evaluate(curveCoefficient);
 
-        int damage = (int)(curveValue * turretOwner.Stats.Damage * maxDamageMultiplier);
+        int damage = (int)(curveValue * TurretOwner.Stats.Damage * maxDamageMultiplier);
         return damage;        
     }
 

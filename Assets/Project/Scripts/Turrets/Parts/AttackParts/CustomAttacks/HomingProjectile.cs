@@ -3,61 +3,68 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class HomingProjectile : TurretPartAttack_Prefab
+public class HomingProjectile : ATurretProjectileBehaviour
 {
     [SerializeField] protected Lerp lerp;
-
-    protected override void DoUpdate()
+    
+    
+    protected sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-    }
+        base.ProjectileShotInit(targetEnemy, owner);
+        _targetEnemy = targetEnemy;
+        
+        _damageAttack = CreateDamageAttack(_targetEnemy);
 
-    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
-    {
-        turretOwner = owner;
-
-        if(owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
-        this.targetEnemy = targetEnemy;
-
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, owner.Stats.Damage, passiveDamageModifier);
-
-        targetEnemy.QueueDamage(damage);
-
+        targetEnemy.QueueDamage(_damageAttack);
 
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
+
+        OnShotInitialized();
     }
 
-    public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
+    protected sealed override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
     {
-        turretOwner = owner;
+        base.ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
 
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
+        this._targetEnemy = precomputedDamageAttack.Target;
+        _damageAttack = precomputedDamageAttack;
 
-        this.targetEnemy = targetEnemy;
-        this.damage = precomputedDamage;
-
-        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
+        
+        OnShotInitialized();
     }
 
 
     protected IEnumerator WaitForLerpFinish()
     {
         yield return new WaitUntil(() => lerp.finishedPositionLerp);
-        EnemyHit();
+        OnEnemyReached();
     }
 
-    protected void EnemyHit()
+    protected virtual void OnEnemyReached()
     {
-        GameObject temp = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(attackType, targetEnemy.MeshTransform.position, Quaternion.identity);
+        EnemyHit();
+    }
+    
+    private void EnemyHit()
+    {
+        GameObject temp = ProjectileParticleFactory.GetInstance()
+            .GetAttackParticlesGameObject(ProjectileType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.gameObject.SetActive(true);
         temp.transform.parent = gameObject.transform.parent;
 
-        targetEnemy.TakeDamage(this, damage);
+        DamageTargetEnemy(_damageAttack);
 
         Disappear();
     }
+
+
+    protected override int ComputeDamage()
+    {
+        return TurretOwner.Stats.Damage;
+    }
+
+    
 }

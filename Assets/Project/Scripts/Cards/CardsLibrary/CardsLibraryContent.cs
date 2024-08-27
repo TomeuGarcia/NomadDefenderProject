@@ -10,9 +10,9 @@ public class CardsLibraryContent : ScriptableObject
     public class CardsPerProgression
     {
         [SerializeField] public NodeEnums.ProgressionState progressionState;
-        [SerializeField] public TurretCardParts[] turretCards;
-        [SerializeField] public TurretCardParts[] perfectTurretCards;
-        [SerializeField] public SupportCardParts[] supportCards;
+        [SerializeField] public TurretCardDataModel[] turretCards;
+        [SerializeField] public TurretCardDataModel[] perfectTurretCards;
+        [SerializeField] public SupportCardDataModel[] supportCards;
     }
 
     [Header("CARDS PER PROGRESSION")]
@@ -50,11 +50,11 @@ public class CardsLibraryContent : ScriptableObject
     }
 
 
-    public TurretCardParts[] GetRandomTurretCards(NodeEnums.ProgressionState progressionState, int totalAmount, int perfectAmount)
+    public TurretCardDataModel[] GetRandomTurretCards(NodeEnums.ProgressionState progressionState, int totalAmount, int perfectAmount)
     {
-        TurretCardParts[] tempCards = new TurretCardParts[totalAmount];
+        TurretCardDataModel[] tempCards = new TurretCardDataModel[totalAmount];
 
-        List<TurretCardParts> availablePerfectCards = new List<TurretCardParts>(cardsByProgression[progressionState].perfectTurretCards);
+        List<TurretCardDataModel> availablePerfectCards = new List<TurretCardDataModel>(cardsByProgression[progressionState].perfectTurretCards);
 
         int i = 0;
         while (i < perfectAmount && availablePerfectCards.Count > 0)
@@ -67,7 +67,7 @@ public class CardsLibraryContent : ScriptableObject
             ++i;
         }
 
-        List<TurretCardParts> availableCards = new List<TurretCardParts>(cardsByProgression[progressionState].turretCards);
+        List<TurretCardDataModel> availableCards = new List<TurretCardDataModel>(cardsByProgression[progressionState].turretCards);
         while (i < totalAmount && availableCards.Count > 0)
         {
             int cardI = Random.Range(0, availableCards.Count);
@@ -81,13 +81,13 @@ public class CardsLibraryContent : ScriptableObject
         return tempCards;
     }
     
-    public SupportCardParts[] GetRandomSupportCards(NodeEnums.ProgressionState progressionState, int totalAmount)
+    public SupportCardDataModel[] GetRandomSupportCards(NodeEnums.ProgressionState progressionState, int totalAmount)
     {
-        SupportCardParts[] tempCards = new SupportCardParts[totalAmount];
+        SupportCardDataModel[] tempCards = new SupportCardDataModel[totalAmount];
 
         int i = 0;
 
-        List<SupportCardParts> availableCards = new List<SupportCardParts>(cardsByProgression[progressionState].supportCards);
+        List<SupportCardDataModel> availableCards = new List<SupportCardDataModel>(cardsByProgression[progressionState].supportCards);
         while (i < totalAmount && availableCards.Count > 0)
         {
             int cardI = Random.Range(0, availableCards.Count);

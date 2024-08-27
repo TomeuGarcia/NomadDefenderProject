@@ -6,17 +6,28 @@ using static ProjectileParticleFactory;
 public class ProjectileAttacksFactory : MonoBehaviour
 {
     [System.Serializable]
-    private struct ProjectileTypeAndPool
+    private struct ProjectileTypeAndPool : Pool.IListener
     {
-        public TurretPartAttack_Prefab.AttackType attackType;
+        public TurretPartProjectileDataModel projectileDataModel;
         public Pool pool;
+
+        public void Init()
+        {
+            pool.SetPooledObject(projectileDataModel.ProjectilePrefab.gameObject);
+            pool._listener = this;
+        }
+
+        public void OnObjectInstantiated(GameObject projectileGameObject)
+        {
+            projectileGameObject.GetComponent<ATurretProjectileBehaviour>().InstantiatedInit(projectileDataModel);
+        }
     }
 
 
     private static ProjectileAttacksFactory instance;
 
     [SerializeField] private ProjectileTypeAndPool[] projectileAndPoolList;
-    private Dictionary<TurretPartAttack_Prefab.AttackType, Pool> projectileTypeToPool;
+    private Dictionary<ATurretProjectileBehaviour.Type, Pool> projectileTypeToPool;
 
 
 
@@ -45,11 +56,12 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     private void Init()
     {
-        projectileTypeToPool = new Dictionary<TurretPartAttack_Prefab.AttackType, Pool>();
+        projectileTypeToPool = new Dictionary<ATurretProjectileBehaviour.Type, Pool>();
 
         foreach (ProjectileTypeAndPool projectileTypeAndPool in projectileAndPoolList)
         {
-            projectileTypeToPool.Add(projectileTypeAndPool.attackType, projectileTypeAndPool.pool);
+            projectileTypeAndPool.Init();
+            projectileTypeToPool.Add(projectileTypeAndPool.projectileDataModel.ProjectileType, projectileTypeAndPool.pool);
         }
     }
 
@@ -66,7 +78,7 @@ public class ProjectileAttacksFactory : MonoBehaviour
         }
     }
 
-    public GameObject GetAttackGameObject(TurretPartAttack_Prefab.AttackType attackType, Vector3 position, Quaternion rotation)
+    public GameObject GetAttackGameObject(ATurretProjectileBehaviour.Type attackType, Vector3 position, Quaternion rotation)
     {
         return projectileTypeToPool[attackType].GetObject(position, rotation);
     }

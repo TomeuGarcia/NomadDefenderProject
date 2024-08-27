@@ -185,7 +185,7 @@ public class BuildingPlacer : MonoBehaviour
 
         if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)selectedBuildingCard).turretCardParts.turretPartBody.bodyType);
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)selectedBuildingCard).CardParts.Body.bodyType);
         }
         else
         {
@@ -210,7 +210,7 @@ public class BuildingPlacer : MonoBehaviour
 
         if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
-            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)buildingCard).turretCardParts.turretPartBody.bodyType);
+            GameAudioManager.GetInstance().PlayTurretCardPlaced(((TurretBuildingCard)buildingCard).CardParts.Body.bodyType);
         }
         else
         {

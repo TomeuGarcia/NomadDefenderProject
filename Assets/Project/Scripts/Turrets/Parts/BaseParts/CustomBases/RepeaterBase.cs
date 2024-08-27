@@ -31,25 +31,22 @@ public class RepeaterBase : TurretPartBase_Prefab
     [SerializeField] private Material outsideRangeMaterial;
 
 
-    private List<Enemy> repeatTargetEnemies = new List<Enemy>();
     private Enemy targetedEnemy;
 
     bool allEnemiesInRangeAreFake = false;
 
     private int currentLvl = 0;
 
+    private RangeBuilding _ownerBuilding;
+
     private class EnemyInDamageQueue
     {
-        public EnemyInDamageQueue(TurretPartAttack_Prefab projectile, Enemy enemy, int damage)
+        public EnemyInDamageQueue(TurretDamageAttack damageAttack)
         {
-            this.projectile = projectile;
-            this.enemy = enemy;
-            this.damage = damage;
+            DamageAttack = damageAttack;
         }
 
-        public TurretPartAttack_Prefab projectile;
-        public Enemy enemy;
-        public int damage;
+        public readonly TurretDamageAttack DamageAttack;
     }
     private List<EnemyInDamageQueue> enemiesInDamageQueue = new List<EnemyInDamageQueue>();
 
@@ -67,7 +64,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnEnable()
     {
-        fakeEnemy.OnDamageCompute += ComputeTargetAndComputeDamage;        
+        fakeEnemy.OnWillBeAttackedByTurret += ComputeTargetAndComputeDamage;        
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
         fakeEnemy.OnGetPosition += ComputeTargetAndAssignFakeEnemyPosition;
 
@@ -77,7 +74,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void OnDisable()
     {
-        fakeEnemy.OnDamageCompute -= ComputeTargetAndComputeDamage;
+        fakeEnemy.OnWillBeAttackedByTurret -= ComputeTargetAndComputeDamage;
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
         fakeEnemy.OnGetPosition -= ComputeTargetAndAssignFakeEnemyPosition;
 
@@ -87,7 +84,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Update()
     {
-        if (repeatTargetEnemies.Count > 0)
+        if (targetedEnemy != null)
         {
             LookAtTargetEnemy();
         }
@@ -98,6 +95,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         base.Init(turretOwner, turretRange);
 
+        _ownerBuilding = turretOwner;
         turretOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         turretOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
@@ -107,6 +105,7 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         base.InitAsSupportBuilding(supportOwner, supportRange);
 
+        _ownerBuilding = supportOwner;
         supportOwner.OnEnemyEnterRange += AddEnemyToRepeatTargets;
         supportOwner.OnEnemyExitRange += RemoveEnemyFromRepeatTargets;
 
@@ -203,50 +202,54 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void AddEnemyToRepeatTargets(Enemy enemy)
     {
-        if (enemy.IsFakeEnemy) return;
-
-        repeatTargetEnemies.Add(enemy);
-        fakeEnemy.SetCanBeTargeted(true);
+        if (enemy.IsFakeEnemy)
+        {
+            _ownerBuilding.Enemies.Remove(enemy);
+        }
+        else
+        {
+            fakeEnemy.SetCanBeTargeted(true);
+        }
     }
 
     private void RemoveEnemyFromRepeatTargets(Enemy enemy)
     {
-        repeatTargetEnemies.Remove(enemy);
-
-        if (repeatTargetEnemies.Count == 0)
+        if (_ownerBuilding.Enemies.Count <= 1)
         {
             fakeEnemy.SetCanBeTargeted(false);
         }        
     }
 
 
-    private void ComputeTargetAndComputeDamage(int damageAmount, PassiveDamageModifier modifier, out int resultDamage, TurretPartAttack_Prefab projectileSource)
+    private void ComputeTargetAndComputeDamage(TurretDamageAttack damageAttack)
     {
         ComputeNextTargetedEnemy();
-
+        
+        
         if (targetedEnemy == null)
         {
-            resultDamage = 0;
             return;
         }
 
-        resultDamage = targetedEnemy.ComputeDamageWithPassive(projectileSource, damageAmount, modifier);
-        resultDamage += (int)(resultDamage * currentDamagePer1Increment);
+        int resultDamage = damageAttack.Damage + (int)(damageAttack.Damage * currentDamagePer1Increment);
 
-        if (projectileSource.QueuesDamageToEnemies())
+        TurretDamageAttack repeatedDamageAttack = 
+            new TurretDamageAttack(damageAttack.ProjectileSource, targetedEnemy, resultDamage);
+
+        if (damageAttack.ProjectileSource.QueuesDamageToEnemies())
         {
-            targetedEnemy.QueueDamage(resultDamage);
+            targetedEnemy.QueueDamage(repeatedDamageAttack);
         }        
 
-        enemiesInDamageQueue.Add(new EnemyInDamageQueue(projectileSource, targetedEnemy, resultDamage));
+        enemiesInDamageQueue.Add(new EnemyInDamageQueue(repeatedDamageAttack));
     }
 
 
-    private EnemyInDamageQueue PopEnemyInDamageQueue(TurretPartAttack_Prefab projectileSource)
+    private EnemyInDamageQueue PopEnemyInDamageQueue(ATurretProjectileBehaviour projectileSource)
     {
         for (int i = 0; i < enemiesInDamageQueue.Count; ++i)
         {
-            if (enemiesInDamageQueue[i].projectile == projectileSource)
+            if (enemiesInDamageQueue[i].DamageAttack.ProjectileSource == projectileSource)
             {
                 EnemyInDamageQueue temp = enemiesInDamageQueue[i];
                 enemiesInDamageQueue.RemoveAt(i);
@@ -259,13 +262,15 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
-    private void RepeatProjectile(TurretPartAttack_Prefab projectileSource)
+    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource)
     {        
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
 
         if (enemyInDamageQueue == null) return;
+        
+        
 
-        Shoot(enemyInDamageQueue.enemy, enemyInDamageQueue.projectile, enemyInDamageQueue.damage);
+        Shoot(enemyInDamageQueue.DamageAttack);
 
         /*
         if (currentLvl > 0)
@@ -279,35 +284,32 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeNextTargetedEnemy()
     {
-        targetedEnemy = null;
-
-        for (int i = 0; i < repeatTargetEnemies.Count; ++i)
-        {
-            if (repeatTargetEnemies[i].CanBeTargeted() && !repeatTargetEnemies[i].DiesFromQueuedDamage())
-            {
-                targetedEnemy = repeatTargetEnemies[i];
-                break;
-            }
-        }
+        targetedEnemy = _ownerBuilding.GetBestEnemyTarget(targetedEnemy);
     }
 
 
-    private void Shoot(Enemy enemyTarget, TurretPartAttack_Prefab projectileSource, int precomputedDamage)
+    private void Shoot(TurretDamageAttack repeatedDamageAttack)
     {
-        TurretPartAttack_Prefab.AttackType attackType = projectileSource.GetAttackType;
+        ATurretProjectileBehaviour projectileSource = repeatedDamageAttack.ProjectileSource;
+        
+        ATurretProjectileBehaviour.Type projectileType = projectileSource.ProjectileType;
         Vector3 spawnPosition = shootPoint.position;
 
-        TurretPartAttack_Prefab newProjectile = ProjectileAttacksFactory.GetInstance().GetAttackGameObject(attackType, spawnPosition, Quaternion.identity)
-            .GetComponent<TurretPartAttack_Prefab>();
+        ATurretProjectileBehaviour newProjectile = 
+            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileType, spawnPosition, Quaternion.identity)
+            .GetComponent<ATurretProjectileBehaviour>();
 
+        TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
-        newProjectile.transform.parent = projectileSource.GetTurretOwner().BaseHolder;
+        newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.gameObject.SetActive(true);
-        newProjectile.ProjectileShotInit_PrecomputedAndQueued(enemyTarget, projectileSource.GetTurretOwner(), precomputedDamage);
+        newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
+            projectileTurret, repeatedDamageAttack);
 
 
         // Spawn particle
-        GameObject particles = ProjectileParticleFactory.GetInstance().GetAttackParticlesGameObject(newProjectile.GetAttackType, spawnPosition, Quaternion.identity);
+        GameObject particles = ProjectileParticleFactory.GetInstance()
+            .GetAttackParticlesGameObject(projectileType, spawnPosition, Quaternion.identity);
         particles.SetActive(true);
         particles.transform.parent = gameObject.transform.parent;
 
@@ -318,7 +320,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void LookAtTargetEnemy()
     {
-        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : repeatTargetEnemies[0].Position;    
+        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;    
 
         Quaternion targetRot = Quaternion.LookRotation((lookPosition - rotateTransform.position).normalized, rotateTransform.up);
 
@@ -331,17 +333,12 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeTargetAndAssignFakeEnemyPosition(out Vector3 enemyPosition, out bool foundTarget)
     {
-        ComputeNextTargetedEnemy();
+        //ComputeNextTargetedEnemy();
 
         foundTarget = targetedEnemy != null;
-
-        if (!foundTarget)
-        {
-            enemyPosition = Vector3.zero;
-            return;
-        }
-
-        enemyPosition = targetedEnemy.GetPosition();
+        enemyPosition = foundTarget
+            ? targetedEnemy.GetPosition()
+            : Vector3.zero;
     }
 
 
@@ -418,52 +415,5 @@ public class RepeaterBase : TurretPartBase_Prefab
         }
     }
         
-
-    private float GetTurretRangeDistance(TurretBuilding turretBuilding)
-    {
-        return ((turretBuilding.Stats.RadiusRange + 0.5f) / 2f) + 0.15f; // Weird formula...
-    }
-
-
-    private void UpdateTurretBinder(Transform binderTransform, Transform targetTransform)
-    {
-        Vector3 targetPosition = targetTransform.position + Vector3.up * 0.2f;
-
-        // Find scale
-        float distance = Vector3.Distance(bindOriginTransform.position, targetPosition);
-        Vector3 binderScale = binderTransform.lossyScale;
-        float scaleFactor = 1f;
-        binderScale.z = distance * scaleFactor;
-
-
-        // Find center position
-        Vector3 centerPosition = Vector3.Lerp(bindOriginTransform.position, targetPosition, 0.5f);
-
-
-        // Find rotation
-        Vector3 directionToTarget = (targetPosition - bindOriginTransform.position).normalized;
-        Quaternion binderRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
-
-
-        // Apply changes
-        binderTransform.localScale = binderScale;
-        binderTransform.position = centerPosition;
-        binderTransform.rotation = binderRotation;
-    }
-
-    private bool IsBinderTargetWithinRange(Transform binderTransform, Transform targetTransform, float range)
-    {       
-        Vector3 binderPosition = binderTransform.position;
-        binderPosition.y = 0f;
-
-        Vector3 targetPosition = targetTransform.position;
-        targetPosition.y = 0f;
-
-        float distance = Vector3.Distance(binderPosition, targetPosition);
-
-        
-        //Debug.Log("D-" + distance + " <= R-" + range);
-
-        return distance <= range;
-    }
+    
 }

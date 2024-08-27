@@ -323,9 +323,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3738778343730170132}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.65, y: 1, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7126227104347597867
@@ -373,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f361a7784327b57409cc95897e610bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deckData: {fileID: 11400000, guid: 34287d5d7447ba8438b13f39557bad56, type: 2}
+  deckInUse: {fileID: 11400000, guid: 0039801bcd042d0488d7d65b0df8bff0, type: 2}
   cardsHolder: {fileID: 8794990797135172002}
 --- !u!1 &7896820729630638159
 GameObject:
@@ -433,7 +441,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0

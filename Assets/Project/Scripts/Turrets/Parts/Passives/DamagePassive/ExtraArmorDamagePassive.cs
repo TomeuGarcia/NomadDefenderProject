@@ -7,7 +7,7 @@ using UnityEngine;
     menuName = SOAssetPaths.TURRET_PARTS_BASEPASSIVES + "ExtraArmorDamagePassive")]
 public class ExtraArmorDamagePassive : BaseDamagePassive
 {
-    public override int PassiveDamageModifier(int damage, HealthSystem healthSystem)
+    protected override int PassiveDamageModifier(int damage, HealthSystem healthSystem)
     {
         if (healthSystem.HasArmor())
         {

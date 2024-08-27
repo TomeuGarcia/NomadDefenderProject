@@ -5,16 +5,17 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartAttack_SlowFireRate", 
     menuName = SOAssetPaths.TURRET_PARTS_ATTACKS + "TurretPartAttack_SlowFireRate")]
-public class TurretPartAttack_SlowFireRate : TurretPartAttack
+public class TurretPartAttack_SlowFireRate : TurretPartProjectileDataModel
 {
     [Space(40)]
     [SerializeField] private SlowFireRateTurretBuildingVisuals slowFireRateVisualsPrefab;
 
+    /*
     public override void OnTurretPlaced(TurretBuilding owner, Material turretMaterial)
     {
         SlowFireRateTurretBuildingVisuals slowFireRateVisuals = GameObject.Instantiate(slowFireRateVisualsPrefab, owner.transform);
 
-        slowFireRateVisuals.TurretPlacedInit(owner);
+        slowFireRateVisuals.TurretPlacedInit(owner, SlowFireRateProjectile.MAX_CADENCE_TIME);
     }
-
+*/
 }

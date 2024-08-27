@@ -15,18 +15,15 @@ public class HurtedThresholdProjectile : HomingProjectile
     [SerializeField] private TrailRenderer trilRenderer;
 
 
-
+/*
     public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         turretOwner = owner;
-
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
+        
         this.targetEnemy = targetEnemy;
 
         this.damage = ComputeDamage();
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage, passiveDamageModifier);
+        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
 
         targetEnemy.QueueDamage(damage);
 
@@ -37,10 +34,7 @@ public class HurtedThresholdProjectile : HomingProjectile
     public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
     {
         turretOwner = owner;
-
-        if (owner.baseDamagePassive != null)
-            SetPassiveDamageModifier(owner.baseDamagePassive);
-
+        
         this.targetEnemy = targetEnemy;
 
         this.damage = precomputedDamage;
@@ -48,10 +42,11 @@ public class HurtedThresholdProjectile : HomingProjectile
         lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
         StartCoroutine(WaitForLerpFinish());
     }
+    */
 
-    private int ComputeDamage()
+    protected override int ComputeDamage()
     {
-        int damage = (int)(turretOwner.Stats.Damage);
+        int damage = (int)(TurretOwner.Stats.Damage);
 
         int highestHealth = ServiceLocator.GetInstance().TDLocationsUtils.GetHighestLocationHealth();
 
@@ -66,6 +61,6 @@ public class HurtedThresholdProjectile : HomingProjectile
         }
 
         return damage;
-    }   
+    }
 
 }

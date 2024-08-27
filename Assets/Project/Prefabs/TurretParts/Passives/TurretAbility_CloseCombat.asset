@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cb495dd44844002b9898e6bd9a1c859, type: 3}
+  m_Name: TurretAbility_CloseCombat
+  m_EditorClassIdentifier: 
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: c2143f2f6b8afb84dba7a9f9cb813741, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: c2143f2f6b8afb84dba7a9f9cb813741, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4278216698
+  _descriptionModel:
+    _abilityName: closeCombat
+    _abilityDescription: Deal more damage the closer the target.
+    _descriptionKeywords: []
+  _name: closeCombat
+  _description: Deal more damage the closer the target.
+  _descriptionKeywords: []
+  _damageMultiplierOverDistance:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2.0056038
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.9866691
+      value: 1.0033602
+      inSlope: -0.30084056
+      outSlope: -0.30084056
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5.5346622
+      value: 0.32292762
+      inSlope: -0.2983496
+      outSlope: -0.2983496
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5.538833
+      value: 0.32167795
+      inSlope: -0.30084056
+      outSlope: -0.30084056
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 10
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

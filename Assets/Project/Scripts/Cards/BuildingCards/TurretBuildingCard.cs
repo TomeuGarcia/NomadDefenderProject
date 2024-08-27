@@ -2,14 +2,15 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 
 
-public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
+public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 {
-    public TurretCardParts turretCardParts { get; private set; }
+    public TurretCardData CardData { get; private set; }
+    public TurretCardPartsGroup CardParts => CardData.SharedPartsGroup;
+    
     private TurretBuilding turretBuilding;
 
 
@@ -29,37 +30,31 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
     [Header("VISUALS")]
-    //[SerializeField] private MeshRenderer attackMeshRenderer;
-    //[SerializeField] private MeshRenderer bodyMeshRenderer;
-    //[SerializeField] private MeshRenderer baseMeshRenderer;
-    [SerializeField] private Image attackImage;
     [SerializeField] private Image bodyImage;
     [SerializeField] private Image baseImage;
-    private Material cardAttackMaterial, cardBodyMaterial, cardBaseMaterial;
+    [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
+    
+    private Material cardBodyMaterial, cardBaseMaterial;
 
     [SerializeField] private TextMeshProUGUI _damageStatValueText;
     [SerializeField] private TextMeshProUGUI _fireRateStatValueText;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
-
-    [SerializeField] private Image basePassiveImage;
-
+    
     [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
-
-    bool hasBasePassiveAbility = false;
-
+    
 
     [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
 
 
-    [Header("DESCRIPTION")]
+    [Header("DESCRIPTION")] 
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-    private TurretCardStatsController StatsController => turretCardParts.StatsController;
+    private TurretCardStatsController StatsController => CardData.StatsController;
     public ITurretStatsBonusController StatsBonusController => StatsController;
     private int PlayCost { get; set; }
 
@@ -80,8 +75,6 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         //cardAttackMaterial = attackMeshRenderer.material;
         //cardBodyMaterial = bodyMeshRenderer.material;
         //cardBaseMaterial = baseMeshRenderer.material;
-        cardAttackMaterial = new Material(attackImage.material);
-        attackImage.material = cardAttackMaterial;
         cardBodyMaterial = new Material(bodyImage.material);
         bodyImage.material = cardBodyMaterial;
         cardBaseMaterial = new Material(baseImage.material);
@@ -90,55 +83,58 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitVisuals()
     {
-        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
-        TurretPartBody turretPartBody = turretCardParts.turretPartBody;
-        TurretPartBase turretPartBase = turretCardParts.turretPartBase;
+        TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
+        TurretPartBody turretPartBody = CardParts.Body;
 
         // Mesh Materials
+        if (cardBodyMaterial == null)
+        {
+            GetMaterialsRefs();
+        }
+        
         cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
 
-        cardBaseMaterial.SetTexture("_Texture", turretPartBase.materialTexture);
-        cardBaseMaterial.SetColor("_Color", turretPartBase.materialColor);
+        cardBaseMaterial.SetTexture("_Texture", turretPartBody.BasePartPrimitive.MaterialTexture);
+        cardBaseMaterial.SetColor("_Color", turretPartBody.BasePartPrimitive.MaterialColor);
 
 
         // Canvas
-        _damageStatValueText.text = StatsController.DamageStatState.BaseDamageText;
-        _fireRateStatValueText.text = StatsController.ShotsPerSecondStatState.BaseShotsPerSecondText;
-        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseRadiusRangeText;
-
-
-        SetAttackIcon(turretPartAttack);
-
-
-        hasBasePassiveAbility = turretCardParts.turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
-
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
-
-            basePassiveImage.sprite = turretCardParts.turretPassiveBase.visualInformation.sprite;
-            basePassiveImage.color = turretCardParts.turretPassiveBase.visualInformation.color;
-        }
-        else {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }
+        _damageStatValueText.text = StatsController.DamageStatState.BaseValueText;
+        _fireRateStatValueText.text = StatsController.ShotsPerSecondInvertedStatState.BaseValueText;
+        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;
+        
+        UpdateIcons();
+        
 
         // Level
         UpdateCardLevelText();
     }
 
-    private void SetAttackIcon(TurretPartAttack turretPartAttack)
+    private void UpdateIcons()
     {
-        attackImage.sprite = turretPartAttack.abilitySprite;
-        attackImage.color = turretPartAttack.materialColor;
+        TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, CardData.MakeIconsDisplayData());
 
-        cardBodyMaterial.SetColor("_PaintColor", turretPartAttack.materialColor);
+        UpdateTurretBodyImageColor();
+    }
+
+    
+    private void SetAttackIcon(TurretPartProjectileDataModel projectileModel)
+    {
+        _iconDisplays[0].Init(
+            new TurretIconCanvasDisplay.ConfigData(projectileModel.abilitySprite, projectileModel.materialColor));
+
+        UpdateTurretBodyImageColor();
+    }
+
+    private void UpdateTurretBodyImageColor()
+    {
+        cardBodyMaterial.SetColor("_PaintColor", CardParts.Projectile.materialColor);
     }
 
     protected override void InitStatsFromTurretParts()
     {
         StatsController.ResetUpgradeLevel();
-        PlayCost = turretCardParts.GetCardCost();
+        PlayCost = CardData.PlayCost;
     }
 
     public override void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter)
@@ -147,7 +143,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
         turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
-        turretBuilding.Init(StatsController, turretCardParts, currencyCounter);
+        turretBuilding.Init(StatsController, CardData, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 
@@ -161,50 +157,44 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         InitCostText();
     }
 
-    public void ResetParts(TurretCardParts turretCardParts)
+    public void InitWithData(TurretCardData cardData)
     {
-        this.turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
-        this.turretCardParts.InitCopyingReferences(turretCardParts);
-
+        CardData = cardData;
         Init();
     }
-
-
-    public void SetNewPartAttack(TurretPartAttack newTurretPartAttack)
+    
+    public void SetNewPartAttack(TurretPartProjectileDataModel newTurretPartAttack)
     {
         ReplacedWithSamePart = HasSameAttackPart(newTurretPartAttack); // Check replaced with same part
-
-        int costHolder = turretCardParts.turretPartAttack.cost;
-        turretCardParts.turretPartAttack = newTurretPartAttack;
-        turretCardParts.turretPartAttack.cost = costHolder;
+        CardParts.SetProjectile(newTurretPartAttack);
+        
         Init();
     }
-    public bool HasSameAttackPart(TurretPartAttack newTurretPartAttack)
+    public bool HasSameAttackPart(TurretPartProjectileDataModel newTurretPartAttack)
     {
-        return turretCardParts.turretPartAttack == newTurretPartAttack;
+        return CardParts.Projectile == newTurretPartAttack;
     }
 
     public void SetNewPartBody(TurretPartBody newTurretPartBody)
     {
         ReplacedWithSamePart = HasSameBodyPart(newTurretPartBody); // Check replaced with same part
+        CardParts.SetBody(newTurretPartBody);
 
-        int costHolder = turretCardParts.turretPartBody.cost;
-        turretCardParts.turretPartBody = newTurretPartBody;
-        turretCardParts.turretPartBody.cost = costHolder;
         Init();
     }
     public bool HasSameBodyPart(TurretPartBody newTurretPartBody)
     {
-        return turretCardParts.turretPartBody == newTurretPartBody;
+        return CardParts.Body == newTurretPartBody;
     }
 
-    public void SetNewPartBasePassive(TurretPassiveBase newTurretPassiveBase)
+    public void AddNewPassive(ATurretPassiveAbilityDataModel newTurretPassive)
     {
-        ReplacedWithSamePart = HasSameBasePassivePart(newTurretPassiveBase); // Check replaced with same part
+        ReplacedWithSamePart = AlreadyHasPassive(newTurretPassive); // Check replaced with same part
+        if (!ReplacedWithSamePart)
+        {
+            CardData.AddPassiveAbility(newTurretPassive);
+        }
 
-        turretCardParts.turretPassiveBase = newTurretPassiveBase;
-        turretCardParts.turretPassiveBase.cost = 0;
-        
         Init();
     }
 
@@ -215,9 +205,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
-    public bool HasSameBasePassivePart(TurretPassiveBase newTurretPassiveBase)
+    public bool AlreadyHasPassive(ATurretPassiveAbilityDataModel newTurretPassive)
     {
-        return turretCardParts.turretPassiveBase == newTurretPassiveBase;
+        return CardData.PassiveAbilitiesController.AlreadyContainsPassive(newTurretPassive);
     }
 
     protected override void SetupCardInfo()
@@ -235,16 +225,13 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public override void ShowInfo()
     {
         base.ShowInfo();
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance()?.HideCardDescription();
-        return;
-
-        if (isHideInfoAnimationPlaying) return;
+        CardTooltipDisplayManager.GetInstance()?.StopDisplayingTooltip();
     }
 
 
@@ -253,22 +240,27 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     // Card Level
     public override int GetCardLevel()
     {
-        return turretCardParts.cardLevel;
+        return CardData.CardUpgradeLevel;
     }
 
-    public void IncrementCardLevel(int levelIncrement)
+    public void IncrementCardLevel(int levelIncrement, bool updateText = true)
     {
         cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
-        turretCardParts.cardLevel = Mathf.Clamp(turretCardParts.cardLevel + levelIncrement, 1, TurretCardParts.MAX_CARD_LEVEL);        
+        CardData.IncrementUpgradeLevel(levelIncrement);
+
+        if (updateText)
+        {
+            UpdateCardLevelText();
+        }
     }
 
     public bool IsCardLevelMaxed()
     {
-        return turretCardParts.cardLevel == TurretCardParts.MAX_CARD_LEVEL;
+        return CardData.IsCardUpgradeLevelMaxed();
     }
     private string GetCardLevelString()
     {
-        int level = turretCardParts.cardLevel;
+        int level = CardData.CardUpgradeLevel;
         return IsCardLevelMaxed() ? "MAX" : "lvl " + level.ToString();
     }
 
@@ -312,7 +304,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public void InstantUpdatePlayCost(int amountToIncrement)
     {
         int endValue = Mathf.Max(PlayCost + amountToIncrement, TurretBuilding.MIN_PLAY_COST);
-        turretCardParts.cardCost = endValue;
+        CardData.SetPlayCost(endValue);
         PlayCost = endValue;
         InitCostText();
     }
@@ -320,7 +312,7 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     public void PlayUpdatePlayCostAnimation(int amountToIncrement)
     {
         int endValue = Mathf.Max(PlayCost + amountToIncrement, TurretBuilding.MIN_PLAY_COST);
-        turretCardParts.cardCost = endValue;
+        CardData.SetPlayCost(endValue);
 
         if (endValue > PlayCost)
         {
@@ -377,50 +369,11 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
     }
 
 
+    
+    
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
-    {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
-
-        TurretPartAttack turretPartAttack = turretCardParts.turretPartAttack;
-        setupData[0] = new ICardDescriptionProvider.SetupData(
-            turretPartAttack.abilityName,
-            turretPartAttack.abilityDescription,
-            turretPartAttack.abilitySprite,
-            turretPartAttack.materialColor
-        );
-
-        if (hasBasePassiveAbility)
-        {
-            TurretPassiveBase turretPartBase = turretCardParts.turretPassiveBase;
-            setupData[1] = new ICardDescriptionProvider.SetupData(
-                turretPartBase.passive.abilityName,
-                turretPartBase.passive.abilityDescription,
-                turretPartBase.visualInformation.sprite,
-                turretPartBase.visualInformation.color
-            );
-        }
-        else
-        {
-            setupData[1] = null;
-        }
-
-        return setupData;
-    }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position;
-    }
-
-
-
-
-
-
-    public void PreviewChangeVisuals(TurretPartAttack newTurretPartAttack, TurretPartBody newTurretPartBody,
-                                     TurretPartBase newTurretPartBase, TurretPassiveBase newTurretPassiveBase,
+    public void PreviewChangeVisuals(TurretPartProjectileDataModel newTurretPartAttack, TurretPartBody newTurretPartBody,
+        ATurretPassiveAbilityDataModel newTurretPassive,
                                      CardPartBonusStats cardPartBonusStats,
                                      TurretBuildingCard originalCard, CardPartReplaceManager.PartType partType,
                                      CardUpgradeTurretPlayCostConfig playCostsConfig)
@@ -428,10 +381,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         bool replacingWithSamePart = false;
 
         // ATTACK
-        //if (newTurretPartAttack == null)
         if (partType != CardPartReplaceManager.PartType.ATTACK)
         {
-            newTurretPartAttack = originalCard.turretCardParts.turretPartAttack;
+            newTurretPartAttack = originalCard.CardParts.Projectile;
         }
         else
         {
@@ -441,10 +393,9 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
         // BODY
-        //if (newTurretPartBody == null)
         if (partType != CardPartReplaceManager.PartType.BODY)
         {
-            newTurretPartBody = originalCard.turretCardParts.turretPartBody;
+            newTurretPartBody = originalCard.CardParts.Body;
         }
         else
         {
@@ -454,46 +405,35 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
 
         // BASE
-        //if (newTurretPartBase == null && newTurretPassiveBase == null)
-        newTurretPartBase = originalCard.turretCardParts.turretPartBase;
         if (partType != CardPartReplaceManager.PartType.BASE)
         {
-            newTurretPassiveBase = originalCard.turretCardParts.turretPassiveBase;
+            newTurretPassive = null;
         }
         else
         {
-            replacingWithSamePart = originalCard.HasSameBasePassivePart(newTurretPassiveBase);
-        }
-
-
-        bool hasBasePassiveAbility = newTurretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
-
-            basePassiveImage.sprite = newTurretPassiveBase.visualInformation.sprite;
-            basePassiveImage.color = newTurretPassiveBase.visualInformation.color;
-        }
-        else
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
+            replacingWithSamePart = originalCard.AlreadyHasPassive(newTurretPassive);
+            if (replacingWithSamePart)
+            {
+                newTurretPassive = null;
+            }
         }
 
 
 
 
         // PLAY COST
-        turretCardParts = ScriptableObject.CreateInstance<TurretCardParts>();
-        PlayCost = originalCard.PlayCost;
-
-        turretCardParts.turretPartAttack = newTurretPartAttack;
-        turretCardParts.turretPartBody = newTurretPartBody;
-        turretCardParts.turretPartBase = newTurretPartBase;
-        turretCardParts.turretPassiveBase = newTurretPassiveBase;
+        CardData = new TurretCardData(originalCard.CardData);
+        CardData.SetPlayCost(originalCard.PlayCost);
+        CardParts.SetBody(newTurretPartBody);
+        CardParts.SetProjectile(newTurretPartAttack);
+        if (newTurretPassive)
+        {
+            CardData.AddPassiveAbility(newTurretPassive);
+        }
 
 
         TurretCardStatsController tempStatsController = new TurretCardStatsController(originalCard.StatsController,
-            newTurretPartBody.DamageStat, newTurretPartBody.ShotsPerSecondStat, newTurretPartBase.RadiusRangeStat);
+            newTurretPartBody.DamageStat, newTurretPartBody.ShotsPerSecondStat, newTurretPartBody.RadiusRangeStat);
 
         if (partType == CardPartReplaceManager.PartType.BONUS_STATS)
         {
@@ -505,40 +445,38 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
         }
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
-        attackImage.sprite = newTurretPartAttack.abilitySprite;
-        attackImage.color = newTurretPartAttack.materialColor;
+        
+        UpdateIcons();
+
 
         cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
-        _damageStatValueText.text = tempStatsController.DamageStatState.BaseDamageText;
-        _fireRateStatValueText.text = tempStatsController.ShotsPerSecondStatState.BaseShotsPerSecondText;
+        _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;
+        _fireRateStatValueText.text = tempStatsController.ShotsPerSecondInvertedStatState.BaseValueText;
 
-        cardBaseMaterial.SetTexture("_Texture", newTurretPartBase.materialTexture);
-        cardBaseMaterial.SetColor("_Color", newTurretPartBase.materialColor);
-        _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseRadiusRangeText;
+        cardBaseMaterial.SetTexture("_Texture", newTurretPartBody.BasePartPrimitive.MaterialTexture);
+        cardBaseMaterial.SetColor("_Color", newTurretPartBody.BasePartPrimitive.MaterialColor);
+        _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseValueText;
 
+        PlayCost = CardData.PlayCost;
         InstantUpdatePlayCost(playCostsConfig.ComputeCardPlayCostIncrement(!replacingWithSamePart, this));
 
 
         // CARD LVL
-        turretCardParts.cardLevel = originalCard.turretCardParts.cardLevel;        
+        CardData.SetCardUpgradeLevel(originalCard.CardData.CardUpgradeLevel);        
         IncrementCardLevel(1);
-        UpdateCardLevelText();
+        
     }
 
 
 
-    public DescriptionCornerPositions GetCornerPositions()
+
+
+    public void InBattleReplaceAttack(TurretPartProjectileDataModel newTurretPartAttack, float delayBeforeAnimation)
     {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
+        TurretPartProjectileDataModel oldTurretPartAttack = CardParts.Projectile;
+        CardParts.SetProjectile(newTurretPartAttack);
 
-
-    public void InBattleReplaceAttack(TurretPartAttack newTurretPartAttack, float delayBeforeAnimation)
-    {
-        TurretPartAttack oldTurretPartAttack = turretCardParts.turretPartAttack;
-        turretCardParts.turretPartAttack = newTurretPartAttack;
-
-        turretBuilding.ResetAttackPart(newTurretPartAttack);
+        turretBuilding.ResetProjectilePart(newTurretPartAttack);
 
         cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
 
@@ -568,4 +506,12 @@ public class TurretBuildingCard : BuildingCard, ICardDescriptionProvider
 
     }
 
+    
+    
+        
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return CardTooltipDisplayData.MakeForTurretCard(_descriptionTooltipPositioning, CardData);
+    }
 }

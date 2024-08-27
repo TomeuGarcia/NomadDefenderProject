@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tutorial2CardDrawer : CardDrawer
 {
 
-    [SerializeField] TurretPartAttack turretPartAttackToSortFirst;
+    [SerializeField] TurretPartProjectileDataModel turretPartAttackToSortFirst;
 
     protected override void SetupDeck()
     {
@@ -23,7 +23,7 @@ public class Tutorial2CardDrawer : CardDrawer
         {
             TurretBuildingCard tempCard = deck.Cards[i] as TurretBuildingCard;
 
-            if (tempCard != null && tempCard.turretCardParts.turretPartAttack == turretPartAttackToSortFirst)
+            if (tempCard != null && tempCard.CardParts.Projectile == turretPartAttackToSortFirst)
             {
                 //Sorts actual card to first place in deck
                 deck.Cards[i] = deck.Cards[0];

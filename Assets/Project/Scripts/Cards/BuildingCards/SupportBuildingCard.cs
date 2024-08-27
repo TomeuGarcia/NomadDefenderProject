@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
-using static SupportBuilding;
-using static TurretBuildingCard;
+using static ICardTooltipSource;
 
 
-public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
+public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 {
-    public SupportCardParts supportCardParts { get; private set; }
+    public SupportCardData CardData { get; private set; }
+    public SupportCardPartsGroup CardParts => CardData.SharedPartsGroup;
 
     
     [Header("CARD INFO")]
@@ -34,7 +33,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
-    private SupportCardStatsController StatsController => supportCardParts.StatsController;
+    private SupportCardStatsController StatsController => CardData.StatsController;
     private int PlayCost { get; set; }
 
 
@@ -54,7 +53,7 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, supportCardParts.turretPartBase, currencyCounter, 
+        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, CardData, currencyCounter, 
             abilityImage.sprite, abilityImage.color);
         copyBuildingPrefab.SetActive(false);
     }
@@ -70,12 +69,12 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
         InitCostText();
     }
 
-    public void ResetParts(SupportCardParts supportCardParts)
+    public void InitWithData(SupportCardData cardData)
     {
-        this.supportCardParts = ScriptableObject.CreateInstance("SupportCardParts") as SupportCardParts;
-        this.supportCardParts.InitCopyingReferences(supportCardParts);
+        CardData = cardData;
         Init();
     }
+    
     protected override void GetMaterialsRefs()
     {
         //material = baseMeshRenderer.material;
@@ -85,32 +84,24 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
 
     protected override void InitStatsFromTurretParts()
     {
-        PlayCost = supportCardParts.GetCardCost();
+        PlayCost = CardData.PlayCost;
     }
 
     protected override void InitVisuals()
     {
-        TurretPartBase turretPartBase = supportCardParts.turretPartBase;
+        SupportPartBase turretPartBase = CardParts.Base;
         //Mesh Materials
-        material.SetTexture("_Texture", turretPartBase.materialTexture);
-        material.SetColor("_Color", turretPartBase.materialColor);
+        material.SetTexture("_Texture", turretPartBase.BasePartPrimitive.MaterialTexture);
+        material.SetColor("_Color", turretPartBase.BasePartPrimitive.MaterialColor);
 
         // Canvas
-        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseRadiusRangeText;        
+        _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;        
         abilityImage.transform.parent.gameObject.SetActive(true);
 
         abilityImage.sprite = turretPartBase.abilitySprite;
         abilityImage.color = turretPartBase.spriteColor;
     }
 
-
-    public void SetNewPartBase(TurretPartBase newPartBase)
-    {
-        int costHolder = supportCardParts.turretPartBase.cost;
-        supportCardParts.turretPartBase = newPartBase;
-        supportCardParts.turretPartBase.cost = costHolder;
-        Init();
-    }
 
     protected override void SetupCardInfo()
     {
@@ -124,40 +115,20 @@ public class SupportBuildingCard : BuildingCard, ICardDescriptionProvider
     public override void ShowInfo()
     {
         base.ShowInfo();
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance()?.HideCardDescription();
+        CardTooltipDisplayManager.GetInstance()?.StopDisplayingTooltip();
     }
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
-
-        setupData[0] = null;
-
-        TurretPartBase turretPartBase = supportCardParts.turretPartBase;
-        setupData[1] = new ICardDescriptionProvider.SetupData(
-            turretPartBase.abilityName,
-            turretPartBase.abilityDescription,
-            turretPartBase.abilitySprite,
-            turretPartBase.spriteColor
-        );
-
-        return setupData;
-    }
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position;
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
+        return CardTooltipDisplayData.MakeForSupportCard(_descriptionTooltipPositioning, CardParts.Base, 
+            CardData.AbilityDescriptions);
     }
 }

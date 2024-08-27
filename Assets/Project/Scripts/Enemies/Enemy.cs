@@ -5,9 +5,6 @@ using NaughtyAttributes;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("Attack")]
-    [SerializeField] private EnemyAttackGeneralConfig _attackGeneralConfig;
-    
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
     public Transform MeshTransform => meshRenderer.transform;
@@ -39,6 +36,7 @@ public class Enemy : MonoBehaviour
 
 
     protected HealthSystem healthSystem;
+    public HealthSystem HealthSystem => healthSystem;
     private EnemyAttackDestination _attackDestination;
 
     public delegate void EnemyAction(Enemy enemy);
@@ -149,23 +147,33 @@ public class Enemy : MonoBehaviour
         Suicide();
     }
 
-    public virtual int ComputeDamageWithPassive(TurretPartAttack_Prefab projectileSource, int damageAmount, PassiveDamageModifier modifier)
+    public virtual void OnWillBeAttacked(TurretDamageAttack damageAttack)
     {
-        //Debug.Log("ComputeDamageWithPassive " + name);
-        return modifier(damageAmount, healthSystem);
-    }
-
-    public void TakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount)
-    {
-        DoTakeDamage(projectileSource, damageAmount, out bool hitArmor);
+        
     }
     
-    public virtual void DoTakeDamage(TurretPartAttack_Prefab projectileSource, int damageAmount, out bool hitArmor)
+
+    public TurretDamageAttackResult TakeDamage(TurretDamageAttack damageAttack)
+    {
+        return DoTakeDamage(damageAttack);
+    }
+
+    protected virtual TurretDamageAttackResult DoTakeDamage(TurretDamageAttack damageAttack)
     {
         healthHUD.Show();
 
-        healthSystem.TakeDamage(damageAmount, out hitArmor);
-        RemoveQueuedDamage(damageAmount);
+        bool hadArmor = healthSystem.HasArmor();
+        int previousHealth = healthSystem.health;
+        int previousArmor = healthSystem.armor;
+        
+        healthSystem.TakeDamage(damageAttack.Damage, out bool hitArmor);
+        
+        bool brokeArmor = hadArmor && !healthSystem.HasArmor();
+        int damageTaken = previousHealth - healthSystem.health;
+        int armorDamageTaken = previousArmor - healthSystem.armor;
+        
+        
+        RemoveQueuedDamage(damageAttack.Damage);
 
         MeshTransform.localScale = originalMeshLocalScale;
         MeshTransform.DOKill(true);
@@ -176,7 +184,13 @@ public class Enemy : MonoBehaviour
             Die();
         }
 
-        SpawntakeDamageText(damageAmount, hitArmor);
+        SpawntakeDamageText(damageAttack.Damage, hitArmor);
+
+        
+        TurretDamageAttackResult result = 
+            new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor);
+        
+        return result;
     }
 
     private void SpawntakeDamageText(int damageAmount, bool hitArmor)
@@ -219,10 +233,10 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public virtual int QueueDamage(int amount)
+    public virtual int QueueDamage(TurretDamageAttack damageAttack)
     {
-        queuedDamage += amount;
-        return amount;
+        queuedDamage += damageAttack.Damage;
+        return damageAttack.Damage;
     }
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed

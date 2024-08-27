@@ -9,7 +9,7 @@ public class SupportBuilding : RangeBuilding
     public SupportStatsSnapshot Stats => _statsController.CurrentStats;
 
 
-    private TurretPartBase turretPartBase;
+    private SupportPartBase turretPartBase;
 
 
     [SerializeField]GameObject[] visualUpgrades;
@@ -47,21 +47,21 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    public void Init(SupportCardStatsController statsController, TurretPartBase turretPartBase, 
+    public void Init(SupportCardStatsController statsController, SupportCardData supportCardData, 
         CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
         _statsController = statsController;
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
-        this.turretPartBase = turretPartBase;
+        this.turretPartBase = supportCardData.SharedPartsGroup.Base;
 
-        basePart = Instantiate(turretPartBase.prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
+        basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
 
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
 
-        Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, turretPartBase);
+        Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, supportCardData);
 
         DisableFunctionality();
         basePart.PlacedParticleSystem.gameObject.SetActive(false);

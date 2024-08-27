@@ -11,20 +11,19 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private InBattleUpgradeStat _rangeUpgradeStat;
     [SerializeField] private StatUpgradeButton _allStatsUpgradeButton;
 
-    [Header("QUICK DISPLAY UI EXTRAS")]
-    [SerializeField] private GameObject quickHoverBasePassiveImageHolder;
-    [SerializeField] private Image quickHoverBasePassiveImage;
+    [Header("QUICK DISPLAY UI EXTRAS")] 
+    [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
 
     private TurretBuilding _turretBuilding;
     private ITurretStatsStateSource _turretStatsState;
 
     protected override int CurrentBuildingLevel => _buildingUpgradesController.CurrentUpgradeLevel;
-    private string DamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel);
-    private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetDamageByLevelText(CurrentBuildingLevel + 1);
-    private string FireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel);
-    private string NextFireRateStatValueText => _turretStatsState.ShotsPerSecondStatState.GetShotsPerSecondByLevelText(CurrentBuildingLevel + 1);
-    private string RangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel);
-    private string NextRangeStatValueText => _turretStatsState.RadiusRangeStatState.GetRadiusRangeByLevelText(CurrentBuildingLevel + 1);
+    private string DamageStatValueText => _turretStatsState.DamageStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextDamageStatValueText => _turretStatsState.DamageStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
+    private string FireRateStatValueText => _turretStatsState.ShotsPerSecondInvertedStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextFireRateStatValueText => _turretStatsState.ShotsPerSecondInvertedStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
+    private string RangeStatValueText => _turretStatsState.RadiusRangeStatState.GetValueTextByLevel(CurrentBuildingLevel);
+    private string NextRangeStatValueText => _turretStatsState.RadiusRangeStatState.GetValueTextByLevel(CurrentBuildingLevel + 1);
 
     protected override void AwakeInit()
     {
@@ -41,29 +40,24 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     public override void InitTurret(TurretBuilding turretBuilding, 
         IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
         int numberOfUpgrades, 
-        CurrencyCounter newCurrencyCounter, bool hasPassiveAbility, Sprite basePassiveSprite, Color basePassiveColor)
+        CurrencyCounter newCurrencyCounter, 
+        TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
         base.InitTurret(turretBuilding, buildingUpgradesController, turretStatsState, numberOfUpgrades, newCurrencyCounter, 
-            hasPassiveAbility, basePassiveSprite, basePassiveColor);
+            iconsDisplayData);
 
         _turretBuilding = turretBuilding;
         _turretStatsState = turretStatsState;
         maxLevels = numberOfUpgrades;
-
-        if (hasPassiveAbility)
-        {
-            quickHoverBasePassiveImageHolder.SetActive(true);
-            quickHoverBasePassiveImage.sprite = basePassiveSprite;
-            quickHoverBasePassiveImage.color = basePassiveColor;
-        }
-        else
-        {
-            quickHoverBasePassiveImageHolder.gameObject.SetActive(false);
-        }
-
+        
+        UpdateIcons(iconsDisplayData);
         UpdateAllStatsView();
     }
 
+    private void UpdateIcons(TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
+    {
+        TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, iconsDisplayData);
+    }
 
     protected override void UpdateAllStatsView()
     {

@@ -1,9 +1,11 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class CardPartReplaceManager : MonoBehaviour
 {
@@ -17,14 +19,15 @@ public class CardPartReplaceManager : MonoBehaviour
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
     [Header("DECK DATA")]
-    [SerializeField] private DeckData deckData;
-    private List<BuildingCard> deckCards;
+    [SerializeField] private CardDeckInUseData _deckInUse;
+    private BuildingCard[] deckCards;
 
     [Header("MACHINE")]
     [SerializeField] private UpgradeMachineControl upgradeMachineControl;
     [SerializeField] private GameObject incompletePreviewCard;
 
     [Header("HOLDERS")]
+    [SerializeField] private Transform _cardSpawnHolder;
     [SerializeField] private UpgradeCardHolder upgradeCardHolder;
     [SerializeField] private CardPartHolder cardPartHolder;
     public UpgradeCardHolder UpgradeCardHolder => upgradeCardHolder;
@@ -45,9 +48,9 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("BONUS STATS")]
     [SerializeField] private GameObject cardPartBonusStatsPrefab;
 
-    private TurretPartAttack[] tutorialTurretPartAttacks;
+    private TurretPartProjectileDataModel[] tutorialTurretPartAttacks;
     private TurretPartBody[] tutorialTurretPartBodies;
-    private PartsLibrary.BaseAndPassive[] tutorialTurretPartBases;
+    private ATurretPassiveAbilityDataModel[] tutorialTurretPassives;
     private TurretStatsUpgradeModel[] tutorialTurretStatBonusModels;
 
 
@@ -96,13 +99,13 @@ public class CardPartReplaceManager : MonoBehaviour
         BuildingCard.MouseDragCamera = mouseDragCamera;
         CardPart.MouseDragCamera = mouseDragCamera;
 
-        CardDescriptionDisplayer.GetInstance().SetCamera(Camera.main);
+        CardTooltipDisplayManager.GetInstance().SetDisplayCamera(Camera.main);
     }
     
 
     private void Start()
     {
-        deckCards = deckData.GetCardsReference();
+        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder);
         previewTurretCard.MotionEffectsController.DisableMotion();
 
         SetButtonNotReady();
@@ -175,7 +178,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
 
         List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
-        for (int i = 0; i < deckCards.Count; ++i)
+        for (int i = 0; i < deckCards.Length; ++i)
         {
             if (!randomCards.Contains(deckCards[i]))
             {
@@ -187,7 +190,7 @@ public class CardPartReplaceManager : MonoBehaviour
     }
 
 
-    public void AwakeSetupTutorialAttacks(TurretPartAttack[] turretPartAttacks)
+    public void AwakeSetupTutorialAttacks(TurretPartProjectileDataModel[] turretPartAttacks)
     {
         partsCreatedByTutorial = true;
         tutorialTurretPartAttacks = turretPartAttacks;
@@ -202,7 +205,7 @@ public class CardPartReplaceManager : MonoBehaviour
         InitAttacks(LibrariesManager.GetInstance().PartsLibrary
             .GetRandomTurretPartAttacks(numParts, numPartsIfPerfect, false, progressionState));
     }
-    private void InitAttacks(TurretPartAttack[] attacks)
+    private void InitAttacks(TurretPartProjectileDataModel[] attacks)
     {
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
@@ -243,28 +246,28 @@ public class CardPartReplaceManager : MonoBehaviour
         PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY", true, 2f);
     }
 
-    public void AwakeSetupTutorialBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    public void AwakeSetupTutorialBases(ATurretPassiveAbilityDataModel[] passives)
     {
         partsCreatedByTutorial = true;
-        tutorialTurretPartBases = basesAndPassives;
+        tutorialTurretPassives = passives;
     }
     private void InitBasesTutorial()
     {
-        numParts = tutorialTurretPartBases.Length;
-        InitBases(tutorialTurretPartBases);
+        numParts = tutorialTurretPassives.Length;
+        InitPassives(tutorialTurretPassives);
     }
     private void InitBasesRandom()
     {
-        InitBases(LibrariesManager.GetInstance()
+        InitPassives(LibrariesManager.GetInstance()
             .PartsLibrary.GetRandomTurretPartBaseAndPassive(numParts, numPartsIfPerfect, false, progressionState));
     }
-    private void InitBases(PartsLibrary.BaseAndPassive[] basesAndPassives)
+    private void InitPassives(ATurretPassiveAbilityDataModel[] passives)
     {
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
             parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].turretPassiveBase = basesAndPassives[i].turretPassiveBase;
+            parts[i].SetTurretPassive(passives[i]);
         }
         cardPartHolder.Init(parts);
 
@@ -313,7 +316,7 @@ public class CardPartReplaceManager : MonoBehaviour
         List<BuildingCard> maxLevelCards = new List<BuildingCard>();
         List<BuildingCard> notMaxLevelCards = new List<BuildingCard>();
         
-        for (int cardI = 0; cardI < deckCards.Count; ++cardI)
+        for (int cardI = 0; cardI < deckCards.Length; ++cardI)
         {
             if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
             {
@@ -414,7 +417,7 @@ public class CardPartReplaceManager : MonoBehaviour
     
     private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
-        selectedCard.IncrementCardLevel(1);
+        selectedCard.IncrementCardLevel(1, false);
 
         switch (partType)
         {
@@ -433,7 +436,7 @@ public class CardPartReplaceManager : MonoBehaviour
             case PartType.BASE:
                 {
                     CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();                    
-                    selectedCard.SetNewPartBasePassive(cardPartBase.turretPassiveBase);
+                    selectedCard.AddNewPassive(cardPartBase.TurretPassiveModel);
                 }
                 break;
             case PartType.BONUS_STATS:
@@ -678,10 +681,9 @@ public class CardPartReplaceManager : MonoBehaviour
 
         incompletePreviewCard.SetActive(false);
 
-        TurretPartAttack turretPartAttack = null;
+        TurretPartProjectileDataModel turretPartAttack = null;
         TurretPartBody turretPartBody = null;
-        TurretPartBase turretPartBase = null;
-        TurretPassiveBase turretPassiveBase = null;
+        ATurretPassiveAbilityDataModel turretPassive = null;
         CardPartBonusStats cardPartBonusStats = null;
 
         if (partType == PartType.ATTACK)
@@ -694,15 +696,14 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         else if (partType == PartType.BASE)
         {
-            //turretPartBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPartBase;
-            turretPassiveBase = selectedCardPart.gameObject.GetComponent<CardPartBase>().turretPassiveBase;
+            turretPassive = selectedCardPart.gameObject.GetComponent<CardPartBase>().TurretPassiveModel;
         }
         else if (partType == PartType.BONUS_STATS)
         {
             cardPartBonusStats = selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
         }
 
-        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPartBase, turretPassiveBase, cardPartBonusStats,
+        previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPassive, cardPartBonusStats,
             selectedCard, partType, _playCostsConfig);
     }
 

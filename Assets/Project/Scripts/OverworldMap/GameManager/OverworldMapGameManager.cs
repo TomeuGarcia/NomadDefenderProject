@@ -338,8 +338,8 @@ public class OverworldMapGameManager : MonoBehaviour
     {       
         owMapPawn.ActivateCamera();
 
-        cardDisplayer.ResetAll();
         cardDisplayer.gameObject.SetActive(canDisplayDeck);
+        cardDisplayer.ResetAll();
 
         if (gameFinished)
         {

@@ -35,7 +35,10 @@ public abstract class CardPart : MonoBehaviour
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
     [HideInInspector] public bool hideInfoWhenSelected = true;
 
-
+    [Header("DESCRIPTION")]
+    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    
+    
     private Vector3 standardPosition;
     private Vector3 hoveredPosition;
     private Vector3 selectedPosition;
@@ -274,7 +277,7 @@ public abstract class CardPart : MonoBehaviour
         cardCollider.center = cardColliderOffset + CardTransform.localPosition;
     }
 
-        public void ShowInfo()
+    public void ShowInfo()
     {
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
@@ -297,7 +300,7 @@ public abstract class CardPart : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         if (cardState != CardPartStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
 

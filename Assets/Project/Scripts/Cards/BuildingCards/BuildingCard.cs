@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
 using static CardPart;
+using Random = UnityEngine.Random;
 
 public abstract class BuildingCard : MonoBehaviour
 {
@@ -114,6 +116,9 @@ public abstract class BuildingCard : MonoBehaviour
 
     public const float redrawHoldDuration = 0.5f;
 
+    [Header("DESCRIPTION")] 
+    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    
 
 
     [HideInInspector] public bool isMissingDefaultCallbacks = false;
@@ -161,6 +166,11 @@ public abstract class BuildingCard : MonoBehaviour
     private void Awake()
     {
         AwakeInit(CardBuildingType.NONE);
+    }
+
+    private void OnDestroy()
+    {
+        HideInfo();
     }
 
     private void OnMouseEnter()
@@ -648,7 +658,7 @@ public abstract class BuildingCard : MonoBehaviour
     }
     private IEnumerator ShowInfoWithDelay()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         if (cardState != CardStates.HOVERED && !canDisplayInfoIfNotInteractable) yield break;
 

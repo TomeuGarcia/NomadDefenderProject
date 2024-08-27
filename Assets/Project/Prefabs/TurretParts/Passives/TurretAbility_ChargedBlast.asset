@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa30c886cb94da2aec540b3bf433e9e, type: 3}
+  m_Name: TurretAbility_ChargedBlast
+  m_EditorClassIdentifier: 
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: a920c3110795d2c42b8b8b9c69b0c01d, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: a920c3110795d2c42b8b8b9c69b0c01d, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4283609053
+  _descriptionModel:
+    _abilityName: chargedBlast
+    _abilityDescription: Deal more damage the more time it passed since the last
+      shot.
+    _descriptionKeywords: []
+  _name: chargedBlast
+  _description: Deal more damage the more time it passed since the last shot.
+  _descriptionKeywords: []
+  _slowFireRateVisualsPrefab: {fileID: 7843519292623782401, guid: 69be74942ca5dd24ead89e26f4dcf17f,
+    type: 3}
+  _damageMultiplierOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0006538201
+      value: 0.50773835
+      inSlope: 0.7517517
+      outSlope: 0.7517517
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.025708383
+    - serializedVersion: 3
+      time: 5.991173
+      value: 3.0016046
+      inSlope: 1.4276868
+      outSlope: 1.4276868
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06382246
+      outWeight: 1
+    - serializedVersion: 3
+      time: 6.000114
+      value: 3.9995527
+      inSlope: 0.012696803
+      outSlope: 0.012696803
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e6d74dfe0b4469a65a1e44f4aa7edd, type: 3}
+  m_Name: TurretAbility_StockGenerator
+  m_EditorClassIdentifier: 
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: 839be1b2029cdc845ba8aae43396953b, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: 839be1b2029cdc845ba8aae43396953b, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4291721472
+  _descriptionModel:
+    _abilityName: stockGenerator
+    _abilityDescription: "WHILE_IN_HAND: When an Enemy Wave finishes, spawn a copy
+      of this card in your hand without this ability with +COST_INCREMENT\u2666 cost
+      for each card in hand."
+    _descriptionKeywords:
+    - {fileID: 11400000, guid: 79c8916f54e211f46832d00e100cb260, type: 2}
+  _costIncrementPerCard:
+    _name: COST_INCREMENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 10
+    _floatConstantValue: 0

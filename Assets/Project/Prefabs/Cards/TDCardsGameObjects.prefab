@@ -30,7 +30,6 @@ Transform:
   m_Children:
   - {fileID: 4885359580403629099}
   - {fileID: 7982427645377297912}
-  - {fileID: 3199584504370394203}
   - {fileID: 2389504214443094639}
   - {fileID: 3266126797930933544}
   m_Father: {fileID: 0}
@@ -248,97 +247,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3452838483188448605, guid: 951de556f60e0a64bb926fda0081621f,
     type: 3}
   m_PrefabInstance: {fileID: 196310426264293493}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &4885359580172842444
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2287175830089958520}
-    m_Modifications:
-    - target: {fileID: 8046663148399722901, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_Name
-      value: DeckCreator
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 36a8c95af325b8645bf8a418ff4c490c, type: 3}
---- !u!114 &3199584504370394202 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8046663148399722902, guid: 36a8c95af325b8645bf8a418ff4c490c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4885359580172842444}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b74ec5ee685c7c94aa7ef4f7faba1bfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &3199584504370394203 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8046663148399722903, guid: 36a8c95af325b8645bf8a418ff4c490c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4885359580172842444}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4885359581180190298
 PrefabInstance:
@@ -694,11 +602,6 @@ PrefabInstance:
       propertyPath: battleHUD
       value: 
       objectReference: {fileID: 3061516609394921384}
-    - target: {fileID: 2683057792737234630, guid: 1e95f6c11d30a424c8a201ae4ad04870,
-        type: 3}
-      propertyPath: deckCreator
-      value: 
-      objectReference: {fileID: 3199584504370394202}
     - target: {fileID: 2683057792737234630, guid: 1e95f6c11d30a424c8a201ae4ad04870,
         type: 3}
       propertyPath: warningBackground

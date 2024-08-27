@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpgradesController
 {
-    private readonly TurretRadiusRangeStatState _radiusRangeStatState;
+    private readonly TurretStatState _radiusRangeStatState;
 
-    public ITurretRadiusRangeState RadiusRangeStatState => _radiusRangeStatState;
+    public ITurretStatState RadiusRangeStatState => _radiusRangeStatState;
 
     public SupportStatsSnapshot CurrentStats { get; private set; }
 
@@ -18,11 +18,11 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
 
     public SupportCardStatsController(CardStatConfig radiusRangeStat)
     {
-        _radiusRangeStatState = new TurretRadiusRangeStatState(radiusRangeStat);
+        _radiusRangeStatState = new TurretStatState(radiusRangeStat, new TurretRadiusRangeStatStateValuePerser());
 
         CurrentUpgradeLevel = 0;
         CurrentStats = new SupportStatsSnapshot(
-            _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
+            _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
     }
 
@@ -35,7 +35,7 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
     private void UpdateCurrentStats()
     {
         CurrentStats.Reset(
-            _radiusRangeStatState.GetRadiusRangeByLevel(CurrentUpgradeLevel)
+            _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
 
         OnStatsUpdated?.Invoke();

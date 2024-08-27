@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 using static TurretBuildingCard;
 
-public class CardPartAttack : CardPart, ICardDescriptionProvider
+public class CardPartAttack : CardPart, ICardTooltipSource
 {
     [Header("CARD INFO")]
     //[SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -18,8 +18,8 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
 
 
     [Header("PART")]
-    [SerializeField] private TurretPartAttack turretPartAttack;
-    public TurretPartAttack TurretPartAttack => turretPartAttack;
+    [SerializeField] private TurretPartProjectileDataModel turretPartAttack;
+    public TurretPartProjectileDataModel TurretPartAttack => turretPartAttack;
 
 
     [Header("VISUALS")]
@@ -33,61 +33,37 @@ public class CardPartAttack : CardPart, ICardDescriptionProvider
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-    }
+    private EditableCardAbilityDescription _projectileDescription;
 
-    public void Configure(TurretPartAttack turretPartAttack)
+    public void Configure(TurretPartProjectileDataModel turretPartAttack)
     {
         this.turretPartAttack = turretPartAttack;
     }
 
     public override void Init()
     {
+        _projectileDescription = turretPartAttack.MakeAbilityDescription();
+        
         attackImage.sprite = turretPartAttack.abilitySprite;
         attackImage.color = turretPartAttack.materialColor;
-        _attackNameText.text = "/"+turretPartAttack.abilityName;
+        _attackNameText.text = _projectileDescription.NameForDisplay;
     }
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
-
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
-
-        setupData[0] = new ICardDescriptionProvider.SetupData(
-            turretPartAttack.abilityName,
-            turretPartAttack.abilityDescription,
-            turretPartAttack.abilitySprite,
-            turretPartAttack.materialColor
-        );
-
-        setupData[1] = null;
-
-        return setupData;
+        return CardTooltipDisplayData.MakeForProjectileCardPart(_descriptionTooltipPositioning, turretPartAttack, _projectileDescription);
     }
-
-    public Vector3 GetCenterPosition()
-    {        
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
 }

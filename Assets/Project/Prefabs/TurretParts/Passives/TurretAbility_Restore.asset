@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985cfe7dae3746ea818033f9695d3836, type: 3}
+  m_Name: TurretAbility_Restore
+  m_EditorClassIdentifier: 
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: 1dd8139ee3f76574fb389779b864f9ba, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: 1dd8139ee3f76574fb389779b864f9ba, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4286177311
+  _descriptionModel:
+    _abilityName: restore
+    _abilityDescription: 'WHEN_PLAYED: Heal the most damaged alive NODE by the amount
+      of this card''s level [HEAL_AMOUNT].'
+    _descriptionKeywords:
+    - {fileID: 11400000, guid: b2cfbf298d96474468b3b7f26245a5db, type: 2}
+    - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+  _name: restore
+  _description: 'WHEN_PLAYED: Heal the most damaged alive NODE by the amount of this
+    card''s level [HEAL_AMOUNT].'
+  _descriptionKeywords:
+  - {fileID: 11400000, guid: b2cfbf298d96474468b3b7f26245a5db, type: 2}
+  - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+  _healAmount:
+    _name: HEAL_AMOUNT
+    _isDynamic: 1
+    _isFloat: 0
+    _constantValue: 0
+    _floatConstantValue: 0

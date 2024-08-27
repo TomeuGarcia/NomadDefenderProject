@@ -17,8 +17,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     [SerializeField] private CanvasGroup cgNextUpgradeDescription;
     private bool isAbilityButtonHovered = false;
 
-    private TurretPartBase turretPartBase;
-
+    private SupportCardData _supportCardData;
     private SupportBuilding _supportBuilding;
 
     protected override int CurrentBuildingLevel { get => _currentSupportLevel; }
@@ -35,18 +34,18 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     public override void InitSupport(SupportBuilding supportBuilding,
         IBuildingUpgradesController buildingUpgradesController,
-        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, TurretPartBase turretPartBase)
+        CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, SupportCardData supportCardData)
     {
         _supportBuilding = supportBuilding;
         maxLevels = maxUpgradeCount;
         _currentSupportLevel = 0;
 
         base.InitSupport(supportBuilding, buildingUpgradesController, 
-            newCurrencyCounter, abilitySprite, abilityColor, turretPartBase);
+            newCurrencyCounter, abilitySprite, abilityColor, supportCardData);
         supportIcon.sprite = abilitySprite;
         supportIcon.color = abilityColor;
 
-        this.turretPartBase = turretPartBase;
+        _supportCardData = supportCardData;
 
 
         UpdateNextUpgradeDescriptionText();
@@ -224,7 +223,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpdateNextUpgradeDescriptionText()
     {
-        nextUpgradeDescriptionText.text = turretPartBase.GetUpgradeDescriptionByLevel(CurrentBuildingLevel + 1);
+        nextUpgradeDescriptionText.text = _supportCardData.GetUpgradeDescriptionByLevel(CurrentBuildingLevel + 1);
     }
 
 

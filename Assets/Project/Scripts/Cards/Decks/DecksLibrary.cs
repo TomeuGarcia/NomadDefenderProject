@@ -8,20 +8,20 @@ using UnityEngine;
 public class DecksLibrary : ScriptableObject
 {
     [Header("STARTER DECK DATA")]
-    [SerializeField] protected DeckData starterDeckData;
+    [SerializeField] protected CardDeckAsset startingDeck;
 
     [Header("GAME DECK DATA")]
-    [SerializeField] protected DeckData gameDeckData;
+    [SerializeField] protected CardDeckInUseData gameDeckData;
 
 
-    public void SetStarterDeck(DeckData newStarterDeckData)
+    public void SetStarterDeck(CardDeckAsset newStartingDeck)
     {
-        starterDeckData = newStarterDeckData;
+        startingDeck = newStartingDeck;
     }
     
     public void InitGameDeck()
     {
-        gameDeckData.ReplaceFor(starterDeckData);
+        gameDeckData.InitializeForRun(startingDeck, ServiceLocator.GetInstance().CardSpawnService);
     }
 
 }

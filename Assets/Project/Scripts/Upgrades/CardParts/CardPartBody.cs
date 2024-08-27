@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 
-public class CardPartBody : CardPart, ICardDescriptionProvider
+public class CardPartBody : CardPart, ICardTooltipSource
 {
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -27,7 +27,7 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
     //[SerializeField] private MeshRenderer bodyMeshRenderer;
     [SerializeField] private Image bodyImage;
     private Material bodyMaterial;
-    [SerializeField] private TurretPartAttack defaultColorTurretPartAttack;
+    [SerializeField] private TurretPartProjectileDataModel defaultColorTurretPartAttack;
 
 
     [Header("DESCRIPTION")]
@@ -57,13 +57,13 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
 
@@ -90,27 +90,9 @@ public class CardPartBody : CardPart, ICardDescriptionProvider
 
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
-
-        setupData[0] = new ICardDescriptionProvider.SetupData();
-        setupData[1] = null;
-
-
-        return setupData;
+        return new CardTooltipDisplayData();
     }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
 }

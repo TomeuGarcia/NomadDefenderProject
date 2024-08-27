@@ -16,14 +16,23 @@ public class TurretPartBody : ScriptableObject
         SPAMMER
     }
 
+    [Header("TYPE")]
     [SerializeField] public BodyType bodyType;
 
     [Header("STATS")]
-    [SerializeField, Min(0)] public int cost;
     [SerializeField] private CardStatConfig _damageStat;
     [SerializeField] private CardStatConfig _shotsPerSecondStat;
+    [SerializeField] private CardStatConfig _radiusRangeStat;
+    
     public CardStatConfig DamageStat => _damageStat;
     public CardStatConfig ShotsPerSecondStat => _shotsPerSecondStat;
+    public CardStatConfig RadiusRangeStat => _radiusRangeStat;
+
+    
+    [Header("BASE PRIMITIVE")] 
+    [SerializeField] private BasePartPrimitive _basePartPrimitive;
+    public BasePartPrimitive BasePartPrimitive => _basePartPrimitive;
+    
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
@@ -37,24 +46,7 @@ public class TurretPartBody : ScriptableObject
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] public string abilityDescription = "No ability.";
 
-
-    public void InitAsCopy(TurretPartBody other)
-    {
-        this.cost = other.cost;
-        
-        this._damageStat = other._damageStat;
-        this._shotsPerSecondStat = other._shotsPerSecondStat;
-
-        this.prefab = other.prefab;
-        this.materialTextureMap = other.materialTextureMap;
-
-        this.partName = other.partName;
-        this.abilityDescription = other.abilityDescription;
-
-        this.bodyType = other.bodyType;
-    }
-
-
+    
     // Operator Overloads
     public static bool operator ==(TurretPartBody obj1, TurretPartBody obj2)
     {
@@ -65,16 +57,6 @@ public class TurretPartBody : ScriptableObject
     public static bool operator !=(TurretPartBody obj1, TurretPartBody obj2)
     {
         return !(obj1 == obj2);
-    }
-
-    public override bool Equals(object o)
-    {
-        return base.Equals(o);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
     }
 
 }

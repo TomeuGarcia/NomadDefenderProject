@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ICardDescriptionProvider;
+using static ICardTooltipSource;
 using static TurretBuildingCard;
 
-public class CardPartBase : CardPart, ICardDescriptionProvider
+public class CardPartBase : CardPart, ICardTooltipSource
 {
     [Header("CARD INFO")]
     [SerializeField] protected CanvasGroup[] cgsInfoHide;
@@ -22,50 +22,43 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
     [SerializeField] private TMP_Text _basePassiveNameText;
 
 
-    [Header("PART")]
-    [SerializeField] public TurretPassiveBase turretPassiveBase;
+    private ATurretPassiveAbility turretPassive;
+    public ATurretPassiveAbilityDataModel TurretPassiveModel => turretPassive.OriginalModel;
 
-
-
-    private bool hasBasePassiveAbility;
-
+    
 
     [Header("DESCRIPTION")]
     [SerializeField] private Transform leftDescriptionPosition;
     [SerializeField] private Transform rightDescriptionPosition;
 
 
-
+    public void SetTurretPassive(ATurretPassiveAbilityDataModel turretPassiveModel)
+    {
+        turretPassive = turretPassiveModel.MakePassiveAbility();
+    }
 
 
     public override void Init()
     {
-        hasBasePassiveAbility = turretPassiveBase.passive.GetType() != typeof(BaseNullPassive);
-        if (hasBasePassiveAbility)
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(true);
+        basePassiveImage.transform.parent.gameObject.SetActive(true);
 
-            basePassiveImage.sprite = turretPassiveBase.visualInformation.sprite;
-            basePassiveImage.color = turretPassiveBase.visualInformation.color;
+        basePassiveImage.sprite = TurretPassiveModel.View.Sprite;
+        basePassiveImage.color = TurretPassiveModel.View.Color;
 
-            _basePassiveNameText.text = "/" + turretPassiveBase.passive.abilityName;
-        }
-        else
-        {
-            basePassiveImage.transform.parent.gameObject.SetActive(false);
-        }        
+        _basePassiveNameText.text = "/" + TurretPassiveModel.Name;
     }
 
+    
 
     protected override void DoShowInfo()
     {
-        CardDescriptionDisplayer.GetInstance().ShowCardDescription(this);
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
     }
 
     public override void HideInfo()
     {
         base.HideInfo();
-        CardDescriptionDisplayer.GetInstance().HideCardDescription();
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
     public void PlayTutorialBlinkAnimation(float delayBeforeAbility)
@@ -110,39 +103,10 @@ public class CardPartBase : CardPart, ICardDescriptionProvider
 
 
 
-    // ICardDescriptionProvider OVERLOADS
-    public ICardDescriptionProvider.SetupData[] GetAbilityDescriptionSetupData()
+    // ICardTooltipSource OVERLOADS
+    public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        ICardDescriptionProvider.SetupData[] setupData = new ICardDescriptionProvider.SetupData[2];
-        
-        setupData[0] = null;
-
-        if (hasBasePassiveAbility)
-        {
-            setupData[1] = new ICardDescriptionProvider.SetupData(
-                turretPassiveBase.passive.abilityName,
-                turretPassiveBase.passive.abilityDescription,
-                turretPassiveBase.visualInformation.sprite,
-                turretPassiveBase.visualInformation.color
-            );
-        }
-        else
-        {
-            setupData[1] = new ICardDescriptionProvider.SetupData();
-        }
-                    
-
-        return setupData;
+        return CardTooltipDisplayData.MakeForCardPartPassive(_descriptionTooltipPositioning, TurretPassiveModel, 
+            turretPassive.GetAbilityDescription());
     }
-
-    public Vector3 GetCenterPosition()
-    {
-        return CardTransform.position + CardTransform.TransformDirection(Vector3.down * 0.2f);
-    }
-
-    public DescriptionCornerPositions GetCornerPositions()
-    {
-        return new DescriptionCornerPositions(leftDescriptionPosition.position, rightDescriptionPosition.position);
-    }
-
 }

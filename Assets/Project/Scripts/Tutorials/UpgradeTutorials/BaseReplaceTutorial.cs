@@ -8,13 +8,13 @@ public class BaseReplaceTutorial : MonoBehaviour
     [SerializeField] private ScriptedSequence scriptedSequence;
     private Tutorials tutoType;
 
-    [SerializeField] PartsLibrary.BaseAndPassive[] tutorialBaseAndPassive;
+    [SerializeField] ATurretPassiveAbilityDataModel[] _tutorialPassives;
 
 
     private void Awake()
     {
         tutoType = Tutorials.BASE_FUSION_UPG;
-        cardPartReplaceManager.AwakeSetupTutorialBases(tutorialBaseAndPassive);
+        cardPartReplaceManager.AwakeSetupTutorialBases(_tutorialPassives);
     }
 
     void Start()
@@ -39,7 +39,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        //Calibrating base replacement upgrade…
+        //Calibrating base replacement upgradeï¿½
         //[CLEAR]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -47,7 +47,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         scriptedSequence.Clear();
 
 
-        //Loading deck cards…
+        //Loading deck cardsï¿½
         //[CARDS SHOW UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
@@ -56,7 +56,7 @@ public class BaseReplaceTutorial : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
 
-        //Loading new Clean Strike base card…
+        //Loading new Clean Strike base cardï¿½
         //[Clean Strike PART SHOWS UP]
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
