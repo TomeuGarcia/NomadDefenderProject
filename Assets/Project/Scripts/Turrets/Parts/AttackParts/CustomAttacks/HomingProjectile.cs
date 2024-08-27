@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class HomingProjectile : ATurretProjectileBehaviour
@@ -27,7 +25,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     {
         base.ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
 
-        this._targetEnemy = precomputedDamageAttack.Target;
+        _targetEnemy = precomputedDamageAttack.Target;
         _damageAttack = precomputedDamageAttack;
 
         lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed);
@@ -51,8 +49,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     private void EnemyHit()
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(ProjectileType, _targetEnemy.MeshTransform.position, Quaternion.identity);
-        temp.gameObject.SetActive(true);
+            .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.transform.parent = gameObject.transform.parent;
 
         DamageTargetEnemy(_damageAttack);

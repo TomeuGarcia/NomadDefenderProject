@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2080374624328513536}
   - component: {fileID: 4376590595653548842}
   m_Layer: 0
-  m_Name: ChainingProjectile
+  m_Name: HomingChainingProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,9 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 299602562984148312}
-  - {fileID: 4230058289579654547}
-  - {fileID: 4768121472525351440}
+  - {fileID: 7115812790429405885}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,9 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862745f8631a89a448c91b64d9900dba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  _viewAddOnsParent: {fileID: 7115812790429405885}
   bulletSpeed: 2
-  materialForTurret: {fileID: 2100000, guid: ed1b3ee6878fb8a419814854c3a263d3, type: 2}
   lerp: {fileID: 4376590595653548842}
   enemyLayerMask:
     serializedVersion: 2
@@ -59,7 +56,6 @@ MonoBehaviour:
   damageMultiplier: 0.5
   maxChainedTargets: 2
   chainRadius: 1.5
-  stunDuration: 0.15
 --- !u!96 &2080374624328513536
 TrailRenderer:
   serializedVersion: 3
@@ -263,8 +259,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2080374624328513537}
-  m_RootOrder: 1
+  m_Father: {fileID: 7115812790429405885}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &652111113423113906
 ParticleSystem:
@@ -5150,8 +5146,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2080374624328513537}
-  m_RootOrder: 2
+  m_Father: {fileID: 7115812790429405885}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &2690993562331189747
 ParticleSystem:
@@ -10007,6 +10003,40 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &5961982930197635000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7115812790429405885}
+  m_Layer: 0
+  m_Name: ViewParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7115812790429405885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5961982930197635000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 299602562984148312}
+  - {fileID: 4230058289579654547}
+  - {fileID: 4768121472525351440}
+  m_Father: {fileID: 2080374624328513537}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7356487611820603595
 GameObject:
   m_ObjectHideFlags: 0
@@ -10032,13 +10062,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7356487611820603595}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2080374624328513537}
-  m_RootOrder: 0
+  m_Father: {fileID: 7115812790429405885}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &5281027061989356899
 ParticleSystem:

@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &206374178767441811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3302994808616090319}
+  m_Layer: 0
+  m_Name: ViewParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3302994808616090319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206374178767441811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4033769943740171574}
+  - {fileID: 3149954680575709340}
+  m_Father: {fileID: 9123804657942524075}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5441583890708131692
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,13 +58,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5441583890708131692}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9123804657942524075}
-  m_RootOrder: 1
+  m_Father: {fileID: 3302994808616090319}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &3042756291224821405
 ParticleSystem:
@@ -4918,8 +4951,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4033769943740171574}
-  - {fileID: 3149954680575709340}
+  - {fileID: 3302994808616090319}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4935,20 +4967,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32aee746d4742f146b9c7e69d5d72b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 4
+  _viewAddOnsParent: {fileID: 3302994808616090319}
   bulletSpeed: 2
-  materialForTurret: {fileID: 2100000, guid: d8dd886f8eb10f843b61b2f57073a73a, type: 2}
   lerp: {fileID: 3876527974923763685}
   trailRenderer: {fileID: 1197175851975916224}
   damageCollider: {fileID: 4806232799590981710}
-  extraDistanceCoef: 0.5
   travelTime: 0.5
-  projectile: {fileID: 4033769943740171574}
   arrow: {fileID: 8565247250592976179}
   disableParticles: {fileID: 5441583890708131692}
-  startDamageMultiplier: 1
-  maxDamageMultiplier: 2.5
-  damageMultiplierIncrement: 0.5
   _distance: 15
 --- !u!96 &1197175851975916224
 TrailRenderer:
@@ -5168,13 +5194,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8565247250592976179}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
+  m_LocalScale: {x: 0.09, y: 0.089999996, z: 0.089999996}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9123804657942524075}
-  m_RootOrder: 0
+  m_Father: {fileID: 3302994808616090319}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &4824985425693807126
 SpriteRenderer:

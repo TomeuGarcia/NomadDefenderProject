@@ -20,6 +20,7 @@ public abstract class ATurretPassiveAbility
     private readonly EditableCardAbilityDescription _abilityDescription;
     private readonly Dictionary<string, string> _descriptionCorrections;
 
+    protected ProjectileParticleFactory _projectileParticleFactory;
 
     public EditableCardAbilityDescription GetAbilityDescription()
     {
@@ -33,8 +34,9 @@ public abstract class ATurretPassiveAbility
         OriginalModel = originalModel;
         
         _abilityDescription = OriginalModel.MakeDescription();
-
         _descriptionCorrections = new Dictionary<string, string>();
+
+        _projectileParticleFactory = ProjectileParticleFactory.GetInstance();
     }
 
     protected void ApplyDescriptionCorrection(string name, int value)
@@ -55,6 +57,14 @@ public abstract class ATurretPassiveAbility
         
         _descriptionCorrections.Add(name, value);
     }
+
+    protected void AddViewAddOnToProjectile(ProjectileViewAddOnConfig viewAddOnConfig,
+        ATurretProjectileBehaviour projectile)
+    {
+        AProjectileViewAddOn projectileViewAddOn =
+            ServiceLocator.GetInstance().ProjectileViewAddOnFactory.CreateAddOn(viewAddOnConfig);
+        projectile.View.AddViewAddOn(projectileViewAddOn);
+    }
     
     
     public virtual void OnAddedToTurretCard(TurretCardData cardData) { } 
@@ -69,7 +79,7 @@ public abstract class ATurretPassiveAbility
     public virtual void OnTurretPlacingMove() { } 
     public virtual void OnTurretPlaced() { } 
     
-    public virtual void OnBeforeShootingEnemy() { } 
+    public virtual void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile) { } 
     public virtual void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack) { } 
     public virtual void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult) { } 
 }

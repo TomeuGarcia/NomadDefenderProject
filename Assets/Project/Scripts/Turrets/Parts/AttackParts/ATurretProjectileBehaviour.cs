@@ -10,52 +10,56 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
         HomingChaining,
         Piercing,
     }
+
+
+    [Header("VIEW")] 
+    [SerializeField] private Transform _viewAddOnsParent;
+    private TurretProjectileView _turretProjectileView;
+    public ITurretProjectileView View => _turretProjectileView;
     
-    public TurretBuilding TurretOwner { get; private set; }
+    
+    [Header("MOVEMENT")] 
+    [SerializeField] protected float bulletSpeed = 2.0f;
+    
+    
 
 
     private TurretPartProjectileDataModel _dataModel;
     protected TurretDamageAttack _damageAttack;
-    
-    
     protected Enemy _targetEnemy;
-    public Type ProjectileType => _dataModel.ProjectileType;
-    
-    [SerializeField] protected float bulletSpeed = 2.0f;
-
-    [SerializeField] public Material materialForTurret;
-
-    public Vector3 Position => transform.position;
-
-
-    
-    protected bool disappearing = false;
-
     private ITurretShootingLifetimeCycle _shootingLifetimeCycle;
+    protected bool disappearing = false;
+    
+    public Vector3 Position => transform.position;
+    public Quaternion Rotation => Quaternion.LookRotation((_targetEnemy.Position - Position).normalized);
+    public TurretBuilding TurretOwner { get; private set; }
+    public Type ProjectileType => _dataModel.ProjectileType;
+    public ProjectileParticleType HitParticlesType => _dataModel.HitParticlesType;
+
 
 
     public void InstantiatedInit(TurretPartProjectileDataModel dataModel)
     {
         _dataModel = dataModel;
+        _turretProjectileView = new TurretProjectileView(_viewAddOnsParent);
     }
 
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
         Enemy targetEnemy, TurretBuilding owner)
     {
-        _shootingLifetimeCycle = shootingLifetimeCycle;
-        _shootingLifetimeCycle.OnBeforeShootingEnemy();
+        SharedInit(shootingLifetimeCycle);
         ProjectileShotInit(targetEnemy, owner);
     }
     protected virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         TurretOwner = owner;
+        _turretProjectileView.OnProjectileSpawned();
     }
 
     public void ProjectileShotInit_PrecomputedAndQueued(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
         TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
     {
-        _shootingLifetimeCycle = shootingLifetimeCycle;
-        _shootingLifetimeCycle.OnBeforeShootingEnemy();
+        SharedInit(shootingLifetimeCycle);
         ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
     }
     protected virtual void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, 
@@ -63,7 +67,12 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     {
         TurretOwner = owner;
     }
-    
+
+    private void SharedInit(ITurretShootingLifetimeCycle shootingLifetimeCycle)
+    {
+        _shootingLifetimeCycle = shootingLifetimeCycle;
+        _shootingLifetimeCycle.OnBeforeShootingEnemy(this);
+    }
     
     protected virtual void DoUpdate()
     {
@@ -83,9 +92,10 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
         }
     }
 
-    protected virtual void Disappear()
+    protected void Disappear()
     {
         StartCoroutine(WaitToDisable());
+        _turretProjectileView.OnProjectileDisappear();
     }
 
     private IEnumerator WaitToDisable()
@@ -153,6 +163,8 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     {
         TurretDamageAttackResult damageAttackResult = _targetEnemy.TakeDamage(damageAttack);
         _shootingLifetimeCycle.OnAfterDamagingEnemy(damageAttackResult);
+        
+        _turretProjectileView.OnProjectileHitsTarget(damageAttackResult.Target.MeshTransform);
     }
     
     protected virtual void OnShotInitialized()

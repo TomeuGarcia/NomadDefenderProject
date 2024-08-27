@@ -9,8 +9,10 @@ public class TurretPartProjectileDataModel : ScriptableObject
 {
     [Header("PREFAB")]
     [SerializeField] protected ATurretProjectileBehaviour.Type _projectileType;
+    [SerializeField] protected ProjectileParticleType _hitParticlesType;
     [SerializeField] private ATurretProjectileBehaviour _projectilePrefab;
     public ATurretProjectileBehaviour.Type ProjectileType => _projectileType;
+    public ProjectileParticleType HitParticlesType => _hitParticlesType;
     public ATurretProjectileBehaviour ProjectilePrefab => _projectilePrefab;
 
     [Header("VISUALS")]

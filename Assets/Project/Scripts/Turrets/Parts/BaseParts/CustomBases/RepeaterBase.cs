@@ -292,11 +292,10 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         ATurretProjectileBehaviour projectileSource = repeatedDamageAttack.ProjectileSource;
         
-        ATurretProjectileBehaviour.Type projectileType = projectileSource.ProjectileType;
         Vector3 spawnPosition = shootPoint.position;
 
         ATurretProjectileBehaviour newProjectile = 
-            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileType, spawnPosition, Quaternion.identity)
+            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, spawnPosition, Quaternion.identity)
             .GetComponent<ATurretProjectileBehaviour>();
 
         TurretBuilding projectileTurret = projectileSource.TurretOwner;
@@ -309,8 +308,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         // Spawn particle
         GameObject particles = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(projectileType, spawnPosition, Quaternion.identity);
-        particles.SetActive(true);
+            .CreateParticlesGameObject(projectileSource.HitParticlesType, spawnPosition, Quaternion.identity);
         particles.transform.parent = gameObject.transform.parent;
 
 

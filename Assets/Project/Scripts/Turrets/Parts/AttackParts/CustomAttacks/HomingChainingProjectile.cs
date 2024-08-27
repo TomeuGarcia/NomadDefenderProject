@@ -76,8 +76,7 @@ public class HomingChainingProjectile : HomingProjectile
     protected override void OnEnemyReached()
     {
         GameObject hitParticles = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(ProjectileType, _targetEnemy.MeshTransform.position, Quaternion.identity);
-        hitParticles.gameObject.SetActive(true);
+            .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         hitParticles.transform.parent = gameObject.transform.parent;
         
         //targetEnemy.GetStunned(stunDuration); // Already on HighVoltage ability

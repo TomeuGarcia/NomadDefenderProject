@@ -13,10 +13,6 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject disableParticles;
 
-    [Header("STATS")]
-    [SerializeField, Min(0)] private float startDamageMultiplier = 0.5f;
-    [SerializeField, Min(1)] private float maxDamageMultiplier = 2.0f;
-    [SerializeField, Min(0)] private float damageMultiplierIncrement = 0.25f;
     [SerializeField] private float _distance = 15;
     
     private float _currentDamageMultiplier = 0f;
@@ -79,15 +75,11 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     private void EnemyHit(Enemy enemy)
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(ProjectileType, enemy.MeshTransform.position, Quaternion.identity);
-        temp.gameObject.SetActive(true);
+            .CreateParticlesGameObject(HitParticlesType, enemy.MeshTransform.position, Quaternion.identity);
         temp.transform.parent = gameObject.transform.parent;
 
         _damageAttack = CreateDamageAttack(_targetEnemy);
         DamageTargetEnemy(_damageAttack);
-
-        _currentDamageMultiplier += damageMultiplierIncrement;
-        _currentDamageMultiplier = Mathf.Min(_currentDamageMultiplier, maxDamageMultiplier);
     }
 
     public override bool QueuesDamageToEnemies()

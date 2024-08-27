@@ -73,10 +73,9 @@ public class ProjectileShootingController
         currentAttack.ProjectileShotInit(_turretShootingLifetimeCycle, targetedEnemy, _turretOwner);
 
 
-        // Spawn particle
+        // Spawn particle (shoot particles are the same as hit particles)
         GameObject particles = ProjectileParticleFactory.GetInstance()
-            .GetAttackParticlesGameObject(currentAttack.ProjectileType, shootPoint, _body.transform.rotation);
-        particles.SetActive(true);
+            .CreateParticlesGameObject(currentAttack.HitParticlesType, shootPoint, _body.transform.rotation);
         particles.transform.parent = _turretOwner.transform;
 
 

@@ -128,11 +128,11 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
     }
 
 
-    public void OnBeforeShootingEnemy()
+    public void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnBeforeShootingEnemy();
+            passiveAbility.OnBeforeShootingEnemy(projectile);
         }  
     }
     
