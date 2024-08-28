@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb495dd44844002b9898e6bd9a1c859, type: 3}
   m_Name: TurretAbility_CloseCombat
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 11400000, guid: 357cf7beb69d8d045913728ac6e708fa, type: 2}
+    _projectileAddOn: {fileID: 11400000, guid: 3810e0068310c2c4082c63d72c5b034b, type: 2}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: c2143f2f6b8afb84dba7a9f9cb813741, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: c2143f2f6b8afb84dba7a9f9cb813741, type: 3}
@@ -22,9 +25,6 @@ MonoBehaviour:
     _abilityName: closeCombat
     _abilityDescription: Deal more damage the closer the target.
     _descriptionKeywords: []
-  _optionalViewAddOns:
-    _turretAddOn: {fileID: 0}
-    _projectileAddOn: {fileID: 11400000, guid: 3810e0068310c2c4082c63d72c5b034b, type: 2}
   _damageMultiplierOverDistance:
     serializedVersion: 2
     m_Curve:

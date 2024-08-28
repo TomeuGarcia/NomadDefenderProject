@@ -15,7 +15,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
 
         targetEnemy.QueueDamage(_damageAttack);
 
-        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
+        lerp.LerpPosition(targetEnemy.MeshTransform, MovementSpeed);
         StartCoroutine(WaitForLerpFinish());
 
         OnShotInitialized();
@@ -28,7 +28,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
         _targetEnemy = precomputedDamageAttack.Target;
         _damageAttack = precomputedDamageAttack;
 
-        lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed);
+        lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed);
         StartCoroutine(WaitForLerpFinish());
         
         OnShotInitialized();

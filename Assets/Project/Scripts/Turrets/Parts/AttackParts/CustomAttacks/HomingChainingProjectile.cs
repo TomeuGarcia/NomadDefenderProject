@@ -95,7 +95,7 @@ public class HomingChainingProjectile : HomingProjectile
         if (_currentChainedTarget < _chainTargetedEnemies.Length)
         {
             _targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
-            lerp.LerpPosition(_targetEnemy.MeshTransform, bulletSpeed / 2.0f);
+            lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());            
         }
         else

@@ -8,7 +8,6 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     [SerializeField] private Lerp lerp;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private Collider damageCollider;
-    [SerializeField] private float travelTime;
 
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject disableParticles;
@@ -20,18 +19,18 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
-        base.ProjectileShotInit(base._targetEnemy, owner);
+        base.ProjectileShotInit(_targetEnemy, owner);
 
         trailRenderer.Clear();
         arrow.SetActive(true);
         damageCollider.enabled = true;
 
-        this._targetEnemy = targetEnemy;
+        _targetEnemy = targetEnemy;
 
         ComputeGoalPosition();
         transform.LookAt(_goalPosition);
 
-        lerp.LerpPosition(_goalPosition, travelTime);
+        lerp.LerpPosition(_goalPosition, _distance / MovementSpeed);
         StartCoroutine(WaitForFinish());
         
         OnShotInitialized();

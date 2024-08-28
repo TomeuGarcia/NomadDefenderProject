@@ -19,9 +19,10 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     
     
     [Header("MOVEMENT")] 
-    [SerializeField] protected float bulletSpeed = 2.0f;
-    
-    
+    [SerializeField] private float bulletSpeed = 2.0f;
+
+
+    protected float MovementSpeed => _dataModel.MovementSpeed;
 
 
     private TurretPartProjectileDataModel _dataModel;

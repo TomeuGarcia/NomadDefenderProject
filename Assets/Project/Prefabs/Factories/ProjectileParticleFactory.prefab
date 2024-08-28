@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 6114662614164756248, guid: f3b5d71e856a64040b67a16113d7a8c7,
+  pooledObject: {fileID: 986712954125772557, guid: 4047e4d234cb55f4fb150ea2bf930034,
     type: 3}
 --- !u!1 &5109938563644678452
 GameObject:
@@ -219,6 +219,8 @@ Transform:
   - {fileID: 7362008027453364645}
   - {fileID: 8070973227676315653}
   - {fileID: 4627299854284541569}
+  - {fileID: 5514135338768791400}
+  - {fileID: 6613359470286197708}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -235,16 +237,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleToPool:
-  - type: 0
-    pool: {fileID: 5109938563178013694}
   - type: 1
-    pool: {fileID: 5109938563527937921}
+    pool: {fileID: 5109938563178013694}
   - type: 2
-    pool: {fileID: 5058762162173083756}
+    pool: {fileID: 5109938563527937921}
   - type: 3
-    pool: {fileID: 428702994998083738}
+    pool: {fileID: 8677149990929232600}
   - type: 4
+    pool: {fileID: 428702994998083738}
+  - type: 5
     pool: {fileID: 9045728790309813472}
+  - type: 6
+    pool: {fileID: 8389372455013971823}
+  - type: 7
+    pool: {fileID: 1787345274197976232}
   _projectileAddOnConfigs:
   - {fileID: 11400000, guid: 63a8d309d07ff06489191761e5715762, type: 2}
   - {fileID: 11400000, guid: 5ae16a5c24f9f3a44b76101977e758eb, type: 2}
@@ -254,7 +260,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 532c3522ea914fd4e901892cd175b783, type: 2}
   - {fileID: 11400000, guid: d5d55ac3ad925c84a822889d79061516, type: 2}
   - {fileID: 11400000, guid: 1db64f1a8d5eaff4a898a889ab9e585a, type: 2}
-  _turretAddOnConfigs: []
+  _turretAddOnConfigs:
+  - {fileID: 11400000, guid: 08de0ebd14bc3ce4dbfaeeecbee75a6d, type: 2}
+  - {fileID: 11400000, guid: 40f8a7bbf0c040d408bad2abd7c0f79d, type: 2}
+  - {fileID: 11400000, guid: 357cf7beb69d8d045913728ac6e708fa, type: 2}
+  - {fileID: 11400000, guid: 1ce62c296515dfb4da17053482edeb50, type: 2}
+  - {fileID: 11400000, guid: 1437be0cebf413b4da5af6f51daf9827, type: 2}
+  - {fileID: 11400000, guid: 63a59caf838c2c940af0119a71319e01, type: 2}
+  - {fileID: 11400000, guid: b2db1f82527a9c940b068152b88230ac, type: 2}
 --- !u!1 &6617176870248771009
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +325,7 @@ GameObject:
   - component: {fileID: 4627299854284541569}
   - component: {fileID: 5058762162173083756}
   m_Layer: 0
-  m_Name: TeslaWavePool
+  m_Name: TeslaWavePool_NOT_USED
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,4 +359,96 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 2864370599542333413, guid: 93cef1fe2df3bca4198745d7d066f135,
+    type: 3}
+--- !u!1 &8467865936112112071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5514135338768791400}
+  - component: {fileID: 8389372455013971823}
+  m_Layer: 0
+  m_Name: Pool_StunTouch_Hit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5514135338768791400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8467865936112112071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5109938563644678453}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8389372455013971823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8467865936112112071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 6114662614164756248, guid: f3b5d71e856a64040b67a16113d7a8c7,
+    type: 3}
+--- !u!1 &8635704608428960692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6613359470286197708}
+  - component: {fileID: 1787345274197976232}
+  m_Layer: 0
+  m_Name: Pool_MultiCrash_Hit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6613359470286197708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635704608428960692}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5109938563644678453}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1787345274197976232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635704608428960692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 8023212588190361100, guid: 0b2235db626c47444aaa0f9177dfd18e,
     type: 3}

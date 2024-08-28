@@ -4,7 +4,7 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
 {
     [SerializeField] private TrailRenderer _projectileTrail;
     [SerializeField] private ParticleSystem _lifetimeParticles;
-    [SerializeField] private ParticleSystem _hitTargetParticles;
+    [SerializeField] private ProjectileParticleType _hitTargetParticleType = ProjectileParticleType.None;
 
     private float _spawnTime;
 
@@ -17,12 +17,7 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
             float currentTime = Time.time * GameTime.TimeScale;
             allEffectsFinished = (currentTime - _spawnTime) > _lifetimeParticles.main.duration;
         }
-        
-        if (_hitTargetParticles)
-        {
-            allEffectsFinished = !_hitTargetParticles.isEmitting;
-        }
-        
+
         return allEffectsFinished;
     }
 
@@ -55,9 +50,10 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
 
     public override void OnProjectileHitsTarget(Transform target)
     {
-        if (_hitTargetParticles)
+        if (_hitTargetParticleType != ProjectileParticleType.None)
         {
-            _hitTargetParticles.Play();
+            ProjectileParticleFactory.GetInstance().CreateParticlesGameObject(_hitTargetParticleType,
+                target.position, transform.rotation);
         }
     }
     

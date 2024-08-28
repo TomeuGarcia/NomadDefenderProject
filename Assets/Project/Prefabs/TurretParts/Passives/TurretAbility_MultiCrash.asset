@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4754adee6e4f4a9e24585b42f42fae, type: 3}
   m_Name: TurretAbility_MultiCrash
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 11400000, guid: 1ce62c296515dfb4da17053482edeb50, type: 2}
+    _projectileAddOn: {fileID: 11400000, guid: b2f7d7445792cdd4bac44cc6791065e6, type: 2}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: 3cd40fe8b2dfec44faf12212365ce61e, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: 3cd40fe8b2dfec44faf12212365ce61e, type: 3}
@@ -23,9 +26,6 @@ MonoBehaviour:
     _abilityDescription: Increase the Projectile's damage after every hit until it
       banishes.
     _descriptionKeywords: []
-  _optionalViewAddOns:
-    _turretAddOn: {fileID: 0}
-    _projectileAddOn: {fileID: 11400000, guid: b2f7d7445792cdd4bac44cc6791065e6, type: 2}
   _startingDamageMultiplier: 1
   _maxDamageMultiplier: 2.5
   _damageMultiplierIncrementPerHit: 0.25

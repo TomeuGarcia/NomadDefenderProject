@@ -22,6 +22,11 @@ public class TurretPartProjectileDataModel : ScriptableObject
     [SerializeField] private Material _materialForTurret;
     public Material MaterialForTurret => _materialForTurret;
 
+    
+    [Header("STATS CONFIG")] 
+    [SerializeField, Min(0f)] private float _movementSpeed = 2f;
+    public float MovementSpeed => _movementSpeed;
+    
 
     [Header("ABILITY INFO")] 
     [SerializeField] private CardAbilityDescriptionModel _descriptionModel;

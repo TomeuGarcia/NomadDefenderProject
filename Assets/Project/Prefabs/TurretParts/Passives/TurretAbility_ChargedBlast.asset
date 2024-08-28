@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa30c886cb94da2aec540b3bf433e9e, type: 3}
   m_Name: TurretAbility_ChargedBlast
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 11400000, guid: 40f8a7bbf0c040d408bad2abd7c0f79d, type: 2}
+    _projectileAddOn: {fileID: 11400000, guid: 5ae16a5c24f9f3a44b76101977e758eb, type: 2}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: a920c3110795d2c42b8b8b9c69b0c01d, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: a920c3110795d2c42b8b8b9c69b0c01d, type: 3}
@@ -23,9 +26,6 @@ MonoBehaviour:
     _abilityDescription: Deal more damage the more time it passed since the last
       shot.
     _descriptionKeywords: []
-  _optionalViewAddOns:
-    _turretAddOn: {fileID: 0}
-    _projectileAddOn: {fileID: 11400000, guid: 5ae16a5c24f9f3a44b76101977e758eb, type: 2}
   _slowFireRateVisualsPrefab: {fileID: 7843519292623782401, guid: 69be74942ca5dd24ead89e26f4dcf17f,
     type: 3}
   _damageMultiplierOverTime:
