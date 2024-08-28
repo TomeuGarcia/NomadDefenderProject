@@ -61,25 +61,37 @@ public abstract class ATurretPassiveAbility
     protected void AddViewAddOnToProjectile(ProjectileViewAddOnConfig viewAddOnConfig,
         ATurretProjectileBehaviour projectile)
     {
-        AProjectileViewAddOn projectileViewAddOn =
-            ServiceLocator.GetInstance().ProjectileViewAddOnFactory.CreateAddOn(viewAddOnConfig);
+        AProjectileViewAddOn projectileViewAddOn = _projectileParticleFactory.CreateProjectileAddOn(viewAddOnConfig);
         projectile.View.AddViewAddOn(projectileViewAddOn);
     }
+    
     
     
     public virtual void OnAddedToTurretCard(TurretCardData cardData) { } 
     public virtual void OnRemovedFromTurretCard() { } 
     public virtual void OnTurretCardUpgraded(TurretCardData cardData) { } 
     
+    
     public virtual void OnTurretCreated(TurretBuilding turretOwner) { } 
     public virtual void OnTurretDestroyed() { } 
+    
     
     public virtual void OnTurretPlacingStart() { } 
     public virtual void OnTurretPlacingFinish() { } 
     public virtual void OnTurretPlacingMove() { } 
-    public virtual void OnTurretPlaced() { } 
+    public virtual void OnTurretPlaced() { }
+
     
-    public virtual void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile) { } 
+    public void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
+    {
+        if (OriginalModel.OptionalViewAddOns.ProjectileAddOn)
+        {
+            AddViewAddOnToProjectile(OriginalModel.OptionalViewAddOns.ProjectileAddOn, projectile);
+        }
+        
+        DoOnBeforeShootingEnemy(projectile);
+    } 
+    protected virtual void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile) { } 
     public virtual void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack) { } 
     public virtual void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult) { } 
 }

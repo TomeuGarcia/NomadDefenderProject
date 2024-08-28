@@ -98,6 +98,10 @@ public class TurretCardData
     {
         PassiveAbilitiesController.RemovePassiveAbility(passiveAbilityModel);
     }
+    public void OnCardUpgraded()
+    {
+        PassiveAbilitiesController.OnTurretCardUpgraded(this);
+    }
 
 
     public TurretIconCanvasDisplay.ConfigData[] MakeIconsDisplayData()

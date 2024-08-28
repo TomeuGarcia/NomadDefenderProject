@@ -27,7 +27,7 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
         _slowFireRateVisuals.TurretPlacedInit(_turretOwner, _abilityDataModel.MaxTimeBetweenShots);
     }
 
-    public override void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
+    protected override void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {
         _timeSinceLastShot = _turretOwner.TimeSinceLastShot;
     }

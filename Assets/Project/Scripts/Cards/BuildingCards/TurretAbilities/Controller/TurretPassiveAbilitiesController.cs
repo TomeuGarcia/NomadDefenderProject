@@ -54,6 +54,14 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
             }
         }
     }
+    public void OnTurretCardUpgraded(TurretCardData cardData)
+    {
+        foreach (ATurretPassiveAbility passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnTurretCardUpgraded(cardData);
+        }
+    }
+    
 
     public bool AlreadyContainsPassive(ATurretPassiveAbilityDataModel passiveAbilityDataModel)
     {

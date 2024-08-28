@@ -6,9 +6,24 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
     [SerializeField] private ParticleSystem _lifetimeParticles;
     [SerializeField] private ParticleSystem _hitTargetParticles;
 
+    private float _spawnTime;
+
     protected override bool AllAffectsFinished()
     {
-        return (_hitTargetParticles && !_hitTargetParticles.isEmitting);
+        bool allEffectsFinished = true; 
+        
+        if (_lifetimeParticles)
+        {
+            float currentTime = Time.time * GameTime.TimeScale;
+            allEffectsFinished = (currentTime - _spawnTime) > _lifetimeParticles.main.duration;
+        }
+        
+        if (_hitTargetParticles)
+        {
+            allEffectsFinished = !_hitTargetParticles.isEmitting;
+        }
+        
+        return allEffectsFinished;
     }
 
     protected override void DoOnProjectileSpawned()
@@ -21,6 +36,7 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
         if (_lifetimeParticles)
         {
             _lifetimeParticles.Play();
+            _spawnTime = Time.time * GameTime.TimeScale;
         }
     }
 
@@ -45,4 +61,13 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
         }
     }
     
+
+    internal override void RecycledInit()
+    {
+        
+    }
+    internal override void RecycledReleased()
+    {
+        
+    }
 }

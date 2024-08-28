@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TurretPassiveAbility_DamageOverDistance : ATurretPassiveAbility
 {
-    private readonly TPADataModel_ExtraOverDistance _abilityDataModel;
+    private readonly TPADataModel_DamageOverDistance _abilityDataModel;
     private TurretBuilding _turretOwner;
     
-    public TurretPassiveAbility_DamageOverDistance(TPADataModel_ExtraOverDistance originalModel) 
+    public TurretPassiveAbility_DamageOverDistance(TPADataModel_DamageOverDistance originalModel) 
         : base(originalModel)
     {
         _abilityDataModel = originalModel;

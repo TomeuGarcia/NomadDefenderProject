@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ProjectileViewAddOnConfig_NAME", 
-    menuName = SOAssetPaths.TURRET_PARTS_ATTACKS + "ProjectileViewAddOn")]
+    menuName = SOAssetPaths.VFX_ABILITIES + "ProjectileViewAddOn")]
 public class ProjectileViewAddOnConfig : ScriptableObject
 {
     [SerializeField] private ObjectPoolData<AProjectileViewAddOn> _objectPoolData;

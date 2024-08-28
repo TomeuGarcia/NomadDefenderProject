@@ -14,6 +14,7 @@ public static class SOAssetPaths
     public const string TURRET_PARTS_BONUSSTATS = TURRET_PARTS + "BonusStats/";
 
     public const string BUILDINGS = MENU_ROOT + "Buildings/";
+    
 
     public const string LEVEL_CREATION = MENU_ROOT + "LevelCreation/";
     public const string LEVEL_CREATION_BRUSHES = LEVEL_CREATION + "Brushes/";
@@ -43,4 +44,5 @@ public static class SOAssetPaths
     public const string CARDS_ABILITIES = CARDS + "Abilities/";
 
     public const string VFX = MENU_ROOT + "VFX/";
+    public const string VFX_ABILITIES = VFX + "Abilities/";
 }

@@ -49,11 +49,14 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         _isTurretPlaced = true;
     }
 
-    public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
+    
+    protected override void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {
-        // TODO if _isInBerserkerMode true, add projectile visuals 
+        if (_isInBerserkerMode)
+        {
+            AddViewAddOnToProjectile(_abilityDataModel.BerserkerActiveAddOn, projectile);
+        }
     }
-
 
     private void OnPathLocationTakesDamage(PathLocation pathLocation)
     {

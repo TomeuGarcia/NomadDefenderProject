@@ -12,7 +12,7 @@ public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbilit
     }
 
 
-    public override void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
+    protected override void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {
         _hitCount = 0;
     }

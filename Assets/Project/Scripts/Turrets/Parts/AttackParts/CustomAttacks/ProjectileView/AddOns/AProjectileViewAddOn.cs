@@ -12,10 +12,6 @@ public abstract class AProjectileViewAddOn : RecyclableObject
         _originalParent = transform.parent;
     }
     
-    internal override void RecycledInit() { }
-    internal override void RecycledReleased() { }
-
-    
     public void OnProjectileSpawned(Transform parent)
     {
         transform.SetParent(parent);

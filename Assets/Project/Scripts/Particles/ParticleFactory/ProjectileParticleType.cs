@@ -4,5 +4,7 @@ public enum ProjectileParticleType
     HomingChainingHit,
     PiercingHit,
     
-    CleanStrikeHit
+    CleanStrike_Hit,
+    MetalCruncher_Hit,
+    BerserkerActivated
 }

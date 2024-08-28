@@ -448,6 +448,8 @@ public class CardPartReplaceManager : MonoBehaviour
             default: 
                 break;
         }
+        
+        selectedCard.CardData.OnCardUpgraded();
     }
 
     
