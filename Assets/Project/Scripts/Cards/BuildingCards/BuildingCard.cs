@@ -152,6 +152,18 @@ public abstract class BuildingCard : MonoBehaviour
     [HideInInspector] public bool canBeHovered = true;
 
 
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    
+    //get the mesh prefab from the same place where you get the sprite
+    //animation appear --> use the PreviewMat
+    //assign the material throught the same functions used inbattle
+    
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
+
+
     // MonoBehaviour methods
     private void OnEnable()
     {        

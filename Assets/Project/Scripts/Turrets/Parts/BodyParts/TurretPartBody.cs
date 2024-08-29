@@ -36,6 +36,7 @@ public class TurretPartBody : ScriptableObject
 
     [Header("PREFAB")]
     [SerializeField] public GameObject prefab;
+    [SerializeField] public GameObject previewPrefab;
 
     [Header("VISUALS")]
     [SerializeField] public Texture2D materialTextureMap;

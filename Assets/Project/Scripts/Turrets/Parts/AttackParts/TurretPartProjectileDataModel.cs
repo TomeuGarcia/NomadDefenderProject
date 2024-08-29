@@ -18,7 +18,9 @@ public class TurretPartProjectileDataModel : ScriptableObject
     [SerializeField] public Sprite abilitySprite;
     [SerializeField] public Color materialColor = Color.white;
     [SerializeField] private Material _materialForTurret;
+    [SerializeField] private Material _materialForTurretPreview;
     public Material MaterialForTurret => _materialForTurret;
+    public Material MaterialForTurretPreview => _materialForTurretPreview;
 
 
     [Header("ABILITY INFO")] 
