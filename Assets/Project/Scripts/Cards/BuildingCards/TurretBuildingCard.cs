@@ -105,15 +105,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         //cardBaseMaterial.SetColor("_Color", turretPartBody.BasePartPrimitive.MaterialColor);
 
 
-
-        _turretMeshPreview = Instantiate(CardParts.Body.previewPrefab, _turretParentTransform)
-            .transform.GetChild(0).GetComponent<TurretPartBody_View>();
-        _turretMeshPreview.InitMaterials(new Material(CardParts.Projectile.MaterialForTurretPreview));
-        _turretMeshPreview.SetDefaultMaterial();
-
-        _turretMeshPreview.transform.localRotation = Quaternion.identity;
-        _turretMeshPreview.transform.localPosition = Vector3.zero;
-        _turretMeshPreview.transform.localScale = Vector3.one;
+        InstantiateTurretPreviewMesh();
 
 
         // Canvas
@@ -131,7 +123,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     private void UpdateIcons()
     {
         TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, CardData.MakeIconsDisplayData());
-
+        
         UpdateTurretBodyColor();
     }
 
@@ -147,7 +139,31 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     private void UpdateTurretBodyColor()
     {
         Debug.Log(CardParts.Projectile.MaterialForTurretPreview);
-        _turretMeshPreview.ResetProjectileMaterial(new Material(CardParts.Projectile.MaterialForTurretPreview));
+        if(_turretMeshPreview == null)
+        {
+            InstantiateTurretPreviewMesh();
+        }
+        else
+        {
+            _turretMeshPreview.ResetProjectileMaterial(new Material(CardParts.Projectile.MaterialForTurretPreview));
+        }
+    }
+
+    private void InstantiateTurretPreviewMesh()
+    {
+        if(_turretMeshPreview != null)
+        {
+            Destroy(_turretMeshPreview.transform.parent.gameObject);
+        }
+
+        _turretMeshPreview = Instantiate(CardParts.Body.previewPrefab, _turretParentTransform)
+            .transform.GetChild(0).GetComponent<TurretPartBody_View>();
+        _turretMeshPreview.InitMaterials(new Material(CardParts.Projectile.MaterialForTurretPreview));
+        _turretMeshPreview.SetDefaultMaterial();
+
+        _turretMeshPreview.transform.localRotation = Quaternion.identity;
+        _turretMeshPreview.transform.localPosition = Vector3.zero;
+        _turretMeshPreview.transform.localScale = Vector3.one;
     }
 
     protected override void InitStatsFromTurretParts()
@@ -465,18 +481,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
         UpdateIcons();
 
-        //TODO - CHANGE FOR MESH AAAAAAAAA
-        //cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
-        //cardBodyMaterial.SetTexture("_MaskTexture", newTurretPartBody.materialTextureMap);
-
-        _turretMeshPreview.ResetProjectileMaterial(newTurretPartAttack.MaterialForTurret);
-        //
+        //_turretMeshPreview.ResetProjectileMaterial(newTurretPartAttack.MaterialForTurret);
 
         _damageStatValueText.text = tempStatsController.DamageStatState.BaseValueText;
         _fireRateStatValueText.text = tempStatsController.ShotsPerSecondInvertedStatState.BaseValueText;
 
-        cardBaseMaterial.SetTexture("_Texture", newTurretPartBody.BasePartPrimitive.MaterialTexture);
-        cardBaseMaterial.SetColor("_Color", newTurretPartBody.BasePartPrimitive.MaterialColor);
         _rangeStatValueText.text = tempStatsController.RadiusRangeStatState.BaseValueText;
 
         PlayCost = CardData.PlayCost;
