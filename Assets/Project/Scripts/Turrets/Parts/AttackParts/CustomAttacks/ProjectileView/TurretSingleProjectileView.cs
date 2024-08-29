@@ -2,21 +2,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretProjectileView : ITurretProjectileView
+public class TurretSingleProjectileView : ITurretProjectileView
 {
     private readonly Transform _addOnsParent;
     private readonly List<AProjectileViewAddOn> _dynamicAddOns;
 
 
-    public TurretProjectileView(Transform addOnsParent)
+    public TurretSingleProjectileView(Transform addOnsParent)
     {
         _addOnsParent = addOnsParent;
         _dynamicAddOns = new List<AProjectileViewAddOn>();
     }
 
 
-    public void AddViewAddOn(AProjectileViewAddOn addOn)
+    public void AddViewAddOn(ProjectileViewAddOnConfig addOnConfig)
     {
+        AProjectileViewAddOn addOn = ProjectileParticleFactory.GetInstance().CreateProjectileAddOn(addOnConfig);
         _dynamicAddOns.Add(addOn);
     }
     

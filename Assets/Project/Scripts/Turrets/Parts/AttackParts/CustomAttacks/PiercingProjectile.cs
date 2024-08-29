@@ -90,4 +90,9 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     {
         return TurretOwner.Stats.Damage;
     }
+    
+    protected override ITurretProjectileView MakeTurretProjectileView()
+    {
+        return new TurretSingleProjectileView(_viewAddOnsParent);
+    }
 }

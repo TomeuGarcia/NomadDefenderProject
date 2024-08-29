@@ -13,15 +13,11 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
 
 
     [Header("VIEW")] 
-    [SerializeField] private Transform _viewAddOnsParent;
-    private TurretProjectileView _turretProjectileView;
-    public ITurretProjectileView View => _turretProjectileView;
+    [SerializeField] protected Transform _viewAddOnsParent;
+    private ITurretProjectileView _turretProjectileView;
+    public ITurretProjectileViewAddOnController ViewAddOnsController => _turretProjectileView;
     
     
-    [Header("MOVEMENT")] 
-    [SerializeField] private float bulletSpeed = 2.0f;
-
-
     protected float MovementSpeed => _dataModel.MovementSpeed;
 
 
@@ -42,7 +38,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public void InstantiatedInit(TurretPartProjectileDataModel dataModel)
     {
         _dataModel = dataModel;
-        _turretProjectileView = new TurretProjectileView(_viewAddOnsParent);
+        _turretProjectileView = MakeTurretProjectileView();
     }
 
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
@@ -174,4 +170,6 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     }
 
     protected abstract int ComputeDamage();
+
+    protected abstract ITurretProjectileView MakeTurretProjectileView();
 }

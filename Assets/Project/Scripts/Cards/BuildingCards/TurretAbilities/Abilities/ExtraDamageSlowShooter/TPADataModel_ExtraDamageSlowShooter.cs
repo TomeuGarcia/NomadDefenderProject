@@ -6,9 +6,8 @@ public class TPADataModel_ExtraDamageSlowShooter : ATurretPassiveAbilityDataMode
 {
     [Header("ABILITY CONFIG")]
     [SerializeField] private SlowFireRateTurretBuildingVisuals _slowFireRateVisualsPrefab;
-
     [SerializeField] private AnimationCurve _damageMultiplierOverTime;
-    
+
     public SlowFireRateTurretBuildingVisuals VisualsPrefab => _slowFireRateVisualsPrefab;
     public float MaxTimeBetweenShots => _damageMultiplierOverTime.keys[^1].time;
     public AnimationCurve DamageMultiplierOverTimePer1 => _damageMultiplierOverTime;

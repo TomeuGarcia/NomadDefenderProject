@@ -1,7 +1,9 @@
 
-public class TurretPassiveAbility_ExtraDamagePerCardInHand : ATurretPassiveAbility
+public class TurretPassiveAbility_ExtraDamagePerCardInHand : ATurretPassiveAbility,
+    ProjectileViewAddOn_StackedPower.IConfigurationSource
 {
     private readonly float _damageMultiplierPerCard;
+    private int _numberOfCardsInHand;
 
     
     public TurretPassiveAbility_ExtraDamagePerCardInHand(TPADataModel_ExtraDamagePerCardInHand originalModel) 
@@ -12,14 +14,21 @@ public class TurretPassiveAbility_ExtraDamagePerCardInHand : ATurretPassiveAbili
         ApplyDescriptionCorrection(originalModel.DamagePercentBonusPerCard);
     }
 
+    protected override void DoOnBeforeShootingEnemyStart()
+    {
+        _numberOfCardsInHand = ServiceLocator.GetInstance().CardDrawer.GetCardsInHand().Length;
+        ProjectileViewAddOn_StackedPower.ConfigurationSource = this;
+    } 
 
     public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
     {
-        int numberOfCardsInHand = ServiceLocator.GetInstance().CardDrawer.GetCardsInHand().Length;
-
         int baseDamage = damageAttack.Damage;
-        int extraDamage = (int)(baseDamage * (_damageMultiplierPerCard * numberOfCardsInHand));
+        int extraDamage = (int)(baseDamage * (_damageMultiplierPerCard * _numberOfCardsInHand));
         damageAttack.UpdateDamage(baseDamage + extraDamage);
     }
-    
+
+    int ProjectileViewAddOn_StackedPower.IConfigurationSource.GetNumberOfCards()
+    {
+        return _numberOfCardsInHand;
+    }
 }

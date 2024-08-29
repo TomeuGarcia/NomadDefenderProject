@@ -50,7 +50,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     }
 
     
-    protected override void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
+    protected override void DoOnBeforeShootingEnemyEnd(ATurretProjectileBehaviour projectile)
     {
         if (_isInBerserkerMode)
         {

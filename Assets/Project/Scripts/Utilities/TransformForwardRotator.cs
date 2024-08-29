@@ -8,7 +8,7 @@ public class TransformForwardRotator : MonoBehaviour
     
     private void Update()
     {
-        _currentRotation = (_currentRotation + (_rotationSpeed * Time.deltaTime)) ;/// 360f;
+        _currentRotation = _currentRotation + (_rotationSpeed * Time.deltaTime);
         transform.localRotation = Quaternion.AngleAxis(_currentRotation, Vector3.forward);
     }
     

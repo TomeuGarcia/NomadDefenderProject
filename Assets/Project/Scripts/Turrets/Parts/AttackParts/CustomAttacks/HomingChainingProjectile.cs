@@ -14,56 +14,6 @@ public class HomingChainingProjectile : HomingProjectile
     private int _currentChainedTarget;
     private Enemy[] _chainTargetedEnemies;
     private TurretDamageAttack[] _chainTargetedDamage;
-
-/*
-    protected override void DoUpdate()
-    {
-    }
-
-    public override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
-    {
-        turretOwner = owner;
-
-        this.targetEnemy = targetEnemy;
-
-
-        this.currentChainedTarget = 0;
-
-        this.damage = owner.Stats.Damage;
-        this.damage = (int)((float)this.damage * damageMultiplier);
-        this.damage = targetEnemy.ComputeDamageWithPassive(this, this.damage);
-
-        targetEnemy.QueueDamage(this.damage);
-        
-
-        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
-        StartCoroutine(WaitForLerpFinish(false));
-    }
-
-    public override void ProjectileShotInit_PrecomputedAndQueued(Enemy targetEnemy, TurretBuilding owner, int precomputedDamage)
-    {
-        turretOwner = owner;
-
-        this.targetEnemy = targetEnemy;
-
-
-        this.currentChainedTarget = 0;
-
-        this.damage = precomputedDamage;
-
-
-        lerp.LerpPosition(targetEnemy.MeshTransform, bulletSpeed);
-        StartCoroutine(WaitForLerpFinish(false));
-    }
-
-
-    IEnumerator WaitForLerpFinish(bool isChaining)
-    {
-        yield return new WaitUntil(() => lerp.finishedPositionLerp == true);
-        EnemyHit(isChaining);
-    }
-    */
-
     private bool _isChaining;
 
     protected override void OnShotInitialized()

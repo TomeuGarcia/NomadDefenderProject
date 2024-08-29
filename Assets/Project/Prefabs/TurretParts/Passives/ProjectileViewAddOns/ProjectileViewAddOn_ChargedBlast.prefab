@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1652887216407274724}
-  - component: {fileID: 1202700252624865342}
+  - component: {fileID: 6844796421293844423}
   m_Layer: 0
   m_Name: ProjectileViewAddOn_ChargedBlast
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1202700252624865342
+--- !u!114 &6844796421293844423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,12 +43,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2705753343443482596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16605a34fd04405a1c1be3c2065df31, type: 3}
+  m_Script: {fileID: 11500000, guid: 437dc7c8be8e4a3bb6d9c09d81fdc9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectileTrail: {fileID: 0}
-  _lifetimeParticles: {fileID: 6467908582371930470}
-  _hitTargetParticleType: 0
+  _fullyChargedHolder: {fileID: 4740629117452518690}
 --- !u!1001 &3903932846622200866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57,6 +55,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1652887216407274724}
     m_Modifications:
+    - target: {fileID: 2632780490379341912, guid: 5d520279b720cd54aa63ad8d9d05db40,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2632780490379341912, guid: 5d520279b720cd54aa63ad8d9d05db40,
         type: 3}
       propertyPath: m_Parameters.colorGradient.ctime1
@@ -91,6 +94,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Parameters.colorGradient.key1.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3117542818152081013, guid: 5d520279b720cd54aa63ad8d9d05db40,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3117542818152081013, guid: 5d520279b720cd54aa63ad8d9d05db40,
         type: 3}
@@ -182,6 +190,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7986926399556820090, guid: 5d520279b720cd54aa63ad8d9d05db40,
+        type: 3}
+      propertyPath: _rotationSpeed
+      value: 3000
+      objectReference: {fileID: 0}
     - target: {fileID: 8640040633022861568, guid: 5d520279b720cd54aa63ad8d9d05db40,
         type: 3}
       propertyPath: m_Name
@@ -192,6 +205,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d520279b720cd54aa63ad8d9d05db40, type: 3}
+--- !u!1 &4740629117452518690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8640040633022861568, guid: 5d520279b720cd54aa63ad8d9d05db40,
+    type: 3}
+  m_PrefabInstance: {fileID: 3903932846622200866}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6055829421386251625 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7072673397526980939, guid: 5d520279b720cd54aa63ad8d9d05db40,
@@ -309,12 +328,6 @@ PrefabInstance:
 --- !u!4 &3514222675003210557 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9032377174647914322, guid: 97acaaa1ad33efb46b6aeb0f6cf66fce,
-    type: 3}
-  m_PrefabInstance: {fileID: 5592474339427239023}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &6467908582371930470 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1467845129396483337, guid: 97acaaa1ad33efb46b6aeb0f6cf66fce,
     type: 3}
   m_PrefabInstance: {fileID: 5592474339427239023}
   m_PrefabAsset: {fileID: 0}

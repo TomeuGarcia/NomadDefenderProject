@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
+public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility,
+    ProjectileViewAddOn_ChargedBlast.IConfigurationSource
 {
     private readonly TPADataModel_ExtraDamageSlowShooter _abilityDataModel;
     private TurretBuilding _turretOwner;
@@ -27,11 +28,12 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
         _slowFireRateVisuals.TurretPlacedInit(_turretOwner, _abilityDataModel.MaxTimeBetweenShots);
     }
 
-    protected override void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
+    protected override void DoOnBeforeShootingEnemyStart()
     {
         _timeSinceLastShot = _turretOwner.TimeSinceLastShot;
+        ProjectileViewAddOn_ChargedBlast.ConfigurationSource = this;
     }
-
+    
     public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
     {
         float currentTime = Mathf.Min(_timeSinceLastShot, _abilityDataModel.MaxTimeBetweenShots);
@@ -40,6 +42,10 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
         int damage = (int)Mathf.Max((curveValue * damageAttack.Damage), 1);
 
         damageAttack.UpdateDamage(damage);
-        
+    }
+
+    bool ProjectileViewAddOn_ChargedBlast.IConfigurationSource.IsFullyCharged()
+    {
+        return _timeSinceLastShot > _abilityDataModel.MaxTimeBetweenShots;
     }
 }

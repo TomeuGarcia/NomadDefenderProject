@@ -1,4 +1,8 @@
-public interface ITurretProjectileView
+using UnityEngine;
+
+public interface ITurretProjectileView : ITurretProjectileViewAddOnController
 {
-    void AddViewAddOn(AProjectileViewAddOn addOn);
+    void OnProjectileSpawned();
+    void OnProjectileDisappear();
+    void OnProjectileHitsTarget(Transform target);
 }

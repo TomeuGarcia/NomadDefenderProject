@@ -61,8 +61,7 @@ public abstract class ATurretPassiveAbility
     protected void AddViewAddOnToProjectile(ProjectileViewAddOnConfig viewAddOnConfig,
         ATurretProjectileBehaviour projectile)
     {
-        AProjectileViewAddOn projectileViewAddOn = _projectileParticleFactory.CreateProjectileAddOn(viewAddOnConfig);
-        projectile.View.AddViewAddOn(projectileViewAddOn);
+        projectile.ViewAddOnsController.AddViewAddOn(viewAddOnConfig);
     }
     
     
@@ -84,14 +83,17 @@ public abstract class ATurretPassiveAbility
     
     public void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {
+        DoOnBeforeShootingEnemyStart();
+        
         if (OriginalModel.OptionalViewAddOns.ProjectileAddOn)
         {
             AddViewAddOnToProjectile(OriginalModel.OptionalViewAddOns.ProjectileAddOn, projectile);
         }
         
-        DoOnBeforeShootingEnemy(projectile);
+        DoOnBeforeShootingEnemyEnd(projectile);
     } 
-    protected virtual void DoOnBeforeShootingEnemy(ATurretProjectileBehaviour projectile) { } 
+    protected virtual void DoOnBeforeShootingEnemyStart() { } 
+    protected virtual void DoOnBeforeShootingEnemyEnd(ATurretProjectileBehaviour projectile) { } 
     public virtual void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack) { } 
     public virtual void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult) { } 
 }

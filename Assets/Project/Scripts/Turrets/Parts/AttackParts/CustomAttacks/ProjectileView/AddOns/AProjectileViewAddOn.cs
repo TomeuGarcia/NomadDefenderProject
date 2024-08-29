@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class AProjectileViewAddOn : RecyclableObject
 {
     private Transform _originalParent;
+    private float _spawnTime;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public abstract class AProjectileViewAddOn : RecyclableObject
     {
         transform.SetParent(parent);
         transform.localPosition = Vector3.zero;
+        _spawnTime = GetCurrentLifetimeTime();
         
         DoOnProjectileSpawned();
     }
@@ -43,6 +45,19 @@ public abstract class AProjectileViewAddOn : RecyclableObject
     protected virtual void DoOnProjectileSpawned() { }
     protected virtual void DoOnProjectileDisappear() { }
     public virtual void OnProjectileHitsTarget(Transform target) { }
+
+
+    private float GetCurrentLifetimeTime()
+    {
+        return Time.time * GameTime.TimeScale;
+    }
+
+    protected bool HasPassedTimeSinceSpawned(float time)
+    {
+        return GetCurrentLifetimeTime() - _spawnTime > time;
+    }
     
     
+    internal sealed override void RecycledInit() { }
+    internal sealed override void RecycledReleased() { }
 }

@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9895702e110409fb9d001fef105c11a, type: 3}
   m_Name: TurretAbility_BreakingBoost
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 0}
+    _projectileAddOn: {fileID: 0}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: c841e8022de307849bda581fa21e871e, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: c841e8022de307849bda581fa21e871e, type: 3}
     _color:
       serializedVersion: 2
-      rgba: 4282786734
+      rgba: 4280483977
   _descriptionModel:
     _abilityName: breakingBoost
     _abilityDescription: 'WHEN_PLAYED: Upgrade the Turret and damage the healthiest
@@ -25,12 +28,6 @@ MonoBehaviour:
     _descriptionKeywords:
     - {fileID: 11400000, guid: b2cfbf298d96474468b3b7f26245a5db, type: 2}
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
-  _name: breakingBoost
-  _description: 'WHEN_PLAYED: Upgrade the Turret and damage the healthiest NODE by
-    DAMAGE_AMOUNT.'
-  _descriptionKeywords:
-  - {fileID: 11400000, guid: b2cfbf298d96474468b3b7f26245a5db, type: 2}
-  - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
   _damageAmount:
     _name: DAMAGE_AMOUNT
     _isDynamic: 0

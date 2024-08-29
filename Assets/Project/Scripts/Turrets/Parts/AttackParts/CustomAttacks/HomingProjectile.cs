@@ -9,16 +9,11 @@ public class HomingProjectile : ATurretProjectileBehaviour
     protected sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
         base.ProjectileShotInit(targetEnemy, owner);
-        _targetEnemy = targetEnemy;
         
-        _damageAttack = CreateDamageAttack(_targetEnemy);
-
+        _targetEnemy = targetEnemy;
+        _damageAttack = CreateDamageAttack(targetEnemy);
         targetEnemy.QueueDamage(_damageAttack);
-
-        lerp.LerpPosition(targetEnemy.MeshTransform, MovementSpeed);
-        StartCoroutine(WaitForLerpFinish());
-
-        OnShotInitialized();
+        SharedInitEnd();
     }
 
     protected sealed override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
@@ -27,10 +22,13 @@ public class HomingProjectile : ATurretProjectileBehaviour
 
         _targetEnemy = precomputedDamageAttack.Target;
         _damageAttack = precomputedDamageAttack;
+        SharedInitEnd();
+    }
 
+    private void SharedInitEnd()
+    {
         lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed);
         StartCoroutine(WaitForLerpFinish());
-        
         OnShotInitialized();
     }
 
@@ -63,5 +61,8 @@ public class HomingProjectile : ATurretProjectileBehaviour
         return TurretOwner.Stats.Damage;
     }
 
-    
+    protected override ITurretProjectileView MakeTurretProjectileView()
+    {
+        return new TurretSingleProjectileView(_viewAddOnsParent);
+    }
 }
