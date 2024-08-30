@@ -11,10 +11,12 @@ public class SupportPartBase : ScriptableObject
     [SerializeField] private CardStatConfig _radiusRangeStat;
     public CardStatConfig RadiusRangeStat => _radiusRangeStat;
 
-    [Header("PREFAB")] 
+    [Header("PREFAB")]
     [SerializeField] private BasePartPrimitive _basePartPrimitive;
+    [SerializeField] private GameObject _previewMeshPrefab;
     public BasePartPrimitive BasePartPrimitive => _basePartPrimitive;
-    
+    public GameObject PreviewMeshPrefab => _previewMeshPrefab;
+
     [Header("VISUALS")]
     [SerializeField] public Sprite abilitySprite;
     [SerializeField] public Color32 spriteColor;

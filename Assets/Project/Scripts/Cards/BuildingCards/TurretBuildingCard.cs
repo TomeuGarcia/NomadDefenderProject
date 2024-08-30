@@ -75,35 +75,10 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         SetupCardInfo();        
     }
 
-    protected override void GetMaterialsRefs() 
-    {
-        //cardBodyMaterial = new Material(bodyImage.material);
-        //bodyImage.material = cardBodyMaterial;
-        //cardBaseMaterial = new Material(baseImage.material);
-        //baseImage.material = cardBaseMaterial;
-
-        Debug.Log("AAAAAAAAAAAAAAAAA");
-        //cardBodyMaterial = new Material(CardParts.Projectile.MaterialForTurret);
-        Debug.Log("BBBBBBBBBBBBBBBB");
-    }
-
     protected override void InitVisuals()
     {
         TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
         TurretPartBody turretPartBody = CardParts.Body;
-
-        // Mesh Materials
-        if (cardBodyMaterial == null)
-        {
-            GetMaterialsRefs();
-        }
-
-        //TODO - PUT THE RIGHT BODY AAAAAAAAAAAA
-        //cardBodyMaterial.SetTexture("_MaskTexture", turretPartBody.materialTextureMap);
-
-        //cardBaseMaterial.SetTexture("_Texture", turretPartBody.BasePartPrimitive.MaterialTexture);
-        //cardBaseMaterial.SetColor("_Color", turretPartBody.BasePartPrimitive.MaterialColor);
-
 
         InstantiateTurretPreviewMesh();
 

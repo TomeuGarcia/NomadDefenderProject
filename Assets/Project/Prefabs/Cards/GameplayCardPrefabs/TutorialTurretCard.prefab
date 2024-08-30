@@ -1699,9 +1699,9 @@ MonoBehaviour:
   cgsInfoHide:
   - {fileID: 3461327007161611810}
   - {fileID: 4731958532111265936}
-  - {fileID: 4804912725542748818}
-  - {fileID: 2691022713337188240}
-  - {fileID: 8856053601654107988}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 6418168050248735777}
   canDisplayInfoIfNotInteractable: 0
   canDisplayInfoIfWhileInteractable: 1
@@ -1721,6 +1721,7 @@ MonoBehaviour:
   borderFillValue01: 0
   defaultAttackIcon: {fileID: 5350238741604382807}
   defaultBaseIcon: {fileID: 413917595717128131}
+  _turretParentTransform: {fileID: 0}
   bodyImage: {fileID: 7797544671340581852}
   baseImage: {fileID: 6498079281641759452}
   _iconDisplays:
@@ -1738,9 +1739,9 @@ MonoBehaviour:
   cardLevelTextCg: {fileID: 6418168050248735777}
   baseAndBodyCg: {fileID: 4731958532111265936}
   playCostTextCg: {fileID: 3461327007161611810}
-  rangeBarCg: {fileID: 8856053601654107988}
-  cadenceBarCg: {fileID: 2691022713337188240}
-  attackBarCg: {fileID: 4804912725542748818}
+  rangeBarCg: {fileID: 0}
+  cadenceBarCg: {fileID: 0}
+  attackBarCg: {fileID: 0}
   attackIconCg: {fileID: 3849485711336957856}
   basePassiveIconCg: {fileID: 2710218681929909118}
   showTurret: 0
@@ -2098,12 +2099,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8c0230811e50b248bdb734f47368220, type: 3}
---- !u!225 &4804912725542748818 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 5940622920233926417, guid: a8c0230811e50b248bdb734f47368220,
-    type: 3}
-  m_PrefabInstance: {fileID: 1215742894681161091}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5890120563594172875 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4711546733936370760, guid: a8c0230811e50b248bdb734f47368220,
@@ -2268,8 +2263,24 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: adf1fee187803844183ae2fd594264f4,
+        type: 3}
+    - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5529412
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
+        type: 3}
       propertyPath: m_Color.g
       value: 0.8078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810964137411418788, guid: a8c0230811e50b248bdb734f47368220,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4880989308449009505, guid: a8c0230811e50b248bdb734f47368220,
         type: 3}
@@ -2396,12 +2407,6 @@ MonoBehaviour:
 --- !u!224 &7722144130015067940 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4880989308449009505, guid: a8c0230811e50b248bdb734f47368220,
-    type: 3}
-  m_PrefabInstance: {fileID: 2924613821362294853}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &8856053601654107988 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 5940622920233926417, guid: a8c0230811e50b248bdb734f47368220,
     type: 3}
   m_PrefabInstance: {fileID: 2924613821362294853}
   m_PrefabAsset: {fileID: 0}
@@ -2560,12 +2565,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8c0230811e50b248bdb734f47368220, type: 3}
---- !u!225 &2691022713337188240 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 5940622920233926417, guid: a8c0230811e50b248bdb734f47368220,
-    type: 3}
-  m_PrefabInstance: {fileID: 8586460085191880833}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3789209668484308960 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4880989308449009505, guid: a8c0230811e50b248bdb734f47368220,

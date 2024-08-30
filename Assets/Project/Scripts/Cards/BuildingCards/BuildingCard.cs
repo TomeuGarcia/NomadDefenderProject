@@ -267,7 +267,6 @@ public abstract class BuildingCard : MonoBehaviour
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
     public abstract int GetCardPlayCost();
-    protected abstract void GetMaterialsRefs();
     protected abstract void InitVisuals();
 
 
@@ -279,7 +278,6 @@ public abstract class BuildingCard : MonoBehaviour
         cardColliderOffset = cardCollider.center;
 
         this.cardBuildingType = cardBuildingType;
-        GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
         if(discardIndicatorMesh != null)
