@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3302994808616090319}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ViewParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3149954680575709340}
   - component: {fileID: 3042756291224821405}
   - component: {fileID: 6357027962573805419}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DisableParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4930,9 +4930,9 @@ GameObject:
   - component: {fileID: 9123804657942524075}
   - component: {fileID: 6198627422097202450}
   - component: {fileID: 1197175851975916224}
-  - component: {fileID: 3876527974923763685}
   - component: {fileID: 4806232799590981710}
-  m_Layer: 0
+  - component: {fileID: 4655970162019040607}
+  m_Layer: 2
   m_Name: PiercingProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4968,11 +4968,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewAddOnsParent: {fileID: 3302994808616090319}
-  bulletSpeed: 2
-  lerp: {fileID: 3876527974923763685}
+  _rigidbody: {fileID: 4655970162019040607}
   trailRenderer: {fileID: 1197175851975916224}
   damageCollider: {fileID: 4806232799590981710}
-  travelTime: 0.5
   arrow: {fileID: 8565247250592976179}
   disableParticles: {fileID: 5441583890708131692}
   _distance: 15
@@ -5098,57 +5096,6 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
---- !u!114 &3876527974923763685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6115612265344960500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c673a9b2aaafb4580791540711ee64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorLerpFunction:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  positionLerpFunction:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  scaleLerpFunction:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  finishedColorLerp: 0
-  finishedPositionLerp: 0
-  finishedScaleLerp: 0
 --- !u!65 &4806232799590981710
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5168,8 +5115,35 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 3, z: 0.2}
+  m_Size: {x: 0.4, y: 3, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &4655970162019040607
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115612265344960500}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &8565247250592976179
 GameObject:
   m_ObjectHideFlags: 0
@@ -5180,7 +5154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4033769943740171574}
   - component: {fileID: 4824985425693807126}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

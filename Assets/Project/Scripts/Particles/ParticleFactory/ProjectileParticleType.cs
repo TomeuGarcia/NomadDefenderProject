@@ -11,4 +11,7 @@ public enum ProjectileParticleType
     
     StunTouch_Hit,
     MultiCrash_Hit,
+    
+    Shotgun_Hit,
+    Orbiting_Hit,
 }

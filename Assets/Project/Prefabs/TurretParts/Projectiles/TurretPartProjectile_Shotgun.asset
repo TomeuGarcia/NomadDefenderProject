@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c122d348ea3ce84ebb877e4c32462bf, type: 3}
+  m_Name: TurretPartProjectile_Shotgun
+  m_EditorClassIdentifier: 
+  _projectileType: 3
+  _hitParticlesType: 8
+  _projectilePrefab: {fileID: 858079910145182801, guid: 0eb10c6634bf18e42b7197c38ca9b803,
+    type: 3}
+  _shootingControllerCreator: {fileID: 11400000, guid: b524ebe127f316c4f9a3fa7accb67fb5,
+    type: 2}
+  texture: {fileID: 2800000, guid: 6cd8f1a80dc4bd24dada5874a867be83, type: 3}
+  abilitySprite: {fileID: 21300000, guid: 6cd8f1a80dc4bd24dada5874a867be83, type: 3}
+  materialColor: {r: 1, g: 0.4493518, b: 0, a: 1}
+  _materialForTurret: {fileID: 2100000, guid: ce3543f1335df8e4f8c6ca769b39aec3, type: 2}
+  _movementSpeed: 15
+  _descriptionModel:
+    _abilityName: shotgun
+    _abilityDescription: 'The Projectile splits into 6 straight-shot Bullets with
+      random offset.
+
+      For a total of x150% damage.'
+    _descriptionKeywords: []

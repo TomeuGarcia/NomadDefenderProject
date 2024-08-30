@@ -20,7 +20,7 @@ public class TurretBuilding : RangeBuilding
     public Transform BinderPointTransform => bodyPart.binderPoint;
 
 
-    private ProjectileShootingController _shootingController;
+    private AProjectileShootingController _shootingController;
     public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
 
     public Vector3 Position => transform.position;
@@ -72,6 +72,7 @@ public class TurretBuilding : RangeBuilding
         }
 
         _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
+        _shootingController.ClearAllProjectiles();
     }
 
 
@@ -80,9 +81,9 @@ public class TurretBuilding : RangeBuilding
     {
         if (!isFunctional) return;
 
-        _shootingController.UpdateShoot(out bool targetEnemyExists);
+        _shootingController.UpdateShoot();
 
-        if (bodyPart.lookAtTarget)
+        //if (bodyPart.lookAtTarget)
         {
             LookAtTarget();
         }
@@ -91,7 +92,9 @@ public class TurretBuilding : RangeBuilding
 
     private void LookAtTarget()
     {
-        Vector3 lookDirection = Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up).normalized;
+        Vector3 lookDirection = 
+            Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up)
+                .normalized;
         Quaternion targetRot = Quaternion.LookRotation(lookDirection, Vector3.up);
         bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
     }
@@ -128,9 +131,10 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
-        
-        _shootingController = new ProjectileShootingController(this, Stats, ProjectileDataModel, bodyPart,
-           CardData.PassiveAbilitiesController);
+
+        _shootingController = parts.Projectile.ShootingControllerCreator.Create(
+            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
+                CardData.PassiveAbilitiesController));
         
         _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
     }

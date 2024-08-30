@@ -4,7 +4,7 @@
 public class TurretDamageAttack
 {
     public readonly ATurretProjectileBehaviour ProjectileSource;
-    public readonly Enemy Target;
+    public Enemy Target { get; private set; }
     public int Damage { get; private set; }
     
     public TurretDamageAttack(ATurretProjectileBehaviour projectileSource, Enemy target, int defaultDamage)
@@ -17,5 +17,9 @@ public class TurretDamageAttack
     public void UpdateDamage(int updatedDamage)
     {
         Damage = updatedDamage;
+    }
+    public void UpdateTarget(Enemy enemyTarget)
+    {
+        Target = enemyTarget;
     }
 }

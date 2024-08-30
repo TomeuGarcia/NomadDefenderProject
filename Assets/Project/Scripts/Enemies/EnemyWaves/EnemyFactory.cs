@@ -18,6 +18,8 @@ public class EnemyFactory : MonoBehaviour
     [SerializeField] private EnemyTypeToPool[] enemiesToPool;
     private Dictionary<EnemyTypeConfig, Pool> sortedEnemies;
 
+    [SerializeField] private Enemy _nullEnemy;
+
 
 
     private void Awake()
@@ -64,6 +66,11 @@ public class EnemyFactory : MonoBehaviour
         return sortedEnemies[enemyType].GetObject(position, rotation, spawnTransform);
     }
 
+    public Enemy GetNullEnemy()
+    {
+        return _nullEnemy;
+    }
+    
     public void ResetPools()
     {
         foreach (EnemyTypeToPool enemyTypeToPool in enemiesToPool)
@@ -72,5 +79,6 @@ public class EnemyFactory : MonoBehaviour
         }
     }
 
+    
 
 }

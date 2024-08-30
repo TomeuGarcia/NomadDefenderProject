@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4173629720462856162}
   - component: {fileID: 1061200715970663579}
   - component: {fileID: 1132742094671854993}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShotgunBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1061200715970663579}
+  _trailRenderer: {fileID: 4173629720462856162}
 --- !u!96 &4173629720462856162
 TrailRenderer:
   serializedVersion: 3
@@ -91,11 +92,11 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.02
+  m_Time: 0.15
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -193,7 +194,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
@@ -217,7 +218,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 3, z: 0.2}
+  m_Size: {x: 0.4, y: 3, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7564307907941667813
 GameObject:
@@ -228,7 +229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4109532194674436087}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ViewParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}

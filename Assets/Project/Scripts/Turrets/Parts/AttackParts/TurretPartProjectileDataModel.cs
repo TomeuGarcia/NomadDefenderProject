@@ -15,6 +15,12 @@ public class TurretPartProjectileDataModel : ScriptableObject
     public ProjectileParticleType HitParticlesType => _hitParticlesType;
     public ATurretProjectileBehaviour ProjectilePrefab => _projectilePrefab;
 
+
+    [Header("SHOOTING CONFIG")] 
+    [SerializeField] private AProjectileShootingControllerCreator _shootingControllerCreator;
+    public AProjectileShootingControllerCreator ShootingControllerCreator => _shootingControllerCreator;
+    
+    
     [Header("VISUALS")]
     [SerializeField] public Texture texture;
     [SerializeField] public Sprite abilitySprite;

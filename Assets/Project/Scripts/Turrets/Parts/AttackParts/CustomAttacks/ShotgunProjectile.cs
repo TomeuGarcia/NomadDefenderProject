@@ -9,8 +9,12 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     [SerializeField] private ShotgunBullet[] _bullets;
     private int _activeBulletsCounter;
-    
 
+    private const float RADIUS_DISTANCE_MULTIPLIER = 2.5f;
+    private const float HALF_SHOOT_ANGLE = 35f;
+    private const float TOTAL_DAMAGE_MULTIPLIER = 1.5f;
+    
+    
     private void Awake()
     {
         foreach (ShotgunBullet bullet in _bullets)
@@ -24,7 +28,6 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         base.ProjectileShotInit(targetEnemy, owner);
         
         _damageAttack = CreateDamageAttack(targetEnemy);
-        targetEnemy.QueueDamage(_damageAttack);
         SharedInitEnd(targetEnemy);
     }
 
@@ -39,30 +42,37 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     private void SharedInitEnd(Enemy targetEnemy)
     {
-        float bulletMoveDistance = TurretOwner.Stats.RadiusRange;
+        _targetEnemy = targetEnemy;
+        float bulletMoveDistance = TurretOwner.Stats.RadiusRange * RADIUS_DISTANCE_MULTIPLIER;
         float bulletMoveDuration = bulletMoveDistance / MovementSpeed;
-        float HalfShootAngle = 50f;
 
         Vector3 directionToTarget =
             Vector3.ProjectOnPlane(targetEnemy.Position - TurretOwner.Position, Vector3.up).normalized;
         Quaternion rotationToTarget = Quaternion.FromToRotation(Vector3.forward, directionToTarget);
         
-        _activeBulletsCounter = _bullets.Length;
+
+        float angleStep = (HALF_SHOOT_ANGLE * 2) / _bullets.Length;
+        float accumulatedAngles = -HALF_SHOOT_ANGLE;
         for (int i = 0; i < _bullets.Length; ++i)
         {
-            bool goRight = i % 2 == 0;
-            float randomAngle = Random.Range(0f, (goRight ? HalfShootAngle : -HalfShootAngle));
+            float randomAngle = accumulatedAngles + Random.Range(0, angleStep);
             Quaternion bulletRotation = Quaternion.AngleAxis(randomAngle, Vector3.up) * rotationToTarget;
             
             ShotgunBullet bullet = _bullets[i];
             bullet.StartMoving(bulletRotation, bulletMoveDistance, bulletMoveDuration);
+
+            accumulatedAngles += angleStep;
         }
 
         OnShotInitialized();
     }
-    
-    
-    
+
+
+    protected override void OnShotInitialized()
+    {
+        base.OnShotInitialized();
+        _activeBulletsCounter = _bullets.Length;
+    }
 
     private void EnemyHit()
     {
@@ -76,7 +86,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     protected override int ComputeDamage()
     {
-        return (int)(TurretOwner.Stats.Damage * 1.5f / _bullets.Length);
+        return (int)(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER / _bullets.Length);
     }
     
     public override bool QueuesDamageToEnemies()
@@ -90,11 +100,8 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     {
         _targetEnemy = enemy;
         EnemyHit();
-
-        DecrementAndCheckActiveBullets();
     }
-
-    public void OnEndReached()
+    public void OnDisappearCompleted()
     {
         DecrementAndCheckActiveBullets();
     }

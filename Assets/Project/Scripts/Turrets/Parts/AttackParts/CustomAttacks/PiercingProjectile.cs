@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
 public class PiercingProjectile : ATurretProjectileBehaviour
 {
-    [SerializeField] private Lerp lerp;
+    [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private Collider damageCollider;
 
@@ -30,8 +31,9 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         ComputeGoalPosition();
         transform.LookAt(_goalPosition);
 
-        lerp.LerpPosition(_goalPosition, _distance / MovementSpeed);
-        StartCoroutine(WaitForFinish());
+        _rigidbody.DOMove(_goalPosition, _distance / MovementSpeed)
+            .OnComplete(OnGoalPositionReached);
+        
         
         OnShotInitialized();
     }
@@ -48,10 +50,12 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     }
 
 
+    private void OnGoalPositionReached()
+    {
+        StartCoroutine(WaitForFinish());
+    }
     private IEnumerator WaitForFinish()
     {
-        yield return new WaitUntil(() => lerp.finishedPositionLerp);
-
         arrow.SetActive(false);
         damageCollider.enabled = false;
         disableParticles.SetActive(true);
