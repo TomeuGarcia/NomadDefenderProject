@@ -20,7 +20,7 @@ public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
         _turretOwner = turretOwner;
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         SpawnCardCopy();
     }

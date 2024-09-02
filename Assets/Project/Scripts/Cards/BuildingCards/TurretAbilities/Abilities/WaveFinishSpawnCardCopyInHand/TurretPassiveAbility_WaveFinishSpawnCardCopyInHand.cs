@@ -29,7 +29,7 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
         UnsubscribeEvents();
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         UnsubscribeEvents();
     }

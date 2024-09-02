@@ -31,6 +31,37 @@ Transform:
   m_Father: {fileID: 7050595552286264547}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1628249402240646651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4343476885551178793}
+  m_Layer: 0
+  m_Name: AddOnsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4343476885551178793
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628249402240646651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6901535849871159827}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2874085206332275055
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +192,7 @@ Transform:
   - {fileID: 2144122440916852494}
   - {fileID: 8068711354322317798}
   - {fileID: 7050595552286264547}
+  - {fileID: 4343476885551178793}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -120, z: 0}
@@ -178,35 +210,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _view: {fileID: 769413282150902204}
   binderPoint: {fileID: 8068711354322317798}
-  lookAtTarget: 1
+  _addOnsParent: {fileID: 4343476885551178793}
   shootingPointParent: {fileID: 7050595552286264547}
-  previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
-  meshRenderers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  projectileMaterialIndices:
-  - meshI: 1
-    materialI: 0
-  - meshI: 1
-    materialI: 0
-  - meshI: 2
-    materialI: 0
-  - meshI: 3
-    materialI: 0
-  - meshI: 4
-    materialI: 0
-  - meshI: 5
-    materialI: 0
-  - meshI: 6
-    materialI: 0
-  - meshI: 7
-    materialI: 0
   turretUpgradeVisuals:
   - {fileID: 1336651885829831914}
   - {fileID: 1680733201355022573}

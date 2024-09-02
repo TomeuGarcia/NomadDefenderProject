@@ -41,7 +41,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         _berserkerVisuals = GameObject.Instantiate(_abilityDataModel.VisualsPrefab, _turretOwner.transform);
         _berserkerVisuals.TurretPlacedInit(_turretOwner, _turretOwner.MaterialForTurret);

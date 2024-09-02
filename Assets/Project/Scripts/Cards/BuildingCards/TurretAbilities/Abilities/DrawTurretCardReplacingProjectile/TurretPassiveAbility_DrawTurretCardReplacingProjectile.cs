@@ -14,7 +14,7 @@ public class TurretPassiveAbility_DrawTurretCardReplacingProjectile : ATurretPas
         _turretOwner = turretOwner;
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         DoDrawCard();
     }

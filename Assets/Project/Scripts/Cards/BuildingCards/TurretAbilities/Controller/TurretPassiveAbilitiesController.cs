@@ -127,11 +127,11 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
 
-    public void OnTurretPlaced()
+    public void OnTurretPlaced(TurretBuilding turretOwner)
     {
         foreach (var passiveAbility in _passiveAbilities)
         {
-            passiveAbility.OnTurretPlaced();
+            passiveAbility.OnTurretPlaced(turretOwner);
         }
     }
 

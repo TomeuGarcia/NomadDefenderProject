@@ -30,6 +30,9 @@ public class TurretBuilding : RangeBuilding
     public Material MaterialForTurret => ProjectileDataModel.MaterialForTurret;
     public TurretPartProjectileDataModel ProjectileDataModel { get; private set; }
     
+    private TurretViewAddOnController _viewAddOnController;
+    public ITurretViewAddOnController ViewAddOnController => _viewAddOnController;
+    
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -73,6 +76,7 @@ public class TurretBuilding : RangeBuilding
 
         _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
         _shootingController.ClearAllProjectiles();
+        _viewAddOnController.StopViewingAddOns();
     }
 
 
@@ -131,6 +135,7 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
+        _viewAddOnController = new TurretViewAddOnController(bodyPart.AddOnsParent);
 
         _shootingController = parts.Projectile.ShootingControllerCreator.Create(
             new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
@@ -214,7 +219,8 @@ public class TurretBuilding : RangeBuilding
         InvokeOnPlaced();
         
         if (OnGotPlaced != null) OnGotPlaced();
-        _abilitiesPlacingLifetimeCycle.OnTurretPlaced();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlaced(this);
+        _viewAddOnController.StartViewingAddOns();
     }
     public override void GotEnabledPlacing()
     {
