@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
@@ -126,9 +127,9 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
-    public virtual float GetTargetPriorityBonus()
+    public virtual int GetTargetPriorityBonus()
     {
-        return 0f;
+        return 0;
     }
 
 
@@ -153,12 +154,12 @@ public class Enemy : MonoBehaviour
     }
     
 
-    public TurretDamageAttackResult TakeDamage(TurretDamageAttack damageAttack)
+    public void TakeDamage(TurretDamageAttack damageAttack, Action<TurretDamageAttackResult> takeDamageResultCallback)
     {
-        return DoTakeDamage(damageAttack);
+        DoTakeDamage(damageAttack, takeDamageResultCallback);
     }
 
-    protected virtual TurretDamageAttackResult DoTakeDamage(TurretDamageAttack damageAttack)
+    protected virtual void DoTakeDamage(TurretDamageAttack damageAttack, Action<TurretDamageAttackResult> takeDamageResultCallback)
     {
         healthHUD.Show();
 
@@ -190,7 +191,7 @@ public class Enemy : MonoBehaviour
         TurretDamageAttackResult result = 
             new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor);
         
-        return result;
+        takeDamageResultCallback(result);
     }
 
     private void SpawntakeDamageText(int damageAmount, bool hitArmor)

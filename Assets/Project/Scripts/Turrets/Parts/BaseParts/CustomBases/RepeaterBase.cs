@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static TurretPartBody;
@@ -262,11 +263,15 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
-    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource)
+    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource, 
+        Action<TurretDamageAttackResult> takeDamageResultCallback)
     {        
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
-
-        if (enemyInDamageQueue == null) return;
+        
+        if (enemyInDamageQueue == null)
+        {
+            return;
+        }
         
         
 
@@ -288,22 +293,22 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void Shoot(TurretDamageAttack repeatedDamageAttack)
+    private void Shoot(TurretDamageAttack projectileToRepeat)
     {
-        ATurretProjectileBehaviour projectileSource = repeatedDamageAttack.ProjectileSource;
+        ATurretProjectileBehaviour projectileSource = projectileToRepeat.ProjectileSource;
         
         Vector3 spawnPosition = shootPoint.position;
 
         ATurretProjectileBehaviour newProjectile = 
-            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, spawnPosition, Quaternion.identity)
-            .GetComponent<ATurretProjectileBehaviour>();
+            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, 
+                    spawnPosition, Quaternion.identity).GetComponent<ATurretProjectileBehaviour>();
 
         TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
         newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.gameObject.SetActive(true);
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
-            projectileTurret, repeatedDamageAttack);
+            projectileTurret, projectileToRepeat);
 
 
         // Spawn particle
@@ -313,7 +318,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
         // Audio
-        GameAudioManager.GetInstance().PlayProjectileShot(BodyType.SENTRY);        
+        GameAudioManager.GetInstance().PlayProjectileShot(BodyType.SENTRY);
     }
 
     private void LookAtTargetEnemy()

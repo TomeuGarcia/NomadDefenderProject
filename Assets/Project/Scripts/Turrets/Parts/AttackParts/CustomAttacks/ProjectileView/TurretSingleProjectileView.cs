@@ -14,7 +14,6 @@ public class TurretSingleProjectileView : ITurretProjectileView
         _dynamicAddOns = new List<AProjectileViewAddOn>();
     }
 
-
     public void AddViewAddOn(ProjectileViewAddOnConfig addOnConfig)
     {
         AProjectileViewAddOn addOn = ProjectileParticleFactory.GetInstance().CreateProjectileAddOn(addOnConfig);

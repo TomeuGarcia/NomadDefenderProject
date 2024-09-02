@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -180,10 +181,13 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
         {
             _shootingLifetimeCycle.OnBeforeDamagingEnemy(damageAttack);
         }
-        
-        TurretDamageAttackResult damageAttackResult = _targetEnemy.TakeDamage(damageAttack);
+
+        _targetEnemy.TakeDamage(damageAttack, DamageTargetEnemyResult);
+    }
+
+    private void DamageTargetEnemyResult(TurretDamageAttackResult damageAttackResult)
+    {
         _shootingLifetimeCycle.OnAfterDamagingEnemy(damageAttackResult);
-        
         _turretProjectileView.OnProjectileHitsTarget(damageAttackResult.Target.MeshTransform);
     }
     
