@@ -22,7 +22,8 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 
     [Header("VISUALS")]
     //[SerializeField] private MeshRenderer baseMeshRenderer;
-    [SerializeField] private Image baseImage;
+    [SerializeField] private Transform _buildingParentTransform;
+    private Transform _buildingMeshPreview;
     private Material material;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     [SerializeField] private Image abilityImage;
@@ -74,13 +75,6 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         CardData = cardData;
         Init();
     }
-    
-    protected override void GetMaterialsRefs()
-    {
-        //material = baseMeshRenderer.material;
-        material = new Material(baseImage.material);
-        baseImage.material = material;
-    }
 
     protected override void InitStatsFromTurretParts()
     {
@@ -90,9 +84,9 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
     protected override void InitVisuals()
     {
         SupportPartBase turretPartBase = CardParts.Base;
-        //Mesh Materials
-        material.SetTexture("_Texture", turretPartBase.BasePartPrimitive.MaterialTexture);
-        material.SetColor("_Color", turretPartBase.BasePartPrimitive.MaterialColor);
+
+        //Mesh Preview
+        InstantiateTurretPreviewMesh();
 
         // Canvas
         _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;        
@@ -100,6 +94,19 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 
         abilityImage.sprite = turretPartBase.abilitySprite;
         abilityImage.color = turretPartBase.spriteColor;
+    }
+
+    private void InstantiateTurretPreviewMesh()
+    {
+        if (_buildingMeshPreview != null)
+        {
+            Destroy(_buildingMeshPreview.transform.parent.gameObject);
+        }
+
+        _buildingMeshPreview = Instantiate(CardParts.Base.PreviewMeshPrefab, _buildingParentTransform).transform;
+        _buildingMeshPreview.transform.localRotation = Quaternion.identity;
+        _buildingMeshPreview.transform.localPosition = Vector3.zero;
+        _buildingMeshPreview.transform.localScale = Vector3.one;
     }
 
 

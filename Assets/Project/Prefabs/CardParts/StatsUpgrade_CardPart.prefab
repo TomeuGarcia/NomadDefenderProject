@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3900070926281709076}
   - component: {fileID: 3900070926281709077}
-  - component: {fileID: 9216161285752200215}
+  - component: {fileID: 855272102631095563}
   m_Layer: 10
   m_Name: CanvasGroup
   m_TagString: Untagged
@@ -85,7 +85,7 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &9216161285752200215
+--- !u!114 &855272102631095563
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,12 +98,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -50
+    m_Left: 0
     m_Right: 0
-    m_Top: 100
-    m_Bottom: 200
+    m_Top: 80
+    m_Bottom: 180
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -776,68 +776,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a6aa2bd279b3812449d0e55ba8adbea5,
-        type: 3}
-    - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.29411766
-      objectReference: {fileID: 0}
-    - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1089646723553654996, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.8078432
-      objectReference: {fileID: 0}
     - target: {fileID: 2565026174679003895, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
       propertyPath: m_Name
       value: CardPartBonusStatItem_Damage
       objectReference: {fileID: 0}
-    - target: {fileID: 7603746477136393009, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
-      propertyPath: m_Name
-      value: CardStat_Damage_Holder
+      propertyPath: m_SizeDelta.x
+      value: -100
       objectReference: {fileID: 0}
-    - target: {fileID: 7845359954770794972, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
-      propertyPath: m_Name
-      value: Damage_Value_Text
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8848677043506809638, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: _config
-      value: 
-      objectReference: {fileID: 11400000, guid: 95f79cef23c25734a9d39eaa22ac060f,
-        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -976,21 +929,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
@@ -1019,6 +957,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CardPartBonusStatItem_ShotsPerSecond
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7603746477136393009, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
@@ -1174,21 +1122,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035837135305657617, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
-        type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
@@ -1217,6 +1150,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CardPartBonusStatItem_RadiusRange
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080413297720381170, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7603746477136393009, guid: 6502f0e76ded31340bbd210e7f8cfb0a,
         type: 3}

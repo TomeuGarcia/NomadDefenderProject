@@ -5,6 +5,7 @@ using UnityEngine.XR;
 
 public class TurretPartBody_Prefab : MonoBehaviour
 {
+    [SerializeField] public TurretPartBody_View _view;
     [SerializeField] public Transform binderPoint;
 
     [SerializeField] public bool lookAtTarget;
@@ -34,39 +35,19 @@ public class TurretPartBody_Prefab : MonoBehaviour
     public virtual void Init(TurretPartBody.BodyType bodyType, Material projectileMaterial)
     {
         BodyType = bodyType;
-        InitMaterials(projectileMaterial);
+        _view.InitMaterials(projectileMaterial);
 
         InitTurretUpgradeVisuals(0);
     }
 
     private void InitMaterials(Material projectileMaterial)
     {
-        defaultMaterials = new Material[meshRenderers.Length][];
-        previewMaterials = new Material[meshRenderers.Length][];
-
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
-        {
-            defaultMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
-            previewMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
-
-            for (int i = 0; i < meshRenderers[meshI].materials.Length; ++i)
-            {
-                defaultMaterials[meshI][i] = meshRenderers[meshI].materials[i];
-                previewMaterials[meshI][i] = previewMaterial;
-            }
-        }
-
-
-        ResetProjectileMaterial(projectileMaterial);
+        _view.InitMaterials(projectileMaterial);
     }
 
     public virtual void ResetProjectileMaterial(Material projectileMaterial)
     {
-        // Replace inital materials for projectile material
-        for (int i = 0; i < projectileMaterialIndices.Length; ++i)
-        {
-            defaultMaterials[projectileMaterialIndices[i].meshI][projectileMaterialIndices[i].materialI] = projectileMaterial;
-        }
+        _view.ResetProjectileMaterial(projectileMaterial);
     }
 
     public Vector3 GetNextShootingPoint()
@@ -79,24 +60,18 @@ public class TurretPartBody_Prefab : MonoBehaviour
 
     public void SetDefaultMaterial()
     {
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
-        {
-            meshRenderers[meshI].materials = defaultMaterials[meshI];
-        }            
+        _view.SetDefaultMaterial();
     }
 
     public void SetPreviewMaterial()
     {
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
-        {
-            meshRenderers[meshI].materials = previewMaterials[meshI];
-        }
+        _view.SetPreviewMaterial();
     }
 
 
     public void SetMaterialColor(Color color)
     {
-        previewMaterial.color = color;
+        _view.SetMaterialColor(color);
     }
 
     private void InitTurretUpgradeVisuals(int level)

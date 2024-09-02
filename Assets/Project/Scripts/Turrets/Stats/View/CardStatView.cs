@@ -37,7 +37,7 @@ public class CardStatView : MonoBehaviour
     private void ConfigureComponents()
     {
         _iconImage.sprite = _config.Icon;
-        _iconImage.color = _config.IconColor;
+        _iconImage.color = new Color(_config.IconColor.r, _config.IconColor.g, _config.IconColor.b, _iconImage.color.a);
 
         gameObject.name = _metaType.GetGameObjectName(_config.Name);
         _valueText.gameObject.name = _metaType.GetValueGameObjectName(_config.Name);

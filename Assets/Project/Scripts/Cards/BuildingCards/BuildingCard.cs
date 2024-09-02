@@ -152,6 +152,18 @@ public abstract class BuildingCard : MonoBehaviour
     [HideInInspector] public bool canBeHovered = true;
 
 
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    
+    //get the mesh prefab from the same place where you get the sprite
+    //animation appear --> use the PreviewMat
+    //assign the material throught the same functions used inbattle
+    
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
+
+
     // MonoBehaviour methods
     private void OnEnable()
     {        
@@ -255,7 +267,6 @@ public abstract class BuildingCard : MonoBehaviour
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
     public abstract int GetCardPlayCost();
-    protected abstract void GetMaterialsRefs();
     protected abstract void InitVisuals();
 
 
@@ -267,7 +278,6 @@ public abstract class BuildingCard : MonoBehaviour
         cardColliderOffset = cardCollider.center;
 
         this.cardBuildingType = cardBuildingType;
-        GetMaterialsRefs();
 
         cardMaterial = cardMeshRenderer.material;
         if(discardIndicatorMesh != null)
