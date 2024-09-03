@@ -11,28 +11,15 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 {
     public SupportCardData CardData { get; private set; }
     public SupportCardPartsGroup CardParts => CardData.SharedPartsGroup;
-
     
-    [Header("CARD INFO")]
-    [Header("Base card info")]
-    [SerializeField] private RectTransform defaultPassiveIcon; // used as Hidden info
-    private Vector3 infoShownPassiveIconPos;
-    private Vector3 infoHiddenPassiveIconPos;
-
 
     [Header("VISUALS")]
-    //[SerializeField] private MeshRenderer baseMeshRenderer;
     [SerializeField] private Transform _buildingParentTransform;
     private Transform _buildingMeshPreview;
     private Material material;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     [SerializeField] private Image abilityImage;
-
-
-
-    [Header("DESCRIPTION")]
-    [SerializeField] private Transform leftDescriptionPosition;
-    [SerializeField] private Transform rightDescriptionPosition;
+    
 
     private SupportCardStatsController StatsController => CardData.StatsController;
     private int PlayCost { get; set; }
@@ -42,11 +29,6 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
     public void Awake()
     {
         AwakeInit(CardBuildingType.SUPPORT);
-    }
-    protected override void AwakeInit(CardBuildingType cardBuildingType)
-    {
-        base.AwakeInit(cardBuildingType);
-        SetupCardInfo();
     }
 
     public override void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter)
@@ -108,16 +90,7 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         _buildingMeshPreview.transform.localPosition = Vector3.zero;
         _buildingMeshPreview.transform.localScale = Vector3.one;
     }
-
-
-    protected override void SetupCardInfo()
-    {
-        // general
-        isShowInfoAnimationPlaying = false;
-
-        // base passive
-        infoHiddenPassiveIconPos = defaultPassiveIcon.localPosition;
-    }
+    
 
     public override void ShowInfo()
     {

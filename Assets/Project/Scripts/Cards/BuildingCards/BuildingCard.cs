@@ -89,22 +89,18 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool canInfoInteract = true;
 
     [Header("VISUALS")]
+    [SerializeField] private CardDrawAnimationPlayer _drawAnimationPlayer;
     [SerializeField] private MeshRenderer cardMeshRenderer;
-    [SerializeField] protected CanvasGroup interfaceCanvasGroup;
     [SerializeField] private MeshRenderer discardIndicatorMesh;
     protected Material cardMaterial;
     protected Material discardIndicatorMaterial;
 
     [Header("CARD INFO")]
-    [SerializeField] protected CanvasGroup[] cgsInfoHide;
-    protected bool isShowInfoAnimationPlaying = false;
-    protected bool isHideInfoAnimationPlaying = false;
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
     [HideInInspector] public bool canDisplayInfoIfWhileInteractable = true;
     [HideInInspector] public bool hideInfoWhenSelected = true;
 
     // CARD DRAW ANIMATION
-    [SerializeField] protected CanvasGroup[] otherCfDrawAnimation;    
     protected bool isPlayingDrawAnimation = false;
     protected const float drawAnimLoopDuration = 0.4f;
     protected const float drawAnimWaitDurationBeforeBlink = 0.1f;
@@ -297,6 +293,8 @@ public abstract class BuildingCard : MonoBehaviour
 
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
 
+        _drawAnimationPlayer.Configure();
+        
         SetBorderFillValue(0f);
         SetBorderFillEnabled(false);
 
@@ -647,7 +645,6 @@ public abstract class BuildingCard : MonoBehaviour
         return 0;
     }
 
-    protected abstract void SetupCardInfo();
     public virtual void ShowInfo()
     {
         isShowingInfo = true;
@@ -684,9 +681,6 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void PlayDrawAnimation(CardFunctionPtr animationEndCallback)
     {
-        cardMaterial.SetFloat("_BorderLoopEnabled", 1f);
-        cardMaterial.SetFloat("_TimeStartBorderLoop", Time.time);
-
         StartCoroutine(InterfaceDrawAnimation(animationEndCallback));
     }
 
@@ -694,68 +688,14 @@ public abstract class BuildingCard : MonoBehaviour
     {
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
-
-
-        for (int i = 0; i < cgsInfoHide.Length; ++i)
-        {
-            cgsInfoHide[i].alpha = 0f;
-        }
-        for (int i = 0; i < otherCfDrawAnimation.Length; ++i)
-        {
-            otherCfDrawAnimation[i].alpha = 0f;
-        }
-
-
-        float startStep = 10f;
-        float step = startStep;
-        float stepDec = startStep * 0.02f;
-        for (float t = 0f; t < drawAnimLoopDuration; t+= Time.deltaTime * step)
-        {
-            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
-            yield return new WaitForSeconds(Time.deltaTime * step);
-
-            step -= stepDec;
-        }
-
-
-        yield return new WaitForSeconds(drawAnimWaitDurationBeforeBlink);
-
-
-        float tBlink = drawAnimBlinkDuration / drawAnimNumBlinks;
-        for (int i = 0; i < drawAnimNumBlinks; ++i)
-        {
-            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
-            yield return new WaitForSeconds(tBlink);
-        }
-
-
-        float t1 = 0.05f;
-        for (int i = cgsInfoHide.Length-1; i >= 0; --i)
-        {
-            cgsInfoHide[i].DOFade(1f, t1);
-            GameAudioManager.GetInstance().PlayCardInfoShown();
-            yield return new WaitForSeconds(t1);
-        }
-        for (int i = otherCfDrawAnimation.Length - 1; i >= 0; --i)
-        {
-            otherCfDrawAnimation[i].DOFade(1f, t1);
-            GameAudioManager.GetInstance().PlayCardInfoShown();
-            yield return new WaitForSeconds(t1);
-        }
-
-
+        
+        yield return StartCoroutine(_drawAnimationPlayer.PlayDrawAnimation());
+        
         canInfoInteract = true;
         isPlayingDrawAnimation = false;
-        cardMaterial.SetFloat("_BorderLoopEnabled", 0f);
-
-        //DisableMouseInteraction();
-        //yield return null;
-        //EnableMouseInteraction();
-
 
         animationEndCallback();
     }
-
 
     public void PlayCanNotBePlayedAnimation()
     {

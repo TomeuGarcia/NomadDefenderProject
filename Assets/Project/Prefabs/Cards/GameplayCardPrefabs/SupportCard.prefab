@@ -707,6 +707,7 @@ GameObject:
   - component: {fileID: 8436797292709200466}
   - component: {fileID: 2198697777562756413}
   - component: {fileID: 5830606690554930900}
+  - component: {fileID: 7486450026858664669}
   m_Layer: 10
   m_Name: SupportCard
   m_TagString: Untagged
@@ -780,16 +781,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   isShowingInfo: 0
+  _drawAnimationPlayer: {fileID: 7486450026858664669}
   cardMeshRenderer: {fileID: 327177989589292513}
-  interfaceCanvasGroup: {fileID: 8436797293034456911}
   discardIndicatorMesh: {fileID: 4819215635734578115}
-  cgsInfoHide:
-  - {fileID: 4701946779586725980}
   canDisplayInfoIfNotInteractable: 0
   canDisplayInfoIfWhileInteractable: 1
   hideInfoWhenSelected: 1
-  otherCfDrawAnimation:
-  - {fileID: 6598585969574252253}
   _descriptionTooltipPositioning:
     _leftDisplaySpot: {fileID: 55434787172332147}
     _rightDisplaySpot: {fileID: 5763998244258541307}
@@ -798,12 +795,9 @@ MonoBehaviour:
   isInteractable: 1
   canBeHovered: 1
   borderFillValue01: 0
-  defaultPassiveIcon: {fileID: 670514567913568641}
   _buildingParentTransform: {fileID: 1399631791494550382}
   _rangeStatValueText: {fileID: 6541310538997833355}
   abilityImage: {fileID: 8521076531209727037}
-  leftDescriptionPosition: {fileID: 55434787172332147}
-  rightDescriptionPosition: {fileID: 5763998244258541307}
 --- !u!114 &5830606690554930900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,6 +811,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotationEffectsTransform: {fileID: 374519592482291124}
+--- !u!114 &7486450026858664669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436797292709200463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7ff00d2d0f8b24a8a0c6e024da9f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _borderMesh: {fileID: 327177989589292513}
+  _objectsToShow:
+  - {fileID: 600088021879578564}
+  - {fileID: 7103190080132658371}
+  - {fileID: 5281394645196913957}
+  - {fileID: 4610708721417202562}
 --- !u!1 &8436797293034456905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,6 +1169,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8c0230811e50b248bdb734f47368220, type: 3}
+--- !u!1 &4610708721417202562 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2619167173206069569, guid: a8c0230811e50b248bdb734f47368220,
+    type: 3}
+  m_PrefabInstance: {fileID: 1992176039435041475}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6348211148776854946 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4880989308449009505, guid: a8c0230811e50b248bdb734f47368220,
@@ -1257,6 +1275,12 @@ MeshRenderer:
 --- !u!4 &1399631791494550382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5549364229910152397, guid: dd9a6264304c81049a62bda7ec2c4f9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6804711366669997987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7103190080132658371 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4394573502755054432, guid: dd9a6264304c81049a62bda7ec2c4f9f,
     type: 3}
   m_PrefabInstance: {fileID: 6804711366669997987}
   m_PrefabAsset: {fileID: 0}

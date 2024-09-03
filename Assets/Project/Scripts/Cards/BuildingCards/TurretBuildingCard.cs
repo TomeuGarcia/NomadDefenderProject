@@ -12,28 +12,12 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public TurretCardPartsGroup CardParts => CardData.SharedPartsGroup;
     
     private TurretBuilding turretBuilding;
-
-
-
-    [Header("CARD INFO")]
-    [Header("Attack card info")]
-    [SerializeField] private RectTransform defaultAttackIcon; // used as Hidden info
-    private Vector3 infoShownAttackIconPos;
-    private Vector3 infoHiddenAttackIconPos;
-
-
-    [Header("Base card info")]
-    [SerializeField] private RectTransform defaultBaseIcon; // used as Hidden info
-    private Vector3 infoShownBaseIconPos;
-    private Vector3 infoHiddenBaseIconPos;
-
+    
 
 
     [Header("VISUALS")]
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
-    [SerializeField] private Image bodyImage;
-    [SerializeField] private Image baseImage;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
     
     private Material cardBodyMaterial, cardBaseMaterial;
@@ -47,13 +31,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     private bool cardLevelAlredyDisplayedMax = false;
     
 
-    [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
+    public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
-
-
-    [Header("DESCRIPTION")] 
-    [SerializeField] private Transform leftDescriptionPosition;
-    [SerializeField] private Transform rightDescriptionPosition;
 
 
     private TurretCardStatsController StatsController => CardData.StatsController;
@@ -64,15 +43,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     private void Awake()
     {
         AwakeInit(CardBuildingType.TURRET);
-    }
-
-    protected override void AwakeInit(CardBuildingType cardBuildingType)
-    {
-        base.AwakeInit(cardBuildingType);
-
-        //TODO - AAA
-
-        SetupCardInfo();        
     }
 
     protected override void InitVisuals()
@@ -219,18 +189,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         return CardData.PassiveAbilitiesController.AlreadyContainsPassive(newTurretPassive);
     }
-
-    protected override void SetupCardInfo()
-    {
-        // general
-        isShowInfoAnimationPlaying = false;
-
-        // attack
-        infoHiddenAttackIconPos = defaultAttackIcon.localPosition;
-
-        // base
-        infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
-    }
+    
 
     public override void ShowInfo()
     {
