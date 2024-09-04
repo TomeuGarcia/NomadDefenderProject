@@ -37,7 +37,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     {
         _timeSinceSpawn = 0.001f;
         _startPosition = Position;
-        _orbitOriginPosition = TurretOwner.Position + (Vector3.up * 0.5f);
+        _orbitOriginPosition = transform.TransformPoint(Vector3.zero) + (Vector3.up * 0.5f);
         disappearing = false;
         
         _sphereHolder.SetActive(true);
@@ -129,12 +129,11 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.gameObject.CompareTag("Enemy") || disappearing)
+        if (CheckEnemyOnTriggerEnter(other, out Enemy enemy))
         {
-            return;
+            OnEnemyHit(enemy);
         }
-
-        OnEnemyHit(other.gameObject.GetComponent<Enemy>());
     }
+
     
 }

@@ -14,6 +14,7 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
     
     public interface IListener
     {
+        bool DoCheckEnemyOnTriggerEnter(Collider other, out Enemy enemy);
         void OnEnemyHit(Enemy enemy);
         void OnDisappearCompleted();
     }
@@ -27,14 +28,12 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.gameObject.CompareTag("Enemy") || _disappearing)
+        if (_listener.DoCheckEnemyOnTriggerEnter(other, out Enemy enemy))
         {
-            return;
+            OnEnemyHit(enemy);
         }
-
-        OnEnemyHit(other.gameObject.GetComponent<Enemy>());
     }
-    
+
     private void OnEnemyHit(Enemy enemy)
     {
         if (_disappearing) return;

@@ -1501,6 +1501,7 @@ GameObject:
   - component: {fileID: 8436797292709200460}
   - component: {fileID: 7555017279591878770}
   - component: {fileID: 1733295007331473105}
+  - component: {fileID: 5163730381812384485}
   - component: {fileID: 7213864097649153203}
   - component: {fileID: 8436797292709200466}
   m_Layer: 10
@@ -1555,7 +1556,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   isShowingInfo: 0
-  _drawAnimationPlayer: {fileID: 7213864097649153203}
+  _view: {fileID: 5163730381812384485}
   cardMeshRenderer: {fileID: 8345937801958188090}
   discardIndicatorMesh: {fileID: 0}
   canDisplayInfoIfNotInteractable: 0
@@ -1595,6 +1596,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotationEffectsTransform: {fileID: 2799599733536281513}
+--- !u!114 &5163730381812384485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436797292709200463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa899c27caa4501ba2569a49bbccddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _borderMesh: {fileID: 8345937801958188090}
+  _drawAnimationPlayer: {fileID: 7213864097649153203}
 --- !u!114 &7213864097649153203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1607,7 +1622,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6c10dce5ca42fb8e407a7dbf2f338a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _borderMesh: {fileID: 8345937801958188090}
   _objectsToShow: []
   _cardLevelText: {fileID: 257412328185207012}
   _playCostText: {fileID: 8788691674735764064}

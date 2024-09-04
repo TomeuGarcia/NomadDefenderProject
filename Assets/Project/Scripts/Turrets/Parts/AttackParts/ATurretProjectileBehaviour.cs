@@ -26,6 +26,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
 
     private TurretPartProjectileDataModel _dataModel;
     protected TurretDamageAttack _damageAttack;
+    public TurretDamageAttack DamageAttack => _damageAttack;
     protected Enemy _targetEnemy;
     private ITurretShootingLifetimeCycle _shootingLifetimeCycle;
     protected bool disappearing = false;
@@ -48,6 +49,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     {
         _dataModel = dataModel;
         _turretProjectileView = MakeTurretProjectileView();
+        _enemiesToIgnore = new List<Enemy>();
     }
 
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
@@ -80,6 +82,8 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
             Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized);
         _shootingLifetimeCycle = shootingLifetimeCycle;
         _shootingLifetimeCycle.OnBeforeShootingEnemy(this);
+        
+        _enemiesToIgnore.Clear();
     }
     
     
@@ -199,4 +203,32 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     protected abstract int ComputeDamage();
 
     protected abstract ITurretProjectileView MakeTurretProjectileView();
+
+
+
+    private List<Enemy> _enemiesToIgnore;
+    public void AddEnemyToIgnore(Enemy enemy)
+    {
+        _enemiesToIgnore.Add(enemy);
+    }
+    
+    protected bool CheckEnemyOnTriggerEnter(Collider other, out Enemy enemy)
+    {
+        if(!other.gameObject.CompareTag("Enemy") || disappearing)
+        {
+            enemy = null;
+            return false;
+        }
+
+        enemy = other.gameObject.GetComponent<Enemy>();
+
+        if (_enemiesToIgnore.Contains(enemy))
+        {
+            enemy = null;
+            return false;
+        }
+        
+        return true;
+    }
+    
 }

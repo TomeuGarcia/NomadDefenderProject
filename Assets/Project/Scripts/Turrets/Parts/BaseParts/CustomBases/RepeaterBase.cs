@@ -267,15 +267,25 @@ public class RepeaterBase : TurretPartBase_Prefab
         Action<TurretDamageAttackResult> takeDamageResultCallback)
     {        
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
+        TurretDamageAttack damageAttackToRepeat = null;
         
         if (enemyInDamageQueue == null)
         {
-            return;
+            if (projectileSource.QueuesDamageToEnemies())
+            {
+                return;
+            }
+
+            damageAttackToRepeat = projectileSource.DamageAttack;
+        }
+        else
+        {
+            damageAttackToRepeat = enemyInDamageQueue.DamageAttack;
         }
         
         
 
-        Shoot(enemyInDamageQueue.DamageAttack);
+        Shoot(damageAttackToRepeat);
 
         /*
         if (currentLvl > 0)
@@ -309,6 +319,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         newProjectile.gameObject.SetActive(true);
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
             projectileTurret, projectileToRepeat);
+        newProjectile.AddEnemyToIgnore(fakeEnemy);
 
 
         // Spawn particle

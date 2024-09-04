@@ -93,8 +93,12 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     {
         return false;
     }
-    
-    
+
+
+    public bool DoCheckEnemyOnTriggerEnter(Collider other, out Enemy enemy)
+    {
+        return CheckEnemyOnTriggerEnter(other, out enemy);
+    }
 
     public void OnEnemyHit(Enemy enemy)
     {

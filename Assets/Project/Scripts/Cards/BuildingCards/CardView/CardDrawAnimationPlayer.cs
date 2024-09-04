@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CardDrawAnimationPlayer : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _borderMesh;
     [SerializeField] protected GameObject[] _objectsToShow;
     
     private Material _borderMaterial;
@@ -15,9 +14,9 @@ public class CardDrawAnimationPlayer : MonoBehaviour
     private int _currentActiveBorderIndexPropertyId;
     
     
-    public void Configure()
+    public void Configure(Material borderMaterial)
     {
-        _borderMaterial = _borderMesh.material;
+        _borderMaterial = borderMaterial;
         _allBordersAreActivePropertyId = Shader.PropertyToID("_AllBordersAreActive");
         _bordersAreSegmentedPropertyId = Shader.PropertyToID("_BordersAreSegmented");
         _currentActiveBorderIndexPropertyId = Shader.PropertyToID("_CurrentActiveBorderIndex");

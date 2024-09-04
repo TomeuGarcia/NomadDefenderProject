@@ -89,7 +89,7 @@ public abstract class BuildingCard : MonoBehaviour
     protected bool canInfoInteract = true;
 
     [Header("VISUALS")]
-    [SerializeField] private CardDrawAnimationPlayer _drawAnimationPlayer;
+    [SerializeField] private BuildingCardView _view;
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] private MeshRenderer discardIndicatorMesh;
     protected Material cardMaterial;
@@ -276,6 +276,8 @@ public abstract class BuildingCard : MonoBehaviour
         this.cardBuildingType = cardBuildingType;
 
         cardMaterial = cardMeshRenderer.material;
+        _view.Configure();
+
         if(discardIndicatorMesh != null)
         {
             discardIndicatorMaterial = discardIndicatorMesh.material;
@@ -292,8 +294,7 @@ public abstract class BuildingCard : MonoBehaviour
         cardMaterial.SetFloat("_NumBlinks", drawAnimNumBlinks);
 
         cardMaterial.SetFloat("_CanNotBePlayedDuration", canNotBePlayedAnimDuration);
-
-        _drawAnimationPlayer.Configure();
+        
         
         SetBorderFillValue(0f);
         SetBorderFillEnabled(false);
@@ -532,14 +533,14 @@ public abstract class BuildingCard : MonoBehaviour
 
     public void SetCanBePlayedAnimation()
     {
-        cardMaterial.SetFloat("_CanBePlayed", 1f);
+        _view.SetCanBePlayed(true);
         playCostText.DOColor(Color.white, 0.2f);
         playCostCurrencyIcon.DOColor(Color.white, 0.2f);
     }
 
     public void SetCannotBePlayedAnimation(bool updatePlayCostText)
     {
-        cardMaterial.SetFloat("_CanBePlayed", 0f);
+        _view.SetCanBePlayed(false);
 
         if (updatePlayCostText)
         {
@@ -689,7 +690,7 @@ public abstract class BuildingCard : MonoBehaviour
         canInfoInteract = false;
         isPlayingDrawAnimation = true;
         
-        yield return StartCoroutine(_drawAnimationPlayer.PlayDrawAnimation());
+        yield return StartCoroutine(_view.DrawAnimationPlayer.PlayDrawAnimation());
         
         canInfoInteract = true;
         isPlayingDrawAnimation = false;
@@ -700,7 +701,7 @@ public abstract class BuildingCard : MonoBehaviour
     public void PlayCanNotBePlayedAnimation()
     {
         SetCannotBePlayedAnimation(true);
-        cardMaterial.SetFloat("_TimeStartCanNotBePlayed", Time.time);
+        _view.PlayCanNotBePlayedAnimation();
 
         CardTransform.DOComplete(true);
         CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
