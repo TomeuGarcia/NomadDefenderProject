@@ -86,11 +86,7 @@ public class TurretBuilding : RangeBuilding
         if (!isFunctional) return;
 
         _shootingController.UpdateShoot();
-
-        //if (bodyPart.lookAtTarget)
-        {
-            LookAtTarget();
-        }
+        LookAtTarget();
     }
 
 
@@ -99,8 +95,14 @@ public class TurretBuilding : RangeBuilding
         Vector3 lookDirection = 
             Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up)
                 .normalized;
-        Quaternion targetRot = Quaternion.LookRotation(lookDirection, Vector3.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
+        
+        Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+        Quaternion currentRotation = 
+            Vector3.Dot(lookDirection, bodyPart.transform.forward) > 0.95f 
+            ? targetRotation 
+            : Quaternion.RotateTowards(bodyPart.transform.rotation, targetRotation, 600.0f * GameTime.DeltaTime);
+
+        bodyPart.transform.rotation = currentRotation;
     }
 
     public void Init(TurretCardStatsController statsController, TurretCardData turretCardData, CurrencyCounter currencyCounter)

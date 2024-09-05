@@ -11,7 +11,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     private int _activeBulletsCounter;
 
     private const float RADIUS_DISTANCE_MULTIPLIER = 2.5f;
-    private const float HALF_SHOOT_ANGLE = 35f;
+    private const float HALF_SHOOT_ANGLE = 30f;
     private const float TOTAL_DAMAGE_MULTIPLIER = 1.5f;
     
     
@@ -104,6 +104,11 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     {
         _targetEnemy = enemy;
         EnemyHit();
+
+        if (enemy.IsFakeEnemy)
+        {
+            AddEnemyToIgnore(enemy);
+        }
     }
     public void OnDisappearCompleted()
     {

@@ -38,6 +38,8 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public ProjectileParticleType HitParticlesType => _dataModel.HitParticlesType;
 
     public IDisappearListener DisappearListener { get; set; } = null;
+
+    protected Vector3 _spawnerObjectPosition;
     
     public interface IDisappearListener
     {
@@ -55,7 +57,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
         Enemy targetEnemy, TurretBuilding owner)
     {
-        SharedInit(shootingLifetimeCycle, targetEnemy);
+        SharedInit(shootingLifetimeCycle, targetEnemy, owner.Position);
         ProjectileShotInit(targetEnemy, owner);
     }
     protected virtual void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
@@ -65,9 +67,9 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     }
 
     public void ProjectileShotInit_PrecomputedAndQueued(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
-        TurretBuilding owner, TurretDamageAttack precomputedDamageAttack)
+        TurretBuilding owner, TurretDamageAttack precomputedDamageAttack, Vector3 spawnerObjectPosition)
     {
-        SharedInit(shootingLifetimeCycle, precomputedDamageAttack.Target);
+        SharedInit(shootingLifetimeCycle, precomputedDamageAttack.Target, spawnerObjectPosition);
         ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
     }
     protected virtual void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner, 
@@ -76,7 +78,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
         TurretOwner = owner;
     }
 
-    private void SharedInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, Enemy targetEnemy)
+    private void SharedInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, Enemy targetEnemy, Vector3 spawnerObjectPosition)
     {
         transform.rotation = Quaternion.LookRotation(
             Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized);
@@ -84,6 +86,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
         _shootingLifetimeCycle.OnBeforeShootingEnemy(this);
         
         _enemiesToIgnore.Clear();
+        _spawnerObjectPosition = spawnerObjectPosition;
     }
     
     

@@ -85,6 +85,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Update()
     {
+        ComputeNextTargetedEnemy();
         if (targetedEnemy != null)
         {
             LookAtTargetEnemy();
@@ -224,9 +225,6 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeTargetAndComputeDamage(TurretDamageAttack damageAttack)
     {
-        ComputeNextTargetedEnemy();
-        
-        
         if (targetedEnemy == null)
         {
             return;
@@ -318,7 +316,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.gameObject.SetActive(true);
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
-            projectileTurret, projectileToRepeat);
+            projectileTurret, projectileToRepeat, _ownerBuilding.Position);
         newProjectile.AddEnemyToIgnore(fakeEnemy);
 
 
@@ -334,9 +332,16 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void LookAtTargetEnemy()
     {
-        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;    
+        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;
 
-        Quaternion targetRot = Quaternion.LookRotation((lookPosition - rotateTransform.position).normalized, rotateTransform.up);
+        Vector3 lookDirection = Vector3.ProjectOnPlane(lookPosition - rotateTransform.position, Vector3.up).normalized;
+
+        if (Vector3.Dot(lookDirection, rotateTransform.forward) > 0.95f)
+        {
+            return;
+        }
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDirection, rotateTransform.up);
 
         Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
         Vector3 endEuler = endRotation.eulerAngles;
