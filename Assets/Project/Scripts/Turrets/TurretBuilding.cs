@@ -139,17 +139,24 @@ public class TurretBuilding : RangeBuilding
 
         _viewAddOnController = new TurretViewAddOnController(bodyPart.AddOnsParent);
 
-        _shootingController = parts.Projectile.ShootingControllerCreator.Create(
-            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
-                CardData.PassiveAbilitiesController));
+        InitShootingController();
         
         _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
     }
 
+    private void InitShootingController()
+    {
+        _shootingController = ProjectileDataModel.ShootingControllerCreator.Create(
+            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
+                CardData.PassiveAbilitiesController));
+    }
+    
     public void ResetProjectilePart(TurretPartProjectileDataModel newProjectilePart)
     {
         ProjectileDataModel = newProjectilePart;
         bodyPart.ResetProjectileMaterial(MaterialForTurret);
+        
+        InitShootingController();
     }
     public void ResetBodyMaterial(Material newMaterial)
     {        
