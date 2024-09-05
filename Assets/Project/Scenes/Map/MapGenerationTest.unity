@@ -13143,6 +13143,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Global Volume
       objectReference: {fileID: 0}
+    - target: {fileID: 5765041133392004673, guid: 202f952850257fb4c880e7e22d8e869a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5765041133392004675, guid: 202f952850257fb4c880e7e22d8e869a,
         type: 3}
       propertyPath: m_RootOrder
@@ -13201,7 +13206,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5765041133392004673, guid: 202f952850257fb4c880e7e22d8e869a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1488649948}
   m_SourcePrefab: {fileID: 100100000, guid: 202f952850257fb4c880e7e22d8e869a, type: 3}
 --- !u!114 &1488649946 stripped
 MonoBehaviour:
@@ -13209,12 +13218,31 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1488649945}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1488649947}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1488649947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5765041133392004673, guid: 202f952850257fb4c880e7e22d8e869a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1488649945}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1488649948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488649947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba294f5d92fc2441999166b23671ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _volume: {fileID: 1488649946}
 --- !u!1001 &1489257654
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18021,6 +18049,11 @@ PrefabInstance:
       propertyPath: mapEventSystemGO
       value: 
       objectReference: {fileID: 293309645}
+    - target: {fileID: 481244355035842441, guid: bea90a63c4431e143a62fe3e27dfe2f3,
+        type: 3}
+      propertyPath: _overworldMapVolume
+      value: 
+      objectReference: {fileID: 1488649948}
     - target: {fileID: 4525846864927280061, guid: bea90a63c4431e143a62fe3e27dfe2f3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y

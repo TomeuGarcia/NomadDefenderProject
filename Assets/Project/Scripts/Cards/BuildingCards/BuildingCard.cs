@@ -311,6 +311,7 @@ public abstract class BuildingCard : MonoBehaviour
     protected void Init()
     {
         initialPosition = CardTransform.position;
+        _view.Configure();
 
         InitStatsFromTurretParts();
         InitCostText();
@@ -724,5 +725,10 @@ public abstract class BuildingCard : MonoBehaviour
         {
             StartShowInfoWithDelay();
         }
+    }
+
+    protected void UpdateCardLevelView()
+    {
+        _view.UpdateCardLevelView(GetCardLevel());
     }
 }

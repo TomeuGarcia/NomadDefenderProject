@@ -12,7 +12,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public TurretCardPartsGroup CardParts => CardData.SharedPartsGroup;
     
     private TurretBuilding turretBuilding;
-    
+
 
 
     [Header("VISUALS")]
@@ -57,7 +57,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         _damageStatValueText.text = StatsController.DamageStatState.BaseValueText;
         _fireRateStatValueText.text = StatsController.ShotsPerSecondInvertedStatState.BaseValueText;
         _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;
-        
+
         UpdateIcons();
         
 
@@ -237,6 +237,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         cardLevelText.enabled = true;
         cardLevelText.text = GetCardLevelString();
+        UpdateCardLevelView();
     }
 
     private void UpdateCardLevelTextWithDecoder()
@@ -244,6 +245,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         cardLevelTextDecoder.ResetDecoder();
         cardLevelTextDecoder.SetTextStrings(GetCardLevelString());
         cardLevelTextDecoder.Activate();
+        UpdateCardLevelView();
     }
 
     public void PlayLevelUpAnimation()

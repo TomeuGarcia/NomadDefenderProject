@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 39d28541bc2ee5d4a9542fc0c9452779, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -824,7 +824,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa899c27caa4501ba2569a49bbccddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: f5f9451e3d1aeda4fb41967ec1cfcb23, type: 2}
   _borderMesh: {fileID: 327177989589292513}
+  _backgroundMesh: {fileID: 4161713464567966934}
+  _levelText: {fileID: 0}
   _drawAnimationPlayer: {fileID: 7486450026858664669}
 --- !u!114 &7486450026858664669
 MonoBehaviour:
@@ -1275,6 +1278,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card_Mesh
       objectReference: {fileID: 0}
+    - target: {fileID: 7470997582150712181, guid: dd9a6264304c81049a62bda7ec2c4f9f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 67488633d21365642bcf7efbb20f37f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1289,6 +1297,12 @@ MeshRenderer:
 --- !u!4 &1399631791494550382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5549364229910152397, guid: dd9a6264304c81049a62bda7ec2c4f9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6804711366669997987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4161713464567966934 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7470997582150712181, guid: dd9a6264304c81049a62bda7ec2c4f9f,
     type: 3}
   m_PrefabInstance: {fileID: 6804711366669997987}
   m_PrefabAsset: {fileID: 0}

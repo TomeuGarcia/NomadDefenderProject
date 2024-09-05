@@ -36,6 +36,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
+    [SerializeField] private OverworldMapVolume _overworldMapVolume;
 
     protected bool canDisplayDeck = true;
 
@@ -60,6 +61,9 @@ public class OverworldMapGameManager : MonoBehaviour
         mapSceneLoader.OnSceneFromMapUnloaded += DoOnSceneFromMapUnloaded;
 
         TDGameManager.OnQueryReferenceToBattleStateResult += CreateNewBattleStateResult;
+
+        OnMapNodeSceneStartsLoading += _overworldMapVolume.DeactivateVolume;
+        MapSceneNotifier.OnMapSceneFinished += _overworldMapVolume.ActivateVolume;
     }
 
     private void OnDisable()
@@ -69,6 +73,9 @@ public class OverworldMapGameManager : MonoBehaviour
         mapSceneLoader.OnSceneFromMapUnloaded -= DoOnSceneFromMapUnloaded;
 
         TDGameManager.OnQueryReferenceToBattleStateResult -= CreateNewBattleStateResult;
+
+        OnMapNodeSceneStartsLoading -= _overworldMapVolume.DeactivateVolume;
+        MapSceneNotifier.OnMapSceneFinished -= _overworldMapVolume.ActivateVolume;
     }
 
 
