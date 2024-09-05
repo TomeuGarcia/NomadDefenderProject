@@ -30,10 +30,10 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
     [Header("VISUALS")]
+    [SerializeField] private MeshRenderer _cardBackgroundMesh;
+    private Material _cardBackgroundMaterial;
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
-    [SerializeField] private Image bodyImage;
-    [SerializeField] private Image baseImage;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
     
     private Material cardBodyMaterial, cardBaseMaterial;
@@ -42,6 +42,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     [SerializeField] private TextMeshProUGUI _fireRateStatValueText;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     
+    [SerializeField] protected Material _maxCardLevelTextMat;
+    [SerializeField] protected Material _defaultCardLevelTextMat;
     [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
@@ -70,9 +72,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         base.AwakeInit(cardBuildingType);
 
-        //TODO - AAA
+        SetupCardInfo();
 
-        SetupCardInfo();        
+        _cardBackgroundMaterial = _cardBackgroundMesh.material;
     }
 
     protected override void InitVisuals()
@@ -278,6 +280,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         cardLevelText.enabled = true;
         cardLevelText.text = GetCardLevelString();
+        UpdateCardLevelTextMaterial();
+
+        _cardBackgroundMaterial.SetFloat("_Level", GetCardLevel());
     }
 
     private void UpdateCardLevelTextWithDecoder()
@@ -285,6 +290,20 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         cardLevelTextDecoder.ResetDecoder();
         cardLevelTextDecoder.SetTextStrings(GetCardLevelString());
         cardLevelTextDecoder.Activate();
+        UpdateCardLevelTextMaterial();
+
+        _cardBackgroundMaterial.SetFloat("_Level", GetCardLevel());
+    }
+
+    private void UpdateCardLevelTextMaterial()
+    {
+        if(GetCardLevel() == 3)
+        {
+            cardLevelText.fontMaterial = _maxCardLevelTextMat;
+        } else
+        {
+            cardLevelText.fontMaterial = _defaultCardLevelTextMat;
+        }
     }
 
     public void PlayLevelUpAnimation()

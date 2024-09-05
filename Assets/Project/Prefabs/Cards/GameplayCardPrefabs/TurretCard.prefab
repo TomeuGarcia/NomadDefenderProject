@@ -1556,9 +1556,8 @@ MonoBehaviour:
   borderFillValue01: 0
   defaultAttackIcon: {fileID: 6521726379349566995}
   defaultBaseIcon: {fileID: 5538805637866954710}
+  _cardBackgroundMesh: {fileID: 3417445188129601231}
   _turretParentTransform: {fileID: 414376935057901943}
-  bodyImage: {fileID: 0}
-  baseImage: {fileID: 0}
   _iconDisplays:
   - {fileID: 3495002726334189746}
   - {fileID: 6959023640878615238}
@@ -1567,6 +1566,10 @@ MonoBehaviour:
   _damageStatValueText: {fileID: 8922473117344703872}
   _fireRateStatValueText: {fileID: 6062797284505700821}
   _rangeStatValueText: {fileID: 6910846748345995605}
+  _maxCardLevelTextMat: {fileID: 2100000, guid: 8cc42ab62dc98d6408e69485f9c29b35,
+    type: 2}
+  _defaultCardLevelTextMat: {fileID: -8397721410776992557, guid: 9137f9f1050efdc408763f58ca6c8923,
+    type: 2}
   cardLevelText: {fileID: 2089727611730500624}
   cardLevelTextDecoder: {fileID: 4749006990418903415}
   leftDescriptionPosition: {fileID: 3365011796835139761}
@@ -2551,6 +2554,12 @@ Transform:
 --- !u!23 &1307744525083889656 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6549762499445932610, guid: dd9a6264304c81049a62bda7ec2c4f9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5243145429049150906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3417445188129601231 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7470997582150712181, guid: dd9a6264304c81049a62bda7ec2c4f9f,
     type: 3}
   m_PrefabInstance: {fileID: 5243145429049150906}
   m_PrefabAsset: {fileID: 0}

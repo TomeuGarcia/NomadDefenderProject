@@ -111,7 +111,7 @@ Shader "Unlit/TooltipBackground"
                 float2 screenUV = IN.screenPos.xy / IN.screenPos.w;
                 screenUV.x += 1;
 
-                float extraColor = (1 - color.x) * 0.0015f;
+                float extraColor = (1 - color.x) * 0.003f;
                 extraColor *= step(((screenUV.y * 4 + _Time.y * 0.05f) % 0.1f) / 0.1f, 0.5f);
                 
                 color.xyz += extraColor;
