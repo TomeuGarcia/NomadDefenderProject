@@ -179,7 +179,10 @@ public abstract class BuildingCard : MonoBehaviour
     private void OnDestroy()
     {
         HideInfo();
+        DoOnDestroy();
     }
+    
+    protected virtual void DoOnDestroy(){}
 
     private void OnMouseEnter()
     {

@@ -45,6 +45,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         AwakeInit(CardBuildingType.TURRET);
     }
 
+    protected override void DoOnDestroy()
+    {
+        CardData.ResetProjectile();
+    }
+
     protected override void InitVisuals()
     {
         TurretPartProjectileDataModel turretPartAttack = CardParts.Projectile;
@@ -71,21 +76,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         
         UpdateTurretBodyColor();
     }
-
     
-    private void SetProjectileIcon(TurretPartProjectileDataModel projectileModel, bool hidden = false)
-    {
-        TurretIconCanvasDisplay projectileIconDisplay = _iconDisplays[0];
-        
-        projectileIconDisplay.Init(new TurretIconCanvasDisplay.ConfigData(projectileModel.abilitySprite, projectileModel.materialColor));
-
-        if (hidden)
-        {
-            projectileIconDisplay.InitHidden();
-        }
-
-        UpdateTurretBodyColor();
-    }
 
     private void UpdateTurretBodyColor()
     {
@@ -219,6 +210,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     public void IncrementCardLevel(int levelIncrement, bool updateText = true)
     {
+        if (levelIncrement == 0)
+        {
+            return;
+        }
+        
         cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
         CardData.IncrementUpgradeLevel(levelIncrement);
 
@@ -447,6 +443,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         TurretPartProjectileDataModel oldProjectile = CardParts.Projectile;
         
+        CardData.SetProjectileTemporarily(newTurretProjectileModel);
         turretBuilding.ResetProjectilePart(newTurretProjectileModel);
 
         _turretMeshPreview.ResetProjectileMaterial(newTurretProjectileModel.MaterialForTurret);
@@ -473,7 +470,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         yield return new WaitForSeconds(delayBeforeAnimation);
         
         const float t1 = 0.1f;
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             _turretMeshPreview.ResetProjectileMaterial(newProjectileMaterial);
             projectileIconDisplay.Init(newProjectileIconData);
@@ -483,6 +480,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
             projectileIconDisplay.Init(oldProjectileIconData);
             yield return new WaitForSeconds(t1);
         }
+        _turretMeshPreview.ResetProjectileMaterial(newProjectileMaterial);
+        projectileIconDisplay.Init(newProjectileIconData);
     }
 
     

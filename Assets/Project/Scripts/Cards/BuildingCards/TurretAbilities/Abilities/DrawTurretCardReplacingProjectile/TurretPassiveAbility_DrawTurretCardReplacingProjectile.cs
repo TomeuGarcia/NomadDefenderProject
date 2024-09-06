@@ -30,6 +30,6 @@ public class TurretPassiveAbility_DrawTurretCardReplacingProjectile : ATurretPas
 
         TurretBuildingCard turretCard = card as TurretBuildingCard;
                 
-        turretCard.InBattleReplaceAttack(_turretOwner.ProjectileDataModel, 1.5f);
+        turretCard.InBattleReplaceAttack(_turretOwner.ProjectileDataModel, 2.0f);
     }
 }
