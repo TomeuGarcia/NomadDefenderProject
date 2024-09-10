@@ -18,7 +18,7 @@ public class TPADataModel_ExtraDamageMultipleHits : ATurretPassiveAbilityDataMod
 
     public float DamageMultiplierByHitCount(int hitCount)
     {
-        return Mathf.Max(_maxDamageMultiplier, _startingDamageMultiplier + (_damageMultiplierIncrementPerHit * hitCount));
+        return Mathf.Min(_maxDamageMultiplier, _startingDamageMultiplier + (_damageMultiplierIncrementPerHit * hitCount));
     }
     
 }
