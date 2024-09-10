@@ -31,18 +31,27 @@ public class TurretCardData
         _originalProjectileDescription = model.SharedPartsGroup.Projectile.MakeAbilityDescription();
         CurrentProjectileDescription = _originalProjectileDescription;
     }
+
     
-    public TurretCardData(TurretCardData other)
+    public TurretCardData(TurretCardData other) 
+        : this(other, other.StatsController == null)
+    {
+    }
+    
+    public TurretCardData(TurretCardData other, bool makeNewStats)
     {
         OriginalModel = other.OriginalModel;
         PlayCost = other.PlayCost;
         CardUpgradeLevel = other.CardUpgradeLevel;
         SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
-        
-        StatsController = other.StatsController;
-        if (StatsController == null)
+
+        if (makeNewStats)
         {
             MakeStatsControllerFromParts();
+        }
+        else
+        {
+            StatsController = other.StatsController;
         }
         
         PassiveAbilitiesController = new TurretPassiveAbilitiesController(this, other.PassiveAbilitiesController);

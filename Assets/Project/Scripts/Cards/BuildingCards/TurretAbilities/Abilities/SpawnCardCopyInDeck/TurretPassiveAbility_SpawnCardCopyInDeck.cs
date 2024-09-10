@@ -30,7 +30,7 @@ public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
         float delayBeforeSpawningCard = 0.5f;
         await Task.Delay(TimeSpan.FromSeconds(delayBeforeSpawningCard));
 
-        TurretCardData turretCardData = new TurretCardData(_turretOwner.CardData);
+        TurretCardData turretCardData = new TurretCardData(_turretOwner.CardData, true);
         turretCardData.IncrementPlayCost(_abilityDataModel.CostIncrement.Value);
         
         ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInDeck(turretCardData);
