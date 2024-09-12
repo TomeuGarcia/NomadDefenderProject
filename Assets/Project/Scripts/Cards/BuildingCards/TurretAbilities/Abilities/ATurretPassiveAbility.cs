@@ -66,7 +66,12 @@ public abstract class ATurretPassiveAbility
     private void AddViewAddOnToTurret(TurretViewAddOnConfig viewAddOnConfig,
         TurretBuilding turretOwner)
     {
-        turretOwner.ViewAddOnController.AddViewAddOn(viewAddOnConfig);
+        OnTurretViewAddOnAdded(turretOwner.ViewAddOnController.AddViewAddOn(viewAddOnConfig));
+    }
+
+    protected virtual void OnTurretViewAddOnAdded(ATurretViewAddOn turretViewAddOn)
+    {
+        
     }
     
     

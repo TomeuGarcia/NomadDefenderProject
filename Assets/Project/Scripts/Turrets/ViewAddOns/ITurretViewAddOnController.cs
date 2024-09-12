@@ -1,4 +1,4 @@
 public interface ITurretViewAddOnController
 {
-    void AddViewAddOn(TurretViewAddOnConfig addOnConfig);
+    ATurretViewAddOn AddViewAddOn(TurretViewAddOnConfig addOnConfig);
 }
