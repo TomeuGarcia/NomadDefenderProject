@@ -9,7 +9,7 @@ public class TurretPassiveAbility_DrawCard : ATurretPassiveAbility
     {
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         DoDrawCard();
     }

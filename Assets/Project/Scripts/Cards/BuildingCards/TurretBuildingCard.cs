@@ -15,23 +15,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
 
-    [Header("CARD INFO")]
-    [Header("Attack card info")]
-    [SerializeField] private RectTransform defaultAttackIcon; // used as Hidden info
-    private Vector3 infoShownAttackIconPos;
-    private Vector3 infoHiddenAttackIconPos;
-
-
-    [Header("Base card info")]
-    [SerializeField] private RectTransform defaultBaseIcon; // used as Hidden info
-    private Vector3 infoShownBaseIconPos;
-    private Vector3 infoHiddenBaseIconPos;
-
-
-
     [Header("VISUALS")]
-    [SerializeField] private MeshRenderer _cardBackgroundMesh;
-    private Material _cardBackgroundMaterial;
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
@@ -42,20 +26,13 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     [SerializeField] private TextMeshProUGUI _fireRateStatValueText;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     
-    [SerializeField] protected Material _maxCardLevelTextMat;
-    [SerializeField] protected Material _defaultCardLevelTextMat;
     [SerializeField] protected TextMeshProUGUI cardLevelText;
     [SerializeField] private TextDecoder cardLevelTextDecoder;
     private bool cardLevelAlredyDisplayedMax = false;
     
 
-    [HideInInspector] public bool ReplacedWithSamePart { get; private set; }
+    public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
-
-
-    [Header("DESCRIPTION")] 
-    [SerializeField] private Transform leftDescriptionPosition;
-    [SerializeField] private Transform rightDescriptionPosition;
 
 
     private TurretCardStatsController StatsController => CardData.StatsController;
@@ -68,13 +45,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         AwakeInit(CardBuildingType.TURRET);
     }
 
-    protected override void AwakeInit(CardBuildingType cardBuildingType)
+    protected override void DoOnDestroy()
     {
-        base.AwakeInit(cardBuildingType);
-
-        SetupCardInfo();
-
-        _cardBackgroundMaterial = _cardBackgroundMesh.material;
+        CardData.ResetProjectile();
     }
 
     protected override void InitVisuals()
@@ -89,7 +62,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         _damageStatValueText.text = StatsController.DamageStatState.BaseValueText;
         _fireRateStatValueText.text = StatsController.ShotsPerSecondInvertedStatState.BaseValueText;
         _rangeStatValueText.text = StatsController.RadiusRangeStatState.BaseValueText;
-        
+
         UpdateIcons();
         
 
@@ -103,19 +76,10 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         
         UpdateTurretBodyColor();
     }
-
     
-    private void SetAttackIcon(TurretPartProjectileDataModel projectileModel)
-    {
-        _iconDisplays[0].Init(
-            new TurretIconCanvasDisplay.ConfigData(projectileModel.abilitySprite, projectileModel.materialColor));
-
-        UpdateTurretBodyColor();
-    }
 
     private void UpdateTurretBodyColor()
     {
-        Debug.Log(CardParts.Projectile.MaterialForTurretPreview);
         if(_turretMeshPreview == null)
         {
             InstantiateTurretPreviewMesh();
@@ -221,18 +185,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         return CardData.PassiveAbilitiesController.AlreadyContainsPassive(newTurretPassive);
     }
-
-    protected override void SetupCardInfo()
-    {
-        // general
-        isShowInfoAnimationPlaying = false;
-
-        // attack
-        infoHiddenAttackIconPos = defaultAttackIcon.localPosition;
-
-        // base
-        infoHiddenBaseIconPos = defaultBaseIcon.localPosition;
-    }
+    
 
     public override void ShowInfo()
     {
@@ -257,6 +210,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     public void IncrementCardLevel(int levelIncrement, bool updateText = true)
     {
+        if (levelIncrement == 0)
+        {
+            return;
+        }
+        
         cardLevelAlredyDisplayedMax = IsCardLevelMaxed();
         CardData.IncrementUpgradeLevel(levelIncrement);
 
@@ -280,9 +238,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         cardLevelText.enabled = true;
         cardLevelText.text = GetCardLevelString();
-        UpdateCardLevelTextMaterial();
-
-        _cardBackgroundMaterial.SetFloat("_Level", GetCardLevel());
+        UpdateCardLevelView();
     }
 
     private void UpdateCardLevelTextWithDecoder()
@@ -290,20 +246,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         cardLevelTextDecoder.ResetDecoder();
         cardLevelTextDecoder.SetTextStrings(GetCardLevelString());
         cardLevelTextDecoder.Activate();
-        UpdateCardLevelTextMaterial();
-
-        _cardBackgroundMaterial.SetFloat("_Level", GetCardLevel());
-    }
-
-    private void UpdateCardLevelTextMaterial()
-    {
-        if(GetCardLevel() == 3)
-        {
-            cardLevelText.fontMaterial = _maxCardLevelTextMat;
-        } else
-        {
-            cardLevelText.fontMaterial = _defaultCardLevelTextMat;
-        }
+        UpdateCardLevelView();
     }
 
     public void PlayLevelUpAnimation()
@@ -496,40 +439,49 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
 
 
-    public void InBattleReplaceAttack(TurretPartProjectileDataModel newTurretPartAttack, float delayBeforeAnimation)
+    public void InBattleReplaceAttack(TurretPartProjectileDataModel newTurretProjectileModel, float delayBeforeAnimation)
     {
-        TurretPartProjectileDataModel oldTurretPartAttack = CardParts.Projectile;
-        CardParts.SetProjectile(newTurretPartAttack);
+        TurretPartProjectileDataModel oldProjectile = CardParts.Projectile;
+        
+        CardData.SetProjectileTemporarily(newTurretProjectileModel);
+        turretBuilding.ResetProjectilePart(newTurretProjectileModel);
 
-        turretBuilding.ResetProjectilePart(newTurretPartAttack);
+        _turretMeshPreview.ResetProjectileMaterial(newTurretProjectileModel.MaterialForTurret);
+        _turretMeshPreview.SetDefaultMaterial();
 
-        _turretMeshPreview.ResetProjectileMaterial(newTurretPartAttack.MaterialForTurret);
-        //cardBodyMaterial.SetColor("_PaintColor", newTurretPartAttack.materialColor); // Projectile color
+        StartCoroutine(
+            PlayProjectileReplacementAnimation(oldProjectile, newTurretProjectileModel, delayBeforeAnimation));
+    }
 
+    private IEnumerator PlayProjectileReplacementAnimation(TurretPartProjectileDataModel oldProjectile,
+        TurretPartProjectileDataModel newProjectile, float delayBeforeAnimation)
+    {
+        Material oldProjectileMaterial = new Material(oldProjectile.MaterialForTurretPreview);
+        TurretIconCanvasDisplay.ConfigData oldProjectileIconData =
+            new TurretIconCanvasDisplay.ConfigData(oldProjectile.abilitySprite, oldProjectile.materialColor);
+        
+        Material newProjectileMaterial = new Material(newProjectile.MaterialForTurretPreview);
+        TurretIconCanvasDisplay.ConfigData newProjectileIconData =
+            new TurretIconCanvasDisplay.ConfigData(newProjectile.abilitySprite, newProjectile.materialColor);
+        
+        TurretIconCanvasDisplay projectileIconDisplay = _iconDisplays[0];
 
-        float iconViewDuration = 0.1f;
-        Sequence replaceAttackAnimation = DOTween.Sequence();
-        replaceAttackAnimation.AppendInterval(delayBeforeAnimation);
-        replaceAttackAnimation.AppendCallback(() => SetAttackIcon(newTurretPartAttack));
-
-        for (int i = 0; i < 4; i++)
+        
+        yield return new WaitForSeconds(delayBeforeAnimation);
+        
+        const float t1 = 0.1f;
+        for (int i = 0; i < 2; ++i)
         {
-            replaceAttackAnimation.AppendInterval(iconViewDuration);
-            replaceAttackAnimation.AppendCallback(() =>
-            {
-                SetAttackIcon(oldTurretPartAttack);
-                GameAudioManager.GetInstance().PlayCardInfoHidden();
-            });            
+            _turretMeshPreview.ResetProjectileMaterial(newProjectileMaterial);
+            projectileIconDisplay.Init(newProjectileIconData);
+            yield return new WaitForSeconds(t1);
             
-
-            replaceAttackAnimation.AppendInterval(iconViewDuration);
-            replaceAttackAnimation.AppendCallback(() => 
-            { 
-                SetAttackIcon(newTurretPartAttack);
-                GameAudioManager.GetInstance().PlayCardInfoShown();
-            });
-        }    
-
+            _turretMeshPreview.ResetProjectileMaterial(oldProjectileMaterial);
+            projectileIconDisplay.Init(oldProjectileIconData);
+            yield return new WaitForSeconds(t1);
+        }
+        _turretMeshPreview.ResetProjectileMaterial(newProjectileMaterial);
+        projectileIconDisplay.Init(newProjectileIconData);
     }
 
     

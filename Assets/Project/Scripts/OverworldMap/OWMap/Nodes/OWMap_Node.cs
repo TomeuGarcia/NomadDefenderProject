@@ -1,8 +1,11 @@
+using System;
 using DG.Tweening;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class OWMap_Node : MonoBehaviour
 {
@@ -158,6 +161,7 @@ public class OWMap_Node : MonoBehaviour
         material.SetFloat("_NoiseTwitchingEnabled", 0f);
         material.SetFloat("_IsDamaged", 0f);
         material.SetFloat("_IsDestroyed", 0f);
+        material.SetFloat("_HasBeatenNode", 0f);
 
         material.SetFloat("_FadeDuration", FADE_DURATION);
         material.SetFloat("_TimeStartFade", 0f);
@@ -310,29 +314,37 @@ public class OWMap_Node : MonoBehaviour
     {
         material.SetFloat("_IsSelected", 1f);
         material.SetFloat("_TimeStartSelected", Time.time);
-
-        //AAAAAAAAAAAAAAAAA
-
     }
-    private void SetSelectedVisuals()
+    private async void SetSelectedVisuals(float delay)
     {
-        material.SetFloat("_IsSelected", 1f);
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+        
+        material.SetFloat("_IsSelected", 0f);
         material.SetFloat("_StartTimeFastBorderMoveSpeed", Time.time);
         material.SetFloat("_DoFastBorder", 1f);
+        material.SetFloat("_HasBeatenNode", 1.0f);
+    }
+    private async void SetDisabledVisuals(float delay)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+        
+        material.SetColor("_IconColor", OWMapDecoratorUtils.s_darkGreyColor);
+        material.SetColor("_BorderColor", OWMapDecoratorUtils.s_darkGreyColor);
     }
 
     public void SetSelected(bool wasSelectedByPlayer)
     {
         interactState = NodeInteractState.SELECTED;
 
-        //SetColor(blueColor);
+        const float delayBeforeUpdatingViews = 3f;
+
         SetCameFromColor();
 
         DisableInteraction();
         if (!mapReferencesData.isLastLevelNode)
         {
             DisableNextLevelNodesInteraction(); // Disable temporarely (to update mouse collisions)
-            DisableNeighborLevelNodesInteraction(); // Disable permanently        
+            DisableNeighborLevelNodesInteraction(delayBeforeUpdatingViews); // Disable permanently        
         }
 
         if (owMapGameManager != null)
@@ -343,7 +355,7 @@ public class OWMap_Node : MonoBehaviour
         flashMeshRenderer.gameObject.SetActive(true);
         flashMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
 
-        SetSelectedVisuals();
+        SetSelectedVisuals(delayBeforeUpdatingViews);
     }
 
     public void UpdateBorderMaterial(bool enabled)
@@ -475,14 +487,13 @@ public class OWMap_Node : MonoBehaviour
         return nextLevelEnabledNodes.ToArray();
     }
 
-    private void DisableNeighborLevelNodesInteraction()
+    private void DisableNeighborLevelNodesInteraction(float delayBeforeUpdatingViews)
     {
         foreach (OWMap_Node node in mapReferencesData.levelNeighbourNodes)
         {
             node.DisableInteraction();
+            node.SetDisabledVisuals(delayBeforeUpdatingViews);
         }
-
-        material.SetFloat("_HasBeatenNode", 1.0f);
     }
 
     public void SetNodeClass(OWMap_NodeClass _nodeClass, Texture mapIconTexture)
@@ -495,7 +506,9 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetTexture("_IconTexture", nodeIcon);
 
-        flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE ? OWMapDecoratorUtils.s_orangeColor : OWMapDecoratorUtils.s_blueColor);
+        flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE 
+            ? OWMapDecoratorUtils.s_orangeColor 
+            : OWMapDecoratorUtils.s_blueColor);
     }
 
     public NodeEnums.NodeType GetNodeType()

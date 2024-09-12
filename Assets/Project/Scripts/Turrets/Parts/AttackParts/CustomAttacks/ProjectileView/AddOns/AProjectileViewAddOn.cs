@@ -8,9 +8,16 @@ public abstract class AProjectileViewAddOn : RecyclableObject
     private Transform _originalParent;
     private float _spawnTime;
 
+    public ProjectileViewAddOnConfig OriginalConfig { get; private set; }
+    
     private void Awake()
     {
         _originalParent = transform.parent;
+    }
+
+    public void Configure(ProjectileViewAddOnConfig _originalConfig)
+    {
+        OriginalConfig = _originalConfig;
     }
     
     public void OnProjectileSpawned(Transform parent)

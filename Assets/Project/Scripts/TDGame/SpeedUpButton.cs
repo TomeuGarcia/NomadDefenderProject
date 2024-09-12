@@ -6,11 +6,20 @@ using UnityEngine.UI;
 
 public class SpeedUpButton : MonoBehaviour
 {
-    [SerializeField] private List<float> timeScales = new List<float>();
+    [System.Serializable]
+    public struct SpeedScale
+    {
+        [SerializeField] public int timeMultiplier;
+        [SerializeField] public string text;
+
+    }
+    
+    [SerializeField] private SpeedScale[] timeScales;
 
     [SerializeField] private TextMeshProUGUI timeSpeedCountText;
     [SerializeField] private Button incrementButton;
     [SerializeField] private Button decrementButton;
+    [SerializeField] private GameObject _gamePausedDisplay;
     private bool isIncrementButtonHovered = false;
     private bool isDecrementButtonHovered = false;
 
@@ -18,9 +27,12 @@ public class SpeedUpButton : MonoBehaviour
     private int numSpeeds = 0;
     private bool gameFinished = false;
 
+    private bool _isTimePaused;
+
     private void Awake()
     {
-        numSpeeds = timeScales.Count;
+        numSpeeds = timeScales.Length;
+        _isTimePaused = false;
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
     }
@@ -61,7 +73,23 @@ public class SpeedUpButton : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (_isTimePaused)
+            {
+                SetCurrentTimeSpeed(0);
+            }
+            else
+            {
+                SetCurrentTimeSpeed(3);
+            }
+        }
+        
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
             IncrementTime();
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            DecrementTime();
         }
     }
 
@@ -89,10 +117,36 @@ public class SpeedUpButton : MonoBehaviour
 
     private void UpdateTimeSpeed()
     {
-        Time.timeScale = timeScales[current];
-        //image.sprite = sprites[current];
-        timeSpeedCountText.text = (current + 1).ToString();
+        SpeedScale speedScale = timeScales[current];
+
+        bool wantsToPauseGame = speedScale.timeMultiplier == 0;
+        if (wantsToPauseGame)
+        {
+            PauseTimeScale();
+            Time.timeScale = 1;
+        }
+        else
+        {
+            ResumeTimeScale();
+            Time.timeScale = speedScale.timeMultiplier;
+        }
+        
+        _gamePausedDisplay.SetActive(wantsToPauseGame);
+
+        timeSpeedCountText.text = speedScale.text;
     }
+
+    private void PauseTimeScale()
+    {
+        _isTimePaused = true;
+        GameTime.SetTimeScale(0);
+    }
+    private void ResumeTimeScale()
+    {
+        _isTimePaused = false;
+        GameTime.SetTimeScale(1);
+    }
+    
 
     public void IncrementTime()
     {

@@ -144,16 +144,26 @@ public abstract class RangeBuilding : Building
 
     public Enemy GetBestEnemyTarget(Enemy currentlyTargetedEnemy)
     {
+        SortEnemies();
+
         if (currentlyTargetedEnemy != null &&
             currentlyTargetedEnemy.CanBeTargeted() &&
             !currentlyTargetedEnemy.DiesFromQueuedDamage() &&
             enemies.Contains(currentlyTargetedEnemy))
         {
+
+            foreach (Enemy enemy in enemies)
+            {
+                if (enemy.GetTargetPriorityBonus() < currentlyTargetedEnemy.GetTargetPriorityBonus())
+                {
+                    currentlyTargetedEnemy = enemy;
+                }
+            }
+            
             return currentlyTargetedEnemy;
         }
 
 
-        SortEnemies();
 
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())

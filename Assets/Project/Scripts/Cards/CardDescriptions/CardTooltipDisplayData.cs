@@ -76,7 +76,7 @@ public class CardTooltipDisplayData
         List<ATurretPassiveAbility> passiveAbilities = turretCardData.PassiveAbilitiesController.PassiveAbilities;
 
         List<Element> elements = new List<Element>(1 + passiveAbilities.Count);
-        elements.Add(ElementFromProjectile(projectileModel, turretCardData.ProjectileDescription));
+        elements.Add(ElementFromProjectile(projectileModel, turretCardData.CurrentProjectileDescription));
         foreach (ATurretPassiveAbility passiveAbility in passiveAbilities)  
         {
             elements.Add(ElementFromPassive(passiveAbility.OriginalModel, passiveAbility.GetAbilityDescription()));

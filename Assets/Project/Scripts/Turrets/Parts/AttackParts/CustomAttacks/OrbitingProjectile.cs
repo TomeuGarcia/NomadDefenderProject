@@ -8,7 +8,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     [SerializeField] private GameObject _sphereHolder;
     [SerializeField] private TrailRenderer _trailRenderer;
 
-    private const float TOTAL_DAMAGE_MULTIPLIER = 0.2f;
+    private const float TOTAL_DAMAGE_MULTIPLIER = 0.3f;
 
     
     private void Awake()
@@ -37,7 +37,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     {
         _timeSinceSpawn = 0.001f;
         _startPosition = Position;
-        _orbitOriginPosition = TurretOwner.Position + (Vector3.up * 0.5f);
+        _orbitOriginPosition = _spawnerObjectPosition + (Vector3.up * 0.5f);
         disappearing = false;
         
         _sphereHolder.SetActive(true);
@@ -96,6 +96,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     private Vector3 _startPosition;
     private Vector3 _orbitOriginPosition;
     private float MaximumRadius => TurretOwner.Stats.RadiusRange + 0.5f;
+    private float MinimumOrbitRadius => 0.5f;
     private float OrbitRadiusIncrementPerSecond => 1f;
     private float _timeSinceSpawn;
     
@@ -108,7 +109,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     
     private void UpdatePosition()
     {
-        float orbitRadius = Mathf.Min(MaximumRadius, _timeSinceSpawn * OrbitRadiusIncrementPerSecond);
+        float orbitRadius = Mathf.Min(MaximumRadius, MinimumOrbitRadius + _timeSinceSpawn * OrbitRadiusIncrementPerSecond);
         
         float angle = _timeSinceSpawn * MovementSpeed * Mathf.Deg2Rad;
 
@@ -129,12 +130,11 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.gameObject.CompareTag("Enemy") || disappearing)
+        if (CheckEnemyOnTriggerEnter(other, out Enemy enemy))
         {
-            return;
+            OnEnemyHit(enemy);
         }
-
-        OnEnemyHit(other.gameObject.GetComponent<Enemy>());
     }
+
     
 }

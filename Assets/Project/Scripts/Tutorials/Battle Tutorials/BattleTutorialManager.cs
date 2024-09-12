@@ -216,7 +216,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine(); //7
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
-        tutoCardDrawer.tutorialCard.showTurret = true;
+        tutoCardDrawer.tutorialCard.ShowTurret = true;
         yield return new WaitForSeconds(1.0f);
         scriptedSequence.Clear();
 
@@ -230,25 +230,25 @@ public class BattleTutorialManager : MonoBehaviour
         //Cost
         scriptedSequence.NextLine();// 9
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        tutoCardDrawer.tutorialCard.showPlayCost = true;
+        tutoCardDrawer.tutorialCard.ShowPlayCost = true;
         yield return new WaitForSeconds(1.0f);
 
         //Attack
         scriptedSequence.NextLine();// 10
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        tutoCardDrawer.tutorialCard.showAttackStat = true;
+        tutoCardDrawer.tutorialCard.ShowDamageStat = true;
         yield return new WaitForSeconds(1.0f);
 
         //Cadency
         scriptedSequence.NextLine();// 11
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        tutoCardDrawer.tutorialCard.showCadenceStat = true;
+        tutoCardDrawer.tutorialCard.ShowShotsPerSecondStat = true;
         yield return new WaitForSeconds(1.0f);
 
         //Range
         scriptedSequence.NextLine();// 12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        tutoCardDrawer.tutorialCard.showRangeStat = true;
+        tutoCardDrawer.tutorialCard.ShowRangeStat = true;
         yield return new WaitForSeconds(1.0f);
 
 

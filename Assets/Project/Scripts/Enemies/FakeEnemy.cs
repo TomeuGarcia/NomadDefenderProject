@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ public class FakeEnemy : Enemy
 {
     private bool canBeTargeted = true;
 
-    public delegate void FakeEnemyAction(ATurretProjectileBehaviour projectile);
+    public delegate void FakeEnemyAction(ATurretProjectileBehaviour projectile, Action<TurretDamageAttackResult> takeDamageResultCallback);
     public event FakeEnemyAction OnAttackedByProjectile;
 
     public delegate void FakeEnemyComputeDamageAction(TurretDamageAttack damageAttack);
@@ -42,9 +43,9 @@ public class FakeEnemy : Enemy
     {
         return canBeTargeted;
     }
-    public override float GetTargetPriorityBonus()
+    public override int GetTargetPriorityBonus()
     {
-        return -10000f;
+        return -10000;
     }
 
     public override void GetStunned(float duration)
@@ -58,14 +59,13 @@ public class FakeEnemy : Enemy
         OnWillBeAttackedByTurret?.Invoke(damageAttack);
     }
     
-    protected override TurretDamageAttackResult DoTakeDamage(TurretDamageAttack damageAttack)
+    protected override void DoTakeDamage(TurretDamageAttack damageAttack, 
+        Action<TurretDamageAttackResult> takeDamageResultCallback)
     {
         if (damageAttack.ProjectileSource != null && OnAttackedByProjectile != null)
         {
-            OnAttackedByProjectile(damageAttack.ProjectileSource);
+            OnAttackedByProjectile(damageAttack.ProjectileSource, takeDamageResultCallback);
         }
-
-        return null;
     }
 
 

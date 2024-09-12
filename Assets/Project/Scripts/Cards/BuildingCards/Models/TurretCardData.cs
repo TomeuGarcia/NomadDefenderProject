@@ -11,7 +11,8 @@ public class TurretCardData
     public TurretCardStatsController StatsController { get; private set; }
 
     public TurretPassiveAbilitiesController PassiveAbilitiesController { get; private set; }
-    public EditableCardAbilityDescription ProjectileDescription { get; private set; }
+    private EditableCardAbilityDescription _originalProjectileDescription;
+    public EditableCardAbilityDescription CurrentProjectileDescription { get; private set; }
 
 
 
@@ -25,27 +26,38 @@ public class TurretCardData
         
         MakeStatsControllerFromParts();
 
-        PassiveAbilitiesController = new TurretPassiveAbilitiesController(
-            this, OriginalModel.PassiveAbilityModels);
-        ProjectileDescription = model.SharedPartsGroup.Projectile.MakeAbilityDescription();
+        PassiveAbilitiesController = new TurretPassiveAbilitiesController(this, OriginalModel.PassiveAbilityModels);
+        
+        _originalProjectileDescription = model.SharedPartsGroup.Projectile.MakeAbilityDescription();
+        CurrentProjectileDescription = _originalProjectileDescription;
+    }
+
+    
+    public TurretCardData(TurretCardData other) 
+        : this(other, other.StatsController == null)
+    {
     }
     
-    public TurretCardData(TurretCardData other)
+    public TurretCardData(TurretCardData other, bool makeNewStats)
     {
         OriginalModel = other.OriginalModel;
         PlayCost = other.PlayCost;
         CardUpgradeLevel = other.CardUpgradeLevel;
         SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
-        
-        StatsController = other.StatsController;
-        if (StatsController == null)
+
+        if (makeNewStats)
         {
             MakeStatsControllerFromParts();
         }
+        else
+        {
+            StatsController = other.StatsController;
+        }
         
-        PassiveAbilitiesController = new TurretPassiveAbilitiesController(
-            this, other.PassiveAbilitiesController);
-        ProjectileDescription = other.SharedPartsGroup.Projectile.MakeAbilityDescription();
+        PassiveAbilitiesController = new TurretPassiveAbilitiesController(this, other.PassiveAbilitiesController);
+        
+        _originalProjectileDescription = other.SharedPartsGroup.Projectile.MakeAbilityDescription();
+        CurrentProjectileDescription = _originalProjectileDescription;
     }
     
     
@@ -84,10 +96,13 @@ public class TurretCardData
 
     
     
-    public void SetProjectilePart(TurretPartProjectileDataModel projectileDataModel)
+    public void SetProjectileTemporarily(TurretPartProjectileDataModel projectileDataModel)
     {
-        SharedPartsGroup.SetProjectile(projectileDataModel);
-        ProjectileDescription = projectileDataModel.MakeAbilityDescription();
+        CurrentProjectileDescription = projectileDataModel.MakeAbilityDescription();
+    }
+    public void ResetProjectile()
+    {
+        CurrentProjectileDescription = _originalProjectileDescription;
     }
 
     public void AddPassiveAbility(ATurretPassiveAbilityDataModel passiveAbilityModel)

@@ -30,6 +30,9 @@ public class TurretBuilding : RangeBuilding
     public Material MaterialForTurret => ProjectileDataModel.MaterialForTurret;
     public TurretPartProjectileDataModel ProjectileDataModel { get; private set; }
     
+    private TurretViewAddOnController _viewAddOnController;
+    public ITurretViewAddOnController ViewAddOnController => _viewAddOnController;
+    
 
     [Header("HOLDERS")]
     [SerializeField] protected Transform bodyHolder;
@@ -73,6 +76,7 @@ public class TurretBuilding : RangeBuilding
 
         _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
         _shootingController.ClearAllProjectiles();
+        _viewAddOnController.StopViewingAddOns();
     }
 
 
@@ -82,11 +86,7 @@ public class TurretBuilding : RangeBuilding
         if (!isFunctional) return;
 
         _shootingController.UpdateShoot();
-
-        //if (bodyPart.lookAtTarget)
-        {
-            LookAtTarget();
-        }
+        LookAtTarget();
     }
 
 
@@ -95,8 +95,14 @@ public class TurretBuilding : RangeBuilding
         Vector3 lookDirection = 
             Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up)
                 .normalized;
-        Quaternion targetRot = Quaternion.LookRotation(lookDirection, Vector3.up);
-        bodyPart.transform.rotation = Quaternion.RotateTowards(bodyPart.transform.rotation, targetRot, 600.0f * GameTime.DeltaTime);
+        
+        Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+        Quaternion currentRotation = 
+            Vector3.Dot(lookDirection, bodyPart.transform.forward) > 0.95f 
+            ? targetRotation 
+            : Quaternion.RotateTowards(bodyPart.transform.rotation, targetRotation, 600.0f * GameTime.DeltaTime);
+
+        bodyPart.transform.rotation = currentRotation;
     }
 
     public void Init(TurretCardStatsController statsController, TurretCardData turretCardData, CurrencyCounter currencyCounter)
@@ -131,18 +137,26 @@ public class TurretBuilding : RangeBuilding
 
         DisableFunctionality();
 
+        _viewAddOnController = new TurretViewAddOnController(bodyPart.AddOnsParent);
 
-        _shootingController = parts.Projectile.ShootingControllerCreator.Create(
-            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
-                CardData.PassiveAbilitiesController));
+        InitShootingController();
         
         _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
     }
 
+    private void InitShootingController()
+    {
+        _shootingController = ProjectileDataModel.ShootingControllerCreator.Create(
+            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
+                CardData.PassiveAbilitiesController));
+    }
+    
     public void ResetProjectilePart(TurretPartProjectileDataModel newProjectilePart)
     {
         ProjectileDataModel = newProjectilePart;
         bodyPart.ResetProjectileMaterial(MaterialForTurret);
+        
+        InitShootingController();
     }
     public void ResetBodyMaterial(Material newMaterial)
     {        
@@ -214,7 +228,8 @@ public class TurretBuilding : RangeBuilding
         InvokeOnPlaced();
         
         if (OnGotPlaced != null) OnGotPlaced();
-        _abilitiesPlacingLifetimeCycle.OnTurretPlaced();
+        _abilitiesPlacingLifetimeCycle.OnTurretPlaced(this);
+        _viewAddOnController.StartViewingAddOns();
     }
     public override void GotEnabledPlacing()
     {

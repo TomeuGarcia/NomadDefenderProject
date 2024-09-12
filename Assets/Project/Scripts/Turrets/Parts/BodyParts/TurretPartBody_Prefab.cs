@@ -7,29 +7,19 @@ public class TurretPartBody_Prefab : MonoBehaviour
 {
     [SerializeField] public TurretPartBody_View _view;
     [SerializeField] public Transform binderPoint;
-
-    [SerializeField] public bool lookAtTarget;
+    [SerializeField] private Transform _addOnsParent;
+    
     [SerializeField] public Transform shootingPointParent;
     private int currentShootingPoint = 0;
-
-
-    [SerializeField] private Material previewMaterial;
-    [SerializeField] private MeshRenderer[] meshRenderers;
     private Material[][] defaultMaterials;
     private Material[][] previewMaterials;
 
-
-    [System.Serializable]
-    private struct MeshAndMaterialI
-    {
-        public int meshI, materialI;
-    }
-    [SerializeField] MeshAndMaterialI[] projectileMaterialIndices;
-
+    
     [Header("TURRET UPGRADE VISUALS")]
     [SerializeField] private GameObject[] turretUpgradeVisuals;
 
     public TurretPartBody.BodyType BodyType { get; private set; }
+    public Transform AddOnsParent => _addOnsParent;
 
 
     public virtual void Init(TurretPartBody.BodyType bodyType, Material projectileMaterial)

@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbility
 {
     private readonly TPADataModel_ExtraDamageMultipleHits _abilityDataModel;

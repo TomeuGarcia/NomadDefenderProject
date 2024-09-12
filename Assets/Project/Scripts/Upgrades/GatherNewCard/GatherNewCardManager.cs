@@ -101,7 +101,7 @@ public class GatherNewCardManager : MonoBehaviour
         {
             TurretBuildingCard turretCard = _cardSpawnService.MakeNewTurretCard_FromDataModel(turretCardPartsSet[i], cardHolder);
             
-            int levelIncrement = turretCardsLevel - turretCardPartsSet[i].CardLevel;
+            int levelIncrement = Mathf.Max(0, turretCardsLevel - turretCardPartsSet[i].CardLevel);
             turretCard.IncrementCardLevel(levelIncrement);
 
             cards[i] = turretCard;

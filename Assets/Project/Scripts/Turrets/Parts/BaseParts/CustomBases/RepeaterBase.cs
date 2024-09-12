@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static TurretPartBody;
@@ -84,6 +85,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void Update()
     {
+        ComputeNextTargetedEnemy();
         if (targetedEnemy != null)
         {
             LookAtTargetEnemy();
@@ -223,9 +225,6 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeTargetAndComputeDamage(TurretDamageAttack damageAttack)
     {
-        ComputeNextTargetedEnemy();
-        
-        
         if (targetedEnemy == null)
         {
             return;
@@ -262,15 +261,29 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
 
-    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource)
+    private void RepeatProjectile(ATurretProjectileBehaviour projectileSource, 
+        Action<TurretDamageAttackResult> takeDamageResultCallback)
     {        
         EnemyInDamageQueue enemyInDamageQueue = PopEnemyInDamageQueue(projectileSource);
+        TurretDamageAttack damageAttackToRepeat = null;
+        
+        if (enemyInDamageQueue == null)
+        {
+            if (projectileSource.QueuesDamageToEnemies())
+            {
+                return;
+            }
 
-        if (enemyInDamageQueue == null) return;
+            damageAttackToRepeat = projectileSource.DamageAttack;
+        }
+        else
+        {
+            damageAttackToRepeat = enemyInDamageQueue.DamageAttack;
+        }
         
         
 
-        Shoot(enemyInDamageQueue.DamageAttack);
+        Shoot(damageAttackToRepeat);
 
         /*
         if (currentLvl > 0)
@@ -288,22 +301,23 @@ public class RepeaterBase : TurretPartBase_Prefab
     }
 
 
-    private void Shoot(TurretDamageAttack repeatedDamageAttack)
+    private void Shoot(TurretDamageAttack projectileToRepeat)
     {
-        ATurretProjectileBehaviour projectileSource = repeatedDamageAttack.ProjectileSource;
+        ATurretProjectileBehaviour projectileSource = projectileToRepeat.ProjectileSource;
         
         Vector3 spawnPosition = shootPoint.position;
 
         ATurretProjectileBehaviour newProjectile = 
-            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, spawnPosition, Quaternion.identity)
-            .GetComponent<ATurretProjectileBehaviour>();
+            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, 
+                    spawnPosition, Quaternion.identity).GetComponent<ATurretProjectileBehaviour>();
 
         TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
         newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.gameObject.SetActive(true);
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
-            projectileTurret, repeatedDamageAttack);
+            projectileTurret, projectileToRepeat, _ownerBuilding.Position);
+        newProjectile.AddEnemyToIgnore(fakeEnemy);
 
 
         // Spawn particle
@@ -313,14 +327,21 @@ public class RepeaterBase : TurretPartBase_Prefab
 
 
         // Audio
-        GameAudioManager.GetInstance().PlayProjectileShot(BodyType.SENTRY);        
+        GameAudioManager.GetInstance().PlayProjectileShot(BodyType.SENTRY);
     }
 
     private void LookAtTargetEnemy()
     {
-        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;    
+        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;
 
-        Quaternion targetRot = Quaternion.LookRotation((lookPosition - rotateTransform.position).normalized, rotateTransform.up);
+        Vector3 lookDirection = Vector3.ProjectOnPlane(lookPosition - rotateTransform.position, Vector3.up).normalized;
+
+        if (Vector3.Dot(lookDirection, rotateTransform.forward) > 0.95f)
+        {
+            return;
+        }
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDirection, rotateTransform.up);
 
         Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 600.0f * Time.deltaTime * GameTime.TimeScale);
         Vector3 endEuler = endRotation.eulerAngles;

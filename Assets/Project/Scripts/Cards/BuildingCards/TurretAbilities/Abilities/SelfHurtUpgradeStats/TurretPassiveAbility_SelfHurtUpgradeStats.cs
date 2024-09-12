@@ -43,7 +43,7 @@ public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
     }
 
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         UnsubscribeEvents();
         DoDamageAndUpgrade();

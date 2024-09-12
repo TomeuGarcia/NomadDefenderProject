@@ -57,7 +57,7 @@ public class TurretPassiveAbility_HealLocation : ATurretPassiveAbility
         ConnectBinderWithPathLocation();
     }
 
-    public override void OnTurretPlaced()
+    protected override void OnTurretPlaced()
     {
         HideBinder();
         DoHeal();

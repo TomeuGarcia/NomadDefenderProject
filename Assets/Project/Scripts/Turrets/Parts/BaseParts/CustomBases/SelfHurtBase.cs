@@ -169,8 +169,13 @@ public class SelfHurtBase : TurretPartBase_Prefab
         {
             TurretDamageAttack explosionDamageAttack = new TurretDamageAttack(null, enemy, explosionDamage);
             enemy.QueueDamage(explosionDamageAttack);
-            enemy.TakeDamage(explosionDamageAttack);
+            enemy.TakeDamage(explosionDamageAttack, DamageEnemiesResult);
         }
+    }
+
+    private void DamageEnemiesResult(TurretDamageAttackResult damageAttackResult)
+    {
+        
     }
 
     private void PlayExplosionAnimation()

@@ -230,8 +230,11 @@ public class OWMapTutorialManager2 : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 0));
         wathcersEyes.SetActive(true);
-
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(0.3f);
+        
+        StartCoroutine(GlitchScreen(0.0f, 0.6f, false, 0));
+        yield return new WaitForSeconds(0.7f);
+        
         StartCoroutine(GlitchScreen(0.0f, 0.2f, false, 2));
         StartCoroutine(GlitchScreen(0.4f, 0.1f, false));
         StartCoroutine(GlitchScreen(0.6f, 0.1f, false));
