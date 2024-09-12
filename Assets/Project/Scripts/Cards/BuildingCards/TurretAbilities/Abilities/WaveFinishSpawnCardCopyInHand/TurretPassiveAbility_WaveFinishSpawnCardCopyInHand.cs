@@ -59,7 +59,7 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;
         int numberOfCards = cardDrawer.GetCardsInHand().Length + 1;
         
-        TurretCardData turretCardDataCopy = new TurretCardData(_turretOwner.CardData);
+        TurretCardData turretCardDataCopy = new TurretCardData(_turretOwner.CardData, true);
         turretCardDataCopy.RemovePassiveAbility(OriginalModel);
         turretCardDataCopy.IncrementPlayCost(_abilityDataModel.CostIncrementPerCard.Value * numberOfCards);
         
