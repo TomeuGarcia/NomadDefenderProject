@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileViewAddOn_StackedPower : AProjectileViewAddOn
 {
     [SerializeField] private AnimationCurve _multiplierOverCards;
     [SerializeField] private ParticleSystem _stackQuantityParticles;
+    [SerializeField] private List<Transform> _meshes = new();
     private ParticleSystem.MainModule _stackQuantityMain;
 
 
