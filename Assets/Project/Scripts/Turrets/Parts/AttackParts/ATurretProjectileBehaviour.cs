@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Scripts.ObjectPooling;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public abstract class ATurretProjectileBehaviour : MonoBehaviour
+public abstract class ATurretProjectileBehaviour : RecyclableObject
 {
     public enum Type { 
         Homing, 
@@ -44,6 +45,16 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     public interface IDisappearListener
     {
         void OnProjectileDisappeared(ATurretProjectileBehaviour projectileBehaviour);
+    }
+    
+    
+    
+    internal override void RecycledInit() { }
+
+    internal override void RecycledReleased()
+    {
+        _turretProjectileView.OnProjectileDisappear();
+        DisappearListener?.OnProjectileDisappeared(this);
     }
     
 
@@ -112,8 +123,6 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
     protected void Disappear()
     {
         StartCoroutine(WaitToDisable());
-        _turretProjectileView.OnProjectileDisappear();
-        DisappearListener?.OnProjectileDisappeared(this);
     }
 
     private IEnumerator WaitToDisable()
@@ -126,7 +135,7 @@ public abstract class ATurretProjectileBehaviour : MonoBehaviour
 
     public void Disable()
     {
-        gameObject.SetActive(false);
+        Recycle();
         disappearing = false;
     }
 

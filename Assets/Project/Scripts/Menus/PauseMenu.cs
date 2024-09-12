@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.Serialization;
+
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
@@ -32,6 +35,10 @@ public class PauseMenu : MonoBehaviour
     private static Color disabledColor = new Color(0.15f, 0.15f, 0.15f);
 
     static PauseMenu instance;
+
+    public Action OnGameSurrender;
+
+
     private void Start()
     {
         //textManager.SetActive(false);
@@ -132,6 +139,8 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
+        OnGameSurrender?.Invoke();
+        
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 1f);
         Time.timeScale = 1;
 

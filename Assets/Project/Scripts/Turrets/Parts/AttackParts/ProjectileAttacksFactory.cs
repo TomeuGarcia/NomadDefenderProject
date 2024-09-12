@@ -1,25 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Scripts.ObjectPooling;
 using UnityEngine;
-using static ProjectileParticleFactory;
+
 
 public class ProjectileAttacksFactory : MonoBehaviour
 {
     [System.Serializable]
-    private struct ProjectileTypeAndPool : Pool.IListener
+    private struct ProjectileTypeAndPool : ObjectPool.IListener
     {
+        [SerializeField] private int _initialInstances;
         public TurretPartProjectileDataModel projectileDataModel;
-        public Pool pool;
-
-        public void Init()
+        
+        public ObjectPool MakeObjectPool(Transform originalParent)
         {
-            pool.SetPooledObject(projectileDataModel.ProjectilePrefab.gameObject);
-            pool._listener = this;
+            ObjectPool objectPool = new ObjectPool(projectileDataModel.ProjectilePrefab, originalParent, this);
+            objectPool.Init(_initialInstances);
+            return objectPool;
         }
 
-        public void OnObjectInstantiated(GameObject projectileGameObject)
+        public void OnObjectInstantiated(RecyclableObject spawnedObject)
         {
-            projectileGameObject.GetComponent<ATurretProjectileBehaviour>().InstantiatedInit(projectileDataModel);
+            spawnedObject.GetComponent<ATurretProjectileBehaviour>().InstantiatedInit(projectileDataModel);
         }
     }
 
@@ -28,7 +30,10 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     [SerializeField] private ProjectileTypeAndPool[] projectileAndPoolList;
     private Dictionary<ATurretProjectileBehaviour.Type, Pool> projectileTypeToPool;
+    
+    private Dictionary<ATurretProjectileBehaviour.Type, ObjectPool> _projectileTypeToPool;
 
+    
 
 
     private void Awake()
@@ -47,21 +52,24 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     private void OnEnable()
     {
+        PauseMenu.GetInstance().OnGameSurrender += ResetPools;
         TDGameManager.OnEndGameResetPools += ResetPools;
     }
     private void OnDisable()
     {
+        PauseMenu.GetInstance().OnGameSurrender -= ResetPools;
         TDGameManager.OnEndGameResetPools -= ResetPools;
     }
 
     private void Init()
     {
-        projectileTypeToPool = new Dictionary<ATurretProjectileBehaviour.Type, Pool>();
+        _projectileTypeToPool = new Dictionary<ATurretProjectileBehaviour.Type, ObjectPool>();
 
         foreach (ProjectileTypeAndPool projectileTypeAndPool in projectileAndPoolList)
         {
-            projectileTypeAndPool.Init();
-            projectileTypeToPool.Add(projectileTypeAndPool.projectileDataModel.ProjectileType, projectileTypeAndPool.pool);
+            _projectileTypeToPool.Add(
+                projectileTypeAndPool.projectileDataModel.ProjectileType, 
+                projectileTypeAndPool.MakeObjectPool(transform));
         }
     }
 
@@ -72,15 +80,16 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     private void ResetPools()
     {
-        foreach (ProjectileTypeAndPool attackTypeParticleToPool in projectileAndPoolList)
+        foreach (var typeToPool in _projectileTypeToPool)
         {
-            attackTypeParticleToPool.pool.ResetObjectsList();
+            typeToPool.Value.RecycleAll();
         }
     }
 
-    public GameObject GetAttackGameObject(ATurretProjectileBehaviour.Type attackType, Vector3 position, Quaternion rotation)
+    public ATurretProjectileBehaviour Create(ATurretProjectileBehaviour.Type attackType, 
+        Vector3 position, Quaternion rotation)
     {
-        return projectileTypeToPool[attackType].GetObject(position, rotation);
+        return _projectileTypeToPool[attackType].Spawn<ATurretProjectileBehaviour>(position, rotation);
     }
 
 }
