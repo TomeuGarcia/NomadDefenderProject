@@ -52,12 +52,12 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     private void OnEnable()
     {
-        PauseMenu.GetInstance().OnGameSurrender += ResetPools;
+        PauseMenu.OnGameSurrender += ResetPools;
         TDGameManager.OnEndGameResetPools += ResetPools;
     }
     private void OnDisable()
     {
-        PauseMenu.GetInstance().OnGameSurrender -= ResetPools;
+        PauseMenu.OnGameSurrender -= ResetPools;
         TDGameManager.OnEndGameResetPools -= ResetPools;
     }
 

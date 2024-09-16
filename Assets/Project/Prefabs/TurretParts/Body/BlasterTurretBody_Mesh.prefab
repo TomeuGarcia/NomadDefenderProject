@@ -268,33 +268,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d1db2cf35f2a149b0efe869ab6685f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
-  meshRenderers:
-  - {fileID: 2944862812649518827}
-  - {fileID: 2575660707322403010}
-  - {fileID: 6278044181618614478}
-  - {fileID: 6205060398627766707}
-  - {fileID: 1139801698387071194}
-  - {fileID: 9001497131938515681}
-  - {fileID: 245757867838427992}
-  - {fileID: 6296971951234660081}
-  projectileMaterialIndices:
-  - meshI: 1
-    materialI: 0
-  - meshI: 1
-    materialI: 0
-  - meshI: 2
-    materialI: 0
-  - meshI: 3
-    materialI: 0
-  - meshI: 4
-    materialI: 0
-  - meshI: 5
-    materialI: 0
-  - meshI: 6
-    materialI: 0
-  - meshI: 7
-    materialI: 0
+  _previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
+  _materialAssigners_Normal:
+  - _mesh: {fileID: 2575660707322403010}
+    _materialIndices: 00000000
+  - _mesh: {fileID: 2944862812649518827}
+    _materialIndices: 
+  _materialAssigners_Lvl1:
+  - _mesh: {fileID: 6278044181618614478}
+    _materialIndices: 00000000
+  - _mesh: {fileID: 6205060398627766707}
+    _materialIndices: 00000000
+  _materialAssigners_Lvl2:
+  - _mesh: {fileID: 1139801698387071194}
+    _materialIndices: 00000000
+  - _mesh: {fileID: 9001497131938515681}
+    _materialIndices: 00000000
+  _materialAssigners_Lvl3:
+  - _mesh: {fileID: 245757867838427992}
+    _materialIndices: 00000000
+  - _mesh: {fileID: 6296971951234660081}
+    _materialIndices: 00000000
 --- !u!1 &8898338496823056344
 GameObject:
   m_ObjectHideFlags: 0

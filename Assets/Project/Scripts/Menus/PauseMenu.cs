@@ -36,7 +36,7 @@ public class PauseMenu : MonoBehaviour
 
     static PauseMenu instance;
 
-    public Action OnGameSurrender;
+    public static Action OnGameSurrender;
 
 
     private void Start()

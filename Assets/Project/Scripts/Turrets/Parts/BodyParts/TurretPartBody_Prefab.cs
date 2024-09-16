@@ -30,11 +30,6 @@ public class TurretPartBody_Prefab : MonoBehaviour
         InitTurretUpgradeVisuals(0);
     }
 
-    private void InitMaterials(Material projectileMaterial)
-    {
-        _view.InitMaterials(projectileMaterial);
-    }
-
     public virtual void ResetProjectileMaterial(Material projectileMaterial)
     {
         _view.ResetProjectileMaterial(projectileMaterial);

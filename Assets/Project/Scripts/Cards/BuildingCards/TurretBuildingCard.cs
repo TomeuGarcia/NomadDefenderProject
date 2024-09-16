@@ -100,7 +100,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         _turretMeshPreview = Instantiate(CardParts.Body.previewPrefab, _turretParentTransform)
             .transform.GetChild(0).GetComponent<TurretPartBody_View>();
         _turretMeshPreview.InitMaterials(new Material(CardParts.Projectile.MaterialForTurretPreview));
-        _turretMeshPreview.SetDefaultMaterial();
 
         _turretMeshPreview.transform.localRotation = Quaternion.identity;
         _turretMeshPreview.transform.localPosition = Vector3.zero;
@@ -447,7 +446,6 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         turretBuilding.ResetProjectilePart(newTurretProjectileModel);
 
         _turretMeshPreview.ResetProjectileMaterial(newTurretProjectileModel.MaterialForTurret);
-        _turretMeshPreview.SetDefaultMaterial();
 
         StartCoroutine(
             PlayProjectileReplacementAnimation(oldProjectile, newTurretProjectileModel, delayBeforeAnimation));
