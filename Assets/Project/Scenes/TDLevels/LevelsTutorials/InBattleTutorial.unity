@@ -4447,7 +4447,7 @@ PrefabInstance:
     - target: {fileID: 1851400534606186765, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2287175830089958520, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
@@ -4573,6 +4573,16 @@ PrefabInstance:
     - target: {fileID: 5785310182354782608, guid: ac4314825bb9b65479c003072040fe74,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873864936841026023, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873864936841026023, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      propertyPath: m_Interactable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6609533211544911166, guid: ac4314825bb9b65479c003072040fe74,
@@ -4717,8 +4727,6 @@ MonoBehaviour:
   hand: {fileID: 1635650534}
   deck: {fileID: 1635650530}
   battleHUD: {fileID: 1635650533}
-  deckCreator: {fileID: 0}
-  testTurretCardParts: {fileID: 0}
   warningBackground: {fileID: 1112238737}
   redrawCanvasGameObject: {fileID: 1635650535}
   redrawsLeftCounterText: {fileID: 495573788}
@@ -11222,18 +11230,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 736763078}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &737672334 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6737276504905484473, guid: ac4314825bb9b65479c003072040fe74,
-    type: 3}
-  m_PrefabInstance: {fileID: 314651045}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &744020335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30707,7 +30703,7 @@ PrefabInstance:
         type: 3}
       propertyPath: speedUpButton
       value: 
-      objectReference: {fileID: 737672334}
+      objectReference: {fileID: 0}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: tDGameManager

@@ -198,6 +198,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         //Starts Cards Tutorial
         tutoCardDrawer.DoGameStartSetup();
+        tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
 
 
         scriptedSequence.NextLine(); //Initializing User's Deck Line 5
@@ -209,51 +210,38 @@ public class BattleTutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f); 
         tutoCardDrawer.tutorialCard.isInteractable = false;
-        tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
         yield return new WaitForSeconds(0.5f);
 
+        scriptedSequence.NextLine(); //7
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
         //Cards Visuals
-        scriptedSequence.NextLine(); //7
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
+        //scriptedSequence.NextLine(); //7
+        //yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
+        
         tutoCardDrawer.tutorialCard.ShowTurret = true;
-        yield return new WaitForSeconds(1.0f);
-        scriptedSequence.Clear();
+        yield return StartCoroutine(WaitForInput());
 
-
-        //Cards Stats
-        scriptedSequence.NextLine();// 8
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(1.0f);
-
-
-        //Cost
-        scriptedSequence.NextLine();// 9
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
-        tutoCardDrawer.tutorialCard.ShowPlayCost = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //Attack
-        scriptedSequence.NextLine();// 10
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        tutoCardDrawer.tutorialCard.ShowProjectile = true;
+        yield return StartCoroutine(WaitForInput());
+        
         tutoCardDrawer.tutorialCard.ShowDamageStat = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //Cadency
-        scriptedSequence.NextLine();// 11
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return StartCoroutine(WaitForInput());
+        
         tutoCardDrawer.tutorialCard.ShowShotsPerSecondStat = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //Range
-        scriptedSequence.NextLine();// 12
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return StartCoroutine(WaitForInput());
+        
         tutoCardDrawer.tutorialCard.ShowRangeStat = true;
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(WaitForInput());
+        
+        tutoCardDrawer.tutorialCard.ShowPlayCost = true;
+        yield return StartCoroutine(WaitForInput());
 
-
-
+        tutoCardDrawer.tutorialCard.Finish = true;
+        
+        
+        
         scriptedSequence.NextLine();// 13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() => tutoCardDrawer.tutorialCard.FinishedAnimation);
@@ -454,6 +442,13 @@ public class BattleTutorialManager : MonoBehaviour
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
         tDGameManager.ForceFinishScene();
 
+    }
+
+
+    private IEnumerator WaitForInput()
+    {
+        yield return new WaitForSeconds(0.2f);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0) );
     }
 
 }

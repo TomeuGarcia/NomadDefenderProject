@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7308264895389281424}
   - component: {fileID: 7308264895389281425}
   m_Layer: 5
-  m_Name: ScriptedSequence
+  m_Name: ScriptedSequence_Initializing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,25 +74,7 @@ MonoBehaviour:
     text: Creating First Card...
     clearTime: 0
   - textType: 0
-    text: Creating Card Visuals
-    clearTime: 0
-  - textType: 0
-    text: 'Creating Card Stats:'
-    clearTime: 0
-  - textType: 0
-    text: '/Card Stats: COST'
-    clearTime: 0
-  - textType: 0
-    text: '/Card Stats: <color=#CE004B>DAMAGE</color>'
-    clearTime: 0
-  - textType: 0
-    text: '/Card Stats: <color=#F8C94E>SHOTS PER SECOND</color>'
-    clearTime: 0
-  - textType: 0
-    text: '/Card Stats: <color=#00CE8D>RANGE</color>'
-    clearTime: 0
-  - textType: 0
-    text: Card Stats Created Successfully
+    text: Waiting for <color=#47B13A>Input</color>.<color=#F5550C>LeftClick</color>
     clearTime: 0
   - textType: 0
     text: Initializing Defense...
@@ -237,9 +219,9 @@ MonoBehaviour:
   hand: {fileID: 0}
   enemyWaveManager: {fileID: 0}
   currencyBackgroundImg: {fileID: 0}
+  speedUpButtonHolder: {fileID: 0}
   speedUpButton: {fileID: 0}
   deckInterface: {fileID: 0}
-  redrawInterface: {fileID: 0}
   blackImg: {fileID: 0}
   scriptedSequence: {fileID: 7308264895389281425}
   currencyCounter: {fileID: 0}

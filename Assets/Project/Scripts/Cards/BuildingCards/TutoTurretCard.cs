@@ -15,6 +15,9 @@ public class TutoTurretCard : TurretBuildingCard
     public bool ShowTurret { 
         set => _tutorialCardDrawAnimation.ShowTurret = value;
     }
+    public bool ShowProjectile { 
+        set => _tutorialCardDrawAnimation.ShowProjectile = value;
+    }
     public bool ShowPlayCost { 
         set => _tutorialCardDrawAnimation.ShowPlayCost = value;
     }
@@ -26,6 +29,9 @@ public class TutoTurretCard : TurretBuildingCard
     }
     public bool ShowShotsPerSecondStat { 
         set => _tutorialCardDrawAnimation.ShowShotsPerSecondStat = value;
+    }
+    public bool Finish { 
+        set => _tutorialCardDrawAnimation.Finish = value;
     }
 
 

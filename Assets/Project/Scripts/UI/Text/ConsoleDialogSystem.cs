@@ -19,6 +19,7 @@ public class ConsoleDialogSystem : MonoBehaviour
     [SerializeField] private Vector3 lineSeparation;
     [SerializeField] private Vector3 initialLinePosition;
     [SerializeField] private Color32 contextColor;
+    [SerializeField] private Vector2 _textsPivot = new Vector2(0f, 0.5f);
 
     [Header("CLEAR")]
     [SerializeField] private bool clearWithTime;
@@ -80,7 +81,7 @@ public class ConsoleDialogSystem : MonoBehaviour
         consoleLines.Insert(0, textPool.GetObject());
         consoleLines[0].SetActive(true);
         consoleLines[0].transform.SetParent(textPool.transform, false);
-        consoleLines[0].GetComponent<RectTransform>().pivot = new Vector2(0f, 0.5f);
+        consoleLines[0].GetComponent<RectTransform>().pivot = _textsPivot;
         consoleLines[0].GetComponent<RectTransform>().anchoredPosition = initialLinePosition - lineSeparation * (consoleLines.Count - 1);
 
         //Configure the TextDecoder
