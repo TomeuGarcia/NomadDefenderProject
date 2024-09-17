@@ -209,6 +209,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f); 
         tutoCardDrawer.tutorialCard.isInteractable = false;
+        tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
         yield return new WaitForSeconds(0.5f);
 
 
@@ -264,12 +265,17 @@ public class BattleTutorialManager : MonoBehaviour
         //Skips Redraw
         scriptedSequence.Clear();
         tutoCardDrawer.FinishRedraws();
-
-        yield return new WaitForSeconds(1.5f);
         
-
+        
+        yield return new WaitForSeconds(0.5f);
+        tutoCardDrawer.tutorialCard.MotionEffectsController.EnableMotion();
+        tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
+        yield return new WaitForSeconds(0.5f);
+        tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
         yield return new WaitForSeconds(0.5f);
 
+
+        yield return new WaitForSeconds(1.5f);
        
 
         
