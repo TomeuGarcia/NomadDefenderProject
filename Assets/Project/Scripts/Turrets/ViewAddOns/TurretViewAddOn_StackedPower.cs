@@ -31,6 +31,11 @@ public class TurretViewAddOn_StackedPower : ATurretViewAddOn
             _meshes[i].localRotation = Quaternion.Euler(Vector3.up * (angleStep * i));
             _meshes[i].gameObject.SetActive(true);
         }
+
+        for (int i = _numberOfCards; i < _meshes.Count; i++)
+        {
+            _meshes[i].gameObject.SetActive(false);
+        }
     }
 
     private void Update()

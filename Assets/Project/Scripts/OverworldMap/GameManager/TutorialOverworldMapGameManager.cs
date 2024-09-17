@@ -47,6 +47,8 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
             CreateNewBattleStateResult(out currentBattleStateResult);
             StartCommunicationWithNextNodes(currentNode);
         }
+
+        _overworldMapVolume.DeactivateVolume();
     }
 
 
