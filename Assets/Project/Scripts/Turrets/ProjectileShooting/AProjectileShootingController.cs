@@ -47,11 +47,8 @@ public abstract class AProjectileShootingController
     {
         Vector3 shootPoint = _body.GetNextShootingPoint();
         ATurretProjectileBehaviour currentAttack = ProjectileAttacksFactory.GetInstance()
-            .GetAttackGameObject(_projectileDataModel.ProjectileType, shootPoint, Quaternion.identity)
-            .GetComponent<ATurretProjectileBehaviour>();
+            .Create(_projectileDataModel.ProjectileType, shootPoint, Quaternion.identity);
 
-        //currentAttack.transform.parent = _turretOwner.transform;
-        currentAttack.gameObject.SetActive(true);
         currentAttack.ProjectileShotInit(_turretShootingLifetimeCycle, targetedEnemy, _turretOwner);
 
 

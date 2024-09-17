@@ -1,71 +1,65 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TurretPartBody_View : MonoBehaviour
 {
-    [SerializeField] private Material previewMaterial;
-    [SerializeField] private MeshRenderer[] meshRenderers;
-    private Material[][] defaultMaterials;
-    private Material[][] previewMaterials;
-
-    [System.Serializable]
-    private struct MeshAndMaterialI
-    {
-        public int meshI, materialI;
-    }
-    [SerializeField] MeshAndMaterialI[] projectileMaterialIndices;
+    [SerializeField] private Material _previewMaterial;
+    [SerializeField] private TurretBodyMaterialAssigner[] _materialAssigners_Normal;
+    [SerializeField] private TurretBodyMaterialAssigner[] _materialAssigners_Lvl1;
+    [SerializeField] private TurretBodyMaterialAssigner[] _materialAssigners_Lvl2;
+    [SerializeField] private TurretBodyMaterialAssigner[] _materialAssigners_Lvl3;
+    private TurretBodyMaterialAssigner[] _allMaterialAssigners;
+    
+    
+    private Material _defaultMaterial;
+    
+    
 
     public void InitMaterials(Material projectileMaterial)
     {
-        defaultMaterials = new Material[meshRenderers.Length][];
-        previewMaterials = new Material[meshRenderers.Length][];
-
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        _allMaterialAssigners = 
+            _materialAssigners_Normal
+            .Union(_materialAssigners_Lvl1)
+            .Union(_materialAssigners_Lvl2)
+            .Union(_materialAssigners_Lvl3)
+            .ToArray();
+        
+        foreach (TurretBodyMaterialAssigner materialAssigner in _allMaterialAssigners)
         {
-            defaultMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
-            previewMaterials[meshI] = new Material[meshRenderers[meshI].materials.Length];
-
-            for (int i = 0; i < meshRenderers[meshI].materials.Length; ++i)
-            {
-                defaultMaterials[meshI][i] = meshRenderers[meshI].materials[i];
-                previewMaterials[meshI][i] = previewMaterial;
-            }
+            materialAssigner.Init();
         }
-
-
+        
         ResetProjectileMaterial(projectileMaterial);
     }
 
     public void ResetProjectileMaterial(Material projectileMaterial)
     {
-        // Replace inital materials for projectile material
-
-        for (int i = 0; i < projectileMaterialIndices.Length; ++i)
-        {
-            defaultMaterials[projectileMaterialIndices[i].meshI][projectileMaterialIndices[i].materialI] = projectileMaterial;
-        }
+        _defaultMaterial = projectileMaterial;
+        SetDefaultMaterial();
     }
 
     public void SetDefaultMaterial()
     {
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        foreach (TurretBodyMaterialAssigner materialAssigner in _allMaterialAssigners)
         {
-            meshRenderers[meshI].materials = defaultMaterials[meshI];
+            materialAssigner.Assign(_defaultMaterial);
         }
     }
 
     public void SetPreviewMaterial()
     {
-        for (int meshI = 0; meshI < meshRenderers.Length; ++meshI)
+        foreach (TurretBodyMaterialAssigner materialAssigner in _allMaterialAssigners)
         {
-            meshRenderers[meshI].materials = previewMaterials[meshI];
+            materialAssigner.AssignToAll(_previewMaterial);
         }
     }
 
 
     public void SetMaterialColor(Color color)
     {
-        previewMaterial.color = color;
+        _previewMaterial.color = color;
     }
 }

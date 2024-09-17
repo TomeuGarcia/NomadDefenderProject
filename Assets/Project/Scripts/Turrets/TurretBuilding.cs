@@ -161,7 +161,6 @@ public class TurretBuilding : RangeBuilding
     public void ResetBodyMaterial(Material newMaterial)
     {        
         bodyPart.ResetProjectileMaterial(newMaterial);
-        bodyPart.SetDefaultMaterial();
     }
 
     protected override void UpdateRange()

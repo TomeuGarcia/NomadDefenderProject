@@ -307,14 +307,12 @@ public class RepeaterBase : TurretPartBase_Prefab
         
         Vector3 spawnPosition = shootPoint.position;
 
-        ATurretProjectileBehaviour newProjectile = 
-            ProjectileAttacksFactory.GetInstance().GetAttackGameObject(projectileSource.ProjectileType, 
-                    spawnPosition, Quaternion.identity).GetComponent<ATurretProjectileBehaviour>();
+        ATurretProjectileBehaviour newProjectile = ProjectileAttacksFactory.GetInstance()
+            .Create(projectileSource.ProjectileType, spawnPosition, Quaternion.identity);
 
         TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
         newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
-        newProjectile.gameObject.SetActive(true);
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
             projectileTurret, projectileToRepeat, _ownerBuilding.Position);
         newProjectile.AddEnemyToIgnore(fakeEnemy);

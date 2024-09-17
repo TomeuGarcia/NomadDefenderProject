@@ -9,13 +9,20 @@ namespace Scripts.ObjectPooling
     {
         private readonly RecyclableObject _prefab;
         private readonly Transform _objectPoolParent;
+        private readonly IListener _listener;
         private readonly HashSet<RecyclableObject> _instantiateObjects;
         private Queue<RecyclableObject> _recycledObjects;
+        
+        public interface IListener
+        {
+            void OnObjectInstantiated(RecyclableObject spawnedObject);
+        }
 
-        public ObjectPool(RecyclableObject prefab, Transform objectPoolParent = null)
+        public ObjectPool(RecyclableObject prefab, Transform objectPoolParent = null, IListener listener = null)
         {
             _prefab = prefab;
             _objectPoolParent = objectPoolParent;
+            _listener = listener;
             _instantiateObjects = new HashSet<RecyclableObject>();
         }
 
@@ -35,6 +42,7 @@ namespace Scripts.ObjectPooling
         {
             var instance = Object.Instantiate(_prefab, position, rotation, _objectPoolParent);
             instance.Configure(this);
+            _listener?.OnObjectInstantiated(instance);
             return instance;
         }
 
@@ -69,9 +77,20 @@ namespace Scripts.ObjectPooling
             Assert.IsTrue(wasInstantiated, $"{gameObjectToRecycle.name} was not instantiate on {_prefab.name} pool");
 
             gameObjectToRecycle.gameObject.SetActive(false);
+            gameObjectToRecycle.transform.SetParent(_objectPoolParent);
             gameObjectToRecycle.RecycledReleased();
             _recycledObjects.Enqueue(gameObjectToRecycle);
         }
+
+        public void RecycleAll()
+        {
+            List<RecyclableObject> instantiateObjectsCopy = new List<RecyclableObject>(_instantiateObjects);
+            foreach (RecyclableObject instantiateObject in instantiateObjectsCopy)
+            {
+                instantiateObject.Recycle();
+            }
+        }
+        
     }
 }
 
