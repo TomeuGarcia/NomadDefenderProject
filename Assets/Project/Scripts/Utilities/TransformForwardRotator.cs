@@ -11,5 +11,4 @@ public class TransformForwardRotator : MonoBehaviour
         _currentRotation = _currentRotation + (_rotationSpeed * Time.deltaTime);
         transform.localRotation = Quaternion.AngleAxis(_currentRotation, Vector3.forward);
     }
-    
 }

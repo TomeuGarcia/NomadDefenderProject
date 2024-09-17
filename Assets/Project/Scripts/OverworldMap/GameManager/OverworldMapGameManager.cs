@@ -36,7 +36,7 @@ public class OverworldMapGameManager : MonoBehaviour
 
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
-    [SerializeField] private OverworldMapVolume _overworldMapVolume;
+    [SerializeField] protected OverworldMapVolume _overworldMapVolume;
 
     protected bool canDisplayDeck = true;
 

@@ -13,10 +13,11 @@ public class TurretViewAddOnController : ITurretViewAddOnController
     }
     
     
-    public void AddViewAddOn(TurretViewAddOnConfig addOnConfig)
+    public ATurretViewAddOn AddViewAddOn(TurretViewAddOnConfig addOnConfig)
     {
         ATurretViewAddOn viewAddOn = ProjectileParticleFactory.GetInstance().CreateTurretAddOn(addOnConfig);
         _dynamicViewAddOns.Add(viewAddOn);
+        return viewAddOn;
     }
 
     public void StartViewingAddOns()

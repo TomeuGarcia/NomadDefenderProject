@@ -28,14 +28,21 @@ public class OWMapTutorialManager : MonoBehaviour
     [SerializeField] private bool testing = false;
 
     [SerializeField] private OWMapTutorialManager2 owMapTuto2;
+    [SerializeField] private OverworldMapVolume _overworldMapVolume;
 
     private void OnEnable()
     {
         owMapGameManager.OnMapNodeSceneStartsLoading += ClearConsoleOnNodeSceneStarts;
+
+        owMapGameManager.OnMapNodeSceneStartsLoading += _overworldMapVolume.DeactivateVolume;
+        MapSceneNotifier.OnMapSceneFinished += _overworldMapVolume.ActivateVolume;
     }
     private void OnDisable()
     {
         owMapGameManager.OnMapNodeSceneStartsLoading -= ClearConsoleOnNodeSceneStarts;
+
+        owMapGameManager.OnMapNodeSceneStartsLoading -= _overworldMapVolume.DeactivateVolume;
+        MapSceneNotifier.OnMapSceneFinished -= _overworldMapVolume.ActivateVolume;
     }
 
     public void StartTutorial()

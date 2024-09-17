@@ -11,12 +11,10 @@ public class OverworldMapVolume : MonoBehaviour
     public void ActivateVolume()
     {
         _volume.enabled = true;
-        Debug.Log("BBBBBBBBBBBBBBBBBB");
     }
 
     public void DeactivateVolume()
     {
         _volume.enabled = false;
-        Debug.Log("GGGGGGGGGGGGGGG");
     }
 }
