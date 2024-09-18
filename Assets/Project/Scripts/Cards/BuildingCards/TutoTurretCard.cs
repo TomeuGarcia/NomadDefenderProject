@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class TutoTurretCard : TurretBuildingCard
 {
     [Header("TUTORIAL DRAW ANIMATION")]
-    [SerializeField] private TutorialCardDrawAnimationPlayer _tutorialCardDrawAnimation;
+    [SerializeField] private CardDrawAnimationPlayer_TutorialCardOverview _tutorialCardDrawAnimation;
     [SerializeField] private Transform _animationTransform;
 
 
@@ -77,6 +77,11 @@ public class TutoTurretCard : TurretBuildingCard
         transform.DOScale(Vector3.one, _displacementOutDuration)
             .SetEase(Ease.InOutSine);
 
+
+        _animationTransform.DOBlendableLocalRotateBy(new Vector3(0, 360f, 0), _displacementOutDuration,
+            RotateMode.LocalAxisAdd);
+        
+        /*        
         Quaternion startRotation = transform.localRotation;
         float spinRotation = 0f;
         DOTween.To(
@@ -89,6 +94,7 @@ public class TutoTurretCard : TurretBuildingCard
             _displacementOutDuration
             )
             .SetEase(Ease.InOutQuad);
+        */
 
         yield return new WaitForSeconds(_displacementOutDuration + 0.25f);
 

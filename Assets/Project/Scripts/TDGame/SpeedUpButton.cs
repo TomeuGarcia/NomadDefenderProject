@@ -11,7 +11,6 @@ public class SpeedUpButton : MonoBehaviour
     {
         [SerializeField] public int timeMultiplier;
         [SerializeField] public string text;
-
     }
     
     [SerializeField] private SpeedScale[] timeScales;
@@ -20,6 +19,7 @@ public class SpeedUpButton : MonoBehaviour
     [SerializeField] private Button incrementButton;
     [SerializeField] private Button decrementButton;
     [SerializeField] private GameObject _gamePausedDisplay;
+    [SerializeField] private bool _startHidden = false;
     private bool isIncrementButtonHovered = false;
     private bool isDecrementButtonHovered = false;
 
@@ -35,6 +35,12 @@ public class SpeedUpButton : MonoBehaviour
         _isTimePaused = false;
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
+
+        if (_startHidden)
+        {
+            gameObject.SetActive(false);
+            _gamePausedDisplay.SetActive(false);
+        }
     }
 
     private void OnDestroy()

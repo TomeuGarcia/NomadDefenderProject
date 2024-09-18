@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class TutorialCardDrawAnimationPlayer : CardDrawAnimationPlayer
+public class CardDrawAnimationPlayer_TutorialCardOverview : CardDrawAnimationPlayer
 {
     private void Awake()
     {
@@ -69,7 +69,7 @@ public class TutorialCardDrawAnimationPlayer : CardDrawAnimationPlayer
         
         
         yield return new WaitUntil(() => ShowProjectile);
-        PlayFirstTutorial(_tutorial_Projectile, _tutorialText_Projectile);
+        StartCoroutine(PlayTutorial(_tutorial_Projectile, _tutorialText_Projectile));
         yield return StartCoroutine(ShowObjectBlinking(_projectileIcon, t1, GameAudioManager.GetInstance().PlayCardInfoMoveShown));
         
         
@@ -96,8 +96,8 @@ public class TutorialCardDrawAnimationPlayer : CardDrawAnimationPlayer
         
         // Show Play Cost
         yield return new WaitUntil(() => ShowPlayCost);
-        yield return StartCoroutine(PlayNextTutorial(_tutorial_PlayCost, _tutorialText_PlayCost));
         GameObject[] playCostElements = { _playCostText, _cardLevelText };
+        yield return StartCoroutine(PlayNextTutorial(_tutorial_PlayCost, _tutorialText_PlayCost));
         yield return StartCoroutine(ShowObjectsBlinking(playCostElements, t1, GameAudioManager.GetInstance().PlayCardInfoShown));
 
         
@@ -106,8 +106,12 @@ public class TutorialCardDrawAnimationPlayer : CardDrawAnimationPlayer
     }
 
 
-    private void PlayFirstTutorial(GameObject nextTutorialObject, TextDecoder textDecoder)
+    private IEnumerator PlayTutorial(GameObject nextTutorialObject, TextDecoder textDecoder, float delay = 0.5f)
     {
+        yield return new WaitForSeconds(delay);
+        
+        if (Finish) yield break;
+        
         _currentTutorialObject = nextTutorialObject;
         _currentTutorialObject.SetActive(true);
         
@@ -120,16 +124,22 @@ public class TutorialCardDrawAnimationPlayer : CardDrawAnimationPlayer
         _currentTutorialObject.SetActive(false);
 
         yield return new WaitForSeconds(transitionDelay);
-
-        _currentTutorialObject = nextTutorialObject;
-        _currentTutorialObject.SetActive(true);
         
-        textDecoder.Activate();
+        if (Finish) yield break;
+
+        StartCoroutine(PlayTutorial(nextTutorialObject, textDecoder));
     }
 
     private void FinishTutorial()
     {
         _currentTutorialObject.SetActive(false);
+        
+        _tutorial_Projectile.SetActive(false);
+        _tutorial_PlayCost.SetActive(false);
+        _tutorial_Damage.SetActive(false);
+        _tutorial_ShotsPerSecond.SetActive(false);
+        _tutorial_Range.SetActive(false);
+        
         _currentTutorialObject = null;
     }
     

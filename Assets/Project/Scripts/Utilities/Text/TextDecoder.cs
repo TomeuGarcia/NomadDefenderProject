@@ -91,17 +91,24 @@ public class TextDecoder : MonoBehaviour
             decodingDictionary += symbols_s;
     }
 
+    public bool FinishedLine { get; private set; } = false;
+
     private IEnumerator Decode()
     {
         nextLine = true;
         while (indexLine < textStrings.Count)
         {
-            if(!nextLine)
-                yield return new WaitUntil(() => nextLine == true);
+            if (!nextLine)
+            {
+                yield return new WaitUntil(() => nextLine);
+            }
+                
             nextLine = false;
+            FinishedLine = false;
 
             yield return StartCoroutine(DecodeString(indexLine));
             indexLine++;
+            FinishedLine = true;
         }
 
         doneDecoding = true;
