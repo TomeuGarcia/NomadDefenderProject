@@ -4686,6 +4686,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 314651052}
+    - targetCorrespondingSourceObject: {fileID: 7982427645377297918, guid: ac4314825bb9b65479c003072040fe74,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 314651055}
   m_SourcePrefab: {fileID: 100100000, guid: ac4314825bb9b65479c003072040fe74, type: 3}
 --- !u!1 &314651046 stripped
 GameObject:
@@ -4768,7 +4772,7 @@ MonoBehaviour:
   warningDisappearEase: 8
   hintText: <color=#FF9500>HOLD</color> to <color=#FF9500>REDRAW</color> a card
   numCardsHandStart: 1
-  cardsToDrawPerWave: 2
+  cardsToDrawPerWave: 0
   cheatDrawCardActivated: 1
   canRedraw: 1
   canDisplaySpeedUp: 1
@@ -4776,7 +4780,21 @@ MonoBehaviour:
   finishRedrawSetup: 1
   tutorialTurretCardPrefab: {fileID: 8436797292709200463, guid: 464c757f3f21af14d975d8fa21500ec2,
     type: 3}
+  _hardcodedDeckShuffler: {fileID: 314651055}
   tutorialCard: {fileID: 0}
+--- !u!114 &314651055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314651046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20843b9d152c4138bc3e7e32846c6cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _indices: 000000000100000002000000030000000400000005000000
 --- !u!1001 &317845071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4962,7 +4980,7 @@ PrefabInstance:
     - target: {fileID: 1430863497499091673, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: textStrings.Array.data[0]
-      value: You earn currency <br>over time
+      value: Currency is earned<br> over time
       objectReference: {fileID: 0}
     - target: {fileID: 1430863497499091673, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -5082,7 +5100,7 @@ PrefabInstance:
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_text
-      value: You spend currency <br>to place Turrets
+      value: Cards spend currency<br> when played
       objectReference: {fileID: 0}
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -10359,7 +10377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 679275221}
   m_Layer: 10
-  m_Name: Currency_DRAW_CARD
+  m_Name: DrawCard_TUTORIAL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14408,11 +14426,11 @@ RectTransform:
   m_Father: {fileID: 679275221}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -30, y: 459}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &914612167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18583,7 +18601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 21, y: 268}
+  m_AnchoredPosition: {x: 30, y: 268}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!1001 &1250606055
@@ -19096,7 +19114,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -147, y: -65}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1280787200
@@ -26498,7 +26516,7 @@ PrefabInstance:
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_Pivot.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -26513,7 +26531,7 @@ PrefabInstance:
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -26523,7 +26541,7 @@ PrefabInstance:
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -26608,7 +26626,17 @@ PrefabInstance:
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_text
-      value: You draw cards before <br>each Enemy Wave
+      value: Cards are drawn before<br> each Enemy Wave
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -29410,16 +29438,16 @@ RectTransform:
   m_GameObject: {fileID: 2104297269}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 679275221}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 31.1}
+  m_SizeDelta: {x: -1570, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &2104297271
 CanvasGroup:
@@ -29446,14 +29474,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9607843}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a85977e8cc25e6546939e26c6ee841e4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -31535,17 +31563,17 @@ PrefabInstance:
     - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1084.5289
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 462.87485
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5704.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308264895925660297, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
@@ -31595,6 +31623,16 @@ PrefabInstance:
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
         type: 3}
       propertyPath: hand
+      value: 
+      objectReference: {fileID: 1635650534}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: _deck
+      value: 
+      objectReference: {fileID: 1635650530}
+    - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,
+        type: 3}
+      propertyPath: _hand
       value: 
       objectReference: {fileID: 1635650534}
     - target: {fileID: 7308264895925660342, guid: e816499ca36b6674ba128bd787597997,

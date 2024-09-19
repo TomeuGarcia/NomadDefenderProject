@@ -184,8 +184,11 @@ public abstract class BuildingCard : MonoBehaviour
     
     protected virtual void DoOnDestroy(){}
 
+    public static bool LockAllCardsFromHover { get; set; } = false;
     private void OnMouseEnter()
     {
+        if (LockAllCardsFromHover) return;
+        
         if (canDisplayInfoIfNotInteractable)
         {
             StartShowInfoWithDelay();

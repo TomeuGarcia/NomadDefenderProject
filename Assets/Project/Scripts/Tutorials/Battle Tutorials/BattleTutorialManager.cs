@@ -1,12 +1,8 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
-using UnityEngine.XR;
-using static InBattleBuildingUpgrader;
 
 public class BattleTutorialManager : MonoBehaviour
 {
@@ -81,8 +77,11 @@ public class BattleTutorialManager : MonoBehaviour
         public TextDecoder Text => _text;
         public int TextLinesCount => _textLinesCount;
     }
-    
+
     [Header("NEW TUTORIAL")] 
+    [SerializeField] private HandBuildingCards _hand;
+    [SerializeField] private DeckBuildingCards _deck;
+    [SerializeField] private CardOverviewPositioner _cardOverviewPositioner;
     [SerializeField] private TutorialGroup _currencyTutorialGroup;
     [SerializeField] private TutorialGroup _drawCardTutorialGroup;
     [SerializeField] private TutorialCardOverviewAddOn _differentProjectilesTutorialAddOn;
@@ -230,6 +229,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         //Starts Cards Tutorial
         tutoCardDrawer.DoGameStartSetup();
+        tutoCardDrawer.tutorialCard.InitOverviewPositioner(_cardOverviewPositioner);
         tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
 
 
@@ -245,11 +245,13 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         tutoCardDrawer.tutorialCard.ShowTurret = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
+        scriptedSequence.Clear();
         scriptedSequence.NextLine(); //7
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return StartCoroutine(WaitForInput());
+        scriptedSequence.Clear();
 
         tutoCardDrawer.tutorialCard.ShowProjectile = true;
         yield return StartCoroutine(WaitForInput());
@@ -266,12 +268,6 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.tutorialCard.ShowPlayCost = true;
         yield return StartCoroutine(WaitForInput());
 
-
-        yield return StartCoroutine(
-            PlayDifferentProjectileTutorial(tutoCardDrawer.tutorialCard, _differentProjectilesTutorialAddOn));
-        yield return StartCoroutine(
-            PlayDifferentProjectileTutorial(tutoCardDrawer.tutorialCard, _multiplePassivesTutorialAddOn));
-        
         tutoCardDrawer.tutorialCard.Finish = true;
         
         
@@ -279,6 +275,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();// 8
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() => tutoCardDrawer.tutorialCard.FinishedAnimation);
+        _hand.InitCardsInHand();
 
         //Finishes Cards Tutorial
         _cardsMotionConfig.SetTDGameplayHandMode();
@@ -291,8 +288,6 @@ public class BattleTutorialManager : MonoBehaviour
         
         yield return new WaitForSeconds(0.5f);
         tutoCardDrawer.tutorialCard.MotionEffectsController.EnableMotion();
-        tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
-        yield return new WaitForSeconds(0.5f);
         tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
         yield return new WaitForSeconds(0.5f);
 
@@ -331,29 +326,67 @@ public class BattleTutorialManager : MonoBehaviour
         //First Wave 1/1
         scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        
-        
-        
         yield return new WaitForSeconds(0.5f);
+        
         
 
         
-        scriptedSequence.NextLine();//13
+        
 
         //Second Wave (2/3)
         yield return new WaitUntil(() => wavesCounter > 1);
-        
         scriptedSequence.Clear();
-        scriptedSequence.NextLine(); //14
+        scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
         
-        yield return new WaitForSeconds(2.0f);
+
+        _hand.CanBeHidden = false;
+        BuildingCard.LockAllCardsFromHover = true;
+        BuildingCard projectileCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
+        BuildingCard passivesCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
+        
+        
+        yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(PlayTutorial(_drawCardTutorialGroup));
+
+
+        yield return new WaitForSeconds(0.25f);
+
+        GameTime.SetTimeScale(0);
+        yield return new WaitForSeconds(0.25f);
+
+
+        _cardOverviewPositioner.Init(projectileCard);
+        yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
+        yield return StartCoroutine(PlayDifferentProjectileTutorial(projectileCard, _differentProjectilesTutorialAddOn));
+        yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
+        _hand.InitCardsInHand(false);
+        yield return new WaitForSeconds(0.25f);
+        
+        _cardOverviewPositioner.Init(passivesCard);
+        yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
+        yield return StartCoroutine(PlayDifferentProjectileTutorial(passivesCard, _multiplePassivesTutorialAddOn));
+        yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
+        _hand.InitCardsInHand(false);
+        yield return new WaitForSeconds(1.0f);
+        
+
+        
+        GameTime.SetTimeScale(1);
+        BuildingCard.LockAllCardsFromHover = false;
+        _hand.CanBeHidden = true;
+        _hand.InitCardsInHand();
+
+        
+        
+        
+        // TODO: REDO FROM BELOW ONWARDS
+
 
         //Place Another Turret
         yield return new WaitUntil(() => currencyCounter.HasEnoughCurrency(125) );
-        scriptedSequence.NextLine(); //15 Place another Turret
+        scriptedSequence.NextLine(); //14 Place another Turret
         GameTime.SetTimeScale(0f);
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitUntil(() =>  PlacedSecondBuilding);
@@ -530,12 +563,16 @@ public class BattleTutorialManager : MonoBehaviour
     }
 
 
-    private IEnumerator PlayDifferentProjectileTutorial(TurretBuildingCard card, TutorialCardOverviewAddOn tutorialAddOnPrefab)
+    private IEnumerator PlayDifferentProjectileTutorial(BuildingCard card, TutorialCardOverviewAddOn tutorialAddOnPrefab)
     {
         TutorialCardOverviewAddOn tutorialAddOn = Instantiate(tutorialAddOnPrefab, card.CardTransform);
         yield return StartCoroutine(tutorialAddOn.Play());
         yield return StartCoroutine(WaitForInput());
         tutorialAddOn.Finish();
     }
+    
+    
+    
+    
     
 }

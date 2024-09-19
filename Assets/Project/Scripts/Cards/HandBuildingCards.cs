@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -165,8 +166,8 @@ public class HandBuildingCards : MonoBehaviour
         }
     }
 
-    
-    public void InitCardsInHand()
+
+    public void InitCardsInHand(bool withRotation = true)
     {
         //Debug.Log("InitCardsInHand");
 
@@ -208,16 +209,27 @@ public class HandBuildingCards : MonoBehaviour
                 card.CardTransform.position = selectedPosition; // Reset selected position
                 //card.CardTransform.position = selectedPosition + hiddenDisplacement; // Reset selected position
             }
-            else
+            else 
             {
                 float repositionDuration = 0.3f;
                 card.StartRepositioning(finalPosition, repositionDuration);
-                card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                    .OnComplete(() => SetupCard(card, selectedPosition, hiddenDisplacement, finalPosition, i));
+                if (withRotation)
+                {
+                    card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration);
+                }
+                
+                DelayedSetupCard(card, selectedPosition, hiddenDisplacement, finalPosition, i, repositionDuration);
             }
         }
-        
     }
+
+    private async void DelayedSetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index, 
+        float delay)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+        SetupCard(card, selectedPosition, hiddenDisplacement, finalPosition, index);
+    }
+    
     private void SetupCard(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
     {
         SetupCard(card, card.CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition, index);
@@ -748,8 +760,12 @@ public class HandBuildingCards : MonoBehaviour
         hiddenHandPosition = HandTransform.position + hiddenDisplacement;
     }
 
+    public bool CanBeHidden { get; set; } = true;
+
     private void HideHand(bool playSound)
     {
+        if (!CanBeHidden) return;
+        
         //Debug.Log("Hide hand");
         isHandHidden = true;
 

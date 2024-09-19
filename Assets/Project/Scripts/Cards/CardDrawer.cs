@@ -107,7 +107,7 @@ public class CardDrawer : MonoBehaviour
     }
     protected virtual void SetupDeck()
     {
-        deck.Init();
+        deck.Init(new CardDeckShuffler_RandomExceptFirst());
         battleHUD.InitDeckCardIcons(deck.NumCards);
     }
 
@@ -118,7 +118,7 @@ public class CardDrawer : MonoBehaviour
         BuildingCard card = null;
         if (deck.HasCardsLeft())
         {
-            card = deck.GetRandomCard();
+            card = deck.GetTopCard();
             AddCardToHand(card, handShownDuration);
 
             hand.InitCardsInHand();
@@ -200,7 +200,7 @@ public class CardDrawer : MonoBehaviour
     }
     private void DrawRandomCard()
     {
-        BuildingCard card = deck.GetRandomCard();
+        BuildingCard card = deck.GetTopCard();
         AddCardToHand(card);
         //TryHideDeckHUD();
     }
