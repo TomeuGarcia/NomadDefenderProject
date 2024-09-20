@@ -57,8 +57,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
       propertyPath: ColorModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
@@ -100,11 +125,56 @@ PrefabInstance:
       propertyPath: ColorModule.gradient.maxGradient.m_ColorSpace
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4418550439180106073, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_Name
       value: Test_TurretIdleParticles
       objectReference: {fileID: 0}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: f29d1cce0644529458fd5a59ea1d697e, type: 2}
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_RootOrder
@@ -118,7 +188,7 @@ PrefabInstance:
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.375
       objectReference: {fileID: 0}
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}

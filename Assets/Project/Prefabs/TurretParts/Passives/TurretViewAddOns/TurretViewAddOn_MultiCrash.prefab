@@ -57,8 +57,58 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
+      propertyPath: ShapeModule.angle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
       propertyPath: ColorModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: TrailModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
@@ -97,14 +147,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
+      propertyPath: EmissionModule.rateOverTime.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
       propertyPath: ColorModule.gradient.maxGradient.m_ColorSpace
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843075546515523171, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].time
+      value: 0.07024133
       objectReference: {fileID: 0}
     - target: {fileID: 4418550439180106073, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_Name
       value: Test_TurretIdleParticles
       objectReference: {fileID: 0}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cfd549cbe06dd246beb1e3afe94bdf0, type: 2}
+    - target: {fileID: 4812686086002339146, guid: 5a48b29bb41882f4a853dbed347ec86f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5cfd549cbe06dd246beb1e3afe94bdf0, type: 2}
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_RootOrder
@@ -118,7 +203,7 @@ PrefabInstance:
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.375
       objectReference: {fileID: 0}
     - target: {fileID: 5670013355123685615, guid: 5a48b29bb41882f4a853dbed347ec86f,
         type: 3}
