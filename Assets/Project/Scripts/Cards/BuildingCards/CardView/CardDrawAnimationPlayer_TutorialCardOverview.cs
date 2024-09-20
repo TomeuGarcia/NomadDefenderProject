@@ -109,6 +109,7 @@ public class CardDrawAnimationPlayer_TutorialCardOverview : CardDrawAnimationPla
     private IEnumerator PlayTutorial(GameObject nextTutorialObject, TextDecoder textDecoder, float delay = 0.5f)
     {
         yield return new WaitForSeconds(delay);
+        _currentTutorialObject?.SetActive(false);
         
         if (Finish) yield break;
         

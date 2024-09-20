@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4646203749965626994}
   - component: {fileID: 5068007415584025149}
   m_Layer: 10
-  m_Name: TutorialCardOverviewAddOn_MultiplePassives
+  m_Name: TutorialCardOverviewAddOn_Supports
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _object: {fileID: 3395913916363315812}
   _text: {fileID: 8728177582057385125}
+--- !u!1 &1626335363131260767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 331911134754644540}
+  - component: {fileID: 4413319926337073448}
+  - component: {fileID: 4955337394168279677}
+  m_Layer: 5
+  m_Name: Image_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &331911134754644540
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626335363131260767}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2678333600254419896}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 155.00002, y: -101.2}
+  m_SizeDelta: {x: 410.00003, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4413319926337073448
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626335363131260767}
+  m_CullTransparentMesh: 1
+--- !u!114 &4955337394168279677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626335363131260767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a85977e8cc25e6546939e26c6ee841e4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2009102728253146436
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,6 +152,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2933943301273518495}
+  - {fileID: 331911134754644540}
   - {fileID: 5131680848432654361}
   - {fileID: 5770544719058179311}
   m_Father: {fileID: 7372505537228949164}
@@ -83,7 +160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 175, y: -55}
+  m_AnchoredPosition: {x: 175, y: 55}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2291522973070484254
@@ -410,7 +487,7 @@ PrefabInstance:
     - target: {fileID: 1430863497499091673, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: textStrings.Array.data[0]
-      value: Projectile
+      value: But Supports don't<br>  attack enemies.
       objectReference: {fileID: 0}
     - target: {fileID: 3300189698626922085, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
@@ -525,7 +602,8 @@ PrefabInstance:
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
       propertyPath: m_text
-      value: "Turret Buildings can have \nup to 3 PASSIVE ABILITIES"
+      value: "Support Buildings have \nSPECIAL ABILITIES.\n\nBut they DON'T ATTACK
+        \nenemies."
       objectReference: {fileID: 0}
     - target: {fileID: 6734055156579071398, guid: 62b18921823816c489ae4acf0aaa019e,
         type: 3}
