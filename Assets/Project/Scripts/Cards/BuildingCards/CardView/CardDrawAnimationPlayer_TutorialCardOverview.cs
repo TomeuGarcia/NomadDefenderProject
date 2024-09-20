@@ -118,16 +118,15 @@ public class CardDrawAnimationPlayer_TutorialCardOverview : CardDrawAnimationPla
         
         textDecoder.Activate();
     }
-    
-    
+
     private IEnumerator PlayNextTutorial(GameObject nextTutorialObject, TextDecoder textDecoder, float transitionDelay = 0.5f)
     {
-        _currentTutorialObject.SetActive(false);
+        _currentTutorialObject?.SetActive(false);
 
         yield return new WaitForSeconds(transitionDelay);
         
         if (Finish) yield break;
-
+        
         StartCoroutine(PlayTutorial(nextTutorialObject, textDecoder));
     }
 

@@ -184,7 +184,20 @@ public abstract class BuildingCard : MonoBehaviour
     
     protected virtual void DoOnDestroy(){}
 
-    public static bool LockAllCardsFromHover { get; set; } = false;
+    private static bool _lockAllCardsFromHover = false;
+    public static bool LockAllCardsFromHover
+    {
+        get => _lockAllCardsFromHover;
+        set
+        {
+            _lockAllCardsFromHover = value;
+            if (!value)
+            {
+                CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+            }
+        }
+    }
+
     private void OnMouseEnter()
     {
         if (LockAllCardsFromHover) return;

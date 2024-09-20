@@ -182,9 +182,6 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
 
-        // Disable Time speed (x3 etc.)
-        speedUpButton.CompletelyDisableTimeSpeed();
-        speedUpButtonHolder.SetActive(false);
         
 
         scriptedSequence.NextLine(); //1
@@ -240,7 +237,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.DoGameStartSetup();
         tutoCardDrawer.tutorialCard.InitOverviewPositioner(_cardOverviewPositioner);
         tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
-
+        
 
         scriptedSequence.NextLine(); //Initializing User's Deck Line 5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -256,12 +253,12 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         tutoCardDrawer.tutorialCard.ShowTurret = true;
-        yield return new WaitForSeconds(1.0f);
-
-        scriptedSequence.Clear();
+        yield return new WaitForSeconds(0.5f);
+        
         scriptedSequence.NextLine(); //7
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return StartCoroutine(WaitForInput(false));
+
         scriptedSequence.Clear();
 
         tutoCardDrawer.tutorialCard.ShowProjectile = true;
@@ -295,6 +292,9 @@ public class BattleTutorialManager : MonoBehaviour
         //Skips Redraw
         scriptedSequence.Clear();
         tutoCardDrawer.FinishRedraws();
+        // Disable Time speed (x3 etc.)
+        speedUpButton.CompletelyDisableTimeSpeed();
+        speedUpButtonHolder.SetActive(false);
         
         
         yield return new WaitForSeconds(0.5f);
@@ -359,13 +359,11 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         yield return StartCoroutine(PlayTutorial(_drawCardTutorialGroup));
-        _backBackgroundCardsHighlight.DOFade(0, 0.3f);
 
 
         yield return new WaitForSeconds(0.25f);
 
         GameTime.SetTimeScale(0);
-        _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         yield return new WaitForSeconds(0.25f);
 
 
