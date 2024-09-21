@@ -74,6 +74,7 @@ public class EnemyWaveManager : MonoBehaviour
     public static event EnemyWaveManagerAction OnAllWavesFinished;
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
+    public static event EnemyWaveManagerAction OnStartFirstWaves;
 
     private EnemyAttackDestination _enemiesAttackDestination;
 
@@ -187,6 +188,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             StartWave(_pathsStartData[i].EnemyWaveSpawner, enemySpawnTransform, i);
         }
+        OnStartFirstWaves?.Invoke();
 
         StopEnemyPathFollowerTrails();
     }

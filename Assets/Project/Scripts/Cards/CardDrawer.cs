@@ -57,8 +57,6 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
         HandBuildingCards.OnFinishRedrawing += FinishRedrawSetupUI;
         HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
-
-        EnemyWaveManager.OnStartNewWaves += DrawCardAfterWave;
     }
 
     private void OnDisable()
@@ -68,8 +66,6 @@ public class CardDrawer : MonoBehaviour
         HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
         HandBuildingCards.OnFinishRedrawing -= FinishRedrawSetupUI;
         HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
-
-        EnemyWaveManager.OnStartNewWaves -= DrawCardAfterWave;
     }
 
     private void Awake()
@@ -227,14 +223,8 @@ public class CardDrawer : MonoBehaviour
         }
     }
 
-
-
-    private void DrawCardAfterWave()
-    {
-        StartCoroutine(DoDrawCardAfterWave());   
-    }
-
-    private IEnumerator DoDrawCardAfterWave()
+    
+    public IEnumerator DoDrawCardAfterWave()
     {        
         if (deck.HasCardsLeft())
         {

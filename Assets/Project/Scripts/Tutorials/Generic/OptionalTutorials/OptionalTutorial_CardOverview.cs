@@ -3,7 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-public class OptionalTutorial_UpgradeRoom_CardLevelMeaning : MonoBehaviour
+public class OptionalTutorial_CardOverview : MonoBehaviour
 {
     [SerializeField] private TutorialCardOverviewAddOn _cardOverview;
     [SerializeField] private CardOverviewPositioner _cardOverviewPositioner;

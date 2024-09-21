@@ -129,7 +129,11 @@ public class TextDecoder : MonoBehaviour
         }
 
         DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, textStrings[currentIndexLine].Length);
-        StopCoroutine(_updateCharCoroutine);
+
+        if (_updateCharCoroutine != null)
+        {
+            StopCoroutine(_updateCharCoroutine);
+        }
     }
 
     IEnumerator UpdateCharIndex(int currentIndexLine)

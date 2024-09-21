@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
@@ -28,6 +29,8 @@ public class SpeedUpButton : MonoBehaviour
     private bool gameFinished = false;
 
     private bool _isTimePaused;
+
+    public static Action OnGameSpeedInteracted;
 
     private void Awake()
     {
@@ -87,6 +90,7 @@ public class SpeedUpButton : MonoBehaviour
             {
                 SetCurrentTimeSpeed(3);
             }
+            OnGameSpeedInteracted?.Invoke();
         }
         
         else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -161,11 +165,13 @@ public class SpeedUpButton : MonoBehaviour
     {
         SetCurrentTimeSpeed((current + 1) % numSpeeds);
         IncrementButtonPressed();
+        OnGameSpeedInteracted?.Invoke();
     }
     public void DecrementTime()
     {
         SetCurrentTimeSpeed((current + numSpeeds - 1) % numSpeeds);
         DecrementButtonPressed();
+        OnGameSpeedInteracted?.Invoke();
     }
     private void SetCurrentTimeSpeed(int newTimeSpeed)
     {

@@ -240,6 +240,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             UpgradeAllSupportStats();
             UpdateNextUpgradeDescriptionText();
             UpdateSupportBar();
+            OnUpgraded();
         }
         else
         {

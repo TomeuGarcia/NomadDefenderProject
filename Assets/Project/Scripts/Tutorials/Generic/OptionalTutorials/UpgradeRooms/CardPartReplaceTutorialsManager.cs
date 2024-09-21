@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CardPartReplaceTutorialsManager : MonoBehaviour
 {
-    [SerializeField] private OptionalTutorial_UpgradeRoom_CardLevelMeaning _cardLevelMeaningTutorialPrefab;
+    [SerializeField] private OptionalTutorial_CardOverview _cardLevelMeaningTutorialPrefab;
     private const OptionalTutorialTypes CardLevelMeaning_TutorialType = OptionalTutorialTypes.UpgradeRoom_CardLevelMeaning;
 
     private IOptionalTutorialsStateManager OptionalTutorialsStateManager => 
@@ -12,7 +12,7 @@ public class CardPartReplaceTutorialsManager : MonoBehaviour
 
     public IEnumerator PlayCardResultTutorials(BuildingCard card)
     {
-        //if (ShouldPlay_CardLevelTutorial())
+        if (ShouldPlay_CardLevelTutorial())
         {
             yield return StartCoroutine(Play_CardLevelTutorial(card));
         }
@@ -27,7 +27,7 @@ public class CardPartReplaceTutorialsManager : MonoBehaviour
 
     private IEnumerator Play_CardLevelTutorial(BuildingCard card)
     {
-        OptionalTutorial_UpgradeRoom_CardLevelMeaning cardLevelMeaningTutorial =
+        OptionalTutorial_CardOverview cardLevelMeaningTutorial =
             Instantiate(_cardLevelMeaningTutorialPrefab, transform);
         
         card.RootCardTransform.SetParent(transform);
