@@ -72,6 +72,14 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("PARTICLES")]
     [SerializeField] private ParticleSystem printParticles_PS;
 
+        
+    [Header("CARD FINAL RETRIEVE")] 
+    [SerializeField] private Transform _cardRetrieveSpot;
+
+    
+    [Header("TUTORIAL")] 
+    [SerializeField] private CardPartReplaceTutorialsManager _partReplaceTutorials;
+
 
     private bool replacementDone = false;
     public bool ReplacementDone => replacementDone;
@@ -79,6 +87,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private bool cardIsReady = false;
     private bool partIsReady = false;
     [HideInInspector] public bool canFinalRetrieveCard = true;
+
 
 
     private int numPartsIfPerfect = 1;
@@ -646,30 +655,42 @@ public class CardPartReplaceManager : MonoBehaviour
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
         selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
         selectedCard.PlayLevelUpAnimation();
-
-
-
-        Sequence selectedCardSequence = DOTween.Sequence();
-        selectedCardSequence.AppendCallback(() => cardPartHolder.ReplaceStartStopInteractions());
-        selectedCardSequence.AppendCallback(() => upgradeCardHolder.StopInteractions());
-        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader());
-        selectedCardSequence.AppendCallback(() => GameAudioManager.GetInstance().PlaySmokeBurst());
-        selectedCardSequence.AppendCallback(() => printParticles_PS.Play() );
-        selectedCardSequence.AppendInterval(1.7f);
-
-        selectedCardSequence.AppendCallback(() => cardPartHolder.Hide(0.5f, 0.2f));
-        selectedCardSequence.AppendInterval(1f);
-        if (replacedWithSamePart) selectedCardSequence.AppendInterval(1.5f);
-
-        selectedCardSequence.AppendCallback(() => upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f));
-        selectedCardSequence.AppendCallback(() => FinishResultCard());
-
+        
+        StartCoroutine(PlayCardResultAnimation(selectedCard, replacedWithSamePart));
     }
+
+    private IEnumerator PlayCardResultAnimation(TurretBuildingCard selectedCard, bool replacedWithSamePart)
+    {
+        cardPartHolder.ReplaceStartStopInteractions();
+        upgradeCardHolder.StopInteractions();
+        GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
+        GameAudioManager.GetInstance().PlaySmokeBurst();
+        printParticles_PS.Play();
+        yield return new WaitForSeconds(1.7f);
+        
+        cardPartHolder.Hide(0.5f, 0.2f);
+        yield return new WaitForSeconds(1.0f);
+        if (replacedWithSamePart)
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        selectedCard.DisableMouseInteraction();
+        selectedCard.RootCardTransform.DOMove(_cardRetrieveSpot.position, 0.75f)
+            .SetEase(Ease.InOutSine);
+        yield return new WaitForSeconds(0.75f);
+
+        yield return StartCoroutine(_partReplaceTutorials.PlayCardResultTutorials(selectedCard));
+        
+        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
+        FinishResultCard();
+    }
+    
 
     private void FinishResultCard()
     {
         consoleDialog.Clear();
-        PrintConsoleLine(TextTypes.SYSTEM, "Combination done successfully", false, 0f);
+        PrintConsoleLine(TextTypes.SYSTEM, "Successful modification", false, 0f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }

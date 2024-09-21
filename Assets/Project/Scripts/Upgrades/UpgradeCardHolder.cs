@@ -377,9 +377,9 @@ public class UpgradeCardHolder : MonoBehaviour
 
     private IEnumerator DoFinalRetrieve(float startDelay, float duration, float delayBetweenCards, BuildingCard selectedCard)
     {
-        selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.0f, 0.75f);
+        //selectedCard.RootCardTransform.DOBlendableMoveBy(selectedCard.RootCardTransform.forward * -3.0f, 0.75f);
+        //selectedCard.RootCardTransform.DOMove(_cardRetrieveSpot.position, 0.75f).SetEase(Ease.InOutSine);
         yield return new WaitForSeconds(startDelay);
-
         Hide(duration, delayBetweenCards);
 
 

@@ -17,7 +17,7 @@ public class CardOverviewPositioner : MonoBehaviour
     public void Init(BuildingCard card)
     {
         _card = card;
-        _originPosition = _overviewSpot.position;
+        _originPosition = card.transform.position;
     }
     
     public IEnumerator PositionToSpot()
