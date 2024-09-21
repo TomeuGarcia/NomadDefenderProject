@@ -7,6 +7,7 @@ public class CardDeckShuffler_RandomExceptFirst : ICardDeckShuffler
     public List<BuildingCard> ShuffleCards(List<BuildingCard> cards)
     {
         List<BuildingCard> shuffledCards = new List<BuildingCard>(cards.Count) { cards[0] };
+        cards.RemoveAt(0);
 
         while (cards.Count > 0)
         {
