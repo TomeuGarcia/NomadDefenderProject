@@ -82,8 +82,8 @@ public class BattleTutorialManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _backBackgroundCardsHighlight;
     private float _backBackgroundCardsHighlightAlpha;
     [SerializeField] private HandBuildingCards _hand;
-    [SerializeField] private DeckBuildingCards _deck;
     [SerializeField] private CardOverviewPositioner _cardOverviewPositioner;
+    [SerializeField] private TutorialGroup _placeABuildingGroup;
     [SerializeField] private TutorialGroup _currencyTutorialGroup;
     [SerializeField] private TutorialGroup _drawCardTutorialGroup;
     [SerializeField] private TutorialCardOverviewAddOn _differentProjectilesTutorialAddOn;
@@ -120,6 +120,7 @@ public class BattleTutorialManager : MonoBehaviour
         _backBackgroundCardsHighlightAlpha = _backBackgroundCardsHighlight.color.a;
         _backBackgroundCardsHighlight.DOFade(0, 0);
         
+        _placeABuildingGroup.Init();
         _currencyTutorialGroup.Init();
         _drawCardTutorialGroup.Init();
     }
@@ -312,12 +313,14 @@ public class BattleTutorialManager : MonoBehaviour
 
         tutoCardDrawer.FinishRedrawSetupUI();
 
-        scriptedSequence.NextLine(); //9
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        
+        StartCoroutine(PlayTutorial(_placeABuildingGroup));
         yield return new WaitUntil(() => waveStarted );
-        scriptedSequence.Clear();
+        StopTutorial(_placeABuildingGroup);
 
         BuildingCard.LockAllCardsFromHover = true;
+        yield return new WaitForSeconds(0.25f);
+
         _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         yield return StartCoroutine(PlayTutorial(_currencyTutorialGroup));
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
@@ -602,6 +605,11 @@ public class BattleTutorialManager : MonoBehaviour
             .SetEase(Ease.InOutSine);
         
         GameTime.SetTimeScale(1f);
+    }
+
+    private void StopTutorial(TutorialGroup group)
+    {
+        group.Object.SetActive(false);
     }
 
 

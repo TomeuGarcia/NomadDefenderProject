@@ -56,7 +56,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     {
         mapSceneLoader.OnSceneFromMapUnloaded -= StartMapTutorial;
         owMapTutorial.StartTutorial();
-        mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle;
+        //mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle; // 2nd TUTORIAL
     }
 
 
@@ -94,14 +94,13 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     }
 
 
-
+    /*
     public override void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            Debug.Log("END OF MAP REACHED ---> VICTORY");
             InvokeOnVictory();
             return;
         }
@@ -110,7 +109,6 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         int aliveNodesCount;
         OWMap_Node[] nextLevelEnabledNodes;
 
-        Debug.Log("battleCounter: " + battleCounter);
         if (battleCounter == 1)
         {
             nextLevelEnabledNodes = currentNode.EnableAllNextLevelNodesInteraction(out aliveNodesCount);
@@ -132,11 +130,11 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         if (aliveNodesCount == 0)
         {
             //InvokeOnGameOver();
-            Debug.Log("ALL PATHS DESTROYED ---> GAME OVER");
             StartCoroutine(ResurrectDestroyedCurrentNode(nextLevelEnabledNodes));
         }
 
     }
+    */
 
 
     private IEnumerator ResurrectDestroyedCurrentNode(OWMap_Node[] nextLevelEnabledNodes)
