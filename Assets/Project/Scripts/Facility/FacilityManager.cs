@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +41,11 @@ public class FacilityManager : MonoBehaviour
                 StartWithOpenSetup();
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        ServiceLocator.GetInstance().RunInfo.SetNewGame(false);
     }
 
     private void ComeFromRun()

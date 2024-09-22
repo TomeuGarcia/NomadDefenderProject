@@ -121,7 +121,8 @@ public class GameManager : MonoBehaviour
         gameOverSubtitleTextDecoder.Activate();
 
         yield return new WaitForSeconds(4.0f);
-        mapSceneLoader.LoadMainMenuScene(1f);
+        //mapSceneLoader.LoadMainMenuScene(1f);
+        StartCoroutine(GameOverFinishLoadScene());
 
         for (int i = 0; i < 3; ++i)
         {
@@ -133,7 +134,12 @@ public class GameManager : MonoBehaviour
         
     }
 
-
+    private IEnumerator GameOverFinishLoadScene()
+    {
+        //mapSceneLoader.LoadMainMenuScene(1f);
+        yield return new WaitForSeconds(1f);
+        SceneLoader.GetInstance().LoadFacility();
+    }
 
 
     private IEnumerator VictoryWatcherScripedSequence()

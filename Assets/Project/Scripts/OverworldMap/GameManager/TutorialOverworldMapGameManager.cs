@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NodeEnums;
 using UnityEngine;
 
 public class TutorialOverworldMapGameManager : OverworldMapGameManager
@@ -55,8 +56,20 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     private void StartMapTutorial()
     {
         mapSceneLoader.OnSceneFromMapUnloaded -= StartMapTutorial;
-        owMapTutorial.StartTutorial();
-        //mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle; // 2nd TUTORIAL
+
+        if (currentBattleStateResult.nodeResults[0].healthState == HealthState.DESTROYED)
+        {
+            firstBattleResultApplied = true;
+            ApplyBattleStateResult();
+            RequestGameOver();
+            return;
+        }
+        else
+        {
+            owMapTutorial.StartTutorial();
+            //mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle; // 2nd TUTORIAL
+        }
+        
     }
 
 
@@ -74,17 +87,14 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
     protected override void ApplyBattleStateResult()
     {
-        BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
         if (firstBattleResultApplied)
         {
-            for (int i = 0; i < nodeResults.Length; ++i)
-            {
-                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, true);
-            }                        
+            base.ApplyBattleStateResult();
         }
         else
         {
             firstBattleResultApplied = true;
+            BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
             for (int i = 0; i < nodeResults.Length; ++i)
             {
                 nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.SURVIVED, true); // Hardcoded to always apply UNDAMAGED
