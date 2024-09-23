@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.0f);
         //mapSceneLoader.LoadMainMenuScene(1f);
-        StartCoroutine(GameOverFinishLoadScene());
+        GameOverFinishLoadScene();
 
         for (int i = 0; i < 3; ++i)
         {
@@ -134,11 +134,9 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private IEnumerator GameOverFinishLoadScene()
+    private void GameOverFinishLoadScene()
     {
-        //mapSceneLoader.LoadMainMenuScene(1f);
-        yield return new WaitForSeconds(1f);
-        SceneLoader.GetInstance().LoadFacility();
+        mapSceneLoader.LoadMainMenuScene(1f);
     }
 
 

@@ -21,6 +21,7 @@ public class ServiceLocator : MonoBehaviour
     public ICameraHelpService CameraHelp { get; set; }
     public ICardSpawnService CardSpawnService { get; set; }
     public IOptionalTutorialsStateManager OptionalTutorialsStateManager { get; set; }
+    public ITutorialViewUtilities TutorialViewUtilities { get; set; }
 
 
     private void Awake()

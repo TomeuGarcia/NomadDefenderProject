@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PreviewBuilding_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: d2b6ae71aa9d35042a693b35b456e5c6,
+  m_Name: RedrawWarning_Tutorials_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 19bbf6800c2a5344f8ca35b548bb1ea8,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,21 +42,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EmissionCoef: 1.76
-    - _MaxAlpha: 0.2
-    - _MaxNoiseScale: 0.5
-    - _MinAlpha: 0.05
-    - _MinNoiseScale: 5
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    - _ScrollSpeed: 0.05
-    - _StripeFactor: 0.2
-    - _StripeWidth: 0.1
+    - _Activate: 1
+    - _AlphaCoef: 1
+    - _BackgroundAlpha: 0.1
+    - _CenterAlphaCoef: 1.98
+    - _ColorGlowSpeed: 0.5
+    - _Deactivate: 0
+    - _HSMult: 0
+    - _HSScale: 3
+    - _HSScrollSpeed: 1.5
+    - _HSWidth: 0.05
+    - _NoiseScale: 20
+    - _RandomFloat1: 0.025
+    - _RandomFloat2: 0.1
+    - _RandomFloat3: 0.0125
+    - _RandomFloat4: 0.05
+    - _ScrollSpeed: 0.1
+    - _StripeAlpha: 0.2
+    - _StripeSize: 0.5
+    - _TransitionSize: 0.5
     m_Colors:
-    - _Color: {r: 1, g: 0.2376578, b: 0, a: 1}
-    - _Color2: {r: 0, g: 0, b: 0, a: 0}
+    - _BackgroundColor: {r: 1, g: 1, b: 1, a: 0}
+    - _HSColor: {r: 7.999999, g: 0.22332253, b: 0, a: 0}
+    - _NoiseSpeed: {r: 0.3, g: 0, b: 0, a: 0}
+    - _StipGlowColor: {r: 4, g: 0.92100215, b: 0, a: 0}
+    - _StripeColor: {r: 1, g: 0.22508657, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2782236158093070226
+--- !u!114 &8525829539655519973
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -87,6 +87,9 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
     protected override void ApplyBattleStateResult()
     {
+        base.ApplyBattleStateResult();
+        return;
+        
         if (firstBattleResultApplied)
         {
             base.ApplyBattleStateResult();

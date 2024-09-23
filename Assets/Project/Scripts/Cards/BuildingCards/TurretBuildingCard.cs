@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using TMPro;
@@ -19,6 +20,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
+    public TurretIconCanvasDisplay ProjectileIconDisplay => _iconDisplays[0];
+    public TurretIconCanvasDisplay[] PassivesIconDisplays => new [] { _iconDisplays[1], _iconDisplays[2], _iconDisplays[3] } ;
     
     private Material cardBodyMaterial, cardBaseMaterial;
 

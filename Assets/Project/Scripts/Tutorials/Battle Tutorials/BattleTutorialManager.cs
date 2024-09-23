@@ -65,6 +65,7 @@ public class BattleTutorialManager : MonoBehaviour
         [SerializeField] private GameObject _object;
         [SerializeField] private TextDecoder _text;
         [SerializeField, Min(0)] private int _textLinesCount = 1;
+        [SerializeField] private bool _showTopWarning = false;
 
         public void Init()
         {
@@ -76,6 +77,7 @@ public class BattleTutorialManager : MonoBehaviour
         public GameObject Object => _object;
         public TextDecoder Text => _text;
         public int TextLinesCount => _textLinesCount;
+        public bool ShowTopWarning => _showTopWarning;
     }
 
     [Header("NEW TUTORIAL")] 
@@ -355,8 +357,8 @@ public class BattleTutorialManager : MonoBehaviour
 
         _hand.CanBeHidden = false;
         BuildingCard.LockAllCardsFromHover = true;
-        BuildingCard projectileCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
-        BuildingCard passivesCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
+        TurretBuildingCard projectileCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f) as TurretBuildingCard;
+        TurretBuildingCard passivesCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f) as TurretBuildingCard;
         
         
         yield return new WaitForSeconds(1.0f);
@@ -372,14 +374,14 @@ public class BattleTutorialManager : MonoBehaviour
 
         _cardOverviewPositioner.Init(projectileCard);
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
-        yield return StartCoroutine(PlayDifferentProjectileTutorial(projectileCard, _differentProjectilesTutorialAddOn));
+        yield return StartCoroutine(PlayDifferentProjectileTutorial(projectileCard));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         _hand.InitCardsInHand(false);
         yield return new WaitForSeconds(0.25f);
         
         _cardOverviewPositioner.Init(passivesCard);
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
-        yield return StartCoroutine(PlayDifferentProjectileTutorial(passivesCard, _multiplePassivesTutorialAddOn));
+        yield return StartCoroutine(PlayDifferentPassivesTutorial(passivesCard));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         _hand.InitCardsInHand(false);
         yield return new WaitForSeconds(1.0f);
@@ -415,7 +417,7 @@ public class BattleTutorialManager : MonoBehaviour
         
         _cardOverviewPositioner.Init(supportCard1);
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
-        yield return StartCoroutine(PlayDifferentProjectileTutorial(supportCard1, _supportsTutorialAddOn));
+        yield return StartCoroutine(PlaySupportTutorial(supportCard1));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
 
@@ -581,11 +583,16 @@ public class BattleTutorialManager : MonoBehaviour
     private IEnumerator PlayTutorial(TutorialGroup group)
     {
         GameTime.SetTimeScale(0f);
+
+        if (group.ShowTopWarning)
+        {
+            ServiceLocator.GetInstance().TutorialViewUtilities.ShowWarningTopBar();
+        }
         
         yield return group.BlackImageHighlight.DOFade(1f, 0.5f)
             .SetUpdate(true)
             .SetEase(Ease.InOutSine);
-        
+
         group.Object.SetActive(true);
         
         group.Text.Activate();
@@ -600,6 +607,11 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(WaitForInput());
         
         group.Object.SetActive(false);
+        
+        if (group.ShowTopWarning)
+        {
+            ServiceLocator.GetInstance().TutorialViewUtilities.HideWarningTopBar();
+        }
         yield return group.BlackImageHighlight.DOFade(0f, 0.5f)
             .SetUpdate(true)
             .SetEase(Ease.InOutSine);
@@ -613,9 +625,25 @@ public class BattleTutorialManager : MonoBehaviour
     }
 
 
-    private IEnumerator PlayDifferentProjectileTutorial(BuildingCard card, TutorialCardOverviewAddOn tutorialAddOnPrefab)
+    private IEnumerator PlayDifferentProjectileTutorial(TurretBuildingCard card)
     {
-        TutorialCardOverviewAddOn tutorialAddOn = Instantiate(tutorialAddOnPrefab, card.CardTransform);
+        TutorialCardOverviewAddOn tutorialAddOn = Instantiate(_differentProjectilesTutorialAddOn, card.CardTransform);
+        tutorialAddOn.SetExtra(new TutorialCardOverviewAddOnExtra_Projectile(card));
+        yield return StartCoroutine(PlayCardAddOnTutorial(tutorialAddOn));
+    }
+    private IEnumerator PlayDifferentPassivesTutorial(TurretBuildingCard card)
+    {
+        TutorialCardOverviewAddOn tutorialAddOn = Instantiate(_multiplePassivesTutorialAddOn, card.CardTransform);
+        tutorialAddOn.SetExtra(new TutorialCardOverviewAddOnExtra_Passives(card));
+        yield return StartCoroutine(PlayCardAddOnTutorial(tutorialAddOn));
+    }
+    private IEnumerator PlaySupportTutorial(BuildingCard card)
+    {
+        TutorialCardOverviewAddOn tutorialAddOn = Instantiate(_supportsTutorialAddOn, card.CardTransform);
+        yield return StartCoroutine(PlayCardAddOnTutorial(tutorialAddOn));
+    }
+    private IEnumerator PlayCardAddOnTutorial(TutorialCardOverviewAddOn tutorialAddOn)
+    {
         yield return StartCoroutine(tutorialAddOn.Play());
         yield return StartCoroutine(WaitForInput());
         tutorialAddOn.Finish();
