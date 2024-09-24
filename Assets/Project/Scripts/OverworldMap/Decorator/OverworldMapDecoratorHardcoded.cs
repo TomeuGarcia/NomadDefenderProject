@@ -43,7 +43,7 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         base.DecorateMap(mapNodes);
         
-        //DecorateHardcodedEmptyLevels(mapNodes);
+        DecorateHardcodedEmptyLevels(mapNodes);
         DecorateHardcodedBattleLevels(mapNodes);
         DecorateHardcodedUpgradeLevels(mapNodes);
     }

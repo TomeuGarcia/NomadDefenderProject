@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 193539522410786926}
   - component: {fileID: 1897838225408051679}
   - component: {fileID: 72844936549633472}
-  - component: {fileID: 6267130343146931128}
+  - component: {fileID: 1489631683628969913}
   - component: {fileID: 8485875724773115229}
   m_Layer: 0
   m_Name: TutorialOverworldMap
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owMapCreator: {fileID: 1897838225408051679}
   owMapGenerator: {fileID: 72844936549633472}
-  owMapDecorator: {fileID: 6267130343146931128}
+  owMapDecorator: {fileID: 1489631683628969913}
   upgradeSceneSetupInfo: {fileID: 11400000, guid: d1f253e6d0edf5a48962ee638e796717,
     type: 2}
   testMapData: {fileID: 11400000, guid: 932b771bcebcb2f4ba3e8e44099bd27f, type: 2}
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapData: {fileID: 11400000, guid: faf8dc860a1d7ad4785d6f3099c97e22, type: 2}
   generationSettings: {fileID: 11400000, guid: 67e8c3955eff28147bb5cac4c8612c1f, type: 2}
---- !u!114 &6267130343146931128
+--- !u!114 &1489631683628969913
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1897838225408051672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b11227d94ed57449bcc893f2fbf7b80, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d914f5d8bf3dc84d8d8c8efe2ee5572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dSettings: {fileID: 11400000, guid: 54fa6e541346171458ecc57650572d46, type: 2}
@@ -127,6 +127,14 @@ MonoBehaviour:
     type: 3}
   UpgradeNodeInfoDisplayPrefab: {fileID: 2209075628736127882, guid: 4386498a9dca425459c3f4feeb5aee2c,
     type: 3}
+  emptyLevels: []
+  battleLevels: []
+  upgradeLevels:
+  - levelI: 1
+    nodeI: 0
+    progressionState: 0
+    upgradeType: 1
+    numNextLevelNodes: 2
 --- !u!114 &8485875724773115229
 MonoBehaviour:
   m_ObjectHideFlags: 0
