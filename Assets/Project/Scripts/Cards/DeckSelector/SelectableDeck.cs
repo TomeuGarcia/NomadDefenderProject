@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -84,6 +85,8 @@ public class SelectableDeck : MonoBehaviour
                                                           Random.Range(-maxRotationAngle.z, maxRotationAngle.z));
     }
 
+    private BuildingCard SecondCardPiledUp => _cards[^2];
+    
     private void OnValidate()
     {
         SetDeckSprites();
@@ -246,6 +249,8 @@ public class SelectableDeck : MonoBehaviour
         pulsingMaterial.SetFloat(isSelectedPropertyId, 1.0f);
 
         ChangeBorderLight(firstMaterialLightName, 0.0f, 1.0f, 0.8f);
+        
+        SecondCardPiledUp.ViewHolder.SetActive(true);
     }
     public void SetNotSelected()
     {
@@ -254,6 +259,11 @@ public class SelectableDeck : MonoBehaviour
 
         ChangeBorderLight(firstMaterialLightName, 1.0f, 0.0f, 0.2f);
         ChangeBorderLight(secondMaterialLightName, 1.0f, 0.0f, 0.2f);
+    }
+    public async void SetNotSelectedFinished(float delay)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+        SecondCardPiledUp.ViewHolder.SetActive(false);
     }
 
 

@@ -46,7 +46,7 @@ public class SlowIdleAnimator : MonoBehaviour
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         _target.DOComplete();
-        _target.DOKill();
     }
 }

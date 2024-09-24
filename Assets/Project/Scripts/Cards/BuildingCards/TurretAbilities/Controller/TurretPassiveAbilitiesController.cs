@@ -6,6 +6,7 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
     private readonly TurretCardData _cardDataOwner;
 
     public List<ATurretPassiveAbility> PassiveAbilities => _passiveAbilities;
+    public int CurrentNumberOfPassives => _passiveAbilities.Count;
 
     public TurretPassiveAbilitiesController(TurretCardData cardDataOwner,
         ATurretPassiveAbilityDataModel[] startingPassiveAbilities)

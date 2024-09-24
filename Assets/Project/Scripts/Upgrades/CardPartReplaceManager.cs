@@ -641,6 +641,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void AttachResultCardToMachine()
     {
+        previewTurretCard.gameObject.SetActive(false);
         upgradeCardHolder.selectedCard.RootCardTransform.SetParent(resultCardPlacerToParent);
         upgradeCardHolder.selectedCard.RootCardTransform.localPosition = Vector3.zero;
         upgradeCardHolder.selectedCard.ResetCardPosition();

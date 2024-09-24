@@ -353,15 +353,19 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
                                      CardUpgradeTurretPlayCostConfig playCostsConfig)
     {
         bool replacingWithSamePart = false;
+        Color hasNotChangedColor = Color.white;  
+        Color hasChangedColor = Color.cyan;  
 
         // ATTACK
         if (partType != CardPartReplaceManager.PartType.ATTACK)
         {
             newTurretPartAttack = originalCard.CardParts.Projectile;
+            ProjectileIconDisplay.SetBorderColor(hasNotChangedColor);
         }
         else
         {
             replacingWithSamePart = originalCard.HasSameAttackPart(newTurretPartAttack);
+            ProjectileIconDisplay.SetBorderColor(replacingWithSamePart ? hasNotChangedColor : hasChangedColor);
         }
 
 
@@ -393,7 +397,14 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         }
 
 
+        playCostCurrencyIcon.color = playCostText.color = replacingWithSamePart ? hasChangedColor : hasNotChangedColor;
 
+        TurretIconCanvasDisplay[] passivesIconDisplays = PassivesIconDisplays;
+        foreach (TurretIconCanvasDisplay turretIconCanvasDisplay in passivesIconDisplays)
+        {
+            turretIconCanvasDisplay.SetBorderColor(hasNotChangedColor);
+        }
+        
 
         // PLAY COST
         CardData = new TurretCardData(originalCard.CardData);
@@ -403,6 +414,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         if (newTurretPassive)
         {
             CardData.AddPassiveAbility(newTurretPassive);
+
+            int passiveIconDisplayIndex = CardData.PassiveAbilitiesController.CurrentNumberOfPassives - 1; 
+            passivesIconDisplays[passiveIconDisplayIndex].SetBorderColor(hasChangedColor);
         }
 
 
@@ -412,13 +426,25 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         if (partType == CardPartReplaceManager.PartType.BONUS_STATS)
         {
             cardPartBonusStats.ApplyStatsModification(tempStatsController);
+
+            _damageStatValueText.color = cardPartBonusStats.StatsSnapshotUpgrade.HasDamage()
+                ? hasChangedColor
+                : hasNotChangedColor;
+            _fireRateStatValueText.color = cardPartBonusStats.StatsSnapshotUpgrade.HasShotsPerSecond()
+                ? hasChangedColor
+                : hasNotChangedColor;
+            _rangeStatValueText.color = cardPartBonusStats.StatsSnapshotUpgrade.HasRadiusRange()
+                ? hasChangedColor
+                : hasNotChangedColor;
         }
         else
         {
             tempStatsController.UpdateCurrentStats();
+            _damageStatValueText.color = _fireRateStatValueText.color = _rangeStatValueText.color = hasNotChangedColor;
         }
 
         UpdateIcons();
+        InstantiateTurretPreviewMesh();
 
         //_turretMeshPreview.ResetProjectileMaterial(newTurretPartAttack.MaterialForTurret);
 
@@ -434,7 +460,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         // CARD LVL
         CardData.SetCardUpgradeLevel(originalCard.CardData.CardUpgradeLevel);        
         IncrementCardLevel(1);
-        
+        cardLevelText.color = IsCardLevelMaxed() ? hasNotChangedColor : hasChangedColor;
     }
 
 
@@ -465,7 +491,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         TurretIconCanvasDisplay.ConfigData newProjectileIconData =
             new TurretIconCanvasDisplay.ConfigData(newProjectile.abilitySprite, newProjectile.materialColor);
         
-        TurretIconCanvasDisplay projectileIconDisplay = _iconDisplays[0];
+        TurretIconCanvasDisplay projectileIconDisplay = ProjectileIconDisplay;
 
         
         yield return new WaitForSeconds(delayBeforeAnimation);

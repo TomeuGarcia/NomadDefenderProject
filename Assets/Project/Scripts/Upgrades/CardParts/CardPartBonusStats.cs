@@ -19,7 +19,7 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
     private TurretStatsUpgradeModel.StatString _radiusRangeStatString;
 
 
-    private TurretStatsMultiplicationSnapshot _statsSnapshotUpgrade;
+    public TurretStatsMultiplicationSnapshot StatsSnapshotUpgrade { get; private set; }
 
     [SerializeField] private DescriptionHelpReferences _descriptionHelper;
     private EditableCardAbilityDescription _statsDescription;
@@ -75,7 +75,7 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
 
     public void Configure(TurretStatsUpgradeModel model)
     {
-        _statsSnapshotUpgrade = model.MakeStatMultiplicationSnapshot();
+        StatsSnapshotUpgrade = model.MakeStatMultiplicationSnapshot();
 
         model.MakeStatStrings(
             out _damageStatString,
@@ -101,7 +101,7 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
 
     public void ApplyStatsModification(ITurretStatsBonusController turretCardStatsController)
     {
-        turretCardStatsController.AddBonusBaseStatsMultiplication(_statsSnapshotUpgrade);
+        turretCardStatsController.AddBonusBaseStatsMultiplication(StatsSnapshotUpgrade);
     }
 
 
