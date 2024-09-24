@@ -22,6 +22,8 @@ public class ProjectileViewAddOn_SimpleSandbox : AProjectileViewAddOn
 
     protected override void DoOnProjectileSpawned()
     {
+        transform.localRotation = Quaternion.identity;
+
         if (_projectileTrail)
         {
             _projectileTrail.emitting = true;
