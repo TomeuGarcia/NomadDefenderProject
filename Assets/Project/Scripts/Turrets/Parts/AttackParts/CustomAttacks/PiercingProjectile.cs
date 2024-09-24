@@ -66,15 +66,12 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!other.gameObject.CompareTag("Enemy"))
+        if (CheckEnemyOnTriggerEnter(other, out Enemy enemy))
         {
-            return;
+            EnemyHit(enemy);
         }
-        
-        Enemy enemy = other.gameObject.GetComponent<Enemy>();
-        EnemyHit(enemy);
     }
-
+    
     private void EnemyHit(Enemy enemy)
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()
@@ -83,6 +80,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
         _damageAttack = CreateDamageAttack(_targetEnemy);
         DamageTargetEnemy(_damageAttack);
+        AddEnemyToIgnore(enemy);
     }
 
     public override bool QueuesDamageToEnemies()
