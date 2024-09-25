@@ -20,6 +20,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [SerializeField] protected ParticleSystem placedParticleSystem;
     public ParticleSystem PlacedParticleSystem => placedParticleSystem;
 
+    public Collider Collider => baseCollider.GetCollider();
 
     private void Awake()
     {
@@ -84,15 +85,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
         }
     }
 
-    public bool IsPointWithinRange(Vector3 point)
-    {
-        return baseCollider.IsPointWithinRange(point);
-    }
-    
-    public bool IsBoundsWithinRange(Bounds bounds)
-    {
-        return baseCollider.IsBoundsWithinRange(bounds);
-    }
+
 
     public virtual void OnGetPlaced()
     {

@@ -87,6 +87,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
         TurretDamageAttack precomputedDamageAttack)
     {
         TurretOwner = owner;
+        _turretProjectileView.OnProjectileSpawned();
     }
 
     private void SharedInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, Enemy targetEnemy, Vector3 spawnerObjectPosition)

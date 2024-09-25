@@ -52,4 +52,20 @@ public class CircularBaseCollider : BaseCollider
         return bounds.Contains(rangeColliderSurfacePoint);
     }
 
+    public override Collider GetCollider()
+    {
+        return rangeCollider;
+    }
+
+    public override bool ColliderIsWithinRange(SphereCollider otherCollider)
+    {
+        Vector3 otherPosition = otherCollider.transform.position;
+        otherPosition.y = 0;
+        Vector3 thisPosition = rangeCollider.transform.position;
+        thisPosition.y = 0;
+        
+        float distance = (otherPosition - thisPosition).magnitude;
+
+        return distance <= (rangeCollider.radius + otherCollider.radius);
+    }
 }

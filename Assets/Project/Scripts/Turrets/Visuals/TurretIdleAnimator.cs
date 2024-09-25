@@ -1,10 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
-using Sequence = DG.Tweening.Sequence;
 
 public class TurretIdleAnimator : MonoBehaviour
 {

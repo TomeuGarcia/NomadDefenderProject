@@ -56,7 +56,6 @@ public class RepeaterBase : TurretPartBase_Prefab
     {
         AwakeInit();
         fakeEnemy.gameObject.SetActive(false);
-        fakeEnemy.SetupColliderBounds();
 
         HideAllTurretBinders();
         currentDamagePer1Increment = 0f;
@@ -317,7 +316,6 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         TurretBuilding projectileTurret = projectileSource.TurretOwner;
 
-        newProjectile.transform.parent = projectileSource.TurretOwner.BaseHolder;
         newProjectile.ProjectileShotInit_PrecomputedAndQueued(projectileTurret.CardData.PassiveAbilitiesController,
             projectileTurret, projectileToRepeat, _ownerBuilding.Position);
         newProjectile.AddEnemyToIgnore(fakeEnemy);
@@ -408,7 +406,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
             TurretBuilding turretBuilding = building as TurretBuilding;
-            bool isTurretWithinRange = turretBuilding.GetBasePart().IsBoundsWithinRange(fakeEnemy.GetColliderBounds());
+            bool isTurretWithinRange = turretBuilding.GetBasePart().baseCollider.ColliderIsWithinRange(fakeEnemy.SphereCollider);
 
             if (isTurretWithinRange)
             {

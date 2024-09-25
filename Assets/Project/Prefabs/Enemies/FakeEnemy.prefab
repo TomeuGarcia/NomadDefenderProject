@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7337741104465675628}
   - component: {fileID: 3623447730478713804}
   - component: {fileID: 3098590598275643451}
-  - component: {fileID: 7219295044337878100}
+  - component: {fileID: 1186103497089098731}
   - component: {fileID: 9014563427558016540}
   m_Layer: 6
   m_Name: FakeEnemy
@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9b4a15eb88a254db86512fceb5d19d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackGeneralConfig: {fileID: 0}
   meshRenderer: {fileID: 7141274354288199827}
   pathFollower: {fileID: 3098590598275643451}
   transformToMove: {fileID: 4599594694859222351}
@@ -59,7 +58,7 @@ MonoBehaviour:
   enemyFeedback: {fileID: 3623447730478713804}
   _typeConfig: {fileID: 11400000, guid: d632a063728cf694785ff002e49e5722, type: 2}
   currencyDrop: 0
-  boxCollider: {fileID: 7219295044337878100}
+  sphereCollider: {fileID: 1186103497089098731}
 --- !u!114 &3623447730478713804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,8 +104,8 @@ MonoBehaviour:
   _rotationSpeed: 300
   _rigidbodyToMove: {fileID: 0}
   paused: 0
---- !u!65 &7219295044337878100
-BoxCollider:
+--- !u!135 &1186103497089098731
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -124,8 +123,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!54 &9014563427558016540
 Rigidbody:
   m_ObjectHideFlags: 0

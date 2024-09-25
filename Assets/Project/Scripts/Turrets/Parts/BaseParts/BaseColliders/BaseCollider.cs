@@ -9,6 +9,7 @@ public abstract class BaseCollider : MonoBehaviour
     [SerializeField] protected MeshRenderer rangePlaneMesh;
     protected Material rangePlaneMaterial;
 
+    
     private void Awake()
     {
         rangePlaneMaterial = rangePlaneMesh.material;        
@@ -38,6 +39,8 @@ public abstract class BaseCollider : MonoBehaviour
         rangePlaneMaterial.color = color;
     }
 
-    
+    public abstract Collider GetCollider();
+    public abstract bool ColliderIsWithinRange(SphereCollider otherCollider);
+
 
 }

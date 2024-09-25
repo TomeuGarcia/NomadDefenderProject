@@ -17,8 +17,8 @@ public class FakeEnemy : Enemy
     public event FakeEnemyGetPositionAction OnGetPosition;
 
 
-    [SerializeField] private BoxCollider boxCollider;
-    private Bounds colliderBounds;
+    [SerializeField] private SphereCollider sphereCollider;
+    public SphereCollider SphereCollider => sphereCollider;
 
 
     private void Awake()
@@ -124,16 +124,6 @@ public class FakeEnemy : Enemy
         return delegatedPosition;
     }
 
-    public void SetupColliderBounds()
-    {
-        colliderBounds = new Bounds(boxCollider.transform.position, boxCollider.size);
-    }
-    
-    public Bounds GetColliderBounds()
-    {
-        colliderBounds.center = boxCollider.transform.position;
-        return colliderBounds;
-    }
 
     public override bool CanBeAttackedByMultiCastProjectiles()
     {
