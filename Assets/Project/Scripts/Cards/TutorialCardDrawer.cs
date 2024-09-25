@@ -6,7 +6,8 @@ public class TutorialCardDrawer : CardDrawer
 {
     [Header("TUTORIAL")]
     [SerializeField] private GameObject tutorialTurretCardPrefab;
-
+    [SerializeField] private CardDeckShuffler_HardcodedIndex _hardcodedDeckShuffler; 
+    
     [HideInInspector] public TutoTurretCard tutorialCard;
 
     private void Awake()
@@ -32,7 +33,7 @@ public class TutorialCardDrawer : CardDrawer
 
     protected override void SetupDeck()
     {
-        deck.Init();
+        deck.Init(_hardcodedDeckShuffler);
 
         // Transform the 1st card in the deck (1st DeckData turret) into a Tutorial Card
         TurretBuildingCard topCardInDeck = deck.GetAndRemoveCard(0).GetComponent<TurretBuildingCard>();

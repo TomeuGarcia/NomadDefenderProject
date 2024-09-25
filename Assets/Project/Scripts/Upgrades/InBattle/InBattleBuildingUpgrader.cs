@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using NodeEnums;
 using System.Collections;
@@ -77,6 +78,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     public delegate void TurretUpgradeEvent(int newLevel);
     public static TurretUpgradeEvent OnTurretUpgrade;
+    public static Action OnBuildingUpgraded;
 
     public delegate void BuildingUpgraderEvent(TurretUpgradeType upgradeType, int upgradeLevel);
     public BuildingUpgraderEvent OnUpgrade;
@@ -364,7 +366,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     protected virtual void PlayCloseAnimation()
     {
     }
-    
+
+    protected void OnUpgraded()
+    {
+        OnBuildingUpgraded?.Invoke();
+    }
 
 
     protected void FillStatBar(Image bar, Image button, Image backFillBar, float backFill, bool highlight)

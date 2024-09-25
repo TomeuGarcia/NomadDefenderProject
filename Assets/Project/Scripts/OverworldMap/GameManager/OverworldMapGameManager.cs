@@ -7,7 +7,7 @@ public class OverworldMapGameManager : MonoBehaviour
     private OWMap_Node[][] mapNodes;
     public OWMap_Node[][] GetMapNodes() { return mapNodes; }
     private int currentMapLevelI;
-    private bool gameFinished = false;
+    protected bool gameFinished = false;
 
 
     [Header("CREATOR & DECORATOR")]
@@ -235,15 +235,13 @@ public class OverworldMapGameManager : MonoBehaviour
     }
 
 
-    public virtual void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
+    public void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            gameFinished = true;
-            InvokeOnVictory();
-            DisableCardDisplayer();
+            RequestVictory();
             Debug.Log("END OF MAP REACHED ---> VICTORY");
             return;
         }
@@ -261,12 +259,22 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         else
         {
-            gameFinished = true;
-            InvokeOnGameOver();
-            DisableCardDisplayer();
+            RequestGameOver();
             Debug.Log("ALL PATHS DESTROYED ---> GAME OVER");
         }
+    }
 
+    private void RequestVictory()
+    {
+        gameFinished = true;
+        InvokeOnVictory();
+        DisableCardDisplayer();
+    }
+    protected void RequestGameOver()
+    {
+        gameFinished = true;
+        InvokeOnGameOver();
+        DisableCardDisplayer();
     }
 
 

@@ -90,10 +90,13 @@ public abstract class BuildingCard : MonoBehaviour
 
     [Header("VISUALS")]
     [SerializeField] private BuildingCardView _view;
+    [SerializeField] private GameObject _viewHolder;
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] private MeshRenderer discardIndicatorMesh;
     protected Material cardMaterial;
     protected Material discardIndicatorMaterial;
+
+    public GameObject ViewHolder => _viewHolder;
 
     [Header("CARD INFO")]
     [HideInInspector] public bool canDisplayInfoIfNotInteractable = false;
@@ -184,8 +187,24 @@ public abstract class BuildingCard : MonoBehaviour
     
     protected virtual void DoOnDestroy(){}
 
+    private static bool _lockAllCardsFromHover = false;
+    public static bool LockAllCardsFromHover
+    {
+        get => _lockAllCardsFromHover;
+        set
+        {
+            _lockAllCardsFromHover = value;
+            if (!value)
+            {
+                CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+            }
+        }
+    }
+
     private void OnMouseEnter()
     {
+        if (LockAllCardsFromHover) return;
+        
         if (canDisplayInfoIfNotInteractable)
         {
             StartShowInfoWithDelay();

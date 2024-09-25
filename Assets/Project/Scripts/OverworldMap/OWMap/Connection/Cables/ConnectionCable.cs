@@ -61,10 +61,9 @@ public abstract class ConnectionCable : MonoBehaviour
 
     public void StartNodesConnectionsScaleZToZero()
     {
-
         foreach (GameObject cableBone in cableBones)
         {
-            cableBone.transform.localScale = new Vector3(100.0f, 100.0f, 0.0f);
+            cableBone.transform.localScale = Vector3.zero;// new Vector3(100.0f, 100.0f, 0.0f);
         }
     }
 
@@ -72,8 +71,8 @@ public abstract class ConnectionCable : MonoBehaviour
     {
         foreach (GameObject cableBone in cableBones)
         {
-            GameAudioManager.GetInstance().PlayConnectionsNodeSpawnSound();
-            cableBone.transform.DOScale(Vector3.one * 100, timeToLerp);
+            cableBone.transform.DOScale(Vector3.one * 100, timeToLerp)
+                .SetEase(Ease.OutBack);
         }
         yield return new WaitForSeconds(timeToLerp);
     }

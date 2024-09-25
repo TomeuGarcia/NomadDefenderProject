@@ -72,6 +72,7 @@ public class DeckSelector : MonoBehaviour
             selectableDeck.InitSpawnCards(cardSpawnService);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
             selectableDeck.SetNotSelected();
+            selectableDeck.SetNotSelectedFinished(0);
 
             bool isUnlocked = i < numberOfUnlockedDecks;
             selectableDeck.InitState(isUnlocked);
@@ -108,6 +109,7 @@ public class DeckSelector : MonoBehaviour
             yield return StartCoroutine(previouslySelectedDeck.ArrangeCardsFromFirst(0.2f, 0.0f, pileUpArrangeCardsData, previouslySelectedDeck.CardsHolder, false));
             yield return new WaitUntil(() => previouslySelectedDeck.FinishedArranging);
             GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+            previouslySelectedDeck.SetNotSelectedFinished(0.1f);
         }
 
         deckSelectorVisuals.ShowWires(selectableDeck.Position);

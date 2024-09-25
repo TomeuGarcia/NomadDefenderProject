@@ -8,12 +8,15 @@ using UnityEngine.Serialization;
 public class TutoTurretCard : TurretBuildingCard
 {
     [Header("TUTORIAL DRAW ANIMATION")]
-    [SerializeField] private TutorialCardDrawAnimationPlayer _tutorialCardDrawAnimation;
+    [SerializeField] private CardDrawAnimationPlayer_TutorialCardOverview _tutorialCardDrawAnimation;
     [SerializeField] private Transform _animationTransform;
 
 
     public bool ShowTurret { 
         set => _tutorialCardDrawAnimation.ShowTurret = value;
+    }
+    public bool ShowProjectile { 
+        set => _tutorialCardDrawAnimation.ShowProjectile = value;
     }
     public bool ShowPlayCost { 
         set => _tutorialCardDrawAnimation.ShowPlayCost = value;
@@ -27,6 +30,9 @@ public class TutoTurretCard : TurretBuildingCard
     public bool ShowShotsPerSecondStat { 
         set => _tutorialCardDrawAnimation.ShowShotsPerSecondStat = value;
     }
+    public bool Finish { 
+        set => _tutorialCardDrawAnimation.Finish = value;
+    }
 
 
     
@@ -38,7 +44,12 @@ public class TutoTurretCard : TurretBuildingCard
     public bool FinishedAnimation => !isPlayingDrawAnimation;
 
 
+    private CardOverviewPositioner _overviewPositioner;
 
+    public void InitOverviewPositioner(CardOverviewPositioner overviewPositioner)
+    {
+        _overviewPositioner = overviewPositioner;
+    }
 
     protected override IEnumerator InterfaceDrawAnimation(CardFunctionPtr animationEndCallback)
     {
@@ -50,11 +61,17 @@ public class TutoTurretCard : TurretBuildingCard
         Coroutine drawAnimation = StartCoroutine(_tutorialCardDrawAnimation.PlayDrawAnimation());
 
         yield return new WaitForSeconds(drawAnimWaitDurationBeforeBlink);
+        yield return new WaitForSeconds(0.5f);
+        
+        _overviewPositioner.Init(this);
+        yield return StartCoroutine(_overviewPositioner.PositionToSpot());
+        /*
         transform.DOComplete();
         transform.DOBlendableMoveBy(_positionDisplacement, _displacementInDuration).SetEase(Ease.InOutSine);
         transform.DOScale(_scaleDisplacement, _displacementInDuration).SetEase(Ease.InOutSine);
         
         yield return new WaitForSeconds(0.4f);
+        */
         _tutorialCardDrawAnimation.CanStartShowing = true;
         
         yield return drawAnimation;
@@ -62,7 +79,8 @@ public class TutoTurretCard : TurretBuildingCard
         
         yield return new WaitForSeconds(0.5f);
 
-
+        yield return StartCoroutine(_overviewPositioner.UndoPositioning());
+        /*
         DisableMouseInteraction();
         MotionEffectsController.DisableMotion();
         transform.DOComplete();
@@ -71,24 +89,16 @@ public class TutoTurretCard : TurretBuildingCard
         transform.DOScale(Vector3.one, _displacementOutDuration)
             .SetEase(Ease.InOutSine);
 
-        Quaternion startRotation = transform.localRotation;
-        float spinRotation = 0f;
-        DOTween.To(
-            () => spinRotation,
-            (spinRotationValue) => {
-                spinRotation = spinRotationValue;
-                _animationTransform.localRotation = startRotation * Quaternion.Euler(0, spinRotation, 0); 
-            },
-            360f,
-            _displacementOutDuration
-            )
-            .SetEase(Ease.InOutQuad);
-
+        _animationTransform.DOBlendableLocalRotateBy(new Vector3(0, 360f, 0), _displacementOutDuration,
+            RotateMode.LocalAxisAdd);
+        
         yield return new WaitForSeconds(_displacementOutDuration + 0.25f);
 
         EnableMouseInteraction();
-        isInteractable = true;
         MotionEffectsController.EnableMotion();
+        isInteractable = true;
+        */
+        
         
 
         canInfoInteract = true;

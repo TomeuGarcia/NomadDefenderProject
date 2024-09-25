@@ -10,6 +10,7 @@ public class CardMotionEffectsController : MonoBehaviour
     private RotatingWithMouseCardMotion _hoveredRotationEffect;
     private ICameraHelpService _cameraHelp;
 
+    public Transform RotationEffectsTransform => _rotationEffectsTransform;
     private Camera CardsCamera => _cameraHelp.CardsCamera;
     private float _motionEnabled01;
 

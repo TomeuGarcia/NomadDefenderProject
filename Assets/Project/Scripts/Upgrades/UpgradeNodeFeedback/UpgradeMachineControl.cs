@@ -1,12 +1,9 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using TMPro;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
-using UnityEngine.Device;
-using UnityEngine.SceneManagement;
+
 
 public class UpgradeMachineControl : MonoBehaviour
 {
@@ -341,5 +338,9 @@ public class UpgradeMachineControl : MonoBehaviour
 
         if (OnReplaceCardPrinted != null) OnReplaceCardPrinted();
         screenCardSlot.Extract();
+        
+        Material screenFillMaterial = screen.materials[2];
+        screenFillMaterial.DOFloat(0, "_FirstFillCoef", 0.2f);
+        screenFillMaterial.DOFloat(0, "_SecondFillCoef", 0.2f);
     }
 }

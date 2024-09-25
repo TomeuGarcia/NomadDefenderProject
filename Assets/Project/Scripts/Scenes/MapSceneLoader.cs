@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NodeEnums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static MapSceneLoader;
@@ -98,6 +99,10 @@ public class MapSceneLoader : MonoBehaviour
 
     public void LoadUpgradeScene(NodeEnums.UpgradeType upgradeType, NodeEnums.HealthState nodeHealthState)
     {
+        if (upgradeType == UpgradeType.ADD_BONUS_STATS_PART)
+        {
+            
+        }
         string sceneName = upgradeScenes.Get((int)upgradeType);
 
         //Debug.Log("Loading Upgrade scene: " + sceneName);

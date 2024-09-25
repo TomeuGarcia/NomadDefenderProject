@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7597700858521337240}
+      - m_Target: {fileID: 2035071140425736177}
         m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
         m_MethodName: DecrementTime
         m_Mode: 1
@@ -151,7 +151,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7597700858521337240}
+        - m_Target: {fileID: 2035071140425736177}
           m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
           m_MethodName: DecrementButtonHovered
           m_Mode: 1
@@ -167,7 +167,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7597700858521337240}
+        - m_Target: {fileID: 2035071140425736177}
           m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
           m_MethodName: DecrementButtonUnhovered
           m_Mode: 1
@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.98039216}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1031,6 +1031,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2714909740775028815}
   - component: {fileID: 7317154147133435078}
+  - component: {fileID: 2035071140425736177}
   m_Layer: 10
   m_Name: SpeedUpButton
   m_TagString: Untagged
@@ -1072,6 +1073,32 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2035071140425736177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3296238132714388524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeScales:
+  - timeMultiplier: 1
+    text: 1
+  - timeMultiplier: 2
+    text: 2
+  - timeMultiplier: 5
+    text: 3
+  - timeMultiplier: 0
+    text: 0
+  timeSpeedCountText: {fileID: 7482905563954951932}
+  incrementButton: {fileID: 8388785990388241353}
+  decrementButton: {fileID: 5296945814937869936}
+  _gamePausedDisplay: {fileID: 5697399514916022384}
+  _startHidden: 0
 --- !u!1 &3371093897008713641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1264,8 @@ MonoBehaviour:
   _speed: 100
   _amplitude: 1
   _direction: {x: 1, y: 0, z: 0}
+  _backAndForth: 1
+  _addStartingLocalPosition: 0
 --- !u!222 &172479003445406678
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1655,10 +1684,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1062552265061900182}
   - {fileID: 1449833603186491054}
   - {fileID: 5787308743945126558}
   - {fileID: 4558423115784393675}
+  - {fileID: 1062552265061900182}
   m_Father: {fileID: 2712414808001822513}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2518,6 +2547,8 @@ MonoBehaviour:
   _speed: 80
   _amplitude: 10
   _direction: {x: 0.78086877, y: 0.62469506, z: 0}
+  _backAndForth: 1
+  _addStartingLocalPosition: 0
 --- !u!222 &8206604355041333234
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2775,7 +2806,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7597700858521337240}
+      - m_Target: {fileID: 2035071140425736177}
         m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
         m_MethodName: IncrementTime
         m_Mode: 1
@@ -2804,7 +2835,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7597700858521337240}
+        - m_Target: {fileID: 2035071140425736177}
           m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
           m_MethodName: IncrementButtonHovered
           m_Mode: 1
@@ -2820,7 +2851,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7597700858521337240}
+        - m_Target: {fileID: 2035071140425736177}
           m_TargetAssemblyTypeName: SpeedUpButton, Assembly-CSharp
           m_MethodName: IncrementButtonUnhovered
           m_Mode: 1
@@ -3030,7 +3061,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8000776030745905205}
-  - component: {fileID: 7597700858521337240}
   m_Layer: 10
   m_Name: SpeedUp
   m_TagString: Untagged
@@ -3061,31 +3091,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0.000015259}
   m_SizeDelta: {x: 110, y: 82.6975}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7597700858521337240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7865837349899405289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeScales:
-  - timeMultiplier: 1
-    text: 1
-  - timeMultiplier: 2
-    text: 2
-  - timeMultiplier: 5
-    text: 3
-  - timeMultiplier: 0
-    text: 0
-  timeSpeedCountText: {fileID: 7482905563954951932}
-  incrementButton: {fileID: 8388785990388241353}
-  decrementButton: {fileID: 5296945814937869936}
-  _gamePausedDisplay: {fileID: 5697399514916022384}
 --- !u!1 &8180905761227322695
 GameObject:
   m_ObjectHideFlags: 0

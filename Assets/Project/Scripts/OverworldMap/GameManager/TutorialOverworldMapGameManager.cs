@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NodeEnums;
 using UnityEngine;
 
 public class TutorialOverworldMapGameManager : OverworldMapGameManager
@@ -55,8 +56,20 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     private void StartMapTutorial()
     {
         mapSceneLoader.OnSceneFromMapUnloaded -= StartMapTutorial;
-        owMapTutorial.StartTutorial();
-        mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle;
+
+        if (currentBattleStateResult.nodeResults[0].healthState == HealthState.DESTROYED)
+        {
+            firstBattleResultApplied = true;
+            ApplyBattleStateResult();
+            RequestGameOver();
+            return;
+        }
+        else
+        {
+            owMapTutorial.StartTutorial();
+            //mapSceneLoader.OnSceneFromMapUnloaded += MapTutorialAfterSecondBattle; // 2nd TUTORIAL
+        }
+        
     }
 
 
@@ -74,17 +87,17 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
 
     protected override void ApplyBattleStateResult()
     {
-        BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
+        base.ApplyBattleStateResult();
+        return;
+        
         if (firstBattleResultApplied)
         {
-            for (int i = 0; i < nodeResults.Length; ++i)
-            {
-                nodeResults[i].owMapNode.SetHealthState(nodeResults[i].healthState, true);
-            }                        
+            base.ApplyBattleStateResult();
         }
         else
         {
             firstBattleResultApplied = true;
+            BattleStateResult.NodeBattleStateResult[] nodeResults = currentBattleStateResult.nodeResults;
             for (int i = 0; i < nodeResults.Length; ++i)
             {
                 nodeResults[i].owMapNode.SetHealthState(NodeEnums.HealthState.SURVIVED, true); // Hardcoded to always apply UNDAMAGED
@@ -94,14 +107,13 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
     }
 
 
-
+    /*
     public override void StartCommunicationWithNextNodes(OWMap_Node owMapNode)
     {
         OWMap_Node.MapReferencesData nodeMapRefData = owMapNode.GetMapReferencesData();
 
         if (nodeMapRefData.isLastLevelNode)
         {
-            Debug.Log("END OF MAP REACHED ---> VICTORY");
             InvokeOnVictory();
             return;
         }
@@ -110,7 +122,6 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         int aliveNodesCount;
         OWMap_Node[] nextLevelEnabledNodes;
 
-        Debug.Log("battleCounter: " + battleCounter);
         if (battleCounter == 1)
         {
             nextLevelEnabledNodes = currentNode.EnableAllNextLevelNodesInteraction(out aliveNodesCount);
@@ -132,11 +143,11 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         if (aliveNodesCount == 0)
         {
             //InvokeOnGameOver();
-            Debug.Log("ALL PATHS DESTROYED ---> GAME OVER");
             StartCoroutine(ResurrectDestroyedCurrentNode(nextLevelEnabledNodes));
         }
 
     }
+    */
 
 
     private IEnumerator ResurrectDestroyedCurrentNode(OWMap_Node[] nextLevelEnabledNodes)

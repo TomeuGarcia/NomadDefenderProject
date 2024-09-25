@@ -18,9 +18,9 @@ public class DeckBuildingCards : MonoBehaviour
     public int NumCards => cards.Count;
 
 
-    public void Init()
+    public void Init(ICardDeckShuffler deckShuffler) 
     {
-        cards = new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform));
+        cards = deckShuffler.ShuffleCards(new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform)));
 
         float upStep = 0.1f;
         float numCards = cards.Count;
@@ -70,10 +70,7 @@ public class DeckBuildingCards : MonoBehaviour
     {
         return GetAndRemoveCard(0);
     }
-    public BuildingCard GetRandomCard()
-    {
-        return GetAndRemoveCard(Random.Range(0, cards.Count));
-    }
+
     public BuildingCard GetAndRemoveCard(int cardI)
     {
         BuildingCard topCard = cards[cardI];
@@ -87,24 +84,15 @@ public class DeckBuildingCards : MonoBehaviour
     
     public BuildingCard GetRandomCardOfType(BuildingCard.CardBuildingType cardBuildingType)
     {
-        List<int> cardIndicesOfType = new List<int>();
         for (int i = 0; i < cards.Count; ++i)
         {
             if (cards[i].cardBuildingType == cardBuildingType)
             {
-                cardIndicesOfType.Add(i);
+                return GetAndRemoveCard(i);
             }
         }
 
-        if (cardIndicesOfType.Count == 0)
-        {
-            return null;
-        }
-
-
-        int randomCardI = cardIndicesOfType[Random.Range(0, cardIndicesOfType.Count)];
-
-        return GetAndRemoveCard(randomCardI);
+        return null;
     }
 
 

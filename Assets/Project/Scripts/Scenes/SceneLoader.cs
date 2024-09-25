@@ -120,11 +120,7 @@ public class SceneLoader : MonoBehaviour
         else
             StartCoroutine(DoLoadScene(LoadNextScene));
     }
-
-    public void LoadNormalGameNoAnim(bool loadUsingSceneName = false)
-    {
-        LoadMapScene();
-    }
+    
     public void StartLoadTutorialGame()
     {
         StartCoroutine(DoLoadScene(LoadTutorialScene));

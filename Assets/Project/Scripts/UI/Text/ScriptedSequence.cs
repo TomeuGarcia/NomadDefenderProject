@@ -24,6 +24,11 @@ public class ScriptedSequence : MonoBehaviour
         InitVariables();
     }
 
+    public void ResetDialog()
+    {
+        InitVariables();
+    }
+    
     private void InitVariables()
     {
         currentLine = 0;

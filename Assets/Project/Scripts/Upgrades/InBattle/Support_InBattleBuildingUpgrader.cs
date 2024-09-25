@@ -223,6 +223,10 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     private void UpdateNextUpgradeDescriptionText()
     {
+        if (IsCardUpgradedToMax(CurrentBuildingLevel))
+        {
+            return;
+        }
         nextUpgradeDescriptionText.text = _supportCardData.GetUpgradeDescriptionByLevel(CurrentBuildingLevel + 1);
     }
 
@@ -236,6 +240,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
             UpgradeAllSupportStats();
             UpdateNextUpgradeDescriptionText();
             UpdateSupportBar();
+            OnUpgraded();
         }
         else
         {

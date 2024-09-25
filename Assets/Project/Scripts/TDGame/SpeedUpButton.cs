@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
@@ -11,7 +12,6 @@ public class SpeedUpButton : MonoBehaviour
     {
         [SerializeField] public int timeMultiplier;
         [SerializeField] public string text;
-
     }
     
     [SerializeField] private SpeedScale[] timeScales;
@@ -20,6 +20,7 @@ public class SpeedUpButton : MonoBehaviour
     [SerializeField] private Button incrementButton;
     [SerializeField] private Button decrementButton;
     [SerializeField] private GameObject _gamePausedDisplay;
+    [SerializeField] private bool _startHidden = false;
     private bool isIncrementButtonHovered = false;
     private bool isDecrementButtonHovered = false;
 
@@ -29,12 +30,20 @@ public class SpeedUpButton : MonoBehaviour
 
     private bool _isTimePaused;
 
+    public static Action OnGameSpeedInteracted;
+
     private void Awake()
     {
         numSpeeds = timeScales.Length;
         _isTimePaused = false;
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
+
+        if (_startHidden)
+        {
+            gameObject.SetActive(false);
+            _gamePausedDisplay.SetActive(false);
+        }
     }
 
     private void OnDestroy()
@@ -81,6 +90,7 @@ public class SpeedUpButton : MonoBehaviour
             {
                 SetCurrentTimeSpeed(3);
             }
+            OnGameSpeedInteracted?.Invoke();
         }
         
         else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -104,9 +114,12 @@ public class SpeedUpButton : MonoBehaviour
     {
         current = 0;
         UpdateTimeSpeed();
-
+        _gamePausedDisplay.SetActive(false); // Don't see that the game is paused
+        
         incrementButton.enabled = false;
         decrementButton.enabled = false;
+        
+        gameObject.SetActive(false);
     }
 
     private void ResetTimeOnGameEnd()
@@ -152,11 +165,13 @@ public class SpeedUpButton : MonoBehaviour
     {
         SetCurrentTimeSpeed((current + 1) % numSpeeds);
         IncrementButtonPressed();
+        OnGameSpeedInteracted?.Invoke();
     }
     public void DecrementTime()
     {
         SetCurrentTimeSpeed((current + numSpeeds - 1) % numSpeeds);
         DecrementButtonPressed();
+        OnGameSpeedInteracted?.Invoke();
     }
     private void SetCurrentTimeSpeed(int newTimeSpeed)
     {

@@ -55,7 +55,7 @@ public class TextDecoder : MonoBehaviour
     public void Activate()
     {
         doneDecoding = false;
-        StartCoroutine(Decode());
+        _decodeCoroutine = textComponent.StartCoroutine(Decode());
         textComponent.enabled = true;
     }
 
@@ -90,25 +90,37 @@ public class TextDecoder : MonoBehaviour
             decodingDictionary += symbols_s;
     }
 
+    public bool FinishedLine { get; private set; } = false;
+    private Coroutine _decodeCoroutine;
+    private Coroutine _decodeStringCoroutine;
     private IEnumerator Decode()
     {
         nextLine = true;
         while (indexLine < textStrings.Count)
         {
-            if(!nextLine)
-                yield return new WaitUntil(() => nextLine == true);
+            if (!nextLine)
+            {
+                yield return new WaitUntil(() => nextLine);
+            }
+                
             nextLine = false;
+            FinishedLine = false;
 
-            yield return StartCoroutine(DecodeString(indexLine));
+            _decodeStringCoroutine = StartCoroutine(DecodeString(indexLine));
+            yield return _decodeStringCoroutine;
+            _decodeStringCoroutine = null;
             indexLine++;
+            FinishedLine = true;
         }
 
         doneDecoding = true;
+        _decodeCoroutine = null;
     }
 
+    private Coroutine _updateCharCoroutine;
     private IEnumerator DecodeString(int currentIndexLine)
     {
-        StartCoroutine(UpdateCharIndex(currentIndexLine));
+        _updateCharCoroutine = StartCoroutine(UpdateCharIndex(currentIndexLine));
 
         while (indexChar <= textStrings[currentIndexLine].Length)
         {
@@ -117,7 +129,11 @@ public class TextDecoder : MonoBehaviour
         }
 
         DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, textStrings[currentIndexLine].Length);
-        StopCoroutine(UpdateCharIndex(currentIndexLine));
+
+        if (_updateCharCoroutine != null)
+        {
+            StopCoroutine(_updateCharCoroutine);
+        }
     }
 
     IEnumerator UpdateCharIndex(int currentIndexLine)
@@ -248,6 +264,34 @@ public class TextDecoder : MonoBehaviour
     {
         ClearText();
         InitDecodingVariables();
+    }
+
+    public void SetStringInstantly()
+    {
+        indexChar = int.MaxValue;
+        FinishAllCoroutines();
+        
+        int tempIndexLine = indexLine;
+        ClearDecoder();
+        indexLine = tempIndexLine;
+        textComponent.text = textStrings[indexLine];
+        textComponent.enabled = true;
+    }
+
+    private void FinishAllCoroutines()
+    {
+        if (_decodeCoroutine != null)
+        {
+            StopCoroutine(_decodeCoroutine);
+        }
+        if (_decodeStringCoroutine != null)
+        {
+            StopCoroutine(_decodeStringCoroutine);
+        }
+        if (_updateCharCoroutine != null)
+        {
+            StopCoroutine(_updateCharCoroutine);
+        }
     }
 
     /*

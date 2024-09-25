@@ -221,6 +221,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         {
             SpendUpgradeCost();
             UpgradeAllTurretStats();
+            OnUpgraded();
         }
         else
         {

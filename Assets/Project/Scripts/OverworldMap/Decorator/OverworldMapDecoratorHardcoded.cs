@@ -41,6 +41,8 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
 
     public override void DecorateMap(OWMap_Node[][] mapNodes)
     {
+        base.DecorateMap(mapNodes);
+        
         DecorateHardcodedEmptyLevels(mapNodes);
         DecorateHardcodedBattleLevels(mapNodes);
         DecorateHardcodedUpgradeLevels(mapNodes);
@@ -66,7 +68,9 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         foreach (BattleLevelData battleLevel in battleLevels)
         {
-            DecorateBattleNode(mapNodes[battleLevel.levelI][battleLevel.nodeI], battleLevel.numNextLevelNodes, battleLevel.nodeI, mapNodes[battleLevel.levelI].Length,
+            OWMap_Node node = mapNodes[battleLevel.levelI][battleLevel.nodeI];
+            DestroyNodeAdditions(node);
+            DecorateBattleNode(node, battleLevel.numNextLevelNodes, battleLevel.nodeI, mapNodes[battleLevel.levelI].Length,
                 battleLevel.battleType, battleLevel.progressionState);
         }
     }
@@ -75,9 +79,18 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     {
         foreach (UpgradeLevelData upgradeLevel in upgradeLevels)
         {
-            DecorateUpgradeNode(mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI], upgradeLevel.numNextLevelNodes, upgradeLevel.nodeI, mapNodes[upgradeLevel.levelI].Length, 
+            OWMap_Node node = mapNodes[upgradeLevel.levelI][upgradeLevel.nodeI];
+            DestroyNodeAdditions(node);
+            DecorateUpgradeNode(node, upgradeLevel.numNextLevelNodes, upgradeLevel.nodeI, mapNodes[upgradeLevel.levelI].Length, 
                 upgradeLevel.upgradeType, upgradeLevel.progressionState);
         }
     }
 
+    private void DestroyNodeAdditions(OWMap_Node node)
+    {
+        for (int i = node.NodeAdditionsTransform.childCount - 1; i >= 0; --i)
+        {
+            Destroy(node.NodeAdditionsTransform.GetChild(i).gameObject);
+        }
+    }
 }
