@@ -329,19 +329,19 @@ public class BattleTutorialManager : MonoBehaviour
         BuildingCard.LockAllCardsFromHover = false;
         
 
-        scriptedSequence.NextLine(); //10
+        scriptedSequence.NextLine(); //9
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.5f);
         scriptedSequence.Clear();
         
         
 
-        scriptedSequence.NextLine(); //11
+        scriptedSequence.NextLine(); //10
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(1.5f);
 
         //First Wave 1/1
-        scriptedSequence.NextLine();//12
+        scriptedSequence.NextLine();//11
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(0.5f);
         
@@ -396,7 +396,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         
         yield return new WaitForSeconds(1.5f);
-        scriptedSequence.NextLine();//13
+        scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         
         
@@ -430,11 +430,21 @@ public class BattleTutorialManager : MonoBehaviour
         _hand.CanBeHidden = true;
         _hand.InitCardsInHand();
         
-        
-        scriptedSequence.NextLine();//14
+        scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
 
-
+        //Wave 4/5
+        yield return new WaitUntil(() => wavesCounter > 3 );
+        scriptedSequence.Clear();
+        yield return new WaitForSeconds(0.5f);
+        scriptedSequence.NextLine();//14
+        
+        //Wave 5/5
+        yield return new WaitUntil(() => wavesCounter > 4 );
+        scriptedSequence.Clear();
+        yield return new WaitForSeconds(0.5f);
+        scriptedSequence.NextLine();//15
+        
         // TODO: REDO FROM BELOW ONWARDS
         // yield return StartCoroutine(MakePlayerUpgradeTurret_Tutorial());
 
@@ -447,7 +457,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         
 
-        scriptedSequence.NextLine(); //25 Defense Finished?
+        scriptedSequence.NextLine(); //16 Wave 6/5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSeconds(4.0f);
 
@@ -470,70 +480,64 @@ public class BattleTutorialManager : MonoBehaviour
         globalVolume.profile = initVol;
         
 
-        scriptedSequence.NextLine(); //26
+        scriptedSequence.NextLine(); //17
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //18
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //19
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //20
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //21
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+        
+        //Random Bullshit Text
+        scriptedSequence.NextLine(); //22
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //23
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        scriptedSequence.NextLine(); //24
+        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        yield return new WaitForSecondsRealtime(0.25f);
+        
+        scriptedSequence.NextLine(); //25
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        scriptedSequence.NextLine(); //26
+        yield return new WaitForSecondsRealtime(1.5f);
 
         scriptedSequence.NextLine(); //27
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //28
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //29
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //30
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //31
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //32
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        scriptedSequence.NextLine(); //33
-        yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSecondsRealtime(0.25f);
-
-        //Random Bullshit Text
-        scriptedSequence.NextLine(); //34
         yield return new WaitForSecondsRealtime(1.5f);
 
-        scriptedSequence.NextLine(); //35
-        yield return new WaitForSecondsRealtime(1.5f);
-
-        scriptedSequence.NextLine(); //36
-        yield return new WaitForSecondsRealtime(1.5f);
-
-        scriptedSequence.NextLine();//37
+        scriptedSequence.NextLine();//28
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();//38
+        scriptedSequence.NextLine();//29
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();//39
+        scriptedSequence.NextLine();//30
         yield return new WaitForSecondsRealtime(1.0f);
 
-        scriptedSequence.NextLine();//40
+        scriptedSequence.NextLine();//31
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();//41
+        scriptedSequence.NextLine();//32
         yield return new WaitForSecondsRealtime(0.75f);
 
-        scriptedSequence.NextLine();//42
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//43
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//44
+        scriptedSequence.NextLine();//33
         yield return new WaitForSecondsRealtime(0.75f);
         
 
