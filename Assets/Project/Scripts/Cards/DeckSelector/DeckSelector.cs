@@ -23,6 +23,8 @@ public class DeckSelector : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Button startSimulationButton;
+    [SerializeField] private Light _startButtonLight;
+    private float _startButtonLightIntensity;
     [SerializeField] private MeshRenderer runButtonMesh;
     [SerializeField] private MeshRenderer runInnerButtonMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh;
@@ -35,6 +37,9 @@ public class DeckSelector : MonoBehaviour
     {
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(Camera.main);
         _cardsMotionConfig.SetUpgradeSceneMode();
+
+        _startButtonLightIntensity = _startButtonLight.intensity;
+        _startButtonLight.intensity = 0;
     }
 
     private void Start()
@@ -142,20 +147,15 @@ public class DeckSelector : MonoBehaviour
         {
             ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
             currentFill = 1.0f;
+            _startButtonLight.DOIntensity(_startButtonLightIntensity, 0.5f).SetEase(Ease.InOutSine);
         }
     }
 
     private void ChangeBorderLight(MeshRenderer mr, string reference, float init, float goal)
     {
-        float litUpCoef = init;
-        DOTween.To(
-            () => litUpCoef,
-            (x) => { litUpCoef = x;
-                mr.materials[1].SetFloat(reference, litUpCoef);
-            },
-            goal,
-            0.25f
-        );
+        Material material = mr.materials[1];
+        material.SetFloat(reference, init);
+        material.DOFloat(goal, reference, 0.25f);
     }
 
     private async void OnStartSimulationButtonPressed()
@@ -203,16 +203,18 @@ public class DeckSelector : MonoBehaviour
             int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
             for (int i = 0; i < selectableDecks.Length; ++i)
             {
-                StarterDecksUnlocker.GetInstance().UnlockNextDeck();
                 selectableDecks[i].InitState(i < numberOfUnlockedDecks);
             }
         }
         if (Input.GetKeyDown(KeyCode.U) && Input.GetKey(KeyCode.LeftShift))
         {
             int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+            Debug.Log(numberOfUnlockedDecks);
+
             for (int i = numberOfUnlockedDecks-1; i < selectableDecks.Length; ++i)
             {
                 selectableDecks[i].InitState(true);
+                StarterDecksUnlocker.GetInstance().UnlockNextDeck();
             }
             StarterDecksUnlocker.GetInstance().UnlockRemainengDecks();
         }

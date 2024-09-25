@@ -989,7 +989,7 @@ Transform:
   - {fileID: 9137596358781741429}
   - {fileID: 7490159035383853915}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2465341813337292246
 MonoBehaviour:
@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce1a9b47a2114e438f967b75360e53e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deckData: {fileID: 11400000, guid: 985a37d62a3f98447976b6d32fa2023a, type: 2}
+  _deck: {fileID: 0}
   runContent:
     cardsContent: {fileID: 11400000, guid: 9c0e9fc96cfe6424284e5ffb87a5428c, type: 2}
     attacksContent: {fileID: 11400000, guid: 26ea0703c51b8ce4bb5bd105a5d5e397, type: 2}
@@ -1020,6 +1020,7 @@ MonoBehaviour:
   screenMesh: {fileID: 4434907461011034727}
   supportSprite: {fileID: 1015041702967004592}
   mainProjectileSprite: {fileID: 7793973923014409395}
+  _mainPassive: {fileID: 0}
   _unlockedCardsHolder: {fileID: 6194647709808690272}
   _lock: {fileID: 7794630047682528133}
 --- !u!65 &8990557148789142646
@@ -8537,7 +8538,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7982316326836735316}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -332,12 +332,10 @@ public class OWMap_Node : MonoBehaviour
         material.SetColor("_BorderColor", OWMapDecoratorUtils.s_darkGreyColor);
     }
 
-    public void SetSelected(bool wasSelectedByPlayer)
+    public void SetSelected(bool wasSelectedByPlayer, float delayBeforeUpdatingViews = 3f)
     {
         interactState = NodeInteractState.SELECTED;
-
-        const float delayBeforeUpdatingViews = 3f;
-
+        
         SetCameFromColor();
 
         DisableInteraction();

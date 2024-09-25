@@ -140,7 +140,7 @@ public class OverworldMapGameManager : MonoBehaviour
         currentNode = mapNodes[0][0];
 
         currentNode.SetOwMapGameManagerRef(this);
-        currentNode.SetSelected(false); // Simulate node is clicked
+        currentNode.SetSelected(false, 0); // Simulate node is clicked
 
         owMapPawn.Init(this, currentNode, OverworldMapCreator.DisplacementBetweenLevels);
     }

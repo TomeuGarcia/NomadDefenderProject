@@ -89,6 +89,11 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (targetedEnemy != null)
         {
             LookAtTargetEnemy();
+            fakeEnemy.SetCanBeTargeted(true);
+        }
+        else
+        {
+            fakeEnemy.SetCanBeTargeted(false);
         }
     }
 
@@ -210,7 +215,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         }
         else
         {
-            fakeEnemy.SetCanBeTargeted(true);
+            //fakeEnemy.SetCanBeTargeted(true);
         }
     }
 
