@@ -40,13 +40,8 @@ public class OptionalTutorial_CanvasOverview : MonoBehaviour
         }
         yield return new WaitUntil(() => _text.IsDoneDecoding());
         yield return StartCoroutine(WaitForInput());
-        
-        _object.SetActive(false);
-        
-        if (_showTopWarning)
-        {
-            ServiceLocator.GetInstance().TutorialViewUtilities.HideWarningTopBar();
-        }
+
+        Finish();
         yield return _blackImageHighlight.DOFade(0f, 0.5f)
             .SetUpdate(true)
             .SetEase(Ease.InOutSine);
@@ -55,6 +50,11 @@ public class OptionalTutorial_CanvasOverview : MonoBehaviour
     public void Finish()
     {
         _object.SetActive(false);
+        
+        if (_showTopWarning)
+        {
+            ServiceLocator.GetInstance().TutorialViewUtilities.HideWarningTopBar();
+        }
     }
 
     private IEnumerator WaitForInput()

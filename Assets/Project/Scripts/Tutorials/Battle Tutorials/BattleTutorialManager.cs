@@ -606,12 +606,8 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => group.Text.IsDoneDecoding());
         yield return StartCoroutine(WaitForInput());
         
-        group.Object.SetActive(false);
-        
-        if (group.ShowTopWarning)
-        {
-            ServiceLocator.GetInstance().TutorialViewUtilities.HideWarningTopBar();
-        }
+        StopTutorial(group);
+
         yield return group.BlackImageHighlight.DOFade(0f, 0.5f)
             .SetUpdate(true)
             .SetEase(Ease.InOutSine);
@@ -622,6 +618,11 @@ public class BattleTutorialManager : MonoBehaviour
     private void StopTutorial(TutorialGroup group)
     {
         group.Object.SetActive(false);
+        
+        if (group.ShowTopWarning)
+        {
+            ServiceLocator.GetInstance().TutorialViewUtilities.HideWarningTopBar();
+        }
     }
 
 
