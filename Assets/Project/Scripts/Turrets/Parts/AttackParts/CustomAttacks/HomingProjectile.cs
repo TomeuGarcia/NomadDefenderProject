@@ -41,7 +41,10 @@ public class HomingProjectile : ATurretProjectileBehaviour
 
     protected virtual void OnEnemyReached()
     {
-        EnemyHit();
+        if (_targetEnemy)
+        {
+            EnemyHit();
+        }
     }
     
     private void EnemyHit()

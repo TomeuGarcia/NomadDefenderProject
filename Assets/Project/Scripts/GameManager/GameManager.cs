@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -29,8 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Volume globalVolume;
     [SerializeField] private VolumeProfile initVol;
     [SerializeField] private VolumeProfile glitchVol;
-
-
+    [SerializeField] private GameObject _watcherFace;
+    [SerializeField] private Camera _mapCamera;
 
     private void OnEnable()
     {
@@ -54,9 +55,11 @@ public class GameManager : MonoBehaviour
         gameOverHolder.SetActive(false);
 
         PauseMenu.GetInstance().GameCanBePaused = true;
+        
+        _watcherFace.SetActive(false);
     }
 
-
+    [Button()]
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
         cgVictoryHolder.DOFade(0f, 0.25f);
         GameAudioManager.GetInstance().PlayRandomGlitchSound();
         globalVolume.profile = glitchVol;
+        StartCoroutine(MakeWatcherFaceVisibleForDuration(0.15f));
         yield return new WaitForSeconds(0.2f);
         globalVolume.profile = initVol;
         yield return new WaitForSeconds(1.0f);
@@ -94,8 +98,10 @@ public class GameManager : MonoBehaviour
         {
             GameAudioManager.GetInstance().PlayRandomGlitchSound();
             globalVolume.profile = glitchVol;
-            yield return new WaitForSeconds(Random.Range(0.2f, 0.3f));
+            float glitchDuration = Random.Range(0.15f, 0.25f);
+            yield return new WaitForSeconds(glitchDuration);
             globalVolume.profile = initVol;
+            yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0.2f);
 
@@ -103,7 +109,7 @@ public class GameManager : MonoBehaviour
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
     }
 
-
+    [Button()]
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);
@@ -124,19 +130,23 @@ public class GameManager : MonoBehaviour
         //mapSceneLoader.LoadMainMenuScene(1f);
         GameOverFinishLoadScene();
 
+        gameOverHolder.SetActive(false);
         for (int i = 0; i < 3; ++i)
         {
             GameAudioManager.GetInstance().PlayRandomGlitchSound();
             globalVolume.profile = glitchVol;
-            yield return new WaitForSeconds(Random.Range(0.2f, 0.3f));
+            float glitchDuration = Random.Range(0.15f, 0.25f);
+            StartCoroutine(MakeWatcherFaceVisibleForDuration(glitchDuration-0.05f));
+            yield return new WaitForSeconds(glitchDuration);
             globalVolume.profile = initVol;
+            yield return new WaitForSeconds(0.1f);
         }
         
     }
 
     private void GameOverFinishLoadScene()
     {
-        mapSceneLoader.LoadMainMenuScene(1f);
+        mapSceneLoader.LoadMainMenuScene(0.85f);
     }
 
 
@@ -183,5 +193,28 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+    [Button()]
+    public void TESTMakeWatcherFaceVisibleForDuration()
+    {
+       StartCoroutine(MakeWatcherFaceVisibleForDuration(0.2f));
+    }
+    private IEnumerator MakeWatcherFaceVisibleForDuration(float duration)
+    {
+        _watcherFace.SetActive(true);
+
+        Vector3 cameraForward = _mapCamera.transform.forward;
+        Vector3 cameraProjectedForward = Vector3.ProjectOnPlane(cameraForward, Vector3.up);
+        Vector3 position = _mapCamera.transform.position + 
+                           (3.5f * cameraProjectedForward) +
+                           (-2.25f * Vector3.up);
+
+        _watcherFace.transform.position = position;
+        _watcherFace.transform.forward = cameraForward;
+        _watcherFace.transform.localScale = Vector3.one * 0.09f;
+        
+        yield return new WaitForSeconds(duration);
+        _watcherFace.SetActive(false);
+    }
 
 }

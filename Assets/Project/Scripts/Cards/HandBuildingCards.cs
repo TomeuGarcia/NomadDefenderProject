@@ -356,6 +356,8 @@ public class HandBuildingCards : MonoBehaviour
 
 
             card.cardLocation = BuildingCard.CardLocation.HAND;
+            
+            card.ReenableMouseInteraction();
         }
 
         UpdateHandSideBlockers();
