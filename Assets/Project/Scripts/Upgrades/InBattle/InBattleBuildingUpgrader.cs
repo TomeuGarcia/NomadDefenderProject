@@ -457,7 +457,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     private IEnumerator DelayedAutomaticWindowClose()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSecondsRealtime(4f);
 
         CloseWindow();
         automaticCloseCoroutine = null;

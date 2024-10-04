@@ -94,8 +94,12 @@ public class TurretCardData
         return CardUpgradeLevel == TurretCardDataModel.MAX_CARD_LEVEL;
     }
 
-    
-    
+
+
+    public void SetProjectile(TurretPartProjectileDataModel projectileDataModel)
+    {
+        CurrentProjectileDescription = _originalProjectileDescription = projectileDataModel.MakeAbilityDescription();
+    }
     public void SetProjectileTemporarily(TurretPartProjectileDataModel projectileDataModel)
     {
         CurrentProjectileDescription = projectileDataModel.MakeAbilityDescription();

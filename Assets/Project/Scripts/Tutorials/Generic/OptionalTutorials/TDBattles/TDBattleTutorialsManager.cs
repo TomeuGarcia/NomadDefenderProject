@@ -7,6 +7,8 @@ public class TDBattleTutorialsManager : MonoBehaviour
     [Header("TD REFERENCES")]
     [SerializeField] private CurrencyCounter _currencyCounter;
     [SerializeField] private HandBuildingCards _hand;
+    [SerializeField] private SpeedUpButton _speedUpButton;
+    [SerializeField] private BuildingPlacer _buildingPlacer;
 
     [Space(10)]
     [Header("TUTORIALS")]
@@ -25,7 +27,7 @@ public class TDBattleTutorialsManager : MonoBehaviour
 
     private void Awake()
     {
-        //OptionalTutorialsStateManager.SetAllTutorialsNotDone(); // Uncomment to Test
+        OptionalTutorialsStateManager.SetAllTutorialsNotDone(); // Uncomment to Test
 
         _buildingUpgraded = OptionalTutorialsStateManager.IsTutorialDone(BuildingUpgrade_TutorialType);
         _gameSpeedInteracted = OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType);
@@ -70,12 +72,14 @@ public class TDBattleTutorialsManager : MonoBehaviour
     private IEnumerator Play_BuildingUpgradeTutorial()
     {
         yield return new WaitUntil(() => _currencyCounter.HasEnoughCurrency(150) && 
-                                         !_hand.AlreadyHasSelectedCard);
+                                         !_hand.IsInteractingWithCards &&
+                                         _buildingPlacer.PlacedBuildingsCount > 0);
         if (!ShouldPlay_BuildingUpgradeTutorial(2))
         {
             yield break;
         }
         
+        _speedUpButton.CompletelyDisableTimeSpeed();
         GameTime.SetTimeScale(0f);
         BuildingCard.LockAllCardsFromHover = true;
         Coroutine buildingUpgradeTutorial = StartCoroutine(_buildingUpgradeTutorial.Play());
@@ -89,6 +93,7 @@ public class TDBattleTutorialsManager : MonoBehaviour
         } 
         
         GameTime.SetTimeScale(1f);
+        _speedUpButton.CompletelyEnableTimeSpeed();
         BuildingCard.LockAllCardsFromHover = false;
         OptionalTutorialsStateManager.SetTutorialAsDone(BuildingUpgrade_TutorialType);
     }
@@ -106,7 +111,8 @@ public class TDBattleTutorialsManager : MonoBehaviour
     
     private bool ShouldPlay_GameSpeedTutorial(int waveNumber)
     {
-        return waveNumber == 1 && !OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType);
+        return waveNumber == 1 && !OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType) &&
+               !_gameSpeedInteracted;
     }
     private IEnumerator Play_GameSpeedTutorial()
     {

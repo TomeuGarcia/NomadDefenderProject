@@ -145,6 +145,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         ReplacedWithSamePart = HasSameAttackPart(newTurretPartAttack); // Check replaced with same part
         CardParts.SetProjectile(newTurretPartAttack);
+        CardData.SetProjectile(newTurretPartAttack);
         
         Init();
     }

@@ -50,11 +50,12 @@ public class HandBuildingCards : MonoBehaviour
 
     private bool isPlayerHoveringTheCards = false;
 
-    public bool AlreadyHasSelectedCard => selectedCard != null;
+    private bool AlreadyHasSelectedCard => selectedCard != null;
     private bool HasPreviouslySelectedCard => previouslySelectedCard != null;
 
     private BuildingCard hoveredCard;
     private bool IsHoveringCard => hoveredCard != null;
+    public bool IsInteractingWithCards => AlreadyHasSelectedCard || IsHoveringCard;
 
     public Transform HandTransform => cardHolder;
 
