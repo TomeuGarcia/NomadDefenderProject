@@ -27,7 +27,7 @@ public class TDBattleTutorialsManager : MonoBehaviour
 
     private void Awake()
     {
-        OptionalTutorialsStateManager.SetAllTutorialsNotDone(); // Uncomment to Test
+        //OptionalTutorialsStateManager.SetAllTutorialsNotDone(); // Uncomment to Test
 
         _buildingUpgraded = OptionalTutorialsStateManager.IsTutorialDone(BuildingUpgrade_TutorialType);
         _gameSpeedInteracted = OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType);
