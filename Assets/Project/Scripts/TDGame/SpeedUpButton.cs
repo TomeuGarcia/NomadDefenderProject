@@ -122,6 +122,17 @@ public class SpeedUpButton : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void CompletelyEnableTimeSpeed()
+    {
+        current = 0;
+        UpdateTimeSpeed();
+        
+        incrementButton.enabled = true;
+        decrementButton.enabled = true;
+        
+        gameObject.SetActive(true);
+    }
+
     private void ResetTimeOnGameEnd()
     {
         gameFinished = true;

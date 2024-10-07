@@ -140,7 +140,6 @@ public class MainMenu : MonoBehaviour
 
         ButtonClickedPunch(newGameButtonText);
 
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
 
         if (skipFirstBattle)
         {
@@ -175,6 +174,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         ServiceLocator.GetInstance().RunInfo.SetComeFromRun(false);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         SceneLoader.GetInstance().LoadFacility();
     }
 

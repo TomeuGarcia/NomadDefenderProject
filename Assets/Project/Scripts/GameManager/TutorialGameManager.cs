@@ -25,10 +25,12 @@ public class TutorialGameManager : GameManager
         partLibrary.SetContent(attacksContent, bodiesContent, basesContent, bonusStatsContent);
     }
 
+/*
     protected override void StartVictory()
     {
         StartCoroutine(tutoManager2.TutorialAnimation(this));
     }
+*/
 
     public IEnumerator DelayedStartVictorySceneLoad(float delay)
     {

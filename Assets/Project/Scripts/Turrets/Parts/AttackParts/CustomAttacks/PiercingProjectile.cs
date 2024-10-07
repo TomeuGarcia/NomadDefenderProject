@@ -12,6 +12,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject disableParticles;
+    [SerializeField] private ParticleSystem _hitParticles;
 
     [SerializeField] private float _distance = 15;
     
@@ -25,16 +26,15 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         trailRenderer.Clear();
         arrow.SetActive(true);
         damageCollider.enabled = true;
-
         _targetEnemy = targetEnemy;
 
         ComputeGoalPosition();
-        transform.LookAt(_goalPosition);
+        //transform.LookAt(_goalPosition);
 
         _rigidbody.DOMove(_goalPosition, _distance / MovementSpeed)
             .OnComplete(OnGoalPositionReached);
         
-        
+        _damageAttack = CreateDamageAttack(_targetEnemy);
         OnShotInitialized();
     }
 
@@ -45,8 +45,8 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     private void ComputeGoalPosition()
     {
-        _goalPosition = transform.position + ((_targetEnemy.Position - transform.position).normalized *_distance);
-        _goalPosition.y = transform.position.y;
+        _goalPosition = _spawnerObjectPosition + ((_targetEnemy.Position - _spawnerObjectPosition).normalized *_distance);
+        _goalPosition.y = _spawnerObjectPosition.y;
     }
 
 
@@ -77,10 +77,12 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         GameObject temp = ProjectileParticleFactory.GetInstance()
             .CreateParticlesGameObject(HitParticlesType, enemy.MeshTransform.position, Quaternion.identity);
         temp.transform.parent = gameObject.transform.parent;
-
+        
+        _targetEnemy = enemy;
         _damageAttack = CreateDamageAttack(_targetEnemy);
         DamageTargetEnemy(_damageAttack);
         AddEnemyToIgnore(enemy);
+        _hitParticles.Play();
     }
 
     public override bool QueuesDamageToEnemies()

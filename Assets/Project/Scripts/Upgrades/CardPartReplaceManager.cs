@@ -224,7 +224,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Change turret PROJECTILE", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a Turret's PROJECTILE", true, 2f);
     }
 
 
@@ -252,7 +252,7 @@ public class CardPartReplaceManager : MonoBehaviour
             parts[i].turretPartBody = bodies[i];
         }
         cardPartHolder.Init(parts);
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a turret's BODY", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a Turret's BODY", true, 2f);
     }
 
     public void AwakeSetupTutorialBases(ATurretPassiveAbilityDataModel[] passives)
@@ -280,7 +280,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Change turret ABILITY", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Add an ABILITY to a Turret", true, 2f);
     }
 
 
@@ -310,7 +310,7 @@ public class CardPartReplaceManager : MonoBehaviour
         }
         cardPartHolder.Init(parts);
 
-        PrintConsoleLine(TextTypes.INSTRUCTION, "Add permanent stats to a turret", true, 2f);
+        PrintConsoleLine(TextTypes.INSTRUCTION, "Add permanent STATS to a Turret", true, 2f);
     }
 
 
@@ -691,7 +691,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private void FinishResultCard()
     {
         consoleDialog.Clear();
-        PrintConsoleLine(TextTypes.SYSTEM, "Successful modification", false, 0f);
+        PrintConsoleLine(TextTypes.SYSTEM, "Successful Turret modification", false, 0f);
 
         upgradeCardHolder.OnFinalRetrieve += InvokeReplacementDone;
     }

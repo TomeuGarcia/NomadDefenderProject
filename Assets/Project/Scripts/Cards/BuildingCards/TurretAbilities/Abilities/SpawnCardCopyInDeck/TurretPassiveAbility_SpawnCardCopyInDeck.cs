@@ -27,7 +27,7 @@ public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
     
     private async void SpawnCardCopy()
     {
-        float delayBeforeSpawningCard = 0.5f;
+        float delayBeforeSpawningCard = 0.25f;
         await Task.Delay(TimeSpan.FromSeconds(delayBeforeSpawningCard));
 
         TurretCardData turretCardData = new TurretCardData(_turretOwner.CardData, true);

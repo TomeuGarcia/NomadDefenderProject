@@ -633,7 +633,6 @@ public abstract class BuildingCard : MonoBehaviour
         borderFillValue01 = 0f;
 
         SetBorderFillValue(borderFillValue01);
-        SetBorderFillEnabled(false);
 
         decreaseBorderFillCoroutine = null;
     }

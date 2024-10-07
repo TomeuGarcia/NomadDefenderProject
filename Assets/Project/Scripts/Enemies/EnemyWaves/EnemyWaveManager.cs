@@ -67,7 +67,7 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] private GameObject enemyPathTrailPrefab;
     private PathFollower[] enemyPathFollowerTrails;
     private bool enemyPathFollowerTrailsEnabled;
-    private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.up * 0.5f;
+    private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
 
 
     public delegate void EnemyWaveManagerAction();

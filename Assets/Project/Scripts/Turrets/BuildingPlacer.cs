@@ -20,6 +20,8 @@ public class BuildingPlacer : MonoBehaviour
     private Coroutine dragAndDropCardCoroutine = null;
 
     private bool isDisablePlacingDelayed = false;
+    
+    public int PlacedBuildingsCount { get; private set; }
 
 
     public delegate void BuildingPlacerAction();
@@ -196,6 +198,8 @@ public class BuildingPlacer : MonoBehaviour
         selectedBuildingCard = null;
         selectedBuilding = null;
 
+        IncrementPlacedBuildingsCount();
+
         if (OnBuildingPlaced != null) OnBuildingPlaced();
     }
 
@@ -262,4 +266,12 @@ public class BuildingPlacer : MonoBehaviour
 
 
 
+    private void IncrementPlacedBuildingsCount()
+    {
+        ++PlacedBuildingsCount;
+    }
+    private void DecrementPlacedBuildingsCount()
+    {
+        --PlacedBuildingsCount;
+    }
 }

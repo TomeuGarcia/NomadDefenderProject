@@ -450,16 +450,16 @@ public class BattleTutorialManager : MonoBehaviour
 
 
         //Last Wave (4/3)
-        yield return new WaitUntil(() => wavesCounter > 3);
+        yield return new WaitUntil(() => wavesCounter > 5);
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
         scriptedSequence.Clear();
 
 
         
-
+        yield return new WaitForSeconds(2.0f);
         scriptedSequence.NextLine(); //16 Wave 6/5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(2.0f);
 
 
         GameAudioManager.GetInstance().MusicFadeOut(1f);
@@ -524,21 +524,11 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine();//28
         yield return new WaitForSecondsRealtime(1.0f);
+        
 
-        scriptedSequence.NextLine();//29
-        yield return new WaitForSecondsRealtime(1.0f);
+        StartCoroutine(KeepPrinting());
+        yield return new WaitForSecondsRealtime(2.75f);
 
-        scriptedSequence.NextLine();//30
-        yield return new WaitForSecondsRealtime(1.0f);
-
-        scriptedSequence.NextLine();//31
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//32
-        yield return new WaitForSecondsRealtime(0.75f);
-
-        scriptedSequence.NextLine();//33
-        yield return new WaitForSecondsRealtime(0.75f);
         
 
         //Finish scene and load next
@@ -547,6 +537,14 @@ public class BattleTutorialManager : MonoBehaviour
         tDGameManager.ForceFinishScene();
     }
 
+    private IEnumerator KeepPrinting()
+    {
+        for (int i = 0; i < 8; ++i)
+        {
+            scriptedSequence.NextLine();
+            yield return new WaitForSecondsRealtime(0.25f);
+        }
+    }
 
     private IEnumerator WaitForInput(bool withText = true)
     {

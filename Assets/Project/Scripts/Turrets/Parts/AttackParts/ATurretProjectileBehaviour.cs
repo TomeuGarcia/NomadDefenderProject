@@ -62,7 +62,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
     {
         _dataModel = dataModel;
         _turretProjectileView = MakeTurretProjectileView();
-        _enemiesToIgnore = new List<Enemy>();
+        _enemiesToIgnore = new HashSet<Enemy>();
     }
 
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
@@ -219,7 +219,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
 
 
-    private List<Enemy> _enemiesToIgnore;
+    private HashSet<Enemy> _enemiesToIgnore;
     public void AddEnemyToIgnore(Enemy enemy)
     {
         _enemiesToIgnore.Add(enemy);
@@ -227,7 +227,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
     
     protected bool CheckEnemyOnTriggerEnter(Collider other, out Enemy enemy)
     {
-        if(!other.gameObject.CompareTag("Enemy") || disappearing)
+        if(!isActiveAndEnabled || disappearing || !other.gameObject.CompareTag("Enemy"))
         {
             enemy = null;
             return false;

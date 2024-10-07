@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardDrawer: {fileID: 7982427645377297919}
   _tdBattleTutorialsManager: {fileID: 1988106333036978561}
+  _checkTutorials: 1
 --- !u!1 &4885359580403629103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,6 +1566,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 579f3ac685ce43247be2a1d33201a582, type: 3}
+--- !u!114 &2896359435789904592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8307170902650671933, guid: 579f3ac685ce43247be2a1d33201a582,
+    type: 3}
+  m_PrefabInstance: {fileID: 6591317549251557869}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d65cc0abfd2824abefef38e2645860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3061516609394921384 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8144092802723001925, guid: 579f3ac685ce43247be2a1d33201a582,
@@ -1599,6 +1612,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b07d8276f6a7d8409ab9744e66a84b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4885359580574228670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1780426827148450131, guid: 579f3ac685ce43247be2a1d33201a582,
+    type: 3}
+  m_PrefabInstance: {fileID: 6591317549251557869}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612fc6fa00614e74694fe525d875a528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &7435402373040979472 stripped
@@ -1698,6 +1723,16 @@ PrefabInstance:
       propertyPath: _hand
       value: 
       objectReference: {fileID: 4885359580415880069}
+    - target: {fileID: 9093841624435195511, guid: e3193c9d8c2053746a198e78d399cd53,
+        type: 3}
+      propertyPath: _speedUpButton
+      value: 
+      objectReference: {fileID: 2896359435789904592}
+    - target: {fileID: 9093841624435195511, guid: e3193c9d8c2053746a198e78d399cd53,
+        type: 3}
+      propertyPath: _buildingPlacer
+      value: 
+      objectReference: {fileID: 4885359580574228670}
     - target: {fileID: 9093841624435195511, guid: e3193c9d8c2053746a198e78d399cd53,
         type: 3}
       propertyPath: _currencyCounter
