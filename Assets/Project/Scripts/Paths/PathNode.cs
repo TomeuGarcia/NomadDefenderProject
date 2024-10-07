@@ -37,4 +37,16 @@ public class PathNode : MonoBehaviour
     }
 
 
+    public float ComputeTotalDistanceUntilEnd()
+    {
+        float totalDistance = 0f;
+        PathNode itNode = this;
+        while (!itNode.IsLastNode)
+        {
+            totalDistance += itNode.GetDistanceToNextNode();
+            itNode = itNode.GetNextNode();
+        }
+
+        return totalDistance;
+    }
 }

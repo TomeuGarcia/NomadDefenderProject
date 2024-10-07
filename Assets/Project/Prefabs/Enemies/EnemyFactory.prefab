@@ -46,6 +46,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 3321023869663998056, guid: d7f6323c03aa22841bead13156191cbd,
     type: 3}
+--- !u!1 &1792546586440576339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5694952112439537998}
+  - component: {fileID: 8148963446979039184}
+  m_Layer: 0
+  m_Name: EnemyPool_Zeppelin_Basic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5694952112439537998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792546586440576339}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8148963446979039184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792546586440576339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 2120707753120156909, guid: 9772c41114aafa74f8968e4082fbc518,
+    type: 3}
 --- !u!1 &3178878729283827890
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +137,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 4599594694859222385, guid: 15850ddccc9ebc14c9f0a9b86f9b64ef,
+    type: 3}
+--- !u!1 &4803476615945625147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2897635336714703100}
+  - component: {fileID: 890391095594692109}
+  m_Layer: 0
+  m_Name: EnemyPool_Zeppelin_Fast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2897635336714703100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4803476615945625147}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &890391095594692109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4803476615945625147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 3184879913529304671, guid: f858e3f79445fc048b000c594532770f,
     type: 3}
 --- !u!1 &5358312093481203060
 GameObject:
@@ -167,6 +259,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8098496768692007100}
   - {fileID: 571774951316878100}
   - {fileID: 4980238292722443800}
   - {fileID: 6461917504625211745}
@@ -176,7 +269,8 @@ Transform:
   - {fileID: 466993926716717260}
   - {fileID: 7840321244591696054}
   - {fileID: 9170357010359149369}
-  - {fileID: 8098496768692007100}
+  - {fileID: 5694952112439537998}
+  - {fileID: 2897635336714703100}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -195,7 +289,7 @@ MonoBehaviour:
   enemiesToPool:
   - type: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
     pool: {fileID: 7863576154011315601}
-  - type: {fileID: 11400000, guid: 46fd8d00c2e7042458a4e06d39e259fa, type: 2}
+  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
     pool: {fileID: 1459440374239873001}
   - type: {fileID: 11400000, guid: 97c4684021c15644c8df8f2de5423e2c, type: 2}
     pool: {fileID: 6208814779952199653}
@@ -209,8 +303,12 @@ MonoBehaviour:
     pool: {fileID: 2978566795682042435}
   - type: {fileID: 11400000, guid: e51a5eedfe92a3442a0578249d82608a, type: 2}
     pool: {fileID: 8847085611556857988}
-  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+  - type: {fileID: 11400000, guid: 46fd8d00c2e7042458a4e06d39e259fa, type: 2}
     pool: {fileID: 2070001352649955540}
+  - type: {fileID: 11400000, guid: 5c8216da509cb644eb059c10135c0cd5, type: 2}
+    pool: {fileID: 8148963446979039184}
+  - type: {fileID: 11400000, guid: 1fa1ccd110f7cf0408292fa786cadd05, type: 2}
+    pool: {fileID: 890391095594692109}
   _nullEnemy: {fileID: 4842515774411779356}
 --- !u!1 &6647312936594356182
 GameObject:

@@ -191,7 +191,7 @@ public class EnemyWaveSpawner : ScriptableObject
                     yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(enemyInWave.DelayBeforeSpawn));
                     if (stopForced) break;
                     
-                    SpawnEnemy(enemyInWave.EnemyType, spawnTransform, attackDestination);
+                    SpawnEnemyIncludedInWave(enemyInWave.EnemyType, spawnTransform, attackDestination);
 
                 }                
             }
@@ -200,28 +200,37 @@ public class EnemyWaveSpawner : ScriptableObject
     }
 
 
-    private void SpawnEnemy(EnemyTypeConfig enemyType, Transform spawnTransform, EnemyAttackDestination attackDestination)
+    private void SpawnEnemyIncludedInWave(EnemyTypeConfig enemyType, Transform spawnParent, EnemyAttackDestination attackDestination)
+    {
+        Vector2 randomSpawnOffset = new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
+        SharedSpawnEnemy(enemyType, spawnParent, attackDestination, randomSpawnOffset, startNode);
+    }
+
+    public void SpawnEnemyNotIncludedInWave(EnemyTypeConfig enemyType, Transform spawnParent, 
+        EnemyAttackDestination attackDestination, Vector2 spawnOffset,
+        PathNode currentNode, float toNextNodeT)
+    {
+        SharedSpawnEnemy(enemyType, spawnParent, attackDestination, spawnOffset, currentNode, toNextNodeT);
+        ++activeEnemies;
+    }
+
+    private void SharedSpawnEnemy(EnemyTypeConfig enemyType, Transform spawnParent, 
+        EnemyAttackDestination attackDestination, Vector2 spawnOffset,
+        PathNode startingNode, float toNextNodeT = 0f)
     {
         if (OnEnemySpawn != null) OnEnemySpawn(this);
 
         GameObject enemyGameObject = EnemyFactory.GetInstance()
-            .GetEnemyGameObject(enemyType, startNode.Position, Quaternion.identity, spawnTransform);
+            .GetEnemyGameObject(enemyType, startingNode.Position, Quaternion.identity, spawnParent);
         enemyGameObject.SetActive(true);
 
         /////////////
-        float totalDistance = 0f;
-        PathNode itNode = startNode;
-        while (!itNode.IsLastNode)
-        {
-            totalDistance += itNode.GetDistanceToNextNode();
-            itNode = itNode.GetNextNode();
-        }
-
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
-        Vector3 randomOffset = (spawnedEnemy.transformToMove.right * Random.Range(-0.3f, 0.3f)) + 
-                               (spawnedEnemy.transformToMove.forward * Random.Range(-0.3f, 0.3f));
-        spawnedEnemy.SpawnedInit(startNode, randomOffset, totalDistance, attackDestination);
+        Vector3 positionOffset = (spawnOffset.x * spawnedEnemy.transformToMove.right) + 
+                                 (spawnOffset.y * spawnedEnemy.transformToMove.forward);
+        spawnedEnemy.SpawnedInit(this, startingNode, toNextNodeT, positionOffset, 
+            startingNode.ComputeTotalDistanceUntilEnd(), attackDestination);
         /////////////
 
         spawnedEnemy.OnEnemyDeactivated += SubtractActiveEnemy;

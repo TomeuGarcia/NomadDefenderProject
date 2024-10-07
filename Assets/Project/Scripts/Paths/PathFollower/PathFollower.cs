@@ -9,11 +9,12 @@ public class PathFollower : MonoBehaviour
     private Vector3 positionOffset;
     private Vector3 currentStartPosition;
     private Vector3 currentEndPosition;
-    private float startToEndT;
+    private float _startToEndT;
     private float step;
     private float distanceStartToEnd;
 
     // Target Node
+    public PathNode CurrentNode { get; private set; }
     private PathNode targetNode = null;
     public PathNode CurrentTargetNode => targetNode;
     private Quaternion _targetRotation;
@@ -47,19 +48,20 @@ public class PathFollower : MonoBehaviour
     public delegate void PathFollowerAction2(PathFollower thisPathFollower);
     public PathFollowerAction2 OnPathEndReached2;
 
-    public float ToNextNodeT => startToEndT;
+    public float ToNextNodeT => _startToEndT;
 
     private void OnDisable()
     {
         TravelledDistance = 0.0f;
     }
 
-    public void Init(PathNode startTargetNode, Vector3 startDirection, Vector3 positionOffset, float totalDistanceToTravel)
+    public void Init(PathNode startNode, Vector3 positionOffset, float totalDistanceToTravel, float startToEndT = 0)
     {
         UpdateBaseMoveSpeed(moveSpeed);
         _speedMultiplier = 1;
 
-        UpdateTarget(startTargetNode, startDirection);
+        CurrentNode = targetNode = startNode;
+        UpdateTarget(CurrentNode.GetNextNode(), CurrentNode.GetDirectionToNextNode());
 
         finished = false;
         paused = false;
@@ -73,7 +75,7 @@ public class PathFollower : MonoBehaviour
 
         _rigidbodyToMove.rotation = _targetRotation;
 
-        startToEndT = 0f;
+        _startToEndT = startToEndT;
 
         distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
         step = moveSpeed / distanceStartToEnd;
@@ -114,7 +116,7 @@ public class PathFollower : MonoBehaviour
     
     private void FollowPathInterpolated()
     {
-        if (startToEndT > 0.99f)
+        if (_startToEndT > 0.99f)
         {
             _rigidbodyToMove.position = currentEndPosition; // Snap at position
 
@@ -131,7 +133,7 @@ public class PathFollower : MonoBehaviour
                 currentStartPosition = currentEndPosition;
                 currentEndPosition = targetNode.Position + positionOffset;
 
-                startToEndT = 0f;
+                _startToEndT = 0f;
 
                 distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
                 step = moveSpeed / distanceStartToEnd;
@@ -141,8 +143,8 @@ public class PathFollower : MonoBehaviour
         float iterationStep = step * GameTime.TimeScale * Time.fixedDeltaTime;
         TravelledDistance += iterationStep * distanceStartToEnd;
 
-        startToEndT = Mathf.Clamp01(startToEndT + iterationStep);
-        Vector3 currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, startToEndT);
+        _startToEndT = Mathf.Clamp01(_startToEndT + iterationStep);
+        Vector3 currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, _startToEndT);
 
         bool isLookingTowardsMoveDirection = Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f;
         Quaternion currentRotation = isLookingTowardsMoveDirection
@@ -156,6 +158,7 @@ public class PathFollower : MonoBehaviour
 
     private void UpdateTarget(PathNode newTargetNode, Vector3 targetDirection)
     {
+        CurrentNode = targetNode;
         targetNode = newTargetNode;
         MoveDirection = targetDirection;
         _targetRotation = Quaternion.LookRotation(MoveDirection, targetNode.Up);

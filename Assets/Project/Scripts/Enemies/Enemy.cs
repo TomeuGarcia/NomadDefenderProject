@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
 
     protected HealthSystem healthSystem;
     public HealthSystem HealthSystem => healthSystem;
-    private EnemyAttackDestination _attackDestination;
+    public EnemyAttackDestination AttackDestination { get; private set; }
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemySuicide;
@@ -50,6 +50,8 @@ public class Enemy : MonoBehaviour
     public Vector3 Right => transformToMove.right;
     
     public bool CanBeTargetedFlag { get; set; }
+    
+    public EnemyWaveSpawner SpawnerOwner { get; private set; }
     
 
     private void Awake()
@@ -88,6 +90,7 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         pathFollower.OnPathEndReached -= Attack;
+        SpawnerOwner = null;
     }
 
     private void ResetEnemy()
@@ -121,11 +124,13 @@ public class Enemy : MonoBehaviour
         CanBeTargetedFlag = true;
     }
 
-    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
+    public void SpawnedInit(EnemyWaveSpawner spawner, PathNode startNode, float toNextNodeT, 
+        Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
     {
+        SpawnerOwner = spawner;
         ResetEnemy();
-        _attackDestination = attackDestination;
-        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
+        AttackDestination = attackDestination;
+        pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
     }
 
 
@@ -141,7 +146,7 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        PathLocation pathLocation = _attackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
+        PathLocation pathLocation = AttackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
 
         if (pathLocation.CanTakeDamage())
         {
