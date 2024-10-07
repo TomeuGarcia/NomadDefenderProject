@@ -339,7 +339,7 @@ public class EnemyWaveManager : MonoBehaviour
 
             enemyPathFollowerTrails[i].Init(_pathsStartData[i].StartNode.GetNextNode(), 
                 _pathsStartData[i].StartNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
-            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+            enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(0f);
             enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
         }
 
@@ -350,7 +350,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         for (int i = 0; i < enemyPathFollowerTrails.Length; ++i) 
         {
-            enemyPathFollowerTrails[i].SetMoveSpeed(1f);
+            enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(1f);
         }
         enemyPathFollowerTrailsEnabled = true;
     }
@@ -359,7 +359,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
         {
-            enemyPathFollowerTrails[i].SetMoveSpeed(0f);
+            enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(0f);
         }
         enemyPathFollowerTrailsEnabled = false;
     }
@@ -378,7 +378,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     private IEnumerator DoResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail, PathNode startNode)
     {
-        enemyPathFollowerTrail.SetMoveSpeed(0f);
+        enemyPathFollowerTrail.SetMoveSpeedMultiplier(0f);
         yield return new WaitForSeconds(0.5f);
         enemyPathFollowerTrail.gameObject.SetActive(false);
 
@@ -396,7 +396,7 @@ public class EnemyWaveManager : MonoBehaviour
             yield break;
         }
 
-        enemyPathFollowerTrail.SetMoveSpeed(1f);
+        enemyPathFollowerTrail.SetMoveSpeedMultiplier(1f);
         enemyPathFollowerTrail.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), enemyPathFollowerTrailsPositionOffset, 0f);
     }
 

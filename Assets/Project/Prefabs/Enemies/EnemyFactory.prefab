@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6461917504625211745}
   - component: {fileID: 1459440374239873001}
   m_Layer: 0
-  m_Name: FastEnemyPool
+  m_Name: EnemyPool_Fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 4980238292722443800}
   - component: {fileID: 9219593916588372213}
   m_Layer: 0
-  m_Name: BasicEnemyArmoredPool
+  m_Name: EnemyPool_BasicArmored
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 7840321244591696054}
   - component: {fileID: 8847085611556857988}
   m_Layer: 0
-  m_Name: HealthTruckEnemyPool
+  m_Name: EnemyPool_HealthTruck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,13 +168,14 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 571774951316878100}
-  - {fileID: 6461917504625211745}
-  - {fileID: 7623476381869025528}
-  - {fileID: 466993926716717260}
   - {fileID: 4980238292722443800}
+  - {fileID: 6461917504625211745}
   - {fileID: 1036065357476877141}
+  - {fileID: 7623476381869025528}
   - {fileID: 3347861597061700021}
+  - {fileID: 466993926716717260}
   - {fileID: 7840321244591696054}
+  - {fileID: 9170357010359149369}
   - {fileID: 8098496768692007100}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -194,7 +195,7 @@ MonoBehaviour:
   enemiesToPool:
   - type: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
     pool: {fileID: 7863576154011315601}
-  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+  - type: {fileID: 11400000, guid: 46fd8d00c2e7042458a4e06d39e259fa, type: 2}
     pool: {fileID: 1459440374239873001}
   - type: {fileID: 11400000, guid: 97c4684021c15644c8df8f2de5423e2c, type: 2}
     pool: {fileID: 6208814779952199653}
@@ -208,6 +209,8 @@ MonoBehaviour:
     pool: {fileID: 2978566795682042435}
   - type: {fileID: 11400000, guid: e51a5eedfe92a3442a0578249d82608a, type: 2}
     pool: {fileID: 8847085611556857988}
+  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+    pool: {fileID: 2070001352649955540}
   _nullEnemy: {fileID: 4842515774411779356}
 --- !u!1 &6647312936594356182
 GameObject:
@@ -220,7 +223,7 @@ GameObject:
   - component: {fileID: 466993926716717260}
   - component: {fileID: 2978566795682042435}
   m_Layer: 0
-  m_Name: ArmorTruckEnemyPool
+  m_Name: EnemyPool_ArmorTruck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,6 +258,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 163396529507246355, guid: d143925e412c2084e8b76e26818735f8,
     type: 3}
+--- !u!1 &7910039680122071272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9170357010359149369}
+  - component: {fileID: 2070001352649955540}
+  m_Layer: 0
+  m_Name: EnemyPool_Dasher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9170357010359149369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7910039680122071272}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2070001352649955540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7910039680122071272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 8243376469949975730, guid: 9184b4ddf2635b5409c1dcd96b33c46e,
+    type: 3}
 --- !u!1 &8150693717742584909
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +315,7 @@ GameObject:
   - component: {fileID: 3347861597061700021}
   - component: {fileID: 1957489279646115172}
   m_Layer: 0
-  m_Name: TankEnemyPoolArmored
+  m_Name: EnemyPool_TankArmored
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,7 +361,7 @@ GameObject:
   - component: {fileID: 571774951316878100}
   - component: {fileID: 7863576154011315601}
   m_Layer: 0
-  m_Name: BasicEnemyPool
+  m_Name: EnemyPool_Basic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -358,7 +407,7 @@ GameObject:
   - component: {fileID: 7623476381869025528}
   - component: {fileID: 6208814779952199653}
   m_Layer: 0
-  m_Name: TankEnemyPool
+  m_Name: EnemyPool_Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -404,7 +453,7 @@ GameObject:
   - component: {fileID: 1036065357476877141}
   - component: {fileID: 2382694982798193530}
   m_Layer: 0
-  m_Name: FastEnemyArmoredPool
+  m_Name: EnemyPool_FastArmored
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

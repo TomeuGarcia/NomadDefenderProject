@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     private int damage;
     private float armor;
     private float health;
-    [HideInInspector] public int currencyDrop;
+    private int currencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;
@@ -48,6 +48,9 @@ public class Enemy : MonoBehaviour
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
+    
+    public bool CanBeTargetedFlag { get; set; }
+    
 
     private void Awake()
     {
@@ -112,20 +115,23 @@ public class Enemy : MonoBehaviour
         health = _typeConfig.BaseStats.Health;
         armor = _typeConfig.BaseStats.Armor;
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
-        pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+        pathFollower.SetMoveSpeedMultiplier(1f);
+
+        CanBeTargetedFlag = true;
     }
 
     public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
     {
+        ResetEnemy();
         _attackDestination = attackDestination;
         pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
-        ResetEnemy();
     }
 
 
     public virtual bool CanBeTargeted()
     {
-        return true;
+        return CanBeTargetedFlag;
     }
     public virtual int GetTargetPriorityBonus()
     {
@@ -252,7 +258,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void SetMoveSpeed(float speedCoef)
     {
-        pathFollower.SetMoveSpeed(speedCoef);
+        pathFollower.SetMoveSpeedMultiplier(speedCoef);
     }
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
