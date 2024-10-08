@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ISpeedBoosterUser
 {
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -303,4 +303,52 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
+
+
+
+
+    private Coroutine _speedBoostCoroutine = null;
+    public void ApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        if (_speedBoostCoroutine != null)
+        {
+            StopCoroutine(_speedBoostCoroutine);
+        }
+        _speedBoostCoroutine = StartCoroutine(DoApplySpeedBoosterMultiplier(boost));
+    }
+
+    private IEnumerator DoApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        float boostedSpeed = _typeConfig.BaseStats.MoveSpeed * boost.SpeedMultiplier;
+        
+        Timer speedTransitionTimer = new Timer(boost.AccelerateDuration);
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                _typeConfig.BaseStats.MoveSpeed, boostedSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(boost.SpeedMultiplier);
+
+        
+        yield return new WaitForSeconds(boost.Duration);
+        
+        
+        speedTransitionTimer.Duration = boost.DecelerateDuration;
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                boostedSpeed, _typeConfig.BaseStats.MoveSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+
+        _speedBoostCoroutine = null;
+    }
+
+    
 }

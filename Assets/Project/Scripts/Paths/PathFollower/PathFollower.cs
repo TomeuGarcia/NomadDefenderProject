@@ -39,6 +39,8 @@ public class PathFollower : MonoBehaviour
 
     private Coroutine pauseCoroutine = null;
 
+    public Vector3 PositionBetweenNodes =>
+        Vector3.LerpUnclamped(CurrentNode.Position, targetNode.Position, _startToEndT);
 
     // Actions
     public delegate void PathFollowerAction();
