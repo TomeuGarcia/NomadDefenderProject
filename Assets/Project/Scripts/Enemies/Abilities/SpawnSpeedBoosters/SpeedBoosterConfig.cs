@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SpeedBoosterConfig_NAME", 
-    menuName = SOAssetPaths.ENEMY_SPEEDBOOSTER + "SpeedBoosterConfig")]
+    menuName = SOAssetPaths.ENEMY_HAZARDS + "SpeedBoosterConfig")]
 public class SpeedBoosterConfig : ScriptableObject
 {
     [SerializeField, Min(0)] private float _speedBoosterLifetime = 5.0f;

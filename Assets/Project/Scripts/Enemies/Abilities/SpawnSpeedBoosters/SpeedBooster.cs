@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using DG.Tweening;
 using Scripts.ObjectPooling;
 using UnityEngine;
 
@@ -24,11 +26,23 @@ public class SpeedBooster : RecyclableObject
     private SpeedBoosterConfig _config;
     private readonly HashSet<ISpeedBoosterUser> _usersToIgnore = new (1);
 
+    [SerializeField] private Transform _viewHolder;
+
 
     public void Init(SpeedBoosterConfig config)
     {
         _config = config;
         StartCoroutine(Lifetime());
+        PlayAppearAnimation();
+    }
+
+    private void OnEnable()
+    {
+        TDGameManager.OnGameFinishStart += ForceRecycle;
+    }
+    private void OnDisable()
+    {
+        TDGameManager.OnGameFinishStart -= ForceRecycle;
     }
 
     internal override void RecycledInit()
@@ -38,7 +52,6 @@ public class SpeedBooster : RecyclableObject
 
     internal override void RecycledReleased()
     {
-        
     }
 
     public void AddUserToIgnore(ISpeedBoosterUser speedBoosterUser)
@@ -62,9 +75,35 @@ public class SpeedBooster : RecyclableObject
 
     private IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(_config.SpeedBoosterLifetime);
+        Timer lifetimeTimer = new Timer(_config.SpeedBoosterLifetime);
+        while (!lifetimeTimer.HasFinished())
+        {
+            lifetimeTimer.Update(GameTime.DeltaTime);
+            yield return null;
+        }
+
+        Task disappearTask = PlayDisappearAnimation();
+        yield return new WaitUntil(() => disappearTask.IsCompleted);
         Recycle();
     }
+    
+    private void PlayAppearAnimation()
+    {
+        _viewHolder.DOComplete();
+        _viewHolder.DOPunchScale(Vector3.one * 0.5f, 0.3f);
+    }
+    
+    private async Task PlayDisappearAnimation()
+    {
+        _viewHolder.DOComplete();
+        await _viewHolder.DOPunchScale(Vector3.one * -0.5f, 0.3f)
+            .AsyncWaitForCompletion();
+    }
 
-
+    private void ForceRecycle()
+    {
+        StopAllCoroutines();
+        _viewHolder.DOComplete();
+        Recycle();
+    }
 }
