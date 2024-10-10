@@ -46,13 +46,13 @@ public class BuildingDisableManager : MonoBehaviour
         {
             buildingDisableState.DisableableTimer.Reset();
             buildingDisableState.DisableableTimer.Duration = disableDuration;
+            disableableBuilding.RestartDisabled();
         }
         else
         {
             _currentDisabledBuildings.Add(disableableBuilding, new BuildingDisableState(disableableBuilding, disableDuration));
+            disableableBuilding.StartDisabled();
         }
-        
-        disableableBuilding.StartDisabled();
     }
 
     private void Update()

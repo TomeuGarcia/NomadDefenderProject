@@ -1,8 +1,8 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyType_SpeedBoosterSpawner", 
-    menuName = SOAssetPaths.ENEMY_TYPES + "EnemyTypeConfig_SpeedBoosterSpawner")]
+[CreateAssetMenu(fileName = "EnemyTypeConfig_BuildingDisabler", 
+    menuName = SOAssetPaths.ENEMY_TYPES + "EnemyTypeConfig_BuildingDisabler")]
 public class EnemyTypeConfig_BuildingDisabler : EnemyTypeConfig
 {
     [Space(30)]

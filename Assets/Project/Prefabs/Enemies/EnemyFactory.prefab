@@ -46,6 +46,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 3321023869663998056, guid: d7f6323c03aa22841bead13156191cbd,
     type: 3}
+--- !u!1 &1150678291460605838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8714714308244226804}
+  - component: {fileID: 7701419216833391132}
+  m_Layer: 0
+  m_Name: EnemyPool_BuildingDisabler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8714714308244226804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150678291460605838}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7701419216833391132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150678291460605838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 3290637566576293578, guid: d3341dec76ad5314a83b202995b4dc54,
+    type: 3}
 --- !u!1 &1792546586440576339
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,6 +318,7 @@ Transform:
   - {fileID: 5694952112439537998}
   - {fileID: 2897635336714703100}
   - {fileID: 2010452054781551184}
+  - {fileID: 8714714308244226804}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -290,7 +337,7 @@ MonoBehaviour:
   enemiesToPool:
   - type: {fileID: 11400000, guid: 6db44258b6caaa24f94d7d9823bf972d, type: 2}
     pool: {fileID: 7863576154011315601}
-  - type: {fileID: 11400000, guid: 86c05f02547edde4e933a91e3f92341c, type: 2}
+  - type: {fileID: 11400000, guid: 1a155359c789a424db4bd0c566086ba8, type: 2}
     pool: {fileID: 1459440374239873001}
   - type: {fileID: 11400000, guid: 97c4684021c15644c8df8f2de5423e2c, type: 2}
     pool: {fileID: 6208814779952199653}
@@ -310,8 +357,10 @@ MonoBehaviour:
     pool: {fileID: 8148963446979039184}
   - type: {fileID: 11400000, guid: 1fa1ccd110f7cf0408292fa786cadd05, type: 2}
     pool: {fileID: 890391095594692109}
-  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+  - type: {fileID: 11400000, guid: 86c05f02547edde4e933a91e3f92341c, type: 2}
     pool: {fileID: 3822010905035815726}
+  - type: {fileID: 11400000, guid: 8e0aaedac61f29f4c9d352ac01168265, type: 2}
+    pool: {fileID: 7701419216833391132}
   _nullEnemy: {fileID: 4842515774411779356}
 --- !u!1 &6647312936594356182
 GameObject:

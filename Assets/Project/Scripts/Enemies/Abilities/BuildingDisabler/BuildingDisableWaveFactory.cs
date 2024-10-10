@@ -9,15 +9,16 @@ public class BuildingDisableWaveFactory : MonoBehaviour
     private class SpeedBoosterConfigToPool
     {
         [SerializeField] private BuildingDisableWaveConfig _config;
-        [SerializeField] private ObjectPoolData<SpeedBooster> _objectPoolData;
+        [SerializeField] private ObjectPoolData<BuildingDisableWave> _objectPoolData;
         
         public BuildingDisableWaveConfig Config => _config;
-        public ObjectPoolData<SpeedBooster> ObjectPoolData => _objectPoolData;
+        public ObjectPoolData<BuildingDisableWave> ObjectPoolData => _objectPoolData;
     }
 
     [SerializeField] private SpeedBoosterConfigToPool[] _configsToPoolData;
     private Dictionary<BuildingDisableWaveConfig, ObjectPool> _configsToPool;
     public static BuildingDisableWaveFactory Instance { get; private set; }
+    
     
     private void Awake()
     {
