@@ -1,5 +1,6 @@
 public interface IDisableableBuilding
 {
+    bool CanBeDisabled();
     void StartDisabled();
     void RestartDisabled();
     void FinishDisabled();

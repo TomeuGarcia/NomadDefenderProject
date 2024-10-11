@@ -44,6 +44,9 @@ public class TurretBuilding : RangeBuilding
     [SerializeField] private Transform _upgradeParticlesPosition;
 
 
+    public bool IsDisabled { get; set; } = false;
+
+    
     public int CardLevel { get; private set; }
 
 
@@ -83,7 +86,7 @@ public class TurretBuilding : RangeBuilding
 
     private void Update()
     {
-        if (!isFunctional) return;
+        if (!isFunctional || IsDisabled) return;
 
         _shootingController.UpdateShoot();
         LookAtTarget();
