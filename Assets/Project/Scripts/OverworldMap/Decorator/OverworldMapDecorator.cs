@@ -193,9 +193,13 @@ public class OverworldMapDecorator : MonoBehaviour
         {
             return NodeEnums.BattleType.MID;
         }
-        else
+        else if (levelI < dSettings.bossBattleStartIndex)
         {
             return NodeEnums.BattleType.LATE;
+        }
+        else
+        {
+            return NodeEnums.BattleType.BOSS;
         }
     }
     private NodeEnums.ProgressionState GetLevelProgressionState(int levelI)
@@ -208,9 +212,13 @@ public class OverworldMapDecorator : MonoBehaviour
         {
             return NodeEnums.ProgressionState.MID;
         }
-        else
+        else if (levelI < dSettings.bossBattleStartIndex)
         {
             return NodeEnums.ProgressionState.LATE;
+        }
+        else 
+        {
+            return NodeEnums.ProgressionState.BOSS;
         }
     }
 
