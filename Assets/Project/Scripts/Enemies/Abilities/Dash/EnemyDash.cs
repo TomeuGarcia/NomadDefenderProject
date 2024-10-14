@@ -33,12 +33,12 @@ public class EnemyDash : MonoBehaviour
 
     private IEnumerator MoveAndSetInvulnerable()
     {
-        _enemy.CanBeTargetedFlag = false;
+        //_enemy.CanBeTargetedFlag = false;
         _view.StartDashing();
 
         yield return StartCoroutine(WaitUntilTravelledDistance(_dashConfig.DashTravelDistance));
         
-        _enemy.CanBeTargetedFlag = true;
+        //_enemy.CanBeTargetedFlag = true;
         _view.StopDashing();
     }
 
