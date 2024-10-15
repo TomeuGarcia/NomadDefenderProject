@@ -91,7 +91,7 @@ public class CurrencyBase : TurretPartBase_Prefab
         topCube.position = new Vector3(topCube.position.x, topCube.position.y + (Mathf.Sin(positionMovement) / 4000.0f), topCube.position.z);
         
 
-        if (_canGenerateCurrency)
+        if (_canGenerateCurrency && !AbilityIsDisabled)
         {
             _currencyOverTimeDropper.Update();
         }

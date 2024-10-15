@@ -12,7 +12,7 @@ public class SupportBuilding : RangeBuilding
     private SupportPartBase turretPartBase;
 
 
-    [SerializeField]GameObject[] visualUpgrades;
+    [SerializeField] GameObject[] visualUpgrades;
     [Header("HOLDERS")]
     [SerializeField] protected Transform baseHolder;
 
@@ -20,8 +20,6 @@ public class SupportBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] private Transform _upgradeParticlesPosition;
     
-
-
 
     void Awake()
     {

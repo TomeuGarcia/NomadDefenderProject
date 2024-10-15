@@ -21,6 +21,9 @@ public class TurretPartBase_Prefab : MonoBehaviour
     public ParticleSystem PlacedParticleSystem => placedParticleSystem;
 
     public Collider Collider => baseCollider.GetCollider();
+    
+    protected bool AbilityIsDisabled { get; private set; }
+
 
     private void Awake()
     {
@@ -125,6 +128,16 @@ public class TurretPartBase_Prefab : MonoBehaviour
 
         specialAreaPlaneMesh.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
         specialAreaPlaneMaterial.SetFloat("_TileNum", planeRange);
+    }
+
+    public virtual void DoOnBuildingDisableStart()
+    {
+        AbilityIsDisabled = true;
+    }
+
+    public virtual void DoOnBuildingDisableFinish()
+    {
+        AbilityIsDisabled = false;
     }
 
 }

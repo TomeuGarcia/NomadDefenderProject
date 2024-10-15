@@ -301,6 +301,12 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void ComputeNextTargetedEnemy()
     {
+        if (AbilityIsDisabled)
+        {
+            targetedEnemy = null;
+            return;
+        }
+        
         targetedEnemy = _ownerBuilding.GetBestEnemyTarget(targetedEnemy);
     }
 

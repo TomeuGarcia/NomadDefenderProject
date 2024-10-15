@@ -24,6 +24,7 @@ public static class SOAssetPaths
     public const string TD_CURRENCYDROP = TD_GAME + "Currency Drop/";
 
     public const string ENEMIES = MENU_ROOT + "Enemies/";
+    public const string ENEMY_HAZARDS = ENEMIES + "Hazards/";
     public const string ENEMY_TYPES = ENEMIES + "Types/";
     public const string ENEMY_WAVES = ENEMIES + "Waves/";
 

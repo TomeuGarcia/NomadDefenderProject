@@ -151,6 +151,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void OnPathLocationTakesDamage(PathLocation pathLocation)
     {
+        if (AbilityIsDisabled) return;
+        
         ConnectBinderWithPathLocation();
 
         DamageEnemies(0.3f);

@@ -151,19 +151,9 @@ public abstract class RangeBuilding : Building
             !currentlyTargetedEnemy.DiesFromQueuedDamage() &&
             enemies.Contains(currentlyTargetedEnemy))
         {
-
-            foreach (Enemy enemy in enemies)
-            {
-                if (enemy.GetTargetPriorityBonus() < currentlyTargetedEnemy.GetTargetPriorityBonus())
-                {
-                    currentlyTargetedEnemy = enemy;
-                }
-            }
-            
             return currentlyTargetedEnemy;
         }
-
-
+        
 
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())

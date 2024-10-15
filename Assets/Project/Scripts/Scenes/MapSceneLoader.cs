@@ -47,6 +47,7 @@ public class MapSceneLoader : MonoBehaviour
     private SceneNames[] midBattleScenes;
     private SceneNames[] lateBattleScenes;
     private SceneNames[] bossBattleScenes;
+    
     private SceneNames[] availableEarlyBattleScenes;
     private SceneNames[] availableMidBattleScenes;
     private SceneNames[] availableLateBattleScenes;

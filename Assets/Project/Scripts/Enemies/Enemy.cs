@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ISpeedBoosterUser
 {
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     private int damage;
     private float armor;
     private float health;
-    [HideInInspector] public int currencyDrop;
+    private int currencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;
@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
 
     protected HealthSystem healthSystem;
     public HealthSystem HealthSystem => healthSystem;
-    private EnemyAttackDestination _attackDestination;
+    public EnemyAttackDestination AttackDestination { get; private set; }
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemySuicide;
@@ -48,6 +48,11 @@ public class Enemy : MonoBehaviour
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
+    
+    public bool CanBeTargetedFlag { get; set; }
+    
+    public EnemyWaveSpawner SpawnerOwner { get; private set; }
+    
 
     private void Awake()
     {
@@ -85,6 +90,7 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         pathFollower.OnPathEndReached -= Attack;
+        SpawnerOwner = null;
     }
 
     private void ResetEnemy()
@@ -112,20 +118,25 @@ public class Enemy : MonoBehaviour
         health = _typeConfig.BaseStats.Health;
         armor = _typeConfig.BaseStats.Armor;
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
-        pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+        pathFollower.SetMoveSpeedMultiplier(1f);
+
+        CanBeTargetedFlag = true;
     }
 
-    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
+    public void SpawnedInit(EnemyWaveSpawner spawner, PathNode startNode, float toNextNodeT, 
+        Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
     {
-        _attackDestination = attackDestination;
-        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
+        SpawnerOwner = spawner;
         ResetEnemy();
+        AttackDestination = attackDestination;
+        pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
     }
 
 
     public virtual bool CanBeTargeted()
     {
-        return true;
+        return CanBeTargetedFlag;
     }
     public virtual int GetTargetPriorityBonus()
     {
@@ -135,7 +146,7 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        PathLocation pathLocation = _attackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
+        PathLocation pathLocation = AttackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
 
         if (pathLocation.CanTakeDamage())
         {
@@ -252,7 +263,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void SetMoveSpeed(float speedCoef)
     {
-        pathFollower.SetMoveSpeed(speedCoef);
+        pathFollower.SetMoveSpeedMultiplier(speedCoef);
     }
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
@@ -292,4 +303,52 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
+
+
+
+
+    private Coroutine _speedBoostCoroutine = null;
+    public void ApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        if (_speedBoostCoroutine != null)
+        {
+            StopCoroutine(_speedBoostCoroutine);
+        }
+        _speedBoostCoroutine = StartCoroutine(DoApplySpeedBoosterMultiplier(boost));
+    }
+
+    private IEnumerator DoApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        float boostedSpeed = _typeConfig.BaseStats.MoveSpeed * boost.SpeedMultiplier;
+        
+        Timer speedTransitionTimer = new Timer(boost.AccelerateDuration);
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                _typeConfig.BaseStats.MoveSpeed, boostedSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(boost.SpeedMultiplier);
+
+        
+        yield return new WaitForSeconds(boost.Duration);
+        
+        
+        speedTransitionTimer.Duration = boost.DecelerateDuration;
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                boostedSpeed, _typeConfig.BaseStats.MoveSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+
+        _speedBoostCoroutine = null;
+    }
+
+    
 }
