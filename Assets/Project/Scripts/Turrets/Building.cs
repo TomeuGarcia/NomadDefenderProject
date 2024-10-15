@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public abstract class Building : MonoBehaviour
@@ -17,6 +18,7 @@ public abstract class Building : MonoBehaviour
 
     protected bool isFunctional = false;
 
+    public Tile PlacedTile { get; private set; }
 
     public delegate void BuildingAction();
     public event BuildingAction OnDestroyed;
@@ -25,6 +27,9 @@ public abstract class Building : MonoBehaviour
     public event BuildingAction2 OnPlaced;
     protected void InvokeOnPlaced() { if (OnPlaced != null) OnPlaced(this); }
 
+    [FormerlySerializedAs("OnTurretUnplaced")] public Action OnBuildingUnplaced;
+    
+    public BuildingCard BuildingCard { get; protected set; }
 
     private void OnDestroy()
     {
@@ -43,7 +48,20 @@ public abstract class Building : MonoBehaviour
     }
 
     protected abstract void AwakeInit();
-    public abstract void GotPlaced();
+
+    public void GotPlaced(Tile placedTile)
+    {
+        PlacedTile = placedTile;
+        GotPlaced();
+    }
+    protected abstract void GotPlaced();
+
+    public void GotUnplaced()
+    {
+        DisableFunctionality();
+        gameObject.SetActive(false);
+        OnBuildingUnplaced?.Invoke();
+    }
     public abstract void GotEnabledPlacing();
     public abstract void GotDisabledPlacing();
     public abstract void GotMovedWhenPlacing();

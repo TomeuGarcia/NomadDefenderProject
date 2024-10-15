@@ -89,6 +89,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     // Animations
     protected override void PlayOpenAnimation()
     {
+        base.PlayOpenAnimation();
         if (closeAnimationCoroutine != null)
         {
             StopCoroutine(closeAnimationCoroutine);
@@ -141,6 +142,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void PlayCloseAnimation()
     {
+        base.PlayCloseAnimation();
         if (openAnimationCoroutine != null)
         {
             StopCoroutine(openAnimationCoroutine);

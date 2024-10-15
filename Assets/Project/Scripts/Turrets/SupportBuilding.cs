@@ -10,6 +10,8 @@ public class SupportBuilding : RangeBuilding
 
 
     private SupportPartBase turretPartBase;
+    
+    public SupportCardData CardData { get; private set; }
 
 
     [SerializeField] GameObject[] visualUpgrades;
@@ -45,13 +47,15 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    public void Init(SupportCardStatsController statsController, SupportCardData supportCardData, 
+    public void Init(BuildingCard buildingCard, SupportCardStatsController statsController, SupportCardData supportCardData, 
         CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
+        BuildingCard = buildingCard;
         _statsController = statsController;
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
-        this.turretPartBase = supportCardData.SharedPartsGroup.Base;
+        CardData = supportCardData;
+        this.turretPartBase = CardData.SharedPartsGroup.Base;
 
         basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
@@ -103,7 +107,7 @@ public class SupportBuilding : RangeBuilding
         basePart.SetDefaultMaterial();
     }
 
-    public override void GotPlaced()
+    protected override void GotPlaced()
     {
         HideRangePlane();
         EnableFunctionality();

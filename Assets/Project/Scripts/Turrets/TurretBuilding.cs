@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,12 +53,6 @@ public class TurretBuilding : RangeBuilding
 
     public const int MIN_PLAY_COST = 10;
 
-    public delegate void TurretBuildingEvent();
-    public event TurretBuildingEvent OnGotPlaced;
-    public event TurretBuildingEvent OnTimeSinceLastShotSet;
-    public event TurretBuildingEvent OnGotEnabledPlacing;
-    public event TurretBuildingEvent OnGotDisabledPlacing;
-    public event TurretBuildingEvent OnGotMovedWhenPlacing;
 
     void Awake()
     {
@@ -108,8 +103,10 @@ public class TurretBuilding : RangeBuilding
         bodyPart.transform.rotation = currentRotation;
     }
 
-    public void Init(TurretCardStatsController statsController, TurretCardData turretCardData, CurrencyCounter currencyCounter)
+    public void Init(BuildingCard buildingCard, TurretCardStatsController statsController, 
+        TurretCardData turretCardData, CurrencyCounter currencyCounter)
     {
+        BuildingCard = buildingCard;
         _statsController = statsController;        
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
@@ -214,7 +211,7 @@ public class TurretBuilding : RangeBuilding
         basePart.SetDefaultMaterial();
     }
 
-    public override void GotPlaced()
+    protected override void GotPlaced()
     {
         HideRangePlane();
         EnableFunctionality();
@@ -229,7 +226,6 @@ public class TurretBuilding : RangeBuilding
 
         InvokeOnPlaced();
         
-        if (OnGotPlaced != null) OnGotPlaced();
         _abilitiesPlacingLifetimeCycle.OnTurretPlaced(this);
         _viewAddOnController.StartViewingAddOns();
     }
@@ -237,21 +233,18 @@ public class TurretBuilding : RangeBuilding
     {
         basePart.GotEnabledPlacing();
 
-        if (OnGotEnabledPlacing != null) OnGotEnabledPlacing();
         _abilitiesPlacingLifetimeCycle.OnTurretPlacingStart();
     }
     public override void GotDisabledPlacing()
     {
         basePart.GotDisabledPlacing();
 
-        if (OnGotDisabledPlacing != null) OnGotDisabledPlacing();
         _abilitiesPlacingLifetimeCycle.OnTurretPlacingFinish();
     }
     public override void GotMovedWhenPlacing()
     {
         basePart.GotMovedWhenPlacing();
 
-        if (OnGotMovedWhenPlacing != null) OnGotMovedWhenPlacing();
         _abilitiesPlacingLifetimeCycle.OnTurretPlacingMove();
     }
 

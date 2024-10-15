@@ -47,7 +47,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] protected CanvasGroup cgQuickLevelDisplay;
     [SerializeField] protected TextMeshProUGUI quickLevelDisplayText;
 
-    [Header("NEW UI")]
+    [Header("NEW UI")] 
+    [Header("Selling")] 
+    [SerializeField] private SellBuildingMenu _sellBuildingMenu;
+    
     [Header("General")]
     [SerializeField] protected RectTransform newUiParent;
     [SerializeField] protected Image barImage;
@@ -131,7 +134,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
             currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
             currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
             currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
-        }        
+        }
+
+        _sellBuildingMenu.OnSellConfirmed += OnSellConfirmed;
     }
     private void OnDisable()
     {
@@ -142,7 +147,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
             currencyCounter.OnCurrencyAdded -= CheckHoveredButtonsCanNowUpgrade;
             currencyCounter.OnCurrencyAdded -= CheckStartParticlesCanUpgrade;
             currencyCounter.OnCurrencySpent -= CheckStopParticlesCanUpgrade;
-        }        
+        }    
+        
+        _sellBuildingMenu.OnSellConfirmed -= OnSellConfirmed;
     }
 
 
@@ -178,23 +185,26 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
         int numberOfUpgrades, CurrencyCounter newCurrencyCounter, TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
-        _buildingUpgradesController = buildingUpgradesController;
-        currencyCounter = newCurrencyCounter;
-        currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
-        currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
-        currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
+        SharedInit(turretBuilding.CardData.PlayCost, buildingUpgradesController, newCurrencyCounter);
     }
 
     public virtual void InitSupport(SupportBuilding supportBuilding,
         IBuildingUpgradesController buildingUpgradesController,
         CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, SupportCardData supportCardData)
     {
-        _buildingUpgradesController = buildingUpgradesController;
+        SharedInit(supportBuilding.CardData.PlayCost, buildingUpgradesController, newCurrencyCounter);
+    }
 
+    private void SharedInit(int cardPlayCost,
+        IBuildingUpgradesController buildingUpgradesController, CurrencyCounter newCurrencyCounter)
+    {
+        _buildingUpgradesController = buildingUpgradesController;
         currencyCounter = newCurrencyCounter;
         currencyCounter.OnCurrencyAdded += CheckHoveredButtonsCanNowUpgrade;
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
+        
+        _sellBuildingMenu.Init(cardPlayCost);
     }
 
     public virtual void OnStatsUpdated()
@@ -360,16 +370,19 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     // Animations
     protected virtual void PlayOpenAnimation()
     {
+        StartCoroutine(_sellBuildingMenu.PlayOpenAnimation());
     }
 
 
     protected virtual void PlayCloseAnimation()
     {
+        StartCoroutine(_sellBuildingMenu.PlayCloseAnimation());
     }
 
     protected void OnUpgraded()
     {
         OnBuildingUpgraded?.Invoke();
+        _sellBuildingMenu.AddSellValue(_upgradeCostsConfig.GetCostByLevel(CurrentBuildingLevel));
     }
 
 
@@ -633,6 +646,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     }
 
 
-
+    private void OnSellConfirmed()
+    {
+        CloseWindow();
+    }
 
 }

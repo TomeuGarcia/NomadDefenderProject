@@ -121,7 +121,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
         turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
-        turretBuilding.Init(StatsController, CardData, currencyCounter);
+        turretBuilding.Init(this, StatsController, CardData, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 

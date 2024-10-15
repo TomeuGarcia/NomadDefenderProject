@@ -502,6 +502,12 @@ public class CardDrawer : MonoBehaviour
         return turretCard;
     }
 
+    public void PutCardBackIntoDeck(BuildingCard buildingCard)
+    {
+        deck.AddCardToDeckBottom(buildingCard);
+        battleHUD.AddHasDeckCardIconAndShow();
+    }
+    
     public BuildingCard[] GetCardsInHand()
     {
         return hand.GetCards().ToArray();
