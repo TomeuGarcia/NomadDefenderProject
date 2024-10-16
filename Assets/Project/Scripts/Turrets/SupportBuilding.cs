@@ -22,6 +22,8 @@ public class SupportBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] private Transform _upgradeParticlesPosition;
     
+    public override Vector3 PlacingParticlesPosition => basePart.PlacedParticlesSpot;
+
 
     void Awake()
     {
@@ -37,6 +39,7 @@ public class SupportBuilding : RangeBuilding
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
     }
+
 
     private void OnDestroy()
     {
@@ -66,7 +69,6 @@ public class SupportBuilding : RangeBuilding
         Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, supportCardData);
 
         DisableFunctionality();
-        basePart.PlacedParticleSystem.gameObject.SetActive(false);
     }
 
     protected override void UpdateRange()
@@ -114,9 +116,6 @@ public class SupportBuilding : RangeBuilding
         basePart.OnGetPlaced();
 
         basePart.MeshTransform.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
-        
-        basePart.PlacedParticleSystem.gameObject.SetActive(true);
-        basePart.PlacedParticleSystem.Play();
 
         Upgrader.OnBuildingOwnerPlaced();
         Upgrader.OnUpgrade += PlayUpgradeAnimation;

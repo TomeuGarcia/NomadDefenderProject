@@ -15,10 +15,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
     [Header("BASE COLLIDER")]
     [SerializeField] public BaseCollider baseCollider;
     [SerializeField] GameObject[] visualUpgrades;
-
-    [Header("PARTICLES")]
-    [SerializeField] protected ParticleSystem placedParticleSystem;
-    public ParticleSystem PlacedParticleSystem => placedParticleSystem;
+    
+    public Vector3 PlacedParticlesSpot => meshTransform.position;
 
     public Collider Collider => baseCollider.GetCollider();
     

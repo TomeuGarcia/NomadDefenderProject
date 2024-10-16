@@ -1488,7 +1488,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7092745323191377639}
   - {fileID: 6616791998591684786}
   - {fileID: 1401920438832918011}
   m_Father: {fileID: 5698239489495674825}
@@ -1876,7 +1875,6 @@ MonoBehaviour:
   upgrader: {fileID: 4030303494629655493}
   bodyHolder: {fileID: 3377734192195378721}
   baseHolder: {fileID: 40166544886556335}
-  placedParticleSystem: {fileID: 7092745323191377638}
   _upgradeParticlesPosition: {fileID: 1401920438832918011}
 --- !u!1 &6663189641556155458
 GameObject:
@@ -3316,91 +3314,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead739a4b4da429c8a1560f8d725c1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &6711383024015717130
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 8989046114779512156}
-    m_Modifications:
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561549420279737842, guid: fad29eb1cbd39eb428fca592697d7e53,
-        type: 3}
-      propertyPath: m_Name
-      value: Dust_Particles
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fad29eb1cbd39eb428fca592697d7e53, type: 3}
---- !u!198 &7092745323191377638 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4561549420279737836, guid: fad29eb1cbd39eb428fca592697d7e53,
-    type: 3}
-  m_PrefabInstance: {fileID: 6711383024015717130}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7092745323191377639 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4561549420279737837, guid: fad29eb1cbd39eb428fca592697d7e53,
-    type: 3}
-  m_PrefabInstance: {fileID: 6711383024015717130}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6742931218783290086
 PrefabInstance:
   m_ObjectHideFlags: 0

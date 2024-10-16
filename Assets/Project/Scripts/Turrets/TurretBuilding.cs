@@ -41,7 +41,6 @@ public class TurretBuilding : RangeBuilding
     public Transform BaseHolder => baseHolder;
 
     [Header("PARTICLES")]
-    [SerializeField] protected ParticleSystem placedParticleSystem;
     [SerializeField] private Transform _upgradeParticlesPosition;
 
 
@@ -49,6 +48,7 @@ public class TurretBuilding : RangeBuilding
 
     
     public int CardLevel { get; private set; }
+    public override Vector3 PlacingParticlesPosition => _upgradeParticlesPosition.position;
 
 
     public const int MIN_PLAY_COST = 10;
@@ -62,8 +62,8 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
-        placedParticleSystem.gameObject.SetActive(false);
     }
+
 
     private void OnDestroy()
     {
@@ -217,10 +217,6 @@ public class TurretBuilding : RangeBuilding
         EnableFunctionality();
 
         bodyHolder.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
-     
-        
-        placedParticleSystem.gameObject.SetActive(true);
-        placedParticleSystem.Play();
 
         Upgrader.OnBuildingOwnerPlaced();
 

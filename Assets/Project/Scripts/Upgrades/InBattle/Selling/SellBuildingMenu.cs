@@ -92,8 +92,12 @@ public class SellBuildingMenu : MonoBehaviour
     private async void OnButtonClicked()
     {
         OnSellConfirmed?.Invoke();
-
-        await Task.Delay(TimeSpan.FromSeconds(0.5f));
+        while (gameObject.activeInHierarchy)
+        {
+            await Task.Yield();
+        }
+        
+        _currencyIcon.color = _sellTurretSellValueText.color = Color.white;
         BuildingSellingController.Instance.SellBuilding(_building, _sellValue);
     }
     private void OnButtonHovered()

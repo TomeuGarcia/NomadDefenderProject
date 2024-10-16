@@ -31,6 +31,8 @@ public abstract class Building : MonoBehaviour
     
     public BuildingCard BuildingCard { get; protected set; }
 
+    public abstract Vector3 PlacingParticlesPosition { get; }
+    
     private void OnDestroy()
     {
         if (OnDestroyed != null) OnDestroyed();
@@ -52,8 +54,11 @@ public abstract class Building : MonoBehaviour
     public void GotPlaced(Tile placedTile)
     {
         PlacedTile = placedTile;
+        ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingPlaced,
+            PlacingParticlesPosition, Quaternion.identity);
         GotPlaced();
     }
+
     protected abstract void GotPlaced();
 
     public void GotUnplaced()
@@ -61,6 +66,9 @@ public abstract class Building : MonoBehaviour
         DisableFunctionality();
         gameObject.SetActive(false);
         OnBuildingUnplaced?.Invoke();
+
+        ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingUnplaced,
+            PlacingParticlesPosition, Quaternion.identity);
     }
     public abstract void GotEnabledPlacing();
     public abstract void GotDisabledPlacing();
