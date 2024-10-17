@@ -20,7 +20,7 @@ public class BuildingSellingController : MonoBehaviour
     public void SellBuilding(Building building, int sellValue)
     {
         _buildingPlacer.UnplaceBuilding(building);
-        ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(sellValue, Vector3.down * -1000);
+        ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(sellValue, building.transform.position);
         ServiceLocator.GetInstance().CardDrawer.PutCardBackIntoDeck(building.BuildingCard);
     }
 }
