@@ -91,6 +91,11 @@ public class StatUpgradeButton : MonoBehaviour
         _button.DOKill();
         ButtonImage.DOKill();
     }
+    public void EnableButton()
+    {
+        _button.interactable = true;
+        ButtonImage.color = normalColor;
+    }
 
     private void ResetColor()
     {

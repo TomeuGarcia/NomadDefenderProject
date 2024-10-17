@@ -148,16 +148,27 @@ public class SlowBase : TurretPartBase_Prefab
         base.DoOnBuildingDisableStart();
         baseCollider.GetCollider().enabled = false;
 
-        Enemy[] tempSlowedEnemiesByThis = _slowedEnemiesByThis.ToArray();
-        foreach (Enemy enemy in tempSlowedEnemiesByThis)
-        {
-            StopEnemySlow(enemy);
-        }
+        StopSlowingEnemiesByThis();
     }
 
     public override void DoOnBuildingDisableFinish()
     {
         base.DoOnBuildingDisableFinish();
         baseCollider.GetCollider().enabled = true;
+    }
+    
+    
+    public override void OnGetUnplaced()
+    {
+        StopSlowingEnemiesByThis();
+    }
+
+    private void StopSlowingEnemiesByThis()
+    {
+        Enemy[] tempSlowedEnemiesByThis = _slowedEnemiesByThis.ToArray();
+        foreach (Enemy enemy in tempSlowedEnemiesByThis)
+        {
+            StopEnemySlow(enemy);
+        }
     }
 }

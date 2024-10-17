@@ -9,6 +9,7 @@ using Task = System.Threading.Tasks.Task;
 
 public class SellBuildingMenu : MonoBehaviour
 {
+    private int _cardPlayCost = 0;
     private int _sellValue = 0;
     private const float SELL_VALUE_MULTIPLIER = 0.5f;
 
@@ -25,18 +26,35 @@ public class SellBuildingMenu : MonoBehaviour
     [SerializeField] private GameObject _content;
     [SerializeField] private Image _backgroundBodyImage;
     [SerializeField] private Image _backgroundBarImage;
-
-    public Action OnSellConfirmed;
     
-    public void Init(int cardPlayCost)
+    public Action OnSellConfirmed;
+    private BuildingSellingConfig _sellingConfig;
+    
+    
+    
+    public void Init(int cardPlayCost, BuildingSellingConfig sellingConfig)
     {
+        _cardPlayCost = cardPlayCost;
+        _sellingConfig = sellingConfig;
+        
         _sellTurretButton.Init(OnButtonClicked, OnButtonHovered, OnButtonUnhovered);
-        AddSellValue(cardPlayCost);
+        AddSellValue(_cardPlayCost, false);
+        _content.SetActive(false);
     }
 
-    public void AddSellValue(int baseAmount)
+    public void ResetState()
     {
-        _sellValue += Mathf.CeilToInt(baseAmount * SELL_VALUE_MULTIPLIER);
+        _sellValue = 0;
+        AddSellValue(_cardPlayCost, false);
+    }
+
+    public void AddSellValue(int baseAmount, bool isFromUpgrade)
+    {
+        float valueMultiplier = isFromUpgrade
+            ? _sellingConfig.UpgradesValueMultiplier
+            : _sellingConfig.PlayValueMultiplier;
+        
+        _sellValue += Mathf.CeilToInt(baseAmount * valueMultiplier);
         UpdateSellValueText();
     }
     
@@ -57,6 +75,7 @@ public class SellBuildingMenu : MonoBehaviour
         _backgroundBarImage.fillAmount = 0;
         _backgroundBodyImage.fillAmount = 0;
 
+        yield return new WaitForSeconds(0.1f);
         yield return _backgroundBarImage.DOFillAmount(1, 0.1f);
         yield return _backgroundBodyImage.DOFillAmount(1, 0.1f);
         

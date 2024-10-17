@@ -211,7 +211,7 @@ public class TurretBuilding : RangeBuilding
         basePart.SetDefaultMaterial();
     }
 
-    protected override void GotPlaced()
+    protected override void DoGotPlaced()
     {
         HideRangePlane();
         EnableFunctionality();
@@ -225,6 +225,14 @@ public class TurretBuilding : RangeBuilding
         _abilitiesPlacingLifetimeCycle.OnTurretPlaced(this);
         _viewAddOnController.StartViewingAddOns();
     }
+
+    protected override void DoGotUnplaced()
+    {
+        _statsController.ResetUpgradeLevel();
+        bodyPart.ResetUpgradeVisuals();
+        upgrader.ResetState();
+    }
+
     public override void GotEnabledPlacing()
     {
         basePart.GotEnabledPlacing();

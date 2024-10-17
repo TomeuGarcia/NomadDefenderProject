@@ -35,19 +35,27 @@ public class TurretPartBase_Prefab : MonoBehaviour
         }
     }
 
-    virtual public void Init(TurretBuilding turretOwner, float turretRange)
+    public virtual void Init(TurretBuilding turretOwner, float turretRange)
     {
         InitMaterials();
         
     }
-    virtual public void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
+    public virtual void InitAsSupportBuilding(SupportBuilding supportBuilding, float supportRange)
     {
         InitMaterials();
     }
 
-    virtual public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel) 
+    public virtual void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel) 
     {
         if (newStatLevel <= visualUpgrades.Length) visualUpgrades[newStatLevel - 1].SetActive(true);
+    }
+
+    public void ResetUpgrades()
+    {
+        foreach (GameObject visualUpgrade in visualUpgrades)
+        {
+            visualUpgrade.SetActive(false);
+        }
     }
 
     protected virtual void InitMaterials()
@@ -92,6 +100,10 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
 
     }
+    public virtual void OnGetUnplaced()
+    {
+
+    }
     public virtual void GotEnabledPlacing()
     {
 
@@ -119,6 +131,10 @@ public class TurretPartBase_Prefab : MonoBehaviour
         baseCollider.SetRangeColor(color);
     }
 
+    public virtual void ResetAreaPlaneSize(SupportBuilding supportOwner)
+    {
+        
+    }
     protected void UpdateAreaPlaneSize(SupportBuilding supportOwner, MeshRenderer specialAreaPlaneMesh, Material specialAreaPlaneMaterial)
     {
         float planeRange = supportOwner.Stats.RadiusRange * 2 + 1; //only for square
@@ -127,6 +143,7 @@ public class TurretPartBase_Prefab : MonoBehaviour
         specialAreaPlaneMesh.transform.localScale = Vector3.one * ((float)planeRange / 10.0f);
         specialAreaPlaneMaterial.SetFloat("_TileNum", planeRange);
     }
+    
 
     public virtual void DoOnBuildingDisableStart()
     {

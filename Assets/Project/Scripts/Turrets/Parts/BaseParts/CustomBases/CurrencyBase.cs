@@ -61,6 +61,10 @@ public class CurrencyBase : TurretPartBase_Prefab
         StartCoroutine(CurrencyDropControl());
         _currencyOverTimeDropper.SetSpawnPosition(topCube.position);
     }
+    public override void OnGetUnplaced()
+    {
+        StopAllCoroutines();
+    }
 
     override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {

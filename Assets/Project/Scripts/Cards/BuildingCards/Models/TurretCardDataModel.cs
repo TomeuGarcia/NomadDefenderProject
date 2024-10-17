@@ -13,6 +13,7 @@ public class TurretCardDataModel : ScriptableObject
     
     [Header("PLAY COST")]
     [SerializeField, Min(0)] private int _cardPlayCost;
+    [SerializeField] private BuildingSellingModel _buildingSelling;
 
     [Header("PARTS")] 
     [SerializeField] private TurretCardPartsGroup _partsGroup;
@@ -21,6 +22,7 @@ public class TurretCardDataModel : ScriptableObject
     public int CardLevel => _cardLevel;
     public int CardPlayCost => _cardPlayCost;
     public TurretCardPartsGroup SharedPartsGroup => _partsGroup;
+    public BuildingSellingConfig MakeBuildingSellingConfig() => new BuildingSellingConfig(_buildingSelling.Config);
     public TurretCardPartsGroup MakePartsGroup() => new TurretCardPartsGroup(_partsGroup);
 
     public ATurretPassiveAbilityDataModel[] PassiveAbilityModels => _passiveAbilities;

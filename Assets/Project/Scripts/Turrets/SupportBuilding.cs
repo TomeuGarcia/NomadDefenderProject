@@ -28,11 +28,7 @@ public class SupportBuilding : RangeBuilding
     void Awake()
     {
         AwakeInit();
-
-        foreach(GameObject go in visualUpgrades)
-        {
-            go.SetActive(false);
-        }
+        ResetVisualUpgrades();
     }
     protected override void AwakeInit()
     {
@@ -40,6 +36,13 @@ public class SupportBuilding : RangeBuilding
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
     }
 
+    private void ResetVisualUpgrades()
+    {
+        foreach(GameObject go in visualUpgrades)
+        {
+            go.SetActive(false);
+        }
+    }
 
     private void OnDestroy()
     {
@@ -109,7 +112,7 @@ public class SupportBuilding : RangeBuilding
         basePart.SetDefaultMaterial();
     }
 
-    protected override void GotPlaced()
+    protected override void DoGotPlaced()
     {
         HideRangePlane();
         EnableFunctionality();
@@ -121,6 +124,17 @@ public class SupportBuilding : RangeBuilding
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         InvokeOnPlaced();
+    }
+
+    protected override void DoGotUnplaced()
+    {
+        _statsController.ResetUpgradeLevel();
+        ResetVisualUpgrades();
+        basePart.OnGetUnplaced();
+        basePart.ResetUpgrades();
+        basePart.ResetAreaPlaneSize(this);
+        upgrader.ResetState();
+        UpdateRange();
     }
 
     public override void GotEnabledPlacing()

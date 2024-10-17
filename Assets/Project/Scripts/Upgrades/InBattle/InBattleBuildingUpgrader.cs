@@ -185,17 +185,19 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         IBuildingUpgradesController buildingUpgradesController, ITurretStatsStateSource turretStatsState, 
         int numberOfUpgrades, CurrencyCounter newCurrencyCounter, TurretIconCanvasDisplay.ConfigData[] iconsDisplayData)
     {
-        SharedInit(turretBuilding.CardData.PlayCost, buildingUpgradesController, newCurrencyCounter);
+        SharedInit(turretBuilding.CardData.PlayCost, turretBuilding.CardData.BuildingSellingConfig,
+            buildingUpgradesController, newCurrencyCounter);
     }
 
     public virtual void InitSupport(SupportBuilding supportBuilding,
         IBuildingUpgradesController buildingUpgradesController,
         CurrencyCounter newCurrencyCounter, Sprite abilitySprite, Color abilityColor, SupportCardData supportCardData)
     {
-        SharedInit(supportBuilding.CardData.PlayCost, buildingUpgradesController, newCurrencyCounter);
+        SharedInit(supportBuilding.CardData.PlayCost, supportBuilding.CardData.BuildingSellingConfig,
+        buildingUpgradesController, newCurrencyCounter);
     }
 
-    private void SharedInit(int cardPlayCost,
+    private void SharedInit(int cardPlayCost, BuildingSellingConfig sellingConfig,
         IBuildingUpgradesController buildingUpgradesController, CurrencyCounter newCurrencyCounter)
     {
         _buildingUpgradesController = buildingUpgradesController;
@@ -204,7 +206,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         currencyCounter.OnCurrencyAdded += CheckStartParticlesCanUpgrade;
         currencyCounter.OnCurrencySpent += CheckStopParticlesCanUpgrade;
         
-        _sellBuildingMenu.Init(cardPlayCost);
+        _sellBuildingMenu.Init(cardPlayCost, sellingConfig);
     }
 
     public virtual void OnStatsUpdated()
@@ -332,6 +334,16 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         if (OnTurretUpgrade != null) { OnTurretUpgrade(CurrentBuildingLevel); }
     }   
 
+    public void ResetState()
+    {
+        DoResetState();
+        UpdateLevelText();
+        EnableButtons();
+        _sellBuildingMenu.ResetState();
+    }
+
+    protected abstract void DoResetState();
+    
     private void UpdateLevelText()
     {
         lvlText.text = CurrentBuildingLevel.ToString() + "/" + maxLevels.ToString(); // Tomeu: I moved this here and commented if-else (A B)
@@ -365,6 +377,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     {
     }
 
+    protected abstract void EnableButtons();
+
 
 
     // Animations
@@ -382,7 +396,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     protected void OnUpgraded()
     {
         OnBuildingUpgraded?.Invoke();
-        _sellBuildingMenu.AddSellValue(_upgradeCostsConfig.GetCostByLevel(CurrentBuildingLevel));
+        _sellBuildingMenu.AddSellValue(_upgradeCostsConfig.GetCostByLevel(CurrentBuildingLevel), true);
     }
 
 

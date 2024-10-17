@@ -272,6 +272,7 @@ public class BuildingPlacer : MonoBehaviour
         placedBuildings.Remove(building);
 
         BuildingCard buildingCard = building.BuildingCard;
+
         if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
             GameAudioManager.GetInstance().PlayTurretCardUnplaced(((TurretBuildingCard)buildingCard).CardParts.Body.bodyType);

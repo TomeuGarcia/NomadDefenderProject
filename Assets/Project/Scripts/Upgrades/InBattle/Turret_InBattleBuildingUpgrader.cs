@@ -59,6 +59,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, iconsDisplayData);
     }
 
+    protected override void DoResetState()
+    {
+        
+    }
+
     protected override void UpdateAllStatsView()
     {
         bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
@@ -76,6 +81,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     protected override void DisableButtons()
     {
         _allStatsUpgradeButton.DisableButton();
+    }
+
+    protected override void EnableButtons()
+    {
+        _allStatsUpgradeButton.EnableButton();
     }
 
 

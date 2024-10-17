@@ -56,10 +56,10 @@ public abstract class Building : MonoBehaviour
         PlacedTile = placedTile;
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingPlaced,
             PlacingParticlesPosition, Quaternion.identity);
-        GotPlaced();
+        DoGotPlaced();
     }
 
-    protected abstract void GotPlaced();
+    protected abstract void DoGotPlaced();
 
     public void GotUnplaced()
     {
@@ -69,7 +69,10 @@ public abstract class Building : MonoBehaviour
 
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingUnplaced,
             PlacingParticlesPosition, Quaternion.identity);
+        DoGotUnplaced();
     }
+    protected abstract void DoGotUnplaced();
+    
     public abstract void GotEnabledPlacing();
     public abstract void GotDisabledPlacing();
     public abstract void GotMovedWhenPlacing();
