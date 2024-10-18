@@ -32,6 +32,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
+    [Header("UNLOCKING")] 
+    [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
+    
     [Header("STEAM")]
     [SerializeField, Min(0)] private float _steamStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _steamCanvasGroup;
@@ -316,6 +319,8 @@ public class MainMenu : MonoBehaviour
         StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
         ServiceLocator.GetInstance().OptionalTutorialsStateManager.SetAllTutorialsNotDone();
 
+        _unlockableTrophiesManager.SetAllTrophiesLocked();
+        
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());
     }
