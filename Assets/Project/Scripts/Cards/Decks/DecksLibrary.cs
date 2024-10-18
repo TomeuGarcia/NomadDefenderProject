@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 
@@ -9,7 +10,8 @@ public class DecksLibrary : ScriptableObject
 {
     [Header("STARTER DECK DATA")]
     [SerializeField] protected CardDeckAsset startingDeck;
-    private UnlockableTrophyModel _startingDeckVictoryTrophy;
+    [SerializeField] private bool _manualTrophy;
+    [ShowIf("_manualTrophy")] [SerializeField] private UnlockableTrophyModel _startingDeckVictoryTrophy;
 
     [Header("GAME DECK DATA")]
     [SerializeField] protected CardDeckInUseData gameDeckData;
