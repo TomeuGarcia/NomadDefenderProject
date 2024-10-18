@@ -51,7 +51,7 @@ public class TurretBuilding : RangeBuilding
     public override Vector3 PlacingParticlesPosition => _upgradeParticlesPosition.position;
 
 
-    public const int MIN_PLAY_COST = 10;
+    public const int MIN_PLAY_COST = -1000;
 
 
     void Awake()

@@ -12,7 +12,7 @@ public class TurretCardDataModel : ScriptableObject
     [SerializeField, Range(MIN_CARD_LEVEL, MAX_CARD_LEVEL)] private int _cardLevel = 1;
     
     [Header("PLAY COST")]
-    [SerializeField, Min(0)] private int _cardPlayCost;
+    [SerializeField, Min(-10)] private int _cardPlayCost;
     [SerializeField] private BuildingSellingModel _buildingSelling;
 
     [Header("PARTS")] 
