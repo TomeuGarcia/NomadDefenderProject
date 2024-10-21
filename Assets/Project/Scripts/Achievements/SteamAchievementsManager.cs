@@ -1,6 +1,7 @@
 
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Steamworks;
 
 public class SteamAchievementsManager : IAchievementsManager
@@ -17,4 +18,15 @@ public class SteamAchievementsManager : IAchievementsManager
         SteamUserStats.SetAchievement(_achievementsMap[achievementType]);
         SteamUserStats.StoreStats();
     }
+
+    public bool IsAchievementUnlocked(AchievementType achievementType)
+    {
+        if (SteamUserStats.GetAchievement(_achievementsMap[achievementType], out bool achieved))
+        {
+            return achieved;
+        }
+
+        return false;
+    }
+
 }

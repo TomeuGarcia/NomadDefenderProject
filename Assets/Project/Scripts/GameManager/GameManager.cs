@@ -70,13 +70,43 @@ public class GameManager : MonoBehaviour
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
 
-        UnlockVictoryContent();
+        UnlockVictoryContent(ServiceLocator.GetInstance().AchievementsManager);
     }
 
-    private void UnlockVictoryContent()
+    private void UnlockVictoryContent(IAchievementsManager achievementsManager)
     {
         StarterDecksUnlocker.GetInstance().UnlockNextDeck();
         _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
+
+        if (decksLibrary.IsUsingFrostDeck())
+        {
+            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Frost);
+        }
+        else if (decksLibrary.IsUsingRepeaterDeck())
+        {
+            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Repeater);
+        }
+        else if (decksLibrary.IsUsingCurrencyDeck())
+        {
+            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Currency);
+        }
+        else if (decksLibrary.IsUsingBerserkerDeck())
+        {
+            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Berserker);
+        }
+
+        if (WonWithAllDecks(achievementsManager))
+        {
+            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_All);
+        }
+    }
+
+    private bool WonWithAllDecks(IAchievementsManager achievementsManager)
+    {
+        return achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Frost) &&
+               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Repeater) &&
+               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Currency) &&
+               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Berserker);
     }
     
     

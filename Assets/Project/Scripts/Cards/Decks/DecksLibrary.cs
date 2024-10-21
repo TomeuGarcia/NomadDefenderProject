@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
@@ -15,6 +16,12 @@ public class DecksLibrary : ScriptableObject
 
     [Header("GAME DECK DATA")]
     [SerializeField] protected CardDeckInUseData gameDeckData;
+    
+    [Header("ALL DECKS")]
+    [SerializeField] private CardDeckAsset _frostDeck;
+    [SerializeField] private CardDeckAsset _repeaterDeck;
+    [SerializeField] private CardDeckAsset _currencyDeck;
+    [SerializeField] private CardDeckAsset _berserkerDeck;
 
 
     public void SetStarterDeck(CardDeckAsset newStartingDeck, UnlockableTrophyModel startingDeckVictoryTrophy)
@@ -29,4 +36,31 @@ public class DecksLibrary : ScriptableObject
             _startingDeckVictoryTrophy);
     }
 
+
+    private bool IsUsingDeck(CardDeckAsset deckToCompareTo)
+    {
+        if (deckToCompareTo == null)
+        {
+            throw new NullReferenceException("DeckToCompareTo is Null");
+        }
+        
+        return startingDeck == deckToCompareTo;
+    }
+    
+    public bool IsUsingFrostDeck()
+    {
+        return IsUsingDeck(_frostDeck);
+    }
+    public bool IsUsingRepeaterDeck()
+    {
+        return IsUsingDeck(_repeaterDeck);
+    }
+    public bool IsUsingCurrencyDeck()
+    {
+        return IsUsingDeck(_currencyDeck);
+    }
+    public bool IsUsingBerserkerDeck()
+    {
+        return IsUsingDeck(_berserkerDeck);
+    }
 }
