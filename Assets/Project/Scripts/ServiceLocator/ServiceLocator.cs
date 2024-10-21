@@ -22,6 +22,7 @@ public class ServiceLocator : MonoBehaviour
     public ICardSpawnService CardSpawnService { get; set; }
     public IOptionalTutorialsStateManager OptionalTutorialsStateManager { get; set; }
     public ITutorialViewUtilities TutorialViewUtilities { get; set; }
+    public IAchievementsManager AchievementsManager { get; set; }
 
 
     private void Awake()
