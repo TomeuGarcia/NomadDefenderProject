@@ -84,6 +84,8 @@ public class DeckSelector : MonoBehaviour
         }
 
         deckSelectorVisuals.Init();
+        
+        AchievementDefinitions.UnlockAllStarterDecks.Check(numberOfUnlockedDecks);
     }
 
 

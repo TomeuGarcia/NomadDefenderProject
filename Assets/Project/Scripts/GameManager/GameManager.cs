@@ -78,38 +78,14 @@ public class GameManager : MonoBehaviour
         StarterDecksUnlocker.GetInstance().UnlockNextDeck();
         _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
 
-        if (decksLibrary.IsUsingFrostDeck())
-        {
-            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Frost);
-        }
-        else if (decksLibrary.IsUsingRepeaterDeck())
-        {
-            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Repeater);
-        }
-        else if (decksLibrary.IsUsingCurrencyDeck())
-        {
-            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Currency);
-        }
-        else if (decksLibrary.IsUsingBerserkerDeck())
-        {
-            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_Berserker);
-        }
-
-        if (WonWithAllDecks(achievementsManager))
-        {
-            achievementsManager.UnlockAchievement(AchievementType.StarterDeck_Victory_All);
-        }
+        AchievementDefinitions.StarterDeck_Victory_Frost.Check(decksLibrary.IsUsingFrostDeck());
+        AchievementDefinitions.StarterDeck_Victory_Repeater.Check(decksLibrary.IsUsingRepeaterDeck());
+        AchievementDefinitions.StarterDeck_Victory_Currency.Check(decksLibrary.IsUsingCurrencyDeck());
+        AchievementDefinitions.StarterDeck_Victory_Berserker.Check(decksLibrary.IsUsingBerserkerDeck());
+        AchievementDefinitions.StarterDeck_Victory_All.Check();
     }
 
-    private bool WonWithAllDecks(IAchievementsManager achievementsManager)
-    {
-        return achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Frost) &&
-               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Repeater) &&
-               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Currency) &&
-               achievementsManager.IsAchievementUnlocked(AchievementType.StarterDeck_Victory_Berserker);
-    }
-    
-    
+
     private IEnumerator DoStartVictory()
     {
         PauseMenu.GetInstance().GameCanBePaused = false;

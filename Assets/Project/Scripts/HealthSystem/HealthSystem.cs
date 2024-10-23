@@ -41,7 +41,6 @@ public class HealthSystem
     public void TakeDamage(int damageAmount, out bool hitArmor)
     {
         UpdateType type;
-
         hitArmor = HasArmor();
 
         if (hitArmor)

@@ -120,6 +120,8 @@ public class CurrencyCounter : MonoBehaviour
         _addCurrencyAnimation = StartCoroutine(ShowAddedCurrency(amount));
         currencyCount += amount;
         UpdateCurrencyCountText(currencyCount);
+        
+        AchievementDefinitions.HoardCurrencyAmount.Check(currencyCount);
 
         if (OnCurrencyAdded != null) OnCurrencyAdded();
     }

@@ -172,6 +172,11 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     protected virtual void DoTakeDamage(TurretDamageAttack damageAttack, Action<TurretDamageAttackResult> takeDamageResultCallback)
     {
+        if (healthSystem.IsDead())
+        {
+            return;
+        }
+        
         healthHUD.Show();
 
         bool hadArmor = healthSystem.HasArmor();
@@ -197,7 +202,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         }
 
         SpawntakeDamageText(damageAttack.Damage, hitArmor);
-
+        AchievementDefinitions.OverkillDamage.Check(damageAttack.Damage);
         
         TurretDamageAttackResult result = 
             new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor);
