@@ -10,6 +10,7 @@ public class SelectableDeck : MonoBehaviour
 {
     [Header("CARDS DECK")]
     [SerializeField] private CardDeckAsset _deck;
+    [SerializeField] private UnlockableTrophyModel _deckVictoryTrophy;
 
     [Header("RUN CONTENT")]
     [SerializeField] private RunUpgradesContent runContent;
@@ -56,7 +57,9 @@ public class SelectableDeck : MonoBehaviour
 
     public bool FinishedArranging { get; private set; }
 
+    public UnlockableTrophyModel DeckVictoryTrophy => _deckVictoryTrophy;
 
+    
     [System.Serializable]
     public class RunUpgradesContent
     {

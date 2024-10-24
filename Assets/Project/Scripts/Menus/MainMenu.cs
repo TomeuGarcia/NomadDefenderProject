@@ -16,6 +16,8 @@ public class MainMenu : MonoBehaviour
     [Header("BUTTONS")]
     [SerializeField] private TextMeshProUGUI playButtonText;
     [SerializeField] private TextMeshProUGUI newGameButtonText;
+    [SerializeField] private TextMeshProUGUI newGameYesButtonText;
+    [SerializeField] private TextMeshProUGUI newGameNoButtonText;
     [SerializeField] private TextMeshProUGUI creditsButtonText;
     [SerializeField] private TextMeshProUGUI optionsButtonText;
     [SerializeField] private TextMeshProUGUI quitButtonText;
@@ -30,6 +32,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextDecoder playButtonTextDecoder;
     [SerializeField] private TextDecoder quitTextDecoder;
 
+    [Header("UNLOCKING")] 
+    [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
+    
     [Header("STEAM")]
     [SerializeField, Min(0)] private float _steamStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _steamCanvasGroup;
@@ -49,6 +54,16 @@ public class MainMenu : MonoBehaviour
     [Header("COMING CHANGES")]
     [SerializeField] private ComingChangesMenu _comingChangesMenu;
 
+    [Header("PROCEED NEW GAME")] 
+    [SerializeField] private GameObject _proceedNewGame;
+    [SerializeField] private CanvasGroup _proceedNewGameCG;
+    [SerializeField] private GameObject _defaultMenu;
+    [SerializeField] private CanvasGroup _defaultMenuCG;
+    [SerializeField] private TextDecoder _proceedNewGame_Question;
+    [SerializeField] private TextDecoder _proceedNewGame_DataWillBeDeleted;
+    [SerializeField] private TextDecoder _proceedNewGame_No;
+    [SerializeField] private TextDecoder _proceedNewGame_Yes;
+    
 
     private int titleClickCount = 0;
     private string originalTitleString;
@@ -59,7 +74,9 @@ public class MainMenu : MonoBehaviour
 
     public const string STEAM_WISHLIST_LINK = "https://store.steampowered.com/app/2712740/Nomad_Defender/?l=english";
 
-
+    private bool CanOnlyNewGame => !playButtonGO.activeInHierarchy;
+    
+    
     private void Awake()
     {
         canInteract = true;
@@ -76,8 +93,7 @@ public class MainMenu : MonoBehaviour
             optionsButton.GetComponent<RectTransform>().position += Vector3.right * offset;
             creditsButtonDecoder.GetComponent<RectTransform>().position += Vector3.right * offset;
         }
-
-        SetupTextDecoderManager();
+        SetupTextDecoderManager(true);
 
         obstacleTilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         obstacleTilesMaterial.SetFloat("_AdditionalErrorWireStep2", 0f);
@@ -90,6 +106,9 @@ public class MainMenu : MonoBehaviour
         PauseMenu.GetInstance().HideUI();
 
         StartCoroutine(PlayShowSteamAnimation());
+        
+        _defaultMenu.SetActive(true);
+        _proceedNewGame.SetActive(false);
     }
     private void Start()
     {
@@ -100,11 +119,12 @@ public class MainMenu : MonoBehaviour
 
     
 
-    private void SetupTextDecoderManager()
+    private void SetupTextDecoderManager(bool withTitle)
     {
-        List<TextDecoder> textDecoders = new List<TextDecoder>();
-        textDecoders.Add(titleTextDecoder);
-        if (playButtonGO.activeInHierarchy) { textDecoders.Add(playButtonTextDecoder); }
+        List<TextDecoder> textDecoders = new List<TextDecoder>(6);
+        
+        if (withTitle) textDecoders.Add(titleTextDecoder);
+        if (playButtonGO.activeInHierarchy) textDecoders.Add(playButtonTextDecoder);
         textDecoders.Add(newGameButtonTextDecoder);
         textDecoders.Add(optionsButtonTextDecoder);
         textDecoders.Add(quitTextDecoder);
@@ -136,24 +156,22 @@ public class MainMenu : MonoBehaviour
         if (!canInteract) return;
 
         canInteract = false;
-        //PauseMenu.GetInstance().gameCanBePaused = true;
 
         ButtonClickedPunch(newGameButtonText);
 
-
-        if (skipFirstBattle)
+        
+        if (CanOnlyNewGame)
         {
-            TutorialsSaverLoader.GetInstance().ResetTutorialsExceptFirstBattle();
+            DoYesProceedNewGame();
         }
         else
         {
-            TutorialsSaverLoader.GetInstance().ResetTutorials();
+            StopAllCoroutines();
+            _steamCanvasGroup.alpha = 1;
+            _upcomingChangesCanvasGroup.alpha = 1;
+            StartCoroutine(ShowProceedNewGame());
         }
-        StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
-        ServiceLocator.GetInstance().OptionalTutorialsStateManager.SetAllTutorialsNotDone();
-
-        ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
-        StartCoroutine(DoPlay());
+        
     }
 
     public void Play()
@@ -205,8 +223,6 @@ public class MainMenu : MonoBehaviour
 
     public void Title()
     {
-        if (!canInteract) return;
-
         titleClickCount++;
         titleClickCount %= 10;
 
@@ -280,6 +296,91 @@ public class MainMenu : MonoBehaviour
         //textDecoderManager.ResetTexts();
     }
 
+
+    public void Yes_ProceedNewGame()
+    {
+        if (canInteract) return;
+        canInteract = true;
+        
+        ButtonClickedPunch(newGameYesButtonText);
+        DoYesProceedNewGame();
+    }
+
+    private void DoYesProceedNewGame()
+    {
+        if (skipFirstBattle)
+        {
+            TutorialsSaverLoader.GetInstance().ResetTutorialsExceptFirstBattle();
+        }
+        else
+        {
+            TutorialsSaverLoader.GetInstance().ResetTutorials();
+        }
+        StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
+        ServiceLocator.GetInstance().OptionalTutorialsStateManager.SetAllTutorialsNotDone();
+
+        _unlockableTrophiesManager.SetAllTrophiesLocked();
+        
+        ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
+        StartCoroutine(DoPlay());
+    }
+    
+    public void No_ProceedNewGame()
+    {
+        if (canInteract) return;
+        canInteract = true;
+        
+        ButtonClickedPunch(newGameNoButtonText);
+        
+        StartCoroutine(HideProceedNewGame());
+    }
+
+    private IEnumerator ShowProceedNewGame()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+            
+        _defaultMenuCG.DOFade(0, 0.1f);
+        _steamCanvasGroup.DOFade(0, 0.1f);
+        _upcomingChangesCanvasGroup.DOFade(0, 0.1f);
+        
+        _defaultMenu.SetActive(false);
+        _proceedNewGame.SetActive(true);
+        _proceedNewGame_Question.ClearDecoder();
+        _proceedNewGame_DataWillBeDeleted.ClearDecoder();
+        _proceedNewGame_No.ClearDecoder();
+        _proceedNewGame_Yes.ClearDecoder();
+        
+        yield return new WaitForSeconds(0.1f);
+        _proceedNewGameCG.alpha = 1;
+        _proceedNewGame_Question.Activate();
+        
+        yield return new WaitForSeconds(0.3f);
+        _proceedNewGame_DataWillBeDeleted.Activate();
+        
+        yield return new WaitForSeconds(0.3f);
+        _proceedNewGame_No.Activate();
+        
+        yield return new WaitForSeconds(0.3f);
+        _proceedNewGame_Yes.Activate();
+    }
+    private IEnumerator HideProceedNewGame()
+    {
+        yield return new WaitForSeconds(0.2f);
+        
+        _defaultMenu.SetActive(true);
+        _proceedNewGame.SetActive(false);
+
+        _proceedNewGameCG.DOFade(0, 0.1f);
+        
+        
+        yield return new WaitForSeconds(0.1f);
+        _upcomingChangesCanvasGroup.alpha = _steamCanvasGroup.alpha = _defaultMenuCG.alpha = 1;
+        SetupTextDecoderManager(false);
+        textDecoderManager.DecodeTexts();
+        StartCoroutine(PlayShowSteamAnimation());
+    }
+    
 
     private IEnumerator PlayShowSteamAnimation()
     {

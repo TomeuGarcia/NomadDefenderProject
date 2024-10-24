@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class SlowBase : TurretPartBase_Prefab
     private int currentLvl = 0;
 
     [SerializeField] private GameObject slowPlane;
-    private static Dictionary<Enemy, SlowData> slowedEnemies = new Dictionary<Enemy, SlowData>();
+    private static Dictionary<Enemy, SlowData> s_slowedEnemies = new Dictionary<Enemy, SlowData>();
+    private List<Enemy> _slowedEnemiesByThis = new List<Enemy>();
     [SerializeField] private ParticleTypes _slowBreakParticleType;
 
     private float _particleLookAtHeightOffset = 0f;
@@ -24,6 +26,7 @@ public class SlowBase : TurretPartBase_Prefab
     private Material slowPlaneMaterial;
 
     private IParticleFactory _particleFactory;
+    private RangeBuilding _ownerBuilding;
 
 
     private void Awake()
@@ -33,12 +36,19 @@ public class SlowBase : TurretPartBase_Prefab
         _particleFactory = ServiceLocator.GetInstance().ParticleFactory;
     }
 
+    private void OnDestroy()
+    {
+        _ownerBuilding.OnEnemyEnterRange -= SlowEnemy;
+        _ownerBuilding.OnEnemyExitRange -= StopEnemySlow;
+    }
+
     override public void Init(TurretBuilding turretOwner, float turretRange) 
     {
         base.Init(turretOwner, turretRange);
+        _ownerBuilding = turretOwner;
 
-        turretOwner.OnEnemyEnterRange += SlowEnemy;
-        turretOwner.OnEnemyExitRange += StopEnemySlow;
+        _ownerBuilding.OnEnemyEnterRange += SlowEnemy;
+        _ownerBuilding.OnEnemyExitRange += StopEnemySlow;
 
         slowPlane.transform.localScale = Vector3.one * ((float)turretRange / 10.0f);
 
@@ -47,9 +57,10 @@ public class SlowBase : TurretPartBase_Prefab
     override public void InitAsSupportBuilding(SupportBuilding supportOwner, float supportRange)
     {
         base.InitAsSupportBuilding(supportOwner, supportRange);
+        _ownerBuilding = supportOwner;
 
-        supportOwner.OnEnemyEnterRange += SlowEnemy;
-        supportOwner.OnEnemyExitRange += StopEnemySlow;
+        _ownerBuilding.OnEnemyEnterRange += SlowEnemy;
+        _ownerBuilding.OnEnemyExitRange += StopEnemySlow;
 
         UpdateAreaPlaneSize(supportOwner);
 
@@ -72,7 +83,7 @@ public class SlowBase : TurretPartBase_Prefab
 
         currentSlowSpeedCoef = slowSpeedCoefs[currentLvl];
 
-        foreach (KeyValuePair<Enemy, SlowData> slowedEnemy in slowedEnemies)
+        foreach (KeyValuePair<Enemy, SlowData> slowedEnemy in s_slowedEnemies)
         {
             if(slowedEnemy.Value.slowCoefApplied > currentSlowSpeedCoef)
             {
@@ -93,31 +104,35 @@ public class SlowBase : TurretPartBase_Prefab
 
     private void SlowEnemy(Enemy enemy)
     {
-        if(slowedEnemies.ContainsKey(enemy))
+        if(s_slowedEnemies.ContainsKey(enemy))
         {
-            slowedEnemies[enemy].slowQuantity += 1;
+            s_slowedEnemies[enemy].slowQuantity += 1;
         }
         else
         {
             enemy.SetMoveSpeed(currentSlowSpeedCoef);
-            slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = currentSlowSpeedCoef };
+            s_slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = currentSlowSpeedCoef };
             SpawnSlowBreakParticles(enemy);
         }
+        
+        _slowedEnemiesByThis.Add(enemy);
     }
 
     private void StopEnemySlow(Enemy enemy)
     {
-        if (!slowedEnemies.ContainsKey(enemy)) return;
+        if (!s_slowedEnemies.ContainsKey(enemy)) return;
 
-        slowedEnemies[enemy].slowQuantity -= 1;
+        s_slowedEnemies[enemy].slowQuantity -= 1;
         
-        if(slowedEnemies[enemy].slowQuantity == 0)
+        if(s_slowedEnemies[enemy].slowQuantity == 0)
         {
-            slowedEnemies.Remove(enemy);
+            s_slowedEnemies.Remove(enemy);
             SpawnSlowBreakParticles(enemy);
 
             enemy.SetMoveSpeed(1.0f);
         }
+        
+        _slowedEnemiesByThis.Remove(enemy);
     }
 
     private void SpawnSlowBreakParticles(Enemy enemy)
@@ -126,5 +141,34 @@ public class SlowBase : TurretPartBase_Prefab
             .Create(_slowBreakParticleType, transform.position + Vector3.up * _particleLookAtHeightOffset, Quaternion.identity);
         particle.LookAt(enemy.Position);
         particle.position = enemy.Position;
+    }
+
+    public override void DoOnBuildingDisableStart()
+    {
+        base.DoOnBuildingDisableStart();
+        baseCollider.GetCollider().enabled = false;
+
+        StopSlowingEnemiesByThis();
+    }
+
+    public override void DoOnBuildingDisableFinish()
+    {
+        base.DoOnBuildingDisableFinish();
+        baseCollider.GetCollider().enabled = true;
+    }
+    
+    
+    public override void OnGetUnplaced()
+    {
+        StopSlowingEnemiesByThis();
+    }
+
+    private void StopSlowingEnemiesByThis()
+    {
+        Enemy[] tempSlowedEnemiesByThis = _slowedEnemiesByThis.ToArray();
+        foreach (Enemy enemy in tempSlowedEnemiesByThis)
+        {
+            StopEnemySlow(enemy);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,7 @@ public class SupportCardDataModel : ScriptableObject
 {
     [Header("PLAY COST")]
     [SerializeField, Min(0)] private int _cardPlayCost;
+    [SerializeField] private BuildingSellingModel _buildingSelling;
 
     [Header("PARTS")] 
     [SerializeField] private SupportCardPartsGroup _partsGroup;
@@ -16,6 +18,7 @@ public class SupportCardDataModel : ScriptableObject
     
     public int CardPlayCost => _cardPlayCost;
     public SupportCardPartsGroup SharedPartsGroup => _partsGroup;
+    public BuildingSellingConfig MakeBuildingSellingConfig() => new BuildingSellingConfig(_buildingSelling.Config);
 
     public SupportCardPartsGroup MakePartsGroup()
     {

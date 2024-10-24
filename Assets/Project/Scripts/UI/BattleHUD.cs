@@ -614,6 +614,11 @@ public class BattleHUD : MonoBehaviour
     }
 
 
+    public void AddHasDeckCardIconAndShow()
+    {
+        AddHasDeckCardIcon();
+        ShowDeckUI();
+    }
     public void AddHasDeckCardIcon()
     {
         ++lastSpriteHasCardIndex;

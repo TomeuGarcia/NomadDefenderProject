@@ -13,13 +13,18 @@ public class OWMapDecoratorSettings : ScriptableObject
     [SerializeField] public bool battleBeforeLastNode = true;
     [SerializeField, Min(0)] public int midBattleStartIndex = 5;
     [SerializeField, Min(0)] public int lateBattleStartIndex = 8;
+    [SerializeField, Min(0)] public int bossBattleStartIndex = 12;
 
 
     private void OnValidate()
     {
-        if (midBattleStartIndex > lateBattleStartIndex)
+        if (midBattleStartIndex >= lateBattleStartIndex)
         {
-            ++lateBattleStartIndex;
+            lateBattleStartIndex = midBattleStartIndex + 1;
+        }
+        if (lateBattleStartIndex >= bossBattleStartIndex)
+        {
+            bossBattleStartIndex = lateBattleStartIndex + 1;
         }
     }
 

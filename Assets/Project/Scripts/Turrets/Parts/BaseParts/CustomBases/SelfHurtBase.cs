@@ -108,6 +108,17 @@ public class SelfHurtBase : TurretPartBase_Prefab
         HideNodeBinder();
         rotatingMesh.DOBlendableRotateBy(Vector3.up * 180f, 8.0f).SetLoops(-1);
     }
+    
+    public override void OnGetUnplaced()
+    {
+        isPlaced = false;
+        PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+        owner.OnShowRangePlane -= OnRangePlaneShown;
+        owner.OnHideRangePlane -= OnRangePlaneHidden;
+
+        rangePlane.gameObject.SetActive(false);
+        HideNodeBinder();
+    }
 
     override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {
@@ -124,6 +135,11 @@ public class SelfHurtBase : TurretPartBase_Prefab
         }
 
         DamageHealthiestLocation(pathLocationDamage);
+    }
+    
+    public override void ResetAreaPlaneSize(SupportBuilding supportOwner)
+    {
+        UpdateAreaPlaneSize(supportOwner, rangePlane, rangePlaneMaterial);
     }
 
     private void UpdateExplosionDamage()
@@ -151,6 +167,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void OnPathLocationTakesDamage(PathLocation pathLocation)
     {
+        if (AbilityIsDisabled) return;
+        
         ConnectBinderWithPathLocation();
 
         DamageEnemies(0.3f);

@@ -115,7 +115,7 @@ public class PauseMenu : MonoBehaviour
             buttonText.color = fadedInColor;
         }
         //Camera.main.GetComponent<OWCameraMovement>().CanDrag(false);//accedir a cameraMovement per quan estic en batalla
-        StartCoroutine(textManager.DecodeTexts());
+        StartCoroutine(textManager.DecodeTextsWithDelay());
         EventSystem.current.SetSelectedGameObject(null);
         //GameAudioManager.GetInstance().PausedMusicPitch();
         //textManager.SetActive(true);

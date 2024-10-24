@@ -89,7 +89,7 @@ public class DeckSelector : MonoBehaviour
 
     public void OnDeckSelected(SelectableDeck selectableDeck)
     {
-        deckLibrary.SetStarterDeck(selectableDeck.Deck);
+        deckLibrary.SetStarterDeck(selectableDeck.Deck, selectableDeck.DeckVictoryTrophy);
 
         SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
 

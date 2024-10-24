@@ -59,6 +59,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         TurretIconCanvasDisplay.InitDisplaysArray(_iconDisplays, iconsDisplayData);
     }
 
+    protected override void DoResetState()
+    {
+        
+    }
+
     protected override void UpdateAllStatsView()
     {
         bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
@@ -78,6 +83,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _allStatsUpgradeButton.DisableButton();
     }
 
+    protected override void EnableButtons()
+    {
+        _allStatsUpgradeButton.EnableButton();
+    }
+
 
     protected override void CheckHoveredButtonsCanNowUpgrade()
     {
@@ -89,6 +99,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     // Animations
     protected override void PlayOpenAnimation()
     {
+        base.PlayOpenAnimation();
         if (closeAnimationCoroutine != null)
         {
             StopCoroutine(closeAnimationCoroutine);
@@ -141,6 +152,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void PlayCloseAnimation()
     {
+        base.PlayCloseAnimation();
         if (openAnimationCoroutine != null)
         {
             StopCoroutine(openAnimationCoroutine);

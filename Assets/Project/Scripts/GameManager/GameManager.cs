@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [Header("DECK DATA")]
     [SerializeField] protected DecksLibrary decksLibrary;
 
+    [Header("TROPHIES")] 
+    [SerializeField] private CardDeckInUseData _cardDeckInUseData;
+    [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
+
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
     [SerializeField] protected CanvasGroup cgVictoryHolder;
@@ -66,8 +70,16 @@ public class GameManager : MonoBehaviour
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
 
-        StarterDecksUnlocker.GetInstance().UnlockNextDeck();
+        UnlockVictoryContent();
     }
+
+    private void UnlockVictoryContent()
+    {
+        StarterDecksUnlocker.GetInstance().UnlockNextDeck();
+        _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
+    }
+    
+    
     private IEnumerator DoStartVictory()
     {
         PauseMenu.GetInstance().GameCanBePaused = false;

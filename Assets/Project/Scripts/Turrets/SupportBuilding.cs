@@ -10,9 +10,11 @@ public class SupportBuilding : RangeBuilding
 
 
     private SupportPartBase turretPartBase;
+    
+    public SupportCardData CardData { get; private set; }
 
 
-    [SerializeField]GameObject[] visualUpgrades;
+    [SerializeField] GameObject[] visualUpgrades;
     [Header("HOLDERS")]
     [SerializeField] protected Transform baseHolder;
 
@@ -20,22 +22,26 @@ public class SupportBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] private Transform _upgradeParticlesPosition;
     
-
+    public override Vector3 PlacingParticlesPosition => basePart.PlacedParticlesSpot;
 
 
     void Awake()
     {
         AwakeInit();
-
-        foreach(GameObject go in visualUpgrades)
-        {
-            go.SetActive(false);
-        }
+        ResetVisualUpgrades();
     }
     protected override void AwakeInit()
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
+    }
+
+    private void ResetVisualUpgrades()
+    {
+        foreach(GameObject go in visualUpgrades)
+        {
+            go.SetActive(false);
+        }
     }
 
     private void OnDestroy()
@@ -47,13 +53,15 @@ public class SupportBuilding : RangeBuilding
     }
 
 
-    public void Init(SupportCardStatsController statsController, SupportCardData supportCardData, 
+    public void Init(BuildingCard buildingCard, SupportCardStatsController statsController, SupportCardData supportCardData, 
         CurrencyCounter currencyCounter, Sprite abilitySprite, Color abilityColor)
     {
+        BuildingCard = buildingCard;
         _statsController = statsController;
         _statsController.OnStatsUpdated += OnControllerUpdatedStats;
 
-        this.turretPartBase = supportCardData.SharedPartsGroup.Base;
+        CardData = supportCardData;
+        this.turretPartBase = CardData.SharedPartsGroup.Base;
 
         basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
@@ -64,7 +72,6 @@ public class SupportBuilding : RangeBuilding
         Upgrader.InitSupport(this, _statsController, currencyCounter, abilitySprite, abilityColor, supportCardData);
 
         DisableFunctionality();
-        basePart.PlacedParticleSystem.gameObject.SetActive(false);
     }
 
     protected override void UpdateRange()
@@ -105,21 +112,29 @@ public class SupportBuilding : RangeBuilding
         basePart.SetDefaultMaterial();
     }
 
-    public override void GotPlaced()
+    protected override void DoGotPlaced()
     {
         HideRangePlane();
         EnableFunctionality();
         basePart.OnGetPlaced();
 
         basePart.MeshTransform.DOPunchScale(Vector3.up * -0.3f, 0.7f, 7);
-        
-        basePart.PlacedParticleSystem.gameObject.SetActive(true);
-        basePart.PlacedParticleSystem.Play();
 
         Upgrader.OnBuildingOwnerPlaced();
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         InvokeOnPlaced();
+    }
+
+    protected override void DoGotUnplaced()
+    {
+        _statsController.ResetUpgradeLevel();
+        ResetVisualUpgrades();
+        basePart.OnGetUnplaced();
+        basePart.ResetUpgrades();
+        basePart.ResetAreaPlaneSize(this);
+        upgrader.ResetState();
+        UpdateRange();
     }
 
     public override void GotEnabledPlacing()
