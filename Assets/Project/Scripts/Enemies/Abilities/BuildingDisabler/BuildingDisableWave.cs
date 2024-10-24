@@ -8,16 +8,21 @@ using UnityEngine;
 public class BuildingDisableWave : RecyclableObject
 {
     [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private Transform _EMPTransform;
     private Material _mashMaterial;
     private BuildingDisableWaveConfig _config;
     
     private Transform MeshTransform => _meshRenderer.transform;
 
-
+    private Vector3 _EMPStartPosition;
+    private Quaternion _EMPStartRotation;
     
     private void Awake()
     {
         _mashMaterial = _meshRenderer.material;
+
+        _EMPStartPosition = _EMPTransform.position;
+        _EMPStartRotation = _EMPTransform.localRotation;
     }
 
     internal override void RecycledInit()
@@ -37,6 +42,12 @@ public class BuildingDisableWave : RecyclableObject
     public void Init(BuildingDisableWaveConfig config)
     {
         _config = config;
+
+        MeshTransform.localScale = Vector3.zero;
+        _EMPTransform.localPosition = _EMPStartPosition;
+        _EMPTransform.localRotation = _EMPStartRotation;
+        _EMPTransform.gameObject.SetActive(true);
+
         StartCoroutine(Sequence());
     }
 
@@ -50,7 +61,11 @@ public class BuildingDisableWave : RecyclableObject
 
     private IEnumerator PlayAnimation()
     {
-        MeshTransform.localScale = Vector3.zero;
+        _EMPTransform.DOLocalMove(_config.DropAnimation.EMPEndPosition, _config.DropAnimation.Duration).SetEase(_config.DropAnimation.Ease);
+        _EMPTransform.DOLocalRotate(_config.DropAnimation.EMPEndRotation, _config.DropAnimation.Duration).SetEase(_config.DropAnimation.Ease);
+        yield return new WaitForSeconds(_config.DropAnimation.Duration);
+        _EMPTransform.gameObject.SetActive(false);
+
         MeshTransform.DOScale(Vector3.one * (_config.Radius * 2), _config.Animation.Duration)
             .SetEase(Ease.OutQuart);
 
