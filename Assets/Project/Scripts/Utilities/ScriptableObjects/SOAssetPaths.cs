@@ -20,6 +20,8 @@ public static class SOAssetPaths
     public const string LEVEL_CREATION = MENU_ROOT + "LevelCreation/";
     public const string LEVEL_CREATION_BRUSHES = LEVEL_CREATION + "Brushes/";
 
+    public const string GAME_RUN = MENU_ROOT + "Run/";
+    
     public const string TD_GAME = MENU_ROOT + "TD Game/";
     public const string TD_CURRENCYDROP = TD_GAME + "Currency Drop/";
 
