@@ -11,6 +11,7 @@ public class CardDeckInUseData : ScriptableObject
     private CardDeckAsset _starterDeck;
     private CardDeckContent _currentDeckContent;
     public UnlockableTrophyModel WinTrophyModel { get; private set; }
+    public CardDeckAsset StarterDeck => _starterDeck;
 
     public void InitializeForRun(CardDeckAsset starterDeck, ICardSpawnService cardSpawnService,
         UnlockableTrophyModel winTrophyModel)

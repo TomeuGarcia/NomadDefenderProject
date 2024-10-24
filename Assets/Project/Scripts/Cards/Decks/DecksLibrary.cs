@@ -16,6 +16,7 @@ public class DecksLibrary : ScriptableObject
 
     [Header("GAME DECK DATA")]
     [SerializeField] protected CardDeckInUseData gameDeckData;
+    public CardDeckInUseData DeckInUse => gameDeckData;
     
     [Header("ALL DECKS")]
     [SerializeField] private CardDeckAsset _frostDeck;

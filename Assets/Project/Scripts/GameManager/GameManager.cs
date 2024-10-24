@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,6 +14,9 @@ public class GameManager : MonoBehaviour
     [Header("TROPHIES")] 
     [SerializeField] private CardDeckInUseData _cardDeckInUseData;
     [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
+
+    [Header("RUN STATE")] 
+    [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
@@ -61,6 +65,8 @@ public class GameManager : MonoBehaviour
         PauseMenu.GetInstance().GameCanBePaused = true;
         
         _watcherFace.SetActive(false);
+        
+        _runStateInit.Value.Init(decksLibrary.DeckInUse);
     }
 
     [Button()]
@@ -70,10 +76,10 @@ public class GameManager : MonoBehaviour
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
 
-        UnlockVictoryContent(ServiceLocator.GetInstance().AchievementsManager);
+        UnlockVictoryContent();
     }
 
-    private void UnlockVictoryContent(IAchievementsManager achievementsManager)
+    private void UnlockVictoryContent()
     {
         StarterDecksUnlocker.GetInstance().UnlockNextDeck();
         _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
@@ -125,6 +131,8 @@ public class GameManager : MonoBehaviour
 
         SceneLoader.GetInstance().StartLoadGameEndCredits();
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
+        
+        SharedFinishRun();
     }
 
     [Button()]
@@ -159,7 +167,8 @@ public class GameManager : MonoBehaviour
             globalVolume.profile = initVol;
             yield return new WaitForSeconds(0.1f);
         }
-        
+
+        SharedFinishRun();
     }
 
     private void GameOverFinishLoadScene()
@@ -209,6 +218,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(3f);
 
+    }
+
+
+    private void SharedFinishRun()
+    {
+        _runStateInit.Value.Finish();
     }
 
 
