@@ -1,6 +1,7 @@
 public interface IRunStateUpdate 
 {
     void IncrementNodesReached();
+    void IncrementDestroyedNodes();
     void IncrementPlacedBuildings();
     void IncrementUpgradedBuildings();
     void AddDamageDealt(int damageDealt);

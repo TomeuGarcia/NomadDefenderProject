@@ -56,6 +56,7 @@ public class PathLocation : MonoBehaviour
     public delegate void PathLocationAction(PathLocation thisPathLocation);
     public delegate void PathLocationAction2();
     public event PathLocationAction OnDeath;
+    public static event PathLocationAction OnDeathGlobal;
     public static event PathLocationAction OnTakeDamage;
     public static event PathLocationAction2 OnHealthChanged;
 
@@ -136,6 +137,7 @@ public class PathLocation : MonoBehaviour
     private void Die()
     {
         if (OnDeath != null) OnDeath(this);
+        if (OnDeathGlobal != null) OnDeathGlobal(this);
     }
 
 

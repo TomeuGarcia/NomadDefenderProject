@@ -14,6 +14,7 @@ namespace Project.Scripts.RunResults
 
         private void OnEnable()
         {
+            PathLocation.OnDeathGlobal += OnPathLocationDestroyed;
             InBattleBuildingUpgrader.OnBuildingUpgraded += OnBuildingUpgraded;
             BuildingPlacer.OnBuildingPlacedGlobal += OnBuildingPlacedGlobal;
             Enemy.OnTakeDamage += OnEnemyTakesDamage;
@@ -21,12 +22,18 @@ namespace Project.Scripts.RunResults
         }
         private void OnDisable()
         {
+            PathLocation.OnDeathGlobal -= OnPathLocationDestroyed;
             InBattleBuildingUpgrader.OnBuildingUpgraded -= OnBuildingUpgraded;
             BuildingPlacer.OnBuildingPlacedGlobal -= OnBuildingPlacedGlobal;
             Enemy.OnTakeDamage -= OnEnemyTakesDamage;
             Enemy.OnDealDamage -= OnEnemyDealsDamage;
         }
 
+
+        private void OnPathLocationDestroyed(PathLocation pathLocation)
+        {
+            RunStateUpdate.IncrementDestroyedNodes();
+        }
 
         private void OnBuildingUpgraded()
         {

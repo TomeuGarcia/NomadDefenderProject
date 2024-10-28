@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         
         _watcherFace.SetActive(false);
         
-        _runStateInit.Value.Init(decksLibrary.DeckInUse);
+        _runStateInit.Value.Init(decksLibrary.DeckInUse.StarterDeck, decksLibrary.DeckInUse.CurrentDeckContent);
     }
 
     [Button()]
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
         SceneLoader.GetInstance().StartLoadGameEndCredits();
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
         
-        SharedFinishRun();
+        SharedFinishRun(true);
     }
 
     [Button()]
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        SharedFinishRun();
+        SharedFinishRun(false);
     }
 
     private void GameOverFinishLoadScene()
@@ -221,9 +221,9 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void SharedFinishRun()
+    private void SharedFinishRun(bool victory)
     {
-        _runStateInit.Value.Finish();
+        _runStateInit.Value.Finish(victory);
     }
 
 

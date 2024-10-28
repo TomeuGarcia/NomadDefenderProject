@@ -1,5 +1,5 @@
 public interface IRunStateInitialization
 {
-    void Init(CardDeckInUseData deckInUse);
-    void Finish();
+    void Init(CardDeckAsset starterDeck, CardDeckContent currentDeckContent);
+    void Finish(bool victory);
 }

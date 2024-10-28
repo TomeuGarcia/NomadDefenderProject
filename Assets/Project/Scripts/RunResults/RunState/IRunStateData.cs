@@ -1,8 +1,12 @@
 public interface IRunStateData 
 {
-    CardDeckInUseData DeckInUse { get; }
+    bool Victory { get; }
+    CardDeckAsset StarterDeck { get; }
+    CardDeckContent DeckContent { get; }
     float RunDuration { get; }
+    string RunDurationAsString();
     int NodesReached { get; }
+    int DestroyedNodes { get; }
     
     int TotalBuildingsPlaced { get; }
     int TotalBuildingsUpgraded { get; }
