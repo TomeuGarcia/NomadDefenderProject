@@ -52,7 +52,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     public bool CanBeTargetedFlag { get; set; }
     
     public EnemyWaveSpawner SpawnerOwner { get; private set; }
-    
+
+    public static Action<EnemyTypeConfig, int> OnTakeDamage;
+    public static Action<EnemyTypeConfig, int> OnDealDamage;
 
     private void Awake()
     {
@@ -156,6 +158,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
             //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
         }
 
+        OnDealDamage?.Invoke(_typeConfig, damage);
         Suicide();
     }
 
@@ -201,6 +204,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
             Die();
         }
 
+        OnTakeDamage?.Invoke(_typeConfig, damageAttack.Damage);
         SpawntakeDamageText(damageAttack.Damage, hitArmor);
         AchievementDefinitions.OverkillDamage.Check(damageAttack.Damage);
         

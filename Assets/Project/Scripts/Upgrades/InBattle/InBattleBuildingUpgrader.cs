@@ -3,6 +3,7 @@ using DG.Tweening;
 using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,6 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] private BuildingCard.CardBuildingType buildingType = BuildingCard.CardBuildingType.NONE;
     protected int maxLevels;
 
-
     [Header("FEEDBACK")]
     [SerializeField] private ParticleSystem canUpgradeParticles;
     private bool canUpgardeParticlesAreActive = false;
@@ -57,6 +57,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] protected Image backgroundImage;
     [SerializeField] protected CanvasGroup cgLvlText;
     [SerializeField] protected CanvasGroup cgCostText;
+
     protected Coroutine openAnimationCoroutine = null;
     protected Coroutine closeAnimationCoroutine = null;
 

@@ -8,13 +8,12 @@ public class ResultsScreen : MonoBehaviour
 {
     [SerializeField] private InterfaceReference<IRunStateData, ScriptableObject> _runStateData;
     private IRunStateData RunStateData => _runStateData.Value;
-
-
+    
+    
     private void Awake()
     {
         Init();
     }
-
 
     private void Init()
     {
@@ -27,4 +26,5 @@ public class ResultsScreen : MonoBehaviour
         AchievementDefinitions.VictoryWithoutTakingDamage.Check(RunStateData.TotalDamageTaken);
         AchievementDefinitions.VictoryWithoutUpgradingBuildings.Check(RunStateData.TotalBuildingsUpgraded);
     }
+
 }

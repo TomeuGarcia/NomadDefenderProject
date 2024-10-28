@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+    public static event BuildingPlacerAction OnBuildingPlacedGlobal;
 
     public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
 
@@ -230,6 +232,8 @@ public class BuildingPlacer : MonoBehaviour
         ++TotalPlacedBuildingsThisBattle;
         
         AchievementDefinitions.HaveAmountOfBuildingsSimultaneously.Check(PlacedBuildingsCount);
+        
+        if (OnBuildingPlacedGlobal != null) OnBuildingPlacedGlobal();
     }
 
 
