@@ -27,7 +27,7 @@ public class TurretPartBody_Prefab : MonoBehaviour
         BodyType = bodyType;
         _view.InitMaterials(projectileMaterial);
 
-        InitTurretUpgradeVisuals(0);
+        ResetUpgradeVisuals();
     }
 
     public virtual void ResetProjectileMaterial(Material projectileMaterial)
@@ -57,6 +57,11 @@ public class TurretPartBody_Prefab : MonoBehaviour
     public void SetMaterialColor(Color color)
     {
         _view.SetMaterialColor(color);
+    }
+
+    public void ResetUpgradeVisuals()
+    {
+        InitTurretUpgradeVisuals(0);
     }
 
     private void InitTurretUpgradeVisuals(int level)

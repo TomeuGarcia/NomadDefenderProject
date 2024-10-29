@@ -273,9 +273,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6099256666054317884}
-  - component: {fileID: 4492506097299611407}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: SpinningTrails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,20 +297,6 @@ Transform:
   m_Father: {fileID: 6799048812540694034}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4492506097299611407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4938200900002963267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b28005c7354343d3b52cc5867e7c356c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rotationAxis: {x: 0, y: 1, z: 0}
-  _rotationSpeed: 500
 --- !u!1 &5956676847605119562
 GameObject:
   m_ObjectHideFlags: 0
@@ -753,6 +738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewHolder: {fileID: 6799048812540694034}
+  _speedBoostApplyRotator: {fileID: 6099256666054317884}
 --- !u!65 &4335429102734967663
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -47,4 +47,6 @@ public static class SOAssetPaths
 
     public const string VFX = MENU_ROOT + "VFX/";
     public const string VFX_ABILITIES = VFX + "Abilities/";
+    
+    public const string UNLOCKABLES = MENU_ROOT + "Unlockables/";
 }

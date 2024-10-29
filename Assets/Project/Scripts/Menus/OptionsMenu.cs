@@ -31,7 +31,7 @@ public class OptionsMenu : MonoBehaviour
     public void Show()
     {
         textManager.ResetTexts();
-        StartCoroutine(textManager.DecodeTexts());
+        StartCoroutine(textManager.DecodeTextsWithDelay());
     }
     public void Hide()
     {

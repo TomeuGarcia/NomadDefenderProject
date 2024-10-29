@@ -1,5 +1,7 @@
 
 public enum ParticleTypes
 {
-    SlowBreak
+    SlowBreak,
+    BuildingPlaced,
+    BuildingUnplaced,
 }

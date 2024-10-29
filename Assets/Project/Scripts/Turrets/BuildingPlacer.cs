@@ -20,8 +20,8 @@ public class BuildingPlacer : MonoBehaviour
     private Coroutine dragAndDropCardCoroutine = null;
 
     private bool isDisablePlacingDelayed = false;
-    
-    public int PlacedBuildingsCount { get; private set; }
+
+    public int PlacedBuildingsCount => placedBuildings.Count;
 
 
     public delegate void BuildingPlacerAction();
@@ -181,7 +181,7 @@ public class BuildingPlacer : MonoBehaviour
         tile.isOccupied = true;
 
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
-        selectedBuilding.GotPlaced();
+        selectedBuilding.GotPlaced(tile);
         placedBuildings.Add(selectedBuilding);
 
 
@@ -197,9 +197,7 @@ public class BuildingPlacer : MonoBehaviour
 
         selectedBuildingCard = null;
         selectedBuilding = null;
-
-        IncrementPlacedBuildingsCount();
-
+        
         if (OnBuildingPlaced != null) OnBuildingPlaced();
     }
 
@@ -208,7 +206,7 @@ public class BuildingPlacer : MonoBehaviour
         tile.isOccupied = true;
 
         ShowAndPositionSelectedBuilding(buildingCard, building, tile);
-        building.GotPlaced();
+        building.GotPlaced(tile);
         placedBuildings.Add(building);
 
 
@@ -264,14 +262,24 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+    
 
+    public void UnplaceBuilding(Building building)
+    {
+        building.PlacedTile.isOccupied = false;
+        building.GotUnplaced();
 
-    private void IncrementPlacedBuildingsCount()
-    {
-        ++PlacedBuildingsCount;
-    }
-    private void DecrementPlacedBuildingsCount()
-    {
-        --PlacedBuildingsCount;
+        placedBuildings.Remove(building);
+
+        BuildingCard buildingCard = building.BuildingCard;
+
+        if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            GameAudioManager.GetInstance().PlayTurretCardUnplaced(((TurretBuildingCard)buildingCard).CardParts.Body.bodyType);
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayTurretCardUnplaced(TurretPartBody.BodyType.SENTRY);
+        }
     }
 }

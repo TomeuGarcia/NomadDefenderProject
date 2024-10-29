@@ -27,6 +27,7 @@ public class SpeedBooster : RecyclableObject
     private readonly HashSet<ISpeedBoosterUser> _usersToIgnore = new (1);
 
     [SerializeField] private Transform _viewHolder;
+    [SerializeField] private Transform _speedBoostApplyRotator;
 
 
     public void Init(SpeedBoosterConfig config)
@@ -69,8 +70,17 @@ public class SpeedBooster : RecyclableObject
         if (other.TryGetComponent(out ISpeedBoosterUser speedBoosterUser) && 
             !_usersToIgnore.Contains(speedBoosterUser))
         {
-            speedBoosterUser.ApplySpeedBoosterMultiplier(_config.Boost);
+            ApplySpeedBoost(speedBoosterUser);
         }
+    }
+
+    private void ApplySpeedBoost(ISpeedBoosterUser speedBoosterUser)
+    {
+        speedBoosterUser.ApplySpeedBoosterMultiplier(_config.Boost);
+
+        _speedBoostApplyRotator.DOComplete();
+        _speedBoostApplyRotator.DOBlendableLocalRotateBy(Vector3.up * 360f, 0.25f, RotateMode.LocalAxisAdd)
+            .SetEase(Ease.InOutSine);
     }
 
     private IEnumerator Lifetime()

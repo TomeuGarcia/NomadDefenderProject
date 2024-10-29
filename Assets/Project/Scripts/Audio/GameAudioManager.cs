@@ -496,34 +496,44 @@ public class GameAudioManager : MonoBehaviour
 
     public void PlayTurretCardPlaced(TurretPartBody.BodyType bodyType)
     {
-
         float pitch = 1f;
         if (bodyType == TurretPartBody.BodyType.SENTRY)
-
         {
-
             pitch = 1f;
-
         }
         else if (bodyType == TurretPartBody.BodyType.BLASTER)
-
         {
-
             pitch = 0.8f;
-
         }
         else if (bodyType == TurretPartBody.BodyType.SPAMMER)
-
         {
-
             pitch = 1.3f;
-
         }
 
         cardPlayedAudioSource.pitch = pitch;
-
         cardPlayedAudioSource.Play();
     }
+    public void PlayTurretCardUnplaced(TurretPartBody.BodyType bodyType)
+    {
+        float pitch = 1f;
+        if (bodyType == TurretPartBody.BodyType.SENTRY)
+        {
+            pitch = 1f;
+        }
+        else if (bodyType == TurretPartBody.BodyType.BLASTER)
+        {
+            pitch = 0.8f;
+        }
+        else if (bodyType == TurretPartBody.BodyType.SPAMMER)
+        {
+            pitch = 1.3f;
+        }
+
+        cardPlayedAudioSource.pitch = pitch;
+        cardPlayedAudioSource.Play();
+    }
+    
+    
     public void PlayWatcherCard()
     {
         watcherCardPlayedAudioSource.Play();

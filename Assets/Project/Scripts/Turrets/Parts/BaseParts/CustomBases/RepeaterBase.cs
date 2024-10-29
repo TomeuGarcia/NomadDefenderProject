@@ -126,6 +126,14 @@ public class RepeaterBase : TurretPartBase_Prefab
         HideAllTurretBinders();
     }
 
+    public override void OnGetUnplaced()
+    {
+        fakeEnemy.gameObject.SetActive(false);
+        fakeEnemy.SetCanBeTargeted(false);
+        HideAllTurretBinders();
+    }
+
+
     public override void GotEnabledPlacing()
     {
         ConnectWithAlreadyPlacedBuildings();
@@ -160,6 +168,11 @@ public class RepeaterBase : TurretPartBase_Prefab
         }
 
         currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];        
+    }
+    
+    public override void ResetAreaPlaneSize(SupportBuilding supportOwner)
+    {
+        UpdateAreaPlaneSize(supportOwner, repeatAreaPlane, repeatAreaPlaneMaterial);
     }
 
 

@@ -129,7 +129,8 @@ public class CurrencyCounter : MonoBehaviour
     {
         if (isSubtracting) StopCoroutine(lastSubtractCoroutine);
 
-        lastSubtractCoroutine = StartCoroutine(SubtractCurrencyAnimation(currencyCount + remainingAmountToSubtract, amount + remainingAmountToSubtract));
+        lastSubtractCoroutine = StartCoroutine(
+            SubtractCurrencyAnimation(currencyCount + remainingAmountToSubtract, amount + remainingAmountToSubtract));
         currencyCount -= amount;
 
         if (OnCurrencySpent != null) OnCurrencySpent();
@@ -138,24 +139,40 @@ public class CurrencyCounter : MonoBehaviour
 
     private IEnumerator SubtractCurrencyAnimation(int initialCurrencyCount, int amount)
     {
+        bool subtractingCurrency = amount > 0;
         isSubtracting = true;
         remainingAmountToSubtract = amount;
 
         currencyCountText.DOComplete();
-        currencyCountText.transform.DOComplete();
         currencyCountText.color = Color.white;
-        currencyCountText.PunchColor(_spentCurrencyColorPunch);
+        currencyCountText.PunchColor(subtractingCurrency ? _spentCurrencyColorPunch : _addedCurrencyColorPunch);
+        currencyCountText.transform.DOComplete();
         currencyCountText.transform.DOPunchPosition(Vector3.down * 40f, 0.5f, 6);
 
         int subtractAmountPerTick = 5;
 
-        for (int i = 0; i < amount; i += subtractAmountPerTick)
+        if (subtractingCurrency)
         {
-            initialCurrencyCount -= subtractAmountPerTick;
-            remainingAmountToSubtract -= subtractAmountPerTick;
-            UpdateCurrencyCountText(initialCurrencyCount);
-            yield return null;
+            for (int i = 0; i < amount; i += subtractAmountPerTick)
+            {
+                initialCurrencyCount -= subtractAmountPerTick;
+                remainingAmountToSubtract -= subtractAmountPerTick;
+                UpdateCurrencyCountText(initialCurrencyCount);
+                yield return null;
+            }
         }
+        else
+        {
+            for (int i = 0; i > amount; i -= subtractAmountPerTick)
+            {
+                initialCurrencyCount += subtractAmountPerTick;
+                remainingAmountToSubtract += subtractAmountPerTick;
+                UpdateCurrencyCountText(initialCurrencyCount);
+                yield return null;
+            }
+        }
+        
+        
         UpdateCurrencyCountText(currencyCount);
 
         isSubtracting = false;
