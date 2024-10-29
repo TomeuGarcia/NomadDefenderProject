@@ -56,6 +56,9 @@ public class ResultsScreen : MonoBehaviour
         bool mostKillsAndDamageCardsAreTheSame = mostKillsTurretCard == mostDamageTurretCard;
         TurretBuildingCard mostKillsTurretCardObject =
             ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostKillsTurretCard, transform);
+        
+        mostKillsTurretCardObject.OnCardUnhovered += SetStandardCard;
+        mostKillsTurretCardObject.OnCardHovered += SetHoveredCard;
 
         TurretBuildingCard mostDamageTurretCardObject = null;
         if (mostKillsAndDamageCardsAreTheSame)
@@ -66,9 +69,12 @@ public class ResultsScreen : MonoBehaviour
         {
             mostDamageTurretCardObject =
                 ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostDamageTurretCard, transform);
+            
+            mostDamageTurretCardObject.OnCardUnhovered += SetStandardCard;
+            mostDamageTurretCardObject.OnCardHovered += SetHoveredCard;
         }
 
-        
+
         bool mostDamagingEnemyExists =
             RunStateData.MostDamagingEnemy(out EnemyTypeConfig enemyType, out int damage);
 
@@ -104,5 +110,20 @@ public class ResultsScreen : MonoBehaviour
             );
 
         return viewInitData;
+    }
+    
+    
+    
+    
+    
+    void SetHoveredCard(BuildingCard buildingCard)
+    {
+        GameAudioManager.GetInstance().PlayCardHovered();
+        buildingCard.HoveredState(rotate: false);
+    }
+
+    void SetStandardCard(BuildingCard buildingCard)
+    {
+        buildingCard.StandardState();
     }
 }
