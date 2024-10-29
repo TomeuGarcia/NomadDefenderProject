@@ -44,9 +44,9 @@ namespace Project.Scripts.RunResults
             RunStateUpdate.IncrementPlacedBuildings();
         }
 
-        private void OnEnemyTakesDamage(EnemyTypeConfig enemyType, int damageTaken)
+        private void OnEnemyTakesDamage(EnemyTypeConfig enemyType, TurretDamageAttack damageAttack)
         {
-            RunStateUpdate.AddDamageDealt(damageTaken);
+            RunStateUpdate.AddDamageDealt(damageAttack);
         }
         private void OnEnemyDealsDamage(EnemyTypeConfig enemyType, int damageDealt)
         {

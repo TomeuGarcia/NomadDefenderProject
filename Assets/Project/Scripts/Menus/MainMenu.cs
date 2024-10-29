@@ -193,7 +193,8 @@ public class MainMenu : MonoBehaviour
 
         ServiceLocator.GetInstance().RunInfo.SetComeFromRun(false);
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
-        SceneLoader.GetInstance().LoadFacility();
+        //SceneLoader.GetInstance().LoadFacility();
+        SceneLoader.GetInstance().LoadRunResultsScreen();
     }
 
     public void Credits()

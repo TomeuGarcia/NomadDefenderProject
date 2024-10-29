@@ -4,7 +4,7 @@ public interface IRunStateUpdate
     void IncrementDestroyedNodes();
     void IncrementPlacedBuildings();
     void IncrementUpgradedBuildings();
-    void AddDamageDealt(int damageDealt);
+    void AddDamageDealt(TurretDamageAttack damageAttackDealt);
     void AddDamageTaken(int damageTaken, EnemyTypeConfig attacker);
     
 }

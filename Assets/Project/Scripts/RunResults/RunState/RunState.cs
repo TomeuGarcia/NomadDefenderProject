@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 [CreateAssetMenu(fileName = "RunState", 
@@ -44,6 +46,23 @@ public class RunState : ScriptableObject,
     public int TotalDamageDealt { get; private set; }
     public int HighestDamageDealt { get; private set; }
     public int TotalDamageTaken { get; private set; }
+    public bool MostDamagingEnemy(out EnemyTypeConfig enemyType, out int damage)
+    {
+        enemyType = null;
+        damage = 0;
+        foreach (KeyValuePair<EnemyTypeConfig,int> enemyTypeToDamageDealt in _enemyTypeToDamageDealt)
+        {
+            if (enemyTypeToDamageDealt.Value > damage)
+            {
+                damage = enemyTypeToDamageDealt.Value;
+                enemyType = enemyTypeToDamageDealt.Key;
+            }
+        }
+
+        return enemyType != null;
+    }
+
+
     public int DestroyedNodes { get; private set; }
     
 
@@ -97,10 +116,10 @@ public class RunState : ScriptableObject,
         ++TotalBuildingsUpgraded;
     }
     
-    public void AddDamageDealt(int damageDealt)
+    public void AddDamageDealt(TurretDamageAttack damageAttackDealt)
     {
-        TotalDamageDealt += damageDealt;
-        HighestDamageDealt = Mathf.Max(HighestDamageDealt, damageDealt);
+        TotalDamageDealt += damageAttackDealt.Damage;
+        HighestDamageDealt = Mathf.Max(HighestDamageDealt, damageAttackDealt.Damage);
     }
 
     public void AddDamageTaken(int damageTaken, EnemyTypeConfig attacker)
@@ -118,10 +137,17 @@ public class RunState : ScriptableObject,
         
     }
 
-    
-    
-    public void DebugOverwriteWithRandomData()
+
+    public void DebugOverwriteWithRandomData(CardDeckAsset starterDeck, CardDeckContent currentDeckContent, EnemyTypeConfig mostDamagingEnemy)
     {
+        StarterDeck = starterDeck;
+        DeckContent = currentDeckContent;
+
+        if (mostDamagingEnemy != null)
+        {
+            _enemyTypeToDamageDealt.Add(mostDamagingEnemy, 1);
+        }
+        
         RunDuration = Random.Range(1000, 3600);
         NodesReached = Random.Range(1, 15);
     

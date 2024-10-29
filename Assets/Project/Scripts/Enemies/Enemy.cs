@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     
     public EnemyWaveSpawner SpawnerOwner { get; private set; }
 
-    public static Action<EnemyTypeConfig, int> OnTakeDamage;
+    public static Action<EnemyTypeConfig, TurretDamageAttack> OnTakeDamage;
     public static Action<EnemyTypeConfig, int> OnDealDamage;
 
     private void Awake()
@@ -199,17 +199,19 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         MeshTransform.DOKill(true);
         MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
-        if (healthSystem.IsDead())
+        bool gotKilled = healthSystem.IsDead();
+        if (gotKilled)
         {
             Die();
         }
 
-        OnTakeDamage?.Invoke(_typeConfig, damageAttack.Damage);
+        OnTakeDamage?.Invoke(_typeConfig, damageAttack);
         SpawntakeDamageText(damageAttack.Damage, hitArmor);
         AchievementDefinitions.OverkillDamage.Check(damageAttack.Damage);
         
         TurretDamageAttackResult result = 
-            new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor);
+            new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor, gotKilled);
+        
         
         takeDamageResultCallback(result);
     }

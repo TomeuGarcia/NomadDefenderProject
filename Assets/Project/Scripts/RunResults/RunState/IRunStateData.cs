@@ -16,4 +16,5 @@ public interface IRunStateData
     int HighestDamageDealt { get; }
     
     int TotalDamageTaken { get; }
+    bool MostDamagingEnemy(out EnemyTypeConfig enemyType, out int damage);
 }
