@@ -149,6 +149,10 @@ public class MainMenu : MonoBehaviour
             TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();            
             Play();
         }
+        else if (Input.GetKeyDown(KeyCode.R) && canInteract) // DEBUG enter ResultsScreen
+        {
+            SceneLoader.GetInstance().LoadRunResultsScreen();
+        }
     }
 
     public void PlayNewGame()
@@ -193,8 +197,7 @@ public class MainMenu : MonoBehaviour
 
         ServiceLocator.GetInstance().RunInfo.SetComeFromRun(false);
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
-        //SceneLoader.GetInstance().LoadFacility();
-        SceneLoader.GetInstance().LoadRunResultsScreen();
+        SceneLoader.GetInstance().LoadFacility();
     }
 
     public void Credits()

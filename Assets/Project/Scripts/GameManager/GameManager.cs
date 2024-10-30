@@ -129,9 +129,9 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(0.2f);
 
-        SceneLoader.GetInstance().StartLoadGameEndCredits();
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
-        
+        //SceneLoader.GetInstance().StartLoadGameEndCredits();
+        StartCoroutine(DelayedLoadRunResultsScreen(0f));
+
         SharedFinishRun(true);
     }
 
@@ -154,7 +154,9 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.0f);
         //mapSceneLoader.LoadMainMenuScene(1f);
-        GameOverFinishLoadScene();
+        
+        //GameOverFinishLoadScene();
+        StartCoroutine(DelayedLoadRunResultsScreen(0.85f));
 
         gameOverHolder.SetActive(false);
         for (int i = 0; i < 3; ++i)
@@ -176,6 +178,12 @@ public class GameManager : MonoBehaviour
         mapSceneLoader.LoadMainMenuScene(0.85f);
     }
 
+    private IEnumerator DelayedLoadRunResultsScreen(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
+        SceneLoader.GetInstance().LoadRunResultsScreen();
+    }
 
     private IEnumerator VictoryWatcherScripedSequence()
     {

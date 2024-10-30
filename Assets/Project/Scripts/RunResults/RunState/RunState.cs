@@ -138,8 +138,10 @@ public class RunState : ScriptableObject,
     }
 
 
-    public void DebugOverwriteWithRandomData(CardDeckAsset starterDeck, CardDeckContent currentDeckContent, EnemyTypeConfig mostDamagingEnemy)
+    public void DebugOverwriteWithRandomData(bool victory,
+        CardDeckAsset starterDeck, CardDeckContent currentDeckContent, EnemyTypeConfig mostDamagingEnemy)
     {
+        Victory = victory;
         StarterDeck = starterDeck;
         DeckContent = currentDeckContent;
 

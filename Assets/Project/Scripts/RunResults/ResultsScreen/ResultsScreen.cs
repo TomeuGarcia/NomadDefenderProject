@@ -1,5 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using AYellowpaper;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResultsScreen : MonoBehaviour
 {
@@ -9,8 +13,13 @@ public class ResultsScreen : MonoBehaviour
 
 
     [Header("VIEW")] 
+    [SerializeField] private Camera _inputCamera;
     [SerializeField] private Camera _camera;
     [SerializeField] private ResultsScreenView _view;
+    [SerializeField] private FullScreenPassRendererFeature _fullScreenEffect;
+    
+    [Header("CONTINUE BUTTON")] 
+    [SerializeField] private Button _continueButton;
     
     
     private void Start()
@@ -18,11 +27,25 @@ public class ResultsScreen : MonoBehaviour
         Init();
     }
 
+    private void OnEnable()
+    {
+        _continueButton.onClick.AddListener(OnContinueButtonClicked);
+        //_fullScreenEffect.SetActive(true);
+    }
+    private void OnDisable()
+    {
+        _continueButton.onClick.RemoveAllListeners();
+        //_fullScreenEffect.SetActive(false);
+    }
+
     private void Init()
     {
         CheckAchievements();
 
-        _view.Init(RunStateData, MakeViewInitData());
+        CardTooltipDisplayManager.GetInstance().SetDisplayCamera(_inputCamera);
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_inputCamera);
+
+        _view.Init(RunStateData, MakeViewInitData(), _continueButton);
         _view.StartPlayingShowAnimation(RunStateData);
     }
     
@@ -59,6 +82,7 @@ public class ResultsScreen : MonoBehaviour
         
         mostKillsTurretCardObject.OnCardUnhovered += SetStandardCard;
         mostKillsTurretCardObject.OnCardHovered += SetHoveredCard;
+        mostKillsTurretCardObject.canDisplayInfoIfWhileInteractable = false;
 
         TurretBuildingCard mostDamageTurretCardObject = null;
         if (mostKillsAndDamageCardsAreTheSame)
@@ -72,6 +96,7 @@ public class ResultsScreen : MonoBehaviour
             
             mostDamageTurretCardObject.OnCardUnhovered += SetStandardCard;
             mostDamageTurretCardObject.OnCardHovered += SetHoveredCard;
+            mostDamageTurretCardObject.canDisplayInfoIfWhileInteractable = false;
         }
 
 
@@ -116,14 +141,33 @@ public class ResultsScreen : MonoBehaviour
     
     
     
-    void SetHoveredCard(BuildingCard buildingCard)
+    private void SetHoveredCard(BuildingCard buildingCard)
     {
         GameAudioManager.GetInstance().PlayCardHovered();
         buildingCard.HoveredState(rotate: false);
     }
 
-    void SetStandardCard(BuildingCard buildingCard)
+    private void SetStandardCard(BuildingCard buildingCard)
     {
         buildingCard.StandardState();
+    }
+
+    private async void OnContinueButtonClicked()
+    {
+        _continueButton.interactable = false;
+
+        _continueButton.transform.DOPunchScale(Vector3.one * 0.15f, 0.5f, 7);
+        GameAudioManager.GetInstance().PlayCardSelected();
+        
+        await Task.Delay(TimeSpan.FromSeconds(0.5f));
+        
+        if (RunStateData.Victory)
+        {
+            SceneLoader.GetInstance().StartLoadGameEndCredits();
+        }
+        else
+        {
+            SceneLoader.GetInstance().StartLoadMainMenu();
+        }
     }
 }

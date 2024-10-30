@@ -5,11 +5,12 @@ using UnityEngine.UI;
 public class ResultsScreenObjectPreviewer : MonoBehaviour
 {
     [SerializeField] private TextDecoder _text;
-    [SerializeField] private RectTransform _previewSpot;
+    [SerializeField] private Transform _previewSpot;
     [SerializeField] private Image _previewImage;
 
     [SerializeField] private Vector3 _objectOffset = Vector3.zero;
     [SerializeField] private TweenPunchConfig _objectAppearScalePunch;
+    [SerializeField] private bool _prantToPreviewer;
 
     private GameObject _objectToPreview;
 
@@ -30,7 +31,13 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         if (_objectToPreview != null)
         {
             _objectToPreview.transform.position = worldPosition;
-            _objectToPreview.SetActive(false);    
+            _objectToPreview.SetActive(false);
+
+            if (_prantToPreviewer)
+            {
+                _objectToPreview.transform.SetParent(_previewSpot);
+                _objectToPreview.transform.localRotation = Quaternion.identity;
+            }
         }
     }
 

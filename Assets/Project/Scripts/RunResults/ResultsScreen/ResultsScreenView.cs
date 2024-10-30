@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResultsScreenView : MonoBehaviour
 {
@@ -103,12 +104,19 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private ResultsScreenObjectPreviewer _mostDamagingEnemyScreenPreviewer;
     [SerializeField] private TextDecoder _noDamageEnemyText;
 
+    [Header("CONTINUE BUTTON")] 
+    [SerializeField] private TextDecoder _continueButtonText;
+    private Button _continueButton;
+
+    
+    
     private InitData _initData;
     
 
-    public void Init(IRunStateData runStateData, InitData initData)
+    public void Init(IRunStateData runStateData, InitData initData, Button continueButton)
     {
         _initData = initData;
+        _continueButton = continueButton;
         _stats.Init(runStateData, _statPrefab, _statSeparatorPrefab);
         SetupShowAnimation(runStateData, initData);
     }
@@ -135,6 +143,8 @@ public class ResultsScreenView : MonoBehaviour
         _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
+        
+        _continueButton.interactable = false;
     }
     
     
@@ -150,6 +160,7 @@ public class ResultsScreenView : MonoBehaviour
         yield return StartCoroutine(PlayShowStatsAnimation());
         yield return StartCoroutine(PlayShowDeckAnimation());
         yield return StartCoroutine(PlayShowEnemiesAnimation());
+        yield return StartCoroutine(PlayShowContinueButton());
     }
 
     private IEnumerator PlayShowTitleAnimation(IRunStateData runStateData)
@@ -192,6 +203,12 @@ public class ResultsScreenView : MonoBehaviour
         yield return StartCoroutine(_mostDamagingEnemyScreenPreviewer.PlayShowAnimation()); 
     }
 
+    private IEnumerator PlayShowContinueButton()
+    {
+        yield return StartCoroutine(PlayTextDecoder(_continueButtonText));
+        _continueButton.interactable = true;
+    }
+    
 
     private IEnumerator PlayTextDecoder(TextDecoder textDecoder)
     {
