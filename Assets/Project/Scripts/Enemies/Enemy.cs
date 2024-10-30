@@ -114,6 +114,12 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         enemyFeedback.ResetEnemy(healthSystem.HasArmor());
     }
 
+    public void InitWithoutFunctionality()
+    {
+        ResetEnemy();
+        healthHUD.gameObject.SetActive(false);
+    }
+
     private void ResetStats()
     {
         damage = _typeConfig.BaseStats.Damage;

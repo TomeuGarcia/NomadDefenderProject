@@ -15,7 +15,10 @@ public class ResultsScreen : MonoBehaviour
     [Header("VIEW")] 
     [SerializeField] private Camera _inputCamera;
     [SerializeField] private Camera _camera;
+    [SerializeField] private CardMotionConfig _cardMotionConfig;
+    [SerializeField] private FadingTextsFactoryConfig _fadingTextsFactoryConfig;
     [SerializeField] private ResultsScreenView _view;
+    [SerializeField] private ResultScreenEnemyInteractions _enemyInteractions;
     [SerializeField] private FullScreenPassRendererFeature _fullScreenEffect;
     
     [Header("CONTINUE BUTTON")] 
@@ -44,7 +47,9 @@ public class ResultsScreen : MonoBehaviour
 
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(_inputCamera);
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_inputCamera);
-
+        _cardMotionConfig.SetResultsScreenDisplayMode();
+        _fadingTextsFactoryConfig.SetResultsScreenMode();
+        
         _view.Init(RunStateData, MakeViewInitData(), _continueButton);
         _view.StartPlayingShowAnimation(RunStateData);
     }
@@ -121,6 +126,8 @@ public class ResultsScreen : MonoBehaviour
             {
                 areaSpawnerHealth.enabled = false;
             }
+            
+            _enemyInteractions.Init(mostDamagingEnemy, RunStateData.HighestDamageDealt);
         }
         
         

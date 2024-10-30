@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,11 +6,16 @@ public class TDGameLogic : MonoBehaviour
 {
     [SerializeField] private CardDrawer _cardDrawer;
     [SerializeField] private TDBattleTutorialsManager _tdBattleTutorialsManager;
+    [SerializeField] private FadingTextsFactoryConfig _fadingTextsFactoryConfig;
     [SerializeField] private bool _checkTutorials = true;
     
     private int _waveCounter = 0;
 
-    
+    private void Awake()
+    {
+        _fadingTextsFactoryConfig.SetTDMode();
+    }
+
     private void OnEnable()
     {
         EnemyWaveManager.OnStartFirstWaves += OnFirstWaveStarted;

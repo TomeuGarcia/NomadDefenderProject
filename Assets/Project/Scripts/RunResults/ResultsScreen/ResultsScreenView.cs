@@ -201,6 +201,7 @@ public class ResultsScreenView : MonoBehaviour
             yield return StartCoroutine(PlayTextDecoder(_noDamageEnemyText));
         }
         yield return StartCoroutine(_mostDamagingEnemyScreenPreviewer.PlayShowAnimation()); 
+        _initData.MostDamagingEnemy.GetComponent<Enemy>().InitWithoutFunctionality();
     }
 
     private IEnumerator PlayShowContinueButton()

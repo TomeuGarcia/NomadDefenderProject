@@ -15,12 +15,22 @@ public class SteamAchievementsManager : IAchievementsManager
     
     public void UnlockAchievement(AchievementType achievementType)
     {
+        if (!SteamManager.Initialized)
+        {
+            return;
+        }
+        
         SteamUserStats.SetAchievement(_achievementsMap[achievementType]);
         SteamUserStats.StoreStats();
     }
 
     public bool IsAchievementUnlocked(AchievementType achievementType)
     {
+        if (!SteamManager.Initialized)
+        {
+            return false;
+        }
+        
         if (SteamUserStats.GetAchievement(_achievementsMap[achievementType], out bool achieved))
         {
             return achieved;
