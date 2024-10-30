@@ -35,6 +35,9 @@ public class ResultScreenEnemyInteractions : MonoBehaviour
 
     private void OnDamageDealtToEnemy(TurretDamageAttackResult result)
     {
+        _enemy.MeshTransform.DOComplete();
+        _enemy.MeshTransform.DOPunchScale(Vector3.one * -0.3f, 0.25f, 2);
+        
         if (_enemy.IsDead())
         {
             StartCoroutine(ReviveEnemy());
@@ -43,6 +46,10 @@ public class ResultScreenEnemyInteractions : MonoBehaviour
 
     private IEnumerator ReviveEnemy()
     {
+        yield return new WaitForSeconds(0.25f);
+        
+        _enemy.gameObject.SetActive(false);
+        
         yield return new WaitForSeconds(2.0f);
         
         _enemy.gameObject.SetActive(true);

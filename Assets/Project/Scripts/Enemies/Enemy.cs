@@ -56,6 +56,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     public static Action<EnemyTypeConfig, TurretDamageAttack> OnTakeDamage;
     public static Action<EnemyTypeConfig, int> OnDealDamage;
 
+    private bool _initializedWithoutFunctionality;
+
     private void Awake()
     {
         ResetStats();
@@ -118,6 +120,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     {
         ResetEnemy();
         healthHUD.gameObject.SetActive(false);
+        _initializedWithoutFunctionality = true;
     }
 
     private void ResetStats()
@@ -139,6 +142,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         ResetEnemy();
         AttackDestination = attackDestination;
         pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
+
+        _initializedWithoutFunctionality = false;
     }
 
 
@@ -206,7 +211,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
         bool gotKilled = healthSystem.IsDead();
-        if (gotKilled)
+        if (gotKilled && !_initializedWithoutFunctionality)
         {
             Die();
         }

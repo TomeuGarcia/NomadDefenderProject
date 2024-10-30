@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultTextsColor: {r: 1, g: 1, b: 1, a: 1}
   _randomPositionOffsetBounds: {x: 0.2, y: 0, z: 0}
-  _fixedPositionOffset: {x: 0, y: 1, z: 0}
+  _fixedPositionOffset: {x: 0, y: 0.5, z: 0}
   _characterAppearAnimation:
     _appearDuration: 0.08
     _rotationPunch:
-      _value: {x: 0, y: 0, z: 15}
-      _duration: 1.5
+      _value: {x: 0, y: 0, z: 2}
+      _duration: 0.3
       _vibrato: 10
       _elasticity: 1
       _ease: 4
@@ -36,7 +36,7 @@ MonoBehaviour:
       _vibrato: 6
       _elasticity: 0
       _ease: 4
-    _moveVelocity: {x: 0, y: 1, z: 0}
+    _moveVelocity: {x: 0, y: 0.3, z: 0}
     _randomRotationInterval: {x: -30, y: -50}
     _backgroundRotatateBy:
       _value: {x: 0, y: 0, z: 0}
