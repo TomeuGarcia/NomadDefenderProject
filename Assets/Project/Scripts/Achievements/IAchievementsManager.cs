@@ -6,4 +6,6 @@ public interface IAchievementsManager
 {
     void UnlockAchievement(AchievementType achievementType);
     bool IsAchievementUnlocked(AchievementType achievementType);
+
+    void LockAllAchievements();
 }
