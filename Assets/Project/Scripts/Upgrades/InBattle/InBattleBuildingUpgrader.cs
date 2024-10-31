@@ -213,7 +213,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     public virtual void OnStatsUpdated()
     {
         UpdateAllStatsView();
-        AchievementDefinitions.UpgradeBuildingToMax.Check(IsCardUpgradedToMax(CurrentBuildingLevel));
+        AchievementDefinitions.UpgradeBuildingToMax.Check(CurrentBuildingLevel == maxUpgradeCount);
     }
 
     public void OnBuildingOwnerPlaced()

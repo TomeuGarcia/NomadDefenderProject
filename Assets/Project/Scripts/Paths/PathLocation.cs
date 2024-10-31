@@ -110,13 +110,18 @@ public class PathLocation : MonoBehaviour
         }
         else
         {
-            locationMeshHolder.DOComplete();
-            locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
-            GameAudioManager.GetInstance().PlayLocationTakeDamage();
+            PlayTakeDamageAnimation();
         }
 
         if (OnTakeDamage != null) OnTakeDamage(this);
         if (OnHealthChanged != null) OnHealthChanged();
+    }
+
+    public void PlayTakeDamageAnimation()
+    {
+        locationMeshHolder.DOComplete();
+        locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
+        GameAudioManager.GetInstance().PlayLocationTakeDamage();
     }
 
     public void Heal(int healAmount)

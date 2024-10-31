@@ -85,22 +85,25 @@ public class LastEnemyKIllAnimation : MonoBehaviour
             StartCoroutine(FlashingLight(tilePos, lost));
             StartCoroutine(CameraShake());
             StartCoroutine(ScreenFlash());
-            Time.timeScale = 0.0f;
-            float currentTime = 0.0f;
-            yield return new WaitForSecondsRealtime(0.0f);
-
-
-            while (currentTime < animationTime)
-            {
-                currentTime += Time.unscaledDeltaTime;
-                Time.timeScale = animationCurve.Evaluate(currentTime / animationTime);
-
-                yield return null;
-            }
-
-
+            yield return StartCoroutine(PlayHitStop());
         }
         if (OnQueryResumeTimescale != null) OnQueryResumeTimescale();
+    }
+
+    public IEnumerator PlayHitStop()
+    {
+        Time.timeScale = 0.0f;
+        float currentTime = 0.0f;
+        yield return new WaitForSecondsRealtime(0.0f);
+
+
+        while (currentTime < animationTime)
+        {
+            currentTime += Time.unscaledDeltaTime;
+            Time.timeScale = animationCurve.Evaluate(currentTime / animationTime);
+
+            yield return null;
+        }
     }
 
     private IEnumerator FlashingLight(Vector3 tilePos, bool lost = false)

@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     [Header("STATS")]
     [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
-    private int damage;
+    private int Damage;
     private float armor;
     private float health;
     private int currencyDrop;
@@ -55,6 +55,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public static Action<EnemyTypeConfig, TurretDamageAttack> OnTakeDamage;
     public static Action<EnemyTypeConfig, int> OnDealDamage;
+
+    public static Action<Enemy, PathLocation> OnTriedToAttackDeadLocation;
 
     private bool _initializedWithoutFunctionality;
 
@@ -125,7 +127,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private void ResetStats()
     {
-        damage = _typeConfig.BaseStats.Damage;
+        Damage = _typeConfig.BaseStats.Damage;
         health = _typeConfig.BaseStats.Health;
         armor = _typeConfig.BaseStats.Armor;
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
@@ -160,17 +162,26 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     private void Attack()
     {
         PathLocation pathLocation = AttackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
+        if (!AttackPathLocation(pathLocation))
+        {
+            OnTriedToAttackDeadLocation?.Invoke(this, pathLocation);
+        }
+        Suicide();
+    }
 
+    public bool AttackPathLocation(PathLocation pathLocation)
+    {
         if (pathLocation.CanTakeDamage())
         {
-            pathLocation.TakeDamage(damage);
+            pathLocation.TakeDamage(Damage);
             collidedWithLocation = true;
 
             //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
+            OnDealDamage?.Invoke(_typeConfig, Damage);
+            return true;
         }
 
-        OnDealDamage?.Invoke(_typeConfig, damage);
-        Suicide();
+        return false;
     }
 
     public virtual void OnWillBeAttacked(TurretDamageAttack damageAttack)
