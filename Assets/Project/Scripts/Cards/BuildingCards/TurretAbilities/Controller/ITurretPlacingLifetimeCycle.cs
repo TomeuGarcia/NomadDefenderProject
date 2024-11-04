@@ -4,4 +4,5 @@ public interface ITurretPlacingLifetimeCycle
     void OnTurretPlacingFinish();
     void OnTurretPlacingMove();
     void OnTurretPlaced(TurretBuilding turretOwner);
+    void OnTurretUnplaced();
 }

@@ -62,7 +62,11 @@ public class TurretPassiveAbility_HealLocation : ATurretPassiveAbility
         HideBinder();
         DoHeal();
     }
-    
+
+    public override void OnTurretUnplaced()
+    {
+        HideBinder();
+    }
 
     private async void DoHeal()
     {

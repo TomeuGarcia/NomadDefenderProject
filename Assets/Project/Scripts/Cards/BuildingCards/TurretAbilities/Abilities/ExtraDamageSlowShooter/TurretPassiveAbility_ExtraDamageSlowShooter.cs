@@ -6,7 +6,7 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
     private readonly TPADataModel_ExtraDamageSlowShooter _abilityDataModel;
     private TurretBuilding _turretOwner;
 
-    private SlowFireRateTurretBuildingVisuals _slowFireRateVisuals;
+    private SlowFireRateTurretBuildingVisuals _slowFireRateVisuals = null;
 
     private float _timeSinceLastShot;
     
@@ -24,6 +24,11 @@ public class TurretPassiveAbility_ExtraDamageSlowShooter : ATurretPassiveAbility
 
     protected override void OnTurretPlaced()
     {
+        if (_slowFireRateVisuals != null)
+        {
+            return;
+        }
+        
         _slowFireRateVisuals = GameObject.Instantiate(_abilityDataModel.VisualsPrefab, _turretOwner.transform);
         _slowFireRateVisuals.TurretPlacedInit(_turretOwner, _abilityDataModel.MaxTimeBetweenShots);
     }
