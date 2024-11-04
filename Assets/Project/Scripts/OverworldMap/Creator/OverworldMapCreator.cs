@@ -18,6 +18,7 @@ public class OverworldMapCreator : MonoBehaviour
 
     [Header("TRANSFORMS")]
     [SerializeField] private Transform holder;
+    public Transform Holder => holder;
 
 
 

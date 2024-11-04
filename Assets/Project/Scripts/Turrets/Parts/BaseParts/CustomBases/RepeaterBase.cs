@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static TurretPartBody;
@@ -453,6 +454,19 @@ public class RepeaterBase : TurretPartBase_Prefab
             binderMesh.material = outsideRangeMaterial;
         }
     }
-        
+
+
+    public override void DoOnBuildingDisableStart()
+    {
+        base.DoOnBuildingDisableStart();
+        StartCoroutine(PlayTogglePartAppearanceAnimation(repeatAreaPlane.gameObject, false));
+    }
+
+    public override void DoOnBuildingDisableFinish()
+    {
+        base.DoOnBuildingDisableFinish();
+        StartCoroutine(PlayTogglePartAppearanceAnimation(repeatAreaPlane.gameObject, true));
+    }
+
     
 }
