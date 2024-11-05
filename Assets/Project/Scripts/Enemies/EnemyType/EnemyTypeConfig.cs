@@ -27,4 +27,6 @@ public class EnemyTypeConfig : ScriptableObject
     [SerializeField] private Stats _baseStats;
 
     public Stats BaseStats => _baseStats;
+    
+    public int PhotoIndex { get; set; }
 }

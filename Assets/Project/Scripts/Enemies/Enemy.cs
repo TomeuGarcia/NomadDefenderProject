@@ -123,6 +123,18 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         ResetEnemy();
         healthHUD.gameObject.SetActive(false);
         _initializedWithoutFunctionality = true;
+        
+        enabled = false;
+        pathFollower.enabled = false;
+
+        if (TryGetComponent(out AreaSpawnerArmor areaSpawnerArmor))
+        {
+            areaSpawnerArmor.enabled = false;
+        }
+        if (TryGetComponent(out AreaSpawnerHealth areaSpawnerHealth))
+        {
+            areaSpawnerHealth.enabled = false;
+        }
     }
 
     private void ResetStats()
