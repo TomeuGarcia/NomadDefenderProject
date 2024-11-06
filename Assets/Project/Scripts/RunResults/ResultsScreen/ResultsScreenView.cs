@@ -85,6 +85,10 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private TextDecoder _victoryTitle;
     [SerializeField] private TextDecoder _defeatTitle;
     [SerializeField] private TextDecoder _resultsSubtitle;
+    [SerializeField] private Image _topFadeVictory;
+    [SerializeField] private Image _botFadeVictory;
+    [SerializeField] private Image _topFadeDefeat;
+    [SerializeField] private Image _botFadeDefeat;
 
     [Header("STATS")] 
     [SerializeField] private ResultScreenStat _statPrefab;
