@@ -5,6 +5,8 @@ using UnityEngine;
 public static class SOAssetPaths
 {
     private const string MENU_ROOT = "Nomad Defender/";
+    
+    public const string HELPERS = MENU_ROOT + "Helpers/";
 
     public const string TURRET_PARTS = MENU_ROOT + "TurretParts/";
     public const string TURRET_PARTS_LIBRARIES = TURRET_PARTS + "Libraries/";
