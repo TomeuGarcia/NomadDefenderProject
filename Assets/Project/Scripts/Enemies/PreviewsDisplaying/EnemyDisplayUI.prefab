@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8283642979276857616}
   - component: {fileID: 673356311979239113}
   - component: {fileID: 8083347225972922726}
+  - component: {fileID: 5191006838500252821}
   m_Layer: 5
   m_Name: EnemyDisplayUI
   m_TagString: Untagged
@@ -53,10 +54,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ae435c075565344ae9f820a3959884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemiesPhotoTextureReference: {fileID: 11400000, guid: 2471ad5167999ea418192d5f27588022,
-    type: 2}
   _image: {fileID: 2537168252192097897}
   _text: {fileID: 3467926978368538296}
+  _canvasGroup: {fileID: 5191006838500252821}
 --- !u!222 &673356311979239113
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -95,6 +95,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5191006838500252821
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6796023084280078133}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7142396646947836788
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +119,7 @@ GameObject:
   - component: {fileID: 4368577949819750957}
   - component: {fileID: 3467926978368538296}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,8 +183,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278226175
-  m_fontColor: {r: 1, g: 0.5501839, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -189,8 +201,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -290,7 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 8cca0b9f0c949b648b770109b3b5dd51, type: 2}
-  m_Color: {r: 1, g: 0.51359504, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

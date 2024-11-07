@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class EnemiesPhotograph : MonoBehaviour
 {
-    [SerializeField] private DynamicTextureReference _textureReference;
     [SerializeField] private RenderTexture _renderTexture;
     [SerializeField] private Camera _camera;
     [SerializeField] private AllEnemyTypeConfigsCollection _enemyTypesCollection;
@@ -28,16 +27,11 @@ public class EnemiesPhotograph : MonoBehaviour
         DrawGrid();
         yield return new WaitForEndOfFrame();
         FixEnemiesPosition();
+        _camera.targetTexture = _renderTexture;
         _camera.Render();
+        _camera.targetTexture = null;
         yield return null;
         yield return null;
-        _textureReference.BakeFromRenderTexture(_renderTexture);
-
-        /*
-        if (AssetDatabase.Contains(_renderTexture)) {
-            EditorUtility.SetDirty(_renderTexture);
-        }
-        */
     }
 
     private void Init()

@@ -171,7 +171,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public void ReadyToStartNextWave()
     {
-        if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
+        OnWaveStartSpawning?.Invoke(this);
     }
 
     public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour,

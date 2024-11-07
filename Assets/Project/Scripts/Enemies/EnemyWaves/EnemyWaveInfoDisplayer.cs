@@ -52,6 +52,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         _mouseOverNotifier.OnMouseEntered += ShowDisplayUI;
         _mouseOverNotifier.OnMouseExited += HideDisplayUI;
 
+        _currentEnemiesDisplayData = new EnemiesInWaveDisplayUI.DisplayData();
         InitEnemiesDisplayDataUI();
     }
 
@@ -64,7 +65,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     
     private async void SetupForNewEnemyWave()
     {
-        numberOfEnemiesToSpawn = enemyWaveSpawner.EnemyWaves[enemyWaveSpawner.currentWave].GetEnemyCount();
+        numberOfEnemiesToSpawn = enemyWaveSpawner.CurrentEnemyWave.GetEnemyCount();
 
         int total = numberOfEnemiesToSpawn;
 
@@ -94,7 +95,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         SetupForNewEnemyWave();
 
         InitEnemiesDisplayDataUI();
-        if (_enemiesInWaveDisplayUI.IsShowing)
+        if (_enemiesInWaveDisplayUI.IsShowingDisplayData(_currentEnemiesDisplayData))
         {
             ShowDisplayUI();
         }
@@ -135,7 +136,6 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
     private void InitEnemiesDisplayDataUI()
     {
-        _currentEnemiesDisplayData?.Cleanup();
         EnemyInWave[] enemiesInWave = enemyWaveSpawner.CurrentEnemyWave.enemiesInWave;
         Dictionary<EnemyTypeConfig, int> groupedEnemiesInWave = new();
         foreach (EnemyInWave enemyInWave in enemiesInWave)
@@ -143,11 +143,11 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
             EnemyTypeConfig enemyType = enemyInWave.EnemyType;
             if (groupedEnemiesInWave.ContainsKey(enemyType))
             {
-                groupedEnemiesInWave[enemyType] += 1;
+                groupedEnemiesInWave[enemyType] += enemyInWave.NumberOfSpawns;
             }
             else
             {
-                groupedEnemiesInWave.Add(enemyType, 1);
+                groupedEnemiesInWave.Add(enemyType, enemyInWave.NumberOfSpawns);
             }
         }
         
@@ -160,12 +160,17 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
                 _enemiesInWaveDisplayUI.ProvideEnemyDisplay()
             ));
         }
-        _currentEnemiesDisplayData = new EnemiesInWaveDisplayUI.DisplayData(currentEnemyEntries.ToArray());
+        
+        _currentEnemiesDisplayData.Reset(currentEnemyEntries.ToArray());
     }
+    
     
     private void ShowDisplayUI()
     {
-        _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
+        if (!NoEnemiesLeft())
+        {
+            _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
+        }
     }
 
     private void HideDisplayUI()

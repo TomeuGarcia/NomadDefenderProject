@@ -93,6 +93,5 @@ public class AreaSpawnerArmor : MonoBehaviour
         currentWave.SetActive(true);
         currentWave.GetComponent<AreaFunctionalityArmor>().SetArmorToAdd(armorAmount);
         currentWave.GetComponent<AreaFunctionalityArmor>().Follow(transform);
-        Debug.Log("spawn Area");
     }
 }

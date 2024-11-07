@@ -316,8 +316,8 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if(OnWaveFinished != null) OnWaveFinished();
 
-        enemyWaveSpawner.ReadyToStartNextWave();
 
+        enemyWaveSpawner.ReadyToStartNextWave();
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
         StartWave(enemyWaveSpawner, enemySpawnTransform, index);
