@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements.Experimental;
 
 public class ResultScreenMaskIntro : MonoBehaviour
 {
@@ -15,8 +14,14 @@ public class ResultScreenMaskIntro : MonoBehaviour
     [SerializeField] private Vector4 _initialMask;
     [SerializeField] private Vector4 _endMask;
 
+    [Header("SCROLL")]
+    [SerializeField] private float _spInitialPosition;
+    [SerializeField] private float _spEndPosition;
+    [SerializeField] private float _scrollTime;
+    [SerializeField] private float _scrollFirstDelay;
+    [SerializeField] private float _scrollWaitTime;
+
     [Header("IMAGE")]
-    [SerializeField] private RectTransform _bottomImage;
     [SerializeField] private float _initialPosition;
     [SerializeField] private float _endPosition;
 
@@ -24,25 +29,31 @@ public class ResultScreenMaskIntro : MonoBehaviour
     {
         _initialPosition += 100.0f;
         _endPosition += 100.0f;
-    }
 
-    private void Start()
-    {
-        _bottomImage.localPosition = Vector3.up * _initialPosition;
         _mask.padding = _initialMask;
-        StartCoroutine(AAAAAA());
     }
-    public IEnumerator AAAAAA()
-    {
-        yield return new WaitForSeconds(3.0f);
 
+    public void StartScroll(RectTransform scrollFadeParent)
+    {
         DOTween.To(() => _mask.padding,
         w => _mask.padding = w,
         _endMask,
         _animationTime
-        ).SetEase(_ease)
-         .OnComplete(() => Debug.Log("Tween completed!"));
+        ).SetEase(_ease);
 
-        _bottomImage.DOLocalMoveY(_endPosition, _animationTime).SetEase(_ease);
+        StartCoroutine(ScrollParent(scrollFadeParent));
+    }
+
+    private IEnumerator ScrollParent(RectTransform scrollFadeParent)
+    {
+        yield return new WaitForSeconds(_scrollFirstDelay);
+
+        while (true)
+        {
+            scrollFadeParent.DOLocalMoveY(_spEndPosition, _scrollTime).SetEase(_ease);
+            yield return new WaitForSeconds(_scrollWaitTime + _scrollTime);
+            scrollFadeParent.DOKill();
+            scrollFadeParent.localPosition = Vector3.up * _spInitialPosition;
+        }
     }
 }

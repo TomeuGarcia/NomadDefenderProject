@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -85,10 +86,14 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private TextDecoder _victoryTitle;
     [SerializeField] private TextDecoder _defeatTitle;
     [SerializeField] private TextDecoder _resultsSubtitle;
-    [SerializeField] private Image _topFadeVictory;
-    [SerializeField] private Image _botFadeVictory;
-    [SerializeField] private Image _topFadeDefeat;
-    [SerializeField] private Image _botFadeDefeat;
+
+    [Header("TITLE FADES")]
+    [SerializeField] private RectTransform _fadeVictory;
+    [SerializeField] private RectTransform _scrollVictory;
+    [SerializeField] private RectTransform _fadeDefeat;
+    [SerializeField] private RectTransform _scrollDefeat;
+    [SerializeField] private float[] _fadePopping;
+    [SerializeField] private ResultScreenMaskIntro _maskIntro; 
 
     [Header("STATS")] 
     [SerializeField] private ResultScreenStat _statPrefab;
@@ -149,6 +154,10 @@ public class ResultsScreenView : MonoBehaviour
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
         
         _continueButton.interactable = false;
+
+        //Fades
+        _fadeVictory.gameObject.SetActive(false);
+        _fadeDefeat.gameObject.SetActive(false);
     }
     
     
@@ -160,6 +169,14 @@ public class ResultsScreenView : MonoBehaviour
     private IEnumerator PlayShowAnimation(IRunStateData runStateData)
     {
         yield return new WaitForSeconds(1f);
+        if(runStateData.Victory)
+        {
+            yield return StartCoroutine(ShowTitleFades(_fadeVictory, _scrollVictory));
+        }
+        else
+        {
+            yield return StartCoroutine(ShowTitleFades(_fadeDefeat, _scrollDefeat));
+        }
         yield return StartCoroutine(PlayShowTitleAnimation(runStateData));
         yield return StartCoroutine(PlayShowStatsAnimation());
         yield return StartCoroutine(PlayShowDeckAnimation());
@@ -219,5 +236,16 @@ public class ResultsScreenView : MonoBehaviour
     {
         textDecoder.Activate();
         yield return new WaitUntil(() => textDecoder.FinishedLine);
+    }
+
+    private IEnumerator ShowTitleFades(RectTransform fade, RectTransform scrollFadeParent)
+    {
+        foreach (float f in _fadePopping)
+        {
+            fade.gameObject.SetActive(!fade.gameObject.activeInHierarchy);
+            yield return new WaitForSeconds(f);
+        }
+
+        _maskIntro.StartScroll(scrollFadeParent);
     }
 }
