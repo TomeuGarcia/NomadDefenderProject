@@ -10,6 +10,7 @@ public class TransformPositionShaker : MonoBehaviour
     [SerializeField] private Vector3 _direction = Vector3.right;
     [SerializeField] private bool _backAndForth = true;
     [SerializeField] private bool _addStartingLocalPosition = false;
+    [SerializeField] private float _time = 0f;
 
     private Vector3 _startingLocalPosition;
     
@@ -26,9 +27,10 @@ public class TransformPositionShaker : MonoBehaviour
 
     private void Update()
     {
+        _time += Time.deltaTime * _speed;
         float sine = _backAndForth
-            ? Mathf.Sin(Time.time * _speed)
-            : (Mathf.Sin(Time.time * _speed) + 1) * 0.5f;
+            ? Mathf.Sin(_time)
+            : (Mathf.Sin(_time) + 1) * 0.5f;
         
         
         Vector3 newPosition = _direction * (sine * _amplitude);

@@ -3,6 +3,7 @@ public class SupportCardData
 {
     public SupportCardDataModel OriginalModel { get; private set; }
     public int PlayCost { get; private set; }
+    public BuildingSellingConfig BuildingSellingConfig { get; private set; }
     public SupportCardPartsGroup SharedPartsGroup { get; private set; }
     public SupportCardStatsController StatsController { get; private set; }
 
@@ -14,6 +15,7 @@ public class SupportCardData
         OriginalModel = model;
         PlayCost = model.CardPlayCost;
         SharedPartsGroup = model.MakePartsGroup();
+        BuildingSellingConfig = model.MakeBuildingSellingConfig();
 
         MakeStatsControllerFromParts();
 
@@ -25,6 +27,7 @@ public class SupportCardData
         OriginalModel = other.OriginalModel;
         PlayCost = other.PlayCost;
         SharedPartsGroup = other.SharedPartsGroup;
+        BuildingSellingConfig = other.BuildingSellingConfig;
 
         StatsController = other.StatsController;
         if (StatsController == null)

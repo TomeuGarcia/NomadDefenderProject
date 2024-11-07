@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class BuildingPlacer : MonoBehaviour
     private BuildingCard selectedBuildingCard = null;
     private Building selectedBuilding = null;
     private List<Building> placedBuildings = new List<Building>();
+    public static int TotalPlacedBuildingsThisBattle { get; private set; } = 0;
 
     private static BuildingPlacer s_currentBuildingPlacer;
     public static Building[] GetCurrentPlacedBuildings()
@@ -20,12 +22,13 @@ public class BuildingPlacer : MonoBehaviour
     private Coroutine dragAndDropCardCoroutine = null;
 
     private bool isDisablePlacingDelayed = false;
-    
-    public int PlacedBuildingsCount { get; private set; }
+
+    public int PlacedBuildingsCount => placedBuildings.Count;
 
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+    public static event BuildingPlacerAction OnBuildingPlacedGlobal;
 
     public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
 
@@ -44,6 +47,7 @@ public class BuildingPlacer : MonoBehaviour
     private void OnEnable()
     {
         s_currentBuildingPlacer = this;
+        TotalPlacedBuildingsThisBattle = 0;
 
         TDGameManager.OnEndGameResetPools += RemoveInteractions;
     }
@@ -181,8 +185,8 @@ public class BuildingPlacer : MonoBehaviour
         tile.isOccupied = true;
 
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
-        selectedBuilding.GotPlaced();
-        placedBuildings.Add(selectedBuilding);
+        selectedBuilding.GotPlaced(tile);
+        AddPlacedBuilding(selectedBuilding);
 
 
         if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
@@ -197,9 +201,7 @@ public class BuildingPlacer : MonoBehaviour
 
         selectedBuildingCard = null;
         selectedBuilding = null;
-
-        IncrementPlacedBuildingsCount();
-
+        
         if (OnBuildingPlaced != null) OnBuildingPlaced();
     }
 
@@ -208,8 +210,8 @@ public class BuildingPlacer : MonoBehaviour
         tile.isOccupied = true;
 
         ShowAndPositionSelectedBuilding(buildingCard, building, tile);
-        building.GotPlaced();
-        placedBuildings.Add(building);
+        building.GotPlaced(tile);
+        AddPlacedBuilding(building);
 
 
         if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
@@ -224,6 +226,15 @@ public class BuildingPlacer : MonoBehaviour
         building.EnablePlayerInteraction();
     }
 
+    private void AddPlacedBuilding(Building building)
+    {
+        placedBuildings.Add(building);
+        ++TotalPlacedBuildingsThisBattle;
+        
+        AchievementDefinitions.HaveAmountOfBuildingsSimultaneously.Check(PlacedBuildingsCount);
+        
+        if (OnBuildingPlacedGlobal != null) OnBuildingPlacedGlobal();
+    }
 
 
     private void ShowAndPositionSelectedBuilding(BuildingCard buildingCard, Building building, Tile tile)
@@ -264,14 +275,24 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+    
 
+    public void UnplaceBuilding(Building building)
+    {
+        building.PlacedTile.isOccupied = false;
+        building.GotUnplaced();
 
-    private void IncrementPlacedBuildingsCount()
-    {
-        ++PlacedBuildingsCount;
-    }
-    private void DecrementPlacedBuildingsCount()
-    {
-        --PlacedBuildingsCount;
+        placedBuildings.Remove(building);
+
+        BuildingCard buildingCard = building.BuildingCard;
+
+        if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            GameAudioManager.GetInstance().PlayTurretCardUnplaced(((TurretBuildingCard)buildingCard).CardParts.Body.bodyType);
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayTurretCardUnplaced(TurretPartBody.BodyType.SENTRY);
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Scripts.ObjectPooling;
+using Unity.Content;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -150,7 +151,21 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
         for (int collidersI = 0; collidersI < colliders.Length; ++collidersI)
         {
-            Enemy enemy = colliders[collidersI].gameObject.GetComponent<Enemy>();
+            Enemy enemy = null;
+            colliders[collidersI].gameObject.TryGetComponent<Enemy>(out enemy);
+            if (enemy == null)
+            {
+                continue;
+            }
+
+            if(enemy == null)
+            {
+                Debug.Log("enemy IS NULL");
+            }
+            if(targetedEnemy == null)
+            {
+                Debug.Log("targetedEnemy IS NULL");
+            }
 
             if (enemy != targetedEnemy && 
                 enemy.CanBeAttackedByMultiCastProjectiles() &&

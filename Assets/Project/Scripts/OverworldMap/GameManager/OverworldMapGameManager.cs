@@ -1,3 +1,4 @@
+using AYellowpaper;
 using UnityEngine;
 using DG.Tweening;
 
@@ -34,9 +35,15 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("AUDIO (Ambience)")]
     [SerializeField] private AmbienceAudio ambienceAudio;
 
+    [Header("RUN STATE")] 
+    [SerializeField] private InterfaceReference<IRunStateUpdate, ScriptableObject> _runStateUpdate;
+
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
     [SerializeField] protected OverworldMapVolume _overworldMapVolume;
+    
+    
+    
 
     protected bool canDisplayDeck = true;
 
@@ -147,15 +154,16 @@ public class OverworldMapGameManager : MonoBehaviour
 
     public void OnMapNodeSelected(OWMap_Node owMapNode, bool wasSelectedByPlayer)
     {
-
         owMapPawn.MoveToNode(owMapNode);
-
+        
         if (wasSelectedByPlayer)
         {
             GameAudioManager.GetInstance().PlayNodeSelectedSound();
 
             owMapPawn.ResetPosition();
             DisableCardDisplayer();
+            
+            _runStateUpdate.Value.IncrementNodesReached();
         }
 
         // scuffed camera shake :)

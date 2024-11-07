@@ -20,7 +20,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     private SupportCardData _supportCardData;
     private SupportBuilding _supportBuilding;
 
-    protected override int CurrentBuildingLevel { get => _currentSupportLevel; }
+    protected override int CurrentBuildingLevel => _currentSupportLevel;
     private int _currentSupportLevel;
 
     protected override void AwakeInit()
@@ -54,6 +54,12 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
+    protected override void DoResetState()
+    {
+        _currentSupportLevel = 0;
+        UpdateNextUpgradeDescriptionText();
+    }
+
     protected override void UpdateSupportBar()
     {
         bool isCardUpgradedToMax = IsCardUpgradedToMax(CurrentBuildingLevel);
@@ -70,6 +76,11 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _supportUpgradeButton.DisableButton();        
     }
 
+    protected override void EnableButtons()
+    {
+        _supportUpgradeButton.EnableButton();
+    }
+
 
     protected override void CheckHoveredButtonsCanNowUpgrade()
     {
@@ -80,6 +91,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     // Animations
     protected override void PlayOpenAnimation()
     {
+        base.PlayOpenAnimation();
         if (closeAnimationCoroutine != null)
         {
             StopCoroutine(closeAnimationCoroutine);
@@ -134,6 +146,7 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
 
     protected override void PlayCloseAnimation()
     {
+        base.PlayCloseAnimation();
         if (openAnimationCoroutine != null)
         {
             StopCoroutine(openAnimationCoroutine);

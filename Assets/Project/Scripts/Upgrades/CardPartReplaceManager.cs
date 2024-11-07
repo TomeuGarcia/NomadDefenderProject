@@ -656,6 +656,11 @@ public class CardPartReplaceManager : MonoBehaviour
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
         selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
         selectedCard.PlayLevelUpAnimation();
+
+        if (replacedWithSamePart)
+        {
+            AchievementDefinitions.NegativePlayCostCard.Check(selectedCard.CardData.PlayCost);
+        }
         
         StartCoroutine(PlayCardResultAnimation(selectedCard, replacedWithSamePart));
     }

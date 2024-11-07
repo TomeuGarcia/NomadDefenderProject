@@ -13,14 +13,22 @@ public class TextManager : MonoBehaviour
     void Start()
     {
         secondTime = true;
-        StartCoroutine(DecodeTexts());
+        StartCoroutine(DecodeTextsWithDelay());
     }
 
-    public IEnumerator DecodeTexts()
+    public IEnumerator DecodeTextsWithDelay()
     {
         yield return new WaitForSecondsRealtime(startDelay);
+        DecodeTexts();
+    }
+
+    public void DecodeTexts()
+    {
+        foreach (TextDecoder text in texts)
+        {
+            text.ClearDecoder();
+        }
         StartCoroutine(LinearDecode());
-        //StartCoroutine(SimultaneousDecode(delay));
     }
 
     IEnumerator SimultaneousDecode(float delay)

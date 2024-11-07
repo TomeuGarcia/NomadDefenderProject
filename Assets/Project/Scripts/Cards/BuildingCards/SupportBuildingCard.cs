@@ -19,6 +19,8 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
     private Material material;
     [SerializeField] private TextMeshProUGUI _rangeStatValueText;
     [SerializeField] private Image abilityImage;
+
+    private SupportBuilding _supportBuilding;
     
 
     private SupportCardStatsController StatsController => CardData.StatsController;
@@ -36,7 +38,8 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        copyBuildingPrefab.GetComponent<SupportBuilding>().Init(StatsController, CardData, currencyCounter, 
+        _supportBuilding = copyBuildingPrefab.GetComponent<SupportBuilding>();
+        _supportBuilding.Init(this, StatsController, CardData, currencyCounter, 
             abilityImage.sprite, abilityImage.color);
         copyBuildingPrefab.SetActive(false);
     }

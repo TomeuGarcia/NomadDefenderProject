@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ISpeedBoosterUser
 {
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -24,10 +24,10 @@ public class Enemy : MonoBehaviour
 
     [Header("STATS")]
     [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
-    private int damage;
+    private int Damage;
     private float armor;
     private float health;
-    [HideInInspector] public int currencyDrop;
+    private int currencyDrop;
 
     // Queued damage
     private int queuedDamage = 0;
@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
 
     protected HealthSystem healthSystem;
     public HealthSystem HealthSystem => healthSystem;
-    private EnemyAttackDestination _attackDestination;
+    public EnemyAttackDestination AttackDestination { get; private set; }
 
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemySuicide;
@@ -48,6 +48,17 @@ public class Enemy : MonoBehaviour
 
     public Vector3 Position => meshRenderer.transform.position;
     public Vector3 Right => transformToMove.right;
+    
+    public bool CanBeTargetedFlag { get; set; }
+    
+    public EnemyWaveSpawner SpawnerOwner { get; private set; }
+
+    public static Action<EnemyTypeConfig, TurretDamageAttack> OnTakeDamage;
+    public static Action<EnemyTypeConfig, int> OnDealDamage;
+
+    public static Action<Enemy, PathLocation> OnTriedToAttackDeadLocation;
+
+    private bool _initializedWithoutFunctionality;
 
     private void Awake()
     {
@@ -85,6 +96,7 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         pathFollower.OnPathEndReached -= Attack;
+        SpawnerOwner = null;
     }
 
     private void ResetEnemy()
@@ -106,26 +118,40 @@ public class Enemy : MonoBehaviour
         enemyFeedback.ResetEnemy(healthSystem.HasArmor());
     }
 
+    public void InitWithoutFunctionality()
+    {
+        ResetEnemy();
+        healthHUD.gameObject.SetActive(false);
+        _initializedWithoutFunctionality = true;
+    }
+
     private void ResetStats()
     {
-        damage = _typeConfig.BaseStats.Damage;
+        Damage = _typeConfig.BaseStats.Damage;
         health = _typeConfig.BaseStats.Health;
         armor = _typeConfig.BaseStats.Armor;
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
-        pathFollower.moveSpeed = _typeConfig.BaseStats.MoveSpeed;
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+        pathFollower.SetMoveSpeedMultiplier(1f);
+
+        CanBeTargetedFlag = true;
     }
 
-    public void SpawnedInit(PathNode startNode, Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
+    public void SpawnedInit(EnemyWaveSpawner spawner, PathNode startNode, float toNextNodeT, 
+        Vector3 positionOffset, float totalDistance, EnemyAttackDestination attackDestination)
     {
-        _attackDestination = attackDestination;
-        pathFollower.Init(startNode.GetNextNode(), startNode.GetDirectionToNextNode(), positionOffset, totalDistance);
+        SpawnerOwner = spawner;
         ResetEnemy();
+        AttackDestination = attackDestination;
+        pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
+
+        _initializedWithoutFunctionality = false;
     }
 
 
     public virtual bool CanBeTargeted()
     {
-        return true;
+        return CanBeTargetedFlag;
     }
     public virtual int GetTargetPriorityBonus()
     {
@@ -135,17 +161,27 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        PathLocation pathLocation = _attackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
+        PathLocation pathLocation = AttackDestination.GetLocationToAttack(pathFollower.CurrentTargetNode);
+        if (!AttackPathLocation(pathLocation))
+        {
+            OnTriedToAttackDeadLocation?.Invoke(this, pathLocation);
+        }
+        Suicide();
+    }
 
+    public bool AttackPathLocation(PathLocation pathLocation)
+    {
         if (pathLocation.CanTakeDamage())
         {
-            pathLocation.TakeDamage(damage);
+            pathLocation.TakeDamage(Damage);
             collidedWithLocation = true;
 
             //ServiceLocator.GetInstance().CurrencySpawnService.SpawnCurrency(_typeConfig.BaseStats.CurrencyDrop, Position);
+            OnDealDamage?.Invoke(_typeConfig, Damage);
+            return true;
         }
 
-        Suicide();
+        return false;
     }
 
     public virtual void OnWillBeAttacked(TurretDamageAttack damageAttack)
@@ -161,6 +197,11 @@ public class Enemy : MonoBehaviour
 
     protected virtual void DoTakeDamage(TurretDamageAttack damageAttack, Action<TurretDamageAttackResult> takeDamageResultCallback)
     {
+        if (healthSystem.IsDead())
+        {
+            return;
+        }
+        
         healthHUD.Show();
 
         bool hadArmor = healthSystem.HasArmor();
@@ -180,16 +221,19 @@ public class Enemy : MonoBehaviour
         MeshTransform.DOKill(true);
         MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
-        if (healthSystem.IsDead())
+        bool gotKilled = healthSystem.IsDead();
+        if (gotKilled && !_initializedWithoutFunctionality)
         {
             Die();
         }
 
+        OnTakeDamage?.Invoke(_typeConfig, damageAttack);
         SpawntakeDamageText(damageAttack.Damage, hitArmor);
-
+        AchievementDefinitions.OverkillDamage.Check(damageAttack.Damage);
         
         TurretDamageAttackResult result = 
-            new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor);
+            new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor, gotKilled);
+        
         
         takeDamageResultCallback(result);
     }
@@ -252,7 +296,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void SetMoveSpeed(float speedCoef)
     {
-        pathFollower.SetMoveSpeed(speedCoef);
+        pathFollower.SetMoveSpeedMultiplier(speedCoef);
     }
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
@@ -292,4 +336,52 @@ public class Enemy : MonoBehaviour
     {
         return true;
     }
+
+
+
+
+    private Coroutine _speedBoostCoroutine = null;
+    public void ApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        if (_speedBoostCoroutine != null)
+        {
+            StopCoroutine(_speedBoostCoroutine);
+        }
+        _speedBoostCoroutine = StartCoroutine(DoApplySpeedBoosterMultiplier(boost));
+    }
+
+    private IEnumerator DoApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
+    {
+        float boostedSpeed = _typeConfig.BaseStats.MoveSpeed * boost.SpeedMultiplier;
+        
+        Timer speedTransitionTimer = new Timer(boost.AccelerateDuration);
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                _typeConfig.BaseStats.MoveSpeed, boostedSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(boost.SpeedMultiplier);
+
+        
+        yield return new WaitForSeconds(boost.Duration);
+        
+        
+        speedTransitionTimer.Duration = boost.DecelerateDuration;
+        while (!speedTransitionTimer.HasFinished())
+        {
+            speedTransitionTimer.Update(Time.deltaTime);
+            pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
+                boostedSpeed, _typeConfig.BaseStats.MoveSpeed, speedTransitionTimer.Ratio01));
+            
+            yield return null;
+        }
+        pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
+
+        _speedBoostCoroutine = null;
+    }
+
+    
 }

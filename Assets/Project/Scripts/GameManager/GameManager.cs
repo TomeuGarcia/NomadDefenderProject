@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -9,6 +10,13 @@ public class GameManager : MonoBehaviour
 {
     [Header("DECK DATA")]
     [SerializeField] protected DecksLibrary decksLibrary;
+
+    [Header("TROPHIES")] 
+    [SerializeField] private CardDeckInUseData _cardDeckInUseData;
+    [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
+
+    [Header("RUN STATE")] 
+    [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
@@ -57,6 +65,8 @@ public class GameManager : MonoBehaviour
         PauseMenu.GetInstance().GameCanBePaused = true;
         
         _watcherFace.SetActive(false);
+        
+        _runStateInit.Value.Init(decksLibrary.DeckInUse.StarterDeck, decksLibrary.DeckInUse.CurrentDeckContent);
     }
 
     [Button()]
@@ -66,8 +76,22 @@ public class GameManager : MonoBehaviour
         //mapSceneLoader.LoadMainMenuScene(3f);
         StartCoroutine(DoStartVictory());
 
-        StarterDecksUnlocker.GetInstance().UnlockNextDeck();
+        UnlockVictoryContent();
     }
+
+    private void UnlockVictoryContent()
+    {
+        StarterDecksUnlocker.GetInstance().UnlockNextDeck();
+        _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
+
+        AchievementDefinitions.StarterDeck_Victory_Frost.Check(decksLibrary.IsUsingFrostDeck());
+        AchievementDefinitions.StarterDeck_Victory_Repeater.Check(decksLibrary.IsUsingRepeaterDeck());
+        AchievementDefinitions.StarterDeck_Victory_Currency.Check(decksLibrary.IsUsingCurrencyDeck());
+        AchievementDefinitions.StarterDeck_Victory_Berserker.Check(decksLibrary.IsUsingBerserkerDeck());
+        AchievementDefinitions.StarterDeck_Victory_All.Check();
+    }
+
+
     private IEnumerator DoStartVictory()
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
@@ -105,8 +129,10 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(0.2f);
 
-        SceneLoader.GetInstance().StartLoadGameEndCredits();
-        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
+        //SceneLoader.GetInstance().StartLoadGameEndCredits();
+        StartCoroutine(DelayedLoadRunResultsScreen(0f));
+
+        SharedFinishRun(true);
     }
 
     [Button()]
@@ -128,7 +154,9 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.0f);
         //mapSceneLoader.LoadMainMenuScene(1f);
-        GameOverFinishLoadScene();
+        
+        //GameOverFinishLoadScene();
+        StartCoroutine(DelayedLoadRunResultsScreen(0.85f));
 
         gameOverHolder.SetActive(false);
         for (int i = 0; i < 3; ++i)
@@ -141,7 +169,8 @@ public class GameManager : MonoBehaviour
             globalVolume.profile = initVol;
             yield return new WaitForSeconds(0.1f);
         }
-        
+
+        SharedFinishRun(false);
     }
 
     private void GameOverFinishLoadScene()
@@ -149,6 +178,12 @@ public class GameManager : MonoBehaviour
         mapSceneLoader.LoadMainMenuScene(0.85f);
     }
 
+    private IEnumerator DelayedLoadRunResultsScreen(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
+        SceneLoader.GetInstance().LoadRunResultsScreen();
+    }
 
     private IEnumerator VictoryWatcherScripedSequence()
     {
@@ -191,6 +226,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(3f);
 
+    }
+
+
+    private void SharedFinishRun(bool victory)
+    {
+        _runStateInit.Value.Finish(victory);
     }
 
 

@@ -61,6 +61,10 @@ public class CurrencyBase : TurretPartBase_Prefab
         StartCoroutine(CurrencyDropControl());
         _currencyOverTimeDropper.SetSpawnPosition(topCube.position);
     }
+    public override void OnGetUnplaced()
+    {
+        StopAllCoroutines();
+    }
 
     override public void Upgrade(SupportBuilding ownerSupportBuilding, int newStatLevel)
     {
@@ -91,7 +95,7 @@ public class CurrencyBase : TurretPartBase_Prefab
         topCube.position = new Vector3(topCube.position.x, topCube.position.y + (Mathf.Sin(positionMovement) / 4000.0f), topCube.position.z);
         
 
-        if (_canGenerateCurrency)
+        if (_canGenerateCurrency && !AbilityIsDisabled)
         {
             _currencyOverTimeDropper.Update();
         }

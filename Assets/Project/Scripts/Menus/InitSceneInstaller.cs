@@ -8,6 +8,7 @@ public class InitSceneInstaller : MonoBehaviour
     [SerializeField] private Transform _particlesParent;
     [SerializeField] private GeneralParticleFactoryConfig _generalParticlesFactoryConfig;
     [SerializeField] private ParticleFactoryConfig _particlesFactoryConfig;
+    [SerializeField] private AchievementsManagerConfig _achievementsManagerConfig;
 
     private void Awake()
     {
@@ -20,5 +21,7 @@ public class InitSceneInstaller : MonoBehaviour
         serviceLocator.ParticleFactory = new ParticleFactory(_particlesFactoryConfig, _particlesParent);
         serviceLocator.CameraHelp = new CameraHelpService();
         serviceLocator.OptionalTutorialsStateManager = new OptionalTutorialsStateManager_PlayerPrefs();
+        
+        serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig);
     }
 }

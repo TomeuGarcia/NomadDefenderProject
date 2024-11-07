@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -121,7 +122,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
         turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
-        turretBuilding.Init(StatsController, CardData, currencyCounter);
+        turretBuilding.Init(this, StatsController, CardData, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 

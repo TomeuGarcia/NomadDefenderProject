@@ -20,10 +20,13 @@ public static class SOAssetPaths
     public const string LEVEL_CREATION = MENU_ROOT + "LevelCreation/";
     public const string LEVEL_CREATION_BRUSHES = LEVEL_CREATION + "Brushes/";
 
+    public const string GAME_RUN = MENU_ROOT + "Run/";
+    
     public const string TD_GAME = MENU_ROOT + "TD Game/";
     public const string TD_CURRENCYDROP = TD_GAME + "Currency Drop/";
 
     public const string ENEMIES = MENU_ROOT + "Enemies/";
+    public const string ENEMY_HAZARDS = ENEMIES + "Hazards/";
     public const string ENEMY_TYPES = ENEMIES + "Types/";
     public const string ENEMY_WAVES = ENEMIES + "Waves/";
 
@@ -46,4 +49,7 @@ public static class SOAssetPaths
 
     public const string VFX = MENU_ROOT + "VFX/";
     public const string VFX_ABILITIES = VFX + "Abilities/";
+    
+    public const string UNLOCKABLES = MENU_ROOT + "Unlockables/";
+    public const string ACHIEVEMENTS = MENU_ROOT + "Achievements/";
 }

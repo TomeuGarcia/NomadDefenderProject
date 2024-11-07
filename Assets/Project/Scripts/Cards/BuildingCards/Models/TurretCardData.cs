@@ -8,13 +8,14 @@ public class TurretCardData
     public readonly TurretCardPartsGroup SharedPartsGroup;
     public int PlayCost { get; private set; }
     public int CardUpgradeLevel { get; private set; }
+    public BuildingSellingConfig BuildingSellingConfig { get; private set; }
     public TurretCardStatsController StatsController { get; private set; }
 
     public TurretPassiveAbilitiesController PassiveAbilitiesController { get; private set; }
     private EditableCardAbilityDescription _originalProjectileDescription;
     public EditableCardAbilityDescription CurrentProjectileDescription { get; private set; }
 
-
+    public TurretCardStatistics Statistics { get; private set; }
 
 
     public TurretCardData(TurretCardDataModel model)
@@ -23,6 +24,8 @@ public class TurretCardData
         PlayCost = model.CardPlayCost;
         CardUpgradeLevel = model.CardLevel;
         SharedPartsGroup = model.MakePartsGroup();
+        BuildingSellingConfig = model.MakeBuildingSellingConfig();
+        Statistics = new TurretCardStatistics();
         
         MakeStatsControllerFromParts();
 
@@ -44,6 +47,8 @@ public class TurretCardData
         PlayCost = other.PlayCost;
         CardUpgradeLevel = other.CardUpgradeLevel;
         SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
+        BuildingSellingConfig = new BuildingSellingConfig(other.BuildingSellingConfig);
+        Statistics = new TurretCardStatistics();
 
         if (makeNewStats)
         {

@@ -31,6 +31,12 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
         ++CurrentUpgradeLevel;
         UpdateCurrentStats();
     }
+    
+    public void ResetUpgradeLevel()
+    {
+        CurrentUpgradeLevel = 0;
+        UpdateCurrentStats();
+    }
 
     private void UpdateCurrentStats()
     {

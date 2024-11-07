@@ -34,14 +34,30 @@ public class SlowIdleAnimator : MonoBehaviour
 
         yield return new WaitForSeconds(_insertionRecoverDelay);
         _target.DOLocalMoveY(_originalHeightPosition, _insertionRecoverDuration)
-            .OnComplete(() => StartCoroutine(AnimateRotation()));
+            .OnComplete(
+                () =>
+                {
+                    if (gameObject.activeInHierarchy)
+                    {
+                        StartCoroutine(AnimateRotation());
+                    }
+                }
+            );
     }
 
     private IEnumerator AnimateRotation()
     {
         yield return new WaitForSeconds(_rotationDelay);
         _target.DOBlendableLocalRotateBy(_target.up * _rotationDegrees, _rotationDuration)
-            .OnComplete(() => StartCoroutine(AnimateInsertion()));
+            .OnComplete(
+                () =>
+                {
+                    if (gameObject.activeInHierarchy)
+                    {
+                        StartCoroutine(AnimateInsertion());
+                    }
+                }
+            );
     }
 
     private void OnDisable()

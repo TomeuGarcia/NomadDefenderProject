@@ -10,10 +10,23 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
 
     private const float TOTAL_DAMAGE_MULTIPLIER = 0.3f;
 
+    private static int s_currentlyAliveOrbitings = 0;
+
     
     private void Awake()
     {
         disappearing = true;
+    }
+
+    private void OnEnable()
+    {
+        ++s_currentlyAliveOrbitings;
+        AchievementDefinitions.OrbitingsStack.Check(s_currentlyAliveOrbitings);
+    }
+
+    private void OnDisable()
+    {
+        --s_currentlyAliveOrbitings;
     }
 
     protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)

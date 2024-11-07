@@ -41,6 +41,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     [SerializeField] private bool hasToSendBattleState = true;
     private bool alreadyPlayedVictoryOrGameOver = false;
 
+    [SerializeField] private EnemyRedirectedDamage _redirectedDamagePrefab;
+
     [Header("TILES MATERIAL")]
     [SerializeField] private Material obstaclesTilesMaterial;
     [SerializeField] private Material tilesMaterial;
@@ -60,7 +62,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
-
+        
         numAliveLocations = pathLocations.Length;        
 
         InitLocationsVisuals();
@@ -72,6 +74,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         HandBuildingCards.OnCardPlayed += EnableFirstCardPlayed;
         EnemyWaveManager.OnAllWavesFinished += CheckVictory;
 
+        Enemy.OnTriedToAttackDeadLocation += OnTriedToAttackDeadLocation;
+        
         for (int i = 0; i < pathLocations.Length; ++i)
         {
             pathLocations[i].OnDeath += DecreaseAliveLocationsAndCheckGameOver;
@@ -86,6 +90,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         }
         
         EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
+        Enemy.OnTriedToAttackDeadLocation -= OnTriedToAttackDeadLocation;
+
 
         for (int i = 0; i < pathLocations.Length; ++i)
         {
@@ -192,6 +198,9 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
 
+        AchievementDefinitions.WinBattleWithOnly1Building.Check(BuildingPlacer.TotalPlacedBuildingsThisBattle);
+        
+        
         StartCoroutine(VictoryAnimation());
         CommonFinishGame();
     }
@@ -358,5 +367,32 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         }
 
         return mostDamagedLocation != null;
+    }
+
+
+
+
+    private void OnTriedToAttackDeadLocation(Enemy enemy, PathLocation attackedLocation)
+    {
+        if (pathLocations.Length < 2)
+        {
+            return;
+        }
+
+        PathLocation otherLocation = attackedLocation == pathLocations[0]
+            ? pathLocations[1] 
+            : pathLocations[0];
+
+        if (!otherLocation.CanTakeDamage())
+        {
+            return;
+        }
+        
+        attackedLocation.PlayTakeDamageAnimation();
+        LastEnemyKIllAnimation.instance.DeathAnimation(attackedLocation.transform.position, false);
+        
+        EnemyRedirectedDamage redirectedDamage = Instantiate(_redirectedDamagePrefab, 
+            attackedLocation.Position + Vector3.up, Quaternion.identity);
+        redirectedDamage.Init(enemy, attackedLocation, otherLocation);
     }
 }
