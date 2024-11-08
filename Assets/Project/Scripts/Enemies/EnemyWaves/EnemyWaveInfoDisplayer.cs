@@ -21,7 +21,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private EnemiesInWaveDisplayUI _enemiesInWaveDisplayUI;
     private EnemiesInWaveDisplayUI.DisplayData _currentEnemiesDisplayData;
 
-    private MouseOverNotifier _mouseOverNotifier;
+    private MouseOverlapNotifier _mouseOverNotifier;
     
     private void OnDestroy()
     {
@@ -35,7 +35,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     }
 
     public void Init(PathNode pathNode, EnemyWaveSpawner enemyWaveSpawner, EnemiesInWaveDisplayUI enemiesInWaveDisplayUI,
-        MouseOverNotifier mouseOverNotifier)
+        MouseOverlapNotifier mouseOverNotifier)
     {
         _enemiesInWaveDisplayUI = enemiesInWaveDisplayUI;
         transform.position = pathNode.Position + Vector3.up * 1.2f;
@@ -175,6 +175,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
     private void HideDisplayUI()
     {
-        _enemiesInWaveDisplayUI.Hide();
+        if (_enemiesInWaveDisplayUI.IsShowingDisplayData(_currentEnemiesDisplayData))
+        {
+            _enemiesInWaveDisplayUI.Hide();
+        }
     }
 }

@@ -59,12 +59,11 @@ public class EnemyDisplayUI : MonoBehaviour
     {
         _text.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
         _image.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
-
-        _text.DOColor(new Color(1, 0.5f, 0, 1), 0.2f)
-            .OnComplete(() => _text.DOColor(Color.white, 0.2f));
     }
     public void PlayTextUpdateAnimation()
     {
-        _text.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
+        _text.transform.DOPunchScale(Vector3.one * 0.4f, 0.3f, 1, 1f);
+        _text.DOColor(new Color(1, 0.5f, 0, 1), 0.15f)
+            .OnComplete(() => _text.DOColor(Color.white, 0.15f));
     }
 }

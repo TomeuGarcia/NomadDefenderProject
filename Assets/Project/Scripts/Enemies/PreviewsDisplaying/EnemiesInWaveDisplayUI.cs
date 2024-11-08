@@ -133,6 +133,7 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
 
     public void Show(DisplayData displayData)
     {
+        _currentDisplayData?.DeactivateViews();
         _currentDisplayData = displayData;
         _isShowing = true;
         StopAllCoroutines();

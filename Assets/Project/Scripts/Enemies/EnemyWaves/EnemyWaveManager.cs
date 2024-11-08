@@ -24,7 +24,7 @@ public class EnemyWaveManager : MonoBehaviour
         public EnemyWaveInfoDisplayer WaveDisplayer { get; private set; }
         
         private NodePathViewer _pathViewer;
-        private MouseOverNotifier _mouseOverNotifier;
+        private MouseOverlapNotifier _mouseOverNotifier;
         private bool _showingPathPermanently = false;
 
         public void InitWaveDisplayer(EnemyWaveInfoDisplayer waveDisplayer, EnemiesInWaveDisplayUI enemiesInWaveDisplayUI)
@@ -38,7 +38,7 @@ public class EnemyWaveManager : MonoBehaviour
             ActiveWaveCoroutine = activeWaveCoroutine;
         }
 
-        public void InitNodePathViewer(NodePathViewer pathViewer, MouseOverNotifier mouseOverNotifier)
+        public void InitNodePathViewer(NodePathViewer pathViewer, MouseOverlapNotifier mouseOverNotifier)
         {
             _pathViewer = pathViewer;
             _mouseOverNotifier = mouseOverNotifier;
@@ -105,7 +105,7 @@ public class EnemyWaveManager : MonoBehaviour
     [Header("ENEMY PATH TRAIL")]
     [SerializeField] private GameObject enemyPathTrailPrefab;
     [SerializeField] private NodePathViewer _pathViewerPrefab;
-    [SerializeField] private MouseOverNotifier _pathViewerMouseNotifierPrefab;
+    [SerializeField] private MouseOverlapNotifier _pathViewerMouseNotifierPrefab;
     private PathFollower[] enemyPathFollowerTrails;
     private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
@@ -136,7 +136,7 @@ public class EnemyWaveManager : MonoBehaviour
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
 
-            MouseOverNotifier enemySpawnMouseOverNotifier =
+            MouseOverlapNotifier enemySpawnMouseOverNotifier =
                 Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform);
 
             pathStartData.InitNodePathViewer(
