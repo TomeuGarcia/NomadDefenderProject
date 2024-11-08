@@ -56,6 +56,7 @@ public class PathLocation : MonoBehaviour
     public delegate void PathLocationAction(PathLocation thisPathLocation);
     public delegate void PathLocationAction2();
     public event PathLocationAction OnDeath;
+    public static event PathLocationAction OnDeathGlobal;
     public static event PathLocationAction OnTakeDamage;
     public static event PathLocationAction2 OnHealthChanged;
 
@@ -109,13 +110,18 @@ public class PathLocation : MonoBehaviour
         }
         else
         {
-            locationMeshHolder.DOComplete();
-            locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
-            GameAudioManager.GetInstance().PlayLocationTakeDamage();
+            PlayTakeDamageAnimation();
         }
 
         if (OnTakeDamage != null) OnTakeDamage(this);
         if (OnHealthChanged != null) OnHealthChanged();
+    }
+
+    public void PlayTakeDamageAnimation()
+    {
+        locationMeshHolder.DOComplete();
+        locationMeshHolder.DOPunchScale(new Vector3(1f, 0f, 1f) * 0.4f, 0.9f, 8);
+        GameAudioManager.GetInstance().PlayLocationTakeDamage();
     }
 
     public void Heal(int healAmount)
@@ -136,6 +142,7 @@ public class PathLocation : MonoBehaviour
     private void Die()
     {
         if (OnDeath != null) OnDeath(this);
+        if (OnDeathGlobal != null) OnDeathGlobal(this);
     }
 
 

@@ -19,6 +19,7 @@ public class FadingTextsFactory : MonoBehaviour, IFadingTextsFactory, IFadingTex
 
     private void Awake()
     {
+        _config.SetTDMode();
         _fadingTextsPool = _config.FadingTextPoolData.MakeInitializedObjectPool(_textsParent);
         _fadingTextCharactersPool = _config.FadingTextCharacterPoolData.MakeInitializedObjectPool(_textsWaitParent);
 

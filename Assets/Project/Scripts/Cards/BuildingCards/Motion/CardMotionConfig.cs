@@ -67,6 +67,7 @@ public class CardMotionConfig : ScriptableObject
     [SerializeField] private CardStateDisplacements _gameplayHandDisplacements;
     [SerializeField] private CardStateDisplacements _upgradesDisplacements;
     [SerializeField] private CardStateDisplacements _tutorialDisplayDisplacements;
+    [SerializeField] private CardStateDisplacements _resultsScreenDisplacements;
     public CardStateDisplacements CurrentDisplacements { get; private set; }
 
 
@@ -81,6 +82,10 @@ public class CardMotionConfig : ScriptableObject
     public void SetTutorialDisplayMode()
     {
         CurrentDisplacements = _tutorialDisplayDisplacements;
+    }
+    public void SetResultsScreenDisplayMode()
+    {
+        CurrentDisplacements = _resultsScreenDisplacements;
     }
 
 }

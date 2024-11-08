@@ -149,6 +149,10 @@ public class MainMenu : MonoBehaviour
             TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();            
             Play();
         }
+        else if (Input.GetKeyDown(KeyCode.R) && canInteract) // DEBUG enter ResultsScreen
+        {
+            SceneLoader.GetInstance().LoadRunResultsScreen();
+        }
     }
 
     public void PlayNewGame()

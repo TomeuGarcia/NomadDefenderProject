@@ -112,6 +112,10 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(DoLoadScene(LoadDeckSelectorScene));
     }
+    public void LoadRunResultsScreen()
+    {
+        StartCoroutine(DoLoadScene(LoadRunResultsScreenScene));
+    }
 
     public void StartLoadNormalGame(bool loadUsingSceneName = false)
     {
@@ -148,6 +152,10 @@ public class SceneLoader : MonoBehaviour
     private void LoadDeckSelectorScene()
     {
         SceneManager.LoadScene("DeckSelector");
+    }
+    private void LoadRunResultsScreenScene()
+    {
+        SceneManager.LoadScene("RunResultsScreen");
     }
     private void LoadMapScene()
     {

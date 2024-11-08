@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class BuildingPlacer : MonoBehaviour
     private BuildingCard selectedBuildingCard = null;
     private Building selectedBuilding = null;
     private List<Building> placedBuildings = new List<Building>();
+    public static int TotalPlacedBuildingsThisBattle { get; private set; } = 0;
 
     private static BuildingPlacer s_currentBuildingPlacer;
     public static Building[] GetCurrentPlacedBuildings()
@@ -26,6 +28,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+    public static event BuildingPlacerAction OnBuildingPlacedGlobal;
 
     public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
 
@@ -44,6 +47,7 @@ public class BuildingPlacer : MonoBehaviour
     private void OnEnable()
     {
         s_currentBuildingPlacer = this;
+        TotalPlacedBuildingsThisBattle = 0;
 
         TDGameManager.OnEndGameResetPools += RemoveInteractions;
     }
@@ -182,7 +186,7 @@ public class BuildingPlacer : MonoBehaviour
 
         ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, tile);
         selectedBuilding.GotPlaced(tile);
-        placedBuildings.Add(selectedBuilding);
+        AddPlacedBuilding(selectedBuilding);
 
 
         if (selectedBuildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
@@ -207,7 +211,7 @@ public class BuildingPlacer : MonoBehaviour
 
         ShowAndPositionSelectedBuilding(buildingCard, building, tile);
         building.GotPlaced(tile);
-        placedBuildings.Add(building);
+        AddPlacedBuilding(building);
 
 
         if (buildingCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
@@ -222,6 +226,15 @@ public class BuildingPlacer : MonoBehaviour
         building.EnablePlayerInteraction();
     }
 
+    private void AddPlacedBuilding(Building building)
+    {
+        placedBuildings.Add(building);
+        ++TotalPlacedBuildingsThisBattle;
+        
+        AchievementDefinitions.HaveAmountOfBuildingsSimultaneously.Check(PlacedBuildingsCount);
+        
+        if (OnBuildingPlacedGlobal != null) OnBuildingPlacedGlobal();
+    }
 
 
     private void ShowAndPositionSelectedBuilding(BuildingCard buildingCard, Building building, Tile tile)

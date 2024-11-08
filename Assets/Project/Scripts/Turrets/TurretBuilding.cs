@@ -142,6 +142,8 @@ public class TurretBuilding : RangeBuilding
         InitShootingController();
         
         _abilitiesObjectLifetimeCycle.OnTurretCreated(this);
+        
+        OnAnyStatUpdated();
     }
 
     private void InitShootingController()
@@ -168,11 +170,17 @@ public class TurretBuilding : RangeBuilding
         basePart.baseCollider.UpdateRange(Stats.RadiusRange);
     }
 
+    private void OnAnyStatUpdated()
+    {
+        AchievementDefinitions.HaveTurretWithRangeAmount.Check(Stats);
+        AchievementDefinitions.HaveTurretWithShotsPerSecondAmount.Check(Stats);
+    }
 
     private void OnControllerUpdatedStats()
     {
         UpdateRange();
         upgrader.OnStatsUpdated();
+        OnAnyStatUpdated();
     }
     
     public void OnEnemyShot(Enemy shotEnemy)

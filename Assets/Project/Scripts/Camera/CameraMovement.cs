@@ -51,10 +51,12 @@ public class CameraMovement : MonoBehaviour
     private void OnEnable()
     {
         PathLocation.OnTakeDamage += CameraShakeLocationTakeDamage;
+        Enemy.OnTriedToAttackDeadLocation += OnTriedToAttackDeadLocation;
     }
     private void OnDisable()
     {
         PathLocation.OnTakeDamage -= CameraShakeLocationTakeDamage;
+        Enemy.OnTriedToAttackDeadLocation -= OnTriedToAttackDeadLocation;
     }
 
     void LateUpdate()
@@ -133,6 +135,11 @@ public class CameraMovement : MonoBehaviour
 
         Vector3 shakePunch = new Vector3(Random.Range(-0.25f, -0.1f), 0f, 0f) * 1.5f;
         transform.DOPunchRotation(shakePunch, 0.4f, 9);
+    }
+
+    private void OnTriedToAttackDeadLocation(Enemy enemy, PathLocation attackedLocation)
+    {
+        CameraShakeLocationTakeDamage(attackedLocation);
     }
 
 }

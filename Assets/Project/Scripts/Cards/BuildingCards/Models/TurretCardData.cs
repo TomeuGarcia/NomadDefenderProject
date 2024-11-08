@@ -15,7 +15,7 @@ public class TurretCardData
     private EditableCardAbilityDescription _originalProjectileDescription;
     public EditableCardAbilityDescription CurrentProjectileDescription { get; private set; }
 
-    
+    public TurretCardStatistics Statistics { get; private set; }
 
 
     public TurretCardData(TurretCardDataModel model)
@@ -25,6 +25,7 @@ public class TurretCardData
         CardUpgradeLevel = model.CardLevel;
         SharedPartsGroup = model.MakePartsGroup();
         BuildingSellingConfig = model.MakeBuildingSellingConfig();
+        Statistics = new TurretCardStatistics();
         
         MakeStatsControllerFromParts();
 
@@ -47,6 +48,7 @@ public class TurretCardData
         CardUpgradeLevel = other.CardUpgradeLevel;
         SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
         BuildingSellingConfig = new BuildingSellingConfig(other.BuildingSellingConfig);
+        Statistics = new TurretCardStatistics();
 
         if (makeNewStats)
         {
