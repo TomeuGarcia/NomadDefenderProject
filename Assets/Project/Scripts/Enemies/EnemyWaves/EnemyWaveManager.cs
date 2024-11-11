@@ -24,13 +24,13 @@ public class EnemyWaveManager : MonoBehaviour
         public EnemyWaveInfoDisplayer WaveDisplayer { get; private set; }
         
         private NodePathViewer _pathViewer;
-        private MouseOverNotifier _mouseOverNotifier;
+        private MouseOverlapNotifier _mouseOverNotifier;
         private bool _showingPathPermanently = false;
 
-        public void InitWaveDisplayer(EnemyWaveInfoDisplayer _waveDisplayer)
+        public void InitWaveDisplayer(EnemyWaveInfoDisplayer waveDisplayer, EnemiesInWaveDisplayUI enemiesInWaveDisplayUI)
         {
-            WaveDisplayer = _waveDisplayer;
-            _waveDisplayer.Init(_startNode, _enemyWaveSpawner);
+            WaveDisplayer = waveDisplayer;
+            WaveDisplayer.Init(_startNode, _enemyWaveSpawner, enemiesInWaveDisplayUI, _mouseOverNotifier);
         }
 
         public void SetActiveWaveCoroutine(Coroutine activeWaveCoroutine)
@@ -38,7 +38,7 @@ public class EnemyWaveManager : MonoBehaviour
             ActiveWaveCoroutine = activeWaveCoroutine;
         }
 
-        public void InitNodePathViewer(NodePathViewer pathViewer, MouseOverNotifier mouseOverNotifier)
+        public void InitNodePathViewer(NodePathViewer pathViewer, MouseOverlapNotifier mouseOverNotifier)
         {
             _pathViewer = pathViewer;
             _mouseOverNotifier = mouseOverNotifier;
@@ -101,11 +101,11 @@ public class EnemyWaveManager : MonoBehaviour
     [Header("FEEDBACK")]
     [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
-
+    
     [Header("ENEMY PATH TRAIL")]
     [SerializeField] private GameObject enemyPathTrailPrefab;
     [SerializeField] private NodePathViewer _pathViewerPrefab;
-    [SerializeField] private MouseOverNotifier _pathViewerMouseNotifierPrefab;
+    [SerializeField] private MouseOverlapNotifier _pathViewerMouseNotifierPrefab;
     private PathFollower[] enemyPathFollowerTrails;
     private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
@@ -121,20 +121,32 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void Awake()
     {
+        
+    }
+    private void Init()
+    {
         //canvas.SetActive(false);
         _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
         activeWaves = _pathsStartData.Length;
-
+        
+        
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
 
-            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform));
+            MouseOverlapNotifier enemySpawnMouseOverNotifier =
+                Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform);
+
+            pathStartData.InitNodePathViewer(
+                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier
+            );
+
+            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform), 
+                EnemiesInWaveDisplayUI.Instance);
         }
 
-        InitPathViewers();
         
         StartCoroutine(SetupEnemyPathFollowerTrails());
 
@@ -145,6 +157,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void Start()
     {
+        Init();
         _tdGameState = ServiceLocator.GetInstance().TDGameState;
         StartCoroutine(WaitForStart());
     }
@@ -303,8 +316,8 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if(OnWaveFinished != null) OnWaveFinished();
 
-        enemyWaveSpawner.ReadyToStartNextWave();
 
+        enemyWaveSpawner.ReadyToStartNextWave();
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
         StartWave(enemyWaveSpawner, enemySpawnTransform, index);
@@ -366,18 +379,7 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
 
-
-
-    private void InitPathViewers()
-    {
-        foreach (PathStartData pathStartData in _pathsStartData)
-        {
-            pathStartData.InitNodePathViewer(
-                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform),
-                Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform)
-                );
-        }
-    }
+    
 
 
     private IEnumerator SetupEnemyPathFollowerTrails()

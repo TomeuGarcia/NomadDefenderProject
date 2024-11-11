@@ -38,6 +38,7 @@ Transform:
   - {fileID: 4033755766678192867}
   - {fileID: 2182832721741666954}
   - {fileID: 5037395756259310455}
+  - {fileID: 7144955952274196074}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,16 +54,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba3a5f4854c377347847475ceb841870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackGeneralConfig: {fileID: 11400000, guid: 715bcb7113599ee45b33a2b03b414826,
-    type: 2}
   meshRenderer: {fileID: 4982204146917144296}
+  _meshHolder: {fileID: 4033755766678192867}
+  _meshCenter: {fileID: 7144955952274196074}
   pathFollower: {fileID: 1626341512122004569}
   transformToMove: {fileID: 163396529507246381}
   rb: {fileID: 4650990172065204862}
   healthHUD: {fileID: 9085599442052968132}
   enemyFeedback: {fileID: 7253815764504096979}
   _typeConfig: {fileID: 11400000, guid: 090f3fcceefbf1445acb812a7648647d, type: 2}
-  currencyDrop: 5
 --- !u!114 &7253815764504096979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +253,37 @@ MonoBehaviour:
   spawnRate: 2.5
   armorAmount: 15
   enemyFeedback: {fileID: 7253815764504096979}
+--- !u!1 &1702439102410689310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7144955952274196074}
+  m_Layer: 6
+  m_Name: MeshCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7144955952274196074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702439102410689310}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 163396529507246381}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &215680629243131439
 PrefabInstance:
   m_ObjectHideFlags: 0

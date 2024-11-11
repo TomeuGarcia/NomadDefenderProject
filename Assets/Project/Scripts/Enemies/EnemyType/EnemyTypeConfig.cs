@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "EnemyType_NAME", 
     menuName = SOAssetPaths.ENEMY_TYPES + "EnemyTypeConfig")]
@@ -23,8 +24,20 @@ public class EnemyTypeConfig : ScriptableObject
         public float MoveSpeed => _moveSpeed;
     }
 
+    [System.Serializable]
+    public class ViewConfig
+    {
+        [SerializeField, Min(0)] private float _photoScale = 1;
+        [SerializeField, Min(0)] private Vector3 _photoRotation = new Vector3(20, 45, 20);
+        public float PhotoScale => _photoScale;
+        public Quaternion PhotoRotation => Quaternion.Euler(_photoRotation);
+        public int PhotoIndex { get; set; }
+    }
 
     [SerializeField] private Stats _baseStats;
+    [SerializeField] private ViewConfig _view;
 
     public Stats BaseStats => _baseStats;
+    public ViewConfig View => _view;
+    
 }

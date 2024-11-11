@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 {
     [Header("Mesh")]
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Transform _meshHolder;
+    [SerializeField] private Transform _meshCenter;
     public Transform MeshTransform => meshRenderer.transform;
     private Vector3 originalMeshLocalScale;
 
@@ -29,6 +31,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     private float health;
     private int currencyDrop;
 
+    public EnemyTypeConfig TypeConfig => _typeConfig;
+    
     // Queued damage
     private int queuedDamage = 0;
 
@@ -123,6 +127,35 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         ResetEnemy();
         healthHUD.gameObject.SetActive(false);
         _initializedWithoutFunctionality = true;
+        
+        enabled = false;
+        pathFollower.enabled = false;
+
+        if (_meshHolder.TryGetComponent(out EnemyIdleAnimator idleAnimator))
+        {
+            idleAnimator.enabled = false;
+        }
+        if (TryGetComponent(out AreaSpawnerArmor areaSpawnerArmor))
+        {
+            areaSpawnerArmor.enabled = false;
+        }
+        if (TryGetComponent(out AreaSpawnerHealth areaSpawnerHealth))
+        {
+            areaSpawnerHealth.enabled = false;
+        }
+    }
+
+    public void PositionWithCenteredMesh()
+    {
+        Vector3 desiredCenterPosition = transform.position;
+        Vector3 currentCenterPosition = _meshCenter.position;
+        Vector3 offset = currentCenterPosition - desiredCenterPosition;
+        transform.position = desiredCenterPosition - offset;
+
+        if (_meshHolder.TryGetComponent(out EnemyIdleAnimator idleAnimator))
+        {
+            idleAnimator.Stop();
+        }
     }
 
     private void ResetStats()

@@ -54,6 +54,11 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
 
     private async void SpawnCardCopy()
     {
+        if (!_turretOwner.IsPlaced)
+        {
+            return;
+        }
+        
         await Task.Delay(System.TimeSpan.FromSeconds(0.1f));
 
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;

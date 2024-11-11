@@ -99,6 +99,7 @@ public abstract class ATurretPassiveAbility
         OnTurretPlaced();
     }
     protected virtual void OnTurretPlaced() { }
+    public virtual void OnTurretUnplaced() { }
 
     
     public void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)

@@ -114,18 +114,8 @@ public class ResultsScreen : MonoBehaviour
             mostDamagingEnemy = EnemyFactory.GetInstance()
                 .GetEnemyGameObject(enemyType, transform.position, Quaternion.identity, transform)
                 .GetComponent<Enemy>();
-            mostDamagingEnemy.enabled = false;
+            mostDamagingEnemy.InitWithoutFunctionality();
 
-            mostDamagingEnemy.GetComponent<PathFollower>().enabled = false;
-
-            if (mostDamagingEnemy.TryGetComponent(out AreaSpawnerArmor areaSpawnerArmor))
-            {
-                areaSpawnerArmor.enabled = false;
-            }
-            if (mostDamagingEnemy.TryGetComponent(out AreaSpawnerHealth areaSpawnerHealth))
-            {
-                areaSpawnerHealth.enabled = false;
-            }
             
             _enemyInteractions.Init(mostDamagingEnemy, RunStateData.HighestDamageDealt);
         }

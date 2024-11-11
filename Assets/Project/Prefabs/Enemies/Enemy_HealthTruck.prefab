@@ -38,6 +38,7 @@ Transform:
   - {fileID: 7725061257356692210}
   - {fileID: 8711040624024581233}
   - {fileID: 2116790723770357295}
+  - {fileID: 7703086075204260953}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,20 +54,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba3a5f4854c377347847475ceb841870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackGeneralConfig: {fileID: 11400000, guid: 715bcb7113599ee45b33a2b03b414826,
-    type: 2}
   meshRenderer: {fileID: 1867429729805549305}
+  _meshHolder: {fileID: 7725061257356692210}
+  _meshCenter: {fileID: 7703086075204260953}
   pathFollower: {fileID: 1626341512122004569}
   transformToMove: {fileID: 163396529507246381}
   rb: {fileID: 4650990172065204862}
   healthHUD: {fileID: 9085599442052968132}
   enemyFeedback: {fileID: 3391217566336223349}
   _typeConfig: {fileID: 11400000, guid: e51a5eedfe92a3442a0578249d82608a, type: 2}
-  baseDamage: 1
-  baseHealth: 140
-  baseArmor: 0
-  currencyDrop: 5
-  baseCurrencyDrop: 30
 --- !u!114 &3391217566336223349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +253,37 @@ MonoBehaviour:
   spawnRate: 2.5
   healthAmount: 15
   enemyFeedback: {fileID: 3391217566336223349}
+--- !u!1 &2169559794618747570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7703086075204260953}
+  m_Layer: 6
+  m_Name: MeshCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7703086075204260953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2169559794618747570}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 163396529507246381}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &515608310207330215
 PrefabInstance:
   m_ObjectHideFlags: 0
