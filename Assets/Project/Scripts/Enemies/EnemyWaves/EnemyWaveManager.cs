@@ -329,7 +329,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             ////////
             /// Invoke event  Start new waves here 
-            if (OnStartNewWaves != null) OnStartNewWaves();
+            OnStartNewWaves?.Invoke();
             ////////
 
 
