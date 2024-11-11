@@ -3769,7 +3769,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &233053603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4234,6 +4234,16 @@ PrefabInstance:
     - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
         type: 3}
       propertyPath: nextNode
+      value: 
+      objectReference: {fileID: 1422699215}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: pathLocation
+      value: 
+      objectReference: {fileID: 1357838357}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: locationEndNode
       value: 
       objectReference: {fileID: 1422699215}
     - target: {fileID: 4468162949968915248, guid: eabf5bbc4aa611546a0a2200fe92ba27,
@@ -5963,6 +5973,16 @@ PrefabInstance:
     - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
         type: 3}
       propertyPath: nextNode
+      value: 
+      objectReference: {fileID: 961198055}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: pathLocation
+      value: 
+      objectReference: {fileID: 1357838357}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: locationEndNode
       value: 
       objectReference: {fileID: 961198055}
     - target: {fileID: 4468162949968915248, guid: eabf5bbc4aa611546a0a2200fe92ba27,
@@ -23287,6 +23307,16 @@ PrefabInstance:
       propertyPath: nextNode
       value: 
       objectReference: {fileID: 1193960283}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: pathLocation
+      value: 
+      objectReference: {fileID: 1357838357}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: locationEndNode
+      value: 
+      objectReference: {fileID: 1422699215}
     - target: {fileID: 4468162949968915248, guid: eabf5bbc4aa611546a0a2200fe92ba27,
         type: 3}
       propertyPath: m_Name
@@ -24653,6 +24683,16 @@ PrefabInstance:
       propertyPath: nextNode
       value: 
       objectReference: {fileID: 588942626}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: pathLocation
+      value: 
+      objectReference: {fileID: 1357838357}
+    - target: {fileID: 1425550507898017436, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+        type: 3}
+      propertyPath: locationEndNode
+      value: 
+      objectReference: {fileID: 961198055}
     - target: {fileID: 4468162949968915248, guid: eabf5bbc4aa611546a0a2200fe92ba27,
         type: 3}
       propertyPath: m_Name
@@ -29843,7 +29883,6 @@ MonoBehaviour:
   previewMaterial: {fileID: 2100000, guid: 8160bed1b1c550942bb5d7546d9319f5, type: 2}
   baseCollider: {fileID: 0}
   visualUpgrades: []
-  placedParticleSystem: {fileID: 0}
   slowSpeedCoefs: []
   slowPlane: {fileID: 4948871345674427457}
   _slowBreakParticleType: 0
@@ -30160,12 +30199,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _pathsEndData.Array.data[0]._endNode
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1422699215}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsEndData.Array.data[1]._endNode
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 961198055}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsEndData.Array.data[0]._endLocation
@@ -30195,13 +30234,13 @@ PrefabInstance:
         type: 3}
       propertyPath: _pathsStartData.Array.data[0]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 0b0f1910d5a34c442bd7f02d2a484532,
+      objectReference: {fileID: 11400000, guid: ad782c1e1e41cae49a658daeec1be274,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsStartData.Array.data[1]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: b3a8302b054eb744fa66543c4077c790,
+      objectReference: {fileID: 11400000, guid: 019f88b0ea4f7e04696960a7f4b801e9,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
