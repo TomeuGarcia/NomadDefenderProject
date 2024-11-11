@@ -149,12 +149,14 @@ public class SlowBase : TurretPartBase_Prefab
         baseCollider.GetCollider().enabled = false;
 
         StopSlowingEnemiesByThis();
+        StartCoroutine(PlayTogglePartAppearanceAnimation(slowPlane, false));
     }
 
     public override void DoOnBuildingDisableFinish()
     {
         base.DoOnBuildingDisableFinish();
         baseCollider.GetCollider().enabled = true;
+        StartCoroutine(PlayTogglePartAppearanceAnimation(slowPlane, true));
     }
     
     
@@ -171,4 +173,5 @@ public class SlowBase : TurretPartBase_Prefab
             StopEnemySlow(enemy);
         }
     }
+
 }

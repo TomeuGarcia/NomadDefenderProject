@@ -12,7 +12,7 @@ public class EnemyInWave
 
     public EnemyTypeConfig EnemyType => _enemyType;
     public float DelayBeforeSpawn => delayBeforeSpawn;
-    public float NumberOfSpawns => numberOfSpawns;
+    public int NumberOfSpawns => numberOfSpawns;
 
 
     public EnemyInWave()

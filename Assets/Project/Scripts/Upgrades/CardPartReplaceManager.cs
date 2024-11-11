@@ -329,7 +329,7 @@ public class CardPartReplaceManager : MonoBehaviour
         {
             if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
             {
-                /*
+                
                 if (deckCards[cardI].GetCardLevel() < 3)
                 {
                     notMaxLevelCards.Add(deckCards[cardI]);
@@ -338,18 +338,15 @@ public class CardPartReplaceManager : MonoBehaviour
                 {
                     maxLevelCards.Add(deckCards[cardI]);
                 }
-                */
-
-                // Quick fix to not filter maxed cards
-                notMaxLevelCards.Add(deckCards[cardI]);
             }            
         }
 
         BuildingCard[] chosenCards = new BuildingCard[numCards];
         int chosenCardI = 0;
 
-        int numMaxedCardsToAdd = numCards - notMaxLevelCards.Count;
-        numMaxedCardsToAdd = numMaxedCardsToAdd < 0 ? 0 : numMaxedCardsToAdd;
+        const int maximumCardsOfMaxLevel = 1;
+        int numMaxedCardsToAdd = Mathf.Min(maximumCardsOfMaxLevel, maxLevelCards.Count);
+        
 
         // If not enough NON-MAXed cards, add MAXed cards
         if (numMaxedCardsToAdd > 0)

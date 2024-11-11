@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 [CreateAssetMenu(fileName = "EnemyWaveSpawner", 
@@ -15,6 +17,7 @@ public class EnemyWaveSpawner : ScriptableObject
     [SerializeField] public float delayWaveStart = 1f;
     [SerializeField] public float delayBetweenWaves = 5f;
     [SerializeField] private EnemyWave[] enemyWaves;
+    public EnemyWave CurrentEnemyWave => enemyWaves[currentWave];
     //[SerializeField] private EnemyWaveWorkaround[] enemyWavesWorkaround;
     public EnemyWave[] EnemyWaves => enemyWaves;
 
@@ -51,6 +54,7 @@ public class EnemyWaveSpawner : ScriptableObject
     public event EnemyWaveSpawnerAction OnEnemySpawn;
     public event EnemyWaveSpawnerAction OnWaveFinished;
     public event EnemyWaveSpawnerAction OnLastWaveFinished;
+    public Action<EnemyTypeConfig> OnEnemyFromWaveSpawned;
 
     bool stopForced;
 
@@ -167,7 +171,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
     public void ReadyToStartNextWave()
     {
-        if (OnWaveStartSpawning != null) OnWaveStartSpawning(this);
+        OnWaveStartSpawning?.Invoke(this);
     }
 
     public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour,
@@ -204,6 +208,7 @@ public class EnemyWaveSpawner : ScriptableObject
     {
         Vector2 randomSpawnOffset = new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
         SharedSpawnEnemy(enemyType, spawnParent, attackDestination, randomSpawnOffset, startNode);
+        OnEnemyFromWaveSpawned?.Invoke(enemyType);
     }
 
     public void SpawnEnemyNotIncludedInWave(EnemyTypeConfig enemyType, Transform spawnParent, 

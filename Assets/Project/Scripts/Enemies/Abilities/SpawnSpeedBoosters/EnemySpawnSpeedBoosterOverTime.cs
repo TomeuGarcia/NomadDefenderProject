@@ -21,7 +21,7 @@ public class EnemySpawnSpeedBoosterOverTime : MonoBehaviour
     private IEnumerator StartSpawning()
     {
         yield return new WaitForSeconds(_config.StartSpawningWaitDuration);
-        while (true)
+        while (_enemy.enabled)
         {
             SpawnSpeedBooster();
             yield return StartCoroutine(WaitUntilTravelledDistance(_config.SpawnTravelDistance));

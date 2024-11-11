@@ -154,5 +154,26 @@ public class TurretPartBase_Prefab : MonoBehaviour
     {
         AbilityIsDisabled = false;
     }
+    
+    protected IEnumerator PlayTogglePartAppearanceAnimation(GameObject part, bool visibility)
+    {
+        const float t1 = 0.075f;
+        for (int i = 0; i < 3; ++i)
+        {
+            part.SetActive(!visibility);
+            yield return new WaitForSeconds(t1);
+            part.SetActive(visibility);
+            yield return new WaitForSeconds(t1);
+        }
+        
+        const float t2 = 0.15f;
+        for (int i = 0; i < 2; ++i)
+        {
+            part.SetActive(!visibility);
+            yield return new WaitForSeconds(t2);
+            part.SetActive(visibility);
+            yield return new WaitForSeconds(t2);
+        }
+    }
 
 }
