@@ -137,17 +137,23 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private void InitEnemiesDisplayDataUI()
     {
         EnemyInWave[] enemiesInWave = enemyWaveSpawner.CurrentEnemyWave.enemiesInWave;
-        Dictionary<EnemyTypeConfig, int> groupedEnemiesInWave = new();
+        Dictionary<EnemyTypeConfig, (int, bool)> groupedEnemiesInWave = new();
         foreach (EnemyInWave enemyInWave in enemiesInWave)
         {
-            EnemyTypeConfig enemyType = enemyInWave.EnemyType;
+            EnemyTypeConfig realEnemyType = enemyInWave.EnemyType;
+            EnemyTypeConfig enemyType = realEnemyType.NonArmored;
+            bool hasArmor = realEnemyType.BaseStats.Armor > 0;
+            
             if (groupedEnemiesInWave.ContainsKey(enemyType))
             {
-                groupedEnemiesInWave[enemyType] += enemyInWave.NumberOfSpawns;
+                (int, bool) existingEntry = groupedEnemiesInWave[enemyType];
+                groupedEnemiesInWave[enemyType] = (
+                    existingEntry.Item1 + enemyInWave.NumberOfSpawns, 
+                    existingEntry.Item2 || hasArmor);
             }
             else
             {
-                groupedEnemiesInWave.Add(enemyType, enemyInWave.NumberOfSpawns);
+                groupedEnemiesInWave.Add(enemyType, (enemyInWave.NumberOfSpawns, hasArmor));
             }
         }
         
@@ -156,7 +162,8 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         {
             currentEnemyEntries.Add(new EnemiesInWaveDisplayUI.DisplayData.Entry(
                 groupedEnemyInWave.Key,
-                groupedEnemyInWave.Value,
+                groupedEnemyInWave.Value.Item1,
+                groupedEnemyInWave.Value.Item2,
                 _enemiesInWaveDisplayUI.ProvideEnemyDisplay()
             ));
         }
