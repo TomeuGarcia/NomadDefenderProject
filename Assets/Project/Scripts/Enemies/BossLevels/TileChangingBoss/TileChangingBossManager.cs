@@ -1,9 +1,12 @@
 using System;
+using System.Collections;
 using Project.Scripts.Enemies.BossLevels;
 using UnityEngine;
 
 public class TileChangingBossManager : MonoBehaviour
 {
+    [SerializeField] private SpeedUpButton _speedUpButton;
+    [SerializeField] private EnemyWaveManager _enemyWaveManager;
     [SerializeField] private ScreenGlitcher _screenGlitcher;
     [SerializeField] private LevelTileChange[] _levelTileChanges;
     private LevelTileChange _currentLevelTileChange;
@@ -35,19 +38,16 @@ public class TileChangingBossManager : MonoBehaviour
     {
         ++_currentWaveIndex;
         
-        
         if (!GetNextLevelTileChange(out LevelTileChange nextLevelTileChange))
         {
             return;
         }
         
-        _currentLevelTileChange?.Hide();
-        _currentLevelTileChange = nextLevelTileChange;
-        _currentLevelTileChange.Show();
 
-        StartCoroutine(
-            _screenGlitcher.PlayGlitch(0f, 0.2f, 0.7f, _currentWaveIndex)
-        );
+        StartCoroutine(ShowNext(0.2f, _currentLevelTileChange, nextLevelTileChange));
+        StartCoroutine(PlayShowNextAnimation());
+        
+        _currentLevelTileChange = nextLevelTileChange;
     }
 
     private bool GetNextLevelTileChange(out LevelTileChange nextLevelTileChange)
@@ -64,4 +64,28 @@ public class TileChangingBossManager : MonoBehaviour
         nextLevelTileChange = null;
         return false;
     }
+
+    private IEnumerator ShowNext(float delay, LevelTileChange oldLevelTileChange, LevelTileChange nextLevelTileChange)
+    {
+        if (!_speedUpButton.IsTimePaused)
+        {
+            _speedUpButton.SetDefaultTimeSpeed();
+        }
+
+        yield return new WaitForSeconds(delay);
+        oldLevelTileChange?.Hide();
+        nextLevelTileChange.Show();
+    }
+
+    private IEnumerator PlayShowNextAnimation()
+    {
+        _enemyWaveManager.WaveStartPaused = true;
+        
+        yield return StartCoroutine(
+            _screenGlitcher.PlayGlitch(0f, 0.2f, 0.7f, _currentWaveIndex)
+        );
+        
+        _enemyWaveManager.WaveStartPaused = false;
+    }
+    
 }

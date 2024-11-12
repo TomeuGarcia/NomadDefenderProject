@@ -10,6 +10,7 @@ public class LevelTileChange : MonoBehaviour
     [SerializeField] private GameObject[] _visibleObjects;
     [SerializeField] private GameObject[] _hiddenObjectsPermanent;
     [SerializeField] private GameObject[] _hiddenObjects;
+    [SerializeField] private GameObject[] _flickeringObjects;
 
     public int WaveIndex => _waveIndex;
     
@@ -21,6 +22,7 @@ public class LevelTileChange : MonoBehaviour
         SetObjectsVisibility(_visibleObjects, startActive);
         SetObjectsVisibility(_hiddenObjectsPermanent, !startActive);
         SetObjectsVisibility(_hiddenObjects, !startActive);
+        SetObjectsVisibility(_flickeringObjects, false);
     }
 
     public void Show()
@@ -29,6 +31,7 @@ public class LevelTileChange : MonoBehaviour
         SetObjectsVisibility(_visibleObjects, true);
         SetObjectsVisibility(_hiddenObjectsPermanent, false);
         SetObjectsVisibility(_hiddenObjects, false);
+        StartCoroutine(ShowFlickering(_flickeringObjects, 0.2f, 0.8f,6));
     }
     public void Hide()
     {
@@ -41,6 +44,21 @@ public class LevelTileChange : MonoBehaviour
         foreach (GameObject toggleableObject in objectsToToggle)
         {
             toggleableObject.SetActive(visible);
+        }
+    }
+
+    private IEnumerator ShowFlickering(GameObject[] objectsToFlicker, float flickInterval, float intervalMultiplier, int times)
+    {
+        for (int i = 0; i < times; ++i)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+            
+            SetObjectsVisibility(objectsToFlicker, true);
+            yield return new WaitForSeconds(flickInterval);
+            SetObjectsVisibility(objectsToFlicker, false);
+            yield return new WaitForSeconds(flickInterval);
+
+            flickInterval *= intervalMultiplier;
         }
     }
 

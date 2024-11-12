@@ -110,6 +110,8 @@ public class EnemyWaveManager : MonoBehaviour
     private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
 
+    public bool WaveStartPaused { get; set; } = false;
+    
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
@@ -316,6 +318,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if(OnWaveFinished != null) OnWaveFinished();
 
+        yield return new WaitUntil(() => !WaveStartPaused);
 
         enemyWaveSpawner.ReadyToStartNextWave();
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);

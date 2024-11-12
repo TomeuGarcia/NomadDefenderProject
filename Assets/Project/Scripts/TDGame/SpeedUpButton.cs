@@ -28,14 +28,14 @@ public class SpeedUpButton : MonoBehaviour
     private int numSpeeds = 0;
     private bool gameFinished = false;
 
-    private bool _isTimePaused;
+    public bool IsTimePaused { get; private set; }
 
     public static Action OnGameSpeedInteracted;
 
     private void Awake()
     {
         numSpeeds = timeScales.Length;
-        _isTimePaused = false;
+        IsTimePaused = false;
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
 
@@ -82,7 +82,7 @@ public class SpeedUpButton : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (_isTimePaused)
+            if (IsTimePaused)
             {
                 SetCurrentTimeSpeed(0);
             }
@@ -162,12 +162,12 @@ public class SpeedUpButton : MonoBehaviour
 
     private void PauseTimeScale()
     {
-        _isTimePaused = true;
+        IsTimePaused = true;
         GameTime.SetTimeScale(0);
     }
     private void ResumeTimeScale()
     {
-        _isTimePaused = false;
+        IsTimePaused = false;
         GameTime.SetTimeScale(1);
     }
     
@@ -183,6 +183,11 @@ public class SpeedUpButton : MonoBehaviour
         SetCurrentTimeSpeed((current + numSpeeds - 1) % numSpeeds);
         DecrementButtonPressed();
         OnGameSpeedInteracted?.Invoke();
+    }
+
+    public void SetDefaultTimeSpeed()
+    {
+        SetCurrentTimeSpeed(0);
     }
     private void SetCurrentTimeSpeed(int newTimeSpeed)
     {
