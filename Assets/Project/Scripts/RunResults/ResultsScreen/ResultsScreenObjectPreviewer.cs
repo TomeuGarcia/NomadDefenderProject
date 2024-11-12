@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 public class ResultsScreenObjectPreviewer : MonoBehaviour
@@ -22,6 +23,11 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     
     public void InitToShow(Camera camera, GameObject objectToPreview)
     {
+        if(objectToPreview.GetComponent<Enemy>() != null)
+        {
+            FindDespicableObjects(objectToPreview.transform);
+        }
+
         _previewImage.enabled = false;
         gameObject.SetActive(true);
         
@@ -37,6 +43,25 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
             {
                 _objectToPreview.transform.SetParent(_previewSpot);
                 _objectToPreview.transform.localRotation = Quaternion.identity;
+                _objectToPreview.transform.localPosition = new Vector3(0, -100, 0);
+                _objectToPreview.transform.localScale = Vector3.one * 200.0f;
+            }
+        }
+    }
+
+    private void FindDespicableObjects(Transform currentTransform)
+    {
+        if (currentTransform.gameObject.GetComponent<Light>() != null || currentTransform.gameObject.GetComponent<TrailRenderer>() != null)
+        {
+            Destroy(currentTransform.gameObject);
+            return;
+        }
+
+        if (currentTransform.childCount > 0)
+        {            
+            foreach (Transform t in currentTransform)
+            {
+                FindDespicableObjects(t);
             }
         }
     }

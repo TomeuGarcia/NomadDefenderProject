@@ -115,10 +115,15 @@ public class ResultsScreenView : MonoBehaviour
 
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private TextDecoder _continueButtonText;
+    [SerializeField] private GameObject _continueTextArrows;
     private Button _continueButton;
 
-    
-    
+    [Header("RESULT SPECIFIC")]
+    [SerializeField] private GameObject _mapVictoryObjects;
+    [SerializeField] private GameObject _mapDefeatObjects;
+
+
+
     private InitData _initData;
     
 
@@ -127,9 +132,19 @@ public class ResultsScreenView : MonoBehaviour
         _initData = initData;
         _continueButton = continueButton;
         _stats.Init(runStateData, _statPrefab, _statSeparatorPrefab);
+
+        ResultChanges(runStateData);
+
         SetupShowAnimation(runStateData, initData);
     }
-    
+
+    private void ResultChanges(IRunStateData runStateData)
+    {
+        _mapVictoryObjects.SetActive(runStateData.Victory);
+        _mapDefeatObjects.SetActive(!runStateData.Victory);
+    }
+
+
     private void SetupShowAnimation(IRunStateData runStateData, InitData initData)
     {
         bool playingVictory = runStateData.Victory;
@@ -158,6 +173,8 @@ public class ResultsScreenView : MonoBehaviour
         //Fades
         _fadeVictory.gameObject.SetActive(false);
         _fadeDefeat.gameObject.SetActive(false);
+
+        _continueTextArrows.gameObject.SetActive(false);
     }
     
     
@@ -228,6 +245,7 @@ public class ResultsScreenView : MonoBehaviour
     private IEnumerator PlayShowContinueButton()
     {
         yield return StartCoroutine(PlayTextDecoder(_continueButtonText));
+        _continueTextArrows.SetActive(true);
         _continueButton.interactable = true;
     }
     
