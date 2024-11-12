@@ -2,26 +2,32 @@ using System;
 using System.Collections;
 using Project.Scripts.Enemies.BossLevels;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TileChangingBossManager : MonoBehaviour
 {
     [SerializeField] private SpeedUpButton _speedUpButton;
     [SerializeField] private EnemyWaveManager _enemyWaveManager;
+    [SerializeField] private ConsoleDialogSystem _bossDialogueSystem;
     [SerializeField] private ScreenGlitcher _screenGlitcher;
-    [SerializeField] private LevelTileChange[] _levelTileChanges;
-    private LevelTileChange _currentLevelTileChange;
+    [SerializeField] private TileChangingBossEvent[] _levelEvents;
+    private TileChangingBossEvent _currentLevelEvent;
     private int _currentWaveIndex = 0;
-
-
+    
     private void Awake()
     {
-        _currentLevelTileChange = null;
+        _currentLevelEvent = null;
         _currentWaveIndex = 0;
         
-        foreach (LevelTileChange levelTileChange in _levelTileChanges)
+        foreach (TileChangingBossEvent levelTileChange in _levelEvents)
         {
-            levelTileChange.Init();
+            levelTileChange.Init(_bossDialogueSystem);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameTime.SetTimeScale(1);
     }
 
     private void OnEnable()
@@ -38,21 +44,18 @@ public class TileChangingBossManager : MonoBehaviour
     {
         ++_currentWaveIndex;
         
-        if (!GetNextLevelTileChange(out LevelTileChange nextLevelTileChange))
+        if (!GetNextLevelEvent(out TileChangingBossEvent nextLevelEvent))
         {
             return;
         }
-        
 
-        StartCoroutine(ShowNext(0.2f, _currentLevelTileChange, nextLevelTileChange));
-        StartCoroutine(PlayShowNextAnimation());
-        
-        _currentLevelTileChange = nextLevelTileChange;
+        StartCoroutine(StartNewWaveEvent(_currentLevelEvent, nextLevelEvent));
+        _currentLevelEvent = nextLevelEvent;
     }
 
-    private bool GetNextLevelTileChange(out LevelTileChange nextLevelTileChange)
+    private bool GetNextLevelEvent(out TileChangingBossEvent nextLevelTileChange)
     {
-        foreach (LevelTileChange levelTileChange in _levelTileChanges)
+        foreach (TileChangingBossEvent levelTileChange in _levelEvents)
         {
             if (levelTileChange.WaveIndex == _currentWaveIndex)
             {
@@ -65,27 +68,42 @@ public class TileChangingBossManager : MonoBehaviour
         return false;
     }
 
-    private IEnumerator ShowNext(float delay, LevelTileChange oldLevelTileChange, LevelTileChange nextLevelTileChange)
+    private IEnumerator StartNewWaveEvent(TileChangingBossEvent oldLevelEvent, TileChangingBossEvent nextLevelEvent)
     {
         if (!_speedUpButton.IsTimePaused)
         {
             _speedUpButton.SetDefaultTimeSpeed();
         }
+        
+        _enemyWaveManager.WaveStartPaused = true;
+        GameTime.SetTimeScale(0);
 
+        
+        yield return StartCoroutine(nextLevelEvent.Dialogue.PlayBeforeAnimationLines());
+        
+        StartCoroutine(ShowNext(0.2f, oldLevelEvent, nextLevelEvent));
+        yield return StartCoroutine(PlayShowNextAnimation());
+        
+        yield return StartCoroutine(nextLevelEvent.Dialogue.PlayAfterAnimationLines());
+
+        
+        _enemyWaveManager.WaveStartPaused = false;
+        GameTime.SetTimeScale(1);
+    }
+    
+
+    private IEnumerator ShowNext(float delay, TileChangingBossEvent oldLevelEvent, TileChangingBossEvent nextLevelEvent)
+    {
         yield return new WaitForSeconds(delay);
-        oldLevelTileChange?.Hide();
-        nextLevelTileChange.Show();
+        oldLevelEvent?.Hide();
+        nextLevelEvent.Show();
     }
 
     private IEnumerator PlayShowNextAnimation()
     {
-        _enemyWaveManager.WaveStartPaused = true;
-        
         yield return StartCoroutine(
             _screenGlitcher.PlayGlitch(0f, 0.2f, 0.7f, _currentWaveIndex)
         );
-        
-        _enemyWaveManager.WaveStartPaused = false;
     }
     
 }
