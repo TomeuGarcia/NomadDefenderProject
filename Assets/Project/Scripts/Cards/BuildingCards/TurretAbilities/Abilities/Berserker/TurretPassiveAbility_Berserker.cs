@@ -11,11 +11,11 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         new TurretStatsMultiplicationSnapshot(0.0f, 4f, 3.0f);
 
 
-    private BerserkerTurretBuildingVisuals _berserkerVisuals;
+    private BerserkerTurretBuildingVisuals _berserkerVisuals = null;
     
     private bool _isTurretPlaced;
     
-    private float _berserkTimer;
+    private float _berserkCountdownTimer;
     private bool _isInBerserkerMode;
     
     
@@ -43,13 +43,23 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
 
     protected override void OnTurretPlaced()
     {
+        if (_berserkerVisuals != null)
+        {
+            return;
+        }
+        
         _berserkerVisuals = GameObject.Instantiate(_abilityDataModel.VisualsPrefab, _turretOwner.transform);
         _berserkerVisuals.TurretPlacedInit(_turretOwner, _turretOwner.MaterialForTurret);
 
         _isTurretPlaced = true;
     }
 
-    
+    public override void OnTurretUnplaced()
+    {
+        _berserkCountdownTimer = 0f;
+    }
+
+
     protected override void DoOnBeforeShootingEnemyEnd(ATurretProjectileBehaviour projectile)
     {
         if (_isInBerserkerMode)
@@ -67,7 +77,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
 
     private void EnterBerserkMode()
     {
-        _berserkTimer += _abilityDataModel.BerserkerDuration.Value;
+        _berserkCountdownTimer += _abilityDataModel.BerserkerDuration.Value;
 
         if (!_isInBerserkerMode)
         {
@@ -82,12 +92,12 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         SetupHyperStats();
         _berserkerVisuals.StartBerserkVisuals();
 
-        while (_berserkTimer > 0.0f)
+        while (_berserkCountdownTimer > 0.0f)
         {
-            _berserkTimer -= GameTime.DeltaTime;
+            _berserkCountdownTimer -= GameTime.DeltaTime;
             await Task.Yield();
         }
-        _berserkTimer = 0.0f;
+        _berserkCountdownTimer = 0.0f;
 
         ResetStats();
         _berserkerVisuals.StopBerserkVisuals();

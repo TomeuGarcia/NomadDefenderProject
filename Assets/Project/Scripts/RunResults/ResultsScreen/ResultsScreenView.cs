@@ -161,9 +161,10 @@ public class ResultsScreenView : MonoBehaviour
         {
             _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
             _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard);
-            _mostKillsAndDamageCardScreenPreviewer.InitToNotShow();
+            InitCard(initData.MostKillsCard);
+            InitCard(initData.MostDamageCard);
         }
-
+        
         _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
@@ -175,6 +176,12 @@ public class ResultsScreenView : MonoBehaviour
         _fadeDefeat.gameObject.SetActive(false);
 
         _continueTextArrows.gameObject.SetActive(false);
+    }
+
+    private void InitCard(GameObject card)
+    {
+        Vector3 cardPosition = card.transform.position;
+        card.GetComponent<BuildingCard>().InitPositions(cardPosition, Vector3.zero, cardPosition);
     }
     
     

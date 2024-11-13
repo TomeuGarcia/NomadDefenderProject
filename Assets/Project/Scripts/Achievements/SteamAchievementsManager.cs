@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Steamworks;
@@ -12,7 +13,7 @@ public class SteamAchievementsManager : IAchievementsManager
     {
         _achievementsMap = config.MakeAchievementsMap();
     }
-    
+
     public void UnlockAchievement(AchievementType achievementType)
     {
         if (!SteamManager.Initialized)
@@ -30,7 +31,7 @@ public class SteamAchievementsManager : IAchievementsManager
         {
             return false;
         }
-        
+
         if (SteamUserStats.GetAchievement(_achievementsMap[achievementType], out bool achieved))
         {
             return achieved;
@@ -39,4 +40,13 @@ public class SteamAchievementsManager : IAchievementsManager
         return false;
     }
 
+    public void LockAllAchievements()
+    {
+        foreach (AchievementType achievementType in Enum.GetValues(typeof(AchievementType)))
+        {
+            SteamUserStats.ClearAchievement(_achievementsMap[achievementType]);
+            SteamUserStats.StoreStats();
+        }
+    }
+    
 }

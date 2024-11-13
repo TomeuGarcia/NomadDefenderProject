@@ -136,6 +136,14 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
 
+    public void OnTurretUnplaced()
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnTurretUnplaced();
+        }
+    }
+
 
     public void OnBeforeShootingEnemy(ATurretProjectileBehaviour projectile)
     {

@@ -58,6 +58,11 @@ public class EnemyIdleAnimator : MonoBehaviour
 
     private void OnDisable()
     {
+        Stop();
+    }
+
+    public void Stop()
+    {
         StopAllCoroutines();
         _target.DOComplete();
     }

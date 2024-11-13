@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,13 @@ public class TextLine
     [Tooltip("If set to 0, this variable will have no effect")]
     public float clearTime;
     //EVENT TO GO FOR THE NEXT LINE?
+
+    public TextLine(TextTypes textType, string text, float clearTime = 0)
+    {
+        this.textType = textType;
+        this.text = text;
+        this.clearTime = clearTime;
+    }
 }
 
 public class ScriptedSequence : MonoBehaviour

@@ -265,23 +265,14 @@ MonoBehaviour:
   enemyWaveInfoPrefab: {fileID: -3766317850578778623, guid: 0476d49e8fbdcd348b0bf4575efe077e,
     type: 3}
   debugText: {fileID: 7980987454900972555}
-  enemyWaveSpawners:
-  - {fileID: 11400000, guid: a3f103612bafa264b885789986b04462, type: 2}
-  - {fileID: 11400000, guid: 149cfcba380be6f4b94e9ceca275d4b8, type: 2}
-  startPathNodes:
-  - {fileID: 0}
-  - {fileID: 0}
   _pathsStartData:
   - _enemyWaveSpawner: {fileID: 11400000, guid: a3f103612bafa264b885789986b04462,
       type: 2}
     _startNode: {fileID: 0}
-    _endNode: {fileID: 0}
-    _endLocation: {fileID: 0}
   - _enemyWaveSpawner: {fileID: 11400000, guid: 149cfcba380be6f4b94e9ceca275d4b8,
       type: 2}
     _startNode: {fileID: 0}
-    _endNode: {fileID: 0}
-    _endLocation: {fileID: 0}
+  _pathsEndData: []
   consoleDialog: {fileID: 5326053019949012135}
   isTutorial: 0
   textLine:
@@ -290,6 +281,10 @@ MonoBehaviour:
     clearTime: 0
   lastEnemyKIllAnimation: {fileID: 6267600204110586935}
   enemyPathTrailPrefab: {fileID: 5189673640126813732, guid: 4c7b13c09010b894fa77bd4a8cbee5f4,
+    type: 3}
+  _pathViewerPrefab: {fileID: 4238958008307933575, guid: b992e80a49b1c754987e4d0788957be9,
+    type: 3}
+  _pathViewerMouseNotifierPrefab: {fileID: 8807873479075332300, guid: 6e88ae8deb6d17741a7e2a0beb979f7e,
     type: 3}
 --- !u!114 &6267600204110586935
 MonoBehaviour:

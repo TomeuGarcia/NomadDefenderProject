@@ -50,7 +50,8 @@ public class TurretBuilding : RangeBuilding
     public int CardLevel { get; private set; }
     public override Vector3 PlacingParticlesPosition => _upgradeParticlesPosition.position;
 
-
+    public bool IsPlaced { get; private set; }
+    
     public const int MIN_PLAY_COST = -1000;
 
 
@@ -62,6 +63,7 @@ public class TurretBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
+        IsPlaced = false;
     }
 
 
@@ -221,6 +223,7 @@ public class TurretBuilding : RangeBuilding
 
     protected override void DoGotPlaced()
     {
+        IsPlaced = true;
         HideRangePlane();
         EnableFunctionality();
 
@@ -236,9 +239,11 @@ public class TurretBuilding : RangeBuilding
 
     protected override void DoGotUnplaced()
     {
+        IsPlaced = false;
         _statsController.ResetUpgradeLevel();
         bodyPart.ResetUpgradeVisuals();
         upgrader.ResetState();
+        _abilitiesPlacingLifetimeCycle.OnTurretUnplaced();
     }
 
     public override void GotEnabledPlacing()

@@ -22,16 +22,55 @@ public class EnemyWaveManager : MonoBehaviour
         public EnemyWaveSpawner EnemyWaveSpawner => _enemyWaveSpawner;
         public Coroutine ActiveWaveCoroutine { get; private set; }
         public EnemyWaveInfoDisplayer WaveDisplayer { get; private set; }
+        
+        private NodePathViewer _pathViewer;
+        private MouseOverlapNotifier _mouseOverNotifier;
+        private bool _showingPathPermanently = false;
 
-        public void InitWaveDisplayer(EnemyWaveInfoDisplayer _waveDisplayer)
+        public void InitWaveDisplayer(EnemyWaveInfoDisplayer waveDisplayer, EnemiesInWaveDisplayUI enemiesInWaveDisplayUI)
         {
-            WaveDisplayer = _waveDisplayer;
-            _waveDisplayer.Init(_startNode, _enemyWaveSpawner);
+            WaveDisplayer = waveDisplayer;
+            WaveDisplayer.Init(_startNode, _enemyWaveSpawner, enemiesInWaveDisplayUI, _mouseOverNotifier);
         }
 
         public void SetActiveWaveCoroutine(Coroutine activeWaveCoroutine)
         {
             ActiveWaveCoroutine = activeWaveCoroutine;
+        }
+
+        public void InitNodePathViewer(NodePathViewer pathViewer, MouseOverlapNotifier mouseOverNotifier)
+        {
+            _pathViewer = pathViewer;
+            _mouseOverNotifier = mouseOverNotifier;
+            _mouseOverNotifier.OnMouseEntered += ShowPathViewer;
+            _mouseOverNotifier.OnMouseExited += HidePathViewer;
+        }
+
+        ~PathStartData()
+        {
+            _mouseOverNotifier.OnMouseEntered -= ShowPathViewer;
+            _mouseOverNotifier.OnMouseExited -= HidePathViewer;
+        }
+
+        private void ShowPathViewer()
+        {
+            if (_showingPathPermanently) return;
+            _pathViewer.Show(_startNode);
+        }
+        private void HidePathViewer()
+        {
+            if (_showingPathPermanently) return;
+            _pathViewer.Hide();
+        }
+        public void StartShowingPathViewerPermanently()
+        {
+            ShowPathViewer();
+            _showingPathPermanently = true;
+        }
+        public void StopShowingPathViewerPermanently()
+        {
+            _showingPathPermanently = false;
+            HidePathViewer();
         }
     }
 
@@ -62,13 +101,17 @@ public class EnemyWaveManager : MonoBehaviour
     [Header("FEEDBACK")]
     [SerializeField] LastEnemyKIllAnimation lastEnemyKIllAnimation;
 
-
+    
     [Header("ENEMY PATH TRAIL")]
     [SerializeField] private GameObject enemyPathTrailPrefab;
+    [SerializeField] private NodePathViewer _pathViewerPrefab;
+    [SerializeField] private MouseOverlapNotifier _pathViewerMouseNotifierPrefab;
     private PathFollower[] enemyPathFollowerTrails;
     private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
 
+    public bool WaveStartPaused { get; set; } = false;
+    
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
@@ -80,19 +123,33 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void Awake()
     {
+        
+    }
+    private void Init()
+    {
         //canvas.SetActive(false);
         _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
         activeWaves = _pathsStartData.Length;
-
+        
+        
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
 
-            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform));
+            MouseOverlapNotifier enemySpawnMouseOverNotifier =
+                Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform);
+
+            pathStartData.InitNodePathViewer(
+                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier
+            );
+
+            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform), 
+                EnemiesInWaveDisplayUI.Instance);
         }
 
+        
         StartCoroutine(SetupEnemyPathFollowerTrails());
 
         
@@ -102,6 +159,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void Start()
     {
+        Init();
         _tdGameState = ServiceLocator.GetInstance().TDGameState;
         StartCoroutine(WaitForStart());
     }
@@ -260,8 +318,9 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if(OnWaveFinished != null) OnWaveFinished();
 
-        enemyWaveSpawner.ReadyToStartNextWave();
+        yield return new WaitUntil(() => !WaveStartPaused);
 
+        enemyWaveSpawner.ReadyToStartNextWave();
         yield return new WaitForSeconds(enemyWaveSpawner.delayBetweenWaves);
 
         StartWave(enemyWaveSpawner, enemySpawnTransform, index);
@@ -273,7 +332,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             ////////
             /// Invoke event  Start new waves here 
-            if (OnStartNewWaves != null) OnStartNewWaves();
+            OnStartNewWaves?.Invoke();
             ////////
 
 
@@ -323,11 +382,12 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
 
-
+    
 
 
     private IEnumerator SetupEnemyPathFollowerTrails()
     {
+        /*
         yield return new WaitForSeconds(2f);
         
         enemyPathFollowerTrails = new PathFollower[_pathsStartData.Length];
@@ -341,26 +401,42 @@ public class EnemyWaveManager : MonoBehaviour
             enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(0f);
             enemyPathFollowerTrails[i].OnPathEndReached2 += ResetEnemyPathFollowerTrailToStart;
         }
+        */
 
+        yield return null;
         StartEnemyPathFollowerTrails();
     }
 
     private void StartEnemyPathFollowerTrails()
     {
+        /*
         for (int i = 0; i < enemyPathFollowerTrails.Length; ++i) 
         {
             enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(1f);
         }
         enemyPathFollowerTrailsEnabled = true;
+        */
+        
+        foreach (PathStartData pathStartData in _pathsStartData)
+        {
+            pathStartData.StartShowingPathViewerPermanently();
+        }
     }
 
     private void StopEnemyPathFollowerTrails()
     {
+        /*
         for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
         {
             enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(0f);
         }
         enemyPathFollowerTrailsEnabled = false;
+        */
+        
+        foreach (PathStartData pathStartData in _pathsStartData)
+        {
+            pathStartData.StopShowingPathViewerPermanently();
+        }
     }
 
     private void ResetEnemyPathFollowerTrailToStart(PathFollower enemyPathFollowerTrail)

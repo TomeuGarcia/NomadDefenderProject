@@ -23,7 +23,7 @@ public class CallbackRecycleParticle : RecyclableObject
 
         if (_completedParticles >= _particleSystems.Count)
         {
-            RecycledReleased();
+            Recycle();
         }
     }
 
@@ -36,6 +36,7 @@ public class CallbackRecycleParticle : RecyclableObject
                 particleSystem.Stop();
             }
         }
+        Recycle();
     }
 
     internal override void RecycledReleased()

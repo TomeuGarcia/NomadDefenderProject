@@ -8,7 +8,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     [SerializeField] private GameObject _sphereHolder;
     [SerializeField] private TrailRenderer _trailRenderer;
 
-    private const float TOTAL_DAMAGE_MULTIPLIER = 0.3f;
+    private const float TOTAL_DAMAGE_MULTIPLIER = 0.5f;
 
     private static int s_currentlyAliveOrbitings = 0;
 
