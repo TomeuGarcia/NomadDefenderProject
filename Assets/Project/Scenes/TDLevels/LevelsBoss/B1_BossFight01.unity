@@ -2457,6 +2457,7 @@ Transform:
   - {fileID: 755659429}
   - {fileID: 265584303}
   - {fileID: 1903868923}
+  - {fileID: 1011929220}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2474,12 +2475,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speedUpButton: {fileID: 529646416}
   _enemyWaveManager: {fileID: 364191823}
+  _tdGameManager: {fileID: 1779983664}
   _bossDialogueSystem: {fileID: 358234794}
   _screenGlitcher: {fileID: 104654499}
   _levelEvents:
   - {fileID: 755659431}
   - {fileID: 265584305}
   - {fileID: 1903868925}
+  _victoryEvent: {fileID: 1011929221}
 --- !u!114 &104654499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,6 +2498,7 @@ MonoBehaviour:
   _globalVolume: {fileID: 797463762}
   _initVol: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
   _glitchVol: {fileID: 11400000, guid: a166ed9067175d249a460dc10bda9b74, type: 2}
+  _musicPitchRange: {x: 0.5, y: 1.5}
 --- !u!1001 &106189478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6198,26 +6202,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f909528bcb948a5876133a949a55e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startDelay: 2
-  _betweenLinesDelay: 1
-  _finishDelay: 2
-  _textLinesBeforeAnimation:
-  - textType: 1
-    text: I just wont shut up
-    clearTime: 0
-  - textType: 1
-    text: bla bla bla bla
-    clearTime: 0
-  _textLinesAfterAnimation:
-  - textType: 1
-    text: bla bla bla bla
-    clearTime: 0
-  - textType: 1
-    text: roger fes push
-    clearTime: 0
-  - textType: 1
-    text: bla bla bla bla
-    clearTime: 0
+  _linesBeforeAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: I just wont shut up
+      clearTime: 0
+    - textType: 1
+      text: bla bla bla bla
+      clearTime: 0
+  _linesAfterAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: bla bla bla bla
+      clearTime: 0
+    - textType: 1
+      text: roger fes push
+      clearTime: 0
+    - textType: 1
+      text: bla bla bla bla
+      clearTime: 0
 --- !u!1001 &270577736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17577,17 +17586,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f909528bcb948a5876133a949a55e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startDelay: 2
-  _betweenLinesDelay: 1
-  _finishDelay: 2
-  _textLinesBeforeAnimation:
-  - textType: 1
-    text: oi m8, just wait for whats up next
-    clearTime: 0
-  _textLinesAfterAnimation:
-  - textType: 1
-    text: cool innit bruv?
-    clearTime: 0
+  _linesBeforeAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: oi m8, just wait for whats up next
+      clearTime: 0
+  _linesAfterAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: cool innit bruv?
+      clearTime: 0
 --- !u!1001 &756289518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23178,6 +23192,70 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1011643614}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1011929219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1011929220}
+  - component: {fileID: 1011929221}
+  m_Layer: 0
+  m_Name: VictoryEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1011929220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011929219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 104654497}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1011929221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011929219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d11f268a16d40789fb933997829db7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _victoryDialogue:
+    _startDelay: 4
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: wait what
+      clearTime: 0
+    - textType: 1
+      text: just like that?
+      clearTime: 0
+    - textType: 1
+      text: this game is too easy
+      clearTime: 0
+    - textType: 0
+      text: quiet you watcher nerd
+      clearTime: 0
+    - textType: 0
+      text: now the credits roll and you go again
+      clearTime: 0
 --- !u!1001 &1013031342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38035,6 +38113,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774037319}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1779983664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6183369776943425441, guid: 490b73a9b4c82ce47bd1c6d7eefd2cd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1156733084}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c850a528120d59f4eb642ecf145bb7e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1781588181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39592,26 +39682,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f909528bcb948a5876133a949a55e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startDelay: 2
-  _betweenLinesDelay: 1
-  _finishDelay: 2
-  _textLinesBeforeAnimation:
-  - textType: 1
-    text: 'the devs should have paid a real storywritter '
-    clearTime: 0
-  - textType: 1
-    text: it is the publishers fault though
-    clearTime: 0
-  _textLinesAfterAnimation:
-  - textType: 1
-    text: anyways
-    clearTime: 0
-  - textType: 1
-    text: this is the last challenge
-    clearTime: 0
-  - textType: 1
-    text: lets go
-    clearTime: 0
+  _linesBeforeAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: 'the devs should have paid a real storywritter '
+      clearTime: 0
+    - textType: 1
+      text: it is the publishers fault though
+      clearTime: 0
+  _linesAfterAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: anyways
+      clearTime: 0
+    - textType: 1
+      text: this is the last challenge
+      clearTime: 0
+    - textType: 1
+      text: lets go
+      clearTime: 0
 --- !u!1001 &1918134471
 PrefabInstance:
   m_ObjectHideFlags: 0

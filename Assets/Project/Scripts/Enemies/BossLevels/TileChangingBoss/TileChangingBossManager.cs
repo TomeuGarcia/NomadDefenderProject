@@ -6,28 +6,46 @@ using UnityEngine.Serialization;
 
 public class TileChangingBossManager : MonoBehaviour
 {
+    [Header("REFERENCES")]
     [SerializeField] private SpeedUpButton _speedUpButton;
     [SerializeField] private EnemyWaveManager _enemyWaveManager;
+    [SerializeField] private TDGameManager _tdGameManager;
     [SerializeField] private ConsoleDialogSystem _bossDialogueSystem;
     [SerializeField] private ScreenGlitcher _screenGlitcher;
+    
+    [Header("EVENTS")]
     [SerializeField] private TileChangingBossEvent[] _levelEvents;
+    [SerializeField] private TileChangingBossVictoryEvent _victoryEvent;
     private TileChangingBossEvent _currentLevelEvent;
     private int _currentWaveIndex = 0;
+    private bool _playingVictory;
+    private bool _firstEventHappened;
     
     private void Awake()
     {
         _currentLevelEvent = null;
         _currentWaveIndex = 0;
+        _playingVictory = false;
+        _firstEventHappened = false;
         
         foreach (TileChangingBossEvent levelTileChange in _levelEvents)
         {
             levelTileChange.Init(_bossDialogueSystem);
         }
+        
+        EnemyWaveManager.OnAllWavesFinished += PlayVictory;
     }
-
+    
     private void OnDestroy()
     {
         GameTime.SetTimeScale(1);
+
+        if (!_playingVictory)
+        {
+            EnemyWaveManager.OnAllWavesFinished -= PlayVictory;
+        }
+
+        GameAudioManager.GetInstance().SetMusicPitch(1);
     }
 
     private void OnEnable()
@@ -48,7 +66,7 @@ public class TileChangingBossManager : MonoBehaviour
         {
             return;
         }
-
+        
         StartCoroutine(StartNewWaveEvent(_currentLevelEvent, nextLevelEvent));
         _currentLevelEvent = nextLevelEvent;
     }
@@ -80,10 +98,16 @@ public class TileChangingBossManager : MonoBehaviour
 
         
         yield return StartCoroutine(nextLevelEvent.Dialogue.PlayBeforeAnimationLines());
-        
+
+        bool isFirstEvent = !_firstEventHappened;
+        if (isFirstEvent)
+        {
+            GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BOSS_BATTLE, 0.1f);
+            _firstEventHappened = true;            
+        }
+
         StartCoroutine(ShowNext(0.2f, oldLevelEvent, nextLevelEvent));
-        yield return StartCoroutine(PlayShowNextAnimation());
-        
+        yield return StartCoroutine(PlayShowNextAnimation(!isFirstEvent));
         yield return StartCoroutine(nextLevelEvent.Dialogue.PlayAfterAnimationLines());
 
         
@@ -99,11 +123,29 @@ public class TileChangingBossManager : MonoBehaviour
         nextLevelEvent.Show();
     }
 
-    private IEnumerator PlayShowNextAnimation()
+    private IEnumerator PlayShowNextAnimation(bool withMusicPitchVariation)
     {
         yield return StartCoroutine(
-            _screenGlitcher.PlayGlitch(0f, 0.2f, 0.7f, _currentWaveIndex)
+            _screenGlitcher.PlayGlitch(0f, 0.2f, 0.7f, _currentWaveIndex, withMusicPitchVariation)
         );
+        GameAudioManager.GetInstance().SetMusicPitch(1);
     }
-    
+
+
+
+    private void PlayVictory()
+    {
+        EnemyWaveManager.OnAllWavesFinished -= PlayVictory;
+        _playingVictory = true;
+        StartCoroutine(DoPlayVictory());
+    }
+
+    private IEnumerator DoPlayVictory()
+    {
+        _tdGameManager.VictoryPaused = true;
+        
+        yield return StartCoroutine(_victoryEvent.PlayVictory(_bossDialogueSystem));
+        
+        _tdGameManager.VictoryPaused = false;
+    }
 }
