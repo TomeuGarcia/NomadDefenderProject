@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
@@ -28,6 +29,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
+    public static Action<RangeBuilding> OnRangedBuildingPlaced;
     public static event BuildingPlacerAction OnBuildingPlacedGlobal;
 
     public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
@@ -198,11 +200,16 @@ public class BuildingPlacer : MonoBehaviour
             GameAudioManager.GetInstance().PlayTurretCardPlaced(TurretPartBody.BodyType.SENTRY);
         }
 
-
+        if (selectedBuilding is RangeBuilding placedRangedBuilding)
+        {
+            OnRangedBuildingPlaced?.Invoke(placedRangedBuilding); 
+        }
+        
         selectedBuildingCard = null;
         selectedBuilding = null;
         
         if (OnBuildingPlaced != null) OnBuildingPlaced();
+
     }
 
     public void PlaceTutorialBuilding(BuildingCard buildingCard, Building building, Tile tile)

@@ -5,6 +5,7 @@ using Scripts.ObjectPooling;
 
 public class RecyclableParticles : RecyclableObject
 {
+    [SerializeField] private bool _playOnInit = true;
     [SerializeField] private ParticleSystem _particles;
 
     private void OnParticleSystemStopped()
@@ -15,7 +16,7 @@ public class RecyclableParticles : RecyclableObject
 
     internal override void RecycledInit()
     {
-        _particles.Play();
+        if (_playOnInit) _particles.Play();
     }
 
     internal override void RecycledReleased()

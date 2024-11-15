@@ -46,6 +46,14 @@ public class SpeedUpButton : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (_startHidden)
+        {
+            _gamePausedDisplay.SetActive(false);
+        }
+    }
+
     private void OnDestroy()
     {
         Time.timeScale = 1.0f;

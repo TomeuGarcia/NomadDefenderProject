@@ -300,7 +300,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         Deactivation();
     }
 
-    private void Deactivation()
+    protected void Deactivation()
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 
