@@ -142,6 +142,7 @@ public abstract class BuildingCard : MonoBehaviour
     public static event BuildingCardAction2 OnMouseDragStart;
     public static event BuildingCardAction2 OnMouseDragEnd;
 
+    public static Action<BuildingCard> OnCardCostDecremented;
 
     public delegate void CardFunctionPtr();
 

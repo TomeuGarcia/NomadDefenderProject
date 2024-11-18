@@ -137,6 +137,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.OnBuildingCantBePlaced += ResetToStandardWhenPlacingCancelled;
         BuildingCard.OnDragOutsideDragBounds += EnablePlacingAfterDragged;
+        BuildingCard.OnCardCostDecremented += CheckCardCost;
     }
     private void OnDisable()
     {
@@ -153,6 +154,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.OnBuildingCantBePlaced -= ResetToStandardWhenPlacingCancelled;
         BuildingCard.OnDragOutsideDragBounds -= EnablePlacingAfterDragged;
+        BuildingCard.OnCardCostDecremented -= CheckCardCost;
     }
 
     private void Update()
@@ -884,16 +886,21 @@ public class HandBuildingCards : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; ++i)
         {
-            int cardCost = cards[i].GetCardPlayCost();
+            CheckCardCost(cards[i]);
+        }
+    }
 
-            if (currencyCounter.HasEnoughCurrency(cardCost))
-            {
-                cards[i].SetCanBePlayedAnimation();
-            }
-            else
-            {
-                cards[i].SetCannotBePlayedAnimation(true);
-            }
+    private void CheckCardCost(BuildingCard card)
+    {
+        int cardCost = card.GetCardPlayCost();
+
+        if (currencyCounter.HasEnoughCurrency(cardCost))
+        {
+            card.SetCanBePlayedAnimation();
+        }
+        else
+        {
+            card.SetCannotBePlayedAnimation(true);
         }
     }
 

@@ -96,6 +96,14 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         }
     }
     
+    public void OnCardInitialized(TurretBuildingCard ownerCard)
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnCardInitialized(ownerCard);
+        }
+    }
+    
     public void OnTurretCreated(TurretBuilding turretOwner)
     {
         foreach (var passiveAbility in _passiveAbilities)

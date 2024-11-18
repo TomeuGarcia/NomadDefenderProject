@@ -145,6 +145,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         CardData = cardData;
         Init();
+        CardData.PassiveAbilitiesController.OnCardInitialized(this);
     }
     
     public void SetNewPartAttack(TurretPartProjectileDataModel newTurretPartAttack)
@@ -325,7 +326,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         GameAudioManager.GetInstance().PlayConsoleTyping(0);
 
         playingPlayCostAnimation = false;
+        OnCardCostDecremented?.Invoke(this);
     }
+
 
     private IEnumerator DoPlayPlayIncrementCostAnimation(int endValue, int incrementAmountPerTick = 1, 
         float tickDuration = 0.03f, float startDelay = 0.4f)
