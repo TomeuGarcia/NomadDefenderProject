@@ -227,6 +227,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        RedrawHoverIndication(false);
         if (canDisplayInfoIfNotInteractable)
         {
             DoHideInfo();
@@ -282,6 +283,7 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     // ABSTRACT METHODS to implement
+    public abstract void OnTDGameStart(DeckBuildingCards deck);
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
     public abstract int GetCardPlayCost();

@@ -110,6 +110,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         _turretMeshPreview.transform.localScale = Vector3.one;
     }
 
+    public override void OnTDGameStart(DeckBuildingCards deck)
+    {
+        CardData.PassiveAbilitiesController.OnTDGameStart(this, deck);
+    }
+
     protected override void InitStatsFromTurretParts()
     {
         StatsController.ResetUpgradeLevel();

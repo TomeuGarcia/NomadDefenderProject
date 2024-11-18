@@ -61,6 +61,11 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         Init();
     }
 
+    public override void OnTDGameStart(DeckBuildingCards deck)
+    {
+        
+    }
+
     protected override void InitStatsFromTurretParts()
     {
         PlayCost = CardData.PlayCost;

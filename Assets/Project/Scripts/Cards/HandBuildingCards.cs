@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -166,7 +167,7 @@ public class HandBuildingCards : MonoBehaviour
             if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
     }
-
+    
 
     public void InitCardsInHand(bool withRotation = true)
     {
@@ -757,7 +758,7 @@ public class HandBuildingCards : MonoBehaviour
     
     private void ComputeHiddenPosition()
     {
-        hiddenDisplacement = (-1.15f * HandTransform.up);// + (HandTransform.forward * 3f);
+        hiddenDisplacement = (-1.05f * HandTransform.up);// + (HandTransform.forward * 3f);
 
         defaultHandPosition = HandTransform.position;
         hiddenHandPosition = HandTransform.position + hiddenDisplacement;

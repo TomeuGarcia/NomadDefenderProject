@@ -104,6 +104,13 @@ public class CardDrawer : MonoBehaviour
     protected virtual void SetupDeck()
     {
         deck.Init(new CardDeckShuffler_RandomExceptFirst());
+
+        BuildingCard[] cards = deck.Cards.ToArray();
+        foreach (BuildingCard card in cards)
+        {
+            card.OnTDGameStart(deck);
+        }
+        
         battleHUD.InitDeckCardIcons(deck.NumCards);
     }
 

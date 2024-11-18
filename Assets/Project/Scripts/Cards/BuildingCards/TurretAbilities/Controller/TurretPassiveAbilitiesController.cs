@@ -88,6 +88,14 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
     
 
 
+    public void OnTDGameStart(BuildingCard ownerCard, DeckBuildingCards deck)
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnTDGameStart(ownerCard, deck);
+        }
+    }
+    
     public void OnTurretCreated(TurretBuilding turretOwner)
     {
         foreach (var passiveAbility in _passiveAbilities)
