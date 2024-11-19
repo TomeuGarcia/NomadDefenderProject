@@ -389,7 +389,6 @@ public abstract class BuildingCard : MonoBehaviour
         local_hoveredPosition = local_standardPosition + HoveredTranslation;
         //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
         startRotation_euler = transform.rotation.eulerAngles;
-        Debug.Log("AAAAAAAAAAAAAA");
         local_standardRotation_euler = transform.rotation.eulerAngles;
         this.hiddenDisplacement = hiddenDisplacement;
 
