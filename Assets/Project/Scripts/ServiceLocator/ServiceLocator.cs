@@ -23,6 +23,7 @@ public class ServiceLocator : MonoBehaviour
     public IOptionalTutorialsStateManager OptionalTutorialsStateManager { get; set; }
     public ITutorialViewUtilities TutorialViewUtilities { get; set; }
     public IAchievementsManager AchievementsManager { get; set; }
+    public IDynamicProjectileShootingService DynamicProjectileShootingService { get; set; }
 
 
     private void Awake()

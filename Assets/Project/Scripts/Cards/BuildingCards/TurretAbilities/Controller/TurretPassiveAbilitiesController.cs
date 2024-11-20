@@ -111,6 +111,14 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
             passiveAbility.OnTurretCreated(turretOwner);
         }
     }
+
+    public void OnDrawnToHandTwiceOrMore()
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnDrawnToHandTwiceOrMore();
+        }
+    }
     
     public void OnTurretDestroyed()
     {

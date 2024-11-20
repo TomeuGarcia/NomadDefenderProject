@@ -11,4 +11,10 @@ public class ProjectileShootingControllerCreator_ProjectileHoarding : AProjectil
     {
         return new ProjectileShootingController_ProjectileHoarding(createData, _maxHoardedProjectilesCount);
     }
+
+    public override void SpawnDynamically(TurretBuilding turretBuilding, TurretPartProjectileDataModel projectileDataModel)
+    {
+        ServiceLocator.GetInstance().DynamicProjectileShootingService
+            .SpawnProjectile<ProjectileShootingController_ProjectileHoarding>(turretBuilding, projectileDataModel);
+    }
 }

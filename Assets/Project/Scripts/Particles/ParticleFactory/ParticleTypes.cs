@@ -6,4 +6,5 @@ public enum ParticleTypes
     BuildingUnplaced,
     ExpandTurretRadiusAbility,
     IncreaseSellValue,
+    SpawnOrbitingsWhileInHand
 }

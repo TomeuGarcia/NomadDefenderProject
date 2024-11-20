@@ -153,8 +153,13 @@ public class TurretBuilding : RangeBuilding
 
     private void InitShootingController()
     {
-        _shootingController = ProjectileDataModel.ShootingControllerCreator.Create(
-            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
+        _shootingController = MakeShootingController(ProjectileDataModel);
+    }
+
+    public AProjectileShootingController MakeShootingController(TurretPartProjectileDataModel projectileDataModel)
+    {
+        return projectileDataModel.ShootingControllerCreator.Create(
+            new AProjectileShootingController.CreateData(this, Stats, projectileDataModel, bodyPart,
                 CardData.PassiveAbilitiesController));
     }
     

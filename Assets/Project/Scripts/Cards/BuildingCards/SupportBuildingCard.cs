@@ -44,6 +44,11 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab.SetActive(false);
     }
 
+    public override void OnDrawnButAlreadyCreatedBuilding()
+    {
+        
+    }
+
     public override int GetCardPlayCost()
     {
         return PlayCost;

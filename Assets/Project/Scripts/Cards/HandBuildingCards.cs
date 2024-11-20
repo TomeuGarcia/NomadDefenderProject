@@ -548,6 +548,10 @@ public class HandBuildingCards : MonoBehaviour
             {
                 card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
             }
+            else
+            {
+                card.OnDrawnButAlreadyCreatedBuilding();
+            }
         }
 
         if (HasPreviouslySelectedCard)

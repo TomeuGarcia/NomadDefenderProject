@@ -20,6 +20,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     [Header("VISUALS")]
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
+    [SerializeField] private Transform _cardParticlesSpot;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
     public TurretIconCanvasDisplay ProjectileIconDisplay => _iconDisplays[0];
     public TurretIconCanvasDisplay[] PassivesIconDisplays => new [] { _iconDisplays[1], _iconDisplays[2], _iconDisplays[3] } ;
@@ -38,11 +39,13 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
 
+    public Transform CardParticlesSpot => _cardParticlesSpot; 
 
     private TurretCardStatsController StatsController => CardData.StatsController;
     public ITurretStatsBonusController StatsBonusController => StatsController;
     private int PlayCost { get; set; }
 
+    
 
     private void Awake()
     {
@@ -129,6 +132,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
         turretBuilding.Init(this, StatsController, CardData, currencyCounter);
         copyBuildingPrefab.SetActive(false);
+    }
+
+    public override void OnDrawnButAlreadyCreatedBuilding()
+    {
+        CardData.PassiveAbilitiesController.OnDrawnToHandTwiceOrMore();
     }
 
     public override int GetCardPlayCost()

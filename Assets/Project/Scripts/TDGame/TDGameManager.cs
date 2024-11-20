@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,6 +69,10 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         InitLocationsVisuals();
     }
 
+    private void OnDestroy()
+    {
+        ServiceLocator.GetInstance().DynamicProjectileShootingService.Clear();
+    }
 
     private void OnEnable()
     {        

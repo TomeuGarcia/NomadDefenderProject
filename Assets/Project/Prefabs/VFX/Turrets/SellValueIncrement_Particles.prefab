@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5536820717678486920}
   - component: {fileID: 1260187717246891788}
   - component: {fileID: 4051943861365163566}
+  - component: {fileID: 6003843282882273459}
   m_Layer: 0
   m_Name: SellValueIncrement_Particles
   m_TagString: Untagged
@@ -185,8 +186,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 2
+      scalar: 2
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4912,6 +4913,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6003843282882273459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256103084907174036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbfc7c3bdd2eca948a37bd38376c53ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playOnInit: 1
+  _particles: {fileID: 0}
 --- !u!1 &1595844833316507175
 GameObject:
   m_ObjectHideFlags: 0

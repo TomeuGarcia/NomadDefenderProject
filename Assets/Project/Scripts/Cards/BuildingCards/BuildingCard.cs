@@ -287,6 +287,7 @@ public abstract class BuildingCard : MonoBehaviour
     public abstract void OnTDGameStart(DeckBuildingCards deck);
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
+    public abstract void OnDrawnButAlreadyCreatedBuilding();
     public abstract int GetCardPlayCost();
     protected abstract void InitVisuals();
 

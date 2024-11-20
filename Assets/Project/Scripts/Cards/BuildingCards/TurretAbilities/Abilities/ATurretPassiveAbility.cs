@@ -86,6 +86,7 @@ public abstract class ATurretPassiveAbility
     
     public virtual void OnTurretCreated(TurretBuilding turretOwner) { } 
     public virtual void OnTurretDestroyed() { } 
+    public virtual void OnDrawnToHandTwiceOrMore() { } 
     
     
     public virtual void OnTurretPlacingStart() { } 
