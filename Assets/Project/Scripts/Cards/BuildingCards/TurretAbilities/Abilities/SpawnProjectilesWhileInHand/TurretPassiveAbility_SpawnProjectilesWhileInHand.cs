@@ -18,7 +18,6 @@ public class TurretPassiveAbility_SpawnProjectilesWhileInHand : ATurretPassiveAb
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.ProjectileSpawnAmountPerTrigger);
     }
 
     public override void OnCardInitialized(TurretBuildingCard ownerCard)
@@ -85,10 +84,9 @@ public class TurretPassiveAbility_SpawnProjectilesWhileInHand : ATurretPassiveAb
 
         TurretBuilding killerTurret = attackResult.DamageAttackSource.ProjectileSource.TurretOwner;
         TurretPartProjectileDataModel projectileDataModel = _abilityDataModel.ProjectileDataModel;
-        int spawnAmount = _abilityDataModel.ProjectileSpawnAmountPerTrigger.Value;
         float delayBetweenSpawns = _abilityDataModel.DelayBetweenSpawns;
 
-        SpawnProjectiles(killerTurret, projectileDataModel, spawnAmount, delayBetweenSpawns);
+        SpawnProjectiles(killerTurret, projectileDataModel, 1, delayBetweenSpawns);
     }
 
     private async void SpawnProjectiles(TurretBuilding killerTurret, TurretPartProjectileDataModel projectileDataModel,
