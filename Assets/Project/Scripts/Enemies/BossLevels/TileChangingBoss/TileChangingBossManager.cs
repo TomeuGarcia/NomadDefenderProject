@@ -35,7 +35,12 @@ public class TileChangingBossManager : MonoBehaviour
         
         EnemyWaveManager.OnAllWavesFinished += PlayVictory;
     }
-    
+
+    private void Start()
+    {
+        _speedUpButton.gameObject.SetActive(true);
+    }
+
     private void OnDestroy()
     {
         GameTime.SetTimeScale(1);

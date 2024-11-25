@@ -22,6 +22,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private EnemiesInWaveDisplayUI.DisplayData _currentEnemiesDisplayData;
 
     private MouseOverlapNotifier _mouseOverNotifier;
+
+    private GameObject _mouseHoverViewToggle;
+    
     
     private void OnDestroy()
     {
@@ -54,6 +57,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
         _currentEnemiesDisplayData = new EnemiesInWaveDisplayUI.DisplayData();
         InitEnemiesDisplayDataUI();
+
+        _mouseHoverViewToggle = pathNode.transform.GetChild(3).gameObject;
+        _mouseHoverViewToggle.SetActive(false);
     }
 
 
@@ -177,6 +183,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         if (!NoEnemiesLeft())
         {
             _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
+            _mouseHoverViewToggle.SetActive(true);
         }
     }
 
@@ -185,6 +192,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         if (_enemiesInWaveDisplayUI.IsShowingDisplayData(_currentEnemiesDisplayData))
         {
             _enemiesInWaveDisplayUI.Hide();
+            _mouseHoverViewToggle.SetActive(false);
         }
     }
 }
