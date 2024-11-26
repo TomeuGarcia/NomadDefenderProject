@@ -9,6 +9,7 @@ public class VictoryCubeIdle : MonoBehaviour
     [SerializeField] private Transform _innerTransform;
 
     [SerializeField] private float _sinSpeed;
+    [SerializeField] private float _sinOffset;
     [SerializeField] private Vector3 _sinAxis;
     [SerializeField] private Vector3 _innerRotationSpeed;
     [SerializeField] private Vector3 _outerRotationSpeed;
@@ -23,6 +24,7 @@ public class VictoryCubeIdle : MonoBehaviour
     private void Awake()
     {
         _initPos = _parentTransform.position;
+        _timer += _sinOffset;
     }
 
     private void Update()
