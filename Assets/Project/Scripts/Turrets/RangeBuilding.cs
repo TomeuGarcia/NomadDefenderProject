@@ -40,6 +40,9 @@ public abstract class RangeBuilding : Building
     public InBattleBuildingUpgrader Upgrader => upgrader;
 
     public Vector3 Position => transform.position;
+    
+    public abstract float CurrentRadiusRange { get; }
+    
 
     private void OnEnable()
     {

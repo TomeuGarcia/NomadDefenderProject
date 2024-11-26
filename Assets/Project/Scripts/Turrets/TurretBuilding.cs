@@ -51,8 +51,11 @@ public class TurretBuilding : RangeBuilding
     public override Vector3 PlacingParticlesPosition => _upgradeParticlesPosition.position;
 
     public bool IsPlaced { get; private set; }
-    
+
     public const int MIN_PLAY_COST = -1000;
+
+    public override float CurrentRadiusRange => Stats.RadiusRange + _extraRadiusRange;
+    private float _extraRadiusRange = 0f;
 
 
     void Awake()
@@ -127,7 +130,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart.Init(turretPartBody.bodyType, ProjectileDataModel.MaterialForTurret);
 
         basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.Init(this, Stats.RadiusRange);
+        basePart.Init(this, CurrentRadiusRange);
         UpdateRange();
         
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
@@ -150,8 +153,13 @@ public class TurretBuilding : RangeBuilding
 
     private void InitShootingController()
     {
-        _shootingController = ProjectileDataModel.ShootingControllerCreator.Create(
-            new AProjectileShootingController.CreateData(this, Stats, ProjectileDataModel, bodyPart,
+        _shootingController = MakeShootingController(ProjectileDataModel);
+    }
+
+    public AProjectileShootingController MakeShootingController(TurretPartProjectileDataModel projectileDataModel)
+    {
+        return projectileDataModel.ShootingControllerCreator.Create(
+            new AProjectileShootingController.CreateData(this, Stats, projectileDataModel, bodyPart,
                 CardData.PassiveAbilitiesController));
     }
     
@@ -169,7 +177,13 @@ public class TurretBuilding : RangeBuilding
 
     protected override void UpdateRange()
     {
-        basePart.baseCollider.UpdateRange(Stats.RadiusRange);
+        basePart.baseCollider.UpdateRange(CurrentRadiusRange);
+    }
+
+    public void AddExtraRadiusRangeAndUpdate(float extraAmount)
+    {
+        _extraRadiusRange += extraAmount;
+        UpdateRange();
     }
 
     private void OnAnyStatUpdated()
@@ -244,6 +258,7 @@ public class TurretBuilding : RangeBuilding
         bodyPart.ResetUpgradeVisuals();
         upgrader.ResetState();
         _abilitiesPlacingLifetimeCycle.OnTurretUnplaced();
+        _extraRadiusRange = 0f;
     }
 
     public override void GotEnabledPlacing()

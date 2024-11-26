@@ -137,7 +137,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip berserker;
 
 
-    public enum MusicType {NONE,MENU,OWMAP,BATTLE}
+    public enum MusicType { NONE, MENU, OWMAP, BATTLE, BOSS_BATTLE }
     [System.Serializable]
     struct TempMusicClips
     {
@@ -284,7 +284,10 @@ public class GameAudioManager : MonoBehaviour
         fadeSequence.AppendCallback(() => MusicFadeIn(type, duration, musicDefaultVolume));
     }
 
-
+    public void SetMusicPitch(float pitch)
+    {
+        musicAudioSource.pitch = pitch;
+    }
     public void ChangeMusic(MusicType newMusicType, float duration)
     {
         MusicFadeOutThenIn(newMusicType, duration);

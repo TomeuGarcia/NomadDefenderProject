@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     [SerializeField] private GameObject defeatHolder;
     [SerializeField] private Transform defeatTextTransform;
 
-
+    public bool VictoryPaused { get; set; } = false;
 
     public delegate void TDGameManagerAction();
     public static event TDGameManagerAction OnGameFinishStart;
@@ -68,6 +69,10 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         InitLocationsVisuals();
     }
 
+    private void OnDestroy()
+    {
+        ServiceLocator.GetInstance().DynamicProjectileShootingService.Clear();
+    }
 
     private void OnEnable()
     {        
@@ -257,6 +262,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         
         SetBattleStateResult();
         if (OnEndGameResetPools != null) OnEndGameResetPools();
+
+        yield return new WaitUntil(() => !VictoryPaused);
 
         mapSceneNotifier.InvokeOnSceneFinished();
         

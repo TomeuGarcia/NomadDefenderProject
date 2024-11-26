@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64e881c6b5722248964495baae799eb, type: 3}
+  m_Name: TurretAbility_ExpandRangeThrive
+  m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 0}
+    _projectileAddOn: {fileID: 0}
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: 7ca1956f30e40be4aae56c3c29310b6b, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: 7ca1956f30e40be4aae56c3c29310b6b, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4287483392
+  _descriptionModel:
+    _abilityName: expandable
+    _abilityDescription: Increment the Turret's radius by RADIUS_INCREMENT Tiles
+      whenever a Card with higher Range is played.
+    _descriptionKeywords: []
+  _radiusRangeIncrement:
+    _name: RADIUS_INCREMENT
+    _isDynamic: 0
+    _isFloat: 1
+    _constantValue: 0
+    _floatConstantValue: 0.25

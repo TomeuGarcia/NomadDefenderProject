@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Scripts.Turrets.Visuals
 {
@@ -10,7 +11,7 @@ namespace Project.Scripts.Turrets.Visuals
     {
         [Header("COMPONENTS")]
         [SerializeField] private TMP_Text _currentKillsText;
-        [SerializeField] private TMP_Text _maxKillsText;
+        [SerializeField] private Image _killsProgressImage;
         [SerializeField] private Transform _textsHolder;
 
         [Header("ANIMATIONS")] 
@@ -69,12 +70,17 @@ namespace Project.Scripts.Turrets.Visuals
             _currentKills = currentKills;
             _currentKillsText.text = currentKills.ToString();
             _currentValueUpdated = true;
+            UpdateProgress();
         }
         private void UpdateMaxKillsText(int maxKills)
         {
             _maxKills = maxKills;
-            _maxKillsText.text = maxKills.ToString();
+            UpdateProgress();
         }
-        
+
+        private void UpdateProgress()
+        {
+            _killsProgressImage.fillAmount = (float)_currentKills / _maxKills;
+        }
     }
 }

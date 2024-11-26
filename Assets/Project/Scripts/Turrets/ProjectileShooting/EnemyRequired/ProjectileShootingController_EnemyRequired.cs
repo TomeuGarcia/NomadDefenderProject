@@ -42,12 +42,14 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
             return;
         }
 
-        Shoot(_targetingController.TargetedEnemy);
+        DoShoot();
         ResetShootState();
     }
-    
-    
 
+    public override void DoShoot()
+    {
+        Shoot(_targetingController.TargetedEnemy);
+    }
 
 
     private void ResetShootState()

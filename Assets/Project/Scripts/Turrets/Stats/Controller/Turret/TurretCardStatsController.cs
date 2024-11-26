@@ -17,7 +17,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
     public int CurrentUpgradeLevel { get; private set; }
 
     public Action OnStatsUpdated;
-
+    
 
 
     public TurretCardStatsController(CardStatConfig damageStat, CardStatConfig shotsPerSecondStat, CardStatConfig radiusRangeStat)
@@ -112,5 +112,5 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
 
         UpdateCurrentStats();
     }
-
+    
 }

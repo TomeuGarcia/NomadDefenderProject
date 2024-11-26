@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
@@ -39,6 +40,17 @@ public class SpeedUpButton : MonoBehaviour
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
 
+        if (_startHidden)
+        {
+            _gamePausedDisplay.SetActive(false);
+        }
+    }
+
+    private IEnumerator Start()
+    {
+        yield return null;
+        UpdateTimeSpeed();
+        
         if (_startHidden)
         {
             gameObject.SetActive(false);

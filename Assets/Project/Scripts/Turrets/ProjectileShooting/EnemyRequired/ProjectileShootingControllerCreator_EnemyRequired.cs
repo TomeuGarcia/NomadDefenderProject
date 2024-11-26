@@ -9,4 +9,10 @@ public class ProjectileShootingControllerCreator_EnemyRequired : AProjectileShoo
     {
         return new ProjectileShootingController_EnemyRequired(createData);
     }
+
+    public override void SpawnDynamically(TurretBuilding turretBuilding, TurretPartProjectileDataModel projectileDataModel)
+    {
+        ServiceLocator.GetInstance().DynamicProjectileShootingService
+            .SpawnProjectile<ProjectileShootingController_EnemyRequired>(turretBuilding, projectileDataModel);
+    }
 }

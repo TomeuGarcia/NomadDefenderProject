@@ -39,6 +39,13 @@ public class SellBuildingMenu : MonoBehaviour
         _sellTurretButton.Init(OnButtonClicked, OnButtonHovered, OnButtonUnhovered);
         AddSellValue(_cardPlayCost, false);
         _content.SetActive(false);
+
+        _sellingConfig.OnExtraAddAmountUpdated += DoUpdateSellValueText;
+    }
+
+    private void OnDestroy()
+    {
+        _sellingConfig.OnExtraAddAmountUpdated -= DoUpdateSellValueText;
     }
 
     public void ResetState()
@@ -56,15 +63,20 @@ public class SellBuildingMenu : MonoBehaviour
         _sellValue += Mathf.CeilToInt(baseAmount * valueMultiplier);
         UpdateSellValueText();
     }
-    
+
     private void UpdateSellValueText()
     {
-        _sellTurretSellValueText.text = '+' + _sellValue.ToString();
+        DoUpdateSellValueText();
 
         if (_content.activeInHierarchy)
         {
             _sellValueHolder.DOPunchScale(Vector3.one * 0.15f, 0.2f, 4);
         }
+    }
+
+    private void DoUpdateSellValueText()
+    {
+        _sellTurretSellValueText.text = '+' + (_sellValue+ _sellingConfig.ExtraAddAmount).ToString() ;
     }
 
     public IEnumerator PlayOpenAnimation()

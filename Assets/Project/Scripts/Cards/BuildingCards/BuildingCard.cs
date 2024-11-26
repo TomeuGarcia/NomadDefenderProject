@@ -142,6 +142,7 @@ public abstract class BuildingCard : MonoBehaviour
     public static event BuildingCardAction2 OnMouseDragStart;
     public static event BuildingCardAction2 OnMouseDragEnd;
 
+    public static Action<BuildingCard> OnCardCostDecremented;
 
     public delegate void CardFunctionPtr();
 
@@ -227,6 +228,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        RedrawHoverIndication(false);
         if (canDisplayInfoIfNotInteractable)
         {
             DoHideInfo();
@@ -282,8 +284,10 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     // ABSTRACT METHODS to implement
+    public abstract void OnTDGameStart(DeckBuildingCards deck);
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
+    public abstract void OnDrawnButAlreadyCreatedBuilding();
     public abstract int GetCardPlayCost();
     protected abstract void InitVisuals();
 
@@ -386,7 +390,6 @@ public abstract class BuildingCard : MonoBehaviour
         local_hoveredPosition = local_standardPosition + HoveredTranslation;
         //local_selectedPosition = CardTransform.InverseTransformPoint(selectedPosition);
         startRotation_euler = transform.rotation.eulerAngles;
-        Debug.Log("AAAAAAAAAAAAAA");
         local_standardRotation_euler = transform.rotation.eulerAngles;
         this.hiddenDisplacement = hiddenDisplacement;
 
