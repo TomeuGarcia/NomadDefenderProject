@@ -256,7 +256,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         else
         {
-            if (!card.IsOnCardHoveredSubscrived)
+            if (!card.IsOnCardHoveredSubscribed)
                 card.OnCardHovered += SetHoveredCard;
         }
 

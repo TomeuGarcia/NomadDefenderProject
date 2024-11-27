@@ -193,7 +193,8 @@ public class DeckSelector : MonoBehaviour
         await Task.Delay((int)(duration * 1000));
 
 
-        SceneLoader.GetInstance().StartLoadNormalGame(true);
+        //SceneLoader.GetInstance().StartLoadNormalGame(true);
+        SceneLoader.GetInstance().DEBUGLOADSCENE("CopyCardAbilityScene");
     }
 
 

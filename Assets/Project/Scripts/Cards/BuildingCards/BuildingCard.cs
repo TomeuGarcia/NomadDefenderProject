@@ -121,19 +121,18 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     [HideInInspector] public bool isMissingDefaultCallbacks = false;
-    public delegate void BuildingCardAction(BuildingCard buildingCard);
-    public event BuildingCardAction OnCardHovered;
-    public event BuildingCardAction OnCardUnhovered;
-    public event BuildingCardAction OnCardSelected;
-    public event BuildingCardAction OnCardInfoSelected;
-    public event BuildingCardAction OnDragMouseUp;
-    public static event BuildingCardAction OnDragOutsideDragBounds;
+    public Action<BuildingCard> OnCardHovered;
+    public Action<BuildingCard> OnCardUnhovered;
+    public Action<BuildingCard> OnCardSelected;
+    public Action<BuildingCard> OnCardInfoSelected;
+    public Action<BuildingCard> OnDragMouseUp;
+    public static Action<BuildingCard> OnDragOutsideDragBounds;
 
 
-    public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
+    public bool IsOnCardHoveredSubscribed => OnCardHovered != null;
 
-    public event BuildingCardAction OnCardSelectedNotHovered;
-    public event BuildingCardAction OnGetSaved;
+    public Action<BuildingCard> OnCardSelectedNotHovered;
+    public Action<BuildingCard> OnGetSaved;
 
 
     public delegate void BuildingCardAction2();
@@ -378,6 +377,10 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = Vector3.zero;
     }
 
+    public void InitSelectedPosition(Vector3 selectedPosition)
+    {
+        this.selectedPosition = selectedPosition;
+    }
     public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
     {
         InitPositions(CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition);
