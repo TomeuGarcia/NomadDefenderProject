@@ -15,6 +15,7 @@ public class UpgradeCardHolderMultiplePlaceSpots : MonoBehaviour
     [SerializeField, Min(0f)] private float distanceBetweenCards = 0.8f;
 
     private BuildingCard[] _cards;
+    public BuildingCard[] Cards => _cards;
 
     [Header("CARD DRAG & DROP")]
     [SerializeField] private BoxCollider cardDragBoundsCollider;
@@ -289,7 +290,7 @@ public class UpgradeCardHolderMultiplePlaceSpots : MonoBehaviour
 
     
     
-    private HashSet<BuildingCard> CurrentlyPlacedCards()
+    public HashSet<BuildingCard> CurrentlyPlacedCards()
     {
         HashSet<BuildingCard> placedCards = new HashSet<BuildingCard>(_cardPlaceSpots.Length);
         
@@ -305,7 +306,7 @@ public class UpgradeCardHolderMultiplePlaceSpots : MonoBehaviour
     }
     
     
-    private HashSet<BuildingCard> CurrentlyNotPlacedCards()
+    public HashSet<BuildingCard> CurrentlyNotPlacedCards()
     {
         HashSet<BuildingCard> placedCards = CurrentlyPlacedCards();
         HashSet<BuildingCard> notPlacedCards = new HashSet<BuildingCard>();
