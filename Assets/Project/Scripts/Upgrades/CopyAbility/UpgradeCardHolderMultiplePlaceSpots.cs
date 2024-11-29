@@ -186,6 +186,11 @@ public class UpgradeCardHolderMultiplePlaceSpots : MonoBehaviour
         {
             if (cardPlaceSpot.CheckSnapCardAtSelectedPosition(card))
             {
+                if (!cardPlaceSpot.AllowsPlacingCard(card))
+                {
+                    break;
+                }   
+               
                 //Debug.Log("YEP drop here");
                 cardPlaceSpot.SetPlacedCard(card);
                 

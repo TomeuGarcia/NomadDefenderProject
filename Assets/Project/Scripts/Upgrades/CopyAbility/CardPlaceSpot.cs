@@ -11,12 +11,18 @@ namespace Project.Scripts.Upgrades.CopyAbility
         private Bounds _cardDragBoundsTarget;
         
         public BuildingCard PlacedCard { get; private set; }
+        public IAllowPlaceCondition AllowPlaceCondition { get; set; }
 
         public Vector3 PlacePosition => transform.position;
 
 
         public Action<BuildingCard> OnCardPlaced;
         public Action<BuildingCard> OnCardRemoved;
+        
+        public interface IAllowPlaceCondition
+        {
+            bool CardIsAllowed(BuildingCard card);
+        }
         
 
         private void OnValidate()
@@ -43,6 +49,18 @@ namespace Project.Scripts.Upgrades.CopyAbility
         public bool CheckSnapCardAtSelectedPosition(BuildingCard card)
         {
             return !HasAnyPlacedCard() && _cardDragBoundsTarget.Contains(card.CardTransform.position);
+        }
+
+        public bool AllowsPlacingCard(BuildingCard card)
+        {
+            if (AllowPlaceCondition == null)
+            {
+                return true;
+            }
+            else
+            {
+                return AllowPlaceCondition.CardIsAllowed(card);
+            }
         }
 
         public void SetPlacedCard(BuildingCard card)

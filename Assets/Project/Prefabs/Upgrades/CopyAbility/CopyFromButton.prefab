@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6100138656266330294}
   - component: {fileID: 2005082736440365465}
-  - component: {fileID: 3401309971830117423}
   m_Layer: 0
   m_Name: CopyFromButton
   m_TagString: Untagged
@@ -47,21 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b17720357f404c628b242f2be46ed953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mouseOverNotifier: {fileID: 3401309971830117423}
+  _mouseOverNotifier: {fileID: 5978096789171043630}
   _spriteRenderer: {fileID: 265238078757500279}
   _selectedMark: {fileID: 5791631125242480244}
---- !u!114 &3401309971830117423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527533638339785954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88b4fa9bcbc6aea4d9f75206b48185a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2088475855293618917
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3648363695160274173}
+  - component: {fileID: 5978096789171043630}
   - component: {fileID: 2341395933932473873}
   m_Layer: 0
   m_Name: Collider
@@ -179,6 +167,18 @@ Transform:
   m_Father: {fileID: 6100138656266330294}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5978096789171043630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2574055493355223860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b4fa9bcbc6aea4d9f75206b48185a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &2341395933932473873
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 0.4, z: 0.1}
+  m_Size: {x: 0.4, y: 0.4, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4952650136055356597
 GameObject:

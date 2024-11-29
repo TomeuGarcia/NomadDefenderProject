@@ -12,6 +12,9 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         private bool _isSelected;
         private bool _isEnabled;
+
+        private Vector3 _spriteDefaultScale;
+        private Vector3 _selectionDefaultScale;
         
         public ATurretPassiveAbilityDataModel AbilityDataModel { get; private set; }
 
@@ -34,6 +37,8 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         private void Awake()
         {
+            _spriteDefaultScale = _spriteRenderer.transform.localScale;
+            _selectionDefaultScale = _selectedMark.transform.localScale;
             SetDisabled();
         }
 
@@ -48,6 +53,8 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _spriteRenderer.gameObject.SetActive(true);
 
             _isEnabled = true;
+            
+            PlayWaitingForSelectedAnimation();
         }
 
 
@@ -56,6 +63,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _spriteRenderer.gameObject.SetActive(false);
             SetNotSelected();
             _isEnabled = false;
+            StopWaitingForSelectedAnimation();
         }
 
         public void SetFinalDisabled()
@@ -75,6 +83,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _isSelected = false;
             SetHighlighted(false);
+            _selectedMark.transform.localScale = _selectionDefaultScale;
         }
 
 
@@ -84,18 +93,21 @@ namespace Project.Scripts.Upgrades.CopyAbility
             if (_isSelected || !_isEnabled) return;
             
             SetHighlighted(true);
+            StopWaitingForSelectedAnimation();
         }
         private void OnUnhover()
         {
             if (_isSelected || !_isEnabled) return;
 
             SetHighlighted(false);
+            PlayWaitingForSelectedAnimation();
         }
         private void OnPressed()
         {
             if (_isSelected || !_isEnabled) return;
             
             OnClicked?.Invoke(this);
+            StopWaitingForSelectedAnimation();
         }
 
 
@@ -104,9 +116,29 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _selectedMark.gameObject.SetActive(highlighted);
         }
 
+        private void PlayWaitingForSelectedAnimation()
+        {
+            Vector3 scaleChange = _spriteDefaultScale * 0.2f;
+
+            _spriteRenderer.transform.DOBlendableScaleBy(-scaleChange, 0.75f)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                    _spriteRenderer.transform.DOBlendableScaleBy(scaleChange, 0.75f)
+                        .SetEase(Ease.InOutSine)
+                        .OnComplete(PlayWaitingForSelectedAnimation)
+                );
+        }
+
+        private void StopWaitingForSelectedAnimation()
+        {
+            _spriteRenderer.transform.DOKill();
+            _spriteRenderer.transform.localScale = _spriteDefaultScale;
+        }
+        
         private void PlaySelectedAnimation()
         {
-            _selectedMark.transform.DOPunchScale(Vector3.one * 0.1f, 0.5f, 5)
+            _selectedMark.transform.localScale = _selectionDefaultScale + (Vector3.one * 0.1f);
+            _selectedMark.transform.DOPunchScale(Vector3.one * 0.2f, 0.5f, 5)
                 .SetEase(Ease.OutSine);
         }
     }

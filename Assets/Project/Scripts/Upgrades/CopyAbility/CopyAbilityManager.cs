@@ -43,12 +43,15 @@ public class CopyAbilityManager : MonoBehaviour
     private AbilityManagerCopyFromButton _selectedCopyFromButton;
 
     [Header("ANIMATIONS")] 
+    [SerializeField] private CopyAbilityManagerTutorizationAnimator _tutorizationAnimator;
     [SerializeField] private CopyAbilityManagerCardHandAnimator _cardHandAnimator;
     [SerializeField] private CopyAbilityManagerMachineAnimator _machineAnimator;
     
 
     private TurretBuildingCard _copyFromCard;
     private TurretBuildingCard _copyToCard;
+
+    private CopyFromCardAllowPlaceCondition _copyFromCardAllowPlaceCondition = new ();
     
     
     private void OnEnable()
@@ -65,6 +68,8 @@ public class CopyAbilityManager : MonoBehaviour
         {
             copyFromButton.OnClicked += OnCopyFromButtonClicked;
         }
+
+        _copyFromCardAllowPlaceCondition.OnTriedPlacingInvalidCard += OnNotValidCopyFromCard;
     }
     
     private void OnDisable()
@@ -81,6 +86,8 @@ public class CopyAbilityManager : MonoBehaviour
         {
             copyFromButton.OnClicked -= OnCopyFromButtonClicked;
         }
+        
+        _copyFromCardAllowPlaceCondition.OnTriedPlacingInvalidCard -= OnNotValidCopyFromCard;
     }
 
     
@@ -104,6 +111,7 @@ public class CopyAbilityManager : MonoBehaviour
         DisableRemainingCardsFromDeckCards(randomCards);
         
         _upgradeCardHolder.Init(randomCards);
+        _copyFromPlaceSpot.AllowPlaceCondition = _copyFromCardAllowPlaceCondition;
 
         StartCoroutine(PlayInitLogic(randomCards));
     }
@@ -138,18 +146,26 @@ public class CopyAbilityManager : MonoBehaviour
     
 
 
+    private void OnNotValidCopyFromCard()
+    {
+        GameAudioManager.GetInstance().PlayError();
+        StartCoroutine(_tutorizationAnimator.PlayNotValidCopyFromCardWasPlaced());
+    }
+    
+    
 
     private void OnCopyFromCardPlaced(BuildingCard card)
     {
         _copyFromCard = card as TurretBuildingCard;
         EnableCopyFromButtons();
-        if (AllCardsArePlaced())
-        {
-            EnableCardPreview();
-        }
     }
     private void OnCopyFromCardRemoved(BuildingCard card)
     {
+        if (AbilityFromCopyIsSelected())
+        {
+            DisableCopyToButton();
+        }
+        
         DisableCopyFromButtons();
         DisableCardPreview();
         _copyFromCard = null;
@@ -158,7 +174,7 @@ public class CopyAbilityManager : MonoBehaviour
     private void OnCopyToCardPlaced(BuildingCard card)
     {
         _copyToCard = card as TurretBuildingCard;
-        if (AllCardsArePlaced())
+        if (AllCardsArePlaced() && AbilityFromCopyIsSelected())
         {
             EnableCopyToButton();
             EnableCardPreview();
@@ -176,12 +192,16 @@ public class CopyAbilityManager : MonoBehaviour
     }
 
 
-
+    
     private bool AllCardsArePlaced()
     {
         return _copyFromPlaceSpot.HasAnyPlacedCard() && _copyToPlaceSpot.HasAnyPlacedCard();
     }
-    
+
+    private bool AbilityFromCopyIsSelected()
+    {
+        return _selectedCopyFromButton != null;
+    }
     
     
     private void EnableCopyFromButtons()
@@ -204,6 +224,8 @@ public class CopyAbilityManager : MonoBehaviour
         {
             _copyFromButtons[i].SetDisabled();
         }
+
+        _selectedCopyFromButton = null;
     }
     
     
@@ -221,6 +243,7 @@ public class CopyAbilityManager : MonoBehaviour
     private void EnableCardPreview()
     {
         _previewTurretCard.RootCardTransform.gameObject.SetActive(true);
+        _previewTurretCard.MotionEffectsController.DisableMotion();
         
 
         TurretPartProjectileDataModel turretPartAttack = null;
@@ -249,11 +272,18 @@ public class CopyAbilityManager : MonoBehaviour
 
         _selectedCopyFromButton = selectedCopyFromButton;
         _selectedCopyFromButton.SetSelected();
+        
+        if (AllCardsArePlaced())
+        {
+            EnableCardPreview();
+            EnableCopyToButton();
+        }
     }
     
     private void OnConfirmButtonClicked(AbilityManagerConfirmButton confirmButton)
     {
         FinalDisableInteractions();
+        DisableCardPreview();
         StartCoroutine(PlayConfirmLogic());
     }
 

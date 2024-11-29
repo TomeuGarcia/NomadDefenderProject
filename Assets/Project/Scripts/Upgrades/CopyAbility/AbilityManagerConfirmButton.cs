@@ -8,10 +8,11 @@ namespace Project.Scripts.Upgrades.CopyAbility
     {
         [SerializeField] private GameObject _viewHolder;
         [SerializeField] private MouseOverNotifier _mouseOverNotifier;
+        [SerializeField] private Transform _canBeSelectedTransform;
         [SerializeField] private GameObject _selectedMark;
 
         private bool _isEnabled;
-        
+        private Vector3 _canBeSelectedTransformDefaultScale;
 
         public Action<AbilityManagerConfirmButton> OnClicked;
 
@@ -31,6 +32,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         private void Awake()
         {
+            _canBeSelectedTransformDefaultScale = _canBeSelectedTransform.localScale;
             SetDisabled();
         }
 
@@ -39,6 +41,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _isEnabled = true;
             _viewHolder.SetActive(true);
+            PlayWaitingForSelectedAnimation();
         }
         public void SetDisabled()
         {
@@ -58,10 +61,12 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             SetHighlighted(true);
             PlaySelectedAnimation();
+            StopWaitingForSelectedAnimation();
         }
         private void SetNotSelected()
         {
             SetHighlighted(false);
+            StopWaitingForSelectedAnimation();
         }
 
 
@@ -69,14 +74,16 @@ namespace Project.Scripts.Upgrades.CopyAbility
         private void OnHover()
         {
             if (!_isEnabled) return;
-            
+
             SetHighlighted(true);
+            StopWaitingForSelectedAnimation();
         }
         private void OnUnhover()
         {
             if (!_isEnabled) return;
 
             SetHighlighted(false);
+            PlayWaitingForSelectedAnimation();
         }
         private void OnPressed()
         {
@@ -84,6 +91,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
             SetSelected();
             OnClicked?.Invoke(this);
+            StopWaitingForSelectedAnimation();
         }
 
 
@@ -92,6 +100,28 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _selectedMark.gameObject.SetActive(highlighted);
         }
 
+        
+        
+        
+        private void PlayWaitingForSelectedAnimation()
+        {
+            Vector3 scaleChange = _canBeSelectedTransformDefaultScale * 0.1f;
+
+            _canBeSelectedTransform.DOBlendableScaleBy(-scaleChange, 0.75f)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                    _canBeSelectedTransform.DOBlendableScaleBy(scaleChange, 0.75f)
+                        .SetEase(Ease.InOutSine)
+                        .OnComplete(PlayWaitingForSelectedAnimation)
+                );
+        }
+
+        private void StopWaitingForSelectedAnimation()
+        {
+            _canBeSelectedTransform.DOKill();
+            _canBeSelectedTransform.localScale = _canBeSelectedTransformDefaultScale;
+        }
+        
         private void PlaySelectedAnimation()
         {
             _selectedMark.transform.DOPunchScale(Vector3.one * 0.1f, 0.5f, 5)
