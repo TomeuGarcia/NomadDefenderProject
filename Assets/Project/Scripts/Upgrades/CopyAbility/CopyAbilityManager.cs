@@ -10,9 +10,6 @@ using Random = UnityEngine.Random;
 
 public class CopyAbilityManager : MonoBehaviour
 {
-    [Header("DEBUG")]
-    [SerializeField] protected DecksLibrary _decksLibraryDEBUG;
-    
     [Header("CAMERA")]
     [SerializeField] private Camera _mouseDragCamera;
     
@@ -23,6 +20,8 @@ public class CopyAbilityManager : MonoBehaviour
     [SerializeField, Min(1)] private int _numberOfCards = 5;
     [SerializeField] private UpgradeCardHolderMultiplePlaceSpots _upgradeCardHolder;
     [SerializeField] private TurretBuildingCard _previewTurretCard;
+    [SerializeField] private CardMotionConfig _cardsMotionConfig;
+
     
     [Header("UPDATE CARD PLAY COST")]
     [SerializeField] private CardUpgradeTurretPlayCostConfig _playCostsConfig;
@@ -43,6 +42,7 @@ public class CopyAbilityManager : MonoBehaviour
     private AbilityManagerCopyFromButton _selectedCopyFromButton;
 
     [Header("ANIMATIONS")] 
+    [SerializeField] private CopyAbilityManagerTextsAnimator _textsAnimator;
     [SerializeField] private CopyAbilityManagerTutorizationAnimator _tutorizationAnimator;
     [SerializeField] private CopyAbilityManagerCardHandAnimator _cardHandAnimator;
     [SerializeField] private CopyAbilityManagerMachineAnimator _machineAnimator;
@@ -97,7 +97,7 @@ public class CopyAbilityManager : MonoBehaviour
         InitCameras();
         
 
-        _decksLibraryDEBUG.InitGameDeck();
+        _cardsMotionConfig.SetUpgradeSceneMode();
         _deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder);
         _numberOfCards = Mathf.Min(_numberOfCards, _deckInUse.CurrentDeckContent.TurretCardsData.Length);
         
@@ -139,8 +139,10 @@ public class CopyAbilityManager : MonoBehaviour
 
     private IEnumerator PlayInitLogic(BuildingCard[] cards)
     {
+        _cardHandAnimator.InitShowCards(cards);
         yield return StartCoroutine(_machineAnimator.PlayInitAppearAnimation_BeforeCardsAppearing());
-        yield return StartCoroutine(_cardHandAnimator.PlayInitShowCards(cards));
+        yield return StartCoroutine(_cardHandAnimator.PlayInitShowCards());
+        StartCoroutine(_textsAnimator.PlayInitText());
         yield return StartCoroutine(_machineAnimator.PlayInitAppearAnimation_AfterCardsAppearing());
     }
     
@@ -303,7 +305,9 @@ public class CopyAbilityManager : MonoBehaviour
 
     private IEnumerator PlayConfirmLogic()
     {
+        _textsAnimator.ClearInitText();
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_BeforeModifyingCard());
+        StartCoroutine(_textsAnimator.PlayCompleteText());
         yield return StartCoroutine(ModifyCopyToCard());
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_AfterModifyingCard());
         yield return StartCoroutine(_cardHandAnimator.PlayFinishHideCards(

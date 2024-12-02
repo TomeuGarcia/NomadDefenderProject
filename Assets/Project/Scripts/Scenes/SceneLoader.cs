@@ -173,10 +173,6 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene("MainMenuCredits");
     }
-    public void DEBUGLOADSCENE(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
 
     public void StartLoadMainMenu()
     {

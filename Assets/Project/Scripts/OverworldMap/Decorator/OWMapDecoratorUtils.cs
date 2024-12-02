@@ -6,19 +6,25 @@ using UnityEngine;
     menuName = SOAssetPaths.MAP_OVERWORLD + "OWMapDecoratorUtils")]
 public class OWMapDecoratorUtils : ScriptableObject
 {
-    [SerializeField] private NodeEnums.UpgradeType[] _availableUpgrades = new[]
+    [System.Serializable]
+    public class UpgradeTypeApparition
     {
-        NodeEnums.UpgradeType.REPLACE_ATTACK_PART,
-        NodeEnums.UpgradeType.REPLACE_BODY_PART,
-        NodeEnums.UpgradeType.REPLACE_BASE_PART,
-        NodeEnums.UpgradeType.NEW_TURRET_CARD,
-        NodeEnums.UpgradeType.ADD_BONUS_STATS_PART
-    };
+        [SerializeField] private NodeEnums.UpgradeType _upgradeType;
+        [SerializeField] private string _titleName;
+        [SerializeField, Range(0, 100)] private int _apparitionChance = 100;
+        [SerializeField] private Texture _texture;
 
-    public NodeEnums.UpgradeType[] AvailableUpgrades => _availableUpgrades;
+        public NodeEnums.UpgradeType UpgradeType => _upgradeType;
+        public string TitleName => _titleName;
+        public int ApparitionChance => _apparitionChance;
+        public Texture Texture => _texture;
+    }
 
 
-    public List<Texture> upgradeNodeTextures;
+    [SerializeField] private UpgradeTypeApparition[] _availableUpgrades;
+    public UpgradeTypeApparition[] AvailableUpgrades => _availableUpgrades;
+
+
     public List<Texture> battleNodeTextures;
     public List<Texture> emptyNodeTextures;
 
@@ -71,10 +77,20 @@ public class OWMapDecoratorUtils : ScriptableObject
         return battleNodeTextures[(int)battleType];
     }
     
-    public Texture GetUpgradeNodeTexture(NodeEnums.UpgradeType upgradeType) 
+    
+    public UpgradeTypeApparition UpgradeTypeApparitionByType(NodeEnums.UpgradeType upgradeType)
     {
-        return upgradeNodeTextures[(int)upgradeType];
+        foreach (UpgradeTypeApparition availableUpgrade in _availableUpgrades)
+        {
+            if (availableUpgrade.UpgradeType == upgradeType)
+            {
+                return availableUpgrade;
+            }
+        }
+
+        return null;
     }
+    
     
     public Texture GetEmptyNodeTexture(NodeEnums.EmptyType emptyType) 
     {

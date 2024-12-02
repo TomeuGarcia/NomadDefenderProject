@@ -84,6 +84,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _isSelected = false;
             SetHighlighted(false);
             _selectedMark.transform.localScale = _selectionDefaultScale;
+            StopWaitingForSelectedAnimation();
         }
 
 

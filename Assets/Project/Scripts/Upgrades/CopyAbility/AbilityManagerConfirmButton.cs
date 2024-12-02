@@ -41,6 +41,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _isEnabled = true;
             _viewHolder.SetActive(true);
+            StopWaitingForSelectedAnimation();
             PlayWaitingForSelectedAnimation();
         }
         public void SetDisabled()

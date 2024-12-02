@@ -21,7 +21,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
             _notValidCardText.Activate();
 
             yield return new WaitUntil(() => _notValidCardText.FinishedLine);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
 
             for (int i = 0; i < 2; i++)
             {
@@ -33,7 +33,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
                 yield return new WaitForSeconds(0.1f);
             }
             
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.75f);
             
             _notValidCardText.ClearDecoder();
         }

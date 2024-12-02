@@ -8,12 +8,13 @@ namespace Project.Scripts.Upgrades.CopyAbility
 {
     public class CopyAbilityManagerCardHandAnimator : MonoBehaviour
     {
+        private BuildingCard[] _cards;
+        private Vector3[] _initShowGoalPositions;
         
-        
-        
-        public IEnumerator PlayInitShowCards(BuildingCard[] cards)
+        public void InitShowCards(BuildingCard[] cards)
         {
-            Vector3[] goalPositions = new Vector3[cards.Length];
+            _cards = cards;
+            _initShowGoalPositions = new Vector3[cards.Length];
             Vector3 startOffset = new Vector3(0, -3, -1);
 
             for (int i = 0; i < cards.Length; ++i)
@@ -21,28 +22,34 @@ namespace Project.Scripts.Upgrades.CopyAbility
                 BuildingCard card = cards[i];
                 card.DisableMouseInteraction();
                 Vector3 cardStartPosition = card.CardTransform.position;
-                goalPositions[i] = cardStartPosition;
+                _initShowGoalPositions[i] = cardStartPosition;
 
                 card.CardTransform.position = cardStartPosition + startOffset;
+                card.canBeHovered = false;
             }
-
-            
-            
+        }
+        
+        public IEnumerator PlayInitShowCards()
+        {
             yield return new WaitForSeconds(0.5f);
-            for (int i = 0; i < cards.Length; ++i)
+            for (int i = 0; i < _cards.Length; ++i)
             {
-                BuildingCard card = cards[i];
-                card.CardTransform.DOMove(goalPositions[i], 0.3f)
+                BuildingCard card = _cards[i];
+                card.CardTransform.DOMove(_initShowGoalPositions[i], 0.3f)
                     .SetEase(Ease.OutSine);
                 
                 yield return new WaitForSeconds(0.1f);
             }
 
-            foreach (var card in cards)
+            foreach (var card in _cards)
             {
-                card.EnableMouseInteraction();
+                card.canBeHovered = true;
+                card.ReenableMouseInteraction();
             }
         }
+        
+        
+        
         
         public IEnumerator PlayFinishHideCards(BuildingCard[] allCards, BuildingCard[] placedCards)
         {
