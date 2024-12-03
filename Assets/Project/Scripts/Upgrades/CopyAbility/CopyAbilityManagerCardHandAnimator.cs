@@ -55,9 +55,10 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             foreach (var card in placedCards)
             {
-                card.StandardState(true, duration: 0.2f);
+                card.StandardState(true, duration: 2.0f);
+                yield return new WaitForSeconds(0.5f);
             }
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.2f);
         
             
             
@@ -71,6 +72,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
                 
                 yield return new WaitForSeconds(0.1f);
             }
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

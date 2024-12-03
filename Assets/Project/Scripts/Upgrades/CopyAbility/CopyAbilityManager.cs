@@ -318,7 +318,8 @@ public class CopyAbilityManager : MonoBehaviour
     private IEnumerator ModifyCopyToCard()
     {
         _copyToCard.AddNewPassive(_selectedCopyFromButton.AbilityDataModel);
-        
+        _copyToCard.IncrementCardLevel(1, false);
+
         bool replacedWithSamePart = _copyToCard.ReplacedWithSamePart;
         _copyToCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, _copyToCard));
         _copyToCard.PlayLevelUpAnimation();
