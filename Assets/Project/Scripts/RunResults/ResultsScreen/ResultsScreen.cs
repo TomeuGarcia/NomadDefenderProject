@@ -20,6 +20,8 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private ResultsScreenView _view;
     [SerializeField] private ResultScreenEnemyInteractions _enemyInteractions;
     [SerializeField] private FullScreenPassRendererFeature _fullScreenEffect;
+
+    [SerializeField] private int _damagePerClick;
     
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private Button _continueButton;
@@ -117,7 +119,7 @@ public class ResultsScreen : MonoBehaviour
             mostDamagingEnemy.InitWithoutFunctionality();
 
             
-            _enemyInteractions.Init(mostDamagingEnemy, RunStateData.HighestDamageDealt);
+            _enemyInteractions.Init(mostDamagingEnemy, _damagePerClick);
         }
         
         

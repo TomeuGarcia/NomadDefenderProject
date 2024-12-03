@@ -121,19 +121,18 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     [HideInInspector] public bool isMissingDefaultCallbacks = false;
-    public delegate void BuildingCardAction(BuildingCard buildingCard);
-    public event BuildingCardAction OnCardHovered;
-    public event BuildingCardAction OnCardUnhovered;
-    public event BuildingCardAction OnCardSelected;
-    public event BuildingCardAction OnCardInfoSelected;
-    public event BuildingCardAction OnDragMouseUp;
-    public static event BuildingCardAction OnDragOutsideDragBounds;
+    public Action<BuildingCard> OnCardHovered;
+    public Action<BuildingCard> OnCardUnhovered;
+    public Action<BuildingCard> OnCardSelected;
+    public Action<BuildingCard> OnCardInfoSelected;
+    public Action<BuildingCard> OnDragMouseUp;
+    public static Action<BuildingCard> OnDragOutsideDragBounds;
 
 
-    public bool IsOnCardHoveredSubscrived => OnCardHovered != null;
+    public bool IsOnCardHoveredSubscribed => OnCardHovered != null;
 
-    public event BuildingCardAction OnCardSelectedNotHovered;
-    public event BuildingCardAction OnGetSaved;
+    public Action<BuildingCard> OnCardSelectedNotHovered;
+    public Action<BuildingCard> OnGetSaved;
 
 
     public delegate void BuildingCardAction2();
@@ -142,6 +141,7 @@ public abstract class BuildingCard : MonoBehaviour
     public static event BuildingCardAction2 OnMouseDragStart;
     public static event BuildingCardAction2 OnMouseDragEnd;
 
+    public static Action<BuildingCard> OnCardCostDecremented;
 
     public delegate void CardFunctionPtr();
 
@@ -227,6 +227,7 @@ public abstract class BuildingCard : MonoBehaviour
 
     private void OnMouseExit()
     {
+        RedrawHoverIndication(false);
         if (canDisplayInfoIfNotInteractable)
         {
             DoHideInfo();
@@ -282,8 +283,10 @@ public abstract class BuildingCard : MonoBehaviour
 
 
     // ABSTRACT METHODS to implement
+    public abstract void OnTDGameStart(DeckBuildingCards deck);
     protected abstract void InitStatsFromTurretParts();
     public abstract void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter);
+    public abstract void OnDrawnButAlreadyCreatedBuilding();
     public abstract int GetCardPlayCost();
     protected abstract void InitVisuals();
 
@@ -374,6 +377,10 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.localPosition = Vector3.zero;
     }
 
+    public void InitSelectedPosition(Vector3 selectedPosition)
+    {
+        this.selectedPosition = selectedPosition;
+    }
     public void InitPositions(Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition)
     {
         InitPositions(CardTransform.localPosition, selectedPosition, hiddenDisplacement, finalPosition);

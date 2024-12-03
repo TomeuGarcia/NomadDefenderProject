@@ -16,10 +16,11 @@ public class EnemyDisplayUI : MonoBehaviour
     private Material _imageMaterial;
     
 
-    public void SetEnemyType(EnemyTypeConfig enemyTypeConfig)
+    public void Init(EnemyTypeConfig enemyTypeConfig, bool withArmor)
     {
         CheckInitMaterial();
         _imageMaterial.SetInt("_EnemyPhotoIndex", enemyTypeConfig.View.PhotoIndex);
+        _imageMaterial.SetInt("_WithArmor", withArmor ? 1 : 0);
     }
 
     private void CheckInitMaterial()

@@ -10,11 +10,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     [SerializeField] private TextMeshProUGUI nodeTitleText;
     [SerializeField] private TextMeshProUGUI statusText;
 
-    private static string[] upgardeTypesToText =
-    {
-        "NewCard", "Projectile", "Ability", "Body", "BonusStats"
-    };
-
 
     private static string[] nodeHealthToStatusText = { "<color=#6F6F6F>LOCKED</color>",
                                                        "<color=#32E8E8>AVAILABLE</color>",
@@ -37,9 +32,9 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     {
         BaseInit(attachedNode, mouseOverNotifier, positionedAtRight);
     }
-    public void InitUpgradeType(NodeEnums.UpgradeType upgradeType)
+    public void InitUpgradeType(string titleName)
     {
-        nodeTitleText.text = "\\UPG> " + upgardeTypesToText[(int)upgradeType]; 
+        nodeTitleText.text = "\\UPG> " + titleName; 
     }
 
     protected override void SubscriveToAttachedNodeEvents()

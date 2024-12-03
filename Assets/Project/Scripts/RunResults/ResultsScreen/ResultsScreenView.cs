@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -86,6 +87,14 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private TextDecoder _defeatTitle;
     [SerializeField] private TextDecoder _resultsSubtitle;
 
+    [Header("TITLE FADES")]
+    [SerializeField] private RectTransform _fadeVictory;
+    [SerializeField] private RectTransform _scrollVictory;
+    [SerializeField] private RectTransform _fadeDefeat;
+    [SerializeField] private RectTransform _scrollDefeat;
+    [SerializeField] private float[] _fadePopping;
+    [SerializeField] private ResultScreenMaskIntro _maskIntro; 
+
     [Header("STATS")] 
     [SerializeField] private ResultScreenStat _statPrefab;
     [SerializeField] private RectTransform _statSeparatorPrefab;
@@ -106,10 +115,15 @@ public class ResultsScreenView : MonoBehaviour
 
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private TextDecoder _continueButtonText;
+    [SerializeField] private GameObject _continueTextArrows;
     private Button _continueButton;
 
-    
-    
+    [Header("RESULT SPECIFIC")]
+    [SerializeField] private GameObject _mapVictoryObjects;
+    [SerializeField] private GameObject _mapDefeatObjects;
+
+
+
     private InitData _initData;
     
 
@@ -118,9 +132,19 @@ public class ResultsScreenView : MonoBehaviour
         _initData = initData;
         _continueButton = continueButton;
         _stats.Init(runStateData, _statPrefab, _statSeparatorPrefab);
+
+        ResultChanges(runStateData);
+
         SetupShowAnimation(runStateData, initData);
     }
-    
+
+    private void ResultChanges(IRunStateData runStateData)
+    {
+        _mapVictoryObjects.SetActive(runStateData.Victory);
+        _mapDefeatObjects.SetActive(!runStateData.Victory);
+    }
+
+
     private void SetupShowAnimation(IRunStateData runStateData, InitData initData)
     {
         bool playingVictory = runStateData.Victory;
@@ -137,14 +161,27 @@ public class ResultsScreenView : MonoBehaviour
         {
             _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
             _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard);
-            _mostKillsAndDamageCardScreenPreviewer.InitToNotShow();
+            InitCard(initData.MostKillsCard);
+            InitCard(initData.MostDamageCard);
         }
-
+        
         _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
         
         _continueButton.interactable = false;
+
+        //Fades
+        _fadeVictory.gameObject.SetActive(false);
+        _fadeDefeat.gameObject.SetActive(false);
+
+        _continueTextArrows.gameObject.SetActive(false);
+    }
+
+    private void InitCard(GameObject card)
+    {
+        Vector3 cardPosition = card.transform.position;
+        card.GetComponent<BuildingCard>().InitPositions(cardPosition, Vector3.zero, cardPosition);
     }
     
     
@@ -156,6 +193,14 @@ public class ResultsScreenView : MonoBehaviour
     private IEnumerator PlayShowAnimation(IRunStateData runStateData)
     {
         yield return new WaitForSeconds(1f);
+        if(runStateData.Victory)
+        {
+            yield return StartCoroutine(ShowTitleFades(_fadeVictory, _scrollVictory));
+        }
+        else
+        {
+            yield return StartCoroutine(ShowTitleFades(_fadeDefeat, _scrollDefeat));
+        }
         yield return StartCoroutine(PlayShowTitleAnimation(runStateData));
         yield return StartCoroutine(PlayShowStatsAnimation());
         yield return StartCoroutine(PlayShowDeckAnimation());
@@ -207,6 +252,7 @@ public class ResultsScreenView : MonoBehaviour
     private IEnumerator PlayShowContinueButton()
     {
         yield return StartCoroutine(PlayTextDecoder(_continueButtonText));
+        _continueTextArrows.SetActive(true);
         _continueButton.interactable = true;
     }
     
@@ -215,5 +261,16 @@ public class ResultsScreenView : MonoBehaviour
     {
         textDecoder.Activate();
         yield return new WaitUntil(() => textDecoder.FinishedLine);
+    }
+
+    private IEnumerator ShowTitleFades(RectTransform fade, RectTransform scrollFadeParent)
+    {
+        foreach (float f in _fadePopping)
+        {
+            fade.gameObject.SetActive(!fade.gameObject.activeInHierarchy);
+            yield return new WaitForSeconds(f);
+        }
+
+        _maskIntro.StartScroll(scrollFadeParent);
     }
 }

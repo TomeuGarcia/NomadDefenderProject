@@ -543,6 +543,7 @@ Transform:
   - {fileID: 5322048269610582780}
   - {fileID: 3365011796835139761}
   - {fileID: 1087736479542391394}
+  - {fileID: 6941888758708436085}
   m_Father: {fileID: 5966887531202615239}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1440,6 +1441,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8157009018608201266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6941888758708436085}
+  m_Layer: 10
+  m_Name: ParticlesSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6941888758708436085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8157009018608201266}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6285853130821345299}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8358122463752949312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1554,6 +1586,7 @@ MonoBehaviour:
   canBeHovered: 1
   borderFillValue01: 0
   _turretParentTransform: {fileID: 414376935057901943}
+  _cardParticlesSpot: {fileID: 6941888758708436085}
   _iconDisplays:
   - {fileID: 3495002726334189746}
   - {fileID: 6959023640878615238}

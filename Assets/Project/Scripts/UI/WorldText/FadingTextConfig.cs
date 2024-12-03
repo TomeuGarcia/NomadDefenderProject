@@ -10,6 +10,7 @@ public class FadingTextConfig : ScriptableObject
     [SerializeField] private Color _defaultTextsColor = Color.white;
     [SerializeField] private Vector3 _randomPositionOffsetBounds = new Vector3(1, 1, 1);
     [SerializeField] private Vector3 _fixedPositionOffset = new Vector3(0, 1, 0);
+    [SerializeField] private Vector3 _scale = new Vector3(1, 1, 1);
 
     [Space(20)]
     [Header("ANIMATIONS")]
@@ -23,6 +24,7 @@ public class FadingTextConfig : ScriptableObject
 
     public CharacterAnimation CharacterAppearAnimation => _characterAppearAnimation;
     public TextAnimation TextAppearAnimation => _textAppearAnimation;
+    public Vector3 Scale => _scale;
 
 
 

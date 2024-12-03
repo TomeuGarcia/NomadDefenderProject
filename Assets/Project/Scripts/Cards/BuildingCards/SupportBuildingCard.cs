@@ -44,6 +44,11 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab.SetActive(false);
     }
 
+    public override void OnDrawnButAlreadyCreatedBuilding()
+    {
+        
+    }
+
     public override int GetCardPlayCost()
     {
         return PlayCost;
@@ -59,6 +64,11 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
     {
         CardData = cardData;
         Init();
+    }
+
+    public override void OnTDGameStart(DeckBuildingCards deck)
+    {
+        
     }
 
     protected override void InitStatsFromTurretParts()

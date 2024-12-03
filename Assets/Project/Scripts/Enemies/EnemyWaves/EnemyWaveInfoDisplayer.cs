@@ -22,6 +22,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private EnemiesInWaveDisplayUI.DisplayData _currentEnemiesDisplayData;
 
     private MouseOverlapNotifier _mouseOverNotifier;
+
+    private GameObject _mouseHoverViewToggle;
+    
     
     private void OnDestroy()
     {
@@ -54,6 +57,9 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
         _currentEnemiesDisplayData = new EnemiesInWaveDisplayUI.DisplayData();
         InitEnemiesDisplayDataUI();
+
+        _mouseHoverViewToggle = pathNode.transform.GetChild(3).gameObject;
+        _mouseHoverViewToggle.SetActive(false);
     }
 
 
@@ -137,17 +143,23 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private void InitEnemiesDisplayDataUI()
     {
         EnemyInWave[] enemiesInWave = enemyWaveSpawner.CurrentEnemyWave.enemiesInWave;
-        Dictionary<EnemyTypeConfig, int> groupedEnemiesInWave = new();
+        Dictionary<EnemyTypeConfig, (int, bool)> groupedEnemiesInWave = new();
         foreach (EnemyInWave enemyInWave in enemiesInWave)
         {
-            EnemyTypeConfig enemyType = enemyInWave.EnemyType;
+            EnemyTypeConfig realEnemyType = enemyInWave.EnemyType;
+            EnemyTypeConfig enemyType = realEnemyType.NonArmored;
+            bool hasArmor = realEnemyType.BaseStats.Armor > 0;
+            
             if (groupedEnemiesInWave.ContainsKey(enemyType))
             {
-                groupedEnemiesInWave[enemyType] += enemyInWave.NumberOfSpawns;
+                (int, bool) existingEntry = groupedEnemiesInWave[enemyType];
+                groupedEnemiesInWave[enemyType] = (
+                    existingEntry.Item1 + enemyInWave.NumberOfSpawns, 
+                    existingEntry.Item2 || hasArmor);
             }
             else
             {
-                groupedEnemiesInWave.Add(enemyType, enemyInWave.NumberOfSpawns);
+                groupedEnemiesInWave.Add(enemyType, (enemyInWave.NumberOfSpawns, hasArmor));
             }
         }
         
@@ -156,7 +168,8 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         {
             currentEnemyEntries.Add(new EnemiesInWaveDisplayUI.DisplayData.Entry(
                 groupedEnemyInWave.Key,
-                groupedEnemyInWave.Value,
+                groupedEnemyInWave.Value.Item1,
+                groupedEnemyInWave.Value.Item2,
                 _enemiesInWaveDisplayUI.ProvideEnemyDisplay()
             ));
         }
@@ -170,6 +183,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         if (!NoEnemiesLeft())
         {
             _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
+            _mouseHoverViewToggle.SetActive(true);
         }
     }
 
@@ -178,6 +192,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         if (_enemiesInWaveDisplayUI.IsShowingDisplayData(_currentEnemiesDisplayData))
         {
             _enemiesInWaveDisplayUI.Hide();
+            _mouseHoverViewToggle.SetActive(false);
         }
     }
 }

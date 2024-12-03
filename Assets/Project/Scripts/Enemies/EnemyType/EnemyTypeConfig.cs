@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -36,8 +37,15 @@ public class EnemyTypeConfig : ScriptableObject
 
     [SerializeField] private Stats _baseStats;
     [SerializeField] private ViewConfig _view;
+    
+    [Space(10)]
+    [Required, ShowIf("IsArmored"), SerializeField] private EnemyTypeConfig _nonArmoredVersion;
+
 
     public Stats BaseStats => _baseStats;
     public ViewConfig View => _view;
-    
+
+    public EnemyTypeConfig NonArmored => IsArmored ? _nonArmoredVersion : this;
+
+    private bool IsArmored => _baseStats.Armor > 0;
 }

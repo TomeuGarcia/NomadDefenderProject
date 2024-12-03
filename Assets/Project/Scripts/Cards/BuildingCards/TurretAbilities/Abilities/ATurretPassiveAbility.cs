@@ -76,6 +76,8 @@ public abstract class ATurretPassiveAbility
     }
     
     
+    public virtual void OnTDGameStart(BuildingCard ownerCard, DeckBuildingCards deck) { }
+    public virtual void OnCardInitialized(TurretBuildingCard ownerCard) { }
     
     public virtual void OnAddedToTurretCard(TurretCardData cardData) { } 
     public virtual void OnRemovedFromTurretCard() { } 
@@ -84,6 +86,7 @@ public abstract class ATurretPassiveAbility
     
     public virtual void OnTurretCreated(TurretBuilding turretOwner) { } 
     public virtual void OnTurretDestroyed() { } 
+    public virtual void OnDrawnToHandTwiceOrMore() { } 
     
     
     public virtual void OnTurretPlacingStart() { } 

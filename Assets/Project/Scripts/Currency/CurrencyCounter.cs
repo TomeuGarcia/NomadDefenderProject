@@ -9,6 +9,7 @@ public class CurrencyCounter : MonoBehaviour
 {
     [Header("Currency Count")]
     [SerializeField, Min(0)] private int currencyCount;
+    public int CurrencyCount => currencyCount;
 
     [Header("Components")]
     [SerializeField] private Transform currencyCountTextHolder;

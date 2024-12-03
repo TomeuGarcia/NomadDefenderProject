@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -136,6 +137,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.OnBuildingCantBePlaced += ResetToStandardWhenPlacingCancelled;
         BuildingCard.OnDragOutsideDragBounds += EnablePlacingAfterDragged;
+        BuildingCard.OnCardCostDecremented += CheckCardCost;
     }
     private void OnDisable()
     {
@@ -152,6 +154,7 @@ public class HandBuildingCards : MonoBehaviour
 
         buildingPlacer.OnBuildingCantBePlaced -= ResetToStandardWhenPlacingCancelled;
         BuildingCard.OnDragOutsideDragBounds -= EnablePlacingAfterDragged;
+        BuildingCard.OnCardCostDecremented -= CheckCardCost;
     }
 
     private void Update()
@@ -166,7 +169,7 @@ public class HandBuildingCards : MonoBehaviour
             if (OnQueryDrawCard != null) OnQueryDrawCard();
         }
     }
-
+    
 
     public void InitCardsInHand(bool withRotation = true)
     {
@@ -253,7 +256,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         else
         {
-            if (!card.IsOnCardHoveredSubscrived)
+            if (!card.IsOnCardHoveredSubscribed)
                 card.OnCardHovered += SetHoveredCard;
         }
 
@@ -545,6 +548,10 @@ public class HandBuildingCards : MonoBehaviour
             {
                 card.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
             }
+            else
+            {
+                card.OnDrawnButAlreadyCreatedBuilding();
+            }
         }
 
         if (HasPreviouslySelectedCard)
@@ -757,7 +764,7 @@ public class HandBuildingCards : MonoBehaviour
     
     private void ComputeHiddenPosition()
     {
-        hiddenDisplacement = (-1.15f * HandTransform.up);// + (HandTransform.forward * 3f);
+        hiddenDisplacement = (-1.05f * HandTransform.up);// + (HandTransform.forward * 3f);
 
         defaultHandPosition = HandTransform.position;
         hiddenHandPosition = HandTransform.position + hiddenDisplacement;
@@ -883,16 +890,21 @@ public class HandBuildingCards : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; ++i)
         {
-            int cardCost = cards[i].GetCardPlayCost();
+            CheckCardCost(cards[i]);
+        }
+    }
 
-            if (currencyCounter.HasEnoughCurrency(cardCost))
-            {
-                cards[i].SetCanBePlayedAnimation();
-            }
-            else
-            {
-                cards[i].SetCannotBePlayedAnimation(true);
-            }
+    private void CheckCardCost(BuildingCard card)
+    {
+        int cardCost = card.GetCardPlayCost();
+
+        if (currencyCounter.HasEnoughCurrency(cardCost))
+        {
+            card.SetCanBePlayedAnimation();
+        }
+        else
+        {
+            card.SetCannotBePlayedAnimation(true);
         }
     }
 

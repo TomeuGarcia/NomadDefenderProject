@@ -58,6 +58,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     public EnemyWaveSpawner SpawnerOwner { get; private set; }
 
     public static Action<EnemyTypeConfig, TurretDamageAttack> OnTakeDamage;
+    public static Action<TurretDamageAttackResult> OnTakeDamageResult;
     public static Action<EnemyTypeConfig, int> OnDealDamage;
 
     public static Action<Enemy, PathLocation> OnTriedToAttackDeadLocation;
@@ -267,6 +268,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         TurretDamageAttackResult result = 
             new TurretDamageAttackResult(damageAttack, this, damageTaken, armorDamageTaken, hitArmor, brokeArmor, gotKilled);
         
+        OnTakeDamageResult?.Invoke(result);
         
         takeDamageResultCallback(result);
     }
@@ -300,7 +302,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         Deactivation();
     }
 
-    private void Deactivation()
+    protected void Deactivation()
     {
         if (OnEnemyDeactivated != null) OnEnemyDeactivated(this);
 

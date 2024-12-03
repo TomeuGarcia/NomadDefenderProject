@@ -10,7 +10,7 @@ public class AbilityDescriptionVariable
     
     [SerializeField] private bool _isDynamic = true;
     
-    [AllowNesting] [HideIf("_isDynamic"), SerializeField] private bool _isFloat = false;
+    [AllowNesting] [SerializeField] private bool _isFloat = false;
     [AllowNesting] [ShowIf("IsConstantInt"), SerializeField] private int _constantValue;
     [AllowNesting] [ShowIf("IsConstantFloat"), SerializeField] private float _floatConstantValue;
 
@@ -26,7 +26,7 @@ public class AbilityDescriptionVariable
     {
         if (_isFloat)
         {
-            return _floatConstantValue.ToString("0.0");
+            return _floatConstantValue.ToString("0.00");
         }
         
         return _constantValue.ToString();
