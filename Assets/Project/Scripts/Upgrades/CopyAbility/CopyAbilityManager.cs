@@ -105,9 +105,8 @@ public class CopyAbilityManager : MonoBehaviour
         DisableCardPreview();
 
 
-        BuildingCard[] randomCards =
-            UpgradeRoomDeckCardsFilterer.GetRandomTurretCards(_deckCards, _numberOfCards, _upgradeCardHolder.CardsHolder)
-                .ToArray();
+        BuildingCard[] randomCards = UpgradeRoomDeckCardsFilterer.GetRandomTurretCardsWithAtLeast1Ability(
+                _deckCards, _numberOfCards, _upgradeCardHolder.CardsHolder).ToArray();
         DisableRemainingCardsFromDeckCards(randomCards);
         
         _upgradeCardHolder.Init(randomCards);
