@@ -25,6 +25,8 @@ public class SupportBuilding : RangeBuilding
     public override Vector3 PlacingParticlesPosition => basePart.PlacedParticlesSpot;
 
 
+    public override float CurrentRadiusRange => Stats.RadiusRange;
+
     void Awake()
     {
         AwakeInit();
@@ -64,7 +66,7 @@ public class SupportBuilding : RangeBuilding
         this.turretPartBase = CardData.SharedPartsGroup.Base;
 
         basePart = Instantiate(turretPartBase.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
-        basePart.InitAsSupportBuilding(this, Stats.RadiusRange);
+        basePart.InitAsSupportBuilding(this, CurrentRadiusRange);
 
         UpdateRange();
         SetUpTriggerNotifier(basePart.baseCollider.triggerNotifier);
@@ -76,7 +78,7 @@ public class SupportBuilding : RangeBuilding
 
     protected override void UpdateRange()
     {
-        basePart.baseCollider.UpdateRange(Stats.RadiusRange);
+        basePart.baseCollider.UpdateRange(CurrentRadiusRange);
     }
     private void OnControllerUpdatedStats()
     {

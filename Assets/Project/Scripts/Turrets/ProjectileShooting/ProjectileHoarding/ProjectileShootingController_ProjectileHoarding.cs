@@ -37,12 +37,17 @@ public class ProjectileShootingController_ProjectileHoarding : AProjectileShooti
             return;
         }
 
-        ATurretProjectileBehaviour projectileBehaviour = Shoot(EnemyFactory.GetInstance().GetNullEnemy());
-        AddToHoardedProjectiles(projectileBehaviour);
+        DoShoot();
 
         ResetShootState();
     }
-    
+
+    public override void DoShoot()
+    {
+        ATurretProjectileBehaviour projectileBehaviour = Shoot(EnemyFactory.GetInstance().GetNullEnemy());
+        AddToHoardedProjectiles(projectileBehaviour);
+    }
+
     private void ResetShootState()
     {
         _shootTimer = 0f;

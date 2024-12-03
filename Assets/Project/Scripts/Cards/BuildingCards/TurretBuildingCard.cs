@@ -20,6 +20,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     [Header("VISUALS")]
     private TurretPartBody_View _turretMeshPreview;
     [SerializeField] private Transform _turretParentTransform;
+    [SerializeField] private Transform _cardParticlesSpot;
     [SerializeField] private TurretIconCanvasDisplay[] _iconDisplays;
     public TurretIconCanvasDisplay ProjectileIconDisplay => _iconDisplays[0];
     public TurretIconCanvasDisplay[] PassivesIconDisplays => new [] { _iconDisplays[1], _iconDisplays[2], _iconDisplays[3] } ;
@@ -38,11 +39,13 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public bool ReplacedWithSamePart { get; private set; }
     private bool playingPlayCostAnimation = false;
 
+    public Transform CardParticlesSpot => _cardParticlesSpot; 
 
     private TurretCardStatsController StatsController => CardData.StatsController;
     public ITurretStatsBonusController StatsBonusController => StatsController;
     private int PlayCost { get; set; }
 
+    
 
     private void Awake()
     {
@@ -110,6 +113,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         _turretMeshPreview.transform.localScale = Vector3.one;
     }
 
+    public override void OnTDGameStart(DeckBuildingCards deck)
+    {
+        CardData.PassiveAbilitiesController.OnTDGameStart(this, deck);
+    }
+
     protected override void InitStatsFromTurretParts()
     {
         StatsController.ResetUpgradeLevel();
@@ -126,6 +134,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab.SetActive(false);
     }
 
+    public override void OnDrawnButAlreadyCreatedBuilding()
+    {
+        CardData.PassiveAbilitiesController.OnDrawnToHandTwiceOrMore();
+    }
+
     public override int GetCardPlayCost()
     {
         return PlayCost;
@@ -140,6 +153,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         CardData = cardData;
         Init();
+        CardData.PassiveAbilitiesController.OnCardInitialized(this);
     }
     
     public void SetNewPartAttack(TurretPartProjectileDataModel newTurretPartAttack)
@@ -320,7 +334,9 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         GameAudioManager.GetInstance().PlayConsoleTyping(0);
 
         playingPlayCostAnimation = false;
+        OnCardCostDecremented?.Invoke(this);
     }
+
 
     private IEnumerator DoPlayPlayIncrementCostAnimation(int endValue, int incrementAmountPerTick = 1, 
         float tickDuration = 0.03f, float startDelay = 0.4f)

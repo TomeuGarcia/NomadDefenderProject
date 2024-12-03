@@ -52,7 +52,11 @@ public class FakeEnemy : Enemy
     {
         return;
     }
-    
+
+    public void Deactivate()
+    {
+        Deactivation();
+    }
     
     public override void OnWillBeAttacked(TurretDamageAttack damageAttack)
     {

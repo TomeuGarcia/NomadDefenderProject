@@ -157,12 +157,13 @@ public class OverworldMapDecorator : MonoBehaviour
         node.SetBorderColor(OWMapDecoratorUtils.s_blueColor);
 
         OWMap_UpgradeNode upgradeNodeClass = new OWMap_UpgradeNode(nextLevelNodes, ref node.healthState, upgradeType, progressionState);
-        node.SetNodeClass(upgradeNodeClass, dUtils.GetUpgradeNodeTexture(upgradeType));
+        node.SetNodeClass(upgradeNodeClass, dUtils.UpgradeTypeApparitionByType(upgradeType).Texture);
 
+        
         // Spawn UpgradeNodeInfoDisplay
         OWMap_UpgradeNodeInfoDisplay upgradeNodeInfoDisplay = Instantiate(UpgradeNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_UpgradeNodeInfoDisplay>();
         upgradeNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel));
-        upgradeNodeInfoDisplay.InitUpgradeType(upgradeType);
+        upgradeNodeInfoDisplay.InitUpgradeType(dUtils.UpgradeTypeApparitionByType(upgradeType).TitleName);
         //upgradeNodeInfoDisplay.SetIsInteractableFalse();
     }
 
@@ -225,7 +226,16 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private void ResetAvailableUpgradeTypes()
     {
-        availableUpgradeTypes.AddRange(dUtils.AvailableUpgrades);
+        OWMapDecoratorUtils.UpgradeTypeApparition[] upgradeTypeApparitions = dUtils.AvailableUpgrades;
+
+        foreach (var upgradeTypeApparition in upgradeTypeApparitions)
+        {
+            int appearChance = Random.Range(0, 100);
+            if (appearChance < upgradeTypeApparition.ApparitionChance)
+            {
+                availableUpgradeTypes.Add(upgradeTypeApparition.UpgradeType);
+            }
+        }
     }
     private bool NoAvailableUpgradeTypesLeft()
     {

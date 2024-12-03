@@ -129,7 +129,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     public override void OnGetUnplaced()
     {
-        fakeEnemy.gameObject.SetActive(false);
+        fakeEnemy.Deactivate();
         fakeEnemy.SetCanBeTargeted(false);
         HideAllTurretBinders();
     }
@@ -364,7 +364,7 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         Quaternion targetRot = Quaternion.LookRotation(lookDirection, rotateTransform.up);
 
-        Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 300.0f * Time.deltaTime * GameTime.TimeScale);
+        Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 800.0f * Time.deltaTime * GameTime.TimeScale);
         Vector3 endEuler = endRotation.eulerAngles;
 
         rotateTransform.rotation = Quaternion.Euler(0f, endEuler.y, 0f);

@@ -16,12 +16,12 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
             private int _currentCount;
             public readonly EnemyDisplayUI EnemyDisplayUI;
 
-            public Entry(EnemyTypeConfig enemyType, int currentCount, EnemyDisplayUI enemyDisplayUI)
+            public Entry(EnemyTypeConfig enemyType, int currentCount, bool withArmor, EnemyDisplayUI enemyDisplayUI)
             {
                 EnemyType = enemyType;
                 _currentCount = currentCount;
                 EnemyDisplayUI = enemyDisplayUI;
-                EnemyDisplayUI.SetEnemyType(EnemyType);
+                EnemyDisplayUI.Init(EnemyType, withArmor);
                 EnemyDisplayUI.Hide();
                 EnemyDisplayUI.Deactivate();
                 UpdateText();

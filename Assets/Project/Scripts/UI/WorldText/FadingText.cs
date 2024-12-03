@@ -56,6 +56,8 @@ public class FadingText : RecyclableObject
 
     private IEnumerator PlayAppearAnimation(FadingTextConfig config)
     {
+        _canvasGroup.gameObject.GetComponent<RectTransform>().localScale = config.Scale;
+
         FadingTextConfig.TextAnimation textAppearAnimation = config.TextAppearAnimation;
 
         _moveVelocity = textAppearAnimation.MoveVelocity;

@@ -42,6 +42,8 @@ public abstract class AProjectileShootingController
         _body = createData.Body;
         _turretShootingLifetimeCycle = createData.TurretShootingLifetimeCycle;
     }
+
+    public abstract void DoShoot();
     
     protected ATurretProjectileBehaviour Shoot(Enemy targetedEnemy)
     {

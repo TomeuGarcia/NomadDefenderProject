@@ -110,4 +110,10 @@ public class DeckBuildingCards : MonoBehaviour
         ArrangeCards();
     }
 
+
+    public void MoveCardToTop(BuildingCard card)
+    {
+        cards.Remove(card);
+        cards.Insert(0, card);
+    }
 }

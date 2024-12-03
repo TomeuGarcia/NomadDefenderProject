@@ -23,5 +23,7 @@ public class InitSceneInstaller : MonoBehaviour
         serviceLocator.OptionalTutorialsStateManager = new OptionalTutorialsStateManager_PlayerPrefs();
         
         serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig);
+        
+        serviceLocator.DynamicProjectileShootingService = new DynamicProjectileShootingService();
     }
 }
