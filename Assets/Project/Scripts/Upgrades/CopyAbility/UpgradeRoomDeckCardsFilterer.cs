@@ -38,7 +38,7 @@ public static class UpgradeRoomDeckCardsFilterer
         {            
             HashSet<int> randomMaxedCardsIndices = new HashSet<int>();
 
-            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd)
+            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd && maxLevelCards.Count > 0)
             {
                 int randomIndex = Random.Range(0, maxLevelCards.Count);
                 randomMaxedCardsIndices.Add(randomIndex);
@@ -53,7 +53,7 @@ public static class UpgradeRoomDeckCardsFilterer
         // Add NON-MAXed cards
         int numRemainingCards = numberOfCards - numMaxedCardsToAdd;
         HashSet<int> randomNotMaxedCardsIndices = new HashSet<int>();
-        while (randomNotMaxedCardsIndices.Count < numRemainingCards)
+        while (randomNotMaxedCardsIndices.Count < numRemainingCards && notMaxLevelCards.Count > 0)
         {
             int randomIndex = Random.Range(0, notMaxLevelCards.Count);
             randomNotMaxedCardsIndices.Add(randomIndex);
@@ -124,7 +124,7 @@ public static class UpgradeRoomDeckCardsFilterer
         {            
             HashSet<int> randomMaxedCardsIndices = new HashSet<int>();
 
-            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd)
+            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd && maxLevelCards.Count > 0)
             {
                 int randomIndex = Random.Range(0, maxLevelCards.Count);
                 randomMaxedCardsIndices.Add(randomIndex);
@@ -139,7 +139,7 @@ public static class UpgradeRoomDeckCardsFilterer
         // Add NON-MAXed cards
         int numRemainingCards = numberOfCards - numMaxedCardsToAdd;
         HashSet<int> randomNotMaxedCardsIndices = new HashSet<int>();
-        while (randomNotMaxedCardsIndices.Count < numRemainingCards)
+        while (randomNotMaxedCardsIndices.Count < numRemainingCards && notMaxLevelCards.Count > 0)
         {
             int randomIndex = Random.Range(0, notMaxLevelCards.Count);
             randomNotMaxedCardsIndices.Add(randomIndex);
