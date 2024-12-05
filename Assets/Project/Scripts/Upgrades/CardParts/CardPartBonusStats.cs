@@ -8,6 +8,8 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
     [SerializeField] private CardPartBonusStatsItem _damageItem;
     [SerializeField] private CardPartBonusStatsItem _shotsPerSecondItem;
     [SerializeField] private CardPartBonusStatsItem _radiusRangeItem;
+    [SerializeField] private CardPartBonusStatsItem _extraLevelsItem;
+    [SerializeField] private CardPartBonusStatsItem _extraPlayCostItem;
 
 
     [Header("DESCRIPTION")]
@@ -17,6 +19,8 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
     private TurretStatsUpgradeModel.StatString _damageStatString;
     private TurretStatsUpgradeModel.StatString _shotsPerSecondStatString;
     private TurretStatsUpgradeModel.StatString _radiusRangeStatString;
+    private TurretStatsUpgradeModel.StatString _extraLevelsStatString;
+    private TurretStatsUpgradeModel.StatString _extraPlayCostStatString;
 
 
     public TurretStatsMultiplicationSnapshot StatsSnapshotUpgrade { get; private set; }
@@ -32,21 +36,26 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
         [SerializeField] private CardStatViewConfig _damageViewConfig;
         [SerializeField] private CardStatViewConfig _shotsPerSecondViewConfig;
         [SerializeField] private CardStatViewConfig _radiusRangeViewConfig;
+        [SerializeField] private CardStatViewConfig _extraLevelsViewConfig;
+        [SerializeField] private CardStatViewConfig _extraPlayCostViewConfig;
 
         public Sprite UpgradeSprite => _upgradeSprite;
         public Color SpriteColor => Color.white;
         public string Name => "bonusStats";
 
-        private string MakeStatString(TurretStatsUpgradeModel.StatString statString, CardStatViewConfig statsViewConfig)
+        private string MakeStatString(TurretStatsUpgradeModel.StatString statString, CardStatViewConfig statsViewConfig,
+            bool withSuffix = true)
         {            
             if (statString.IsNull)
             {
                 return "";
             }
 
-            return
-                statString.Value +
-                " <color=#" + ColorUtility.ToHtmlStringRGBA(statsViewConfig.IconColor) + ">" + statsViewConfig.Name + "</color>\n";
+            string value = statString.Value;
+            if (withSuffix) value += statsViewConfig.ValueSuffix;
+            value += " <color=#" + ColorUtility.ToHtmlStringRGBA(statsViewConfig.IconColor) + ">" + statsViewConfig.Name + "</color>\n";
+            
+            return value;
         }
         
         public string MakeDamageString(TurretStatsUpgradeModel.StatString damageStatString)
@@ -61,14 +70,29 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
         {
             return MakeStatString(radiusRangeStatString, _radiusRangeViewConfig);
         }
+        public string MakeExtraLevelsStatString(TurretStatsUpgradeModel.StatString extraLevelsStatString, bool withSuffix)
+        {
+            return MakeStatString(extraLevelsStatString, _extraLevelsViewConfig, withSuffix);
+        }
+        public string MakeExtraPlayCostStatString(TurretStatsUpgradeModel.StatString extraPlayCostStatString)
+        {
+            return MakeStatString(extraPlayCostStatString, _extraPlayCostViewConfig);
+        }
 
-        public string MakeStatsString(TurretStatsUpgradeModel.StatString damageStatString,
+        public string MakeStatsString(
+            TurretStatsUpgradeModel.StatString damageStatString,
             TurretStatsUpgradeModel.StatString shotsPerSecondStatString,
-            TurretStatsUpgradeModel.StatString radiusRangeStatString)
+            TurretStatsUpgradeModel.StatString radiusRangeStatString,
+            TurretStatsUpgradeModel.StatString extraLevelsStatString,
+            bool extraLevelNeedsSuffix,
+            TurretStatsUpgradeModel.StatString extraPlayCostStatString
+            )
         {
             return MakeDamageString(damageStatString) +
                    MakeShotsPerSecondString(shotsPerSecondStatString) +
-                   MakeRadiusRangeString(radiusRangeStatString);
+                   MakeRadiusRangeString(radiusRangeStatString) +
+                   MakeExtraPlayCostStatString(extraPlayCostStatString) +
+                   MakeExtraLevelsStatString(extraLevelsStatString, extraLevelNeedsSuffix);
         }
     }
 
@@ -80,15 +104,30 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
         model.MakeStatStrings(
             out _damageStatString,
             out _shotsPerSecondStatString,
-            out _radiusRangeStatString
+            out _radiusRangeStatString,
+            out _extraLevelsStatString,
+            out _extraPlayCostStatString
         );
+        
         _damageItem.Init(_damageStatString);
         _shotsPerSecondItem.Init(_shotsPerSecondStatString);
         _radiusRangeItem.Init(_radiusRangeStatString);
+
+        bool extraLevelNeedsSuffix = model.ExtraLevels < 0;
+        if (extraLevelNeedsSuffix)
+        {
+            _extraLevelsItem.Init(_extraLevelsStatString, " Lvl UPG");
+        }
+        else
+        {
+            _extraLevelsItem.Init(_extraLevelsStatString);
+        }
+        _extraPlayCostItem.Init(_extraPlayCostStatString, "<size=150%>♦");
         
         _statsDescription = new EditableCardAbilityDescription(
                 _descriptionHelper.Name, 
-                _descriptionHelper.MakeStatsString(_damageStatString, _shotsPerSecondStatString, _radiusRangeStatString),
+                _descriptionHelper.MakeStatsString(_damageStatString, _shotsPerSecondStatString, _radiusRangeStatString,
+                    _extraLevelsStatString, extraLevelNeedsSuffix, _extraPlayCostStatString),
                 Array.Empty<CardAbilityKeyword>()
             );
     }
