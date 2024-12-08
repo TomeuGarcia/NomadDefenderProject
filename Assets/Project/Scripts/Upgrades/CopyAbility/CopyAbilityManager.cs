@@ -105,9 +105,8 @@ public class CopyAbilityManager : MonoBehaviour
         DisableCardPreview();
 
 
-        BuildingCard[] randomCards =
-            UpgradeRoomDeckCardsFilterer.GetRandomTurretCards(_deckCards, _numberOfCards, _upgradeCardHolder.CardsHolder)
-                .ToArray();
+        BuildingCard[] randomCards = UpgradeRoomDeckCardsFilterer.GetRandomTurretCardsWithAtLeast1Ability(
+                _deckCards, _numberOfCards, _upgradeCardHolder.CardsHolder).ToArray();
         DisableRemainingCardsFromDeckCards(randomCards);
         
         _upgradeCardHolder.Init(randomCards);
@@ -319,7 +318,8 @@ public class CopyAbilityManager : MonoBehaviour
     private IEnumerator ModifyCopyToCard()
     {
         _copyToCard.AddNewPassive(_selectedCopyFromButton.AbilityDataModel);
-        
+        _copyToCard.IncrementCardLevel(1, false);
+
         bool replacedWithSamePart = _copyToCard.ReplacedWithSamePart;
         _copyToCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, _copyToCard));
         _copyToCard.PlayLevelUpAnimation();

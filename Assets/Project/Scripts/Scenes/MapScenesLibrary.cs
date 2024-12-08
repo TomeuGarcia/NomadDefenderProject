@@ -10,7 +10,6 @@ public class MapScenesLibrary : ScriptableObject
     [Header("UPGRADE SCENE'S NAMES")]
     [SerializeField] private string newTurretCard;
     [SerializeField] private string replaceAttackPart;
-    [SerializeField] private string replaceBodyPart;
     [SerializeField] private string replaceBasePart;
     [SerializeField] private string addBonusStatsPart;
     [SerializeField] private string copyAbility;
@@ -47,7 +46,7 @@ public class MapScenesLibrary : ScriptableObject
         string[] sceneNamesArray = new string[n];
         sceneNamesArray[(int)NodeEnums.UpgradeType.NEW_TURRET_CARD] = newTurretCard;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_ATTACK_PART] = replaceAttackPart;
-        sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BODY_PART] = replaceBodyPart;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BODY_PART] = replaceBasePart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BASE_PART] = replaceBasePart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART] = addBonusStatsPart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.COPY_ABILITY] = copyAbility;
