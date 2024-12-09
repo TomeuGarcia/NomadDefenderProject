@@ -28,6 +28,9 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
     [SerializeField] private DescriptionHelpReferences _descriptionHelper;
     private EditableCardAbilityDescription _statsDescription;
     
+    public int ExtraLevelsForCard { get; private set; }
+    public int ExtraCardPlayCost { get; private set; }
+    
 
     [System.Serializable]
     public class DescriptionHelpReferences
@@ -109,20 +112,20 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
             out _extraPlayCostStatString
         );
         
-        _damageItem.Init(_damageStatString);
-        _shotsPerSecondItem.Init(_shotsPerSecondStatString);
-        _radiusRangeItem.Init(_radiusRangeStatString);
+        _damageItem.Init(_damageStatString, isDebuff: model.DamageMultiplier < 0);
+        _shotsPerSecondItem.Init(_shotsPerSecondStatString, isDebuff: model.ShotsPerSecondMultiplier < 0);
+        _radiusRangeItem.Init(_radiusRangeStatString, isDebuff: model.RadiusRangeMultiplier < 0);
 
         bool extraLevelNeedsSuffix = model.ExtraLevels < 0;
         if (extraLevelNeedsSuffix)
         {
-            _extraLevelsItem.Init(_extraLevelsStatString, " Lvl UPG");
+            _extraLevelsItem.Init(_extraLevelsStatString, textSuffix:" Lvl UPG", isDebuff: true);
         }
         else
         {
-            _extraLevelsItem.Init(_extraLevelsStatString);
+            _extraLevelsItem.Init(_extraLevelsStatString, isDebuff: true);
         }
-        _extraPlayCostItem.Init(_extraPlayCostStatString, "<size=150%>♦");
+        _extraPlayCostItem.Init(_extraPlayCostStatString, textSuffix:"<size=150%>♦", isDebuff: true);
         
         _statsDescription = new EditableCardAbilityDescription(
                 _descriptionHelper.Name, 
@@ -130,6 +133,9 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
                     _extraLevelsStatString, extraLevelNeedsSuffix, _extraPlayCostStatString),
                 Array.Empty<CardAbilityKeyword>()
             );
+
+        ExtraLevelsForCard = model.ExtraLevels;
+        ExtraCardPlayCost = model.ExtraPlayCost;
     }
 
     public override void Init()

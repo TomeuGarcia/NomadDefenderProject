@@ -26,6 +26,9 @@ public class TurretStatsUpgradeModel : ScriptableObject
     }
 
 
+    [Header("TYPE")] 
+    [SerializeField] private CardPartReplaceManager.BonusStatType _type;
+    [SerializeField] private NodeEnums.ProgressionState _progression;
 
     [Header("BONUS PERCENTS")]
     [SerializeField] private int _damageMultiplier = 20;
@@ -36,6 +39,12 @@ public class TurretStatsUpgradeModel : ScriptableObject
     [SerializeField, Range(1, -2)] private int _extraLevels = 1;
     [SerializeField] private int _extraPlayCost = 0;
     
+    
+    public CardPartReplaceManager.BonusStatType Type => _type;
+    public NodeEnums.ProgressionState Progression => _progression;
+    public int DamageMultiplier => _damageMultiplier;
+    public int ShotsPerSecondMultiplier => _shotsPerSecondMultiplier;
+    public int RadiusRangeMultiplier => _radiusRangeMultiplier;
     public int ExtraLevels => _extraLevels;
     public int ExtraPlayCost => _extraPlayCost;
     
