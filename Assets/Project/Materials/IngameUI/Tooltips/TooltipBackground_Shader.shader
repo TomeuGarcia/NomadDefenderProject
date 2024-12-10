@@ -115,7 +115,7 @@ Shader "Unlit/TooltipBackground"
                 extraColor *= step(((screenUV.y * 4 + _Time.y * 0.05f) % 0.1f) / 0.1f, 0.5f);
                 
                 color.xyz += extraColor;
-                color.w = IN.color.w;
+                color.w *= IN.color.w;
 
                 return color;
             }

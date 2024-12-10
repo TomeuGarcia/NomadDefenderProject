@@ -305,6 +305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1780426826839134825}
   - component: {fileID: 1780426826839134824}
+  - component: {fileID: 7527643708728346977}
   m_Layer: 10
   m_Name: Hand
   m_TagString: Untagged
@@ -330,7 +331,7 @@ Transform:
   - {fileID: 2926230348663969576}
   - {fileID: 7623773223063630124}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1780426826839134824
 MonoBehaviour:
@@ -346,6 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handCamera: {fileID: 0}
   handCameraTransform: {fileID: 0}
+  _tdGameViewUtilities: {fileID: 7527643708728346977}
   _cardsMotionConfig: {fileID: 11400000, guid: 7fd2da50d28f475418f9fddc4ee63191, type: 2}
   cardHolder: {fileID: 4699311004732642255}
   buildingsHolder: {fileID: 2926230348663969576}
@@ -412,6 +414,20 @@ MonoBehaviour:
   buildingPlacer: {fileID: 1780426827148450131}
   initialRedraws: 2
   cheatDrawCardActivated: 1
+--- !u!114 &7527643708728346977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780426826839134823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54fdb5f6f0f74588850d8ef665e61a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundTileTopMaterial: {fileID: 2100000, guid: 459aac53eecdc3e41957131b53911939,
+    type: 2}
 --- !u!1 &1780426827148450130
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,8 +472,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612fc6fa00614e74694fe525d875a528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runStateUpdate:
-    _underlyingValue: {fileID: 11400000, guid: a087e2a282d44c94790bd8f1f7f1ee14, type: 2}
 --- !u!1 &1961901543603484889
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,6 +951,11 @@ PrefabInstance:
     - target: {fileID: 2712414808001822513, guid: dc975b7aac447ec4ca28d07bcaa82e31,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6164229124540265189, guid: dc975b7aac447ec4ca28d07bcaa82e31,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8891730011413891390, guid: dc975b7aac447ec4ca28d07bcaa82e31,

@@ -62,10 +62,11 @@ public class FadingText : RecyclableObject
 
         _moveVelocity = textAppearAnimation.MoveVelocity;
 
-        _canvasGroup.transform.PunchScale(textAppearAnimation.AppearScale);
+        //_canvasGroup.transform.PunchScale(textAppearAnimation.AppearScale);
+        StartCoroutine(ScaleAnimation(textAppearAnimation));
 
         _backgroundImageHolder.Scale(textAppearAnimation.BackgroundImageAppearScale);
-        _backgroundImageHolder.LocalRotateBy(textAppearAnimation.BackgroundRotationTween);
+        //_backgroundImageHolder.LocalRotateBy(textAppearAnimation.BackgroundRotationTween);
 
         foreach (FadingTextCharacter fadingTextCharacter in _fadingTextCharacters)
         {
@@ -91,4 +92,20 @@ public class FadingText : RecyclableObject
         Recycle();
     }
 
+    private IEnumerator ScaleAnimation(FadingTextConfig.TextAnimation textAppearAnimation)
+    {
+        _canvasGroup.transform.localScale = textAppearAnimation.AppearScaleOut.Value;
+        Task scaleIn = _canvasGroup.transform.Scale(textAppearAnimation.AppearScaleIn)
+            .AsyncWaitForCompletion();
+        yield return new WaitUntil(() => scaleIn.IsCompleted);
+
+        yield return new WaitForSeconds(textAppearAnimation.AppearScaleOutDelay);
+        
+        Task scaleOut = _canvasGroup.transform.Scale(textAppearAnimation.AppearScaleOut)
+            .AsyncWaitForCompletion();
+        yield return new WaitUntil(() => scaleOut.IsCompleted);
+        
+        
+    }
+    
 }
