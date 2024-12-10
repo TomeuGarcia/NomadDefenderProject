@@ -8,12 +8,14 @@ public class CardStatViewConfig : ScriptableObject
 {
     [Header("PARAMETERS")]
     [SerializeField] private string _name;
+    [SerializeField] private string _valueSuffix;
     [SerializeField] private Sprite _icon;
     [SerializeField] private Color _iconColor = Color.black;
     [SerializeField] private Color _textColor = Color.black;
     
 
     public string Name => _name;
+    public string ValueSuffix => _valueSuffix;
     public Sprite Icon => _icon;
     public Color IconColor => _iconColor;
     public Color TextColor => _textColor;

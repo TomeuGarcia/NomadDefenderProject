@@ -10,9 +10,10 @@ public class MapScenesLibrary : ScriptableObject
     [Header("UPGRADE SCENE'S NAMES")]
     [SerializeField] private string newTurretCard;
     [SerializeField] private string replaceAttackPart;
-    [SerializeField] private string replaceBodyPart;
     [SerializeField] private string replaceBasePart;
-    [SerializeField] private string addBonusStatsPart;
+    [SerializeField] private string addBonusStatsPartDamage;
+    [SerializeField] private string addBonusStatsPartShotsPerSecond;
+    [SerializeField] private string addBonusStatsPartDamageRange;
     [SerializeField] private string copyAbility;
 
 
@@ -47,9 +48,11 @@ public class MapScenesLibrary : ScriptableObject
         string[] sceneNamesArray = new string[n];
         sceneNamesArray[(int)NodeEnums.UpgradeType.NEW_TURRET_CARD] = newTurretCard;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_ATTACK_PART] = replaceAttackPart;
-        sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BODY_PART] = replaceBodyPart;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BODY_PART] = replaceBasePart;
         sceneNamesArray[(int)NodeEnums.UpgradeType.REPLACE_BASE_PART] = replaceBasePart;
-        sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART] = addBonusStatsPart;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART_DAMAGE] = addBonusStatsPartDamage;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART_SHOTSPERSECOND] = addBonusStatsPartShotsPerSecond;
+        sceneNamesArray[(int)NodeEnums.UpgradeType.ADD_BONUS_STATS_PART_RANGE] = addBonusStatsPartDamageRange;
         sceneNamesArray[(int)NodeEnums.UpgradeType.COPY_ABILITY] = copyAbility;
 
         sceneNames = new MapSceneLoader.SceneNames(sceneNamesArray);

@@ -115,6 +115,7 @@ Shader "Unlit/CardIcon_Shader"
                 extraColor *= step(((screenUV.y * 6 + _Time.y * 0.05f) % 0.1f) / 0.1f, 0.5f);
                 
                 color.xyz -= extraColor;
+                color.a *= IN.color.a;
                 
                 return color;
             }

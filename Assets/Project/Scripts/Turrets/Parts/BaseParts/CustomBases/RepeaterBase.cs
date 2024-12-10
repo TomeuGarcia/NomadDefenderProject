@@ -162,7 +162,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         base.Upgrade(ownerSupportBuilding, newStatLevel);
         currentLvl = newStatLevel;
 
-        if (newStatLevel == 3)
+        if (newStatLevel == 2)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
             UpdateAreaPlaneSize(ownerSupportBuilding, repeatAreaPlane, repeatAreaPlaneMaterial);

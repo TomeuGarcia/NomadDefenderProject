@@ -8,7 +8,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     private TurretBuilding _turretOwner;
     
     private readonly TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = 
-        new TurretStatsMultiplicationSnapshot(0.0f, 4f, 3.0f);
+        new TurretStatsMultiplicationSnapshot(-0.5f, 4f, 3.0f);
 
 
     private BerserkerTurretBuildingVisuals _berserkerVisuals = null;
