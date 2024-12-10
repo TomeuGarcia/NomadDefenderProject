@@ -101,6 +101,8 @@ public class SelfHurtBase : TurretPartBase_Prefab
     {
         isPlaced = true;
         PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
+        PathLocation.OnHealthChanged -= ConnectBinderWithPathLocation;
+
         owner.OnShowRangePlane += OnRangePlaneShown;
         owner.OnHideRangePlane += OnRangePlaneHidden;
 

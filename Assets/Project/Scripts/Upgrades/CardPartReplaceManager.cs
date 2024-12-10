@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using NaughtyAttributes;
 using Random = UnityEngine.Random;
 
 public class CardPartReplaceManager : MonoBehaviour
@@ -34,10 +35,13 @@ public class CardPartReplaceManager : MonoBehaviour
     public CardPartHolder CardPartHolder => cardPartHolder;
 
     public enum PartType { ATTACK, BODY, BASE, BONUS_STATS }
+    public enum BonusStatType { DAMAGE, SHOTS_PER_SECOND, RANGE }
+    
     [Header("TYPE")]
     [SerializeField] private int numCards = 3;
     [SerializeField] private int numParts = 3;
     [SerializeField] private PartType partType;
+    [SerializeField, ShowIf("partType", PartType.BONUS_STATS)] private BonusStatType _bonusStatType;
 
     [Header("ATTACK")]
     [SerializeField] private GameObject cardPartAttackPrefab;
@@ -92,6 +96,8 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private int numPartsIfPerfect = 1;
     NodeEnums.ProgressionState progressionState = NodeEnums.ProgressionState.EARLY;
+
+
 
 
     public delegate void CarPartReplaceManagerAction();
@@ -298,7 +304,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void InitBonusStatsRandom()
     {
         InitStatBonuses(LibrariesManager.GetInstance()
-            .PartsLibrary.GetRandomTurretStatsUpgradeModel(numParts, numPartsIfPerfect, false, progressionState));
+            .PartsLibrary.GetRandomTurretStatsUpgradeModel(numParts, numPartsIfPerfect, false, 
+                progressionState, _bonusStatType));
     }
     private void InitStatBonuses(TurretStatsUpgradeModel[] statBonuses)
     {
@@ -423,7 +430,7 @@ public class CardPartReplaceManager : MonoBehaviour
     
     private void ReplacePartInCard(TurretBuildingCard selectedCard)
     {
-        selectedCard.IncrementCardLevel(1, false);
+        int levelUpgradeAmount = 1;
 
         switch (partType)
         {
@@ -448,6 +455,8 @@ public class CardPartReplaceManager : MonoBehaviour
             case PartType.BONUS_STATS:
                 {
                     CardPartBonusStats cardPartBonusStats = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
+                    levelUpgradeAmount = cardPartBonusStats.ExtraLevelsForCard;
+                    selectedCard.CardData.IncrementPlayCost(cardPartBonusStats.ExtraCardPlayCost);
                     selectedCard.AddPermanentBonusStats(cardPartBonusStats);
                 }
                 break;
@@ -455,6 +464,8 @@ public class CardPartReplaceManager : MonoBehaviour
                 break;
         }
         
+        selectedCard.IncrementCardLevel(levelUpgradeAmount, false);
+
         selectedCard.CardData.OnCardUpgraded();
     }
 
@@ -712,6 +723,9 @@ public class CardPartReplaceManager : MonoBehaviour
         ATurretPassiveAbilityDataModel turretPassive = null;
         CardPartBonusStats cardPartBonusStats = null;
 
+        int levelIncrement = 1;
+        int playCostIncrement = 0;
+
         if (partType == PartType.ATTACK)
         {
             turretPartAttack = selectedCardPart.gameObject.GetComponent<CardPartAttack>().TurretPartAttack;
@@ -727,10 +741,12 @@ public class CardPartReplaceManager : MonoBehaviour
         else if (partType == PartType.BONUS_STATS)
         {
             cardPartBonusStats = selectedCardPart.gameObject.GetComponent<CardPartBonusStats>();
+            levelIncrement = cardPartBonusStats.ExtraLevelsForCard;
+            playCostIncrement = cardPartBonusStats.ExtraCardPlayCost;
         }
 
         previewCard.PreviewChangeVisuals(turretPartAttack, turretPartBody, turretPassive, cardPartBonusStats,
-            selectedCard, partType, _playCostsConfig);
+            selectedCard, partType, _playCostsConfig, levelIncrement, playCostIncrement);
     }
 
     private void UpdatePreviewCard_MissingParts(TurretBuildingCard previewCard, bool cardIsMissing, bool cardPartIsMissing)

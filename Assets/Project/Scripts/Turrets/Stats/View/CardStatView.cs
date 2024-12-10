@@ -48,5 +48,4 @@ public class CardStatView : MonoBehaviour
     {
         return _config && _iconImage && _valueText;
     }
-
 }

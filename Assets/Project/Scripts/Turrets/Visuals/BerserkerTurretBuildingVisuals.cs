@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class BerserkerTurretBuildingVisuals : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _flashEffectMesh;
+    [SerializeField] private GameObject _particlesHolder;
     private Material _flashEffectMaterial;
 
     private Material _turretMaterial;
@@ -62,6 +64,7 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
     {
         _turretMaterial.SetFloat(_isBerserkEnabledProperty, 1.0f);
         _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time);
+        _particlesHolder.gameObject.SetActive(true);
 
         GameAudioManager.GetInstance().PlayEnterBerserker();
     }
@@ -75,5 +78,6 @@ public class BerserkerTurretBuildingVisuals : MonoBehaviour
             _flashEffectMaterial.SetFloat(_startTimeFlashProperty, Time.time - 0.5f);
             GameAudioManager.GetInstance().PlayExitBerserker();
         }
+        _particlesHolder.gameObject.SetActive(false);
     }
 }

@@ -91,15 +91,15 @@ public class SlowBase : TurretPartBase_Prefab
                 slowedEnemy.Value.slowCoefApplied = currentSlowSpeedCoef;
             }
         }
-
-        // TODO see if we want to make Supports 3rd upgrade always increment range
-        /*
-        if (newStatLevel == 3)
+        
+        
+        
+        if (newStatLevel == 2)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
             UpdateAreaPlaneSize(ownerSupportBuilding);
         }
-        */
+        
     }
 
     private void SlowEnemy(Enemy enemy)
