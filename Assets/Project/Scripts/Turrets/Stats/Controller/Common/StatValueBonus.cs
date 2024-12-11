@@ -5,7 +5,7 @@ using UnityEngine;
 public class StatValueBonus
 {
     private List<float> _valueBonuses;
-    public float AccumulatedBonusSum { get; private set; }
+    public float AccumulatedBonusMultiplier { get; private set; }
 
     public StatValueBonus()
     {
@@ -20,10 +20,10 @@ public class StatValueBonus
 
     private void UpdateAccumulatedBonusSum()
     {
-        AccumulatedBonusSum = 0;
+        AccumulatedBonusMultiplier = 1f;
         foreach (float bonus in _valueBonuses)
         {
-            AccumulatedBonusSum += bonus;
+            AccumulatedBonusMultiplier *= (1f + bonus);
         }
     }
 

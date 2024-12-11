@@ -1,6 +1,7 @@
 using AYellowpaper;
 using UnityEngine;
 using DG.Tweening;
+using NodeEnums;
 
 
 public class OverworldMapGameManager : MonoBehaviour
@@ -133,7 +134,7 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         MapData mapData = SetupMapData();
         owMapCreator.RegenerateMap(out mapNodes, mapData);
-        owMapDecorator.DecorateMap(mapNodes);
+        owMapDecorator.DecorateMap(mapNodes, mapData);
     }
     protected void InitMapSceneLoader()
     {
@@ -145,6 +146,13 @@ public class OverworldMapGameManager : MonoBehaviour
     {
         currentMapLevelI = 0;
         currentNode = mapNodes[0][0];
+        foreach (OWMap_Node owMapNode in mapNodes[1])
+        {
+            if (owMapNode.nodeClass is OWMap_UpgradeNode)
+            {
+                owMapNode.SetHealthState(HealthState.SURVIVED, true);
+            }
+        }
 
         currentNode.SetOwMapGameManagerRef(this);
         currentNode.SetSelected(false, 0); // Simulate node is clicked

@@ -1,8 +1,10 @@
+using System;
 using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class OverworldMapDecorator : MonoBehaviour
 {
@@ -23,9 +25,13 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private List<NodeEnums.UpgradeType> availableUpgradeTypes = new List<UpgradeType>();
 
+    private MapData _mapData;
+    private OWMap_Node[][] _mapNodes;
 
-    public virtual void DecorateMap(OWMap_Node[][] mapNodes)
+    public virtual void DecorateMap(OWMap_Node[][] mapNodes, MapData mapData)
     {
+        _mapNodes = mapNodes;
+        _mapData = mapData;
         firstDecoratedLevel = 0;
         if (dSettings.firstNodeIsEmpty)
         {
@@ -140,9 +146,24 @@ public class OverworldMapDecorator : MonoBehaviour
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
-
+            
             if (NoAvailableUpgradeTypesLeft()) ResetAvailableUpgradeTypes();
-            NodeEnums.UpgradeType upgradeType = GetRandomAvailableUpgradeType(upgradesAlreadyInLevel.ToArray());
+            
+            
+            List<NodeEnums.UpgradeType> upgradesAlreadyInLevelAndPrevious = new List<UpgradeType>(upgradesAlreadyInLevel);
+            List<MapData.MapNodeData> connectionsFromPreviousLevel = _mapData.levels[levelI].nodes[nodeI].connectionsFromPreviousLevel;
+            foreach (MapData.MapNodeData connectionFromPreviousLevel in connectionsFromPreviousLevel)
+            {
+                OWMap_NodeClass connectionFromPreviousNodeClass =
+                    _mapNodes[levelI - 1][connectionFromPreviousLevel.nodeI].nodeClass;
+                if (connectionFromPreviousNodeClass is OWMap_UpgradeNode previousUpgradeNode)
+                {
+                    upgradesAlreadyInLevelAndPrevious.Add(previousUpgradeNode.upgradeType);
+                }
+            }
+
+
+            NodeEnums.UpgradeType upgradeType = GetRandomAvailableUpgradeType(upgradesAlreadyInLevelAndPrevious.ToArray());
             upgradesAlreadyInLevel.Add(upgradeType);
 
             NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
@@ -228,14 +249,27 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         OWMapDecoratorUtils.UpgradeTypeApparition[] upgradeTypeApparitions = dUtils.AvailableUpgrades;
 
-        foreach (var upgradeTypeApparition in upgradeTypeApparitions)
+        const int MAX_ITERATIONS = 10;
+        int iterations = 0;
+        while (availableUpgradeTypes.Count == 0 && iterations < MAX_ITERATIONS)
         {
-            int appearChance = Random.Range(0, 100);
-            if (appearChance < upgradeTypeApparition.ApparitionChance)
+            foreach (var upgradeTypeApparition in upgradeTypeApparitions)
             {
-                availableUpgradeTypes.Add(upgradeTypeApparition.UpgradeType);
+                int appearChance = Random.Range(0, 100);
+                if (appearChance < upgradeTypeApparition.ApparitionChance)
+                {
+                    availableUpgradeTypes.Add(upgradeTypeApparition.UpgradeType);
+                }
             }
+
+            ++iterations;
         }
+
+        if (iterations == MAX_ITERATIONS)
+        {
+            throw new Exception("WTF bro, dUtils.AvailableUpgrades might be missing entries with high enough chances!");
+        }
+        
     }
     private bool NoAvailableUpgradeTypesLeft()
     {
@@ -244,25 +278,30 @@ public class OverworldMapDecorator : MonoBehaviour
 
     private NodeEnums.UpgradeType GetRandomAvailableUpgradeType(NodeEnums.UpgradeType[] upgradesAlreadyInLevel)
     {
-        int randomI = Random.Range(0, availableUpgradeTypes.Count);
-        NodeEnums.UpgradeType randomUpgradeType = availableUpgradeTypes[randomI];
-
-        int tries = 0;
-        int MAX_TRIES = availableUpgradeTypes.Count;
-
-
-        while (upgradesAlreadyInLevel.Contains(randomUpgradeType) && tries < MAX_TRIES)
+        HashSet<NodeEnums.UpgradeType> availableUpgradeTypesSet = new(availableUpgradeTypes);
+        foreach (NodeEnums.UpgradeType upgradeAlreadyInLevel in upgradesAlreadyInLevel)
         {
-            randomI = (randomI + 1) % availableUpgradeTypes.Count;
-            randomUpgradeType = availableUpgradeTypes[randomI];
-
-            ++tries;
+            if (availableUpgradeTypesSet.Contains(upgradeAlreadyInLevel))
+            {
+                availableUpgradeTypesSet.Remove(upgradeAlreadyInLevel);
+            }
         }
 
-        availableUpgradeTypes.RemoveAt(randomI);
+        if (availableUpgradeTypesSet.Count == 0)
+        {
+            int randomButRepeatedIndex = Random.Range(0, availableUpgradeTypes.Count);
+            NodeEnums.UpgradeType randomButRepeatedUpgradeType = availableUpgradeTypes[randomButRepeatedIndex];
+            availableUpgradeTypes.RemoveAt(randomButRepeatedIndex);
+            return randomButRepeatedUpgradeType;
+        }
 
+        NodeEnums.UpgradeType[] availableNonRepeatedUpgradeTypes = availableUpgradeTypesSet.ToArray();
+        int randomIndex = Random.Range(0, availableNonRepeatedUpgradeTypes.Length);
+        NodeEnums.UpgradeType randomUpgradeType = availableNonRepeatedUpgradeTypes[randomIndex];
+        availableUpgradeTypes.Remove(randomUpgradeType);
         return randomUpgradeType;
     }
+    
 
     private bool PositionAtRight(int nodeIndexInLevel, int totalNodesInLevel)
     {
