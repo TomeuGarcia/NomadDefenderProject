@@ -4,39 +4,31 @@ using UnityEngine;
 
 public class StatValueBonus
 {
-    private List<float> _valueBonuses;
     public float AccumulatedBonusMultiplier { get; private set; }
 
     public StatValueBonus()
     {
-        _valueBonuses = new List<float>();
-        UpdateAccumulatedBonusSum();
+        AccumulatedBonusMultiplier = 1f;
     }
     public StatValueBonus(StatValueBonus other)
     {
-        _valueBonuses = new List<float>(other._valueBonuses);
-        UpdateAccumulatedBonusSum();
+        AccumulatedBonusMultiplier = other.AccumulatedBonusMultiplier;
     }
-
-    private void UpdateAccumulatedBonusSum()
-    {
-        AccumulatedBonusMultiplier = 1f;
-        foreach (float bonus in _valueBonuses)
-        {
-            AccumulatedBonusMultiplier *= (1f + bonus);
-        }
-    }
-
+    
     public void AddBonus(float bonus)
     {
-        _valueBonuses.Add(bonus);
-        UpdateAccumulatedBonusSum();
+        AccumulatedBonusMultiplier *= (1 + bonus);
+        ClampAccumulatedBonusMultiplier();
     }
     
     public void RemoveBonus(float bonus)
     {
-        _valueBonuses.Add(-bonus);
-        UpdateAccumulatedBonusSum();
+        AccumulatedBonusMultiplier /= (1 + bonus);
+        ClampAccumulatedBonusMultiplier();
     }
 
+    private void ClampAccumulatedBonusMultiplier()
+    {
+        AccumulatedBonusMultiplier = Mathf.Max(AccumulatedBonusMultiplier, 0.1f);
+    }
 }

@@ -97,7 +97,10 @@ public class CardTooltipDisplayData
     private static void AddReferencedProjectiles(ATurretPassiveAbilityDataModel passiveAbility, 
         List<Element> elementsList, HashSet<TurretPartProjectileDataModel> alreadyAddedProjectiles)
     {
-        foreach (TurretPartProjectileDataModel referencedProjectileDataModel in passiveAbility.GetReferencedProjectiles())
+        TurretPartProjectileDataModel[] referencedProjectiles = passiveAbility.GetReferencedProjectiles();
+        if (referencedProjectiles == null) return;
+        
+        foreach (TurretPartProjectileDataModel referencedProjectileDataModel in referencedProjectiles)
         {
             if (alreadyAddedProjectiles.Contains(referencedProjectileDataModel))
             {
@@ -111,7 +114,10 @@ public class CardTooltipDisplayData
     private static void AddReferencedPassiveAbilities(ATurretPassiveAbilityDataModel passiveAbility, 
         List<Element> elementsList, HashSet<ATurretPassiveAbilityDataModel> alreadyAddedPassiveAbilities)
     {
-        foreach (ATurretPassiveAbilityDataModel referencedPassiveAbility in passiveAbility.GetReferencedAbilities())
+        ATurretPassiveAbilityDataModel[] referencedPassiveAbilities = passiveAbility.GetReferencedAbilities();
+        if (referencedPassiveAbilities == null) return;
+        
+        foreach (ATurretPassiveAbilityDataModel referencedPassiveAbility in referencedPassiveAbilities)
         {
             ATurretPassiveAbilityDataModel referencedPassiveAbilityDataModel = referencedPassiveAbility;
             if (alreadyAddedPassiveAbilities.Contains(referencedPassiveAbilityDataModel))
