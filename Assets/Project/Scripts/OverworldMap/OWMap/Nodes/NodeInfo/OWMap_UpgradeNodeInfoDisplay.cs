@@ -52,7 +52,6 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     // Functionality
     private void SetupTexts(NodeEnums.HealthState nodeHealth)
     {
-        Debug.Log("bro");
         statusText.text = statusStr + nodeHealthToStatusText[(int)nodeHealth];
     }
 

@@ -429,7 +429,6 @@ public class OWMap_Node : MonoBehaviour
                 break;
         }
 
-        Debug.Log("xd");
 
         if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState);
         if (enableInfoDisplay) InvokeOnNodeInfoInteractionEnabled();
