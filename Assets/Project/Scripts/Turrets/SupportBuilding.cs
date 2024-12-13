@@ -51,6 +51,7 @@ public class SupportBuilding : RangeBuilding
         if (_statsController != null)
         {
             _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
+            _statsController.ResetUpgradeLevel();
         }
     }
 
