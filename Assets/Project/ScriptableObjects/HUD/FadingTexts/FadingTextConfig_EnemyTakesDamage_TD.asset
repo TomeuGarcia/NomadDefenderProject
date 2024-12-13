@@ -15,6 +15,7 @@ MonoBehaviour:
   _defaultTextsColor: {r: 1, g: 1, b: 1, a: 1}
   _randomPositionOffsetBounds: {x: 0.5, y: 0.2, z: 0.5}
   _fixedPositionOffset: {x: 0, y: 1, z: 0}
+  _scale: {x: 1, y: 1, z: 1}
   _characterAppearAnimation:
     _appearDuration: 0.08
     _rotationPunch:
@@ -30,12 +31,15 @@ MonoBehaviour:
       _elasticity: 0.5
       _ease: 4
   _textAppearAnimation:
-    _appearScale:
-      _value: {x: 1, y: -0.5, z: 0}
-      _duration: 0.5
-      _vibrato: 6
-      _elasticity: 0
-      _ease: 4
+    _appearScaleIn:
+      _value: {x: 1, y: 1, z: 1}
+      _duration: 0.25
+      _ease: 3
+    _appearScaleOut:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 0.25
+      _ease: 2
+    _appearScaleOutDelay: 0.5
     _moveVelocity: {x: 0, y: 2, z: 0}
     _randomRotationInterval: {x: -30, y: -50}
     _backgroundRotatateBy:

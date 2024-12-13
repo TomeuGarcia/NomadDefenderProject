@@ -42,6 +42,6 @@ public class TurretStatState : ITurretStatState
 
     private float GetStatValueByLevel(int upgradeLevel)
     {
-        return _stat.ComputeValueByLevel(upgradeLevel, BaseStatMultiplicationBonus.AccumulatedBonusSum);
+        return _stat.ComputeValueByLevel(upgradeLevel, BaseStatMultiplicationBonus.AccumulatedBonusMultiplier);
     }
 }
