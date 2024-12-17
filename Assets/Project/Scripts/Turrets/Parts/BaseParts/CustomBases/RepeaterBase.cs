@@ -59,7 +59,7 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.gameObject.SetActive(false);
 
         HideAllTurretBinders();
-        currentDamagePer1Increment = 0f;
+        currentDamagePer1Increment = damagePer1Increments[0];
         repeatAreaPlaneMaterial = repeatAreaPlane.materials[0];
     }
 
@@ -168,7 +168,7 @@ public class RepeaterBase : TurretPartBase_Prefab
             UpdateAreaPlaneSize(ownerSupportBuilding, repeatAreaPlane, repeatAreaPlaneMaterial);
         }
 
-        currentDamagePer1Increment = damagePer1Increments[currentLvl - 1];        
+        currentDamagePer1Increment = damagePer1Increments[currentLvl];        
     }
     
     public override void ResetAreaPlaneSize(SupportBuilding supportOwner)
