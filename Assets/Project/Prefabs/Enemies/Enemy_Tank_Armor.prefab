@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armorCovers:
-  - {fileID: 0}
-  armorShatterParticles: {fileID: 0}
+  - {fileID: 1680698577174589152}
+  armorShatterParticles: {fileID: 5345134242355895497}
   matLerpsData:
   - time: 1
     min: 0.3
@@ -165,7 +165,6 @@ MonoBehaviour:
   moveSpeed: 0.75
   _rotationSpeed: 300
   _rigidbodyToMove: {fileID: 4650990172065204862}
-  paused: 0
 --- !u!65 &6458616864240699446
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -326,6 +325,18 @@ PrefabInstance:
 --- !u!23 &1083622864960358875 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1407770992803389889, guid: feb554e14e8d0f14d815052ae71ae469,
+    type: 3}
+  m_PrefabInstance: {fileID: 2053822864520456218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1680698577174589152 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 852217654330509050, guid: feb554e14e8d0f14d815052ae71ae469,
+    type: 3}
+  m_PrefabInstance: {fileID: 2053822864520456218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5345134242355895497 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6245681541800228051, guid: feb554e14e8d0f14d815052ae71ae469,
     type: 3}
   m_PrefabInstance: {fileID: 2053822864520456218}
   m_PrefabAsset: {fileID: 0}
