@@ -291,8 +291,18 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void GetStunned(float duration)
     {
-        if (IsDead()) return;
+        if (IsDead() || _ignoreStunned) return;
         pathFollower.PauseForDuration(duration);
+        StartCoroutine(DoIgnoreStunned(duration));
+    }
+
+    private bool _ignoreStunned = false;
+
+    private IEnumerator DoIgnoreStunned(float stunDuration)
+    {
+        _ignoreStunned = true;
+        yield return new WaitForSeconds(stunDuration + 0.2f);
+        _ignoreStunned = false;
     }
 
     private void Suicide()

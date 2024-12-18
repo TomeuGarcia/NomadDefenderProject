@@ -1,3 +1,5 @@
+using System;
+using NaughtyAttributes;
 using UnityEngine;
 
 
@@ -13,6 +15,8 @@ public abstract class ATurretPassiveAbilityDataModel : ScriptableObject
 
     [Header("Description")] 
     [SerializeField] private CardAbilityDescriptionModel _descriptionModel;
+    [SerializeField, Foldout("Other")] private TurretPartProjectileDataModel[] _otherReferencedProjectiles;
+    [SerializeField, Foldout("Other")] private ATurretPassiveAbilityDataModel[] _otherReferencedPassives;
     
 
     [System.Serializable]
@@ -49,4 +53,15 @@ public abstract class ATurretPassiveAbilityDataModel : ScriptableObject
     }
     
     public abstract ATurretPassiveAbility MakePassiveAbility();
+    
+    
+    
+    public TurretPartProjectileDataModel[] GetReferencedProjectiles()
+    {
+        return _otherReferencedProjectiles;
+    }
+    public ATurretPassiveAbilityDataModel[] GetReferencedAbilities()
+    {
+        return _otherReferencedPassives;
+    }
 }

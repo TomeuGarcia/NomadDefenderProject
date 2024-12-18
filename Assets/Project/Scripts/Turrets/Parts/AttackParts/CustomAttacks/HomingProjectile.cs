@@ -36,6 +36,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     protected IEnumerator WaitForLerpFinish()
     {
         yield return new WaitUntil(() => lerp.finishedPositionLerp);
+        if (_targetEnemy.IsDead()) yield break;
         OnEnemyReached();
     }
 

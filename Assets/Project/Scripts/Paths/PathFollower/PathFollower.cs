@@ -27,7 +27,7 @@ public class PathFollower : MonoBehaviour
 
     // Path Follow Control
     private bool finished = false;
-    [HideInInspector] public bool paused = false;
+    public bool Paused { get; set; } = false;
 
     // Distance
     public float TravelledDistance { get; private set; } = 0f;
@@ -66,7 +66,7 @@ public class PathFollower : MonoBehaviour
         UpdateTarget(CurrentNode.GetNextNode(), CurrentNode.GetDirectionToNextNode());
 
         finished = false;
-        paused = false;
+        Paused = false;
 
         TravelledDistance = 0.0f;
         this.totalDistanceToTravel = totalDistanceToTravel;
@@ -96,7 +96,7 @@ public class PathFollower : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!finished && !paused) FollowPathInterpolated();
+        if (!finished && !Paused) FollowPathInterpolated();
     }
 
     public void SetMoveSpeedMultiplier(float speedMultiplier)
@@ -179,9 +179,9 @@ public class PathFollower : MonoBehaviour
 
     private IEnumerator DoPauseForDuration(float duration)
     {
-        paused = true;
+        Paused = true;
         yield return new WaitForSeconds(duration);
-        paused = false;
+        Paused = false;
         pauseCoroutine = null;
     }
 

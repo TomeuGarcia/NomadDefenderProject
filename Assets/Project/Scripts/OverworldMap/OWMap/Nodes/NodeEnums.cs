@@ -8,8 +8,14 @@ namespace NodeEnums
     public enum ProgressionState { EARLY, MID, LATE, BOSS }
     public enum HealthState { NOT_FOUGHT_YET, SURVIVED, DESTROYED }
     public enum BattleType { EARLY, MID, LATE, BOSS }
-    public enum UpgradeType { NEW_TURRET_CARD, REPLACE_ATTACK_PART, REPLACE_BODY_PART, REPLACE_BASE_PART, 
-        ADD_BONUS_STATS_PART_DAMAGE, ADD_BONUS_STATS_PART_SHOTSPERSECOND, ADD_BONUS_STATS_PART_RANGE, 
+    public enum UpgradeType { 
+        NEW_TURRET_CARD, 
+        REPLACE_ATTACK_PART, 
+        REPLACE_BODY_PART, 
+        REPLACE_BASE_PART, 
+        ADD_BONUS_STATS_PART_DAMAGE, 
+        ADD_BONUS_STATS_PART_SHOTSPERSECOND, 
+        ADD_BONUS_STATS_PART_RANGE, 
         COPY_ABILITY, COUNT } // TODO add more types
     public enum EmptyType { FIRST_LEVEL, LAST_LEVEL, COUNT }
 }
