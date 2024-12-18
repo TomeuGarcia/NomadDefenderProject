@@ -39,9 +39,9 @@ public class OverworldMapDecoratorHardcoded : OverworldMapDecorator
     }
 
 
-    public override void DecorateMap(OWMap_Node[][] mapNodes)
+    public override void DecorateMap(OWMap_Node[][] mapNodes, MapData mapData)
     {
-        base.DecorateMap(mapNodes);
+        base.DecorateMap(mapNodes, mapData);
         
         DecorateHardcodedEmptyLevels(mapNodes);
         DecorateHardcodedBattleLevels(mapNodes);

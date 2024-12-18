@@ -250,7 +250,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
         enemy = other.gameObject.GetComponent<Enemy>();
 
-        if (_enemiesToIgnore.Contains(enemy))
+        if (_enemiesToIgnore.Contains(enemy) || enemy.IsDead())
         {
             enemy = null;
             return false;

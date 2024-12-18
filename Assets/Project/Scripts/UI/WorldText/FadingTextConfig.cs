@@ -44,7 +44,9 @@ public class FadingTextConfig : ScriptableObject
     public class TextAnimation
     {
         [Header("Scale")]
-        [SerializeField] private TweenPunchConfig _appearScale;
+        [SerializeField] private TweenConfig _appearScaleIn;
+        [SerializeField] private TweenConfig _appearScaleOut;
+        [SerializeField, Min(0)] private float _appearScaleOutDelay;
         
         [Header("Move")]
         [SerializeField] private Vector3 _moveVelocity = new Vector3(0, 5, 0);
@@ -58,7 +60,9 @@ public class FadingTextConfig : ScriptableObject
         [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeFadeOut = 0.5f;
         [SerializeField] private TweenFadeConfig _groupFadeOut;
 
-        public TweenPunchConfig AppearScale => _appearScale;
+        public TweenConfig AppearScaleIn => _appearScaleIn;
+        public TweenConfig AppearScaleOut => _appearScaleOut;
+        public float AppearScaleOutDelay => _appearScaleOutDelay;
         public Vector3 MoveVelocity => _moveVelocity;
         private Vector3 BackgroundRotateBy => new Vector3(0, 0, Random.Range(_randomRotationInterval.x, _randomRotationInterval.y));
         public TweenConfig BackgroundRotationTween => new TweenConfig(BackgroundRotateBy, _backgroundRotatateBy.Duration, _backgroundRotatateBy.Ease);

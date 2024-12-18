@@ -11,23 +11,25 @@ public class PartsLibrary : ScriptableObject
     {
         public NodeEnums.ProgressionState progressionState;
         public T[] parts;
-        public T[] perfectParts;
+        //public T[] perfectParts;
 
         public T GetRandomPart()
         {
             return parts[Random.Range(0, parts.Length)];
         }
+        /*
         public T GetRandomPerfectPart()
         {
             return perfectParts[Random.Range(0, perfectParts.Length)];
         }
+        */
     }
 
 
     private PartsByProgressionState<TurretPartProjectileDataModel>[] _attacksByProgressionStates;
     private PartsByProgressionState<TurretPartBody>[] _bodiesByProgressionStates;
     private PartsByProgressionState<ATurretPassiveAbilityDataModel>[] _passivesByProgressionStates;
-    private PartsByProgressionState<TurretStatsUpgradeModel>[] _bonusStatsByProgressionStates;
+    private Dictionary<CardPartReplaceManager.BonusStatType, PartsByProgressionState<TurretStatsUpgradeModel>[]> _bonusStatsByProgressionStatesMap;
 
 
     public void SetContent(AttackPartsLibraryContent newAttacksContent, BodyPartsLibraryContent newBodiesContent, 
@@ -36,7 +38,12 @@ public class PartsLibrary : ScriptableObject
         _attacksByProgressionStates = newAttacksContent.GetArrayByProgression();
         _bodiesByProgressionStates = newBodiesContent.GetArrayByProgression();
         _passivesByProgressionStates = newPassivesContent.GetArrayByProgression();
-        _bonusStatsByProgressionStates = newBonusStatsContent.GetArrayByProgression();
+        _bonusStatsByProgressionStatesMap = new Dictionary<CardPartReplaceManager.BonusStatType, PartsByProgressionState<TurretStatsUpgradeModel>[]>
+        {
+            { CardPartReplaceManager.BonusStatType.DAMAGE, newBonusStatsContent.GetArrayByProgression_Damage() },
+            { CardPartReplaceManager.BonusStatType.SHOTS_PER_SECOND, newBonusStatsContent.GetArrayByProgression_ShotsPerSecond() },
+            { CardPartReplaceManager.BonusStatType.RANGE, newBonusStatsContent.GetArrayByProgression_Range() },
+        };
     }
 
 
@@ -58,6 +65,7 @@ public class PartsLibrary : ScriptableObject
         PartsByProgressionState<TurretPartProjectileDataModel> attacksByProgressionState = GetAttacksByProgressionState(progressionState);
         HashSet<TurretPartProjectileDataModel> holderPartsSet = new HashSet<TurretPartProjectileDataModel>();
 
+        /*
         if (perfect)
         {
             while (holderPartsSet.Count < amountPerfect)
@@ -65,6 +73,7 @@ public class PartsLibrary : ScriptableObject
                 holderPartsSet.Add(attacksByProgressionState.GetRandomPerfectPart());
             }
         }
+        */
 
         while (holderPartsSet.Count < totalAmount)
         {
@@ -94,6 +103,7 @@ public class PartsLibrary : ScriptableObject
         PartsByProgressionState<TurretPartBody> bodiesByProgressionState = GetBodiesByProgressionState(progressionState);
         HashSet<TurretPartBody> holderPartsSet = new HashSet<TurretPartBody>();
 
+        /*
         if (perfect)
         {
             while (holderPartsSet.Count < amountPerfect)
@@ -101,6 +111,7 @@ public class PartsLibrary : ScriptableObject
                 holderPartsSet.Add(bodiesByProgressionState.GetRandomPerfectPart());
             }
         }
+        */
 
         while (holderPartsSet.Count < totalAmount)
         {
@@ -130,6 +141,7 @@ public class PartsLibrary : ScriptableObject
         PartsByProgressionState<ATurretPassiveAbilityDataModel> passiveByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
         HashSet<ATurretPassiveAbilityDataModel> holderPartsSet = new HashSet<ATurretPassiveAbilityDataModel>();
 
+        /*
         if (perfect)
         {
             while (holderPartsSet.Count < amountPerfect)
@@ -137,6 +149,7 @@ public class PartsLibrary : ScriptableObject
                 holderPartsSet.Add(passiveByProgressionState.GetRandomPerfectPart());
             }
         }
+        */
 
         while (holderPartsSet.Count < totalAmount)
         {
@@ -150,23 +163,30 @@ public class PartsLibrary : ScriptableObject
 
 
     // BONUS STATS PARTS
-    private PartsByProgressionState<TurretStatsUpgradeModel> GetBonusStatsByProgressionState(NodeEnums.ProgressionState progressionState)
+    private PartsByProgressionState<TurretStatsUpgradeModel> GetBonusStatsByProgressionState(NodeEnums.ProgressionState progressionState, 
+        CardPartReplaceManager.BonusStatType bonusStatsTypes)
     {
-        for (int i = 0; i < _bonusStatsByProgressionStates.Length; ++i)
+        PartsByProgressionState<TurretStatsUpgradeModel>[] bonusStatsByProgressionStates = 
+            _bonusStatsByProgressionStatesMap[bonusStatsTypes];
+        
+        for (int i = 0; i < bonusStatsByProgressionStates.Length; ++i)
         {
-            if (_bonusStatsByProgressionStates[i].progressionState == progressionState)
-                return _bonusStatsByProgressionStates[i];
+            if (bonusStatsByProgressionStates[i].progressionState == progressionState)
+                return bonusStatsByProgressionStates[i];
         }
 
-        return _bonusStatsByProgressionStates[0];
+        return bonusStatsByProgressionStates[0];
     }
 
-    public TurretStatsUpgradeModel[] GetRandomTurretStatsUpgradeModel(int totalAmount, int amountPerfect, bool perfect, NodeEnums.ProgressionState progressionState)
+    public TurretStatsUpgradeModel[] GetRandomTurretStatsUpgradeModel(int totalAmount, int amountPerfect, bool perfect, 
+        NodeEnums.ProgressionState progressionState, CardPartReplaceManager.BonusStatType bonusStatsTypes)
     {
-        totalAmount = Mathf.Min(totalAmount, _bonusStatsByProgressionStates.Length);
-        PartsByProgressionState<TurretStatsUpgradeModel> bonusStatsByProgressionState = GetBonusStatsByProgressionState(progressionState);
+        totalAmount = Mathf.Min(totalAmount, _bonusStatsByProgressionStatesMap[bonusStatsTypes].Length);
+        PartsByProgressionState<TurretStatsUpgradeModel> bonusStatsByProgressionState = 
+            GetBonusStatsByProgressionState(progressionState, bonusStatsTypes);
         HashSet<TurretStatsUpgradeModel> holderPartsSet = new HashSet<TurretStatsUpgradeModel>();
 
+        /*
         if (perfect)
         {
             while (holderPartsSet.Count < amountPerfect)
@@ -174,6 +194,7 @@ public class PartsLibrary : ScriptableObject
                 holderPartsSet.Add(bonusStatsByProgressionState.GetRandomPerfectPart());
             }
         }
+        */
 
         while (holderPartsSet.Count < totalAmount)
         {

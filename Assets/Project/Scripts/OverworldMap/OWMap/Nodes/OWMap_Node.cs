@@ -86,6 +86,7 @@ public class OWMap_Node : MonoBehaviour
     private OWMap_Connection cameFromConnection;
     private OWMap_Connection[] nextLevelConnections;
     public OWMap_Connection[] GetNextLevelConnections() { return nextLevelConnections; }
+
     
 
     [SerializeField] private MouseOverNotifier mouseOverNotifier;
@@ -428,6 +429,7 @@ public class OWMap_Node : MonoBehaviour
                 break;
         }
 
+
         if (OnNodeHealthStateSet != null) OnNodeHealthStateSet(nodeHealthState);
         if (enableInfoDisplay) InvokeOnNodeInfoInteractionEnabled();
     }
@@ -589,4 +591,7 @@ public class OWMap_Node : MonoBehaviour
         yield return null;
         mouseCollider.enabled = true;
     }
+
+
+
 }

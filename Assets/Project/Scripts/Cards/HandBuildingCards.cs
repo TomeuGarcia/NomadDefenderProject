@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NaughtyAttributes;
+using Project.Scripts.Cards;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -12,6 +13,9 @@ public class HandBuildingCards : MonoBehaviour
     [Header("CAMERA")]
     [SerializeField] private Camera handCamera;
     [SerializeField] private Transform handCameraTransform;
+
+    [Header("VIEW")] 
+    [SerializeField] private TDGameViewUtilities _tdGameViewUtilities;
 
     [Header("CARDS CONFIG")]
     [SerializeField] private CardMotionConfig _cardsMotionConfig;
@@ -256,7 +260,7 @@ public class HandBuildingCards : MonoBehaviour
         }
         else
         {
-            if (!card.IsOnCardHoveredSubscrived)
+            if (!card.IsOnCardHoveredSubscribed)
                 card.OnCardHovered += SetHoveredCard;
         }
 
@@ -631,13 +635,14 @@ public class HandBuildingCards : MonoBehaviour
     {
         selectedCard = cardToBePlaced;
         ResetAndSetStandardCard(selectedCard);
+        _tdGameViewUtilities.StopMarkingGroundTiles();
     }
     private void ResetAndSetStandardCardAfterDragBack(BuildingCard card)
     {
         card.OnDragMouseUp -= ResetAndSetStandardCardAfterDragBack;
         if (selectedCard != null) ResetAndSetStandardCard(card);
         ShowHand();
-        
+        _tdGameViewUtilities.StopMarkingGroundTiles();
     }
     private void ResetAndSetStandardCard(BuildingCard card)
     {        
@@ -691,6 +696,8 @@ public class HandBuildingCards : MonoBehaviour
     private void SetSelectedCard(BuildingCard card)
     {
         if (AlreadyHasSelectedCard) return;
+        
+        _tdGameViewUtilities.StartMarkingGroundTiles();
 
         selectedCard = card;
         selectedCard.SelectedState(true);
@@ -723,6 +730,8 @@ public class HandBuildingCards : MonoBehaviour
 
         isPlayerHoveringTheCards = false;
         StartCoroutine(DelayedTryHideHandAfterDraw());
+        
+        _tdGameViewUtilities.StopMarkingGroundTiles();
 
         // Audio
         GameAudioManager.GetInstance().PlayCurrencySpent();

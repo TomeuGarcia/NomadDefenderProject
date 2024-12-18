@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ public abstract class ATurretPassiveAbility
         _descriptionCorrections.Clear();
         return _abilityDescription;
     }
-    
+
     protected ATurretPassiveAbility(ATurretPassiveAbilityDataModel originalModel)
     {
         OriginalModel = originalModel;

@@ -19,6 +19,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
     private Material rangePlaneMaterial;
 
     [SerializeField] private MeshRenderer explosionCapsuleMesh;
+    [SerializeField] private ParticleSystem _explosionParticles;
     private Material explosionCapsuleMaterial;
 
     [SerializeField] private Transform bindOriginTransform;
@@ -95,12 +96,15 @@ public class SelfHurtBase : TurretPartBase_Prefab
         explosionCapsuleMesh.gameObject.SetActive(true);
         explosionCapsuleMaterial = explosionCapsuleMesh.material;
 
+        UpdateParticlesRange(supportBuilding.CurrentRadiusRange);
     }
 
     public override void OnGetPlaced()
     {
         isPlaced = true;
         PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
+        PathLocation.OnHealthChanged -= ConnectBinderWithPathLocation;
+
         owner.OnShowRangePlane += OnRangePlaneShown;
         owner.OnHideRangePlane += OnRangePlaneHidden;
 
@@ -130,7 +134,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
             UpdateAreaPlaneSize(ownerSupportBuilding, rangePlane, rangePlaneMaterial);
-
+            UpdateParticlesRange(ownerSupportBuilding.CurrentRadiusRange);
             rocketTop.DOBlendableMoveBy(rocketTopMoveBy, 1.0f);
         }
 
@@ -199,8 +203,23 @@ public class SelfHurtBase : TurretPartBase_Prefab
     private void PlayExplosionAnimation()
     {
         explosionCapsuleMaterial.SetFloat("_StartTimeFlashAnimation", Time.time);
+        _explosionParticles.Play();
     }
 
+    private void UpdateParticlesRange(float radiusRange)
+    {
+        ParticleSystem.ShapeModule shape = _explosionParticles.shape;
+        shape.radius = radiusRange;
+
+        for (int i = 0; i < _explosionParticles.transform.childCount; ++i)
+        {
+            if (_explosionParticles.transform.GetChild(i).TryGetComponent(out ParticleSystem childExplosionParticles))
+            {
+                ParticleSystem.ShapeModule childShape = childExplosionParticles.shape;
+                childShape.radius = radiusRange;
+            }
+        }
+    }
 
 
 

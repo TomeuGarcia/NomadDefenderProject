@@ -262,7 +262,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         }
 
         OnTakeDamage?.Invoke(_typeConfig, damageAttack);
-        SpawntakeDamageText(damageAttack.Damage, hitArmor);
+        SpawntakeDamageText(damageAttack, hitArmor);
         AchievementDefinitions.OverkillDamage.Check(damageAttack.Damage);
         
         TurretDamageAttackResult result = 
@@ -273,11 +273,17 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         takeDamageResultCallback(result);
     }
 
-    private void SpawntakeDamageText(int damageAmount, bool hitArmor)
+    private void SpawntakeDamageText(TurretDamageAttack damageAttack, bool hitArmor)
     {
         IFadingTextsFactory fadingTextsFactory = ServiceLocator.GetInstance().FadingTextFactory;
         IFadingTextsFactory.TextSpawnData textSpawnData = fadingTextsFactory.GetTextSpawnData();
-        textSpawnData.Init(Position, damageAmount.ToString(), healthHUD.GetBarColor(hitArmor));
+
+        Color textColor = damageAttack.ProjectileSource != null
+            ? damageAttack.ProjectileSource.TurretOwner.ProjectileDataModel.materialColor
+            : healthHUD.GetBarColor(hitArmor);
+        textSpawnData.Init(Position, damageAttack.Damage.ToString(), textColor);
+        //textSpawnData.Init(Position, damageAmount.ToString(), healthHUD.GetBarColor(hitArmor));
+        
         fadingTextsFactory.SpawnFadingText(textSpawnData);
     }
 
@@ -285,8 +291,18 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void GetStunned(float duration)
     {
-        if (IsDead()) return;
+        if (IsDead() || _ignoreStunned) return;
         pathFollower.PauseForDuration(duration);
+        StartCoroutine(DoIgnoreStunned(duration));
+    }
+
+    private bool _ignoreStunned = false;
+
+    private IEnumerator DoIgnoreStunned(float stunDuration)
+    {
+        _ignoreStunned = true;
+        yield return new WaitForSeconds(stunDuration + 0.2f);
+        _ignoreStunned = false;
     }
 
     private void Suicide()
