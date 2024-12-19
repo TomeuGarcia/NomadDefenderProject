@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,46 +8,60 @@ using UnityEditor;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using static UnityEngine.UI.Image;
+using Random = UnityEngine.Random;
 
 public class CameraMovement : MonoBehaviour
 {
-    const float MAX_DRAG_DISTANCE = 3f;
-    Vector3 cameraOriginPos;
-    Vector3 cameraDragPos;
-    Vector3 cameraZoomPos = Vector3.zero;
+    private Vector3 _cameraStartPosition;
 
+    [Header("ZOOM")]
+    [SerializeField, Range(0,1)] private float _startZoomRatio = 0.3f;
+    [SerializeField, Min(0)] private float _totalZoomDistance = 30f;
+    [SerializeField, Min(0)] private float _zoomSpeed = 4.0f;
+    private float _totalZoomInDistance;
+    private float _totalZoomOutDistance;
+    
+    private Vector3 _zoomAxis;
+    private float _currentZoomDistance;
 
-    private Vector3 difference;
-    private Vector3 lastOrigin;
+    private float ZoomRatio => (_currentZoomDistance - _totalZoomOutDistance) / _totalZoomDistance;
+    
+    [Header("PANNING")]
+    [SerializeField, Min(0)] private float _totalZoomInPanningRadius = 6f;
+    [SerializeField, Min(0)] private float _totalZoomOutPanningRadius = 3f;
+    [SerializeField, Min(0)] private float _panningSpeed = 3f;
+    
+    private Vector3 _panningForwardAxis;
+    private Vector3 _panningSidewaysAxis;
+    
+    private Vector2 _currentPannedDistance;
+    private Vector2 _previousPanningMousePosition;
+    private float PanningRadius => Mathf.LerpUnclamped(_totalZoomOutPanningRadius, _totalZoomInPanningRadius, ZoomRatio);
 
-    private Vector3 moveX;
-    private Vector3 moveZ;
-
-    private Vector3 zoomAxis;
-    private float maxZoomIn;
-    private float maxZoomOut;
-    private float acumulatedZoom;
-    private float zoomStep;
-
-    private float dragSpeed;
 
     private void Awake()
     {
-        dragSpeed = 0.25f;
+        _cameraStartPosition = transform.position;
+        _zoomAxis = transform.forward;
 
-        moveX = (Quaternion.AngleAxis(transform.rotation.x, Vector3.right) * transform.right).normalized;
-        moveZ = (Quaternion.AngleAxis(transform.rotation.x, Vector3.right) * transform.up).normalized;
-        zoomAxis = (Quaternion.AngleAxis(transform.rotation.x, Vector3.right) * transform.forward).normalized;
+        _panningForwardAxis = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+        _panningSidewaysAxis = Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
 
-        maxZoomIn = 40.0f;
-        maxZoomOut = -20.0f;
-        acumulatedZoom = 0.0f;
-        zoomStep = 2.0f;
-
-        cameraOriginPos = transform.position;
-        cameraDragPos = cameraOriginPos;
-        cameraZoomPos = Vector3.zero;
+        UpdateVariables();
     }
+
+    private void OnValidate()
+    {
+        UpdateVariables();
+    }
+
+    private void UpdateVariables()
+    {
+        _totalZoomInDistance = _totalZoomDistance * (1f - _startZoomRatio);
+        _totalZoomOutDistance = _totalZoomDistance * (- _startZoomRatio);
+        _currentZoomDistance = Mathf.LerpUnclamped(_totalZoomOutDistance, _totalZoomInDistance, _startZoomRatio);
+    }
+    
 
     private void OnEnable()
     {
@@ -58,56 +73,6 @@ public class CameraMovement : MonoBehaviour
         PathLocation.OnTakeDamage -= CameraShakeLocationTakeDamage;
         Enemy.OnTriedToAttackDeadLocation -= OnTriedToAttackDeadLocation;
     }
-
-    void LateUpdate()
-    {
-        float zoomIncrement = Input.mouseScrollDelta.y * zoomStep;
-        acumulatedZoom = Mathf.Clamp(acumulatedZoom + zoomIncrement, maxZoomOut, maxZoomIn);
-        if(acumulatedZoom >= maxZoomIn || acumulatedZoom <= maxZoomOut)
-        {
-            zoomIncrement = 0.0f;
-        }
-        MoveCameraByDisplacement(Vector3.zero, zoomAxis* zoomIncrement);
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            lastOrigin = Input.mousePosition;
-        }
-
-        if (Input.GetMouseButton(1))
-        {
-            difference = Input.mousePosition - lastOrigin;
-            float differenceMag = difference.magnitude / 25.0f;
-
-            //accumulatedDifferenceX = Mathf.Clamp(accumulatedDifferenceX + difference.x, -maxDifferenceX, maxDifferenceX);
-            //if (accumulatedDifferenceX >= maxDifferenceX || accumulatedDifferenceX <= -maxDifferenceX)
-            //    difference.x = 0f;
-
-
-            difference.Normalize();
-            //Vector3 displacement = (moveX * difference.x + moveZ * difference.y + zoomAxis * zoomIncrement).normalized * -dragSpeed * differenceMag;
-            Vector3 displacementDrag = (moveX * difference.x + moveZ * difference.y).normalized * -dragSpeed * differenceMag;
-            Vector3 displacementZoom = (zoomAxis * zoomIncrement).normalized * -dragSpeed * differenceMag;
-            MoveCameraByDisplacement(displacementDrag, displacementZoom);
-            lastOrigin = Input.mousePosition;
-
-            
-        }
-    }
-
-    private void MoveCameraByDisplacement(Vector3 displacementDrag, Vector3 displacementZoom)
-    {
-        cameraDragPos += displacementDrag;
-        cameraZoomPos += displacementZoom;
-
-        if (Vector3.Distance(cameraOriginPos, cameraDragPos) > MAX_DRAG_DISTANCE)
-        {
-            cameraDragPos = (cameraDragPos - cameraOriginPos).normalized * MAX_DRAG_DISTANCE + cameraOriginPos;
-        }
-
-        transform.position = cameraDragPos + cameraZoomPos;
-    }
-
 
 
     public void CameraShake(float duration, int vibrato)
@@ -142,4 +107,87 @@ public class CameraMovement : MonoBehaviour
         CameraShakeLocationTakeDamage(attackedLocation);
     }
 
+
+
+    
+    
+
+    private void LateUpdate()
+    {
+        UpdateZoomDistance();
+        Vector3 zoomOffset = _zoomAxis * _currentZoomDistance;
+
+        UpdatePanningDistance();
+        Vector3 panningOffset = (_panningForwardAxis * _currentPannedDistance.y) +
+                                (_panningSidewaysAxis * _currentPannedDistance.x);
+
+        transform.position = _cameraStartPosition + zoomOffset + panningOffset;
+    }
+
+
+    private void UpdateZoomDistance()
+    {
+        float zoomDelta = Input.mouseScrollDelta.y * _zoomSpeed;
+        _currentZoomDistance = Mathf.Clamp(_currentZoomDistance + zoomDelta, _totalZoomOutDistance, _totalZoomInDistance);
+    }
+
+    private void UpdatePanningDistance()
+    {
+        Vector2 panningDelta = UpdatePanningDelta();
+        
+        _currentPannedDistance += panningDelta * _panningSpeed;
+        _currentPannedDistance = Vector2.ClampMagnitude(_currentPannedDistance, PanningRadius);
+    }
+
+    private Vector2 UpdatePanningDelta()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            _previousPanningMousePosition = Input.mousePosition;
+            return Vector2.zero;
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            return Vector2.zero;
+        }
+        else if (!Input.GetKey(KeyCode.Mouse1))
+        {
+            return Vector2.zero;
+        }
+        
+
+        Vector2 currentPanningMousePosition = Input.mousePosition;
+        Vector2 panningDelta = currentPanningMousePosition - _previousPanningMousePosition;
+        _previousPanningMousePosition = Input.mousePosition;
+
+        return panningDelta;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Color defaultColor = Color.green;
+        Color maxZoomInColor = Color.blue;
+        Color maxZoomOutColor = Color.red;
+        
+        Vector3 maxZoomInPosition = _cameraStartPosition + (_zoomAxis * _totalZoomInDistance);
+        Vector3 maxZoomOutPosition = _cameraStartPosition + (_zoomAxis * _totalZoomOutDistance);
+        Vector3 currentZoomPosition = _cameraStartPosition + (_zoomAxis * _currentZoomDistance);
+
+        Gizmos.color = defaultColor;
+        Gizmos.DrawLine(maxZoomInPosition, maxZoomOutPosition);
+        
+        Gizmos.color = maxZoomInColor;
+        Gizmos.DrawSphere(maxZoomInPosition, 0.2f);
+        
+        Gizmos.color = maxZoomOutColor;
+        Gizmos.DrawSphere(maxZoomOutPosition, 0.2f);
+        
+        Gizmos.color = defaultColor;
+        Gizmos.DrawSphere(currentZoomPosition, 0.2f);
+
+
+        Gizmos.color = Color.LerpUnclamped(maxZoomOutColor, maxZoomInColor, ZoomRatio);
+        GizmosUtility.DrawCircle(_cameraStartPosition + (_zoomAxis * _currentZoomDistance), Vector3.up, PanningRadius);
+        
+    }
 }
