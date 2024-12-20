@@ -118,8 +118,8 @@ public class CameraMovement : MonoBehaviour
         Vector3 zoomOffset = _zoomAxis * _currentZoomDistance;
 
         UpdatePanningDistance();
-        Vector3 panningOffset = (_panningForwardAxis * _currentPannedDistance.y) +
-                                (_panningSidewaysAxis * _currentPannedDistance.x);
+        Vector3 panningOffset = (_panningForwardAxis * -_currentPannedDistance.y) +
+                                (_panningSidewaysAxis * -_currentPannedDistance.x);
 
         transform.position = _cameraStartPosition + zoomOffset + panningOffset;
     }
