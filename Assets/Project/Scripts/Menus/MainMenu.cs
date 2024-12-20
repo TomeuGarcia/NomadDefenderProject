@@ -352,8 +352,8 @@ public class MainMenu : MonoBehaviour
         _proceedNewGame.SetActive(true);
         _proceedNewGame_Question.ClearDecoder();
         _proceedNewGame_DataWillBeDeleted.ClearDecoder();
-        _proceedNewGame_No.ClearDecoder();
         _proceedNewGame_Yes.ClearDecoder();
+        _proceedNewGame_No.ClearDecoder();
         
         yield return new WaitForSeconds(0.1f);
         _proceedNewGameCG.alpha = 1;
@@ -363,10 +363,10 @@ public class MainMenu : MonoBehaviour
         _proceedNewGame_DataWillBeDeleted.Activate();
         
         yield return new WaitForSeconds(0.3f);
-        _proceedNewGame_No.Activate();
+        _proceedNewGame_Yes.Activate();
         
         yield return new WaitForSeconds(0.3f);
-        _proceedNewGame_Yes.Activate();
+        _proceedNewGame_No.Activate();
     }
     private IEnumerator HideProceedNewGame()
     {

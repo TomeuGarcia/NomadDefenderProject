@@ -8,6 +8,8 @@ public class TutorialGameManager : GameManager
 
     [Header("\nREPLACE DECK SELECTOR")]
     [Header("Libraries")]
+    [SerializeField] private CardDeckAsset starterDeck;
+    [SerializeField] private UnlockableTrophyModel starterDeckTrophy;
     [SerializeField] private CardsLibrary cardLibrary;
     [SerializeField] private PartsLibrary partLibrary;
 
@@ -18,6 +20,12 @@ public class TutorialGameManager : GameManager
     [SerializeField] private PassivesLibraryContent basesContent;
     [SerializeField] private BonusStatsPartsLibraryContent bonusStatsContent;
 
+
+    protected override void DoAwake()
+    {
+        decksLibrary.SetStarterDeck(starterDeck, starterDeckTrophy);
+        base.DoAwake();
+    }
 
     private void Start()
     {
