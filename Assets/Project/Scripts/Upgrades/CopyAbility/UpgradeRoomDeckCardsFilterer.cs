@@ -32,6 +32,12 @@ public static class UpgradeRoomDeckCardsFilterer
         const int maximumCardsOfMaxLevel = 1;
         int numMaxedCardsToAdd = Mathf.Min(maximumCardsOfMaxLevel, maxLevelCards.Count);
         
+        int undesiredRemainingMaxCards = numberOfCards - notMaxLevelCards.Count - numMaxedCardsToAdd;
+        if (undesiredRemainingMaxCards > 0)
+        {
+            numMaxedCardsToAdd += undesiredRemainingMaxCards;
+        }
+        
 
         // If not enough NON-MAXed cards, add MAXed cards
         if (numMaxedCardsToAdd > 0)
@@ -91,7 +97,7 @@ public static class UpgradeRoomDeckCardsFilterer
             if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
             {
                 
-                if (deckCards[cardI].GetCardLevel() < 3)
+                if (deckCards[cardI].GetCardLevel() < TurretCardDataModel.MAX_CARD_LEVEL)
                 {
                     notMaxLevelCards.Add(deckCards[cardI]);
                 }
@@ -117,6 +123,12 @@ public static class UpgradeRoomDeckCardsFilterer
 
         const int maximumCardsOfMaxLevel = 1;
         int numMaxedCardsToAdd = Mathf.Min(maximumCardsOfMaxLevel, maxLevelCards.Count);
+
+        int undesiredRemainingMaxCards = numberOfCards - notMaxLevelCards.Count - numMaxedCardsToAdd;
+        if (undesiredRemainingMaxCards > 0)
+        {
+            numMaxedCardsToAdd += undesiredRemainingMaxCards;
+        }
         
 
         // If not enough NON-MAXed cards, add MAXed cards
