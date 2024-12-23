@@ -656,6 +656,17 @@ public abstract class BuildingCard : MonoBehaviour
         //Debug.Log("Interaction OFF");
     }
 
+    public void ResizeColliderForHand()
+    {
+        cardCollider.center = new Vector3(0, -0.25f, 0);
+        cardCollider.size = new Vector3(1, 1.9f, 0.2f);
+    }
+    public void ResizeColliderForShowcase()
+    {
+        cardCollider.center = new Vector3(0, 0, 0);
+        cardCollider.size = new Vector3(1, 1.4f, 0.2f);
+    }
+
     public void ReenableMouseInteraction()
     {
         StartCoroutine(ScuffedreinableMouseInteraction());
