@@ -16,7 +16,7 @@ public class CardSlotTubeArm : MachineMovablePart
 
     public override void Init()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override IEnumerator EnterAnimation()
@@ -29,6 +29,6 @@ public class CardSlotTubeArm : MachineMovablePart
 
     public override IEnumerator ExitAnimation()
     {
-        throw new System.NotImplementedException();
+        yield return null;
     }
 }
