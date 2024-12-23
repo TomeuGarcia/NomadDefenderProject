@@ -121,10 +121,9 @@ public class EnemyWaveManager : MonoBehaviour
 
     private EnemyAttackDestination _enemiesAttackDestination;
 
-    private void Awake()
-    {
-        
-    }
+    private bool _gameOverAlreadyPlayed = false;
+    
+    
     private void Init()
     {
         //canvas.SetActive(false);
@@ -176,7 +175,7 @@ public class EnemyWaveManager : MonoBehaviour
         TDGameManager.OnGameOverStart += ForceStopWaves;
         TDGameManager.OnGameOverStart += PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
-
+        
         for (int i = 0; i < _pathsStartData.Length; i++)
         {
             EnemyWaveSpawner enemyWaveSpawner = _pathsStartData[i].EnemyWaveSpawner;
@@ -358,7 +357,10 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (OnAllWavesFinished != null) OnAllWavesFinished();
 
-        yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+        if (!_gameOverAlreadyPlayed)
+        {
+            yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+        }
 
         yield return new WaitUntil(() => !WaveStartPaused);
         
@@ -372,6 +374,8 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void ForceStopWaves()
     {
+        _gameOverAlreadyPlayed = true;
+        
         for (int i = 0; i < _pathsStartData.Length; i++)
         {
             _pathsStartData[i].EnemyWaveSpawner.ForceStopWave();
