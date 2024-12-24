@@ -23,10 +23,13 @@ MonoBehaviour:
       rgba: 4294967295
   _descriptionModel:
     _abilityName: transactionBonus
-    _abilityDescription: "Deal +DAMAGE_PERCENT_BONUS% more damage for every CURRENCY_STEP\u2666
+    _abilityDescription: "Deal +DAMAGE_PERCENT_BONUS% more damage for every +CURRENCY_STEP\u2666
       currently accumulated."
     _descriptionKeywords: []
     _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
+    - {fileID: 11400000, guid: 1496adf7cd9414c46a8bfafb7a6f8c09, type: 2}
   _otherReferencedProjectiles: []
   _otherReferencedPassives: []
   _currencyStepForBonus:

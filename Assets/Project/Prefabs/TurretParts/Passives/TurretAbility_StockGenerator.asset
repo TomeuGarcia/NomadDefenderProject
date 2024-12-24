@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e6d74dfe0b4469a65a1e44f4aa7edd, type: 3}
   m_Name: TurretAbility_StockGenerator
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 0}
+    _projectileAddOn: {fileID: 0}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: 839be1b2029cdc845ba8aae43396953b, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: 839be1b2029cdc845ba8aae43396953b, type: 3}
@@ -25,6 +28,11 @@ MonoBehaviour:
       for each card in hand."
     _descriptionKeywords:
     - {fileID: 11400000, guid: 79c8916f54e211f46832d00e100cb260, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1496adf7cd9414c46a8bfafb7a6f8c09, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
   _costIncrementPerCard:
     _name: COST_INCREMENT
     _isDynamic: 0

@@ -26,31 +26,46 @@ MonoBehaviour:
     rgba: 4282786734
   _defaultAbilityDescription:
     _abilityName: rageNuke
-    _abilityDescription: 'When played & upgraded, damage the healthiest Node by 1.
+    _abilityDescription: 'When played & upgraded, damage the healthiest Node by {1}.
 
       Whenever
       a Node takes damage, explode.'
     _descriptionKeywords:
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
   _lvl1AbilityDescription:
     _abilityName: UPG 1
-    _abilityDescription: 'Explosion deals 50% more damage.
+    _abilityDescription: 'Explosion deals +50% more damage.
 
       Damage the healthiest
-      Node by 1.'
+      Node by {1}.'
     _descriptionKeywords:
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
   _lvl2AbilityDescription:
     _abilityName: UPG 2
-    _abilityDescription: 'Explosion deals 100% more damage.
+    _abilityDescription: 'Explosion deals +100% more damage.
 
       Damage the healthiest
-      Node by 1.'
+      Node by {1}.'
     _descriptionKeywords:
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
   _lvl3AbilityDescription:
     _abilityName: UPG 3
-    _abilityDescription: "Increase range by 1 tile. \nDamage the healthiest Node
-      by 1."
+    _abilityDescription: "Increase range by [1 tile]. \nDamage the healthiest Node
+      by {1}."
     _descriptionKeywords:
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
