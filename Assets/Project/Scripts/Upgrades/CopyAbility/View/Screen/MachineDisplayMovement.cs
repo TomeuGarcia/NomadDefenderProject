@@ -8,8 +8,13 @@ public class MachineDisplayMovement : MachineMovablePart
     [SerializeField] private Transform[] _arm0Pivot;
     [SerializeField] private Transform[] _arm1Pivot;
     [SerializeField] private Transform _screenPivot;
+    [SerializeField] private Transform _displayInd;
 
     [Header("PARAMETERS")]
+    [SerializeField] private float _arm0PivotStartPositionOffset;
+    [SerializeField] private float _arm0PivotStartPositionOffsetDuration;
+    [SerializeField] private Ease _arm0PivotStartPositionOffsetEase;
+
     [SerializeField] private float _arm0PivotStartRotation;
     [SerializeField] private float _arm0PivotStartRotationDuration;
     [SerializeField] private Ease _arm0PivotStartRotationEase;
@@ -31,6 +36,8 @@ public class MachineDisplayMovement : MachineMovablePart
     [SerializeField] private float _screenZRotDuration;
     [SerializeField] private Ease _screenZRotEase;
 
+    [SerializeField] private TweenConfig _displayIndEnterConfig;
+
     public override void Init()
     {
         _screenPivot.SetParent(_arm1Pivot[0]);
@@ -43,6 +50,7 @@ public class MachineDisplayMovement : MachineMovablePart
         for (int i = 0; i < _arm0Pivot.Length; i++)
         {
             _arm0Pivot[i].localRotation = Quaternion.Euler(_arm0PivotStartRotation, 0, 0);
+            _arm0Pivot[i].position += Vector3.up * _arm0PivotStartPositionOffset;
         }
         for (int i = 0; i < _arm1Pivot.Length; i++)
         {
@@ -53,6 +61,11 @@ public class MachineDisplayMovement : MachineMovablePart
 
     public override IEnumerator EnterAnimation()
     {
+        for (int i = 0; i < _arm0Pivot.Length; i++)
+        {
+            _arm0Pivot[i].DOMove(_arm0Pivot[i].position + Vector3.down * _arm0PivotStartPositionOffset, _arm0PivotStartPositionOffsetDuration).SetEase(_arm0PivotStartPositionOffsetEase);
+        }
+
         for (int i = 0; i < _arm1Pivot.Length; i++)
         {
             _arm1Pivot[i].DOLocalRotate(Vector3.right * _arm1PivotEndRotation, _arm1PivotStartRotationDuration).SetEase(_arm1PivotStartRotationEase);
@@ -69,7 +82,8 @@ public class MachineDisplayMovement : MachineMovablePart
         //_screenPivot.DOLocalRotate(Vector3.right * _screenPivotEndRotation, _screenPivotStartRotationDuration).SetEase(_screenPivotStartRotationEase);
         yield return new WaitForSeconds(_delay2);
 
-        _screenPivot.DOBlendableRotateBy(Vector3.back * _startScreenZRot, _screenZRotDuration).SetEase(_screenZRotEase);
+        //_screenPivot.DOBlendableRotateBy(Vector3.back * _startScreenZRot, _screenZRotDuration).SetEase(_screenZRotEase);
+        _displayInd.DOBlendableRotateBy(_displayIndEnterConfig.Value, _displayIndEnterConfig.Duration, RotateMode.FastBeyond360).SetEase(_displayIndEnterConfig.Ease);
     }
 
     public override IEnumerator ExitAnimation()
