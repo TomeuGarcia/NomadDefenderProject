@@ -282,7 +282,7 @@ public abstract class CardPart : MonoBehaviour
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
         if (OnInfoShown != null) OnInfoShown();
-
+        
         DoShowInfo();
     }
     protected abstract void DoShowInfo();

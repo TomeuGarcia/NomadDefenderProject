@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
+using Project.Scripts.Cards;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -286,14 +287,14 @@ public class OverworldCardShower : MonoBehaviour
 
         float cardMoveDelay = 0.1f;
         float cardMoveDuration = 0.5f;
-        float cardmOveSoundPitch = 1.2f;
+        float cardMoveSoundPitch = 1.2f;
         
         for (int i = 0; i < cards.Length; ++i)
         {
             yield return new WaitForSecondsRealtime(cardMoveDelay);
             //TODO: Play Sound
 
-            GameAudioManager.GetInstance().PlayCardInfoMoveShown(cardmOveSoundPitch);
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown(cardMoveSoundPitch);
             
             cards[i].cardLocation = BuildingCard.CardLocation.DECK;
 
@@ -301,7 +302,7 @@ public class OverworldCardShower : MonoBehaviour
 
             cardMoveDelay *= 0.98f;
             cardMoveDuration *= 0.98f;
-            cardmOveSoundPitch *= 1.02f;
+            cardMoveSoundPitch *= 1.02f;
         }
         yield return new WaitForSecondsRealtime(0.3f);
 
@@ -329,48 +330,10 @@ public class OverworldCardShower : MonoBehaviour
 
     private Vector3[] ComputeCardsEndPositions(int cardsCount)
     {
-        Vector3[] cardsEndPositions = new Vector3[cardsCount];
-        
-        int totalRows = Mathf.CeilToInt((float)cardsCount / _placeCards_cardsPerRow);
-
-        int cardsInLastRow = cardsCount % _placeCards_cardsPerRow == 0
-            ? _placeCards_cardsPerRow
-            : cardsCount - ((cardsCount / _placeCards_cardsPerRow) * _placeCards_cardsPerRow);
-
-        for (int i = 0; i < cardsCount; ++i)
-        {
-            int rowIndex = i / _placeCards_cardsPerRow;
-            bool isLastRow = rowIndex + 1 == totalRows;
-            
-            int previousCards = rowIndex * _placeCards_cardsPerRow;
-            int cardsInRow = isLastRow ? cardsInLastRow : _placeCards_cardsPerRow;
-
-            
-            int cardInRowIndex = (i - previousCards) % cardsInRow;
-            float totalSideSpacing = ((cardsInRow - 1) * (_placeCards_cardWidth + _placeCards_spacingBetweenCards));
-            float totalUpwardsSpacing = ((totalRows - 1) * (_placeCards_cardHeight + _placeCards_spacingBetweenRows));
-            
-            Vector3 position = _cardsHolder.position;
-            position += new Vector3(
-                ComputeSpacing(cardInRowIndex, cardsInRow, totalSideSpacing),
-                0,
-                -ComputeSpacing(rowIndex, totalRows, totalUpwardsSpacing));
-
-            cardsEndPositions[i] = position;
-        }
-
-        return cardsEndPositions;
+        return CardArrangingUtilities.GetCenteredCards(_cardsHolder, cardsCount, _placeCards_cardsPerRow,
+            _placeCards_spacingBetweenRows, _placeCards_spacingBetweenCards,
+            _placeCards_cardWidth, _placeCards_cardHeight);
     }
     
-    private float ComputeSpacing(int index, int totalCount, float totalSpacing)
-    {
-        if (totalCount < 2) return 0;
-        
-        float halfSpace = totalSpacing * 0.5f;
-
-        float t = (float)index / (totalCount - 1);
-        float spacing = Mathf.LerpUnclamped(-halfSpace, halfSpace, t);
-        return spacing;
-    }
     
 }

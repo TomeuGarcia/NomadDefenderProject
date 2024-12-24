@@ -137,6 +137,10 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(DoLoadScene(LoadMainMenuCreditsScene));
     }
+    public void StartLoadMainMenuCardCollection()
+    {
+        StartCoroutine(DoLoadScene(LoadMainMenuCardCollectionScene));
+    }
 
 
 
@@ -172,6 +176,10 @@ public class SceneLoader : MonoBehaviour
     private void LoadMainMenuCreditsScene()
     {
         SceneManager.LoadScene("MainMenuCredits");
+    }
+    private void LoadMainMenuCardCollectionScene()
+    {
+        SceneManager.LoadScene("CardCollection");
     }
 
     public void StartLoadMainMenu()
