@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ReplicateAbilityButton_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 9d4c45907cfb4224c8dfbe7bc2634ba7,
+  m_Name: ScreenIndicator_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 68854824cb89b704ea39911eec283afb,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,14 +24,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _TextTexture:
-        m_Texture: {fileID: 2800000, guid: a1b3613223b546e4da41b0b7be33b55d, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture:
-        m_Texture: {fileID: 2800000, guid: a1b3613223b546e4da41b0b7be33b55d, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -46,25 +38,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
-    - _Hovered: 0
-    - _InnerWidth: 0.1
-    - _OutterWidth: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 0.77
-    - _ScaleTexture: 0
-    - _TextureScale: 0.5
-    - _YOffset: 0
+    - _Ready: 0
+    - _ReadySinSpoeed: 0.5
+    - _Replacing: 0
     m_Colors:
-    - _Color: {r: 0, g: 1.4980392, b: 0.3389595, a: 0}
-    - _HoveredColor: {r: 0.6053964, g: 5.133762, b: 4.5356755, a: 0}
-    - _Offset: {r: -7.5, g: 0, b: 0, a: 0}
-    - _OutterColor: {r: 0, g: 0.7490196, b: 0.64563733, a: 0}
-    - _RectScale: {r: 1, g: 1, b: 0, a: 0}
-    - _Scale: {r: 15, g: 1, b: 0, a: 0}
+    - _OffColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0}
+    - _ReadyColor: {r: 0, g: 2, b: 1.5387722, a: 0}
+    - _ReplacingColor: {r: 0, g: 2, b: 0.03990841, a: 0}
+    - _WaitingColor: {r: 2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &7238223228698297149
+--- !u!114 &4997289353031302694
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
