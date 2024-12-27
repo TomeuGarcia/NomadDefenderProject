@@ -51,7 +51,7 @@ namespace Project.Scripts.CardCollection
                 cardMoveDuration *= 0.98f;
                 cardMoveSoundPitch *= 1.02f;
             }
-            yield return new WaitForSecondsRealtime(0.3f);
+            yield return new WaitForSecondsRealtime(cardMoveDuration);
         }
         
         private Vector3[] ComputeCardsEndPositions(int cardsCount)

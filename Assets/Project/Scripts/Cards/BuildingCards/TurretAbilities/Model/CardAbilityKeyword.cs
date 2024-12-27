@@ -20,6 +20,7 @@ public class CardAbilityKeyword : ScriptableObject
     [SerializeField] private string _descriptionVariable = "KEYWORD_NAME";
     [SerializeField] private Color _descriptionVariableColor = Color.cyan;
     [SerializeField] private bool _descriptionVariableBold = true;
+    [SerializeField] private bool _descriptionVariableUnderline = true;
     
     private string DescriptionVariablePlural => _descriptionVariable + 's';
 
@@ -52,6 +53,11 @@ public class CardAbilityKeyword : ScriptableObject
         {
             prefix = prefix + "<b>";
             suffix = "</b>" + suffix;
+        }
+        if (_descriptionVariableUnderline)
+        {
+            prefix = prefix + "<u>";
+            suffix = "</u>" + suffix;
         }
             
         return prefix + (plural ? _namePlural : _name) + suffix;
