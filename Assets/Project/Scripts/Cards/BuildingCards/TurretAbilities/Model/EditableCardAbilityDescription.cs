@@ -23,6 +23,9 @@ public class EditableCardAbilityDescription
             Description = Description.Replace(keywordToValue.Key, keywordToValue.Value);
         }
     }
-    
-    
+
+    public void SetNotDiscovered()
+    {
+        Name = "???";
+    }
 }

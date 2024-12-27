@@ -40,6 +40,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private CanvasGroup _steamCanvasGroup;
     [SerializeField] private TextDecoder _steamDecoder;
 
+    [Header("CARD COLLECTION")] 
+    [SerializeField] private CardCollectionDataStorage _cardCollection;
+
     [Header("UPCOMING CHANGES")]
     [SerializeField, Min(0)] private float _upcomingChangesStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _upcomingChangesCanvasGroup;
@@ -332,12 +335,14 @@ public class MainMenu : MonoBehaviour
         }
         StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
         ServiceLocator.GetInstance().OptionalTutorialsStateManager.SetAllTutorialsNotDone();
+        _cardCollection.DoReset();
 
         _unlockableTrophiesManager.SetAllTrophiesLocked();
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());
     }
+    
     
     public void No_ProceedNewGame()
     {

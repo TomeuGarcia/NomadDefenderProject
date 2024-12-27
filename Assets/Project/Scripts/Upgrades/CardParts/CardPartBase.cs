@@ -106,7 +106,17 @@ public class CardPartBase : CardPart, ICardTooltipSource
     // ICardTooltipSource OVERLOADS
     public CardTooltipDisplayData MakeTooltipDisplayData()
     {
-        return CardTooltipDisplayData.MakeForCardPartPassive(_descriptionTooltipPositioning, TurretPassiveModel, 
-            turretPassive.GetAbilityDescription());
+        CardTooltipDisplayData tooltipDisplayData =
+            CardTooltipDisplayData.MakeForCardPartPassive(_descriptionTooltipPositioning, TurretPassiveModel, 
+                turretPassive.GetAbilityDescription());
+        
+        return tooltipDisplayData;
+    }
+
+    public override void SetNotDiscovered()
+    {
+        base.SetNotDiscovered();
+        turretPassive.AbilityDescription.SetNotDiscovered();
+        _basePassiveNameText.text = turretPassive.AbilityDescription.NameForDisplay;
     }
 }

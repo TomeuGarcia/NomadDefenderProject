@@ -88,6 +88,7 @@ public abstract class CardPart : MonoBehaviour
 
         cardState = CardPartStates.HOVERED;
         SetCardState(CardPartStates.STANDARD);
+        _notDiscoveredView.SetActive(false);
     }
 
     private void OnMouseEnter()
@@ -337,4 +338,12 @@ public abstract class CardPart : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+
+    [Header("NOT DISCOVERED")] 
+    [SerializeField] private GameObject _notDiscoveredView;
+
+    public virtual void SetNotDiscovered()
+    {
+        _notDiscoveredView.SetActive(true);
+    }
 }

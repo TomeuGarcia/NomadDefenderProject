@@ -21,6 +21,7 @@ public abstract class ATurretPassiveAbility
 
     private readonly EditableCardAbilityDescription _abilityDescription;
     private readonly Dictionary<string, string> _descriptionCorrections;
+    public EditableCardAbilityDescription AbilityDescription => _abilityDescription;
 
     protected ProjectileParticleFactory _projectileParticleFactory;
 

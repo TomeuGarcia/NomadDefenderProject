@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class CardCollectionManager : MonoBehaviour
 {
     [Header("SETUP")] 
+    [SerializeField] private CardCollectionDataStorage _cardCollection;
     [SerializeField] private Camera _camera;
     [SerializeField] private CardMotionConfig _cardMotionConfig;
     [SerializeField] private Button _backButton;
@@ -15,14 +16,12 @@ public class CardCollectionManager : MonoBehaviour
     [Header("PROJECTILES")]
     [SerializeField] private CardCollectionPositioner _projectileCardsPositioner;
     [SerializeField] private CardPartAttack _cardPartProjectilePrefab;
-    [SerializeField] private TurretPartProjectileDataModel[] _projectiles;
     private CardCollectionCardPartsGroup _projectilesGroup;
     
     
     [Header("PASSIVE ABILITIES")]
     [SerializeField] private CardCollectionPositioner _passiveAbilityCardsPositioner;
     [SerializeField] private CardPartBase _cardPartBasePrefab;
-    [SerializeField] private ATurretPassiveAbilityDataModel[] _passiveAbilities;
     private CardCollectionCardPartsGroup _passiveAbilitiesGroup;
     
     
@@ -31,8 +30,8 @@ public class CardCollectionManager : MonoBehaviour
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(_camera);
         _cardMotionConfig.SetResultsScreenDisplayMode();
 
-        InitProjectiles(_projectiles, out Transform[] projectileCardTransforms);
-        InitPassiveAbilities(_passiveAbilities, out Transform[] passiveAbilityCardTransforms);
+        InitProjectiles(_cardCollection.Projectiles, out Transform[] projectileCardTransforms);
+        InitPassiveAbilities(_cardCollection.PassiveAbilities, out Transform[] passiveAbilityCardTransforms);
         StartCoroutine(PlaySceneStartAnimation(projectileCardTransforms, passiveAbilityCardTransforms));
         
         _backButton.onClick.AddListener(SceneLoader.GetInstance().StartLoadMainMenu);
@@ -48,9 +47,14 @@ public class CardCollectionManager : MonoBehaviour
 
         for (int i = 0; i < projectiles.Length; ++i)
         {
+            TurretPartProjectileDataModel projectile = projectiles[i];
             CardPartAttack projectileCard = Instantiate(_cardPartProjectilePrefab, transform);
-            projectileCard.Configure(projectiles[i]);
+            projectileCard.Configure(projectile);
             projectileCard.Init();
+            if (!_cardCollection.WasDiscovered(projectile))
+            {
+                projectileCard.SetNotDiscovered();
+            }
             
             projectileCards[i] = projectileCard;
             projectileCardTransforms[i] = projectileCard.transform;
@@ -72,9 +76,14 @@ public class CardCollectionManager : MonoBehaviour
 
         for (int i = 0; i < passiveAbilities.Length; ++i)
         {
+            ATurretPassiveAbilityDataModel passiveAbility = passiveAbilities[i];
             CardPartBase passiveAbilityCard = Instantiate(_cardPartBasePrefab, transform);
-            passiveAbilityCard.SetTurretPassive(passiveAbilities[i]);
+            passiveAbilityCard.SetTurretPassive(passiveAbility);
             passiveAbilityCard.Init();
+            if (!_cardCollection.WasDiscovered(passiveAbility))
+            {
+                passiveAbilityCard.SetNotDiscovered();
+            }
             
             passiveAbilityCards[i] = passiveAbilityCard;
             passiveAbilityCardTransforms[i] = passiveAbilityCard.transform;
