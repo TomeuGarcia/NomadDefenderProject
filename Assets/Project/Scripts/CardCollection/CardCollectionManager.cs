@@ -12,6 +12,9 @@ public class CardCollectionManager : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private CardMotionConfig _cardMotionConfig;
     [SerializeField] private Button _backButton;
+
+    [Header("ANIMATIONS")] 
+    [SerializeField] private CardCollectionAnimations _animations;
     
     [Header("PROJECTILES")]
     [SerializeField] private CardCollectionPositioner _projectileCardsPositioner;
@@ -28,7 +31,8 @@ public class CardCollectionManager : MonoBehaviour
     private void Awake()
     {
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(_camera);
-        _cardMotionConfig.SetResultsScreenDisplayMode();
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_camera);
+        _cardMotionConfig.SetCardCollectionDisplayMode();
 
         InitProjectiles(_cardCollection.Projectiles, out Transform[] projectileCardTransforms);
         InitPassiveAbilities(_cardCollection.PassiveAbilities, out Transform[] passiveAbilityCardTransforms);
@@ -36,9 +40,9 @@ public class CardCollectionManager : MonoBehaviour
         
         _backButton.onClick.AddListener(SceneLoader.GetInstance().StartLoadMainMenu);
     }
+    
 
-    
-    
+
     private void InitProjectiles(TurretPartProjectileDataModel[] projectiles,
         out Transform[] projectileCardTransforms)
     {
@@ -100,6 +104,8 @@ public class CardCollectionManager : MonoBehaviour
         Transform[] passiveAbilityCardTransforms)
     {
         yield return new WaitForSeconds(1.0f);
+        _animations.PlayProjectiles();
+        
         yield return StartCoroutine(_projectileCardsPositioner.PositionCards(projectileCardTransforms));
         _projectilesGroup.StartCardsInteraction();
 

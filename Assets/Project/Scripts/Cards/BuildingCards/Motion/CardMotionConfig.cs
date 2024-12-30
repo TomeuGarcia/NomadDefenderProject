@@ -47,9 +47,12 @@ public class CardMotionConfig : ScriptableObject
 
     [Space(20)]
     [Header("ROTATION EFFECT")]
-    [SerializeField] private RotationEffect _idleRotationEffect;
+    [Header("Idle")]
+    [SerializeField] private RotationEffect _defaultIdleRotationEffect;
+    [SerializeField] private RotationEffect _cardCollectionIdleRotationEffect;
+    [Header("Hover")]
     [SerializeField] private RotationEffect _hoveredMouseRotationEffect;
-    public RotationEffect IdleRotationEffect => _idleRotationEffect;
+    public RotationEffect IdleRotationEffect { get; private set; }
     public RotationEffect HoveredMouseRotationEffect => _hoveredMouseRotationEffect;
 
 
@@ -68,24 +71,34 @@ public class CardMotionConfig : ScriptableObject
     [SerializeField] private CardStateDisplacements _upgradesDisplacements;
     [SerializeField] private CardStateDisplacements _tutorialDisplayDisplacements;
     [SerializeField] private CardStateDisplacements _resultsScreenDisplacements;
+    [SerializeField] private CardStateDisplacements _cardCollectionDisplacements;
     public CardStateDisplacements CurrentDisplacements { get; private set; }
 
 
     public void SetTDGameplayHandMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
         CurrentDisplacements = _gameplayHandDisplacements;
     }
     public void SetUpgradeSceneMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
         CurrentDisplacements = _upgradesDisplacements;
     }
     public void SetTutorialDisplayMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
         CurrentDisplacements = _tutorialDisplayDisplacements;
     }
     public void SetResultsScreenDisplayMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
         CurrentDisplacements = _resultsScreenDisplacements;
+    }
+    public void SetCardCollectionDisplayMode()
+    {
+        IdleRotationEffect = _cardCollectionIdleRotationEffect;
+        CurrentDisplacements = _cardCollectionDisplacements;
     }
 
 }
