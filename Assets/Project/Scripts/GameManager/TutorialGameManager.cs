@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project.Scripts.CardCollection.DataStorage;
 using UnityEngine;
 
 public class TutorialGameManager : GameManager
@@ -10,6 +11,7 @@ public class TutorialGameManager : GameManager
     [Header("Libraries")]
     [SerializeField] private CardDeckAsset starterDeck;
     [SerializeField] private UnlockableTrophyModel starterDeckTrophy;
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
     [SerializeField] private CardsLibrary cardLibrary;
     [SerializeField] private PartsLibrary partLibrary;
 
@@ -24,6 +26,7 @@ public class TutorialGameManager : GameManager
     protected override void DoAwake()
     {
         decksLibrary.SetStarterDeck(starterDeck, starterDeckTrophy);
+        CardCollectionDiscoverUtilities.DiscoverCardDeckProjectilesAndAbilities(_cardCollectionDataStorage, starterDeck);
         base.DoAwake();
     }
 

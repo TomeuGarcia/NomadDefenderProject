@@ -222,6 +222,7 @@ public class CardCollectionDataStorage : ScriptableObject
     private void CheckAllAreDiscovered()
     {
         // TODO check & play achievement
+        AchievementDefinitions.DiscoverAllProjectilesAndAbilities.Check(this);
     }
 
     private void ResetDiscoveries()
@@ -240,4 +241,26 @@ public class CardCollectionDataStorage : ScriptableObject
     }
 
 
+    public bool AllProjectilesDiscovered()
+    {
+        foreach (KeyValuePair<TurretPartProjectileDataModel,bool> discoveredProjectile in _discoveredProjectiles)
+        {
+            if (!discoveredProjectile.Value)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public bool AllPassiveAbilitiesDiscovered()
+    {
+        foreach (KeyValuePair<ATurretPassiveAbilityDataModel,bool> discoveredPassiveAbility in _discoveredPassiveAbilities)
+        {
+            if (!discoveredPassiveAbility.Value)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -564,4 +564,27 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     {
         return CardTooltipDisplayData.MakeForTurretCard(_descriptionTooltipPositioning, CardData);
     }
+
+
+
+    public void UpdateViewWithNotDiscoveredProjectileAndPassives(CardCollectionDataStorage cardCollection)
+    {
+        if (!cardCollection.WasDiscovered(CardParts.Projectile))
+        {
+            ProjectileIconDisplay.SetNotDiscovered();
+            CardData.CurrentProjectileDescription.SetNotDiscovered();
+        }
+
+        int numberOfPassiveAbilities = CardData.PassiveAbilitiesController.CurrentNumberOfPassives;
+        TurretIconCanvasDisplay[] passivesIconDisplays = PassivesIconDisplays; 
+        for (int i = 0; i < numberOfPassiveAbilities; ++i)
+        {
+            ATurretPassiveAbility passiveAbility = CardData.PassiveAbilitiesController.PassiveAbilities[i];
+            if (!cardCollection.WasDiscovered(passiveAbility.OriginalModel))
+            {
+                passivesIconDisplays[i].SetNotDiscovered();
+                passiveAbility.AbilityDescription.SetNotDiscovered();
+            }
+        }
+    }
 }

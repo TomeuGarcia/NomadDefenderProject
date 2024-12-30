@@ -19,6 +19,7 @@ public class TurretIconCanvasDisplay : MonoBehaviour
     [SerializeField] private GameObject _holder;
     [SerializeField] private Image _iconImage;
     [SerializeField] private Image _borderImage;
+    [SerializeField] private GameObject _notDiscoveredView;
 
 
     public void Init(ConfigData configData)
@@ -26,6 +27,7 @@ public class TurretIconCanvasDisplay : MonoBehaviour
         _holder.SetActive(true);
         _iconImage.sprite = configData.ImageSprite;
         _iconImage.color = configData.ImageColor;
+        _notDiscoveredView.SetActive(false);
     }
     private void InitHidden()
     {
@@ -66,5 +68,10 @@ public class TurretIconCanvasDisplay : MonoBehaviour
         {
             iconDisplays[i].InitHidden();
         }
+    }
+
+    public void SetNotDiscovered()
+    {
+        _notDiscoveredView.SetActive(true);
     }
 }

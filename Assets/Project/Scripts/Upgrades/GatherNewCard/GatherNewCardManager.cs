@@ -2,6 +2,7 @@ using DG.Tweening;
 using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Scripts.CardCollection.DataStorage;
 using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class GatherNewCardManager : MonoBehaviour
 
     [Header("UPGRADE SETUP")]
     [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
 
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
@@ -103,6 +105,7 @@ public class GatherNewCardManager : MonoBehaviour
             
             int levelIncrement = Mathf.Max(0, turretCardsLevel - turretCardPartsSet[i].CardLevel);
             turretCard.IncrementCardLevel(levelIncrement);
+            turretCard.UpdateViewWithNotDiscoveredProjectileAndPassives(_cardCollectionDataStorage);
 
             cards[i] = turretCard;
         }
@@ -369,6 +372,13 @@ public class GatherNewCardManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
+        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            DiscoverGatheredCardProjectileAndPassives(selectedCard as TurretBuildingCard);
+        }
+        
+        
+        
         Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
         selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
         selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 1.5f);
@@ -394,5 +404,11 @@ public class GatherNewCardManager : MonoBehaviour
             textLine.text = text;
             consoleDialog.PrintLine(textLine);
         
+    }
+
+
+    private void DiscoverGatheredCardProjectileAndPassives(TurretBuildingCard turretCard)
+    {
+        CardCollectionDiscoverUtilities.DiscoverTurretCardProjectilesAndAbilities(_cardCollectionDataStorage, turretCard);
     }
 }

@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Project.Scripts.CardCollection.DataStorage;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class DeckSelector : MonoBehaviour
 {
     [Header("DECK LIBRARY")]
     [SerializeField] private DecksLibrary deckLibrary;
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
 
     [Header("CONFIGURATION")]
     [SerializeField] private DeckSelectorVisuals deckSelectorVisuals;
@@ -134,7 +136,7 @@ public class DeckSelector : MonoBehaviour
         yield return StartCoroutine(currentlySelectedDeck.ArrangeCardsFromLast(0.25f, 0.1f, selectedArrangeCardsData, selectedDeckHolder, true));
 
         currentlySelectedDeck.EnableCardsMouseInteraction();
-
+        TryDiscoverCurrentlySelectedDeckProjectilesAndAbilities();
 
         foreach (var selectableDeckIt in selectableDecks)
         {
@@ -222,4 +224,12 @@ public class DeckSelector : MonoBehaviour
         }
     }
 
+
+    private void TryDiscoverCurrentlySelectedDeckProjectilesAndAbilities()
+    {
+        CardCollectionDiscoverUtilities.DiscoverCardDeckProjectilesAndAbilities(_cardCollectionDataStorage, 
+            currentlySelectedDeck.Deck);
+
+    }
+    
 }
