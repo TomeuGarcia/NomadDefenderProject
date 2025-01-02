@@ -8,6 +8,7 @@ public class FacilityManager : MonoBehaviour
 {
     [Header("SCENE REFERENCES")]
     [SerializeField] private FacilityPointAndClickManager _facilityPointAndClick;
+    [SerializeField] private FICardCollectionButton _cardCollectionButton;
     [SerializeField] private List<AFacilityInteractable> _startOnInteractables = new();
 
     private CursorChanger _cursorChanger;
@@ -41,6 +42,9 @@ public class FacilityManager : MonoBehaviour
                 StartWithOpenSetup();
             }
         }
+
+        bool showCardCollection = !ServiceLocator.GetInstance().RunInfo.IsNewGame;
+        _cardCollectionButton.Init(showCardCollection, this);
     }
 
     private void OnDestroy()
@@ -74,6 +78,11 @@ public class FacilityManager : MonoBehaviour
         else {
             SceneLoader.GetInstance().LoadDeckSelector();
         }
+    }
+
+    public void TransitionToCardCollection()
+    {
+        SceneLoader.GetInstance().StartLoadFacilityCardCollection();
     }
 
     private void StartWithOpenSetup()

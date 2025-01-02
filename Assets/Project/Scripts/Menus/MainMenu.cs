@@ -227,15 +227,7 @@ public class MainMenu : MonoBehaviour
 
         PauseMenu.GetInstance().MainMenuOptions();
     }
-
-    public void CardCollection()
-    {
-        if (!canInteract) return;
-
-        //canInteract = false;
-
-        SceneLoader.GetInstance().StartLoadMainMenuCardCollection();
-    }
+    
     
 
     public void Title()

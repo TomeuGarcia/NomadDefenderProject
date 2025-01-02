@@ -152,6 +152,7 @@ public class PauseMenu : MonoBehaviour
         textManager.ResetTexts();
 
         SceneLoader.GetInstance().StartLoadMainMenu();
+        pauseMenuUI.SetActive(false);
     }
 
     public void HideUI()

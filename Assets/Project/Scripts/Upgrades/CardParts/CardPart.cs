@@ -208,13 +208,11 @@ public abstract class CardPart : MonoBehaviour
     {
         if (cardState == CardPartStates.HOVERED)
         {
-            Debug.Log("f");
             _motionEffectsController.FinishHoverMotion();
         }
 
         if (newCardState == CardPartStates.HOVERED)
         {
-            Debug.Log("s");
             _motionEffectsController.StartHoverMotion();
         }
 
