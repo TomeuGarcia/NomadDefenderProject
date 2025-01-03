@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,6 +76,10 @@ public class CardMotionConfig : ScriptableObject
     [SerializeField] private CardStateDisplacements _cardCollectionDisplacements;
     public CardStateDisplacements CurrentDisplacements { get; private set; }
 
+    private void OnEnable()
+    {
+        SetTutorialDisplayMode();
+    }
 
     public void SetTDGameplayHandMode()
     {

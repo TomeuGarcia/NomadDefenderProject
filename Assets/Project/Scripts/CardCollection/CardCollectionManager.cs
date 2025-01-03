@@ -117,7 +117,7 @@ public class CardCollectionManager : MonoBehaviour
         int discoveredProjectilesCount, int totalProjectiles,
         int discoveredPassivesCount, int totalPassives)
     {
-        float totalDiscovered = Mathf.Max(1, discoveredProjectilesCount + discoveredPassivesCount);
+        float totalDiscovered = Mathf.Max(0, discoveredProjectilesCount + discoveredPassivesCount);
         float totalCount = Mathf.Max(1, totalProjectiles + totalPassives);
         int percent = Mathf.RoundToInt((totalDiscovered / totalCount) * 100);
         

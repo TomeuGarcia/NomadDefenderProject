@@ -99,6 +99,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.finishRedrawSetup = false;
 
         _placedBuildingsCounter = 0;
+        _cardsMotionConfig.SetTutorialDisplayMode();
     }
 
     void Start()
@@ -178,8 +179,6 @@ public class BattleTutorialManager : MonoBehaviour
     
     IEnumerator Tutorial()
     {
-        _cardsMotionConfig.SetTutorialDisplayMode();
-
         yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine(); //0
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );

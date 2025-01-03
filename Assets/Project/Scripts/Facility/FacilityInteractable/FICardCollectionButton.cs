@@ -24,11 +24,10 @@ public class FICardCollectionButton : AFacilityInteractable
     protected override IEnumerator DoInteract()
     {
         Destroy(_caller);
-        _facilityManager.TransitionToCardCollection();
-        
         GameAudioManager.GetInstance().PlayCardSelected();
+        yield return new WaitForSeconds(0.3f);
         
-        yield return null;
+        _facilityManager.TransitionToCardCollection();        
     }
 
     public override void Hovered()

@@ -297,7 +297,7 @@ public class OverworldCardShower : MonoBehaviour
             
             cards[i].cardLocation = BuildingCard.CardLocation.DECK;
 
-            cards[i].RootCardTransform.DOLocalMove(cardsEndPositions[i], cardMoveDuration).SetEase(Ease.OutQuart);
+            cards[i].RootCardTransform.DOMove(cardsEndPositions[i], cardMoveDuration).SetEase(Ease.OutQuart);
 
             cardMoveDelay *= 0.98f;
             cardMoveDuration *= 0.98f;
