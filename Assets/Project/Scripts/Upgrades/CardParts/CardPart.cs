@@ -26,9 +26,10 @@ public abstract class CardPart : MonoBehaviour
     private Vector3 cardColliderOffset;
     [SerializeField] private Transform cardHolder;
 
-    [Header("VISUALS")]
+    [Header("VISUALS")] 
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
 
+    
     [Header("CARD INFO")]
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;

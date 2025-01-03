@@ -1,10 +1,10 @@
-public class ProjectileTargetingController
+public class DefaultProjectileTargetingController : IProjectileTargetingController
 {
     private readonly RangeBuilding _ownerBuilding;
     public Enemy TargetedEnemy { get; private set; }
 
 
-    public ProjectileTargetingController(RangeBuilding ownerBuilding)
+    public DefaultProjectileTargetingController(RangeBuilding ownerBuilding)
     {
         _ownerBuilding = ownerBuilding;
         TargetedEnemy = null;

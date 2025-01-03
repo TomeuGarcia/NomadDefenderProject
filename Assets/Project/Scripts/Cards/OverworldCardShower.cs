@@ -45,10 +45,7 @@ public class OverworldCardShower : MonoBehaviour
 
     Dictionary<BuildingCard, Vector3> positions;
 
-    private void Awake()
-    {
-        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
-    }
+
 
     void Start()
     {
@@ -99,6 +96,8 @@ public class OverworldCardShower : MonoBehaviour
 
     private void Init()
     {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
+
         showDeckButton.gameObject.SetActive(true);
         backToMapButton.gameObject.SetActive(false);
 

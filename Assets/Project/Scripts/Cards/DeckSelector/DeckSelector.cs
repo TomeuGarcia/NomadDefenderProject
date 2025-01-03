@@ -26,6 +26,7 @@ public class DeckSelector : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Button startSimulationButton;
     [SerializeField] private Light _startButtonLight;
+    [SerializeField] private ParticleSystem _startButtonParticles;
     private float _startButtonLightIntensity;
     [SerializeField] private MeshRenderer runButtonMesh;
     [SerializeField] private MeshRenderer runInnerButtonMesh;
@@ -166,6 +167,8 @@ public class DeckSelector : MonoBehaviour
     {
         startSimulationButton.enabled = false;
 
+        _startButtonParticles.Play();
+        
         runInnerButtonMesh.transform.DOBlendableLocalMoveBy(Vector3.down * 0.3f, 0.25f);
         startSimulationButton.transform.DOBlendableLocalMoveBy(Vector3.forward * 6.0f, 0.25f);
 

@@ -52,8 +52,9 @@ public class CardMotionConfig : ScriptableObject
     [SerializeField] private RotationEffect _cardCollectionIdleRotationEffect;
     [Header("Hover")]
     [SerializeField] private RotationEffect _hoveredMouseRotationEffect;
+    [SerializeField] private RotationEffect _hoveredGatherNewCardRotationEffect;
     public RotationEffect IdleRotationEffect { get; private set; }
-    public RotationEffect HoveredMouseRotationEffect => _hoveredMouseRotationEffect;
+    public RotationEffect HoveredMouseRotationEffect { get; private set; }
 
 
 
@@ -78,26 +79,37 @@ public class CardMotionConfig : ScriptableObject
     public void SetTDGameplayHandMode()
     {
         IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _gameplayHandDisplacements;
     }
     public void SetUpgradeSceneMode()
     {
         IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _upgradesDisplacements;
     }
     public void SetTutorialDisplayMode()
     {
         IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _tutorialDisplayDisplacements;
     }
     public void SetResultsScreenDisplayMode()
     {
         IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _resultsScreenDisplacements;
     }
     public void SetCardCollectionDisplayMode()
     {
         IdleRotationEffect = _cardCollectionIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
+        CurrentDisplacements = _cardCollectionDisplacements;
+    }
+    public void SetGatherCardDisplayMode()
+    {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredGatherNewCardRotationEffect;
         CurrentDisplacements = _cardCollectionDisplacements;
     }
 

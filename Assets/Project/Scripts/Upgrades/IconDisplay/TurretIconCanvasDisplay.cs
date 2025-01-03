@@ -27,7 +27,10 @@ public class TurretIconCanvasDisplay : MonoBehaviour
         _holder.SetActive(true);
         _iconImage.sprite = configData.ImageSprite;
         _iconImage.color = configData.ImageColor;
-        _notDiscoveredView.SetActive(false);
+        if (_notDiscoveredView != null)
+        {
+            _notDiscoveredView.SetActive(false);
+        }
     }
     private void InitHidden()
     {

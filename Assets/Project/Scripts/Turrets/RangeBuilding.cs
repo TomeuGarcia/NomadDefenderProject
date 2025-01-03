@@ -183,11 +183,7 @@ public abstract class RangeBuilding : Building
         float enemy2Value = e2.PathFollower.DistanceLeftToEnd + e2.GetTargetPriorityBonus();
         return enemy1Value.CompareTo(enemy2Value);
     }
-
-    public void SetEnemySortFunction(EnemySortFunction newEnemySortFunction)
-    {
-        enemySortFunction = newEnemySortFunction;
-    }
+    
     public void ResetEnemySortFunction()
     {
         enemySortFunction = SortByDistanceLeftToEnd;

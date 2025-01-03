@@ -156,6 +156,16 @@ public class TurretBuilding : RangeBuilding
         _shootingController = MakeShootingController(ProjectileDataModel);
     }
 
+    public void SetNewTargetingController(IProjectileTargetingController targetingController)
+    {
+        ProjectileShootingController_EnemyRequired shootingControllerEnemyRequired =
+            _shootingController as ProjectileShootingController_EnemyRequired;
+        if (shootingControllerEnemyRequired != null)
+        {
+            shootingControllerEnemyRequired.SetTargetingController(targetingController);
+        }
+    }
+
     public AProjectileShootingController MakeShootingController(TurretPartProjectileDataModel projectileDataModel)
     {
         return projectileDataModel.ShootingControllerCreator.Create(

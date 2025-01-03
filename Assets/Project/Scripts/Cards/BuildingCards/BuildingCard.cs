@@ -93,6 +93,7 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private GameObject _viewHolder;
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] private MeshRenderer discardIndicatorMesh;
+    
     protected Material cardMaterial;
     protected Material discardIndicatorMaterial;
 

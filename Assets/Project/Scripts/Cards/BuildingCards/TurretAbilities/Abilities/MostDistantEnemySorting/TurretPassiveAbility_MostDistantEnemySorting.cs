@@ -4,7 +4,6 @@ public class TurretPassiveAbility_MostDistantEnemySorting : ATurretPassiveAbilit
 {
     private TurretBuilding _turretOwner;
     
-    
     public TurretPassiveAbility_MostDistantEnemySorting(ATurretPassiveAbilityDataModel originalModel) 
         : base(originalModel)
     {
@@ -13,22 +12,10 @@ public class TurretPassiveAbility_MostDistantEnemySorting : ATurretPassiveAbilit
     public override void OnTurretCreated(TurretBuilding turretOwner)
     {
         _turretOwner = turretOwner;
-        _turretOwner.SetEnemySortFunction(SortEnemiesPrioritizingMostDistant);
     }
 
-    private int SortEnemiesPrioritizingMostDistant(Enemy e1, Enemy e2)
+    protected override void OnTurretPlaced()
     {
-        Vector3 turretPosition = _turretOwner.Position;
-        
-        float distanceE1 = Vector3.Distance(e1.Position, turretPosition);
-        distanceE1 += e1.GetTargetPriorityBonus();
-
-        float distanceE2 = Vector3.Distance(e2.Position, turretPosition);
-        distanceE2 += e2.GetTargetPriorityBonus();
-
-        return distanceE1.CompareTo(distanceE2);
+        _turretOwner.SetNewTargetingController(new FurthestEnemyProjectileTargetingController(_turretOwner));
     }
-
-
-    
 }

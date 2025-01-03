@@ -5,18 +5,22 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
 {
     private readonly TurretStatsSnapshot _stats;
     private float _shootTimer;
-    private readonly ProjectileTargetingController _targetingController;
+    private IProjectileTargetingController _targetingController;
     
     public ProjectileShootingController_EnemyRequired(CreateData createData)
         : base(createData)
     {
         _stats = createData.Stats;
-        _targetingController = new ProjectileTargetingController(createData.TurretOwner);
+        SetTargetingController(new DefaultProjectileTargetingController(createData.TurretOwner));
         
         TimeSinceLastShot = 0;
         _shootTimer = _stats.ShotsPerSecondInverted;
     }
 
+    public void SetTargetingController(IProjectileTargetingController newTargetingController)
+    {
+        _targetingController = newTargetingController;
+    }
 
     public override void UpdateShoot()
     {
