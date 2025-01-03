@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,16 +22,19 @@ public class TurretIconCanvasDisplay : MonoBehaviour
     [SerializeField] private Image _borderImage;
     [SerializeField] private GameObject _notDiscoveredView;
 
+    private void Awake()
+    {
+        if (_notDiscoveredView != null)
+        {
+            _notDiscoveredView.SetActive(false);
+        }
+    }
 
     public void Init(ConfigData configData)
     {
         _holder.SetActive(true);
         _iconImage.sprite = configData.ImageSprite;
         _iconImage.color = configData.ImageColor;
-        if (_notDiscoveredView != null)
-        {
-            _notDiscoveredView.SetActive(false);
-        }
     }
     private void InitHidden()
     {
