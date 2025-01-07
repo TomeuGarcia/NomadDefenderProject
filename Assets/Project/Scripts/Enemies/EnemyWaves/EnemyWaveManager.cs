@@ -115,6 +115,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
+    public static event EnemyWaveManagerAction OnAllWavesFinishedEnd;
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
     public static event EnemyWaveManagerAction OnStartFirstWaves;
@@ -366,6 +367,8 @@ public class EnemyWaveManager : MonoBehaviour
         
         if (OnAllWavesFinished != null) OnAllWavesFinished();
 
+        yield return null;
+        OnAllWavesFinishedEnd?.Invoke();
         yield return new WaitForSeconds(2.5f);
 
         PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);

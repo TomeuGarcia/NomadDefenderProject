@@ -10,7 +10,7 @@ public class OWMapTutorialManager : MonoBehaviour
     //Get Scripted Sequence
     [SerializeField] private ScriptedSequence scriptedSequence;
 
-    [SerializeField] private GameObject mapHolder;
+    [SerializeField] private GameObject _cardShower;
 
     [SerializeField] private OverworldMapGameManager owMapGameManager;
 
@@ -236,6 +236,7 @@ public class OWMapTutorialManager : MonoBehaviour
             node.ReenableMouseCollider();
         }
 
+        _cardShower.SetActive(true);
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);

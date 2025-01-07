@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +14,11 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private Slider _musicSlider;
     [SerializeField] private Slider _sfxSlider;
 
+    [SerializeField] private ScreenOptionsController _screenOptionsController;
+    
+    private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Settings/";
+    private string FileName => "Options.json";
+    
 
     public void Init()
     {
@@ -19,13 +26,29 @@ public class OptionsMenu : MonoBehaviour
         _musicSlider.onValueChanged.AddListener(SetMusicMixerVolume);
         _sfxSlider.onValueChanged.AddListener(SetSFXMixerVolume);
 
-        _masterSoundSlider.value = 1f;
-        _musicSlider.value = 0.8f;
-        _sfxSlider.value = 0.8f;
+
+        LoadOptions(
+            out float masterSoundSliderValue,
+            out float musicSoundSliderValue,
+            out float sfxSoundSliderValue,
+            out bool fullScreen
+            );
+
+        
+        _masterSoundSlider.value = masterSoundSliderValue;
+        _musicSlider.value = musicSoundSliderValue;
+        _sfxSlider.value = sfxSoundSliderValue;
+        
+        _screenOptionsController.Init(fullScreen);
 
         SetMasterMixerVolume(_masterSoundSlider.value);
         SetMusicMixerVolume(_musicSlider.value);
         SetSFXMixerVolume(_sfxSlider.value);
+    }
+
+    private void OnDestroy()
+    {
+        SaveOptions();
     }
 
     public void Show()
@@ -53,4 +76,66 @@ public class OptionsMenu : MonoBehaviour
     }
 
 
+    
+    
+    
+    
+    [System.Serializable]
+    private class SaveDataWrapper
+    {
+        [SerializeField] public float MasterSoundVolume = 1.0f;
+        [SerializeField] public float MusicSoundVolume = 1.0f;
+        [SerializeField] public float SFXSoundVolume = 1.0f;
+        [SerializeField] public bool FullScreen = true;
+
+        public SaveDataWrapper(float masterSoundVolume, float musicSoundVolume, float sfxSoundVolume, bool fullScreen)
+        {
+            MasterSoundVolume = masterSoundVolume;
+            MusicSoundVolume = musicSoundVolume;
+            SFXSoundVolume = sfxSoundVolume;
+            FullScreen = fullScreen;
+        }
+    }
+    
+
+    private void LoadOptions(
+        out float masterSoundSliderValue, 
+        out float musicSoundSliderValue, 
+        out float sfxSoundSliderValue, 
+        out bool fullScreen 
+        )
+    {
+        CheckFile();
+
+        string storedContent = File.ReadAllText(PathToFile + FileName);
+        SaveDataWrapper storedData = JsonUtility.FromJson<SaveDataWrapper>(storedContent);
+
+        masterSoundSliderValue = storedData.MasterSoundVolume;
+        musicSoundSliderValue = storedData.MusicSoundVolume;
+        sfxSoundSliderValue = storedData.SFXSoundVolume;
+        fullScreen = storedData.FullScreen;
+    }
+
+    private void SaveOptions()
+    {
+        SaveDataWrapper dataToStore = new SaveDataWrapper(
+            _masterSoundSlider.value,
+            _musicSlider.value,
+            _sfxSlider.value,
+            _screenOptionsController.IsCurrentlyFullscreen
+            );
+            
+        string contentToStore = JsonUtility.ToJson(dataToStore);
+        File.WriteAllText(PathToFile + FileName, contentToStore);
+    }
+    
+    private void CheckFile()
+    {
+        string directory = PathToFile;
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+            SaveOptions();
+        }
+    }
 }

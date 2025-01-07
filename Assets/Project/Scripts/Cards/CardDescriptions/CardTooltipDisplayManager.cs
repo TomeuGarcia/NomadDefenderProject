@@ -45,6 +45,7 @@ public class CardTooltipDisplayManager : MonoBehaviour
     
     public void StartDisplayingTooltip(ICardTooltipSource descriptionProvider)
     {
+        StopDisplayingTooltip();
         CardTooltipDisplayData displayData = descriptionProvider.MakeTooltipDisplayData();
             
         MakeTooltipContentsForAbilitiesAndKeywords(displayData.Elements,
