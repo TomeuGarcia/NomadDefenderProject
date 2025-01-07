@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
@@ -33,6 +34,11 @@ public class EnemyWaveManager : MonoBehaviour
             WaveDisplayer.Init(_startNode, _enemyWaveSpawner, enemiesInWaveDisplayUI, _mouseOverNotifier);
         }
 
+        public void MergeWaveDisplayer(EnemyWaveSpawner overlappingEnemyWaveSpawner)
+        {
+            WaveDisplayer.Merge(overlappingEnemyWaveSpawner);
+        }
+        
         public void SetActiveWaveCoroutine(Coroutine activeWaveCoroutine)
         {
             ActiveWaveCoroutine = activeWaveCoroutine;
@@ -130,23 +136,31 @@ public class EnemyWaveManager : MonoBehaviour
         //canvas.SetActive(false);
         _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
         activeWaves = _pathsStartData.Length;
-        
-        
+
+        Dictionary<PathNode, PathStartData> repeatedStartPathNodes = new(_pathsStartData.Length);
+
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
+            
+            if (repeatedStartPathNodes.TryGetValue(startPathNode, out PathStartData firstPathStartData))
+            {
+                firstPathStartData.MergeWaveDisplayer(pathStartData.EnemyWaveSpawner);
+                continue;
+            }
 
             MouseOverlapNotifier enemySpawnMouseOverNotifier =
                 Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform);
 
             pathStartData.InitNodePathViewer(
-                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier
-            );
-
-            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform), 
-                EnemiesInWaveDisplayUI.Instance);
+                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier);
+                
+            pathStartData.InitWaveDisplayer(
+                Instantiate(enemyWaveInfoPrefab, startPathNode.transform), EnemiesInWaveDisplayUI.Instance);
+                
+            repeatedStartPathNodes.Add(startPathNode, pathStartData);
         }
 
         

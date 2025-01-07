@@ -15,7 +15,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
     private float showHideDuration = 0.5f;
 
-    private EnemyWaveSpawner enemyWaveSpawner;
+    private List<EnemyWaveSpawner> _overlappingEnemyWaveSpawners;
     int numberOfEnemiesToSpawn = 0;
 
     private EnemiesInWaveDisplayUI _enemiesInWaveDisplayUI;
@@ -28,8 +28,12 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     
     private void OnDestroy()
     {
-        enemyWaveSpawner.OnWaveStartSpawning -= OnWaveStartSpawning;
-        enemyWaveSpawner.OnEnemyFromWaveSpawned -= OnWaveSpawnsEnemy;
+        foreach (EnemyWaveSpawner overlappedEnemyWaveSpawner in _overlappingEnemyWaveSpawners)
+        {
+            overlappedEnemyWaveSpawner.OnWaveStartSpawning -= OnWaveStartSpawning;
+            overlappedEnemyWaveSpawner.OnEnemyFromWaveSpawned -= OnWaveSpawnsEnemy;
+        }
+
 
         _mouseOverNotifier.OnMouseEntered -= ShowDisplayUI;
         _mouseOverNotifier.OnMouseExited -= HideDisplayUI;
@@ -43,7 +47,7 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         _enemiesInWaveDisplayUI = enemiesInWaveDisplayUI;
         transform.position = pathNode.Position + Vector3.up * 1.2f;
 
-        this.enemyWaveSpawner = enemyWaveSpawner;
+        _overlappingEnemyWaveSpawners = new List<EnemyWaveSpawner>() { enemyWaveSpawner };
         SetupForNewEnemyWave();
 
         canvasHolder.DOBlendableMoveBy(Vector3.up * 0.3f, 3f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
@@ -62,6 +66,14 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         _mouseHoverViewToggle.SetActive(false);
     }
 
+    public void Merge(EnemyWaveSpawner overlappingEnemyWaveSpawner)
+    {
+        _overlappingEnemyWaveSpawners.Add(overlappingEnemyWaveSpawner);
+        
+        overlappingEnemyWaveSpawner.OnWaveStartSpawning += OnWaveStartSpawning;
+        overlappingEnemyWaveSpawner.OnEnemyFromWaveSpawned += OnWaveSpawnsEnemy;
+    }
+
 
     private void SetNumberOfEnemiesText(int numberOfEnemies)
     {
@@ -71,8 +83,12 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     
     private async void SetupForNewEnemyWave()
     {
-        numberOfEnemiesToSpawn = enemyWaveSpawner.CurrentEnemyWave.GetEnemyCount();
-
+        numberOfEnemiesToSpawn = 0;
+        foreach (EnemyWaveSpawner overlappingEnemyWaveSpawner in _overlappingEnemyWaveSpawners)
+        {
+            numberOfEnemiesToSpawn += overlappingEnemyWaveSpawner.CurrentEnemyWave.GetEnemyCount();
+        }
+        
         int total = numberOfEnemiesToSpawn;
 
 
@@ -142,7 +158,14 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
 
     private void InitEnemiesDisplayDataUI()
     {
-        EnemyInWave[] enemiesInWave = enemyWaveSpawner.CurrentEnemyWave.enemiesInWave;
+        List<EnemyInWave> enemiesInWave = new List<EnemyInWave>(numberOfEnemiesToSpawn);
+        
+        foreach (EnemyWaveSpawner overlappingEnemyWaveSpawner in _overlappingEnemyWaveSpawners)
+        {
+            enemiesInWave.AddRange(overlappingEnemyWaveSpawner.CurrentEnemyWave.enemiesInWave);
+        }
+        
+        
         Dictionary<EnemyTypeConfig, (int, bool)> groupedEnemiesInWave = new();
         foreach (EnemyInWave enemyInWave in enemiesInWave)
         {
@@ -180,11 +203,8 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     
     private void ShowDisplayUI()
     {
-        if (!NoEnemiesLeft())
-        {
-            _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
-            _mouseHoverViewToggle.SetActive(true);
-        }
+        _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
+        _mouseHoverViewToggle.SetActive(true);
     }
 
     private void HideDisplayUI()
