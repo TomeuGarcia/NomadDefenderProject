@@ -22,6 +22,12 @@ public class CardSlotGlassTube : MachineMovablePart
         yield return null;
     }
 
+    public IEnumerator ReplaceAnimation()
+    {
+        _glassTube.DOLocalMoveY(0.0f, _openTubeConfig.Duration).SetEase(_openTubeConfig.Ease);
+        yield return null;
+    }
+
     public override IEnumerator ExitAnimation()
     {
         yield return null;

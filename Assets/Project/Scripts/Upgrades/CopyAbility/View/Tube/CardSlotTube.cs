@@ -41,6 +41,12 @@ public class CardSlotTube : MachineMovablePart
         StartCoroutine(_glassTube.EnterAnimation());
     }
 
+    public IEnumerator ReplaceAnimation()
+    {
+        StartCoroutine(_glassTube.ReplaceAnimation());
+        yield return null;
+    }
+
     public override IEnumerator ExitAnimation()
     {
         yield return null;
