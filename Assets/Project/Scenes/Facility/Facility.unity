@@ -595,6 +595,7 @@ Transform:
   - {fileID: 1551169561}
   - {fileID: 1215463714}
   - {fileID: 147437257}
+  - {fileID: 1858552668}
   m_Father: {fileID: 2098777982}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2198,6 +2199,7 @@ MonoBehaviour:
   - TextList:
     - {fileID: 2141283958}
     TimeToActivate: 0.3
+  _cardCollection: {fileID: 2134650190}
   _computerButtonAudio: {fileID: 202292065}
   _computerStartupAudio: {fileID: 612243832}
   _computerNoiseStartupAudio: {fileID: 1749322710}
@@ -15834,11 +15836,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858552667}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.003, y: -0.056, z: 0.19}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.036035866, y: -1.2805977, z: 0.5405393}
+  m_LocalScale: {x: 12.012009, y: 20, z: 18.018015}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2134650189}
+  m_Father: {fileID: 64898389}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1858552669
@@ -23774,7 +23776,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2098777982}
-  - {fileID: 1858552668}
   - {fileID: 2051018861}
   - {fileID: 107430160}
   - {fileID: 351765782}
@@ -23798,6 +23799,8 @@ MonoBehaviour:
   _caller: {fileID: 1551169562}
   _text: {fileID: 1215463715}
   _textColorHovered: {r: 0, g: 0.40392157, b: 0.47058824, a: 1}
+  _screenParent: {fileID: 64898388}
+  _interactableCollider: {fileID: 1551169563}
 --- !u!1 &2138478414
 GameObject:
   m_ObjectHideFlags: 0
