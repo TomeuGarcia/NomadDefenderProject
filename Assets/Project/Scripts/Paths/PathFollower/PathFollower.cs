@@ -68,7 +68,7 @@ public class PathFollower : MonoBehaviour
         finished = false;
         Paused = false;
 
-        TravelledDistance = 0.0f;
+        TravelledDistance = totalDistanceToTravel * startToEndT;
         this.totalDistanceToTravel = totalDistanceToTravel;
 
         this.positionOffset = positionOffset;
@@ -82,7 +82,10 @@ public class PathFollower : MonoBehaviour
         distanceStartToEnd = (currentEndPosition - currentStartPosition).magnitude;
         step = moveSpeed / distanceStartToEnd;
 
-
+        ComputePositioning(out Vector3 currentPosition, out Quaternion currentRotation);
+        _rigidbodyToMove.transform.position = currentPosition;
+        _rigidbodyToMove.transform.rotation = currentRotation;
+        
         if (OnPathFollowStart != null) OnPathFollowStart();
     }
 
@@ -146,17 +149,21 @@ public class PathFollower : MonoBehaviour
         TravelledDistance += iterationStep * distanceStartToEnd;
 
         _startToEndT = Mathf.Clamp01(_startToEndT + iterationStep);
-        Vector3 currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, _startToEndT);
-
-        bool isLookingTowardsMoveDirection = Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f;
-        Quaternion currentRotation = isLookingTowardsMoveDirection
-            ? _targetRotation
-            : Quaternion.RotateTowards(_rigidbodyToMove.rotation, _targetRotation, _rotationSpeed * GameTime.DeltaTime);
-
-
+        
+        ComputePositioning(out Vector3 currentPosition, out Quaternion currentRotation);
         _rigidbodyToMove.Move(currentPosition, currentRotation);
     }
 
+    private void ComputePositioning(out Vector3 currentPosition, out Quaternion currentRotation)
+    {
+        currentPosition = Vector3.LerpUnclamped(currentStartPosition, currentEndPosition, _startToEndT);
+
+        bool isLookingTowardsMoveDirection = Vector3.Dot(_rigidbodyToMove.transform.forward, MoveDirection) > 0.98f;
+        currentRotation = isLookingTowardsMoveDirection
+            ? _targetRotation
+            : Quaternion.RotateTowards(_rigidbodyToMove.rotation, _targetRotation, _rotationSpeed * GameTime.DeltaTime);
+    }
+    
 
     private void UpdateTarget(PathNode newTargetNode, Vector3 targetDirection)
     {

@@ -8,20 +8,29 @@ public class ResultsScreenView : MonoBehaviour
     {
         public Camera Camera { get; }
         public GameObject MostKillsCard { get; }
+        public int MostKillsCardCount { get; }
         public GameObject MostDamageCard { get; }
+        public int MostDamageCardCount { get; }
         public bool MostKillsAndDamageAreTheSame { get; }
         public GameObject MostDamagingEnemy { get; }
+        public int MostDamagingEnemyCount { get; }
         public bool ExistsMostDamagingEnemy { get; }
 
         public InitData(Camera camera,
-            GameObject mostKillsCard, GameObject mostDamageCard, bool mostKillsAndDamageAreTheSame,
-            GameObject mostDamagingEnemy, bool existsMostDamagingEnemy)
+            GameObject mostKillsCard, int mostKillsCardCount, 
+            GameObject mostDamageCard, int mostDamageCardCount, 
+            bool mostKillsAndDamageAreTheSame,
+            GameObject mostDamagingEnemy, int mostDamagingEnemyCount, 
+            bool existsMostDamagingEnemy)
         {
             Camera = camera;
             MostKillsCard = mostKillsCard;
+            MostKillsCardCount = mostKillsCardCount;
             MostDamageCard = mostDamageCard;
+            MostDamageCardCount = mostDamageCardCount;
             MostKillsAndDamageAreTheSame = mostKillsAndDamageAreTheSame;
             MostDamagingEnemy = mostDamagingEnemy;
+            MostDamagingEnemyCount = mostDamagingEnemyCount;
             ExistsMostDamagingEnemy = existsMostDamagingEnemy;
         }
     }
@@ -151,17 +160,23 @@ public class ResultsScreenView : MonoBehaviour
         {
             _mostKillsCardScreenPreviewer.InitToNotShow();
             _mostDamageCardScreenPreviewer.InitToNotShow();
-            _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
+
+            string extraTextMostKillsAndDamage = 
+                initData.MostKillsCardCount.ToString() + " & " + initData.MostDamageCardCount.ToString();
+            _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKillsAndDamage);
         }
         else
         {
-            _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
-            _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard);
+            string extraTextMostKills = initData.MostKillsCardCount.ToString();
+            string extraTextMostDamage = initData.MostDamageCardCount.ToString();
+            _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKills);
+            _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard, extraTextMostDamage);
             InitCard(initData.MostKillsCard);
             InitCard(initData.MostDamageCard);
         }
         
-        _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy);
+        string extraTextMostDamagingEnemy =  initData.ExistsMostDamagingEnemy ? initData.MostDamagingEnemyCount.ToString() : "";
+        _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy, extraTextMostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
         

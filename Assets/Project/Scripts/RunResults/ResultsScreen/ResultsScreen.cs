@@ -130,10 +130,11 @@ public class ResultsScreen : MonoBehaviour
         
         ResultsScreenView.InitData viewInitData = new ResultsScreenView.InitData(
             _camera, 
-            mostKillsTurretCardObject.gameObject,
-            mostDamageTurretCardObject.gameObject,
+            mostKillsTurretCardObject.gameObject, mostKillsTurretCard.Statistics.TotalKills,
+            mostDamageTurretCardObject.gameObject, mostDamageTurretCard.Statistics.TotalDamageDealt,
             mostKillsAndDamageCardsAreTheSame,
             mostDamagingEnemyExists ? mostDamagingEnemy.gameObject : null,
+            mostDamagingEnemyExists ? damage : 0,
             mostDamagingEnemyExists
             );
 
@@ -182,8 +183,8 @@ public class ResultsScreen : MonoBehaviour
     {
         _continueButton.interactable = false;
         
-        _continueButton.transform.DOPunchScale(Vector3.one * 0.15f, 0.5f, 7);
-        _continueButton.transform.DOPunchPosition(Vector3.back * 0.1f, 0.3f, 3);
+        _continueButton.transform.DOPunchScale(Vector3.one * 0.30f, 0.5f, 7);
+        _continueButton.transform.DOPunchPosition(Vector3.back * 0.10f, 0.3f, 3);
         GameAudioManager.GetInstance().PlayCardSelected();
         
         await Task.Delay(TimeSpan.FromSeconds(0.5f));
