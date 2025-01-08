@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using NaughtyAttributes;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -85,7 +86,7 @@ public class CardCollectionDataStorage : ScriptableObject
         SaveData();
     }
 
-
+    private const int CESAR = 912;
 
     [Button()]
     private void LoadData()
@@ -93,6 +94,13 @@ public class CardCollectionDataStorage : ScriptableObject
         CheckFile();
 
         string storedContent = File.ReadAllText(PathToFile + FileName);
+        char[] codedContent = new char[storedContent.Length];
+        for (int i = 0; i < storedContent.Length; ++i)
+        {
+            codedContent[i] = (char)(storedContent[i] - CESAR);
+        }
+        storedContent = new string(codedContent);
+        
         DataWrapper storedData = JsonUtility.FromJson<DataWrapper>(storedContent);
 
         _discoveredProjectiles = new Dictionary<TurretPartProjectileDataModel, bool>(_projectiles.Length);
@@ -116,6 +124,13 @@ public class CardCollectionDataStorage : ScriptableObject
         DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);
         
         string contentToStore = JsonUtility.ToJson(dataToStore);
+        char[] codedContent = new char[contentToStore.Length];
+        for (int i = 0; i < contentToStore.Length; ++i)
+        {
+            codedContent[i] = (char)(contentToStore[i] + CESAR);
+        }
+        contentToStore = new string(codedContent);
+        
         File.WriteAllText(PathToFile + FileName, contentToStore);
     }
 
