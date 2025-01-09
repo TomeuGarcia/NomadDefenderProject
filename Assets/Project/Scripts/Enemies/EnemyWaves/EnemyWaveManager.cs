@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
@@ -33,6 +34,11 @@ public class EnemyWaveManager : MonoBehaviour
             WaveDisplayer.Init(_startNode, _enemyWaveSpawner, enemiesInWaveDisplayUI, _mouseOverNotifier);
         }
 
+        public void MergeWaveDisplayer(EnemyWaveSpawner overlappingEnemyWaveSpawner)
+        {
+            WaveDisplayer.Merge(overlappingEnemyWaveSpawner);
+        }
+        
         public void SetActiveWaveCoroutine(Coroutine activeWaveCoroutine)
         {
             ActiveWaveCoroutine = activeWaveCoroutine;
@@ -115,38 +121,46 @@ public class EnemyWaveManager : MonoBehaviour
 
     public delegate void EnemyWaveManagerAction();
     public static event EnemyWaveManagerAction OnAllWavesFinished;
+    public static event EnemyWaveManagerAction OnAllWavesFinishedEnd;
     public static event EnemyWaveManagerAction OnWaveFinished;
     public static event EnemyWaveManagerAction OnStartNewWaves;
     public static event EnemyWaveManagerAction OnStartFirstWaves;
 
     private EnemyAttackDestination _enemiesAttackDestination;
 
-    private void Awake()
-    {
-        
-    }
+    private bool _gameOverAlreadyPlayed = false;
+    
+    
     private void Init()
     {
         //canvas.SetActive(false);
         _enemiesAttackDestination = new EnemyAttackDestination(_pathsEndData);
         activeWaves = _pathsStartData.Length;
-        
-        
+
+        Dictionary<PathNode, PathStartData> repeatedStartPathNodes = new(_pathsStartData.Length);
+
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
+            
+            if (repeatedStartPathNodes.TryGetValue(startPathNode, out PathStartData firstPathStartData))
+            {
+                firstPathStartData.MergeWaveDisplayer(pathStartData.EnemyWaveSpawner);
+                continue;
+            }
 
             MouseOverlapNotifier enemySpawnMouseOverNotifier =
                 Instantiate(_pathViewerMouseNotifierPrefab, pathStartData.StartNode.transform);
 
             pathStartData.InitNodePathViewer(
-                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier
-            );
-
-            pathStartData.InitWaveDisplayer(Instantiate(enemyWaveInfoPrefab, startPathNode.transform), 
-                EnemiesInWaveDisplayUI.Instance);
+                Instantiate(_pathViewerPrefab, pathStartData.StartNode.transform), enemySpawnMouseOverNotifier);
+                
+            pathStartData.InitWaveDisplayer(
+                Instantiate(enemyWaveInfoPrefab, startPathNode.transform), EnemiesInWaveDisplayUI.Instance);
+                
+            repeatedStartPathNodes.Add(startPathNode, pathStartData);
         }
 
         
@@ -176,7 +190,7 @@ public class EnemyWaveManager : MonoBehaviour
         TDGameManager.OnGameOverStart += ForceStopWaves;
         TDGameManager.OnGameOverStart += PrintConsoleGameOver;
         SceneLoader.OnSceneForceQuit += ForceStopWaves;
-
+        
         for (int i = 0; i < _pathsStartData.Length; i++)
         {
             EnemyWaveSpawner enemyWaveSpawner = _pathsStartData[i].EnemyWaveSpawner;
@@ -358,12 +372,17 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (OnAllWavesFinished != null) OnAllWavesFinished();
 
-        yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+        if (!_gameOverAlreadyPlayed)
+        {
+            yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+        }
 
         yield return new WaitUntil(() => !WaveStartPaused);
         
         if (OnAllWavesFinished != null) OnAllWavesFinished();
 
+        yield return null;
+        OnAllWavesFinishedEnd?.Invoke();
         yield return new WaitForSeconds(2.5f);
 
         PrintConsoleLine(TextTypes.SYSTEM, "All waves finished", true);
@@ -372,6 +391,8 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void ForceStopWaves()
     {
+        _gameOverAlreadyPlayed = true;
+        
         for (int i = 0; i < _pathsStartData.Length; i++)
         {
             _pathsStartData[i].EnemyWaveSpawner.ForceStopWave();

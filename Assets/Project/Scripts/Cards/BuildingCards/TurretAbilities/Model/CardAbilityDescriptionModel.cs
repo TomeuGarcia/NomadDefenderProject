@@ -1,5 +1,6 @@
 
 using System;
+using Project.Scripts.Cards.BuildingCards.TurretAbilities.Model;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,6 +10,7 @@ public class CardAbilityDescriptionModel
     [SerializeField, TextArea(3, 5)] private string _abilityDescription;
     [SerializeField] private CardAbilityKeyword[] _descriptionKeywords;
     [SerializeField] private CardAbilityKeyword[] _descriptionlessKeywords = Array.Empty<CardAbilityKeyword>();
+    [SerializeField] private AbilityDescriptionPattern[] _descriptionPatterns = Array.Empty<AbilityDescriptionPattern>();
     
     public string AbilityName => _abilityName;
     
@@ -25,6 +27,10 @@ public class CardAbilityDescriptionModel
         foreach (CardAbilityKeyword descriptionlessKeyword in _descriptionlessKeywords)
         {
             descriptionlessKeyword.ApplyDescriptionModifications(editableDescription);
+        }
+        foreach (AbilityDescriptionPattern descriptionPattern in _descriptionPatterns)
+        {
+            descriptionPattern.ApplyDescriptionModifications(editableDescription);
         }
         
         return editableDescription;

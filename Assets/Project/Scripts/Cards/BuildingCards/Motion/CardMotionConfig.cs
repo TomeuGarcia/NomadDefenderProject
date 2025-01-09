@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,10 +48,14 @@ public class CardMotionConfig : ScriptableObject
 
     [Space(20)]
     [Header("ROTATION EFFECT")]
-    [SerializeField] private RotationEffect _idleRotationEffect;
+    [Header("Idle")]
+    [SerializeField] private RotationEffect _defaultIdleRotationEffect;
+    [SerializeField] private RotationEffect _cardCollectionIdleRotationEffect;
+    [Header("Hover")]
     [SerializeField] private RotationEffect _hoveredMouseRotationEffect;
-    public RotationEffect IdleRotationEffect => _idleRotationEffect;
-    public RotationEffect HoveredMouseRotationEffect => _hoveredMouseRotationEffect;
+    [SerializeField] private RotationEffect _hoveredGatherNewCardRotationEffect;
+    public RotationEffect IdleRotationEffect { get; private set; }
+    public RotationEffect HoveredMouseRotationEffect { get; private set; }
 
 
 
@@ -68,24 +73,49 @@ public class CardMotionConfig : ScriptableObject
     [SerializeField] private CardStateDisplacements _upgradesDisplacements;
     [SerializeField] private CardStateDisplacements _tutorialDisplayDisplacements;
     [SerializeField] private CardStateDisplacements _resultsScreenDisplacements;
+    [SerializeField] private CardStateDisplacements _cardCollectionDisplacements;
     public CardStateDisplacements CurrentDisplacements { get; private set; }
 
+    private void OnEnable()
+    {
+        SetTutorialDisplayMode();
+    }
 
     public void SetTDGameplayHandMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _gameplayHandDisplacements;
     }
     public void SetUpgradeSceneMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _upgradesDisplacements;
     }
     public void SetTutorialDisplayMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _tutorialDisplayDisplacements;
     }
     public void SetResultsScreenDisplayMode()
     {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
         CurrentDisplacements = _resultsScreenDisplacements;
+    }
+    public void SetCardCollectionDisplayMode()
+    {
+        IdleRotationEffect = _cardCollectionIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredMouseRotationEffect;
+        CurrentDisplacements = _cardCollectionDisplacements;
+    }
+    public void SetGatherCardDisplayMode()
+    {
+        IdleRotationEffect = _defaultIdleRotationEffect;
+        HoveredMouseRotationEffect = _hoveredGatherNewCardRotationEffect;
+        CurrentDisplacements = _cardCollectionDisplacements;
     }
 
 }

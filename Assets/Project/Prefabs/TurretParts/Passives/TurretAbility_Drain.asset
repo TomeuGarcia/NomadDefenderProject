@@ -23,10 +23,15 @@ MonoBehaviour:
       rgba: 4291223583
   _descriptionModel:
     _abilityName: drain
-    _abilityDescription: After killing STARTING_KILLS Enemies, heal the lowest health
-      NODE by HEAL_AMOUNT. Then, increse the kill count by KILLS_INCREASE.
+    _abilityDescription: After killing [STARTING_KILLS] Enemies, heal the lowest
+      health NODE by [HEAL_AMOUNT]. Then, increse the kill count by [KILLS_INCREASE].
     _descriptionKeywords:
     - {fileID: 11400000, guid: 872e2330a7abbcf45a54bf49dee96dcc, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
   _healAmount:
     _name: HEAL_AMOUNT
     _isDynamic: 0

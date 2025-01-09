@@ -458,8 +458,12 @@ public class GameAudioManager : MonoBehaviour
     }
     public void PlayCardInfoMoveShown()
     {
+        PlayCardInfoMoveShown(Random.Range(1.2f, 1.3f));
+    }
+    public void PlayCardInfoMoveShown(float pitch)
+    {
         cardsInfoAudioSource.clip = cardInfoElementMoves;
-        cardsInfoAudioSource.pitch = Random.Range(1.2f, 1.3f);
+        cardsInfoAudioSource.pitch = pitch;
         cardsInfoAudioSource.volume = 0.4f;
 
         cardsInfoAudioSource.Play();

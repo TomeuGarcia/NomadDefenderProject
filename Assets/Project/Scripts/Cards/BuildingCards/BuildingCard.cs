@@ -93,6 +93,7 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private GameObject _viewHolder;
     [SerializeField] private MeshRenderer cardMeshRenderer;
     [SerializeField] private MeshRenderer discardIndicatorMesh;
+    
     protected Material cardMaterial;
     protected Material discardIndicatorMaterial;
 
@@ -654,6 +655,17 @@ public abstract class BuildingCard : MonoBehaviour
     {
         cardCollider.enabled = false;
         //Debug.Log("Interaction OFF");
+    }
+
+    public void ResizeColliderForHand()
+    {
+        cardCollider.center = new Vector3(0, -0.25f, 0);
+        cardCollider.size = new Vector3(1, 1.9f, 0.2f);
+    }
+    public void ResizeColliderForShowcase()
+    {
+        cardCollider.center = new Vector3(0, 0, 0);
+        cardCollider.size = new Vector3(1, 1.4f, 0.2f);
     }
 
     public void ReenableMouseInteraction()

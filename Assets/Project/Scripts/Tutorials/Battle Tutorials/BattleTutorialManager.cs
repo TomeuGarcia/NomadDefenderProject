@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -99,6 +100,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.finishRedrawSetup = false;
 
         _placedBuildingsCounter = 0;
+        _cardsMotionConfig.SetTutorialDisplayMode();
     }
 
     void Start()
@@ -125,6 +127,11 @@ public class BattleTutorialManager : MonoBehaviour
         _placeABuildingGroup.Init();
         _currencyTutorialGroup.Init();
         _drawCardTutorialGroup.Init();
+    }
+
+    private void OnDestroy()
+    {
+        EnemyWaveInfoDisplayer.InteractionEnabled = true;
     }
 
     private void OnEnable()
@@ -178,8 +185,7 @@ public class BattleTutorialManager : MonoBehaviour
     
     IEnumerator Tutorial()
     {
-        _cardsMotionConfig.SetTutorialDisplayMode();
-
+        EnemyWaveInfoDisplayer.InteractionEnabled = false;
         yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine(); //0
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -290,7 +296,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         //Finishes Cards Tutorial
         _cardsMotionConfig.SetTDGameplayHandMode();
-
+        
 
         //Skips Redraw
         scriptedSequence.Clear();
@@ -304,9 +310,9 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.tutorialCard.MotionEffectsController.EnableMotion();
         tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
         yield return new WaitForSeconds(2.0f);
-        
+        EnemyWaveInfoDisplayer.InteractionEnabled = true;
 
-        
+
 
         //Starts Deck Tutorial
         yield return new WaitUntil(() => deckInterface.activeInHierarchy );
@@ -353,6 +359,7 @@ public class BattleTutorialManager : MonoBehaviour
         //Second Wave (2/3)
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
+        EnemyWaveInfoDisplayer.InteractionEnabled = false;
 
 
         _hand.CanBeHidden = false;
@@ -398,14 +405,16 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-        
+        EnemyWaveInfoDisplayer.InteractionEnabled = true;
+
         
 
         //Wave 3/3
         yield return new WaitUntil(() => wavesCounter > 2 );
         scriptedSequence.Clear();
         yield return new WaitForSeconds(0.5f);
-        
+        EnemyWaveInfoDisplayer.InteractionEnabled = false;
+
 
         _hand.CanBeHidden = false;
         BuildingCard.LockAllCardsFromHover = true;
@@ -432,6 +441,7 @@ public class BattleTutorialManager : MonoBehaviour
         
         scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
+        EnemyWaveInfoDisplayer.InteractionEnabled = true;
 
         //Wave 4/5
         yield return new WaitUntil(() => wavesCounter > 3 );

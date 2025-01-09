@@ -20,6 +20,9 @@ public class TileChangingBossManager : MonoBehaviour
     private int _currentWaveIndex = 0;
     private bool _playingVictory;
     private bool _firstEventHappened;
+
+    [Header("EXTRA")] 
+    [SerializeField] private int _extraCurency = 0;
     
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class TileChangingBossManager : MonoBehaviour
     private void Start()
     {
         _speedUpButton.gameObject.SetActive(true);
+        StartCoroutine(SumExtraCurrency());
     }
 
     private void OnDestroy()
@@ -152,5 +156,11 @@ public class TileChangingBossManager : MonoBehaviour
         yield return StartCoroutine(_victoryEvent.PlayVictory(_bossDialogueSystem));
         
         _tdGameManager.VictoryPaused = false;
+    }
+
+    private IEnumerator SumExtraCurrency()
+    {
+        yield return new WaitForSeconds(1.5f);
+        ServiceLocator.GetInstance().CurrencyCounter.AddCurrency(_extraCurency);
     }
 }

@@ -21,4 +21,6 @@ public enum AchievementType
     HaveTurretWithRangeAmount,
     HaveTurretWithShotsPerSecondAmount,
     UnlockAllStarterDecks,
+    
+    DiscoverAllProjectilesAndAbilities
 }

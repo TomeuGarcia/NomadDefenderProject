@@ -57,6 +57,11 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        DoAwake();
+    }
+
+    protected virtual void DoAwake()
+    {
         decksLibrary.InitGameDeck();
 
         victoryHolder.SetActive(false);

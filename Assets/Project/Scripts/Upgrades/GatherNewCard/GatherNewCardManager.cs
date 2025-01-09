@@ -2,6 +2,7 @@ using DG.Tweening;
 using NodeEnums;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Scripts.CardCollection.DataStorage;
 using UnityEngine;
 
 public class GatherNewCardManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GatherNewCardManager : MonoBehaviour
 
     [Header("UPGRADE SETUP")]
     [SerializeField] private UpgradeSceneSetupInfo upgradeSceneSetupInfo;
+    [SerializeField] private CardMotionConfig _cardMotionConfig;
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
 
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
@@ -50,8 +53,9 @@ public class GatherNewCardManager : MonoBehaviour
     private void Awake()
     {
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_sceneCamera);
-        Init();
+        _cardMotionConfig.SetGatherCardDisplayMode();
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(Camera.main);
+        Init();
     }
 
     private void Init()
@@ -103,6 +107,7 @@ public class GatherNewCardManager : MonoBehaviour
             
             int levelIncrement = Mathf.Max(0, turretCardsLevel - turretCardPartsSet[i].CardLevel);
             turretCard.IncrementCardLevel(levelIncrement);
+            turretCard.UpdateViewWithNotDiscoveredProjectileAndPassives(_cardCollectionDataStorage);
 
             cards[i] = turretCard;
         }
@@ -131,12 +136,16 @@ public class GatherNewCardManager : MonoBehaviour
         {
             Vector3 widthDisplacement = transform.right * distanceBetweenCards * i;
 
-            cards[i].transform.SetParent(cardHolder);
-            cards[i].transform.localPosition = Vector3.zero;
-            cards[i].transform.position += startDisplacement + widthDisplacement;
-            cards[i].transform.localRotation = Quaternion.identity;
+            BuildingCard card = cards[i];
+            Transform cardTransform = card.transform;
+            cardTransform.SetParent(cardHolder);
+            cardTransform.localPosition = Vector3.zero;
+            cardTransform.position += startDisplacement + widthDisplacement;
+            cardTransform.localRotation = Quaternion.identity;
 
-            cards[i].InitPositions(cards[i].transform.position, Vector3.zero, cards[i].transform.position);
+            card.InitPositions(cardTransform.position, Vector3.zero, cardTransform.position);
+            
+            card.ResizeColliderForShowcase();
         }
     }
 
@@ -369,6 +378,13 @@ public class GatherNewCardManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
+        if (selectedCard.cardBuildingType == BuildingCard.CardBuildingType.TURRET)
+        {
+            DiscoverGatheredCardProjectileAndPassives(selectedCard as TurretBuildingCard);
+        }
+        
+        
+        
         Vector3 endPos = selectedCard.RootCardTransform.localPosition + (selectedCard.RootCardTransform.forward * 3f);
         selectedCard.RootCardTransform.DOLocalMove(endPos, moveDuration);
         selectedCard.RootCardTransform.DOLocalRotate(selectedCard.RootCardTransform.up * 15f, 1.5f);
@@ -394,5 +410,11 @@ public class GatherNewCardManager : MonoBehaviour
             textLine.text = text;
             consoleDialog.PrintLine(textLine);
         
+    }
+
+
+    private void DiscoverGatheredCardProjectileAndPassives(TurretBuildingCard turretCard)
+    {
+        CardCollectionDiscoverUtilities.DiscoverTurretCardProjectilesAndAbilities(_cardCollectionDataStorage, turretCard);
     }
 }

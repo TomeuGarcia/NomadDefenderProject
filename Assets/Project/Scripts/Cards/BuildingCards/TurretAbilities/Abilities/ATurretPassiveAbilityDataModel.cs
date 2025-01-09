@@ -1,5 +1,6 @@
 using System;
 using NaughtyAttributes;
+using Project.Scripts.Cards.BuildingCards.TurretAbilities.Model;
 using UnityEngine;
 
 

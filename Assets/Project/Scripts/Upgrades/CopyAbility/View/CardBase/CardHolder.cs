@@ -38,7 +38,7 @@ public class CardHolder : MachineMovablePart
 
         _cardHolder.DOBlendableLocalMoveBy(_holderShow.Value, _holderShow.Duration).SetEase(_holderShow.Ease);
         yield return new WaitForSeconds(_holderShow.Duration);
-        _cardIndicator.TurnOn(5);
+        _cardIndicator.TurnOn();
     }
 
     public override IEnumerator ExitAnimation()

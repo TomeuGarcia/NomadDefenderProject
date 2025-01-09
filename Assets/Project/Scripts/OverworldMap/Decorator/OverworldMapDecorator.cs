@@ -143,11 +143,18 @@ public class OverworldMapDecorator : MonoBehaviour
     {
         List<NodeEnums.UpgradeType> upgradesAlreadyInLevel = new List<UpgradeType>();
 
+        
+        NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
+        bool progressionChanged = progressionState != GetLevelProgressionState(levelI - 1);
+        if (progressionChanged) ResetAvailableUpgradeTypes(progressionState);
+
         for (int nodeI = 0; nodeI < upgradeLevel.Length; ++nodeI)
         {
             int nextLevelNodes = upgradeLevel[nodeI].GetMapReferencesData().nextLevelNodes.Length;
             
-            if (NoAvailableUpgradeTypesLeft()) ResetAvailableUpgradeTypes();
+            if (progressionState == ProgressionState.BOSS) progressionState = ProgressionState.LATE;
+            
+            if (NoAvailableUpgradeTypesLeft()) ResetAvailableUpgradeTypes(progressionState);
             
             
             List<NodeEnums.UpgradeType> upgradesAlreadyInLevelAndPrevious = new List<UpgradeType>(upgradesAlreadyInLevel);
@@ -166,7 +173,6 @@ public class OverworldMapDecorator : MonoBehaviour
             NodeEnums.UpgradeType upgradeType = GetRandomAvailableUpgradeType(upgradesAlreadyInLevelAndPrevious.ToArray());
             upgradesAlreadyInLevel.Add(upgradeType);
 
-            NodeEnums.ProgressionState progressionState = GetLevelProgressionState(levelI);
             
             DecorateUpgradeNode(upgradeLevel[nodeI], nextLevelNodes, nodeI, upgradeLevel.Length, upgradeType, progressionState);
         }
@@ -245,10 +251,11 @@ public class OverworldMapDecorator : MonoBehaviour
     }
 
 
-    private void ResetAvailableUpgradeTypes()
+    private void ResetAvailableUpgradeTypes(NodeEnums.ProgressionState progressionState)
     {
         OWMapDecoratorUtils.UpgradeTypeApparition[] upgradeTypeApparitions = dUtils.AvailableUpgrades;
 
+        availableUpgradeTypes.Clear();
         const int MAX_ITERATIONS = 10;
         int iterations = 0;
         while (availableUpgradeTypes.Count == 0 && iterations < MAX_ITERATIONS)
@@ -256,7 +263,7 @@ public class OverworldMapDecorator : MonoBehaviour
             foreach (var upgradeTypeApparition in upgradeTypeApparitions)
             {
                 int appearChance = Random.Range(0, 100);
-                if (appearChance < upgradeTypeApparition.ApparitionChance)
+                if (appearChance < upgradeTypeApparition.GetAppearChance(progressionState))
                 {
                     availableUpgradeTypes.Add(upgradeTypeApparition.UpgradeType);
                 }

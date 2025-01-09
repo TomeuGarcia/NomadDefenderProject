@@ -46,6 +46,7 @@ public class SelectableDeck : MonoBehaviour
 
     private bool isSelected;
     private bool _isUnlocked;
+    private KeyCode _selectKeyCode;
 
 
     private readonly Vector3 faceUpRotationOffset = Vector3.right * 90.0f;
@@ -104,6 +105,14 @@ public class SelectableDeck : MonoBehaviour
         isSelectedPropertyId = Shader.PropertyToID("_IsSelected");
     }
 
+    private void Update()
+    {
+        if (_isUnlocked && !isSelected && Input.GetKeyDown(_selectKeyCode))
+        {
+            deckSelector.OnDeckSelected(this);
+        }
+    }
+
     private void OnMouseDown()
     {
         deckSelector.OnDeckSelected(this);
@@ -137,6 +146,10 @@ public class SelectableDeck : MonoBehaviour
     public void InitReferences(DeckSelector deckSelector)
     {
         this.deckSelector = deckSelector;
+    }
+    public void InitSelectKeyShortcut(KeyCode selectKeyCode)
+    {
+        _selectKeyCode = selectKeyCode;
     }
 
     public void InitSpawnCards(ICardSpawnService cardSpawnService)

@@ -9,6 +9,8 @@ public class CardDeckAsset : ScriptableObject
     
     [SerializeField] private TurretCardDataModel[] _turretCards;
     [SerializeField] private SupportCardDataModel[] _supportCards;
+    
+    public TurretCardDataModel[] TurretCards => _turretCards;
 
     public string DeckName => _deckName;
     

@@ -27,8 +27,11 @@ MonoBehaviour:
   _movementSpeed: 15
   _descriptionModel:
     _abilityName: shotgun
-    _abilityDescription: 'The Projectile splits into 6 straight-shot Bullets with
-      random offset.
+    _abilityDescription: 'Projectile that splits into 6 straight-shot Bullets within
+      a cone.
 
-      For a total of x150% damage.'
+      Deals x25% of damage per hit.'
     _descriptionKeywords: []
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 7eddb89cbc9c9df438c9f892767417ec, type: 2}

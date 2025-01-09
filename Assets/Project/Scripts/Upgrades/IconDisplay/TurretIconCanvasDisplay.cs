@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,15 @@ public class TurretIconCanvasDisplay : MonoBehaviour
     [SerializeField] private GameObject _holder;
     [SerializeField] private Image _iconImage;
     [SerializeField] private Image _borderImage;
+    [SerializeField] private GameObject _notDiscoveredView;
 
+    private void Awake()
+    {
+        if (_notDiscoveredView != null)
+        {
+            _notDiscoveredView.SetActive(false);
+        }
+    }
 
     public void Init(ConfigData configData)
     {
@@ -66,5 +75,10 @@ public class TurretIconCanvasDisplay : MonoBehaviour
         {
             iconDisplays[i].InitHidden();
         }
+    }
+
+    public void SetNotDiscovered()
+    {
+        _notDiscoveredView.SetActive(true);
     }
 }

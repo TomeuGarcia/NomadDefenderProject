@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
+using Project.Scripts.Cards;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,18 @@ public class OverworldCardShower : MonoBehaviour
     [SerializeField] private CanvasGroup showDeckButtonCG;
     [SerializeField] private bool showButtons = true;
 
+    [Header("CARDS")] 
+    [SerializeField] private Transform _cardsHolder;
+    [SerializeField] private Vector3 _cardsStartPosition = new Vector3(0, 3, 3.5f);
+    [SerializeField, Min(1)] private int _placeCards_cardsPerRow = 7;
+    [SerializeField, Min(0)] private float _placeCards_cardHeight = 1.5f;
+    [SerializeField, Min(0)] private float _placeCards_cardWidth = 1.0f;
+    [SerializeField, Min(0)] private float _placeCards_spacingBetweenCards = 0.25f;
+    [SerializeField, Min(0)] private float _placeCards_spacingBetweenRows = 0.25f;
+    [Header("DEBUG")]
+    [SerializeField, Min(1)] private int _debugCardsCount = 9;
+
+
     private BuildingCard[] cards;
     private Vector3 prevCameraPos;
     private Quaternion prevCameraRot;
@@ -32,10 +45,7 @@ public class OverworldCardShower : MonoBehaviour
 
     Dictionary<BuildingCard, Vector3> positions;
 
-    private void Awake()
-    {
-        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
-    }
+
 
     void Start()
     {
@@ -86,12 +96,14 @@ public class OverworldCardShower : MonoBehaviour
 
     private void Init()
     {
+        ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
+
         showDeckButton.gameObject.SetActive(true);
         backToMapButton.gameObject.SetActive(false);
 
         showingDeck = false;
 
-        cards = _deckInUse.SpawnCurrentDeckBuildingCards(transform);
+        cards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardsHolder);
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardUnhovered += SetStandardCard;
@@ -100,7 +112,7 @@ public class OverworldCardShower : MonoBehaviour
             Quaternion rotation = transform.rotation;
             itCard.RootCardTransform.rotation = Quaternion.Euler(90, 0, 0);
             itCard.InitPositions(Vector3.up * 3.5f, Vector3.zero, itCard.RootCardTransform.position);
-            itCard.RootCardTransform.SetParent(transform);
+            itCard.RootCardTransform.SetParent(_cardsHolder);
 
         }
     }
@@ -159,7 +171,7 @@ public class OverworldCardShower : MonoBehaviour
         backToMapButton.gameObject.SetActive(true);
 
         if(currentCoroutine!= null) { StopCoroutine(currentCoroutine); }
-        currentCoroutine =  StartCoroutine(setCardsInPlace());
+        currentCoroutine =  StartCoroutine(SetCardsInPlace());
 
     }
 
@@ -198,7 +210,7 @@ public class OverworldCardShower : MonoBehaviour
         //buildingCard.OnCardInfoSelected += ShowCardInfo;
         DeselectCard();
         currentSelectedCard = buildingCard;
-        buildingCard.RootCardTransform.DOMove(Vector3.zero - Vector3.up * -2.5f, 0.35f);
+        buildingCard.RootCardTransform.DOLocalMove(Vector3.zero - Vector3.up * -2.5f, 0.35f);
     }
 
 
@@ -251,45 +263,76 @@ public class OverworldCardShower : MonoBehaviour
     //    buildingCard.OnCardInfoSelected -= HideCardInfo;
     //}
 
-    IEnumerator setCardsInPlace()
+    IEnumerator SetCardsInPlace()
     {
         positions = new Dictionary<BuildingCard, Vector3>();
-        float numCards = cards.Length;
-        float yOffset = 3.7f;
         currentSelectedCard = null;
-        foreach (BuildingCard itCard in cards)
-        {
-            itCard.RootCardTransform.DOComplete();
-            itCard.transform.position = new Vector3(0, 3, 3.5f);
-            itCard.StandardState();
-        }
+        
+        Vector3[] cardsEndPositions = ComputeCardsEndPositions(cards.Length); 
+        
         for (int i = 0; i < cards.Length; ++i)
         {
-            if (i % 8 == 0)
-            {
-                yOffset -= 2f;
-            }
-           
+            BuildingCard itCard = cards[i];
+            itCard.RootCardTransform.DOComplete();
+            itCard.transform.localPosition = _cardsStartPosition;
+            itCard.StandardState();
+            
+            itCard.DisableMouseInteraction();
+            itCard.ResizeColliderForShowcase();
+            
+            positions.Add(itCard, cardsEndPositions[i]);
+        }
 
-            Vector3 targetPos;
-            yield return new WaitForSecondsRealtime(0.1f);
+
+        float cardMoveDelay = 0.1f;
+        float cardMoveDuration = 0.5f;
+        float cardMoveSoundPitch = 1.2f;
+        
+        for (int i = 0; i < cards.Length; ++i)
+        {
+            yield return new WaitForSecondsRealtime(cardMoveDelay);
             //TODO: Play Sound
 
-            cards[i].DisableMouseInteraction();
-            targetPos = Vector3.zero - Vector3.up * 0.25f;
-            targetPos -= transform.right * (1.25f * (-(i % 8 + 1))) - transform.right * -5.5f;
-            targetPos += transform.forward * yOffset;
-
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown(cardMoveSoundPitch);
+            
             cards[i].cardLocation = BuildingCard.CardLocation.DECK;
 
-            cards[i].RootCardTransform.DOMove(targetPos, 0.5f);
-            positions.Add(cards[i], targetPos);
+            cards[i].RootCardTransform.DOMove(cardsEndPositions[i], cardMoveDuration).SetEase(Ease.OutQuart);
+
+            cardMoveDelay *= 0.98f;
+            cardMoveDuration *= 0.98f;
+            cardMoveSoundPitch *= 1.02f;
         }
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.3f);
 
         foreach (BuildingCard itCard in cards)
-            itCard.EnableMouseInteraction();
-
-
+        {
+            itCard.EnableMouseInteraction();            
+        }
     }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Vector3 cardSize = new Vector3(_placeCards_cardWidth, 0.2f, _placeCards_cardHeight);        
+        Vector3[] cardPositions = ComputeCardsEndPositions(_debugCardsCount);
+
+        for (int i = 0; i < cardPositions.Length; ++i)
+        {
+            Vector3 position = cardPositions[i];
+
+            Gizmos.DrawSphere(position, 0.1f);
+            Gizmos.DrawCube(position, cardSize);
+        }
+    }
+
+    private Vector3[] ComputeCardsEndPositions(int cardsCount)
+    {
+        return CardArrangingUtilities.GetCenteredCards(_cardsHolder, cardsCount, _placeCards_cardsPerRow,
+            _placeCards_spacingBetweenRows, _placeCards_spacingBetweenCards,
+            _placeCards_cardWidth, _placeCards_cardHeight);
+    }
+    
+    
 }

@@ -23,10 +23,16 @@ MonoBehaviour:
       rgba: 4294967295
   _descriptionModel:
     _abilityName: deadlyDiscount
-    _abilityDescription: "WHILE_IN_HAND: After every KILLS_COUNT Enemy kills, decrement
+    _abilityDescription: "WHILE_IN_HAND: After every [KILLS_COUNT] Enemy kills, decrement
       this card's cost by -COST_DECREMENT\u2666"
     _descriptionKeywords:
     - {fileID: 11400000, guid: 79c8916f54e211f46832d00e100cb260, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}
+    - {fileID: 11400000, guid: 176a0396b400bac48825c2484ee577e8, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
   _killsToDecrement:
     _name: KILLS_COUNT
     _isDynamic: 0

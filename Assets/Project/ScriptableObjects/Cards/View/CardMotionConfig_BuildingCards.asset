@@ -18,12 +18,20 @@ MonoBehaviour:
   _hovered_Move_Ease: 4
   _hovered_Rot_Ease: 4
   _selected_Move_Ease: 4
-  _idleRotationEffect:
+  _defaultIdleRotationEffect:
     _maxRotationAngles: {x: 8, y: 12}
+    _rotationSpeed: 1
+    _transitionDuration: 0.2
+  _cardCollectionIdleRotationEffect:
+    _maxRotationAngles: {x: 4, y: 6}
     _rotationSpeed: 1
     _transitionDuration: 0.2
   _hoveredMouseRotationEffect:
     _maxRotationAngles: {x: 17, y: 42}
+    _rotationSpeed: 1
+    _transitionDuration: 0.2
+  _hoveredGatherNewCardRotationEffect:
+    _maxRotationAngles: {x: 8, y: 16}
     _rotationSpeed: 1
     _transitionDuration: 0.2
   _gameplayHandDisplacements:
@@ -34,3 +42,5 @@ MonoBehaviour:
     _hovered: {x: 0, y: 0, z: -0.14}
   _resultsScreenDisplacements:
     _hovered: {x: 0.02, y: 0.01, z: -0.1}
+  _cardCollectionDisplacements:
+    _hovered: {x: 0, y: 0.05, z: -0.1}

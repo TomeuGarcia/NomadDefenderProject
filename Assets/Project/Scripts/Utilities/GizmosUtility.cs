@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class GizmosUtility
+{
+    public static void DrawCircle(Vector3 center, Vector3 normal, float radius, float distanceStep = 0.25f)
+    {
+        const float TAU = 2f * Mathf.PI;
+        float circlePerimeter = TAU * radius;
+            
+
+        normal.Normalize();
+        bool normalIsUp = Vector3.Dot(normal, Vector3.up) > 0.99f;
+        List<Vector3> circlePositions = new List<Vector3>(Mathf.FloorToInt(circlePerimeter / distanceStep));
+        Vector3 up = normalIsUp
+            ? Vector3.Cross(normal, Vector3.right) 
+            : Vector3.Cross(normal, Vector3.up);
+        up *= radius;
+        Vector3 right = normalIsUp
+            ? Vector3.Cross(normal, Vector3.forward) 
+            : Vector3.Cross(normal, Vector3.right);
+        right *= radius;
+            
+
+        float distanceCounter = 0f;
+        while (distanceCounter < circlePerimeter)
+        {
+            float circleRatio = distanceCounter / circlePerimeter;
+            float angle = TAU * circleRatio;
+
+            Vector3 position = center 
+                               + right * Mathf.Cos(angle)
+                               + up * Mathf.Sin(angle);
+            circlePositions.Add(position);
+                
+            distanceCounter += distanceStep;
+        }
+
+        Vector3 closingPosition = center 
+                                  + right * Mathf.Cos(TAU)
+                                  + up * Mathf.Sin(TAU);
+        circlePositions.Add(closingPosition);
+            
+        Gizmos.DrawLineStrip(circlePositions.ToArray(), true);
+    }
+}

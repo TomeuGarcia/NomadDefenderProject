@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
+using NodeEnums;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewOWMapDecoratorUtils", 
@@ -7,17 +9,47 @@ using UnityEngine;
 public class OWMapDecoratorUtils : ScriptableObject
 {
     [System.Serializable]
+    public class AppearChances
+    {
+        [SerializeField] private bool _sharedByAllProgressions = true;
+        [AllowNesting] [SerializeField, Range(0, 100), ShowIf("_sharedByAllProgressions")] private int _chance = 100;
+        [AllowNesting] [SerializeField, Range(0, 100), HideIf("_sharedByAllProgressions")] private int _earlyChance = 100;
+        [AllowNesting] [SerializeField, Range(0, 100), HideIf("_sharedByAllProgressions")] private int _midChance = 100;
+        [AllowNesting] [SerializeField, Range(0, 100), HideIf("_sharedByAllProgressions")] private int _lateChance = 100;
+        
+        public int GetAppearChance(NodeEnums.ProgressionState progressionState)
+        {
+            switch (progressionState)
+            {
+                case ProgressionState.EARLY:
+                    return _sharedByAllProgressions ? _chance : _earlyChance;
+                case ProgressionState.MID:
+                    return _sharedByAllProgressions ? _chance : _midChance;
+                case ProgressionState.LATE:
+                    return _sharedByAllProgressions ? _chance : _lateChance;
+            }
+
+            Debug.LogError("Can't appear in this progression state");
+            return 0;
+        }
+    }
+    
+    [System.Serializable]
     public class UpgradeTypeApparition
     {
         [SerializeField] private NodeEnums.UpgradeType _upgradeType;
         [SerializeField] private string _titleName;
-        [SerializeField, Range(0, 100)] private int _apparitionChance = 100;
         [SerializeField] private Texture _texture;
+        [AllowNesting] [SerializeField] private AppearChances _appearChances;
 
         public NodeEnums.UpgradeType UpgradeType => _upgradeType;
         public string TitleName => _titleName;
-        public int ApparitionChance => _apparitionChance;
         public Texture Texture => _texture;
+
+        public int GetAppearChance(NodeEnums.ProgressionState progressionState)
+        {
+            return _appearChances.GetAppearChance(progressionState);
+        }
     }
 
 

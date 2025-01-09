@@ -26,9 +26,10 @@ public abstract class CardPart : MonoBehaviour
     private Vector3 cardColliderOffset;
     [SerializeField] private Transform cardHolder;
 
-    [Header("VISUALS")]
+    [Header("VISUALS")] 
     [SerializeField] protected CanvasGroup interfaceCanvasGroup;
 
+    
     [Header("CARD INFO")]
     protected bool isShowInfoAnimationPlaying = false;
     protected bool isHideInfoAnimationPlaying = false;
@@ -88,6 +89,11 @@ public abstract class CardPart : MonoBehaviour
 
         cardState = CardPartStates.HOVERED;
         SetCardState(CardPartStates.STANDARD);
+
+        if (_notDiscoveredView != null)
+        {
+            _notDiscoveredView.SetActive(false);            
+        }
     }
 
     private void OnMouseEnter()
@@ -282,7 +288,7 @@ public abstract class CardPart : MonoBehaviour
         isShowingInfo = true;
         //Debug.Log("ShowInfo");
         if (OnInfoShown != null) OnInfoShown();
-
+        
         DoShowInfo();
     }
     protected abstract void DoShowInfo();
@@ -337,4 +343,12 @@ public abstract class CardPart : MonoBehaviour
             if (OnCardUnhovered != null) OnCardUnhovered(this);
     }
 
+
+    [Header("NOT DISCOVERED")] 
+    [SerializeField] private GameObject _notDiscoveredView;
+
+    public virtual void SetNotDiscovered()
+    {
+        _notDiscoveredView.SetActive(true);
+    }
 }

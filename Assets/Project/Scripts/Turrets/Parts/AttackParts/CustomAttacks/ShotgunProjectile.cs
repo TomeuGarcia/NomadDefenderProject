@@ -47,7 +47,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         float bulletMoveDuration = bulletMoveDistance / MovementSpeed;
 
         Vector3 directionToTarget =
-            Vector3.ProjectOnPlane(targetEnemy.Position - TurretOwner.Position, Vector3.up).normalized;
+            Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized;
         Quaternion rotationToTarget = Quaternion.FromToRotation(Vector3.forward, directionToTarget);
         
 

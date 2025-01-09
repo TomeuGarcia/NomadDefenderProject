@@ -19,7 +19,8 @@ public class CardPartReplaceManager : MonoBehaviour
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
-    [Header("DECK DATA")]
+    [Header("DECK DATA")] 
+    [SerializeField] private CardCollectionDataStorage _cardCollection;
     [SerializeField] private CardDeckInUseData _deckInUse;
     private BuildingCard[] deckCards;
 
@@ -225,10 +226,19 @@ public class CardPartReplaceManager : MonoBehaviour
         CardPartAttack[] parts = new CardPartAttack[numParts];
         for (int i = 0; i < numParts; ++i)
         {
-            parts[i] = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
-            parts[i].Configure(attacks[i]);
+            CardPartAttack part = Instantiate(cardPartAttackPrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartAttack>();
+            part.Configure(attacks[i]);
+            parts[i] = part;
         }
         cardPartHolder.Init(parts);
+
+        foreach (CardPartAttack part in parts)
+        {
+            if (!_cardCollection.WasDiscovered(part.TurretPartAttack))
+            {
+                part.SetNotDiscovered();
+            }
+        }
 
         PrintConsoleLine(TextTypes.INSTRUCTION, "Replace a Turret's PROJECTILE", true, 2f);
     }
@@ -281,10 +291,19 @@ public class CardPartReplaceManager : MonoBehaviour
         CardPartBase[] parts = new CardPartBase[numParts];
         for (int i = 0; i < numParts; ++i)
         {
-            parts[i] = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
-            parts[i].SetTurretPassive(passives[i]);
+            CardPartBase part = Instantiate(cardPartBasePrefab, cardPartHolder.cardsHolderTransform).GetComponent<CardPartBase>();
+            part.SetTurretPassive(passives[i]);
+            parts[i] = part;
         }
         cardPartHolder.Init(parts);
+
+        foreach (CardPartBase part in parts)
+        {
+            if (!_cardCollection.WasDiscovered(part.TurretPassiveModel))
+            {
+                part.SetNotDiscovered();
+            }
+        }
 
         PrintConsoleLine(TextTypes.INSTRUCTION, "Add an ABILITY to a Turret", true, 2f);
     }
@@ -438,6 +457,10 @@ public class CardPartReplaceManager : MonoBehaviour
                 {
                     CardPartAttack cardPartAttack = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartAttack>();
                     selectedCard.SetNewPartAttack(cardPartAttack.TurretPartAttack);
+                    if (!_cardCollection.WasDiscovered(cardPartAttack.TurretPartAttack))
+                    {
+                        _cardCollection.Discover(cardPartAttack.TurretPartAttack);
+                    }
                 }
                 break;
             case PartType.BODY:
@@ -450,6 +473,10 @@ public class CardPartReplaceManager : MonoBehaviour
                 {
                     CardPartBase cardPartBase = cardPartHolder.selectedCardPart.gameObject.GetComponent<CardPartBase>();                    
                     selectedCard.AddNewPassive(cardPartBase.TurretPassiveModel);
+                    if (!_cardCollection.WasDiscovered(cardPartBase.TurretPassiveModel))
+                    {
+                        _cardCollection.Discover(cardPartBase.TurretPassiveModel);
+                    }
                 }
                 break;
             case PartType.BONUS_STATS:

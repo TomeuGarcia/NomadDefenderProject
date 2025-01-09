@@ -40,6 +40,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private CanvasGroup _steamCanvasGroup;
     [SerializeField] private TextDecoder _steamDecoder;
 
+    [Header("CARD COLLECTION")] 
+    [SerializeField] private CardCollectionDataStorage _cardCollection;
+
     [Header("UPCOMING CHANGES")]
     [SerializeField, Min(0)] private float _upcomingChangesStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _upcomingChangesCanvasGroup;
@@ -224,6 +227,8 @@ public class MainMenu : MonoBehaviour
 
         PauseMenu.GetInstance().MainMenuOptions();
     }
+    
+    
 
     public void Title()
     {
@@ -322,12 +327,14 @@ public class MainMenu : MonoBehaviour
         }
         StarterDecksUnlocker.GetInstance().ResetUnlockedCount();
         ServiceLocator.GetInstance().OptionalTutorialsStateManager.SetAllTutorialsNotDone();
+        _cardCollection.DoReset();
 
         _unlockableTrophiesManager.SetAllTrophiesLocked();
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());
     }
+    
     
     public void No_ProceedNewGame()
     {
@@ -352,8 +359,8 @@ public class MainMenu : MonoBehaviour
         _proceedNewGame.SetActive(true);
         _proceedNewGame_Question.ClearDecoder();
         _proceedNewGame_DataWillBeDeleted.ClearDecoder();
-        _proceedNewGame_No.ClearDecoder();
         _proceedNewGame_Yes.ClearDecoder();
+        _proceedNewGame_No.ClearDecoder();
         
         yield return new WaitForSeconds(0.1f);
         _proceedNewGameCG.alpha = 1;
@@ -363,10 +370,10 @@ public class MainMenu : MonoBehaviour
         _proceedNewGame_DataWillBeDeleted.Activate();
         
         yield return new WaitForSeconds(0.3f);
-        _proceedNewGame_No.Activate();
+        _proceedNewGame_Yes.Activate();
         
         yield return new WaitForSeconds(0.3f);
-        _proceedNewGame_Yes.Activate();
+        _proceedNewGame_No.Activate();
     }
     private IEnumerator HideProceedNewGame()
     {

@@ -12,9 +12,9 @@ public class ScreenOptionsController : MonoBehaviour
     private const int FIXED_HEIGHT = 1080;
     private Resolution _fixedResolution;
 
-    private bool IsCurrentlyFullscreen => _windowedToggle.isOn;
+    public bool IsCurrentlyFullscreen => _windowedToggle.isOn;
 
-    private void Awake()
+    public void Init(bool fullScreen)
     {
         _fixedResolution = new Resolution();
         _fixedResolution.width = FIXED_WIDTH;
@@ -25,6 +25,8 @@ public class ScreenOptionsController : MonoBehaviour
 
         OnWidowedTogglePressed(_windowedToggle.isOn);
         OnFixedResolutionTogglePressed(_fixedResolutionToggle.isOn);
+
+        _windowedToggle.isOn = fullScreen;
     }
 
 

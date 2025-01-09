@@ -111,7 +111,7 @@ public class CurrencyCounter : MonoBehaviour
         currencyCountText.text = count.ToString();
     }
     
-    private void AddCurrency(int amount)
+    public void AddCurrency(int amount)
     {
         if (_addCurrencyAnimation != null)
         {

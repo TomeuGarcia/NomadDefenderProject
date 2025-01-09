@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1526e6ab63c94dfe9958989d493dedff, type: 3}
   m_Name: TurretAbility_SharpShooter
   m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 0}
+    _projectileAddOn: {fileID: 11400000, guid: b2ed5280be1b3c34fbcd32f7967b019b, type: 2}
   _viewConfig:
     _sprite: {fileID: 21300000, guid: fe2eafe3cee113a4c865d0e46469bec5, type: 3}
     _spriteAsTexture: {fileID: 2800000, guid: fe2eafe3cee113a4c865d0e46469bec5, type: 3}
@@ -20,8 +23,9 @@ MonoBehaviour:
       rgba: 4287748445
   _descriptionModel:
     _abilityName: sharpShooter
-    _abilityDescription: Targets the furthest Enemy first.
+    _abilityDescription: Always shoot at the furthest Enemy.
     _descriptionKeywords: []
-  _optionalViewAddOns:
-    _turretAddOn: {fileID: 0}
-    _projectileAddOn: {fileID: 11400000, guid: b2ed5280be1b3c34fbcd32f7967b019b, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns: []
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
