@@ -27,6 +27,7 @@ public class ReplacingAnimationTube : MonoBehaviour
 
     [Header("PARTICLES")]
     [SerializeField] private TweenConfig _leftAirConfig;
+    [SerializeField] private TweenConfig _leftAirSpeedConfig;
 
     public IEnumerator PlayTubeFlash()
     {
@@ -53,17 +54,27 @@ public class ReplacingAnimationTube : MonoBehaviour
         _ambientLightParent.SetActive(true);
     }
 
-    public void ActivateLeftTube()
+    public void ParticleAcceleration()
     {
-        var leftTrailsModule = _leftParticleSystem.trails;
-        DOTween.To(() => leftTrailsModule.lifetime.constant, x => leftTrailsModule.lifetime = x, _leftAirConfig.Value.x, _leftAirConfig.Duration)
-            .SetEase(_leftAirConfig.Ease)
-            .OnComplete(() => StartCoroutine(StopLeftParticles()) );
+        ActivateTubeParticles(_leftParticleSystem);
+        ActivateTubeParticles(_rightParticleSystem);
     }
 
-    private IEnumerator StopLeftParticles()
+    public void ActivateTubeParticles(ParticleSystem particleSystem)
+    {
+        var trailModule = particleSystem.trails;
+        DOTween.To(() => trailModule.lifetime.constant, x => trailModule.lifetime = x, _leftAirConfig.Value.x, _leftAirConfig.Duration)
+            .SetEase(_leftAirConfig.Ease)
+            .OnComplete(() => StartCoroutine(StopLeftParticles(particleSystem)));
+
+        var mainModule = particleSystem.main;
+        DOTween.To(() => mainModule.startSpeed.constant, x => mainModule.startSpeed = x, _leftAirSpeedConfig.Value.x, _leftAirSpeedConfig.Duration)
+            .SetEase(_leftAirSpeedConfig.Ease);
+    }
+
+    private IEnumerator StopLeftParticles(ParticleSystem particleSystem)
     {
         yield return new WaitForSeconds(1.0f);
-        _leftParticleSystem.Stop();
+        particleSystem.Stop();
     }
 }

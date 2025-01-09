@@ -18,13 +18,19 @@ public class CardSlotGlassTube : MachineMovablePart
 
     public override IEnumerator EnterAnimation()
     {
+        StartCoroutine(OpenTube());
+        yield return null;
+    }
+
+    public IEnumerator OpenTube()
+    {
         _glassTube.DOLocalMoveY(_openTubeConfig.Value, _openTubeConfig.Duration).SetEase(_openTubeConfig.Ease);
         yield return null;
     }
 
-    public IEnumerator ReplaceAnimation()
+    public IEnumerator CloseTube()
     {
-        _glassTube.DOLocalMoveY(0.0f, _openTubeConfig.Duration).SetEase(_openTubeConfig.Ease);
+        _glassTube.DOLocalMoveY(_closeTubeConfig.Value, _closeTubeConfig.Duration).SetEase(_closeTubeConfig.Ease);
         yield return null;
     }
 

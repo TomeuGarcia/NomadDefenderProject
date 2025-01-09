@@ -45,6 +45,12 @@ public class MachineManager : MonoBehaviour
         StartCoroutine(_leftTube.ReplaceAnimation());
     }
 
+    public void ReopenTubes()
+    {
+        StartCoroutine(_rightTube.ReopenTube());
+        StartCoroutine(_leftTube.ReopenTube());
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.R))

@@ -29,11 +29,12 @@ public class ReplacingAnimation : MonoBehaviour
         }
         yield return new WaitForSeconds(_sliderDelay);
 
-        _slider.DOBlendableLocalMoveBy(_sliderTweenConfig.Value, _sliderTweenConfig.Duration).SetEase(_sliderTweenConfig.Ease);
+        _slider.DOLocalMove(_sliderTweenConfig.Value, _sliderTweenConfig.Duration).SetEase(_sliderTweenConfig.Ease);
         _machineManager.LowerTubes();
-        _replacingAnimationTube.ActivateLeftTube();
+        _replacingAnimationTube.ParticleAcceleration();
         yield return new WaitForSeconds(_sliderTweenConfig.Duration);
 
-        StartCoroutine(_replacingAnimationTube.PlayTubeFlash());
+        yield return StartCoroutine(_replacingAnimationTube.PlayTubeFlash());
+        _machineManager.ReopenTubes();
     }
 }

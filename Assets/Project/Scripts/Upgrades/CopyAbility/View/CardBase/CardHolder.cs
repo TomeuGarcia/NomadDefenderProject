@@ -8,6 +8,7 @@ public class CardHolder : MachineMovablePart
     [Header("REFERENCES")]
     [SerializeField] private Transform _cardCover;
     [SerializeField] private Transform _cardHolder;
+    [SerializeField] private ReplicateSelectedCardIndicator _cardIndicator;
 
     [Header("PARAMETERS")]
     [SerializeField] private TweenConfig _coverHideA;
@@ -37,10 +38,12 @@ public class CardHolder : MachineMovablePart
 
         _cardHolder.DOBlendableLocalMoveBy(_holderShow.Value, _holderShow.Duration).SetEase(_holderShow.Ease);
         yield return new WaitForSeconds(_holderShow.Duration);
+        _cardIndicator.TurnOn(5);
     }
 
     public override IEnumerator ExitAnimation()
     {
+        //should not use?
         _cardHolder.DOBlendableLocalMoveBy(_holderShowUndo.Value, _holderShowUndo.Duration).SetEase(_holderShowUndo.Ease);
         yield return new WaitForSeconds(_holderShowUndo.Duration + _delay1);
 
