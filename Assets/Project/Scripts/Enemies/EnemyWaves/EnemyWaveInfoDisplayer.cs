@@ -200,9 +200,11 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
         _currentEnemiesDisplayData.Reset(currentEnemyEntries.ToArray());
     }
     
-    
+    public static bool InteractionEnabled { get; set; }
     private void ShowDisplayUI()
     {
+        if (!InteractionEnabled) return;
+        
         _enemiesInWaveDisplayUI.Show(_currentEnemiesDisplayData);
         _mouseHoverViewToggle.SetActive(true);
     }
