@@ -15,8 +15,8 @@ public class EnemiesPhotograph : MonoBehaviour
     [SerializeField] private LineRenderer _gridLine;
     [SerializeField] private Transform _enemiesSpawnTransform;
     [SerializeField, Min(1)] private int _columns = 4;
+    [SerializeField, Min(1)] private int _rows = 4;
     [SerializeField] private Vector2 _gridSize = new Vector2(2, 2);
-    private int _rows;
 
     private List<Enemy> _enemies;
 
@@ -36,7 +36,6 @@ public class EnemiesPhotograph : MonoBehaviour
 
     private void Init()
     {
-        _rows = Mathf.CeilToInt((float)_enemyTypesCollection.EnemyTypes.Length / _columns);
         _camera.enabled = false;
     }
     
@@ -45,18 +44,18 @@ public class EnemiesPhotograph : MonoBehaviour
         EnemyFactory enemyFactory = EnemyFactory.GetInstance();
         
         _enemies = new List<Enemy>(_enemyTypesCollection.EnemyTypes.Length);
+        int photoIndexCounter = 0;
         
         for (int i = 0; i < _enemyTypesCollection.EnemyTypes.Length; ++i)
         {
             EnemyTypeConfig enemyTypeConfig = _enemyTypesCollection.EnemyTypes[i];
-            if (enemyTypeConfig == _fakeEnemyType)
+            if (enemyTypeConfig == _fakeEnemyType || enemyTypeConfig.IsArmored)
             {
                 continue;
             }
-            
-            
-            int row = (i / _rows);
-            int column = (i % _columns);
+
+            int row = (photoIndexCounter / _rows);
+            int column = (photoIndexCounter % _columns);
 
             Vector3 position = LocalToWorldPosition(
                 new Vector3((column + 0.5f) * _gridSize.x, (row + 0.5f) * _gridSize.y, 0));
@@ -69,7 +68,8 @@ public class EnemiesPhotograph : MonoBehaviour
             Enemy enemy = enemyGameObject.GetComponent<Enemy>();
             enemy.InitWithoutFunctionality();
 
-            enemyTypeConfig.View.PhotoIndex = i;
+            enemyTypeConfig.View.PhotoIndex = photoIndexCounter;
+            ++photoIndexCounter;
             
             
             _enemies.Add(enemy);

@@ -66,6 +66,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private bool _initializedWithoutFunctionality;
 
+    private static readonly Quaternion _particleSpawnRotation = Quaternion.Euler(90, 0, 0);
+    
+    
     private void Awake()
     {
         ResetStats();
@@ -181,6 +184,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
 
         _initializedWithoutFunctionality = false;
+
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesSpawn, _meshCenter.position, _particleSpawnRotation);
     }
 
 
@@ -201,6 +207,10 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         {
             OnTriedToAttackDeadLocation?.Invoke(this, pathLocation);
         }
+        
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesAttack, Position, Quaternion.identity);
+        
         Suicide();
     }
 
@@ -317,6 +327,10 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         OnBeforeEnemyDeath?.Invoke(this);
         if (OnEnemyDeathGlobal != null) OnEnemyDeathGlobal(this);
         if (OnEnemyDeath != null) OnEnemyDeath(this);
+        
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesDeath, Position, Quaternion.identity);
+        
         Deactivation();
     }
 
