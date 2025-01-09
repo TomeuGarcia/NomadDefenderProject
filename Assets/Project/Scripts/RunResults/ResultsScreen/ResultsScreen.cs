@@ -25,6 +25,8 @@ public class ResultsScreen : MonoBehaviour
     
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private Button _continueButton;
+    [SerializeField] private Graphic[] _continueButtonArrows;
+    [SerializeField] private MouseOverNotifier _continueButtonMouseNotifier;
     
     
     private void Start()
@@ -34,13 +36,15 @@ public class ResultsScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        _continueButton.onClick.AddListener(OnContinueButtonClicked);
-        //_fullScreenEffect.SetActive(true);
+        _continueButtonMouseNotifier.OnMouseEntered += OnContinueButtonHover;
+        _continueButtonMouseNotifier.OnMouseExited += OnContinueButtonUnhover;
+        _continueButtonMouseNotifier.OnMousePressed += OnContinueButtonClicked;
     }
     private void OnDisable()
     {
-        _continueButton.onClick.RemoveAllListeners();
-        //_fullScreenEffect.SetActive(false);
+        _continueButtonMouseNotifier.OnMouseEntered -= OnContinueButtonHover;
+        _continueButtonMouseNotifier.OnMouseExited -= OnContinueButtonUnhover;
+        _continueButtonMouseNotifier.OnMousePressed -= OnContinueButtonClicked;
     }
 
     private void Init()
@@ -151,11 +155,35 @@ public class ResultsScreen : MonoBehaviour
         buildingCard.StandardState();
     }
 
+    private void OnContinueButtonHover()
+    {
+        if (!_continueButton.interactable) return;
+        
+        Color color = _continueButton.colors.highlightedColor;
+        _continueButton.targetGraphic.color = color;
+        foreach (Graphic continueButtonArrow in _continueButtonArrows)
+        {
+            continueButtonArrow.color = color;
+        }
+    }
+
+    private void OnContinueButtonUnhover()
+    {
+        if (!_continueButton.interactable) return;
+
+        Color color = _continueButton.colors.normalColor;
+        _continueButton.targetGraphic.color = color;
+        foreach (Graphic continueButtonArrow in _continueButtonArrows)
+        {
+            continueButtonArrow.color = color;
+        }
+    }
     private async void OnContinueButtonClicked()
     {
         _continueButton.interactable = false;
-
+        
         _continueButton.transform.DOPunchScale(Vector3.one * 0.15f, 0.5f, 7);
+        _continueButton.transform.DOPunchPosition(Vector3.back * 0.1f, 0.3f, 3);
         GameAudioManager.GetInstance().PlayCardSelected();
         
         await Task.Delay(TimeSpan.FromSeconds(0.5f));

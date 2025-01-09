@@ -35,6 +35,7 @@ public class DeckSelector : MonoBehaviour
     private Material startSimulationFlashMaterial;
 
     private float currentFill = 0.0f;
+    private bool _busySelectingDeck;
 
     private void Awake()
     {
@@ -65,6 +66,11 @@ public class DeckSelector : MonoBehaviour
     private void Update()
     {
         UpdateCheatInputs();
+
+        if (startSimulationButton.interactable && Input.GetKeyDown(KeyCode.Space))
+        {
+            OnStartSimulationButtonPressed();
+        }
     }
 
 
@@ -77,6 +83,7 @@ public class DeckSelector : MonoBehaviour
         {
             SelectableDeck selectableDeck = selectableDecks[i];
             selectableDeck.InitReferences(this);
+            selectableDeck.InitSelectKeyShortcut((KeyCode.Alpha1 + i));
             selectableDeck.InitSpawnCards(cardSpawnService);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
             selectableDeck.SetNotSelected();
@@ -94,6 +101,7 @@ public class DeckSelector : MonoBehaviour
 
     public void OnDeckSelected(SelectableDeck selectableDeck)
     {
+        if (_busySelectingDeck) return;
         deckLibrary.SetStarterDeck(selectableDeck.Deck, selectableDeck.DeckVictoryTrophy);
 
         SelectableDeck.RunUpgradesContent runContent = selectableDeck.RunContent;
@@ -107,6 +115,7 @@ public class DeckSelector : MonoBehaviour
 
     private IEnumerator DoOnDeckSelected(SelectableDeck selectableDeck)
     {
+        _busySelectingDeck = true;
         SelectableDeck previouslySelectedDeck = null;
         if (currentlySelectedDeck != null && currentlySelectedDeck != selectableDeck)
         {
@@ -154,6 +163,7 @@ public class DeckSelector : MonoBehaviour
             currentFill = 1.0f;
             _startButtonLight.DOIntensity(_startButtonLightIntensity, 0.5f).SetEase(Ease.InOutSine);
         }
+        _busySelectingDeck = false;
     }
 
     private void ChangeBorderLight(MeshRenderer mr, string reference, float init, float goal)

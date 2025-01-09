@@ -77,7 +77,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     private void OnEnable()
     {        
         HandBuildingCards.OnCardPlayed += EnableFirstCardPlayed;
-        EnemyWaveManager.OnAllWavesFinished += CheckVictory;
+        EnemyWaveManager.OnAllWavesFinishedEnd += CheckVictory;
 
         Enemy.OnTriedToAttackDeadLocation += OnTriedToAttackDeadLocation;
         
@@ -94,7 +94,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
             HandBuildingCards.OnCardPlayed -= EnableFirstCardPlayed;
         }
         
-        EnemyWaveManager.OnAllWavesFinished -= CheckVictory;
+        EnemyWaveManager.OnAllWavesFinishedEnd -= CheckVictory;
         Enemy.OnTriedToAttackDeadLocation -= OnTriedToAttackDeadLocation;
 
 

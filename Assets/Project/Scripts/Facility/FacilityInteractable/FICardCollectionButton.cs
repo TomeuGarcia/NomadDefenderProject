@@ -12,6 +12,8 @@ public class FICardCollectionButton : AFacilityInteractable
     
     private FacilityManager _facilityManager;
 
+    [SerializeField] private GameObject _screenParent;
+    [SerializeField] private Collider _interactableCollider;
 
     public void Init(bool enabled, FacilityManager facilityManager)
     {
@@ -40,5 +42,17 @@ public class FICardCollectionButton : AFacilityInteractable
     {
         _text.color = _textColorUnhovered;
         GameAudioManager.GetInstance().PlayCardInfoHidden();
+    }
+
+
+    public void TurnOn()
+    {
+        _screenParent.SetActive(true);
+        _interactableCollider.enabled = true;
+    }
+    public void TurnOff()
+    {
+        _screenParent.SetActive(false);
+        _interactableCollider.enabled = false;
     }
 }
