@@ -12,4 +12,5 @@ public enum ParticleTypes
     EnemyDeathSmall,
     EnemyDeathBig,
     EnemyAttack,
+    SpawnCardCopyInHand_SourceCard,
 }

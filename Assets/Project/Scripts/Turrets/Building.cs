@@ -53,6 +53,7 @@ public abstract class Building : MonoBehaviour
 
     public void GotPlaced(Tile placedTile)
     {
+        BuildingCard.cardLocation = BuildingCard.CardLocation.PLACED;
         PlacedTile = placedTile;
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingPlaced,
             PlacingParticlesPosition, Quaternion.identity);
@@ -63,6 +64,7 @@ public abstract class Building : MonoBehaviour
 
     public void GotUnplaced()
     {
+        BuildingCard.cardLocation = BuildingCard.CardLocation.DECK;
         DisableFunctionality();
         gameObject.SetActive(false);
         OnBuildingUnplaced?.Invoke();
