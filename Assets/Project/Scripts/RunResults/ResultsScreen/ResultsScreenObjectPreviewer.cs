@@ -21,8 +21,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         gameObject.SetActive(false);
     }
     
-    public void InitToShow(Camera camera, GameObject objectToPreview)
+    public void InitToShow(Camera camera, GameObject objectToPreview, string appendedText)
     {
+        _text.textComponent.text += '\n' + appendedText;
+        
         if(objectToPreview.GetComponent<Enemy>() != null)
         {
             FindDespicableObjects(objectToPreview.transform);

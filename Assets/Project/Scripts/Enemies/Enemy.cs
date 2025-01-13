@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     [Header("STATS")]
     [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
-    private int Damage;
+    public int Damage { get; private set; }
     private float armor;
     private float health;
     private int currencyDrop;
@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     public delegate void EnemyAction(Enemy enemy);
     public static EnemyAction OnEnemySuicide;
     public static EnemyAction OnEnemyDeathGlobal;
+    public EnemyAction OnBeforeEnemyDeath;
     public EnemyAction OnEnemyDeath;
     public EnemyAction OnEnemyDeactivated;
 
@@ -65,6 +66,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private bool _initializedWithoutFunctionality;
 
+    private static readonly Quaternion _particleSpawnRotation = Quaternion.Euler(90, 0, 0);
+    
+    
     private void Awake()
     {
         ResetStats();
@@ -180,6 +184,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         pathFollower.Init(startNode, positionOffset, totalDistance, toNextNodeT);
 
         _initializedWithoutFunctionality = false;
+
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesSpawn, _meshCenter.position, _particleSpawnRotation);
     }
 
 
@@ -200,6 +207,10 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         {
             OnTriedToAttackDeadLocation?.Invoke(this, pathLocation);
         }
+        
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesAttack, Position, Quaternion.identity);
+        
         Suicide();
     }
 
@@ -313,8 +324,13 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private void Die()
     {
+        OnBeforeEnemyDeath?.Invoke(this);
         if (OnEnemyDeathGlobal != null) OnEnemyDeathGlobal(this);
         if (OnEnemyDeath != null) OnEnemyDeath(this);
+        
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(_typeConfig.View.ParticlesDeath, Position, Quaternion.identity);
+        
         Deactivation();
     }
 

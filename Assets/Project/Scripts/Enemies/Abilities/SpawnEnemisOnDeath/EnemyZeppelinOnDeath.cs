@@ -13,11 +13,11 @@ public class EnemyZeppelinOnDeath : MonoBehaviour
 
     private void OnEnable()
     {
-        _enemy.OnEnemyDeath += SpawnEnemies;
+        _enemy.OnBeforeEnemyDeath += SpawnEnemies;
     }
     private void OnDisable()
     {
-        _enemy.OnEnemyDeath -= SpawnEnemies;
+        _enemy.OnBeforeEnemyDeath -= SpawnEnemies;
     }
 
 

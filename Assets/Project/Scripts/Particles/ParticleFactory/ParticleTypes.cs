@@ -6,5 +6,11 @@ public enum ParticleTypes
     BuildingUnplaced,
     ExpandTurretRadiusAbility,
     IncreaseSellValue,
-    SpawnOrbitingsWhileInHand
+    SpawnOrbitingsWhileInHand,
+    EnemySpawnSmall,
+    EnemySpawnBig,
+    EnemyDeathSmall,
+    EnemyDeathBig,
+    EnemyAttack,
+    SpawnCardCopyInHand_SourceCard,
 }

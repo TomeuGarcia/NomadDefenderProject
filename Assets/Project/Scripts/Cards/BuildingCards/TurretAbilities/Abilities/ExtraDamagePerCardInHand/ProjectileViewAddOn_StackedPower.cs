@@ -24,9 +24,9 @@ public class ProjectileViewAddOn_StackedPower : AProjectileViewAddOn
 
     protected override void DoOnProjectileSpawned()
     {
+        float rateOverTime = _multiplierOverCards.Evaluate(ConfigurationSource.GetNumberOfCards());
         var emission = _stackQuantityParticles.emission;
-        emission.rateOverTime = _multiplierOverCards.Evaluate(ConfigurationSource.GetNumberOfCards());
-        
+        emission.rateOverTime = rateOverTime;
         _stackQuantityParticles.Play();
     }
     protected override void DoOnProjectileDisappear()

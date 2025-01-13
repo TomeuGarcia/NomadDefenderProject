@@ -7,8 +7,12 @@ public class TPADataModel_ExtraDamageMultipleHits : ATurretPassiveAbilityDataMod
 {
     [Header("ABILITY CONFIG")] 
     [SerializeField, Min(0)] private float _startingDamageMultiplier = 0.5f;
-    [SerializeField, Min(1)] private float _maxDamageMultiplier = 2.0f;
-    [SerializeField, Min(0)] private float _damageMultiplierIncrementPerHit = 0.25f;
+
+    [SerializeField] private AbilityDescriptionVariable _damageMultiplierIncrementVariable;
+    [SerializeField] private AbilityDescriptionVariable _maxDamageMultiplierVariable;
+    
+    public AbilityDescriptionVariable DamageMultiplierIncrementVariable => _damageMultiplierIncrementVariable;
+    public AbilityDescriptionVariable MaxDamageMultiplierVariable => _maxDamageMultiplierVariable;
     
     public override ATurretPassiveAbility MakePassiveAbility()
     {
@@ -18,7 +22,10 @@ public class TPADataModel_ExtraDamageMultipleHits : ATurretPassiveAbilityDataMod
 
     public float DamageMultiplierByHitCount(int hitCount)
     {
-        return Mathf.Min(_maxDamageMultiplier, _startingDamageMultiplier + (_damageMultiplierIncrementPerHit * hitCount));
+        return Mathf.Min(
+            _maxDamageMultiplierVariable.FloatValue,
+            _startingDamageMultiplier + (_damageMultiplierIncrementVariable.FloatValue * hitCount)
+        );
     }
     
 }
