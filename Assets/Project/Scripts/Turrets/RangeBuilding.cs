@@ -136,8 +136,23 @@ public abstract class RangeBuilding : Building
     {
         if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
         enemies.Remove(enemyToDelete);
+    }
+    private void DeleteEnemyFromList(int enemyIndexToDelete)
+    {
+        if (OnEnemyExitRange != null) OnEnemyExitRange(enemies[enemyIndexToDelete]);
+        enemies.RemoveAt(enemyIndexToDelete);
+    }
 
-        //SortEnemies();
+    protected void UpdateEnemiesInRange()
+    {
+        for (int i = 0; i < enemies.Count; ++i)
+        {
+            if (enemies[i].DiesFromQueuedDamage())
+            {
+                DeleteEnemyFromList(i);
+                --i;
+            }
+        }
     }
 
     private void SortEnemies()
