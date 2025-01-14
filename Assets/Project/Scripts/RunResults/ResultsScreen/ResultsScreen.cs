@@ -74,7 +74,7 @@ public class ResultsScreen : MonoBehaviour
 
         for (int i = 1; i < turretCards.Length; ++i)
         {
-            TurretCardData currentTurretCard = turretCards[0];
+            TurretCardData currentTurretCard = turretCards[i];
 
             if (currentTurretCard.Statistics.TotalKills > mostKillsTurretCard.Statistics.TotalKills)
             {

@@ -189,7 +189,7 @@ public class OverworldMapDecorator : MonoBehaviour
         
         // Spawn UpgradeNodeInfoDisplay
         OWMap_UpgradeNodeInfoDisplay upgradeNodeInfoDisplay = Instantiate(UpgradeNodeInfoDisplayPrefab, node.NodeAdditionsTransform).GetComponent<OWMap_UpgradeNodeInfoDisplay>();
-        upgradeNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel));
+        upgradeNodeInfoDisplay.Init(node, node.MouseOverNotifier, PositionAtRight(nodeIndexInLevel, totalNodesInLevel), progressionState);
         upgradeNodeInfoDisplay.InitUpgradeType(dUtils.UpgradeTypeApparitionByType(upgradeType).TitleName);
         //upgradeNodeInfoDisplay.SetIsInteractableFalse();
     }
