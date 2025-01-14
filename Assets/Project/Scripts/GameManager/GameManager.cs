@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,7 @@ using AYellowpaper;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     [Header("RUN STATE")] 
     [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
+    [SerializeField] private InterfaceReference<IGameProgressionUpdater, ScriptableObject> _gameProgressionUpdater;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
@@ -237,6 +240,10 @@ public class GameManager : MonoBehaviour
     private void SharedFinishRun(bool victory)
     {
         _runStateInit.Value.Finish(victory);
+        if (victory)
+        {
+            _gameProgressionUpdater.Value.IncrementVictoryCount();
+        }
     }
 
 

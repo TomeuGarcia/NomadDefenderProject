@@ -374,7 +374,7 @@ public class EnemyWaveManager : MonoBehaviour
 
         //if (!_gameOverAlreadyPlayed)
         {
-            yield return StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
+            /*yield return*/ StartCoroutine(lastEnemyKIllAnimation.StartAnimation(lastEnemyPos));
         }
 
         yield return new WaitUntil(() => !WaveStartPaused);

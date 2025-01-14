@@ -54,4 +54,6 @@ public static class SOAssetPaths
     
     public const string UNLOCKABLES = MENU_ROOT + "Unlockables/";
     public const string ACHIEVEMENTS = MENU_ROOT + "Achievements/";
+    
+    public const string GAME_PROGRESSION = MENU_ROOT + "GameProgression/";
 }
