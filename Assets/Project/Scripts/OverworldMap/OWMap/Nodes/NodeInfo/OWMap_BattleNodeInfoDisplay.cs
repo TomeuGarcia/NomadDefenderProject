@@ -10,12 +10,12 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
     [SerializeField] private TextMeshProUGUI nodeTitleText;
     [SerializeField] private TextMeshProUGUI difficultyText;
 
-    private static string[] nodeDifficultyToText = { "<color=#1DFF5F>EARLY</color>",
+    public static string[] nodeDifficultyToText = { "<color=#1DFF5F>EARLY</color>",
                                                  "<color=#FFF345>MID</color>",
                                                  "<color=#F5550C>LATE</color>",
                                                  "<color=#FF003E>BOSS</color>" };
 
-    private const string difficultyStr = "stage: ";
+    public const string difficultyStr = "stage: ";
     private const string unknownStr = "???";
 
     private int nextLevelNodes;
@@ -28,7 +28,8 @@ public class OWMap_BattleNodeInfoDisplay : OWMap_NodeInfoDisplay
         difficultyText.text = difficultyStr + unknownStr;
     }
 
-    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight, NodeEnums.BattleType battleType, int newNextLevelNodes)
+    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight, 
+        NodeEnums.BattleType battleType, int newNextLevelNodes)
     {
         BaseInit(attachedNode, mouseOverNotifier, positionedAtRight);
         nextLevelNodes = newNextLevelNodes;
