@@ -1,16 +1,15 @@
 
 
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassiveAbility
 {
-    private TurretBuilding _turretOwner;
     private bool _isSubscribed;
     
     private readonly TPADataModel_WaveFinishSpawnCardCopyInHand _abilityDataModel;
+    private TurretBuildingCard _ownerCard;
 
-    
-    
     public TurretPassiveAbility_WaveFinishSpawnCardCopyInHand(TPADataModel_WaveFinishSpawnCardCopyInHand originalModel) 
         : base(originalModel)
     {
@@ -18,15 +17,19 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
         ApplyDescriptionCorrection(_abilityDataModel.CostIncrementPerCard);
     }
 
-    public override void OnTurretCreated(TurretBuilding turretOwner)
+    public override void OnCardInitialized(TurretBuildingCard ownerCard)
     {
-        _turretOwner = turretOwner;
+        _ownerCard = ownerCard;
+    }
+    
+    public override void OnDrawnToHandTwiceOrMore()
+    {
         SubscribeEvents();
     }
 
-    public override void OnTurretDestroyed()
+    public override void OnTurretCreated(TurretBuilding turretOwner)
     {
-        UnsubscribeEvents();
+        SubscribeEvents();
     }
 
     protected override void OnTurretPlaced()
@@ -35,6 +38,13 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
     }
 
 
+    public override void OnCardDestroyed()
+    {
+        UnsubscribeEvents();
+    }
+
+
+    
     private void SubscribeEvents()
     {
         if (_isSubscribed) return;
@@ -52,22 +62,33 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
     }
 
 
-    private async void SpawnCardCopy()
+    private void SpawnCardCopy()
     {
-        if (!_turretOwner.IsPlaced)
+        DoSpawnCardCopy();
+    }
+    private async void DoSpawnCardCopy()
+    {
+        if (_ownerCard.cardLocation != BuildingCard.CardLocation.HAND)
         {
             return;
         }
         
-        await Task.Delay(System.TimeSpan.FromSeconds(0.1f));
-
+        
         CardDrawer cardDrawer = ServiceLocator.GetInstance().CardDrawer;
         int numberOfCards = cardDrawer.GetCardsInHand().Length + 1;
         
-        TurretCardData turretCardDataCopy = new TurretCardData(_turretOwner.CardData, true);
+        await Task.Delay(System.TimeSpan.FromSeconds(0.1f));
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(ParticleTypes.SpawnCardCopyInHand_SourceCard, _ownerCard.CardParticlesSpot.position, Quaternion.identity)
+            .SetParent(_ownerCard.CardParticlesSpot);
+
+
+        await Task.Delay(System.TimeSpan.FromSeconds(0.5f));
+        TurretCardData turretCardDataCopy = new TurretCardData(_ownerCard.CardData, true);
         turretCardDataCopy.RemovePassiveAbility(OriginalModel);
         turretCardDataCopy.IncrementPlayCost(_abilityDataModel.CostIncrementPerCard.Value * numberOfCards);
         
-        ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInHand(turretCardDataCopy);
+        TurretBuildingCard spawnedCard = ServiceLocator.GetInstance().CardDrawer.SpawnTurretCardInHand(turretCardDataCopy);
+        
     }
 }

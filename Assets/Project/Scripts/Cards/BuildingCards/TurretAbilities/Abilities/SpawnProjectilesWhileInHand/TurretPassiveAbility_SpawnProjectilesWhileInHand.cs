@@ -106,7 +106,7 @@ public class TurretPassiveAbility_SpawnProjectilesWhileInHand : ATurretPassiveAb
             ServiceLocator.GetInstance().ParticleFactory
                 .Create(ParticleTypes.SpawnOrbitingsWhileInHand, _ownerCard.CardParticlesSpot.position, Quaternion.identity)
                 .GetComponent<RecyclableParticles>();
-        
+
         _cardParticles.transform.SetParent(_ownerCard.CardParticlesSpot);
     }
     private void ClearCardParticles()

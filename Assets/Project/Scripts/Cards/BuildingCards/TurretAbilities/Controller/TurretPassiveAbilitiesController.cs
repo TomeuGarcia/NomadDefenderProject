@@ -103,6 +103,13 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
             passiveAbility.OnCardInitialized(ownerCard);
         }
     }
+    public void OnCardDestroyed()
+    {
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            passiveAbility.OnCardDestroyed();
+        }
+    }
     
     public void OnTurretCreated(TurretBuilding turretOwner)
     {

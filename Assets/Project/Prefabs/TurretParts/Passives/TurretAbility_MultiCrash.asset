@@ -23,13 +23,26 @@ MonoBehaviour:
       rgba: 4288884472
   _descriptionModel:
     _abilityName: multiCrash
-    _abilityDescription: Increase the Projectile's damage after every hit, until
-      it banishes.
+    _abilityDescription: 'Increase the Projectile''s damage by +MULTIPLIER_INCREMENT%
+      after every hit, until it banishes.
+
+      (Up to +MAXIMUM_MULTIPLIER%)'
     _descriptionKeywords: []
     _descriptionlessKeywords: []
-    _descriptionPatterns: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
   _otherReferencedProjectiles: []
   _otherReferencedPassives: []
   _startingDamageMultiplier: 1
-  _maxDamageMultiplier: 2.5
-  _damageMultiplierIncrementPerHit: 0.5
+  _damageMultiplierIncrementVariable:
+    _name: MULTIPLIER_INCREMENT
+    _isDynamic: 0
+    _isFloat: 1
+    _constantValue: 0
+    _floatConstantValue: 0.5
+  _maxDamageMultiplierVariable:
+    _name: MAXIMUM_MULTIPLIER
+    _isDynamic: 0
+    _isFloat: 1
+    _constantValue: 0
+    _floatConstantValue: 2.5

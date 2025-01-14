@@ -13,7 +13,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public TurretCardData CardData { get; private set; }
     public TurretCardPartsGroup CardParts => CardData.SharedPartsGroup;
     
-    private TurretBuilding turretBuilding;
+    public TurretBuilding TurretBuilding { get; private set; }
 
 
 
@@ -54,6 +54,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     protected override void DoOnDestroy()
     {
+        CardData.PassiveAbilitiesController.OnCardDestroyed();
         CardData.ResetProjectile();
     }
 
@@ -129,8 +130,8 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
-        turretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
-        turretBuilding.Init(this, StatsController, CardData, currencyCounter);
+        TurretBuilding = copyBuildingPrefab.GetComponent<TurretBuilding>();
+        TurretBuilding.Init(this, StatsController, CardData, currencyCounter);
         copyBuildingPrefab.SetActive(false);
     }
 
@@ -517,7 +518,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         TurretPartProjectileDataModel oldProjectile = CardParts.Projectile;
         
         CardData.SetProjectileTemporarily(newTurretProjectileModel);
-        turretBuilding.ResetProjectilePart(newTurretProjectileModel);
+        TurretBuilding.ResetProjectilePart(newTurretProjectileModel);
 
         _turretMeshPreview.ResetProjectileMaterial(newTurretProjectileModel.MaterialForTurret);
 
