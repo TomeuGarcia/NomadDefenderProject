@@ -8,6 +8,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
 {
 
     [SerializeField] private TextMeshProUGUI nodeTitleText;
+    [SerializeField] private TextMeshProUGUI difficultyText;
     [SerializeField] private TextMeshProUGUI statusText;
 
 
@@ -15,6 +16,9 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
                                                        "<color=#32E8E8>AVAILABLE</color>",
                                                        "<color=#FF003E>DESTROYED</color>" };
 
+    private const string difficultyStr = "stage: ";
+
+    
     private const string statusStr = "status: ";
     private const string rewardsStr = "rewards: ";
     private const string unknownStr = "<color=#8C8C8C>???</color>";
@@ -28,9 +32,11 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
     }
 
 
-    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight)
+    public void Init(OWMap_Node attachedNode, MouseOverNotifier mouseOverNotifier, bool positionedAtRight,
+        NodeEnums.ProgressionState progressionState)
     {
         BaseInit(attachedNode, mouseOverNotifier, positionedAtRight);
+        difficultyText.text = OWMap_BattleNodeInfoDisplay.difficultyStr + OWMap_BattleNodeInfoDisplay.nodeDifficultyToText[(int)progressionState];
     }
     public void InitUpgradeType(string titleName)
     {
@@ -62,6 +68,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         barImage.DOComplete();
         backgroundImage.DOComplete();
         nodeTitleText.DOComplete();
+        difficultyText.DOComplete();
         statusText.DOComplete();
 
         float t0 = 0.001f;
@@ -72,6 +79,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         barImage.fillAmount = 0f;
         backgroundImage.fillAmount = 0f;
         nodeTitleText.DOFade(0f, t0);
+        difficultyText.DOFade(0f, t0);
         statusText.DOFade(0f, t0);
         yield return new WaitForSeconds(t0);
 
@@ -91,6 +99,9 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         yield return new WaitForSeconds(t1);
 
 
+        difficultyText.DOFade(1f, t1);
+        yield return new WaitForSeconds(t1);
+        
         statusText.DOFade(1f, t1);
         yield return new WaitForSeconds(t1);
 
@@ -103,6 +114,7 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         barImage.DOComplete();
         backgroundImage.DOComplete();
         nodeTitleText.DOComplete();
+        difficultyText.DOComplete();
         statusText.DOComplete();
 
         float t1 = 0.1f;
@@ -115,6 +127,9 @@ public class OWMap_UpgradeNodeInfoDisplay : OWMap_NodeInfoDisplay
         //GameAudioManager.GetInstance().PlayCardInfoHidden();
 
         statusText.DOFade(0f, t1);
+        yield return new WaitForSeconds(t1);
+        
+        difficultyText.DOFade(0f, t1);
         yield return new WaitForSeconds(t1);
 
         backgroundImage.DOFillAmount(0f, t2);

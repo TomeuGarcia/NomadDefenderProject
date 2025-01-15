@@ -88,6 +88,7 @@ public class TurretBuilding : RangeBuilding
     {
         if (!isFunctional || IsDisabled) return;
 
+        UpdateEnemiesInRange();
         _shootingController.UpdateShoot();
         LookAtTarget();
     }

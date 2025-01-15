@@ -9,6 +9,8 @@ public class ResultsScreen : MonoBehaviour
 {
     [Header("RUN STATE")]
     [SerializeField] private InterfaceReference<IRunStateData, ScriptableObject> _runStateData;
+    [SerializeField] private InterfaceReference<IGameProgressionStatus, ScriptableObject> _gameProgressionStatus;
+
     private IRunStateData RunStateData => _runStateData.Value;
 
 
@@ -74,7 +76,7 @@ public class ResultsScreen : MonoBehaviour
 
         for (int i = 1; i < turretCards.Length; ++i)
         {
-            TurretCardData currentTurretCard = turretCards[0];
+            TurretCardData currentTurretCard = turretCards[i];
 
             if (currentTurretCard.Statistics.TotalKills > mostKillsTurretCard.Statistics.TotalKills)
             {
@@ -191,7 +193,14 @@ public class ResultsScreen : MonoBehaviour
         
         if (RunStateData.Victory)
         {
-            SceneLoader.GetInstance().StartLoadGameEndCredits();
+            if (_gameProgressionStatus.Value.Game.VictoriesCount > 1)
+            {
+                SceneLoader.GetInstance().StartLoadMainMenu();
+            }
+            else
+            {
+                SceneLoader.GetInstance().StartLoadGameEndCredits();
+            }
         }
         else
         {

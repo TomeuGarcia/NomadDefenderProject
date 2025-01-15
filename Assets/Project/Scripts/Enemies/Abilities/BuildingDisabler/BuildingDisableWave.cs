@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Scripts.ObjectPooling;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BuildingDisableWave : RecyclableObject
 {
     [SerializeField] private MeshRenderer _meshRenderer;
     [SerializeField] private Transform _EMPTransform;
+    [SerializeField] private ParticleSystem _EMPHitParticles;
+    [SerializeField] private AudioSource _waveAudioSource;
+    [SerializeField] private AudioSource _hitAudioSource;
+    
     private Material _mashMaterial;
     private BuildingDisableWaveConfig _config;
     
@@ -65,6 +70,9 @@ public class BuildingDisableWave : RecyclableObject
         _EMPTransform.DOLocalRotate(_config.DropAnimation.EMPEndRotation, _config.DropAnimation.Duration).SetEase(_config.DropAnimation.Ease);
         yield return new WaitForSeconds(_config.DropAnimation.Duration);
         _EMPTransform.gameObject.SetActive(false);
+        _EMPHitParticles.Play();
+        
+        _waveAudioSource.Play();
 
         MeshTransform.DOScale(Vector3.one * (_config.Radius * 2), _config.Animation.Duration)
             .SetEase(Ease.OutQuart);
@@ -91,6 +99,11 @@ public class BuildingDisableWave : RecyclableObject
             {
                 BuildingDisableManager.Instance.HandleNewBuilding(disableableBuilding, _config.DisableDuration);
             }
+        }
+        
+        if (collidersInRange.Length > 0)
+        {
+            _hitAudioSource.Play();
         }
     }
 }

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using TMPro;
 using UnityEngine;
 
@@ -34,7 +35,8 @@ public class MainMenu : MonoBehaviour
 
     [Header("UNLOCKING")] 
     [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
-    
+    [SerializeField] private InterfaceReference<IGameProgressionUpdater, ScriptableObject> _gameProgressionUpdater;
+
     [Header("STEAM")]
     [SerializeField, Min(0)] private float _steamStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _steamCanvasGroup;
@@ -330,6 +332,7 @@ public class MainMenu : MonoBehaviour
         _cardCollection.DoReset();
 
         _unlockableTrophiesManager.SetAllTrophiesLocked();
+        _gameProgressionUpdater.Value.ResetEverything();
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());

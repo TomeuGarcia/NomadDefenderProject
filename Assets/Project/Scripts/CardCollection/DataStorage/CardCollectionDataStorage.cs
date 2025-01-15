@@ -86,21 +86,15 @@ public class CardCollectionDataStorage : ScriptableObject
         SaveData();
     }
 
-    private const int CESAR = 912;
+    private readonly CaesarCipher _caesarCipher = new (912);
 
     [Button()]
     private void LoadData()
     {
         CheckFile();
 
-        string storedContent = File.ReadAllText(PathToFile + FileName);
-        char[] codedContent = new char[storedContent.Length];
-        for (int i = 0; i < storedContent.Length; ++i)
-        {
-            codedContent[i] = (char)(storedContent[i] - CESAR);
-        }
-        storedContent = new string(codedContent);
-        
+        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile + FileName));
+
         DataWrapper storedData = JsonUtility.FromJson<DataWrapper>(storedContent);
 
         _discoveredProjectiles = new Dictionary<TurretPartProjectileDataModel, bool>(_projectiles.Length);
@@ -123,14 +117,8 @@ public class CardCollectionDataStorage : ScriptableObject
     {
         DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);
         
-        string contentToStore = JsonUtility.ToJson(dataToStore);
-        char[] codedContent = new char[contentToStore.Length];
-        for (int i = 0; i < contentToStore.Length; ++i)
-        {
-            codedContent[i] = (char)(contentToStore[i] + CESAR);
-        }
-        contentToStore = new string(codedContent);
-        
+        string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
+
         File.WriteAllText(PathToFile + FileName, contentToStore);
     }
 
@@ -138,9 +126,11 @@ public class CardCollectionDataStorage : ScriptableObject
     private void CheckFile()
     {
         string directory = PathToFile;
-        if (!Directory.Exists(directory))
+        if (!Directory.Exists(directory) || !File.Exists(directory))
         {
             Directory.CreateDirectory(directory);
+            FileStream fileStream = File.Create(directory + FileName);
+            fileStream.Close();
             ResetDiscoveries();
             SaveData();
         }
@@ -150,11 +140,7 @@ public class CardCollectionDataStorage : ScriptableObject
     [Button()]
     public void DoReset()
     {
-        string directory = PathToFile;
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
+        CheckFile();
         ResetDiscoveries();
         SaveData();
     }
