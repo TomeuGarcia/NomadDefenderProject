@@ -29,8 +29,17 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private Button _continueButton;
     [SerializeField] private Graphic[] _continueButtonArrows;
     [SerializeField] private MouseOverNotifier _continueButtonMouseNotifier;
-    
-    
+
+    private void Awake()
+    {
+        PauseMenu.GetInstance().GameCanBePaused = false;
+    }
+
+    private void OnDestroy()
+    {
+        PauseMenu.GetInstance().GameCanBePaused = true;
+    }
+
     private void Start()
     {
         Init();

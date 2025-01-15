@@ -340,6 +340,12 @@ public class RepeaterBase : TurretPartBase_Prefab
             projectileTurret, projectileToRepeat, _ownerBuilding.Position);
         newProjectile.AddEnemyToIgnore(fakeEnemy);
 
+        IReadOnlyCollection<Enemy> enemiesToIgnore = projectileSource.EnemiesToIgnore;
+        foreach (Enemy enemyToIgnore in enemiesToIgnore)
+        {
+            newProjectile.AddEnemyToIgnore(enemyToIgnore);
+        }
+
 
         // Spawn particle
         GameObject particles = ProjectileParticleFactory.GetInstance()

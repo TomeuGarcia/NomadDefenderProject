@@ -42,7 +42,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
 
     protected virtual void OnEnemyReached()
     {
-        if (_targetEnemy)
+        if (_targetEnemy != null && _targetEnemy.gameObject.activeInHierarchy)
         {
             EnemyHit();
         }

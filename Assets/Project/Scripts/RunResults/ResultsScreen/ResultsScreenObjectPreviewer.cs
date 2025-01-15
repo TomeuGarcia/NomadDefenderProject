@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     
     public void InitToShow(Camera camera, GameObject objectToPreview, string appendedText)
     {
-        _text.textComponent.text += '\n' + appendedText;
+        _text.SetTextStrings(_text.textComponent.text += '\n' + appendedText);
         
         if(objectToPreview.GetComponent<Enemy>() != null)
         {

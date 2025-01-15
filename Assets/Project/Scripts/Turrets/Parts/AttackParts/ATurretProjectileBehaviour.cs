@@ -235,6 +235,8 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
 
     private HashSet<Enemy> _enemiesToIgnore;
+    public IReadOnlyCollection<Enemy> EnemiesToIgnore => _enemiesToIgnore;
+    
     public void AddEnemyToIgnore(Enemy enemy)
     {
         _enemiesToIgnore.Add(enemy);
