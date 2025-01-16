@@ -19,7 +19,6 @@ public class DeckSelectorDebugDeckMap : ScriptableObject
         public void Validate()
         {
             int currentCount = _deckByProgressions.Count;
-            Debug.Log(currentCount);
             int progressionStateCount = Enum.GetValues(typeof(ProgressionState)).Length;
             for (int i = currentCount; i < progressionStateCount; ++i)
             {
