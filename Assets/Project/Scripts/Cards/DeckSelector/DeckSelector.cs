@@ -22,6 +22,7 @@ public class DeckSelector : MonoBehaviour
     [Header("SELECTABLE DECKS")]
     [SerializeField] private SelectableDeck[] selectableDecks;
     private SelectableDeck currentlySelectedDeck;
+    [SerializeField] private DeckSelectorDebugDeckMap _debugDeckMap;
 
     [Header("UI")]
     [SerializeField] private Button startSimulationButton;
@@ -83,6 +84,7 @@ public class DeckSelector : MonoBehaviour
         {
             SelectableDeck selectableDeck = selectableDecks[i];
             selectableDeck.InitReferences(this);
+            selectableDeck.InitSetDeck(_debugDeckMap.RemapDeck(selectableDeck.Deck));
             selectableDeck.InitSelectKeyShortcut((KeyCode.Alpha1 + i));
             selectableDeck.InitSpawnCards(cardSpawnService);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
