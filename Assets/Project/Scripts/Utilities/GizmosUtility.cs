@@ -44,4 +44,33 @@ public static class GizmosUtility
             
         Gizmos.DrawLineStrip(circlePositions.ToArray(), true);
     }
+
+
+
+    public static void DrawArrow(Vector3 from, Vector3 to, float headDistance = 0.25f)
+    {
+        Vector3 fromToVector = to - from;
+        float fromToDistance = fromToVector.magnitude;
+
+        if (fromToDistance.AlmostZero())
+        {
+            return;
+        }
+        
+        Vector3 fromToDirection = fromToVector / fromToDistance;
+
+        Vector3 headNormal = Mathf.Abs(Vector3.Dot(fromToDirection, Vector3.up)).AlmostEquals(1f)
+            ? Vector3.right
+            : Vector3.up;
+
+        Vector3 headAxis = Vector3.Cross(headNormal, fromToDirection);
+
+        Vector3 toFromDirection = -fromToDirection;
+        Vector3 headA = Quaternion.AngleAxis(45f, headAxis) * toFromDirection * headDistance;
+        Vector3 headB = Quaternion.AngleAxis(-45f, headAxis) * toFromDirection * headDistance;
+        
+        Gizmos.DrawLine(from, to);
+        Gizmos.DrawLine(to, to + headA);
+        Gizmos.DrawLine(to, to + headB);
+    }
 }

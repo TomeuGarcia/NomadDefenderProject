@@ -164,6 +164,7 @@ public class ResultsScreenView : MonoBehaviour
             string extraTextMostKillsAndDamage = 
                 initData.MostKillsCardCount.ToString() + " & " + initData.MostDamageCardCount.ToString();
             _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKillsAndDamage);
+            InitCard(initData.MostKillsCard);
         }
         else
         {
@@ -203,7 +204,6 @@ public class ResultsScreenView : MonoBehaviour
     
     private IEnumerator PlayShowAnimation(IRunStateData runStateData)
     {
-        yield return new WaitForSeconds(1f);
         if(runStateData.Victory)
         {
             yield return StartCoroutine(ShowTitleFades(_fadeVictory, _scrollVictory));
