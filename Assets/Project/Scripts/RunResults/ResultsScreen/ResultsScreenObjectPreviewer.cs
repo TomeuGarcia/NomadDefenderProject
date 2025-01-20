@@ -83,5 +83,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         _text.Activate();
         yield return new WaitUntil(() => _text.FinishedLine);
     }
-    
+
+    public void CompleteShowAnimation()
+    {
+        _objectToPreview.SetActive(true);
+        _text.SetStringInstantly();
+    }
 }

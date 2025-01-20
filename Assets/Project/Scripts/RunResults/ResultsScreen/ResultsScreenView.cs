@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,6 +85,18 @@ public class ResultsScreenView : MonoBehaviour
             yield return coroutinesParent.StartCoroutine(_totalDamageTaken.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_totalDestroyedNodes.PlayAnimation());
         }
+
+        public void CompleteAnimations()
+        {
+            _simulationTime.CompleteAnimation();
+            _nodesReached.CompleteAnimation();
+            _buildingsPlaced.CompleteAnimation();
+            _buildingsUpgraded.CompleteAnimation();
+            _totalDamageDealt.CompleteAnimation();
+            _highestDamageDealt.CompleteAnimation();
+            _totalDamageTaken.CompleteAnimation();
+            _totalDestroyedNodes.CompleteAnimation();
+        }
     }
 
     
@@ -127,7 +140,7 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private GameObject _mapVictoryObjects;
     [SerializeField] private GameObject _mapDefeatObjects;
 
-
+    private bool _finishedPlayingShowAnimation = false;
 
     private InitData _initData;
     
@@ -195,15 +208,17 @@ public class ResultsScreenView : MonoBehaviour
         Vector3 cardPosition = card.transform.position;
         card.GetComponent<BuildingCard>().InitPositions(cardPosition, Vector3.zero, cardPosition);
     }
-    
-    
+
     public void StartPlayingShowAnimation(IRunStateData runStateData)
     {
         StartCoroutine(PlayShowAnimation(runStateData));
+        StartCoroutine(WaitForShowAnimationSkip(runStateData));
     }
+
     
     private IEnumerator PlayShowAnimation(IRunStateData runStateData)
     {
+        _finishedPlayingShowAnimation = false;
         if(runStateData.Victory)
         {
             yield return StartCoroutine(ShowTitleFades(_fadeVictory, _scrollVictory));
@@ -217,6 +232,7 @@ public class ResultsScreenView : MonoBehaviour
         yield return StartCoroutine(PlayShowDeckAnimation());
         yield return StartCoroutine(PlayShowEnemiesAnimation());
         yield return StartCoroutine(PlayShowContinueButton());
+        _finishedPlayingShowAnimation = true;
     }
 
     private IEnumerator PlayShowTitleAnimation(IRunStateData runStateData)
@@ -284,4 +300,66 @@ public class ResultsScreenView : MonoBehaviour
 
         _maskIntro.StartScroll(scrollFadeParent);
     }
+    
+    
+    private IEnumerator WaitForShowAnimationSkip(IRunStateData runStateData)
+    {
+        while (!_finishedPlayingShowAnimation)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                CancelShowAnimation(runStateData);
+                _finishedPlayingShowAnimation = true;
+            }            
+            yield return null;
+        }
+    }
+
+    private void CancelShowAnimation(IRunStateData runStateData)
+    {
+        StopAllCoroutines();
+
+        bool playingVictory = runStateData.Victory;
+        TextDecoder titleDecoder = playingVictory ? _victoryTitle : _defeatTitle;
+        CompletePlayingDecoder(titleDecoder);
+        CompletePlayingDecoder(_resultsSubtitle);
+        
+        
+        CompletePlayingDecoder(_statsHeader);
+        _stats.CompleteAnimations();
+
+        
+        CompletePlayingDecoder(_deckHeader);
+        CompletePlayingDecoder(_deckNameSubheader);
+        if (_initData.MostKillsAndDamageAreTheSame)
+        {
+            _mostKillsAndDamageCardScreenPreviewer.CompleteShowAnimation();
+        }
+        else
+        {
+            _mostKillsCardScreenPreviewer.CompleteShowAnimation();
+            _mostDamageCardScreenPreviewer.CompleteShowAnimation();
+        }
+        
+        
+        CompletePlayingDecoder(_enemiesHeader);
+        if (!_initData.ExistsMostDamagingEnemy)
+        {
+            CompletePlayingDecoder(_noDamageEnemyText);
+        }
+        _mostDamagingEnemyScreenPreviewer.CompleteShowAnimation(); 
+        _initData.MostDamagingEnemy.GetComponent<Enemy>().InitWithoutFunctionality();
+        
+        
+        
+        CompletePlayingDecoder(_continueButtonText);
+        _continueTextArrows.SetActive(true);
+        _continueButton.interactable = true;
+    }
+
+    private void CompletePlayingDecoder(TextDecoder textDecoder)
+    {
+        textDecoder.SetStringInstantly();
+    }
+
 }

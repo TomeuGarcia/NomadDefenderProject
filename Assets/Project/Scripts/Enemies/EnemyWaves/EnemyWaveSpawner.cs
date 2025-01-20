@@ -178,6 +178,7 @@ public class EnemyWaveSpawner : ScriptableObject
         EnemyAttackDestination attackDestination)
     {
         yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
+        //Debug.Log(name + " " + currentWave);
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
         if (activeEnemies == 0) // If empty wave, end
