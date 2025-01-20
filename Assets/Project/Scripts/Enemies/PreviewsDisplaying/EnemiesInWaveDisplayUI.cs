@@ -156,12 +156,12 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
         
         yield return new WaitForSeconds(0.1f);
 
+        
         for (int i = 0; i < _currentDisplayData.Entries.Length; ++i)
         {
-            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
             _currentDisplayData.Entries[i].EnemyDisplayUI.Show();
-            yield return new WaitForSeconds(0.1f);
         }
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
         
         _animationState = AnimationState.None;
     }
@@ -179,10 +179,10 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
         
         for (int i = _currentDisplayData.Entries.Length - 1; i >= 0; --i)
         {
-            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
             _currentDisplayData.Entries[i].EnemyDisplayUI.Hide();
-            yield return new WaitForSeconds(0.1f);
         }
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
+        
         
         for (int i = 0; i < 2; ++i)
         {

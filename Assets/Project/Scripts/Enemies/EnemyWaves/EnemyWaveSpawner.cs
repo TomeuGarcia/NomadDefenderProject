@@ -217,7 +217,11 @@ public class EnemyWaveSpawner : ScriptableObject
         PathNode currentNode, float toNextNodeT)
     {
         SharedSpawnEnemy(enemyType, spawnParent, attackDestination, spawnOffset, currentNode, toNextNodeT);
-        ++activeEnemies;
+    }
+
+    public void HintSpawnEnemyNotIncludedInWave(int numberOfEnemies)
+    {
+        activeEnemies += numberOfEnemies;
     }
 
     private void SharedSpawnEnemy(EnemyTypeConfig enemyType, Transform spawnParent, 
