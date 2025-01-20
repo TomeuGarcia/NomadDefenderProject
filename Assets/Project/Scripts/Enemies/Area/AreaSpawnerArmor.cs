@@ -18,7 +18,7 @@ public class AreaSpawnerArmor : MonoBehaviour
 
     private void OnEnable()
     {
-        InitAreaSpawn();
+        if (gameObject.activeInHierarchy) InitAreaSpawn();
     }
     private void OnDisable()
     {
@@ -70,14 +70,19 @@ public class AreaSpawnerArmor : MonoBehaviour
 
     private IEnumerator SpawnAreaRepeatedly()
     {
-        yield return new WaitForSeconds(spawnRate);
-
-        while (true)
+        Timer delayTimer = new Timer(spawnRate);
+        
+        while (gameObject.activeInHierarchy)
         {
+            while (!delayTimer.HasFinished())
+            {
+                delayTimer.Update(GameTime.DeltaTime);
+                yield return null;
+            }
+            
+            delayTimer.Reset();
             AreaCooldown();
-            yield return new WaitForSeconds(spawnRate);
         }
-
     }
 
 
