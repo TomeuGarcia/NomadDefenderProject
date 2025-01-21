@@ -408,6 +408,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
 
     private Coroutine _speedBoostCoroutine = null;
+    public float SpeedBoosterEffectMultiplier { get; set; } = 1f;
+    public bool SpeedBoosterPaused { get; set; } = false;
     public void ApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
     {
         if (_speedBoostCoroutine != null)
@@ -419,12 +421,13 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private IEnumerator DoApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
     {
+        boost.WithMultiplier(SpeedBoosterEffectMultiplier);
         float boostedSpeed = _typeConfig.BaseStats.MoveSpeed * boost.SpeedMultiplier;
         
         Timer speedTransitionTimer = new Timer(boost.AccelerateDuration);
         while (!speedTransitionTimer.HasFinished())
         {
-            speedTransitionTimer.Update(Time.deltaTime);
+            speedTransitionTimer.Update(GameTime.DeltaTime);
             pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
                 _typeConfig.BaseStats.MoveSpeed, boostedSpeed, speedTransitionTimer.Ratio01));
             
@@ -439,7 +442,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         speedTransitionTimer.Duration = boost.DecelerateDuration;
         while (!speedTransitionTimer.HasFinished())
         {
-            speedTransitionTimer.Update(Time.deltaTime);
+            speedTransitionTimer.Update(GameTime.DeltaTime);
             pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
                 boostedSpeed, _typeConfig.BaseStats.MoveSpeed, speedTransitionTimer.Ratio01));
             
