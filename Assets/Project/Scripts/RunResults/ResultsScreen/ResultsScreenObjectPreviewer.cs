@@ -24,7 +24,7 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     
     public void InitToShow(Camera camera, GameObject objectToPreview, string appendedText)
     {
-        _text.SetTextStrings(_text.textComponent.text += '\n' + appendedText);
+        _text.SetTextStrings(_text.textComponent.text += '\n' + "<size=150%>"+ appendedText + "</size>");
         
         if(objectToPreview.GetComponent<Enemy>() != null)
         {

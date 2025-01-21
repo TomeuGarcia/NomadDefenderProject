@@ -212,7 +212,6 @@ public class ResultsScreenView : MonoBehaviour
     public void StartPlayingShowAnimation(IRunStateData runStateData)
     {
         StartCoroutine(PlayShowAnimation(runStateData));
-        StartCoroutine(WaitForShowAnimationSkip(runStateData));
     }
 
     
@@ -227,6 +226,9 @@ public class ResultsScreenView : MonoBehaviour
         {
             yield return StartCoroutine(ShowTitleFades(_fadeDefeat, _scrollDefeat));
         }
+        
+        StartCoroutine(WaitForShowAnimationSkip(runStateData));
+        
         yield return StartCoroutine(PlayShowTitleAnimation(runStateData));
         yield return StartCoroutine(PlayShowStatsAnimation());
         yield return StartCoroutine(PlayShowDeckAnimation());
