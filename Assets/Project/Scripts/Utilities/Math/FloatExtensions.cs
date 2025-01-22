@@ -17,4 +17,9 @@ public static class FloatExtensions
     {
         return (Mathf.Sin(value * Mathf.PI - (Mathf.PI / 2)) + 1) / 2;
     }
+
+    public static int RoundStepping(int value, int roundStep)
+    {
+        return roundStep * Mathf.RoundToInt((float)value / roundStep);
+    }
 }
