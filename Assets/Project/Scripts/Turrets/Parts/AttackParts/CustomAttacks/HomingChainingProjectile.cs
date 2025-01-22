@@ -83,7 +83,7 @@ public class HomingChainingProjectile : HomingProjectile
     protected override int ComputeDamage()
     {
         int damage = TurretOwner.Stats.Damage;
-        damage = (int)(damage * damageMultiplier);
+        damage = Mathf.RoundToInt(damage * damageMultiplier);
         return damage;
     }
     

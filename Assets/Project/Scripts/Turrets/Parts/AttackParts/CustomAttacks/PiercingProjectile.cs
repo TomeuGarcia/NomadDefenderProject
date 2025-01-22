@@ -96,7 +96,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     protected override int ComputeDamage()
     {
-        return Mathf.CeilToInt(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER);
+        return Mathf.RoundToInt(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER);
     }
     
     protected override ITurretProjectileView MakeTurretProjectileView()
