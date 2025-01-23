@@ -24,12 +24,11 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     
     public void InitToShow(Camera camera, GameObject objectToPreview, string appendedText)
     {
-        _text.SetTextStrings(_text.textComponent.text += '\n' + appendedText);
+        _text.SetTextStrings(_text.textComponent.text += '\n' + "<size=150%>"+ appendedText + "</size>");
         
-        if(objectToPreview.TryGetComponent(out Enemy enemy))
+        if(objectToPreview.GetComponent<Enemy>() != null)
         {
             FindDespicableObjects(objectToPreview.transform);
-            enemy.PositionWithCenteredMesh();
         }
 
         _previewImage.enabled = false;
@@ -84,5 +83,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         _text.Activate();
         yield return new WaitUntil(() => _text.FinishedLine);
     }
-    
+
+    public void CompleteShowAnimation()
+    {
+        _objectToPreview.SetActive(true);
+        _text.SetStringInstantly();
+    }
 }
