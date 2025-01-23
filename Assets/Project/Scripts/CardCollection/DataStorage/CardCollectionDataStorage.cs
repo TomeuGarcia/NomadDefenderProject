@@ -142,6 +142,7 @@ public class CardCollectionDataStorage : ScriptableObject
     {
         CheckFile();
         ResetDiscoveries();
+        DiscoverFirsts();
         SaveData();
     }
     
@@ -169,8 +170,12 @@ public class CardCollectionDataStorage : ScriptableObject
             if (Random.Range(0, 2) < 1) Discover(passiveAbility);
         }
     }
-    
-    
+
+    private void DiscoverFirsts()
+    {
+        Discover(_projectiles[0]);
+        Discover(_passiveAbilities[0]);
+    }
 
     private TurretPartProjectileDataModel ProjectileNameToDataModel(string name)
     {
