@@ -26,9 +26,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     {
         _text.SetTextStrings(_text.textComponent.text += '\n' + appendedText);
         
-        if(objectToPreview.GetComponent<Enemy>() != null)
+        if(objectToPreview.TryGetComponent(out Enemy enemy))
         {
             FindDespicableObjects(objectToPreview.transform);
+            enemy.PositionWithCenteredMesh();
         }
 
         _previewImage.enabled = false;
