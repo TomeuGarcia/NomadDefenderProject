@@ -15,17 +15,11 @@ public class SpeedBooster : RecyclableObject
         [SerializeField, Min(0)] private float _duration = 0.25f;
         [SerializeField, Min(0)] private float _accelerateDuration = 0.2f;
         [SerializeField, Min(0)] private float _decelerateDuration = 0.2f;
-        private float _multiplier = 1f;
         
-        public float SpeedMultiplier => _speedMultiplier * _multiplier;
-        public float Duration => _duration * _multiplier;   
-        public float AccelerateDuration => _accelerateDuration * _multiplier;   
-        public float DecelerateDuration => _decelerateDuration * _multiplier;
-
-        public void WithMultiplier(float multiplier)
-        {
-            _multiplier = multiplier;
-        }
+        public float SpeedMultiplier => _speedMultiplier;
+        public float Duration => _duration;   
+        public float AccelerateDuration => _accelerateDuration;   
+        public float DecelerateDuration => _decelerateDuration;   
     }
 
     

@@ -178,7 +178,6 @@ public class EnemyWaveSpawner : ScriptableObject
         EnemyAttackDestination attackDestination)
     {
         yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
-        Debug.Log(name + " " + currentWave);
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
         if (activeEnemies == 0) // If empty wave, end
@@ -217,11 +216,7 @@ public class EnemyWaveSpawner : ScriptableObject
         PathNode currentNode, float toNextNodeT)
     {
         SharedSpawnEnemy(enemyType, spawnParent, attackDestination, spawnOffset, currentNode, toNextNodeT);
-    }
-
-    public void HintSpawnEnemyNotIncludedInWave(int numberOfEnemies)
-    {
-        activeEnemies += numberOfEnemies;
+        ++activeEnemies;
     }
 
     private void SharedSpawnEnemy(EnemyTypeConfig enemyType, Transform spawnParent, 

@@ -9,16 +9,10 @@ public class EnemyDash : MonoBehaviour
     [SerializeField] private Enemy _enemy;
     [SerializeField] private PathFollower _pathFollower;
     [SerializeField] private EnemyDashView _view;
-
-
-    private void Awake()
-    {
-        _enemy.SpeedBoosterEffectMultiplier = _dashConfig.SpeedBoosterInteractionMultiplier;
-    }
-
+    
+    
     private void OnEnable()
     {
-        ResetMoving();
         StartCoroutine(DashAfterReachingNodeT());
     }
 
@@ -68,11 +62,11 @@ public class EnemyDash : MonoBehaviour
     
     private void StopMoving()
     {
-        _pathFollower.SetSecondaryMoveSpeedMultiplier(0);
+        _pathFollower.UpdateBaseMoveSpeed(0);
     }
     private void ResetMoving()
     {
-        _pathFollower.SetSecondaryMoveSpeedMultiplier(1);
+        _pathFollower.UpdateBaseMoveSpeed(_dashConfig.BaseStats.MoveSpeed);
     }
     
     

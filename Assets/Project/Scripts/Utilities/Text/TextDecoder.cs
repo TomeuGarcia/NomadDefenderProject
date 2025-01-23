@@ -271,7 +271,7 @@ public class TextDecoder : MonoBehaviour
         indexChar = int.MaxValue;
         FinishAllCoroutines();
         
-        int tempIndexLine = Mathf.Min(indexLine, textStrings.Count - 1);
+        int tempIndexLine = indexLine;
         ClearDecoder();
         indexLine = tempIndexLine;
         textComponent.text = textStrings[indexLine];

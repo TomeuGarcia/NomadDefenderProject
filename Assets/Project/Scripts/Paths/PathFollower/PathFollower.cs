@@ -20,8 +20,7 @@ public class PathFollower : MonoBehaviour
     private Quaternion _targetRotation;
     public Vector3 MoveDirection { get; private set; }
     [SerializeField, Min(0f)] private float moveSpeed = 10f;
-    private float _speedMultiplier = 1f;
-    private float _secondarySpeedMultiplier = 1f;
+    private float _speedMultiplier;
     [SerializeField, Min(0f)] public float _rotationSpeed = 300f;
     private float _baseMoveSpeed;
     [SerializeField] private Rigidbody _rigidbodyToMove;
@@ -60,8 +59,8 @@ public class PathFollower : MonoBehaviour
 
     public void Init(PathNode startNode, Vector3 positionOffset, float totalDistanceToTravel, float startToEndT = 0)
     {
-        _secondarySpeedMultiplier = _speedMultiplier = 1f;
         UpdateBaseMoveSpeed(moveSpeed);
+        _speedMultiplier = 1;
 
         CurrentNode = targetNode = startNode;
         UpdateTarget(CurrentNode.GetNextNode(), CurrentNode.GetDirectionToNextNode());
@@ -108,11 +107,6 @@ public class PathFollower : MonoBehaviour
         _speedMultiplier = speedMultiplier;
         UpdateMoveSpeed();
     }
-    public void SetSecondaryMoveSpeedMultiplier(float secondarySpeedMultiplier)
-    {
-        _secondarySpeedMultiplier = secondarySpeedMultiplier;
-        UpdateMoveSpeed();
-    }
 
     public void UpdateBaseMoveSpeed(float baseMoveSpeed)
     {
@@ -121,7 +115,7 @@ public class PathFollower : MonoBehaviour
     }
     private void UpdateMoveSpeed()
     {
-        moveSpeed = (_baseMoveSpeed * _speedMultiplier * _secondarySpeedMultiplier);
+        moveSpeed = (_baseMoveSpeed * _speedMultiplier);
         step = moveSpeed / distanceStartToEnd;
     }
     
