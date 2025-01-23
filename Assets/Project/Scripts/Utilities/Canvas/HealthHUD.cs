@@ -1,10 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
+using Project.Scripts.Utilities.Canvas;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthHUD : MonoBehaviour
 {
+    private static HealthHUDResizeConfig ResizeConfig = new HealthHUDResizeConfig();
+    
     private HealthSystem healthSystem;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image armorImage;
@@ -25,6 +27,7 @@ public class HealthHUD : MonoBehaviour
     public void Init(HealthSystem healthSystem)
     {
         this.healthSystem = healthSystem;
+        ResizeConfig.Apply(this.healthSystem, canvasRectTransform);
 
         this.healthSystem.OnHealthUpdated += UpdateHealthImage;
         this.healthSystem.OnArmorUpdated += UpdateArmorImage;
