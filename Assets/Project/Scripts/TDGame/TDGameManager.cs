@@ -194,6 +194,10 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     {
         if (!HasAliveLocationsLeft() || RedirectedDamageWillKill())
         {
+            if (!alreadyPlayedVictoryOrGameOver)
+            {
+                GameOver();
+            }
             return;
         }
         
@@ -378,7 +382,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         return mostDamagedLocation != null;
     }
-
 
 
 
