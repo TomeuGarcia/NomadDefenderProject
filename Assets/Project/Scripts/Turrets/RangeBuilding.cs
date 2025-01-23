@@ -42,17 +42,25 @@ public abstract class RangeBuilding : Building
     public Vector3 Position => transform.position;
     
     public abstract float CurrentRadiusRange { get; }
-    
+
+    protected bool _gameOverDisabled = false;
 
     private void OnEnable()
     {
         if (triggerNotifier != null) { SubscribeToTriggerNotifier(); }
+        TDGameManager.OnGameOverStart += SetGameOverDisabled;
     }
     private void OnDisable()
     {
         if (triggerNotifier != null) { UnsubscribeToTriggerNotifier(); }
+        TDGameManager.OnGameOverStart -= SetGameOverDisabled;
     }
 
+
+    private void SetGameOverDisabled()
+    {
+        _gameOverDisabled = true;
+    }
 
     private void Awake()
     {
