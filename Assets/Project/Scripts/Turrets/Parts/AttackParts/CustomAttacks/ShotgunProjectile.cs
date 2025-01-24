@@ -86,7 +86,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     protected override int ComputeDamage()
     {
-        return (int)(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER / _bullets.Length);
+        return Mathf.RoundToInt(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER / _bullets.Length);
     }
     
     public override bool QueuesDamageToEnemies()

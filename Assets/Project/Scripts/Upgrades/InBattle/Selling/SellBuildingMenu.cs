@@ -60,7 +60,7 @@ public class SellBuildingMenu : MonoBehaviour
             ? _sellingConfig.UpgradesValueMultiplier
             : _sellingConfig.PlayValueMultiplier;
         
-        _sellValue += Mathf.CeilToInt(baseAmount * valueMultiplier);
+        _sellValue += FloatExtensions.RoundStepping(Mathf.CeilToInt(baseAmount * valueMultiplier), 5);
         UpdateSellValueText();
     }
 
