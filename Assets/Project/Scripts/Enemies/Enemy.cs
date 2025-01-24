@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
         healthHUD.Init(healthSystem);
 
-        originalMeshLocalScale = MeshTransform.localScale;
+        originalMeshLocalScale = _meshHolder.localScale;
 
         healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
         IsFakeEnemy = false;
@@ -262,9 +262,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         
         RemoveQueuedDamage(damageAttack.Damage);
 
-        MeshTransform.localScale = originalMeshLocalScale;
-        MeshTransform.DOKill(true);
-        MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
+        _meshHolder.localScale = originalMeshLocalScale;
+        _meshHolder.DOKill(true);
+        _meshHolder.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
         bool gotKilled = healthSystem.IsDead();
         if (gotKilled && !_initializedWithoutFunctionality)
