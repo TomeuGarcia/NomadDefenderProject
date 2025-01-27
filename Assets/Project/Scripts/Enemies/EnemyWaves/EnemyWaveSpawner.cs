@@ -206,7 +206,7 @@ public class EnemyWaveSpawner : ScriptableObject
 
     private void SpawnEnemyIncludedInWave(EnemyTypeConfig enemyType, Transform spawnParent, EnemyAttackDestination attackDestination)
     {
-        Vector2 randomSpawnOffset = new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
+        Vector2 randomSpawnOffset = new Vector2(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f));
         SharedSpawnEnemy(enemyType, spawnParent, attackDestination, randomSpawnOffset, startNode);
         OnEnemyFromWaveSpawned?.Invoke(enemyType);
     }

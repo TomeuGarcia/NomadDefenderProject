@@ -119,7 +119,7 @@ public class EnemiesPhotograph : MonoBehaviour
         {
             Enemy enemy = _enemies[i];
             enemy.PositionWithCenteredMesh();
-            enemy.MeshTransform.localScale = enemy.MeshTransform.localScale * enemy.TypeConfig.View.PhotoScale;
+            enemy.MeshTransform.parent.localScale = enemy.MeshTransform.parent.localScale * enemy.TypeConfig.View.PhotoScale;
         }
     }
 }
