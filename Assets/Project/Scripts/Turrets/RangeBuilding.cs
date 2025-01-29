@@ -10,7 +10,7 @@ public abstract class RangeBuilding : Building
     public List<Enemy> Enemies => enemies;
 
     [Header("COMPONENTS")]
-    [SerializeField] private MouseOverNotifier meshMouseNotifier;
+    [SerializeField] private MouseOverlapNotifier meshMouseNotifier;
     //[SerializeField] protected GameObject rangePlaneMeshObject;
     //protected Material rangePlaneMaterial;
 

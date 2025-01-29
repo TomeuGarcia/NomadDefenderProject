@@ -246,7 +246,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.DoGameStartSetup();
         tutoCardDrawer.tutorialCard.InitOverviewPositioner(_cardOverviewPositioner);
         tutoCardDrawer.tutorialCard.MotionEffectsController.DisableMotion();
-        
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
 
         scriptedSequence.NextLine(); //Initializing User's Deck Line 5
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -296,7 +296,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         //Finishes Cards Tutorial
         _cardsMotionConfig.SetTDGameplayHandMode();
-        
+
 
         //Skips Redraw
         scriptedSequence.Clear();
@@ -378,7 +378,8 @@ public class BattleTutorialManager : MonoBehaviour
         GameTime.SetTimeScale(0);
         yield return new WaitForSeconds(0.25f);
 
-
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+        _cardsMotionConfig.SetTutorialDisplayMode();
         _cardOverviewPositioner.Init(projectileCard);
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
         yield return StartCoroutine(PlayDifferentProjectileTutorial(projectileCard));
@@ -390,6 +391,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
         yield return StartCoroutine(PlayDifferentPassivesTutorial(passivesCard));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
+        _cardsMotionConfig.SetTDGameplayHandMode();
         _hand.InitCardsInHand(false);
         yield return new WaitForSeconds(1.0f);
         
@@ -424,12 +426,15 @@ public class BattleTutorialManager : MonoBehaviour
         _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         yield return new WaitForSeconds(0.25f);
         
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+        _cardsMotionConfig.SetTutorialDisplayMode();
         _cardOverviewPositioner.Init(supportCard1);
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
         yield return StartCoroutine(PlaySupportTutorial(supportCard1));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
-
+        _cardsMotionConfig.SetTDGameplayHandMode();
+        
         yield return new WaitForSeconds(1.0f);
         
         

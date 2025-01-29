@@ -7,6 +7,9 @@ public class MouseOverlapNotifier : MonoBehaviour
 {
     public event Action OnMouseEntered;
     public event Action OnMouseExited;
+    public event Action OnMousePressed;
+    
+    
 
     private Camera _camera;
 
@@ -28,6 +31,10 @@ public class MouseOverlapNotifier : MonoBehaviour
             {
                 if (_isBeingOverlapped)
                 {
+                    if (OnMousePressed != null && Input.GetKeyDown(KeyCode.Mouse0))
+                    {
+                        OnMousePressed.Invoke();
+                    }
                     return;
                 }
                 

@@ -1452,7 +1452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validTileType: 1
   buildingsUtils: {fileID: 11400000, guid: 1b5d68d06ba91654fb779dfe256efc8b, type: 2}
-  meshMouseNotifier: {fileID: 3840318094199946480}
+  meshMouseNotifier: {fileID: 4218944134237261223}
   upgrader: {fileID: 5780698753735836814}
   bodyHolder: {fileID: 8841902078336537721}
   baseHolder: {fileID: 7087010633946979603}
@@ -1893,9 +1893,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5921213790072655071}
-  - component: {fileID: 3840318094199946480}
   - component: {fileID: 1257576971250742800}
   - component: {fileID: 7240679814083374270}
+  - component: {fileID: 4218944134237261223}
   m_Layer: 0
   m_Name: MouseNotifier
   m_TagString: Untagged
@@ -1918,18 +1918,6 @@ Transform:
   m_Father: {fileID: 8554712681228330222}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3840318094199946480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6976824036702100469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88b4fa9bcbc6aea4d9f75206b48185a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1257576971250742800
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1965,6 +1953,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _turret: {fileID: 1416685430773097842}
   _view: {fileID: 1955923432000558293}
+--- !u!114 &4218944134237261223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976824036702100469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3023305c244ca4b83c2c10e350bce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7186562074925846485
 GameObject:
   m_ObjectHideFlags: 0
