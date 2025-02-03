@@ -393,7 +393,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         _cardsMotionConfig.SetTDGameplayHandMode();
         _hand.InitCardsInHand(false);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.5f);
         
 
         
@@ -435,7 +435,7 @@ public class BattleTutorialManager : MonoBehaviour
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
         _cardsMotionConfig.SetTDGameplayHandMode();
         
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.5f);
         
         
         GameTime.SetTimeScale(1);
