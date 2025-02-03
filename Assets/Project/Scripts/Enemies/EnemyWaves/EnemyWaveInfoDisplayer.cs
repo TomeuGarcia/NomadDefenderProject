@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,13 @@ public class EnemyWaveInfoDisplayer : MonoBehaviour
     private MouseOverlapNotifier _mouseOverNotifier;
 
     private GameObject _mouseHoverViewToggle;
-    
-    
+
+
+    private void Awake()
+    {
+        numberOfEnemiesText.text = "0";
+    }
+
     private void OnDestroy()
     {
         foreach (EnemyWaveSpawner overlappedEnemyWaveSpawner in _overlappingEnemyWaveSpawners)

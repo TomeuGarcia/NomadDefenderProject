@@ -394,18 +394,19 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         _cardsMotionConfig.SetTDGameplayHandMode();
         _hand.InitCardsInHand(false);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
         
 
         
-        GameTime.SetTimeScale(1);
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
         BuildingCard.LockAllCardsFromHover = false;
         _hand.CanBeHidden = true;
         _hand.InitCardsInHand();
 
         
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
+        GameTime.SetTimeScale(1);
+        
         scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
@@ -436,14 +437,15 @@ public class BattleTutorialManager : MonoBehaviour
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
         _cardsMotionConfig.SetTDGameplayHandMode();
         
-        yield return new WaitForSeconds(2.5f);
-        
-        
-        GameTime.SetTimeScale(1);
+        yield return new WaitForSeconds(1.5f);
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
         BuildingCard.LockAllCardsFromHover = false;
         _hand.CanBeHidden = true;
         _hand.InitCardsInHand();
+        
+        
+        yield return new WaitForSeconds(2.5f);
+        GameTime.SetTimeScale(1);
         
         scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );

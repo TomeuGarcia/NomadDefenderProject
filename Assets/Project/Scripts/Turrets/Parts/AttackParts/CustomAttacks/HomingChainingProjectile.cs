@@ -25,6 +25,12 @@ public class HomingChainingProjectile : HomingProjectile
 
     protected override void OnEnemyReached()
     {
+        if (!TargetedEnemyIsStillValid)
+        {
+            Disappear();
+            return;
+        }
+        
         GameObject hitParticles = ProjectileParticleFactory.GetInstance()
             .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         hitParticles.transform.parent = gameObject.transform.parent;
@@ -42,13 +48,16 @@ public class HomingChainingProjectile : HomingProjectile
         }
 
 
-        if (_currentChainedTarget < _chainTargetedEnemies.Length)
+        int chainTargetsCount = _chainTargetedEnemies.Length;
+        if (_currentChainedTarget < chainTargetsCount)
         {
             _targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
             lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());            
         }
-        else
+        
+        if (chainTargetsCount < 1 ||
+            _currentChainedTarget >= chainTargetsCount - 1)
         {
             Disappear();
         }
