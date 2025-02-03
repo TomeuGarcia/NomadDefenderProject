@@ -112,6 +112,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         speedUpButtonHolder.GetComponent<CanvasGroup>().alpha = 0;
         speedUpButtonHolder.SetActive(false);
+        speedUpButton.InitNumSpeed();
 
         deckInterface.GetComponent<CanvasGroup>().alpha = 0;
         deckInterface.SetActive(false);
