@@ -22,15 +22,15 @@ public class CardAbilityDescriptionModel
 
         foreach (CardAbilityKeyword descriptionKeyword in _descriptionKeywords)
         {
-            descriptionKeyword.ApplyDescriptionModifications(editableDescription);
+            descriptionKeyword.ApplyModificationsToDescription(editableDescription);
         }
         foreach (CardAbilityKeyword descriptionlessKeyword in _descriptionlessKeywords)
         {
-            descriptionlessKeyword.ApplyDescriptionModifications(editableDescription);
+            descriptionlessKeyword.ApplyModificationsToDescription(editableDescription);
         }
         foreach (AbilityDescriptionPattern descriptionPattern in _descriptionPatterns)
         {
-            descriptionPattern.ApplyDescriptionModifications(editableDescription);
+            descriptionPattern.ApplyModificationsToDescription(editableDescription);
         }
         
         return editableDescription;

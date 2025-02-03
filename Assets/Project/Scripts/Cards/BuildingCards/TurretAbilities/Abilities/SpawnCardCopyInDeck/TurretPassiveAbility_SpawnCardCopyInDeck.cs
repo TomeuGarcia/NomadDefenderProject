@@ -12,7 +12,7 @@ public class TurretPassiveAbility_SpawnCardCopyInDeck : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.CostIncrement);
+        UpdateDescriptionVariable(_abilityDataModel.CostIncrement);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)

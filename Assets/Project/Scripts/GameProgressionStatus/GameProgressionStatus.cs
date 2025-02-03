@@ -79,10 +79,11 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     private void CheckFile()
     {
         string directory = PathToFile;
-        if (!Directory.Exists(directory) || !File.Exists(directory))
+        string directoryWithFile = directory + FileName;
+        if (!Directory.Exists(directory) || !File.Exists(directoryWithFile))
         {
             Directory.CreateDirectory(directory);
-            FileStream fileStream = File.Create(directory + FileName);
+            FileStream fileStream = File.Create(directoryWithFile);
             fileStream.Close();
             ResetStatus();
             SaveData();

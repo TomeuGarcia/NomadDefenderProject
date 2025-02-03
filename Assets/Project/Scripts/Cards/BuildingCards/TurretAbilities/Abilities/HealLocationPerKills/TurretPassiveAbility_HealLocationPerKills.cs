@@ -17,9 +17,9 @@ public class TurretPassiveAbility_HealLocationPerKills : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.HealAmount);
-        ApplyDescriptionCorrection(_abilityDataModel.StartingKills);
-        ApplyDescriptionCorrection(_abilityDataModel.KillsIncrease);
+        UpdateDescriptionVariable(_abilityDataModel.HealAmount);
+        UpdateDescriptionVariable(_abilityDataModel.StartingKills);
+        UpdateDescriptionVariable(_abilityDataModel.KillsIncrease);
     }
 
 
