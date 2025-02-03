@@ -13,7 +13,7 @@ public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.DamageAmount);
+        UpdateDescriptionVariable(_abilityDataModel.DamageAmount);
     }
 
 

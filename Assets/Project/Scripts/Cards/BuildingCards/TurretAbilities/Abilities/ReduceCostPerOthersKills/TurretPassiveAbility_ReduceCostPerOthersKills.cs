@@ -12,8 +12,8 @@ public class TurretPassiveAbility_ReduceCostPerOthersKills : ATurretPassiveAbili
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.PlayCostDecrementAmount);
-        ApplyDescriptionCorrection(_abilityDataModel.KillsToDecrement);
+        UpdateDescriptionVariable(_abilityDataModel.PlayCostDecrementAmount);
+        UpdateDescriptionVariable(_abilityDataModel.KillsToDecrement);
         _killsCount = 0;
     }
 

@@ -18,6 +18,8 @@ public class SpeedUpButton : MonoBehaviour
     [SerializeField] private SpeedScale[] timeScales;
 
     [SerializeField] private TextMeshProUGUI timeSpeedCountText;
+    [SerializeField] private TextMeshProUGUI timeSpeedCountLeftText;
+    [SerializeField] private TextMeshProUGUI timeSpeedCountRightText;
     [SerializeField] private Button incrementButton;
     [SerializeField] private Button decrementButton;
     [SerializeField] private GameObject _gamePausedDisplay;
@@ -154,6 +156,8 @@ public class SpeedUpButton : MonoBehaviour
     private void UpdateTimeSpeed()
     {
         SpeedScale speedScale = timeScales[current];
+        SpeedScale previousSpeedScale = timeScales[((current - 1) + numSpeeds) % numSpeeds];
+        SpeedScale nextSpeedScale = timeScales[(current + 1) % numSpeeds];
 
         bool wantsToPauseGame = speedScale.timeMultiplier == 0;
         if (wantsToPauseGame)
@@ -170,6 +174,8 @@ public class SpeedUpButton : MonoBehaviour
         _gamePausedDisplay.SetActive(wantsToPauseGame);
 
         timeSpeedCountText.text = speedScale.text;
+        timeSpeedCountLeftText.text = previousSpeedScale.text;
+        timeSpeedCountRightText.text = nextSpeedScale.text;
     }
 
     private void PauseTimeScale()

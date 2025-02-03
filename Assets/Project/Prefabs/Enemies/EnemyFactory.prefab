@@ -230,6 +230,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 2120707753120156909, guid: 9772c41114aafa74f8968e4082fbc518,
     type: 3}
+--- !u!1 &3097785072539119618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8650696837558149419}
+  - component: {fileID: 8708968387392664610}
+  m_Layer: 0
+  m_Name: EnemyPool_SpeedBoosterSpawner_Armor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8650696837558149419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3097785072539119618}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5937173816068285021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8708968387392664610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3097785072539119618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e438a1b0b38bfb54890b680eab909851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 5149288120603484742, guid: 938640222a33a0e4bb97c5d74f40094c,
+    type: 3}
 --- !u!1 &3178878729283827890
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +505,7 @@ Transform:
   - {fileID: 2897635336714703100}
   - {fileID: 7112730475838421117}
   - {fileID: 2010452054781551184}
+  - {fileID: 8650696837558149419}
   - {fileID: 8714714308244226804}
   - {fileID: 1023232564843604279}
   - {fileID: 6807463659709959546}
@@ -508,6 +555,8 @@ MonoBehaviour:
     pool: {fileID: 2156532607632471188}
   - type: {fileID: 11400000, guid: 86c05f02547edde4e933a91e3f92341c, type: 2}
     pool: {fileID: 3822010905035815726}
+  - type: {fileID: 11400000, guid: 9dd001ad8ed3a4047b7e32f730315456, type: 2}
+    pool: {fileID: 8708968387392664610}
   - type: {fileID: 11400000, guid: 1a155359c789a424db4bd0c566086ba8, type: 2}
     pool: {fileID: 7701419216833391132}
   - type: {fileID: 11400000, guid: 812b1538630963144ae12016b3c29dfb, type: 2}

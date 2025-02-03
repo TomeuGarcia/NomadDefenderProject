@@ -8,7 +8,7 @@ public class TurretPassiveAbility_HitStun : ATurretPassiveAbility
     {
         _stunDuration = originalModel.StunDuration.FloatValue;
 
-        ApplyDescriptionCorrection(originalModel.StunDuration);
+        UpdateDescriptionVariable(originalModel.StunDuration);
     }
 
     public override void OnAfterDamagingEnemy(TurretDamageAttackResult damageAttackResult)

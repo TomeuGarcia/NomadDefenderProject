@@ -26,7 +26,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         _isTurretPlaced = false;
         _isInBerserkerMode = false;
         
-        ApplyDescriptionCorrection(_abilityDataModel.BerserkerDuration);
+        UpdateDescriptionVariable(_abilityDataModel.BerserkerDuration);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)

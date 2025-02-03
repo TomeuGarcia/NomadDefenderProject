@@ -21,6 +21,6 @@ public class TurretIdleAnimator : MonoBehaviour
 
     private void OnDisable()
     {
-        _turretHead.DOKill();
+        _turretHead.DOComplete();
     }
 }
