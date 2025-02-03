@@ -70,14 +70,18 @@ public class AreaSpawnerHealth : MonoBehaviour
 
     private IEnumerator SpawnAreaRepeatedly()
     {
-        yield return new WaitForSeconds(spawnRate);
-
-        while (true)
+        Timer timer = new Timer(spawnRate);
+        while (gameObject.activeInHierarchy)
         {
+            while (!timer.HasFinished())
+            {
+                timer.Update(GameTime.DeltaTime);
+                yield return null;
+            }
+            
+            timer.Reset();
             AreaCooldown();
-            yield return new WaitForSeconds(spawnRate);
         }
-
     }
 
     void AreaCooldown()
