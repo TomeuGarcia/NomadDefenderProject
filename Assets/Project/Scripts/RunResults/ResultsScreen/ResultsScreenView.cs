@@ -175,14 +175,15 @@ public class ResultsScreenView : MonoBehaviour
             _mostDamageCardScreenPreviewer.InitToNotShow();
 
             string extraTextMostKillsAndDamage = 
-                initData.MostKillsCardCount.ToString() + " & " + initData.MostDamageCardCount.ToString();
+                (initData.MostKillsCardCount.ToString("N0") + " & " + initData.MostDamageCardCount.ToString("N0"))
+                .Replace(',', '.');
             _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKillsAndDamage);
             InitCard(initData.MostKillsCard);
         }
         else
         {
-            string extraTextMostKills = initData.MostKillsCardCount.ToString();
-            string extraTextMostDamage = initData.MostDamageCardCount.ToString();
+            string extraTextMostKills = initData.MostKillsCardCount.ToString("N0").Replace(',', '.');
+            string extraTextMostDamage = initData.MostDamageCardCount.ToString("N0").Replace(',', '.');
             _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKills);
             _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard, extraTextMostDamage);
             InitCard(initData.MostKillsCard);
