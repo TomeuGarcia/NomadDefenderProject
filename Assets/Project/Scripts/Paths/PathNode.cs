@@ -58,22 +58,31 @@ public class PathNode : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawSphere(PositionForGizmo, 0.05f);
 
-        PathNode tempNodeNode = this;
+        HashSet<PathNode> visitedNodes = new(8);
+
+        PathNode tempNode = this;
         int pathLength = 1;
-        while (!tempNodeNode.IsLastNode)
+        while (!tempNode.IsLastNode)
         {
-            tempNodeNode = tempNodeNode.nextNode;
+            if (visitedNodes.Contains(tempNode))
+            {
+                Debug.LogError("Nodes are assigned in loop!");
+                return;
+            }
+            
+            tempNode = tempNode.nextNode;
             ++pathLength;
+            visitedNodes.Add(tempNode);
         }
         
-        tempNodeNode = this;
+        tempNode = this;
         int pathItR = pathLength;
-        while (!tempNodeNode.IsLastNode)
+        while (!tempNode.IsLastNode)
         {
             Gizmos.color = Color.magenta * (((float)pathItR / pathLength) * 0.5f + 0.5f);
-            GizmosUtility.DrawArrow(tempNodeNode.PositionForGizmo, tempNodeNode.nextNode.PositionForGizmo);
+            GizmosUtility.DrawArrow(tempNode.PositionForGizmo, tempNode.nextNode.PositionForGizmo);
             
-            tempNodeNode = tempNodeNode.nextNode;
+            tempNode = tempNode.nextNode;
             --pathItR;
         }
     }
