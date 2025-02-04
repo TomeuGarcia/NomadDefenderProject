@@ -10,7 +10,7 @@ public enum AchievementType
     OrbitingsStack,
     NegativePlayCostCard,
     
-    VictoryWithoutTakingDamage,
+    VictoryWithLessThanDamage,
     VictoryWithoutUpgradingBuildings,
     WinBattleWithOnly1Building,
     

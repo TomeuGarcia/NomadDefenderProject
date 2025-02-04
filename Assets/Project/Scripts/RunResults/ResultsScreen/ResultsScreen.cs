@@ -73,7 +73,7 @@ public class ResultsScreen : MonoBehaviour
     
     private void CheckAchievements()
     {
-        AchievementDefinitions.VictoryWithoutTakingDamage.Check(RunStateData.TotalDamageTaken);
+        AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken);
         AchievementDefinitions.VictoryWithoutUpgradingBuildings.Check(RunStateData.TotalBuildingsUpgraded);
     }
 
