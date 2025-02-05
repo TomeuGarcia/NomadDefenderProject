@@ -104,9 +104,9 @@ public class SlowBase : TurretPartBase_Prefab
 
     private void SlowEnemy(Enemy enemy)
     {
-        if(s_slowedEnemies.ContainsKey(enemy))
+        if(s_slowedEnemies.TryGetValue(enemy, out var slowedEnemy))
         {
-            s_slowedEnemies[enemy].slowQuantity += 1;
+            slowedEnemy.slowQuantity += 1;
         }
         else
         {

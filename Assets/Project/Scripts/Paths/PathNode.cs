@@ -57,22 +57,19 @@ public class PathNode : MonoBehaviour
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawSphere(PositionForGizmo, 0.05f);
-
-        HashSet<PathNode> visitedNodes = new(8);
-
+        
         PathNode tempNode = this;
         int pathLength = 1;
         while (!tempNode.IsLastNode)
         {
-            if (visitedNodes.Contains(tempNode))
+            if (pathLength > 20)
             {
-                Debug.LogError("Nodes are assigned in loop!");
+                Debug.LogError("Path is too long or there are references in a LOOP, please ensure everything is correct");
                 return;
             }
             
             tempNode = tempNode.nextNode;
             ++pathLength;
-            visitedNodes.Add(tempNode);
         }
         
         tempNode = this;

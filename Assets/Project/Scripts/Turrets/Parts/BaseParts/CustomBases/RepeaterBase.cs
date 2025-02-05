@@ -248,7 +248,7 @@ public class RepeaterBase : TurretPartBase_Prefab
             return;
         }
 
-        int resultDamage = damageAttack.Damage + (int)(damageAttack.Damage * currentDamagePer1Increment);
+        int resultDamage = damageAttack.Damage + Mathf.RoundToInt(damageAttack.Damage * currentDamagePer1Increment);
 
         TurretDamageAttack repeatedDamageAttack = 
             new TurretDamageAttack(damageAttack.ProjectileSource, targetedEnemy, resultDamage);
