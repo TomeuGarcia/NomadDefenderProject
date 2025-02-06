@@ -48,10 +48,12 @@ public class CreditsDisplayer : MonoBehaviour
     }
 
 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
     [SerializeField] private KeyCode creditsSpeedUpButton = KeyCode.Mouse0;
     [SerializeField] private CreditsSettings settings;
     [SerializeField] private CreditsContent content;
-
+    
+    
     private RectTransform lastSpawnedTransform;
     private bool hasReachedEndPosition;
     private bool hasFinished;
@@ -76,6 +78,11 @@ public class CreditsDisplayer : MonoBehaviour
         textsHolderStartPosition = settings.parentTransform.position;
         defaultCreditsScrollSpeed = settings.scrollSpeed;
 
+        if (_demoManagerConfig.DemoEnabled)
+        {
+            content.bigTitleText += "\n[DEMO]";
+        }
+        
         //StartCredits(); /////////
     }
     private void Update()
@@ -183,6 +190,8 @@ public class CreditsDisplayer : MonoBehaviour
         titleText.fontSize = settings.bigTitleFontSize;
         titleText.text = bigTitleText;
         titleText.color = settings.bigTitleColor;
+
+        titleText.alignment = TextAlignmentOptions.Center;
 
         lastSpawnedTransform = titleText.rectTransform;
     }

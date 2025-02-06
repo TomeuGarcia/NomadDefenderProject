@@ -9,6 +9,7 @@ public class OWMapPawn : MonoBehaviour
 
     [SerializeField] private Transform moveTransform;
     [SerializeField] private OWCameraMovement followCamera;
+    public OWCameraMovement FollowCamera => followCamera;
     public Transform FollowCameraTransform => followCamera.gameObject.transform;
 
     private OWMap_Node currentNode;
@@ -29,7 +30,7 @@ public class OWMapPawn : MonoBehaviour
 
         defaultRotation = moveTransform.rotation;
 
-        this.followCamera.Init(camDisplacementToNextLevel, owMapGameManager.GetMapNodes()[owMapGameManager.GetMapNodes().Length - 1][0].Position.z);
+        this.followCamera.Init(camDisplacementToNextLevel, owMapGameManager.GetMapNodes()[^1][0].Position.z);
     }
 
     public void MoveToNode(OWMap_Node targetNode)

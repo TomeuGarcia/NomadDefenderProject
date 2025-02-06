@@ -45,11 +45,16 @@ public class OWCameraMovement : MonoBehaviour
 
     public void Init(Vector3 newDistanceToNextLevel, float maxDistance)
     {
-        dragRange = new Vector2(transform.position.z - 1.0f, maxDistance - 4.0f);
+        UpdateMaxDragDistance(maxDistance);
         distanceToNextLevel = newDistanceToNextLevel;
         CanDrag(true);
 
         SetPositions();
+    }
+
+    public void UpdateMaxDragDistance(float maxDistance)
+    {
+        dragRange = new Vector2(transform.position.z - 1.0f, maxDistance - 4.0f);
     }
 
     private void SetPositions()

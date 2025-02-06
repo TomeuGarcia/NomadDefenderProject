@@ -42,8 +42,9 @@ public class OverworldMapGameManager : MonoBehaviour
     [Header("OTHER")]
     [SerializeField] private GameObject mapEventSystemGO;
     [SerializeField] protected OverworldMapVolume _overworldMapVolume;
-    
-    
+
+    [Header("DEMO")] 
+    [SerializeField] private DemoManager _demoManager;
     
 
     protected bool canDisplayDeck = true;
@@ -99,6 +100,7 @@ public class OverworldMapGameManager : MonoBehaviour
         StartAtFirstLevel();
         StartCommunicationWithNextNodes(currentNode);
         DisableCurrentLevelNodesInfoDisplay();
+        InitDemo();
 
         moveCameraAfterNodeScene = true;
 
@@ -273,6 +275,8 @@ public class OverworldMapGameManager : MonoBehaviour
                 nextLevelEnabledNodes[i].SetOwMapGameManagerRef(this);
                 // TODO set node material for active interaction
             }
+            
+            _demoManager.CheckEndOfDemo(currentNode);
         }
         else
         {
@@ -416,6 +420,11 @@ public class OverworldMapGameManager : MonoBehaviour
     protected void InvokeOnVictory()
     {
         if (OnVictory != null) OnVictory();
+    }
+
+    protected void InitDemo()
+    {
+        _demoManager.Init(GetMapNodes(), owMapCreator, owMapPawn.FollowCamera);
     }
 
 }
