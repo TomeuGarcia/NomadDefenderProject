@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 public class TurretPassiveAbility_ExtraDamageToArmored : ATurretPassiveAbility
 {
     private readonly float _damageMultiplier;
@@ -19,7 +21,7 @@ public class TurretPassiveAbility_ExtraDamageToArmored : ATurretPassiveAbility
     {
         if (damageAttack.Target.HealthSystem.HasArmor())
         {
-            damageAttack.UpdateDamage((int)(damageAttack.Damage * _damageMultiplier));
+            damageAttack.UpdateDamage(Mathf.RoundToInt(damageAttack.Damage * _damageMultiplier));
             _projectileParticleFactory.CreateParticlesGameObject(ProjectileParticleType.MetalCruncher_Hit,
                 damageAttack.Target.Position, damageAttack.ProjectileSource.Rotation);
         }
