@@ -44,6 +44,9 @@ public class MainMenu : MonoBehaviour
 
     [Header("CARD COLLECTION")] 
     [SerializeField] private CardCollectionDataStorage _cardCollection;
+
+    [Header("DIFFICULTY")] 
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
     
 
     [Header("MATERIALS SETUP")]
@@ -308,6 +311,7 @@ public class MainMenu : MonoBehaviour
         ButtonClickedPunch(newGameYesButtonText);
         DoYesProceedNewGame();
     }
+    
 
     private void DoYesProceedNewGame()
     {
@@ -325,6 +329,8 @@ public class MainMenu : MonoBehaviour
 
         _unlockableTrophiesManager.SetAllTrophiesLocked();
         _gameProgressionUpdater.Value.ResetEverything();
+
+        _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());

@@ -37,6 +37,11 @@ public class CursorChanger : MonoBehaviour
     {
         Cursor.visible = false;
         _cursorMove.position = Input.mousePosition;
+
+        if (Cursor.lockState != CursorLockMode.Confined && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 
     public void ChangeCursorContext(CursorContext cursorContext)

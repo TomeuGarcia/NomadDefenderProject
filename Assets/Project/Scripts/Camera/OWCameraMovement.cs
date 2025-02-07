@@ -20,6 +20,8 @@ public class OWCameraMovement : MonoBehaviour
     private bool moving = false;
     private bool nodeSelected = false;
 
+    private float _goalMouseScroll;
+
     void Update()
     {
         if(canDrag)
@@ -27,6 +29,7 @@ public class OWCameraMovement : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 lastDragPos = Input.mousePosition.y;
+                _goalMouseScroll = 0;
             }
             else if (Input.GetMouseButton(1))
             {
@@ -34,15 +37,46 @@ public class OWCameraMovement : MonoBehaviour
 
                 if (difference == 0) { return; }
 
-                float newPos = Mathf.Clamp(transform.position.z + -difference * speed, dragRange.x, dragRange.y);
-
-                transform.position = new Vector3(transform.position.x, transform.position.y, newPos);
-
+                MoveCameraDragging(-difference);
+                
                 lastDragPos = Input.mousePosition.y;
             }
+            else if (!Input.mouseScrollDelta.y.AlmostZero())
+            {
+                _goalMouseScroll += Input.mouseScrollDelta.y * _wheelMove;
+            }
+
+            UpdateMouseWheelScroll();
         }
     }
 
+    private void MoveCameraDragging(float moveAmount)
+    {
+        float newPos = Mathf.Clamp(transform.position.z + moveAmount * speed, dragRange.x, dragRange.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, newPos);
+    }
+
+    [SerializeField, Min(0)] private float _wheelMove = 60f;
+    [SerializeField, Min(0)] private float _wheelSpeed1 = 1200f;
+    [SerializeField, Min(0)] private float _wheelSpeed2 = 500f;
+    [SerializeField, Min(0)] private float _wheelMoveSharpness = 10f;
+    private void UpdateMouseWheelScroll()
+    {
+        if (_goalMouseScroll.AlmostZero()) return;
+
+        float moveStep = Time.deltaTime * _wheelSpeed1; 
+        moveStep *= Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs(_goalMouseScroll * _wheelSpeed2)), _wheelMoveSharpness);
+        
+        bool needToIncrementing = _goalMouseScroll < 0;
+        float moveAmount = needToIncrementing 
+            ? Mathf.Min(moveStep, -_goalMouseScroll) 
+            : Mathf.Min(-moveStep, _goalMouseScroll);
+        
+        _goalMouseScroll += moveAmount;
+        
+        MoveCameraDragging(-moveAmount);
+    }
+    
     public void Init(Vector3 newDistanceToNextLevel, float maxDistance)
     {
         UpdateMaxDragDistance(maxDistance);

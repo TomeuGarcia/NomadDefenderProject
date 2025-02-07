@@ -59,6 +59,8 @@ public class EnemyWaveSpawner : ScriptableObject
     bool stopForced;
 
 
+    private GameDifficultySettings _currentGameDifficultySettings;
+
 
     private void OnValidate()
     {        
@@ -163,6 +165,9 @@ public class EnemyWaveSpawner : ScriptableObject
         this.startNode = startNode;
         stopForced = false;
 
+        _currentGameDifficultySettings =
+            ServiceLocator.GetInstance().GameDifficultySettingsSource.GetDifficultySettings();
+
         // UNCOMMENT if need to read from json
         //ValidateJSONFormat();
         //EnemyWaveJSONManager.LoadEnemyWave(this, false);
@@ -177,7 +182,9 @@ public class EnemyWaveSpawner : ScriptableObject
     public IEnumerator SpawnCurrentWaveEnemies(Transform spawnTransform, MonoBehaviour delaysCoroutineBehaviour,
         EnemyAttackDestination attackDestination)
     {
-        yield return delaysCoroutineBehaviour.StartCoroutine(GameTime.WaitForSeconds(delayWaveStart));
+        yield return delaysCoroutineBehaviour.StartCoroutine(
+            GameTime.WaitForSeconds(delayWaveStart + _currentGameDifficultySettings.ExtraDelayWaveStart));
+        
         activeEnemies = enemyWaves[currentWave].GetEnemyCount();
 
         if (activeEnemies == 0) // If empty wave, end
@@ -232,6 +239,7 @@ public class EnemyWaveSpawner : ScriptableObject
         /////////////
         Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
+        
         Vector3 positionOffset = (spawnOffset.x * spawnedEnemy.transformToMove.right) + 
                                  (spawnOffset.y * spawnedEnemy.transformToMove.forward);
         spawnedEnemy.SpawnedInit(this, startingNode, toNextNodeT, positionOffset, 
@@ -243,7 +251,8 @@ public class EnemyWaveSpawner : ScriptableObject
 
     private float CalcWaveMultiplier()
     {
-        return (1.0f + (currentWave * waveMultiplierCoef));
+        return (1.0f + (currentWave * waveMultiplierCoef)) 
+               * _currentGameDifficultySettings.EnemyHealthMultiplier;
     }
 
     private void SubtractActiveEnemy(Enemy enemy)

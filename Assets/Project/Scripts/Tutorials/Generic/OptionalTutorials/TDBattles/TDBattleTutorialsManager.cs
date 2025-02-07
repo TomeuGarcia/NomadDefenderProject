@@ -71,7 +71,7 @@ public class TDBattleTutorialsManager : MonoBehaviour
 
     private IEnumerator Play_BuildingUpgradeTutorial()
     {
-        yield return new WaitUntil(() => _currencyCounter.HasEnoughCurrency(100) && 
+        yield return new WaitUntil(() => _currencyCounter.HasEnoughCurrency(150) && 
                                          !_hand.IsInteractingWithCards &&
                                          _buildingPlacer.PlacedBuildingsCount > 2);
         if (!ShouldPlay_BuildingUpgradeTutorial(2))

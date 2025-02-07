@@ -8,6 +8,9 @@ public class CurrencyOverTimeDropManager : MonoBehaviour
     [SerializeField] private CurrencyDropOverTimeConfig _currencyDropOverTime;
     [SerializeField] private CurrencyDropOverTimeCanvasView _view;
     private CurrencyOverTimeDropper _currencyOverTimeDropper;
+    
+    [Header("GAME DIFFICULTY")]
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
 
     private bool _canGenerateCurrency;
 
@@ -15,7 +18,10 @@ public class CurrencyOverTimeDropManager : MonoBehaviour
 
     private void Start()
     {
-        _currencyOverTimeDropper = new CurrencyOverTimeDropper(_currencyDropOverTime, ServiceLocator.GetInstance().CurrencySpawnService, _view);
+        float extraPeriod = _gameDifficultyConfig.GetDifficultySettings().ExtraTimeCurrencyDrop;
+        
+        _currencyOverTimeDropper = new CurrencyOverTimeDropper(_currencyDropOverTime, 
+            ServiceLocator.GetInstance().CurrencySpawnService, _view, extraPeriod);
         _canGenerateCurrency = false;
 
         StartCoroutine(ControlCanGenerateCurrency());        

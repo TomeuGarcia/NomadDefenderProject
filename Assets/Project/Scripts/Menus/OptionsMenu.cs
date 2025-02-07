@@ -15,6 +15,8 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private Slider _sfxSlider;
 
     [SerializeField] private ScreenOptionsController _screenOptionsController;
+
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
     
     private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Settings/";
     private string FileName => "Options.json";
@@ -31,7 +33,8 @@ public class OptionsMenu : MonoBehaviour
             out float masterSoundSliderValue,
             out float musicSoundSliderValue,
             out float sfxSoundSliderValue,
-            out bool fullScreen
+            out bool fullScreen,
+            out GameDifficultyType gameDifficultyType
             );
 
         
@@ -40,6 +43,8 @@ public class OptionsMenu : MonoBehaviour
         _sfxSlider.value = sfxSoundSliderValue;
         
         _screenOptionsController.Init(fullScreen);
+        
+        _gameDifficultyConfig.SetDifficulty(gameDifficultyType);
 
         SetMasterMixerVolume(_masterSoundSlider.value);
         SetMusicMixerVolume(_musicSlider.value);
@@ -87,13 +92,16 @@ public class OptionsMenu : MonoBehaviour
         [SerializeField] public float MusicSoundVolume = 1.0f;
         [SerializeField] public float SFXSoundVolume = 1.0f;
         [SerializeField] public bool FullScreen = true;
+        [SerializeField] public GameDifficultyType GameDifficultyType = GameDifficultyType.Normal;
 
-        public SaveDataWrapper(float masterSoundVolume, float musicSoundVolume, float sfxSoundVolume, bool fullScreen)
+        public SaveDataWrapper(float masterSoundVolume, float musicSoundVolume, float sfxSoundVolume, bool fullScreen,
+            GameDifficultyType gameDifficultyType)
         {
             MasterSoundVolume = masterSoundVolume;
             MusicSoundVolume = musicSoundVolume;
             SFXSoundVolume = sfxSoundVolume;
             FullScreen = fullScreen;
+            GameDifficultyType = gameDifficultyType;
         }
     }
     
@@ -102,7 +110,8 @@ public class OptionsMenu : MonoBehaviour
         out float masterSoundSliderValue, 
         out float musicSoundSliderValue, 
         out float sfxSoundSliderValue, 
-        out bool fullScreen 
+        out bool fullScreen, 
+        out GameDifficultyType gameDifficultyType
         )
     {
         CheckFile();
@@ -114,6 +123,7 @@ public class OptionsMenu : MonoBehaviour
         musicSoundSliderValue = storedData.MusicSoundVolume;
         sfxSoundSliderValue = storedData.SFXSoundVolume;
         fullScreen = storedData.FullScreen;
+        gameDifficultyType = storedData.GameDifficultyType;
     }
 
     private void SaveOptions()
@@ -122,7 +132,8 @@ public class OptionsMenu : MonoBehaviour
             _masterSoundSlider.value,
             _musicSlider.value,
             _sfxSlider.value,
-            _screenOptionsController.IsCurrentlyFullscreen
+            _screenOptionsController.IsCurrentlyFullscreen,
+            _gameDifficultyConfig.CurrentGameDifficulty
             );
             
         string contentToStore = JsonUtility.ToJson(dataToStore);

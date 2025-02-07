@@ -24,6 +24,7 @@ public static class SOAssetPaths
 
     public const string GAME_RUN = MENU_ROOT + "Run/";
     public const string DEMO = MENU_ROOT + "Demo/";
+    public const string GAMEDIFFICULTY = MENU_ROOT + "GameDifficulty/";
     
     public const string TD_GAME = MENU_ROOT + "TD Game/";
     public const string TD_CURRENCYDROP = TD_GAME + "Currency Drop/";

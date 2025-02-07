@@ -7,7 +7,7 @@ public class HomingChainingProjectile : HomingProjectile
 {
     [Header("STATS")]
     [SerializeField] private LayerMask enemyLayerMask;
-    [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.65f;
     [SerializeField, Min(1)] private int maxChainedTargets = 1;
     [SerializeField, Min(0f)] private float chainRadius;
 
