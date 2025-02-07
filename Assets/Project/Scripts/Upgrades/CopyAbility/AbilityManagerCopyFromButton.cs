@@ -56,7 +56,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
             _material.DOFloat(1.0f, "_Enabled", 0.25f).SetEase(Ease.OutCubic);
             _material.SetTexture("_Texture", AbilityDataModel.View.Sprite.texture);
-            //_material.SetColor("_Color", AbilityDataModel.View.Color);
+            _material.SetColor("_InnerColor", AbilityDataModel.View.Color);
             
             //_spriteRenderer.gameObject.SetActive(true);
 
