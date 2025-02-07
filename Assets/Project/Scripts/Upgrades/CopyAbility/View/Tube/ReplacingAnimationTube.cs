@@ -12,6 +12,7 @@ public class ReplacingAnimationTube : MonoBehaviour
     [SerializeField] private GameObject _ambientLightParent;
     [SerializeField] private ParticleSystem _leftParticleSystem;
     [SerializeField] private ParticleSystem _rightParticleSystem;
+    [SerializeField] private ReplicateSelectedCardIndicator _cardIndicator;
 
     [Header("PARAMETERS")]
     [SerializeField] private float _turnOffLightDelay;
@@ -29,11 +30,21 @@ public class ReplacingAnimationTube : MonoBehaviour
     [SerializeField] private TweenConfig _leftAirConfig;
     [SerializeField] private TweenConfig _leftAirSpeedConfig;
 
+    private float _uniqueAmbientIntensity = 0.5f;
+    private float _ambientIntensity;
+
+    private void Awake()
+    {
+        _ambientIntensity = RenderSettings.ambientIntensity;
+        RenderSettings.ambientIntensity = _uniqueAmbientIntensity;
+    }
+
     public IEnumerator PlayTubeFlash()
     {
         DOTween.To(() => RenderSettings.ambientIntensity, x => RenderSettings.ambientIntensity = x, _inSceneLightIntensity.Value.x, _inSceneLightIntensity.Duration)
             .SetEase(_inSceneLightIntensity.Ease);
         _ambientLightParent.SetActive(false);
+        _cardIndicator.TurnOff();
         yield return new WaitForSeconds(_turnOffLightDelay);
 
         _lightFlash.DOIntensity(_inLightFlashConfig.Value.x, _inLightFlashConfig.Duration).SetEase(_inLightFlashConfig.Ease);
@@ -44,7 +55,7 @@ public class ReplacingAnimationTube : MonoBehaviour
         _tubeFlash.DOScale(_outTubeFlashConfig.Value, _outTubeFlashConfig.Duration).SetEase(_outTubeFlashConfig.Ease);
         yield return new WaitForSeconds(_turnOnLightDelay);
 
-        DOTween.To(() => RenderSettings.ambientIntensity, x => RenderSettings.ambientIntensity = x, _outSceneLightIntensity.Value.x, _outSceneLightIntensity.Duration)
+        DOTween.To(() => RenderSettings.ambientIntensity, x => RenderSettings.ambientIntensity = x, _uniqueAmbientIntensity, _outSceneLightIntensity.Duration)
             .SetEase(_outSceneLightIntensity.Ease);
         foreach (float interval in _ambientLightBlinkInterval)
         {
@@ -52,6 +63,7 @@ public class ReplacingAnimationTube : MonoBehaviour
             _ambientLightParent.SetActive(!_ambientLightParent.activeInHierarchy);
         }
         _ambientLightParent.SetActive(true);
+        _cardIndicator.TurnOn();
     }
 
     public void ParticleAcceleration()
@@ -62,19 +74,25 @@ public class ReplacingAnimationTube : MonoBehaviour
 
     public void ActivateTubeParticles(ParticleSystem particleSystem)
     {
+        /*
         var trailModule = particleSystem.trails;
         DOTween.To(() => trailModule.lifetime.constant, x => trailModule.lifetime = x, _leftAirConfig.Value.x, _leftAirConfig.Duration)
             .SetEase(_leftAirConfig.Ease)
             .OnComplete(() => StartCoroutine(StopLeftParticles(particleSystem)));
+        */
 
         var mainModule = particleSystem.main;
         DOTween.To(() => mainModule.startSpeed.constant, x => mainModule.startSpeed = x, _leftAirSpeedConfig.Value.x, _leftAirSpeedConfig.Duration)
+            .SetEase(_leftAirSpeedConfig.Ease)
+            .OnComplete(() => particleSystem.Stop());
+
+        var emissionModule = particleSystem.emission;
+        DOTween.To(() => emissionModule.rateOverTime.constant, x => emissionModule.rateOverTime = x, 35, _leftAirSpeedConfig.Duration)
             .SetEase(_leftAirSpeedConfig.Ease);
     }
 
-    private IEnumerator StopLeftParticles(ParticleSystem particleSystem)
+    private void OnDestroy()
     {
-        yield return new WaitForSeconds(1.0f);
-        particleSystem.Stop();
+        RenderSettings.ambientIntensity = _ambientIntensity;
     }
 }

@@ -24,6 +24,14 @@ public class ReplicateSelectedCardIndicator : MonoBehaviour
         }
     }
 
+    public void TurnOff()
+    {
+        for (int i = 0; i < _indicatorMeshes.Count; i++)
+        {
+            ChangeMaterial(i, _offMaterial);
+        }
+    }
+
     public void SelectCard(int cardIndex)
     {
         ChangeMaterial(cardIndex, _selectedMaterial);
@@ -32,14 +40,6 @@ public class ReplicateSelectedCardIndicator : MonoBehaviour
     public void UnselectCard(int cardIndex)
     {
         ChangeMaterial(cardIndex, _regularMaterial);
-    }
-
-    public void TurnOff()
-    {
-        for (int i = 0; i < _indicatorMeshes.Count; i++)
-        {
-            _indicatorMeshes[i].materials[_materialIndex] = _offMaterial;
-        }
     }
 
     private void ChangeMaterial(int index, Material mat)

@@ -12,6 +12,9 @@ public class MachineManager : MonoBehaviour
     [SerializeField] private CardBase _cardBase;
     [SerializeField] private ReplacingAnimation _replacingAnimation;
 
+    [SerializeField] private AudioSource _enterAudioSource;
+    [SerializeField] private AudioSource _exitAudioSource;
+
     [Header("TWEENS")]
     [SerializeField] private float _startDelay;
     [SerializeField] private float _tubeDelay;
@@ -20,6 +23,7 @@ public class MachineManager : MonoBehaviour
     {
         StartCoroutine(EnterAnimation());
         _replacingAnimation.Init(this);
+        _enterAudioSource.Play();
     }
 
     private IEnumerator EnterAnimation()
@@ -33,12 +37,6 @@ public class MachineManager : MonoBehaviour
         StartCoroutine(_cardBase.EnterAnimation());
     }
 
-    [Button]
-    private void ReplacingAnimation()
-    {
-        StartCoroutine(_replacingAnimation.StartAnimation());
-    }
-
     public void LowerTubes()
     {
         StartCoroutine(_rightTube.ReplaceAnimation());
@@ -47,10 +45,12 @@ public class MachineManager : MonoBehaviour
 
     public void ReopenTubes()
     {
+        GameAudioManager.GetInstance().PlayContainerOpenEnd();
         StartCoroutine(_rightTube.ReopenTube());
         StartCoroutine(_leftTube.ReopenTube());
     }
 
+    /*
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.R))
@@ -61,5 +61,27 @@ public class MachineManager : MonoBehaviour
         {
             ReplacingAnimation();
         }
+    }*/
+
+
+
+    [Button]
+    public void Warning()
+    {
+        _machineDisplay.Warning();
+    }
+
+    [Button]
+    public void Ready()
+    {
+        _machineDisplay.Ready();
+    }
+
+    [Button]
+    public void Replace()
+    {
+        _machineDisplay.Replace();
+        StartCoroutine(_replacingAnimation.StartAnimation());
+        _exitAudioSource.Play();
     }
 }

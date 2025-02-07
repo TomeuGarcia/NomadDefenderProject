@@ -29,7 +29,7 @@ public class CardSlotTubeLid : MachineMovablePart
 
         foreach (Transform child in _lidButtons)
         {
-            _buttonMeshes.Add(child.GetComponent<MeshRenderer>());
+            _buttonMeshes.Add(child.GetChild(1).GetComponent<MeshRenderer>());
         }
         foreach (MeshRenderer mesh in _buttonMeshes)
         {

@@ -30,4 +30,22 @@ public class MachineDisplay : MachineMovablePart
     {
         yield return null;
     }
+
+    public void Warning()
+    {
+        _machineScreen.Warning();
+        GameAudioManager.GetInstance().PlayScreenShut();
+    }
+
+    public void Ready()
+    {
+        _machineScreen.Ready();
+        GameAudioManager.GetInstance().PlayScreenOpen();
+    }
+
+    public void Replace()
+    {
+        _machineScreen.Replace();
+        GameAudioManager.GetInstance().PlayScreenShut();
+    }
 }

@@ -9,6 +9,7 @@ public class CardHolder : MachineMovablePart
     [SerializeField] private Transform _cardCover;
     [SerializeField] private Transform _cardHolder;
     [SerializeField] private ReplicateSelectedCardIndicator _cardIndicator;
+    [SerializeField] private GameObject _dragPlane;
 
     [Header("PARAMETERS")]
     [SerializeField] private TweenConfig _coverHideA;
@@ -30,8 +31,10 @@ public class CardHolder : MachineMovablePart
 
     public override IEnumerator EnterAnimation()
     {
+        yield return new WaitForSeconds(0.2f);
+
         _cardCover.DOBlendableLocalMoveBy(_coverHideA.Value, _coverHideA.Duration).SetEase(_coverHideA.Ease);
-        yield return new WaitForSeconds(_coverHideA.Duration + _delay0);
+        yield return new WaitForSeconds(_coverHideA.Duration + _delay0 - 0.2f);
 
         _cardCover.DOBlendableLocalMoveBy(_coverHideB.Value, _coverHideB.Duration).SetEase(_coverHideB.Ease);
         yield return new WaitForSeconds(_coverHideB.Duration + _delay1);
@@ -39,6 +42,7 @@ public class CardHolder : MachineMovablePart
         _cardHolder.DOBlendableLocalMoveBy(_holderShow.Value, _holderShow.Duration).SetEase(_holderShow.Ease);
         yield return new WaitForSeconds(_holderShow.Duration);
         _cardIndicator.TurnOn();
+        _dragPlane.SetActive(false);
     }
 
     public override IEnumerator ExitAnimation()

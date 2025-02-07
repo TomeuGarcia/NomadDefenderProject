@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -33,12 +34,12 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             UpdateDragBounds();
         }
-
+        [Button]
         private void UpdateDragBounds()
         {
             _cardDragBoundsTarget = new Bounds(cardDragBoundsTargetTransform.position, _boundsSize);
         }
-        
+
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.magenta;

@@ -37,7 +37,6 @@ public class MachineDisplayScreen : MachineMovablePart
     public override IEnumerator EnterAnimation()
     {
         yield return new WaitForSeconds(_openLightIndDelay);
-        //_lightIndicatorMaterial.SetFloat("_On", 1.0f);
         StartCoroutine(EnterWaiting());
     }
 
@@ -60,8 +59,6 @@ public class MachineDisplayScreen : MachineMovablePart
 
     public IEnumerator EnterReady()
     {
-        //_lightIndicatorMaterial.SetFloat("_Ready", 1.0f);
-        //_lightIndicatorMaterial.SetFloat("_Replacing", 0.0f);
         _waitingLight.gameObject.SetActive(false);
         _readyLight.gameObject.SetActive(true);
         _replacingLight.gameObject.SetActive(false);
@@ -72,8 +69,6 @@ public class MachineDisplayScreen : MachineMovablePart
 
     public IEnumerator EnterReplacing()
     {
-        //_lightIndicatorMaterial.SetFloat("_Ready", 0.0f);
-        //_lightIndicatorMaterial.SetFloat("_Replacing", 1.0f);
         _waitingLight.gameObject.SetActive(false);
         _readyLight.gameObject.SetActive(false);
         _replacingLight.gameObject.SetActive(true);
@@ -87,11 +82,9 @@ public class MachineDisplayScreen : MachineMovablePart
         while (true)
         {
             _readyLight.intensity = _originalLightIntensity;
-            //_lightIndicatorMaterial.SetFloat("_On", 1.0f);
             yield return new WaitForSeconds(_readyBlinkTimeInterval);
 
             _readyLight.intensity = 0.0f;
-            //_lightIndicatorMaterial.SetFloat("_On", 0.0f);
             yield return new WaitForSeconds(_readyBlinkTimeInterval);
         }
     }
@@ -100,18 +93,24 @@ public class MachineDisplayScreen : MachineMovablePart
     public void Warning()
     {
         StopAllCoroutines();
-        //_lightIndicatorMaterial.SetFloat("_On", 1.0f);
         StartCoroutine(EnterWaiting());
         StartCoroutine(WaitingScreen());
     }
 
     [Button]
-    private void Ready()
+    public void Ready()
     {
         StopAllCoroutines();
-        //_lightIndicatorMaterial.SetFloat("_On", 1.0f);
         StartCoroutine(EnterReady());
         StartCoroutine(ReadyScreen());
+    }
+
+    [Button]
+    public void Replace()
+    {
+        StopAllCoroutines();
+        StartCoroutine(EnterReplacing());
+        StartCoroutine(ReplacingScreen());
     }
 
     private IEnumerator WaitingScreen()
@@ -126,5 +125,12 @@ public class MachineDisplayScreen : MachineMovablePart
         _screenOnOffMat.DOFloat(_screenFlashTC.Value, "_FlashCoef", _screenFlashTC.Duration).SetEase(_screenFlashTC.Ease);
         yield return new WaitForSeconds(_screenFlashTC.Duration);
         _screenOnOffMat.DOFloat(_screenOnTC.Value, "_OnCoef", _screenOnTC.Duration).SetEase(_screenOnTC.Ease);
+    }
+
+    private IEnumerator ReplacingScreen()
+    {
+        _screenOnOffMat.DOFloat(1.0f - _screenFlashTC.Value, "_FlashCoef", _screenFlashTC.Duration).SetEase(_screenFlashTC.Ease);
+        yield return new WaitForSeconds(_screenFlashTC.Duration);
+        _screenOnOffMat.DOFloat(1.0f - _screenOnTC.Value, "_OnCoef", _screenOnTC.Duration).SetEase(_screenOnTC.Ease);
     }
 }

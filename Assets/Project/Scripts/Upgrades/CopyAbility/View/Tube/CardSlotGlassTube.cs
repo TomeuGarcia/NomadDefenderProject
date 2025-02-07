@@ -1,12 +1,9 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CardSlotGlassTube : MachineMovablePart
 {
-    //TODO - GLASS COMING UP ANIMATION? and particles and stuff
-
     [SerializeField] private Transform _glassTube;
     [SerializeField] private MachineTweenConfig _closeTubeConfig;
     [SerializeField] private MachineTweenConfig _openTubeConfig;
@@ -25,7 +22,7 @@ public class CardSlotGlassTube : MachineMovablePart
     public IEnumerator OpenTube()
     {
         _glassTube.DOLocalMoveY(_openTubeConfig.Value, _openTubeConfig.Duration).SetEase(_openTubeConfig.Ease);
-        yield return null;
+        yield return new WaitForSeconds(0.0f);
     }
 
     public IEnumerator CloseTube()

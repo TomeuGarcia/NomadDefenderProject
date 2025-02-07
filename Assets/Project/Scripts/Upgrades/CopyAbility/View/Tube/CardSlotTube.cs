@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CardSlotTube : MachineMovablePart
 {
@@ -49,11 +46,12 @@ public class CardSlotTube : MachineMovablePart
 
     public IEnumerator ReopenTube()
     {
+        yield return new WaitForSeconds(0.15f);
+
         for (int i = 0; i < _tubeLid.Length; i++)
         {
             _tubeLid[i].Spin();
         }
-        yield return new WaitForSeconds(0.25f);
 
         StartCoroutine(_glassTube.OpenTube());
     }
