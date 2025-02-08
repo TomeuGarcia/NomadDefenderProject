@@ -7,7 +7,6 @@ public class HomingChainingProjectile : HomingProjectile
 {
     [Header("STATS")]
     [SerializeField] private LayerMask enemyLayerMask;
-    [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.65f;
     [SerializeField, Min(1)] private int maxChainedTargets = 1;
     [SerializeField, Min(0f)] private float chainRadius;
 
@@ -92,7 +91,7 @@ public class HomingChainingProjectile : HomingProjectile
     protected override int ComputeDamage()
     {
         int damage = TurretOwner.Stats.Damage;
-        damage = Mathf.RoundToInt(damage * damageMultiplier);
+        damage = Mathf.RoundToInt(damage * _damageMultiplier);
         return damage;
     }
     

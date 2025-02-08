@@ -374,7 +374,10 @@ public class OverworldMapGameManager : MonoBehaviour
     {       
         owMapPawn.ActivateCamera();
 
-        cardDisplayer.gameObject.SetActive(canDisplayDeck);
+        if (!canDisplayDeck)
+        {
+            cardDisplayer.HideButtons();
+        }
         cardDisplayer.ResetAll();
 
         if (gameFinished)

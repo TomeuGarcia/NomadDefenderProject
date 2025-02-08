@@ -25,10 +25,16 @@ MonoBehaviour:
   _materialForTurretPreview: {fileID: 2100000, guid: 45c89fcbac57c934881c19dc05ea7b27,
     type: 2}
   _movementSpeed: 300
+  _damagePercentMultiplier:
+    _name: DAMAGE_PERCENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 50
+    _floatConstantValue: 0
   _descriptionModel:
     _abilityName: orbiting
     _abilityDescription: "Fires constantly, even without targets. The Projectile
-      orbits around the range edge. \nDeals x50% of damage per hit."
+      orbits around the range edge. \nDeals xDAMAGE_PERCENT% of damage per hit."
     _descriptionKeywords: []
     _descriptionlessKeywords: []
     _descriptionPatterns:

@@ -218,12 +218,15 @@ public class EnemyWaveSpawner : ScriptableObject
         OnEnemyFromWaveSpawned?.Invoke(enemyType);
     }
 
+    public void IncrementActiveEnemiesCount(int increment)
+    {
+        activeEnemies += increment;
+    }
     public void SpawnEnemyNotIncludedInWave(EnemyTypeConfig enemyType, Transform spawnParent, 
         EnemyAttackDestination attackDestination, Vector2 spawnOffset,
         PathNode currentNode, float toNextNodeT)
     {
         SharedSpawnEnemy(enemyType, spawnParent, attackDestination, spawnOffset, currentNode, toNextNodeT);
-        ++activeEnemies;
     }
 
     private void SharedSpawnEnemy(EnemyTypeConfig enemyType, Transform spawnParent, 

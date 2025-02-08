@@ -147,6 +147,8 @@ public class EnemyWaveManager : MonoBehaviour
             
             if (repeatedStartPathNodes.TryGetValue(startPathNode, out PathStartData firstPathStartData))
             {
+                Debug.Log("Repeated: " + startPathNode.gameObject.name + " " + firstPathStartData.EnemyWaveSpawner.name);
+                Debug.Log("add: " + pathStartData.EnemyWaveSpawner.name);
                 firstPathStartData.MergeWaveDisplayer(pathStartData.EnemyWaveSpawner);
                 continue;
             }

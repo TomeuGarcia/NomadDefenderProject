@@ -255,7 +255,6 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //6
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-
         _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         
         yield return new WaitForSeconds(0.5f); 
@@ -544,10 +543,10 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
         
 
+        scriptedSequence.dialogSystem.SetMaxLinesOnScreen(18);
         StartCoroutine(KeepPrinting());
-        yield return new WaitForSecondsRealtime(2.75f);
+        yield return new WaitForSecondsRealtime(3.75f);
 
-        
 
         //Finish scene and load next
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
@@ -557,7 +556,7 @@ public class BattleTutorialManager : MonoBehaviour
 
     private IEnumerator KeepPrinting()
     {
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 16; ++i)
         {
             scriptedSequence.NextLine();
             yield return new WaitForSecondsRealtime(0.25f);

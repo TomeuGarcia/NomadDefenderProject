@@ -37,6 +37,8 @@ public class EnemyZeppelinOnDeath : MonoBehaviour
         EnemyAttackDestination attackDestination,
         PathNode ownerCurrentNode, float ownerToNextNodeT)
     {
+        spawner.IncrementActiveEnemiesCount(_zeppelinConfig.NumberOfSpawns);
+        
         for (int i = 0; i < _zeppelinConfig.NumberOfSpawns; ++i)
         {
             spawner.SpawnEnemyNotIncludedInWave(

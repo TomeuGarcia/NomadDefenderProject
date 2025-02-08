@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ public class OWMapTutorialManager : MonoBehaviour
     //Get Scripted Sequence
     [SerializeField] private ScriptedSequence scriptedSequence;
 
-    [SerializeField] private GameObject _cardShower;
+    [SerializeField] private OverworldCardShower _cardShower;
 
     [SerializeField] private OverworldMapGameManager owMapGameManager;
 
@@ -28,6 +29,8 @@ public class OWMapTutorialManager : MonoBehaviour
 
     [SerializeField] private OWMapTutorialManager2 owMapTuto2;
     [SerializeField] private OverworldMapVolume _overworldMapVolume;
+
+
 
     private void OnEnable()
     {
@@ -144,20 +147,25 @@ public class OWMapTutorialManager : MonoBehaviour
         }
         //watcher
         yield return new WaitForSeconds(2.0f);
+        
+        // 1
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2f);
 
+        // 2
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(2f);
         
+        // 3
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
         yield return new WaitForSeconds(3.0f);
 
         scriptedSequence.Clear();
+        // 4
         scriptedSequence.NextLine();
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
@@ -166,10 +174,12 @@ public class OWMapTutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        // 5
         scriptedSequence.NextLine(); //Rendering Map...
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
 
+        // 6
         scriptedSequence.NextLine(); //Loading Upgrade Nodes
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
@@ -184,6 +194,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        // 7
         scriptedSequence.NextLine(); //Loading Battle Nodes
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(0.5f);
@@ -199,6 +210,7 @@ public class OWMapTutorialManager : MonoBehaviour
         GameAudioManager.GetInstance().PlayBattleNodeSpawnSound();
         yield return new WaitForSeconds(0.5f);
 
+        // 8
         scriptedSequence.NextLine(); //Loading Nodes Connection
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
@@ -212,6 +224,7 @@ public class OWMapTutorialManager : MonoBehaviour
         GameAudioManager.GetInstance().PlayConnectionsNodeSpawnSound();
         yield return new WaitForSeconds(0.5f);
 
+        // 9
         scriptedSequence.NextLine(); //Map Loaded
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
         yield return new WaitForSeconds(1.0f);
@@ -220,6 +233,7 @@ public class OWMapTutorialManager : MonoBehaviour
 
         owMapGameManager.StartCommunicationWithNextNodes(owMapGameManager.GetCurrentNode());
 
+        // 10
         scriptedSequence.NextLine(); //Select a node to go to it
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted());
 
@@ -236,7 +250,8 @@ public class OWMapTutorialManager : MonoBehaviour
             node.ReenableMouseCollider();
         }
 
-        _cardShower.SetActive(true);
+        
+        _cardShower.ShowButtons();
 
         //Set OW_Map Tutorial as done
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.OW_MAP);
