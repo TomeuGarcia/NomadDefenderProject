@@ -118,7 +118,7 @@ public abstract class BuildingCard : MonoBehaviour
     public const float redrawHoldDuration = 0.5f;
 
     [Header("DESCRIPTION")] 
-    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    [SerializeField] protected CardTooltipDisplayData.WorldPositioning _descriptionTooltipPositioning;
     
 
 

@@ -298,6 +298,8 @@ public class TurretBuilding : RangeBuilding
 
     public override void HideQuickLevelUI()
     {
+        if (InBattleBuildingUpgrader.IsWindowOpen) return;
+
         Upgrader.HideQuickLevelDisplay();
     }
 

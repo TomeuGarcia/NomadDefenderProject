@@ -20,8 +20,13 @@ public class CardTooltipDisplayData
         }
     }
 
+    public interface IPositioning
+    {
+        void GetCanvasDisplayPosition(Camera displayCamera, out bool displayRightSide, out Vector3 displayPosition);
+    }
+
     [System.Serializable]
-    public class Positioning
+    public class WorldPositioning : IPositioning
     {
         [SerializeField] private Transform _leftDisplaySpot;
         [SerializeField] private Transform _rightDisplaySpot;
@@ -34,7 +39,7 @@ public class CardTooltipDisplayData
         private const float START_DISPLAYING_LEFT_SCREEN_PER1 = 0.55f;
         
         
-        public void TODO_GetCanvasDisplayPosition(Camera displayCamera, 
+        public void GetCanvasDisplayPosition(Camera displayCamera, 
             out bool displayRightSide, out Vector3 displayPosition)
         {
             Vector3 centerPositionScreen = displayCamera.WorldToScreenPoint(CenterPosition);
@@ -52,13 +57,48 @@ public class CardTooltipDisplayData
             return centerPositionScreen.x < displayCamera.pixelWidth * START_DISPLAYING_LEFT_SCREEN_PER1;
         }
     }
+    
+    [System.Serializable]
+    public class CanvasPositioning : IPositioning
+    {
+        [SerializeField] private RectTransform _leftDisplaySpot;
+        [SerializeField] private RectTransform _rightDisplaySpot;
+        [SerializeField] private Transform _centerSpot;
+
+        private Vector3 LeftSpotPosition => _leftDisplaySpot.position;
+        private Vector3 RightSpotPosition => _rightDisplaySpot.position;
+        private Vector3 CenterPosition => _centerSpot.position;
+
+        private const float START_DISPLAYING_LEFT_SCREEN_PER1 = 0.55f;
+        
+        
+        public void GetCanvasDisplayPosition(Camera displayCamera, 
+            out bool displayRightSide, out Vector3 displayPosition)
+        {
+            Vector3 centerPositionScreen = displayCamera.WorldToScreenPoint(CenterPosition);
+
+            displayRightSide = ShouldDisplayRight(displayCamera, centerPositionScreen);
+            displayPosition = displayRightSide
+                ? RightSpotPosition
+                : LeftSpotPosition;
+        }
+
+        private bool ShouldDisplayRight(Camera displayCamera, Vector3 centerPositionScreen)
+        {
+            return false;
+            return centerPositionScreen.x < displayCamera.pixelWidth * START_DISPLAYING_LEFT_SCREEN_PER1;
+        }
+    }
+    
+    
+    
 
 
-    public readonly Positioning DisplayPositioning;
+    public readonly IPositioning DisplayPositioning;
     public readonly Element[] Elements;
 
 
-    private CardTooltipDisplayData(Positioning displayPositioning, Element[] elements)
+    private CardTooltipDisplayData(IPositioning displayPositioning, Element[] elements)
     {
         DisplayPositioning = displayPositioning;
         Elements = elements;
@@ -70,7 +110,7 @@ public class CardTooltipDisplayData
     }
     
 
-    public static CardTooltipDisplayData MakeForTurretCard(Positioning displayPositioning, TurretCardData turretCardData)
+    public static CardTooltipDisplayData MakeForTurretCard(IPositioning displayPositioning, TurretCardData turretCardData)
     {
         var projectileModel = turretCardData.SharedPartsGroup.Projectile;
         List<ATurretPassiveAbility> passiveAbilities = turretCardData.PassiveAbilitiesController.PassiveAbilities;
@@ -131,7 +171,7 @@ public class CardTooltipDisplayData
     }
     
 
-    public static CardTooltipDisplayData MakeForSupportCard(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForSupportCard(IPositioning displayPositioning,
         SupportPartBase supportPartBase,
         EditableCardAbilityDescription[] defaultAndUpgradesDescriptions)
     {
@@ -147,7 +187,7 @@ public class CardTooltipDisplayData
     }
 
 
-    public static CardTooltipDisplayData MakeForProjectileCardPart(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForProjectileCardPart(IPositioning displayPositioning,
         TurretPartProjectileDataModel projectileModel, EditableCardAbilityDescription projectileDescription)
     {
         Element[] elements = new[]
@@ -159,7 +199,7 @@ public class CardTooltipDisplayData
     }
 
     
-    public static CardTooltipDisplayData MakeForCardPartPassive(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForCardPartPassive(IPositioning displayPositioning,
         ATurretPassiveAbilityDataModel passiveModel,
         EditableCardAbilityDescription passiveDescription)
     {
@@ -172,7 +212,7 @@ public class CardTooltipDisplayData
     }
 
     
-    public static CardTooltipDisplayData MakeForCardPartStatsUpgrade(Positioning displayPositioning,
+    public static CardTooltipDisplayData MakeForCardPartStatsUpgrade(IPositioning displayPositioning,
         CardPartBonusStats.DescriptionHelpReferences descriptionHelper,
         EditableCardAbilityDescription statsDescription)
     {

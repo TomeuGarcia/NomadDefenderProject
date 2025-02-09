@@ -2,5 +2,6 @@ using UnityEngine;
 
 public interface ICardTooltipSource
 {
-    public CardTooltipDisplayData MakeTooltipDisplayData();
+    CardTooltipDisplayData MakeTooltipDisplayData();
+    bool WithKeywords();
 }

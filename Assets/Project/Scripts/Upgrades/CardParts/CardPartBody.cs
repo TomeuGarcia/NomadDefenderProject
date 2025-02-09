@@ -95,4 +95,9 @@ public class CardPartBody : CardPart, ICardTooltipSource
     {
         return new CardTooltipDisplayData();
     }
+
+    public bool WithKeywords()
+    {
+        return true;
+    }
 }

@@ -124,4 +124,9 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
         return CardTooltipDisplayData.MakeForSupportCard(_descriptionTooltipPositioning, CardParts.Base, 
             CardData.AbilityDescriptions);
     }
+
+    public bool WithKeywords()
+    {
+        return true;
+    }
 }

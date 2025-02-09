@@ -82,6 +82,12 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
+    public override CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return CardTooltipDisplayData.MakeForSupportCard(_tooltipPoistioning, _supportCardData.SharedPartsGroup.Base,
+            _supportBuilding.CardData.AbilityDescriptions);
+    }
+
     protected override void CheckHoveredButtonsCanNowUpgrade()
     {
         if (_supportUpgradeButton.IsButtonHovered) _supportUpgradeButton.SetHighlighted();
