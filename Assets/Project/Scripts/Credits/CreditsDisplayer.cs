@@ -87,8 +87,14 @@ public class CreditsDisplayer : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(creditsSpeedUpButton)) settings.scrollSpeed = defaultCreditsScrollSpeed * 4f;
-        else if (Input.GetKeyUp(creditsSpeedUpButton)) settings.scrollSpeed = defaultCreditsScrollSpeed;
+        if (Input.GetKeyDown(creditsSpeedUpButton))
+        {
+            settings.scrollSpeed = defaultCreditsScrollSpeed * 8f;
+        }
+        else if (Input.GetKeyUp(creditsSpeedUpButton))
+        {
+            settings.scrollSpeed = defaultCreditsScrollSpeed;
+        }
     }
 
     public void ResetCredits() // Call this to reset credits if already playing

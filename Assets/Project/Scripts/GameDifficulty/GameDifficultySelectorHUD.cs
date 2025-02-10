@@ -45,10 +45,13 @@ public class GameDifficultySelectorHUD : MonoBehaviour
             _button.Select();
         }
     }
-    
+
+    [Header("DEMO")] 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
     
     [Header("DIFFICULTY CONFIG")] 
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+    
 
     [Header("HUD")] 
     [SerializeField] private SelectionButton[] _buttons;
@@ -59,6 +62,11 @@ public class GameDifficultySelectorHUD : MonoBehaviour
         foreach (SelectionButton button in _buttons)
         {
             button.Init(_gameDifficultyConfig);
+        }
+
+        if (_demoManagerConfig.DemoEnabled)
+        {
+            gameObject.SetActive(false);
         }
     }
     

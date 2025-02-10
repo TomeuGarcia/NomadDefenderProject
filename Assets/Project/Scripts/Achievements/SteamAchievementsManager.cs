@@ -7,16 +7,18 @@ using Steamworks;
 
 public class SteamAchievementsManager : IAchievementsManager
 {
+    private readonly DemoManagerConfig _demoManagerConfig;
     private readonly Dictionary<AchievementType, string> _achievementsMap;
 
-    public SteamAchievementsManager(AchievementsManagerConfig config)
+    public SteamAchievementsManager(AchievementsManagerConfig config, DemoManagerConfig demoManagerConfig)
     {
+        _demoManagerConfig = demoManagerConfig;
         _achievementsMap = config.MakeAchievementsMap();
     }
 
     public void UnlockAchievement(AchievementType achievementType)
     {
-        if (!SteamManager.Initialized)
+        if (!SteamManager.Initialized || _demoManagerConfig.DemoEnabled)
         {
             return;
         }

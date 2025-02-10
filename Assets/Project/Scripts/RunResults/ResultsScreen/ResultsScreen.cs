@@ -11,6 +11,9 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private InterfaceReference<IRunStateData, ScriptableObject> _runStateData;
     [SerializeField] private InterfaceReference<IGameProgressionStatus, ScriptableObject> _gameProgressionStatus;
 
+    [Header("DEMO")] 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
+
     private IRunStateData RunStateData => _runStateData.Value;
 
 
@@ -208,7 +211,14 @@ public class ResultsScreen : MonoBehaviour
             }
             else
             {
-                SceneLoader.GetInstance().StartLoadGameEndCredits();
+                if (_demoManagerConfig.DemoEnabled)
+                {
+                    SceneLoader.GetInstance().StartLoadDemoThanksForPlaying();
+                }
+                else
+                {                
+                    SceneLoader.GetInstance().StartLoadGameEndCredits();
+                }
             }
         }
         else

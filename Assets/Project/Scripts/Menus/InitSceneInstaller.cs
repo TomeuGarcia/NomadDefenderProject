@@ -14,6 +14,9 @@ public class InitSceneInstaller : MonoBehaviour
 
     [Header("GAME DIFFICULTY")] 
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+
+    [Header("DEMO")] 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
     
 
     private void Awake()
@@ -28,7 +31,7 @@ public class InitSceneInstaller : MonoBehaviour
         serviceLocator.CameraHelp = new CameraHelpService();
         serviceLocator.OptionalTutorialsStateManager = new OptionalTutorialsStateManager_PlayerPrefs();
         
-        serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig);
+        serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig, _demoManagerConfig);
         
         serviceLocator.DynamicProjectileShootingService = new DynamicProjectileShootingService();
 

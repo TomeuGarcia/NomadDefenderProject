@@ -9,12 +9,14 @@ public class HomingChainingProjectile : HomingProjectile
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField, Min(1)] private int maxChainedTargets = 1;
     [SerializeField, Min(0f)] private float chainRadius;
-    [SerializeField] private ParticleSystem _radiusParticles;
 
     private int _currentChainedTarget;
     private Enemy[] _chainTargetedEnemies;
     private TurretDamageAttack[] _chainTargetedDamage;
     private bool _isChaining;
+    
+
+
 
     protected override void OnShotInitialized()
     {
@@ -66,10 +68,7 @@ public class HomingChainingProjectile : HomingProjectile
     private void DoTargetedEnemyHit()
     {
         DamageTargetEnemy(_damageAttack);
-
-        _radiusParticles.transform.position = _targetEnemy.Position;
-        _radiusParticles.Play();
-
+        
         _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(_targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
         _chainTargetedDamage = new TurretDamageAttack[_chainTargetedEnemies.Length];
         for (int i = 0; i < _chainTargetedEnemies.Length; i++)
