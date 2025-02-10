@@ -44,7 +44,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _isEnabled = true;
             //_viewHolder.SetActive(true);
-            _material.DOFloat(1.0f, "_Enabled", 0.25f).SetEase(Ease.OutCubic);
+            _material.DOFloat(1.0f, "_EnableCoef", 0.25f).SetEase(Ease.OutCubic);
 
             StopWaitingForSelectedAnimation();
             PlayWaitingForSelectedAnimation();
@@ -52,7 +52,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         public void SetDisabled()
         {
             _isEnabled = false;
-            _material.DOFloat(0.0f, "_Enabled", 0.25f).SetEase(Ease.OutCubic);
+            _material.DOFloat(0.0f, "_EnableCoef", 0.25f).SetEase(Ease.OutCubic);
 
             SetNotSelected();
         }
@@ -60,8 +60,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         public void SetFinalDisabled()
         {
             _isEnabled = false;
-            _material.DOVector(new Vector2(2.0f, 0.0f), "_RectScale", 0.25f).SetEase(Ease.OutCubic)
-                .OnComplete(() => { _material.SetFloat("_Alpha", 0.0f); });
+            _material.DOFloat(0.0f, "_AlphaCoef", 0.25f).SetEase(Ease.OutCubic);
         }
         
         
@@ -110,7 +109,9 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _selectedMark.gameObject.SetActive(highlighted);
 
-            _material.SetFloat("_Hovered", highlighted ? 1.0f : 0.0f);
+            //_material.SetFloat("_HoverCoef", highlighted ? 1.0f : 0.0f);
+            _material.DOComplete();
+            _material.DOFloat(highlighted ? 1.0f : 0.0f, "_HoverCoef", 0.1f);
         }
 
         

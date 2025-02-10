@@ -68,12 +68,14 @@ public class MachineManager : MonoBehaviour
     [Button]
     public void Warning()
     {
+        _rightTube.Warning();
         _machineDisplay.Warning();
     }
 
     [Button]
     public void Ready()
     {
+        _rightTube.Ready();
         _machineDisplay.Ready();
     }
 

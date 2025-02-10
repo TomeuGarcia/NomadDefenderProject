@@ -54,7 +54,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
             //Debug.Log("SetEnabled");
             AbilityDataModel = abilityDataModel;
 
-            _material.DOFloat(1.0f, "_Enabled", 0.25f).SetEase(Ease.OutCubic);
+            _material.DOFloat(1.0f, "_EnableCoef", 0.25f).SetEase(Ease.OutCubic);
             _material.SetTexture("_Texture", AbilityDataModel.View.Sprite.texture);
             _material.SetColor("_InnerColor", AbilityDataModel.View.Color);
             
@@ -69,7 +69,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         public void SetDisabled()
         {
             //Debug.Log("SetDisabled");
-            _material.DOFloat(0.0f, "_Enabled", 0.25f).SetEase(Ease.InCubic);
+            _material.DOFloat(0.0f, "_EnableCoef", 0.25f).SetEase(Ease.InCubic);
             //_material.SetFloat("_Enabled", 0f);
             //_spriteRenderer.gameObject.SetActive(false);
             SetNotSelected();
@@ -82,8 +82,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
             //Debug.Log("SetFinalDisabled");
             SetDisabled();
 
-            _material.DOVector(new Vector2(1.0f, 0.0f), "_RectScale", 0.25f).SetEase(Ease.OutCubic)
-                .OnComplete(() => { _material.SetFloat("_Alpha", 0.0f); });
+            _material.DOFloat(0.0f, "_AlphaCoef", 0.25f).SetEase(Ease.OutCubic);
         }
 
 
@@ -134,12 +133,15 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         private void SetSelectedView(bool selected)
         {
-            _material.DOFloat(selected ? 1.0f : 0.0f, "_Selected", 0.2f).SetEase(Ease.OutCubic);
+            _material.DOFloat(selected ? 1.0f : 0.0f, "_SelectCoef", 0.2f).SetEase(Ease.OutCubic);
         }
 
         private void SetHoveredView(bool highlighted)
         {
-            _material.SetFloat("_Hovered", highlighted ? 1.0f : 0.0f);
+            //_material.SetFloat("_HoverCoef", highlighted ? 1.0f : 0.0f);
+            
+            _material.DOComplete();
+            _material.DOFloat(highlighted ? 1.0f : 0.0f, "_HoverCoef", 0.1f);
         }
 
         private void PlayWaitingForSelectedAnimation()

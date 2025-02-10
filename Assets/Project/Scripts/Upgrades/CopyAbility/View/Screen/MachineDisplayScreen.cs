@@ -122,6 +122,8 @@ public class MachineDisplayScreen : MachineMovablePart
 
     private IEnumerator ReadyScreen()
     {
+        _screenOnOffMat.SetFloat("_FlashCoef", 0.0f);
+        _screenOnOffMat.SetFloat("_OnCoef", 0.0f);
         _screenOnOffMat.DOFloat(_screenFlashTC.Value, "_FlashCoef", _screenFlashTC.Duration).SetEase(_screenFlashTC.Ease);
         yield return new WaitForSeconds(_screenFlashTC.Duration);
         _screenOnOffMat.DOFloat(_screenOnTC.Value, "_OnCoef", _screenOnTC.Duration).SetEase(_screenOnTC.Ease);

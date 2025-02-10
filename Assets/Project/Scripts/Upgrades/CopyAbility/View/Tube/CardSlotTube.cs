@@ -8,6 +8,7 @@ public class CardSlotTube : MachineMovablePart
     [SerializeField] private CardSlotHandle[] _handles;
     [SerializeField] private CardSlotGlassTube _glassTube;
     [SerializeField] private CardSlotTubeLid[] _tubeLid;
+    [SerializeField] private GameObject _innerTubeLights;
 
     [Header("PARAMETERS")]
     [SerializeField] private float _delayToHandle;
@@ -16,7 +17,10 @@ public class CardSlotTube : MachineMovablePart
 
     public override void Init()
     {
-
+        if (_innerTubeLights != null)
+        {
+            _innerTubeLights.SetActive(false);
+        }
     }
 
     public override IEnumerator EnterAnimation()
@@ -38,8 +42,29 @@ public class CardSlotTube : MachineMovablePart
         StartCoroutine(_glassTube.EnterAnimation());
     }
 
+    public void Warning()
+    {
+        if (_innerTubeLights != null)
+        {
+            _innerTubeLights.SetActive(false);
+        }
+    }
+
+    public void Ready()
+    {
+        if (_innerTubeLights != null)
+        {
+            _innerTubeLights.SetActive(true);
+        }
+    }
+
     public IEnumerator ReplaceAnimation()
     {
+        if(_innerTubeLights != null)
+        {
+            _innerTubeLights.SetActive(false);
+        }
+
         StartCoroutine(_glassTube.CloseTube());
         yield return null;
     }
