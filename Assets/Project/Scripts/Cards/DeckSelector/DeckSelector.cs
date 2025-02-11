@@ -161,7 +161,7 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = true;
         if (currentFill == 0)
         {
-            ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
+            //ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
             currentFill = 1.0f;
             _startButtonLight.DOIntensity(_startButtonLightIntensity, 0.5f).SetEase(Ease.InOutSine);
         }
@@ -179,7 +179,7 @@ public class DeckSelector : MonoBehaviour
     {
         startSimulationButton.enabled = false;
 
-        _startButtonParticles.Play();
+        //_startButtonParticles.Play();
         
         runInnerButtonMesh.transform.DOBlendableLocalMoveBy(Vector3.down * 0.3f, 0.25f);
         startSimulationButton.transform.DOBlendableLocalMoveBy(Vector3.forward * 6.0f, 0.25f);

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6561019592097627548
+--- !u!114 &-1523228908476526284
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OuterPlaneGround_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 23b0c1bff7bfbfa45b0fb9b222c2b48d,
+  m_Name: Button_Run_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: e81d660cff33de5419c895c80e011bf6,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,12 +37,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: f4445f20d90ff0d4cb70038f60ffc383, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -59,28 +55,30 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdditionalErrorWireStep2: 0
-    - _BrightColorIncrease: 0.03
-    - _ErrorNoiseScale: 2
-    - _ErrorNoiseStrength: 0.5
-    - _ErrorWiresStep: 0
-    - _LerpWireColors: 0
-    - _NoiseScale: 0.1
+    - _AlphaCoef: 1
+    - _EnableCoef: 1
+    - _HoverCoef: 0
+    - _InnerTintSpeed: 2
+    - _InnerWidth_Hover: 0.35
+    - _InnerWidth_Idle: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0
-    - _SquareScaleCoef: 2
-    - _WireColorLerpPeriod: 1
-    - _WireEdge: 0.614
-    - _WiresScale: 0.17
+    - _Scale: 0.7
+    - _SelectCoef: 0
+    - _StripScale: 3
+    - _StrpCoef: 0.5
+    - _StrpScrollSpeed: 0.25
+    - _TextureHoverScale: 0.75
+    - _TextureScale: 1
     m_Colors:
-    - _BaseColor1: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor2: {r: 0, g: 0.1254902, b: 0.14117648, a: 1}
-    - _BrightErrorColor: {r: 47.937256, g: 0, b: 0, a: 0}
-    - _ErrorOriginOffset: {r: -3.5, g: 0, b: -1.25, a: 0}
-    - _ErrorOriginOffset2: {r: -1000, g: -1000, b: -1000, a: 0}
-    - _WiresColor: {r: 0, g: 0.09411765, b: 0.11372549, a: 1}
-    - _WiresColor2: {r: 0.2086226, g: 0.7218053, b: 1.078732, a: 1}
-    - _WiresErrorColor: {r: 4.237095, g: 0.3105724, b: 0, a: 0}
-    - _WiresOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _ButtonSize: {r: 1.73, g: 0.7, b: 0, a: 0}
+    - _InnerColor: {r: 1, g: 1, b: 1, a: 0}
+    - _InnerColorTint: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 0}
+    - _InnerTint_Hover: {r: 0, g: 0, b: 0, a: 0}
+    - _InnerTint_Idle: {r: 0, g: 0, b: 0, a: 0}
+    - _Offset: {r: -0.5, g: 0, b: 0, a: 0}
+    - _Resolution: {r: 1, g: 1, b: 0, a: 0}
+    - _StripColor_Hover: {r: 0, g: 0.74901956, b: 0.67877704, a: 0}
+    - _StripColor_Idle: {r: 0.84313726, g: 0.84313726, b: 0.84313726, a: 0}
+    - _StripsStrengths: {r: 1, g: 0.65, b: 0, a: 0}
   m_BuildTextureStacks: []

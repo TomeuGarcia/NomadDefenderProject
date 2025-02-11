@@ -1,10 +1,6 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class MachineDisplayScreen : MachineMovablePart

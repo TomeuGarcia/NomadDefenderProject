@@ -1,12 +1,10 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 public class DeckSelectorVisuals : MonoBehaviour
 {
+    [SerializeField] private MeshRenderer _runButtonMesh;
+    private Material _runButtonMat;
     [SerializeField] private Transform runSimulationButtonTransform;
     private Vector3 positionButtonWires;
 
@@ -38,6 +36,8 @@ public class DeckSelectorVisuals : MonoBehaviour
 
         positionButtonWires = runSimulationButtonTransform.position + Vector3.forward * positionOffsetWires2;
 
+        _runButtonMat = _runButtonMesh.material;
+
         HideWires();
     }
 
@@ -58,11 +58,13 @@ public class DeckSelectorVisuals : MonoBehaviour
 
         SetCurrentWiresStep(0f);
 
+        _runButtonMat.DOFloat(1.0f, "_EnableCoef", 0.1f);
         DOTween.To(() => currentWiresStep, x => SetCurrentWiresStep(x), maxWireStep, showDuration);
     }
     
     public void HideWires()
     {
+        _runButtonMat.DOFloat(0.0f, "_EnableCoef", 0.1f);
         floorMaterial.SetVector(errorOriginOffset1PropertyId, hiddenWiresPosition);
         floorMaterial.SetVector(errorOriginOffset2PropertyId, hiddenWiresPosition);
         floorMaterial.SetFloat(errorWiresStepPropertyId, 0.0f);
@@ -78,10 +80,12 @@ public class DeckSelectorVisuals : MonoBehaviour
     public void OnButtonEnter()
     {
         GameAudioManager.GetInstance().PlayCardInfoShown();
+        _runButtonMat.DOFloat(1.0f, "_HoverCoef", 0.1f);
     }
     public void OnButtonExit()
     {
         GameAudioManager.GetInstance().PlayCardInfoHidden();
+        _runButtonMat.DOFloat(0.0f, "_HoverCoef", 0.1f);
     }
 
 }
