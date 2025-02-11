@@ -18,6 +18,7 @@ public class BuildingCardView : MonoBehaviour
     private Material _borderMaterial;
     private Material _backgroundMaterial;
     private int _canBePlayedPropertyId;
+    private int _canNotBePlayedPropertyId;
     private int _timeStartCanNotBePlayedPropertyId;
     
     public CardDrawAnimationPlayer DrawAnimationPlayer => _drawAnimationPlayer;
@@ -37,6 +38,7 @@ public class BuildingCardView : MonoBehaviour
         _drawAnimationPlayer.Configure(_borderMaterial);
         
         _canBePlayedPropertyId = Shader.PropertyToID("_CanBePlayed");
+        _canNotBePlayedPropertyId = Shader.PropertyToID("_CanNotBePlayed");
         _timeStartCanNotBePlayedPropertyId = Shader.PropertyToID("_TimeStartCanNotBePlayed");
     }
 
@@ -44,6 +46,10 @@ public class BuildingCardView : MonoBehaviour
     public void SetCanBePlayed(bool canBePlayed)
     {
         _borderMaterial.SetFloat(_canBePlayedPropertyId, canBePlayed ? 1 : 0);
+    }
+    public void SetCanNotBePlayed(bool canBePlayed)
+    {
+        _borderMaterial.SetFloat(_canNotBePlayedPropertyId, canBePlayed ? 1 : 0);
     }
 
     public void PlayCanNotBePlayedAnimation()
