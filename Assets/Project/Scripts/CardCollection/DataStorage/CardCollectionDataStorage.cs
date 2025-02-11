@@ -101,7 +101,7 @@ public class CardCollectionDataStorage : ScriptableObject
         foreach (DataWrapper.ProjectileData projectileData in storedData.projectilesData)
         {
             TurretPartProjectileDataModel projectile = ProjectileNameToDataModel(projectileData.name);
-            _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);    
+            _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);
         }
         
         _discoveredPassiveAbilities = new Dictionary<ATurretPassiveAbilityDataModel, bool>(_passiveAbilities.Length);
@@ -126,10 +126,11 @@ public class CardCollectionDataStorage : ScriptableObject
     private void CheckFile()
     {
         string directory = PathToFile;
-        if (!Directory.Exists(directory) || !File.Exists(directory))
+        string directoryWithFile = directory + FileName;
+        if (!Directory.Exists(directory) || !File.Exists(directoryWithFile))
         {
             Directory.CreateDirectory(directory);
-            FileStream fileStream = File.Create(directory + FileName);
+            FileStream fileStream = File.Create(directoryWithFile);
             fileStream.Close();
             ResetDiscoveries();
             SaveData();

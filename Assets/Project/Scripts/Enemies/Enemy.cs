@@ -27,8 +27,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     [Header("STATS")]
     [Expandable] [SerializeField] private EnemyTypeConfig _typeConfig;
     public int Damage { get; private set; }
-    private float armor;
-    private float health;
+    private int _armor;
+    private int _health;
     private int currencyDrop;
 
     public EnemyTypeConfig TypeConfig => _typeConfig;
@@ -74,18 +74,18 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         ResetStats();
         
 
-        if (armor == 0)
+        if (_armor == 0)
         {
-            healthSystem = new HealthSystem((int)health);
+            healthSystem = new HealthSystem(_health);
         }
         else
         {
-            healthSystem = new HealthSystem((int)health, (int)armor);
+            healthSystem = new HealthSystem(_health, _armor);
         }
 
         healthHUD.Init(healthSystem);
 
-        originalMeshLocalScale = MeshTransform.localScale;
+        originalMeshLocalScale = _meshHolder.localScale;
 
         healthSystem.OnArmorUpdated += enemyFeedback.ArmorUpdate;
         IsFakeEnemy = false;
@@ -166,8 +166,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     private void ResetStats()
     {
         Damage = _typeConfig.BaseStats.Damage;
-        health = _typeConfig.BaseStats.Health;
-        armor = _typeConfig.BaseStats.Armor;
+        _health = _typeConfig.BaseStats.Health;
+        _armor = _typeConfig.BaseStats.Armor;
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
         pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
         pathFollower.SetMoveSpeedMultiplier(1f);
@@ -262,9 +262,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         
         RemoveQueuedDamage(damageAttack.Damage);
 
-        MeshTransform.localScale = originalMeshLocalScale;
-        MeshTransform.DOKill(true);
-        MeshTransform.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
+        _meshHolder.localScale = originalMeshLocalScale;
+        _meshHolder.DOKill(true);
+        _meshHolder.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
         bool gotKilled = healthSystem.IsDead();
         if (gotKilled && !_initializedWithoutFunctionality)
@@ -368,9 +368,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
-        health = (float)_typeConfig.BaseStats.Health * multiplier;
+        _health = Mathf.RoundToInt(_typeConfig.BaseStats.Health * multiplier);
 
-        healthSystem.UpdateHealth((int)health);
+        healthSystem.UpdateHealth(_health);
     }
 
     public virtual bool IsDead()

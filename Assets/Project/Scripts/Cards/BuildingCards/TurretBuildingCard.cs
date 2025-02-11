@@ -566,6 +566,10 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         return CardTooltipDisplayData.MakeForTurretCard(_descriptionTooltipPositioning, CardData);
     }
 
+    public bool WithKeywords()
+    {
+        return true;
+    }
 
 
     public void UpdateViewWithNotDiscoveredProjectileAndPassives(CardCollectionDataStorage cardCollection)

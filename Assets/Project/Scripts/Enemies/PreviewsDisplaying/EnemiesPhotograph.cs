@@ -59,6 +59,7 @@ public class EnemiesPhotograph : MonoBehaviour
 
             Vector3 position = LocalToWorldPosition(
                 new Vector3((column + 0.5f) * _gridSize.x, (row + 0.5f) * _gridSize.y, 0));
+            position += enemyTypeConfig.View.PhotoOffset;
             Quaternion rotation = enemyTypeConfig.View.PhotoRotation;
 
             GameObject enemyGameObject = 

@@ -81,17 +81,25 @@ public class GameManager : MonoBehaviour
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
-        //mapSceneLoader.LoadMainMenuScene(3f);
-        StartCoroutine(DoStartVictory());
-
+        StartCoroutine(DoStartVictory(VictoryWatcherScriptedSequence));
         UnlockVictoryContent();
     }
+
+    public void StartDemoVictory(DemoManager.IVictoryDialogue demoVictoryDialogue)
+    {
+        victoryHolder.SetActive(true);
+        StartCoroutine(DoStartVictory(demoVictoryDialogue.PlayVictoryDialogue));
+        UnlockVictoryContent();
+    }
+    
 
     private void UnlockVictoryContent()
     {
         StarterDecksUnlocker.GetInstance().UnlockNextDeck();
         _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
 
+        AchievementDefinitions.HardDifficultyVictory.Check(ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+        
         AchievementDefinitions.StarterDeck_Victory_Frost.Check(decksLibrary.IsUsingFrostDeck());
         AchievementDefinitions.StarterDeck_Victory_Repeater.Check(decksLibrary.IsUsingRepeaterDeck());
         AchievementDefinitions.StarterDeck_Victory_Currency.Check(decksLibrary.IsUsingCurrencyDeck());
@@ -100,7 +108,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator DoStartVictory()
+    private IEnumerator DoStartVictory(VictoryWatcherScriptedSequenceDelegate scriptedSequenceDelegate)
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
 
@@ -123,7 +131,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        yield return StartCoroutine(VictoryWatcherScripedSequence());
+        yield return StartCoroutine(scriptedSequenceDelegate());
 
 
         for (int i = 0; i < 3; ++i)
@@ -193,7 +201,8 @@ public class GameManager : MonoBehaviour
         SceneLoader.GetInstance().LoadRunResultsScreen();
     }
 
-    private IEnumerator VictoryWatcherScripedSequence()
+    delegate IEnumerator VictoryWatcherScriptedSequenceDelegate();
+    private IEnumerator VictoryWatcherScriptedSequence()
     {
         // 0
         victoryScriptedSequence.NextLine();

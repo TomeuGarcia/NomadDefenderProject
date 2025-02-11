@@ -14,7 +14,7 @@ public class TurretPassiveAbility_WaveFinishSpawnCardCopyInHand : ATurretPassive
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.CostIncrementPerCard);
+        UpdateDescriptionVariable(_abilityDataModel.CostIncrementPerCard);
     }
 
     public override void OnCardInitialized(TurretBuildingCard ownerCard)

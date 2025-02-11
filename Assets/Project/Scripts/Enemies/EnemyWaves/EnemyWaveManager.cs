@@ -147,6 +147,8 @@ public class EnemyWaveManager : MonoBehaviour
             
             if (repeatedStartPathNodes.TryGetValue(startPathNode, out PathStartData firstPathStartData))
             {
+                Debug.Log("Repeated: " + startPathNode.gameObject.name + " " + firstPathStartData.EnemyWaveSpawner.name);
+                Debug.Log("add: " + pathStartData.EnemyWaveSpawner.name);
                 firstPathStartData.MergeWaveDisplayer(pathStartData.EnemyWaveSpawner);
                 continue;
             }
@@ -433,9 +435,11 @@ public class EnemyWaveManager : MonoBehaviour
     private void StartEnemyPathFollowerTrails()
     {
         /**/
-        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i) 
+        for (int i = 0; i < enemyPathFollowerTrails.Length; ++i)
         {
-            enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(1f);
+            bool trailShouldBeVisible = _pathsStartData[i].StartNode.gameObject.activeInHierarchy;
+            float moveSpeedMultiplier = trailShouldBeVisible ? 1f : 0f;
+            enemyPathFollowerTrails[i].SetMoveSpeedMultiplier(moveSpeedMultiplier);
         }
         enemyPathFollowerTrailsEnabled = true;
         /**/

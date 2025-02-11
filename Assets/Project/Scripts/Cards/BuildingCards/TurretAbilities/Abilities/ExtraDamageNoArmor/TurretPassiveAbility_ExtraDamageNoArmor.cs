@@ -12,7 +12,7 @@ public class TurretPassiveAbility_ExtraDamageNoArmor : ATurretPassiveAbility
     {
         _damageMultiplier = 1f + (originalModel.DamagePercentBonus.Value / 100f);
         
-        ApplyDescriptionCorrection(originalModel.DamagePercentBonus);
+        UpdateDescriptionVariable(originalModel.DamagePercentBonus);
     }
 
 

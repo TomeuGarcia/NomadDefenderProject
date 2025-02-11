@@ -8,7 +8,16 @@ public class InitSceneInstaller : MonoBehaviour
     [SerializeField] private Transform _particlesParent;
     [SerializeField] private GeneralParticleFactoryConfig _generalParticlesFactoryConfig;
     [SerializeField] private ParticleFactoryConfig _particlesFactoryConfig;
+    
+    [Header("ACHIEVEMENTS")]
     [SerializeField] private AchievementsManagerConfig _achievementsManagerConfig;
+
+    [Header("GAME DIFFICULTY")] 
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+
+    [Header("DEMO")] 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
+    
 
     private void Awake()
     {
@@ -22,8 +31,10 @@ public class InitSceneInstaller : MonoBehaviour
         serviceLocator.CameraHelp = new CameraHelpService();
         serviceLocator.OptionalTutorialsStateManager = new OptionalTutorialsStateManager_PlayerPrefs();
         
-        serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig);
+        serviceLocator.AchievementsManager = new SteamAchievementsManager(_achievementsManagerConfig, _demoManagerConfig);
         
         serviceLocator.DynamicProjectileShootingService = new DynamicProjectileShootingService();
+
+        serviceLocator.GameDifficultySettingsSource = _gameDifficultyConfig;
     }
 }

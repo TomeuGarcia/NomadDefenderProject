@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public enum TurretUpgradeType { ATTACK, CADENCE, RANGE, SUPPORT, NONE };
 
-public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeConditionChecker
+public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeConditionChecker, ICardTooltipSource
 {
     [SerializeField] private RangeBuilding _building;
     [SerializeField] private RectTransform mouseDetectionPanel;
@@ -24,7 +24,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] private Color32 disalbedTextColor;
 
     public bool IsOpenWindowInCooldown { get; private set; }
-    public bool IsWindowOpen { get; private set; }
+    public static bool IsWindowOpen { get; set; } = false;
 
     private bool hasGameFinished = false;
     protected Coroutine automaticCloseCoroutine = null;
@@ -46,6 +46,9 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] protected RectTransform quickLevelDisplay;
     [SerializeField] protected CanvasGroup cgQuickLevelDisplay;
     [SerializeField] protected TextMeshProUGUI quickLevelDisplayText;
+
+    [Header("TOOLTIP")] 
+    [SerializeField] protected CardTooltipDisplayData.CanvasPositioning _tooltipPoistioning;
 
     [Header("NEW UI")] 
     [Header("Selling")] 
@@ -153,6 +156,10 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         _sellBuildingMenu.OnSellConfirmed -= OnSellConfirmed;
     }
 
+    private void OnDestroy()
+    {
+        IsWindowOpen = false;
+    }
 
     private void Update()
     {
@@ -257,7 +264,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         IsWindowOpen = true;
 
-        HideQuickLevelDisplay();
+        //HideQuickLevelDisplay();
     }
 
     public void CloseWindow()
@@ -274,6 +281,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         IsWindowOpen = false;
 
         AutomaticWindowCloseStop();
+        
+        HideQuickLevelDisplay(); //
     }
     private IEnumerator OpenWindowCooldown()
     {
@@ -501,15 +510,32 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         cgQuickLevelDisplay.DOFade(1f, 0.1f);
 
         //ShowCanUpgradeText();
+        ShowTooltip();
     }
     public void HideQuickLevelDisplay()
     {
         cgQuickLevelDisplay.DOFade(0f, 0.1f).OnComplete(() => quickLevelDisplay.gameObject.SetActive(false));        
 
         //HideCanUpgradeText();
+        HideTooltip();
     }
 
 
+    private void ShowTooltip()
+    {
+        CardTooltipDisplayManager.GetInstance().StartDisplayingTooltip(this);
+    }
+
+    private void HideTooltip()
+    {
+        CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+    }
+    
+    public abstract CardTooltipDisplayData MakeTooltipDisplayData();
+    public bool WithKeywords()
+    {
+        return false;
+    }
 
 
     protected bool IsBuildingUpgradeAvailable()

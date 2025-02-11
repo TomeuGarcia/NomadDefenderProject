@@ -32,14 +32,14 @@ namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Model
         }
 
 
-        public void ApplyDescriptionModifications(EditableCardAbilityDescription abilityDescription)
+        public void ApplyModificationsToDescription(EditableCardAbilityDescription abilityDescription)
         {
-            it(abilityDescription.Description, out Dictionary<string, string> patternToModifiedPattern);
+            IdentifyPatterns(abilityDescription.Description, out Dictionary<string, string> patternToModifiedPattern);
             abilityDescription.ApplyDescriptionModifications(patternToModifiedPattern);
         }
 
 
-        private void it(string description, out Dictionary<string, string> patternToModifiedPattern)
+        private void IdentifyPatterns(string description, out Dictionary<string, string> patternToModifiedPattern)
         {
             patternToModifiedPattern = new Dictionary<string, string>();
             bool lookingForPrefix = true;
@@ -57,11 +57,7 @@ namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Model
                     patternInProcess = "";
                     continue;
                 }
-                else
-                {
-                    patternInProcess += currentCharacter;
-                }
-                
+
                 if (lookingForPrefix)
                 {
                     bool foundPrefix = currentCharacter == _prefix;
@@ -70,10 +66,13 @@ namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Model
                     {
                         lookingForPrefix = false;
                         lookingForSuffix = true;
+                        patternInProcess += currentCharacter;
                     }
                     continue;
                 }
                 
+                patternInProcess += currentCharacter;
+
                 if (lookingForSuffix)
                 {
                     bool foundSuffix = currentCharacter == _suffix;
@@ -96,6 +95,11 @@ namespace Project.Scripts.Cards.BuildingCards.TurretAbilities.Model
 
         private void AddPattern(Dictionary<string, string> patternToModifiedPattern, string pattern, string patternToModify)
         {
+            if (patternToModifiedPattern.ContainsKey(pattern))
+            {
+                return;
+            }
+            
             patternToModifiedPattern.Add(pattern, MakeChangesToPattern(patternToModify));
         }
         

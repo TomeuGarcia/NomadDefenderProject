@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class CursorSet
@@ -19,20 +21,27 @@ public class CursorChanger : MonoBehaviour
 {
     [SerializeField] private CursorSet _facilityCursor;
     [SerializeField] private CursorSet _computerCursor;
+    [SerializeField] private RectTransform _cursorMove;
+    [SerializeField] private Image _cursorImage;
 
     private CursorContext _cursorContext = CursorContext.COMPUTER;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            SetCursor(_computerCursor._hoverData);
-        }
-    }
-
+    
     private void Start()
     {
         ServiceLocator.GetInstance().CursorChanger = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    private void Update()
+    {
+        Cursor.visible = false;
+        _cursorMove.position = Input.mousePosition;
+
+        if (Cursor.lockState != CursorLockMode.Confined && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 
     public void ChangeCursorContext(CursorContext cursorContext)
@@ -78,6 +87,8 @@ public class CursorChanger : MonoBehaviour
 
     private void SetCursor(CursorData cursorData)
     {
-        Cursor.SetCursor(cursorData.Texture, cursorData.HotSpot, cursorData.CursorMode);
+        //Cursor.SetCursor(cursorData.Texture, cursorData.HotSpot, cursorData.CursorMode);
+        _cursorImage.sprite = cursorData.Sprite;
     }
+    
 }

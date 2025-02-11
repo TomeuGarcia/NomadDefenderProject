@@ -57,23 +57,29 @@ public class PathNode : MonoBehaviour
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawSphere(PositionForGizmo, 0.05f);
-
-        PathNode tempNodeNode = this;
+        
+        PathNode tempNode = this;
         int pathLength = 1;
-        while (!tempNodeNode.IsLastNode)
+        while (!tempNode.IsLastNode)
         {
-            tempNodeNode = tempNodeNode.nextNode;
+            if (pathLength > 20)
+            {
+                Debug.LogError("Path is too long or there are references in a LOOP, please ensure everything is correct");
+                return;
+            }
+            
+            tempNode = tempNode.nextNode;
             ++pathLength;
         }
         
-        tempNodeNode = this;
+        tempNode = this;
         int pathItR = pathLength;
-        while (!tempNodeNode.IsLastNode)
+        while (!tempNode.IsLastNode)
         {
             Gizmos.color = Color.magenta * (((float)pathItR / pathLength) * 0.5f + 0.5f);
-            GizmosUtility.DrawArrow(tempNodeNode.PositionForGizmo, tempNodeNode.nextNode.PositionForGizmo);
+            GizmosUtility.DrawArrow(tempNode.PositionForGizmo, tempNode.nextNode.PositionForGizmo);
             
-            tempNodeNode = tempNodeNode.nextNode;
+            tempNode = tempNode.nextNode;
             --pathItR;
         }
     }

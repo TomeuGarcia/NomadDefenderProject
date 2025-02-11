@@ -8,7 +8,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     private TurretBuilding _turretOwner;
     
     private readonly TurretStatsMultiplicationSnapshot _hyperStatsMultiplier = 
-        new TurretStatsMultiplicationSnapshot(-0.5f, 4f, 3.0f);
+        new TurretStatsMultiplicationSnapshot(-0.25f, 3f, 3.0f);
 
 
     private BerserkerTurretBuildingVisuals _berserkerVisuals = null;
@@ -26,7 +26,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         _isTurretPlaced = false;
         _isInBerserkerMode = false;
         
-        ApplyDescriptionCorrection(_abilityDataModel.BerserkerDuration);
+        UpdateDescriptionVariable(_abilityDataModel.BerserkerDuration);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)
@@ -39,6 +39,11 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     public override void OnTurretDestroyed()
     {
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
+        if (_isInBerserkerMode)
+        {
+            ResetStats();
+            _isInBerserkerMode = false;
+        }
     }
 
     protected override void OnTurretPlaced()
@@ -78,6 +83,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     private void EnterBerserkMode()
     {
         _berserkCountdownTimer += _abilityDataModel.BerserkerDuration.Value;
+        _berserkCountdownTimer = Mathf.Min(_berserkCountdownTimer, _abilityDataModel.MaxBerserkerDuration);
 
         if (!_isInBerserkerMode)
         {
@@ -99,8 +105,13 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
         }
         _berserkCountdownTimer = 0.0f;
 
-        ResetStats();
         _berserkerVisuals.StopBerserkVisuals();
+
+        if (_isInBerserkerMode)
+        {
+            ResetStats();
+        }
+        
         _isInBerserkerMode = false;
     }
 

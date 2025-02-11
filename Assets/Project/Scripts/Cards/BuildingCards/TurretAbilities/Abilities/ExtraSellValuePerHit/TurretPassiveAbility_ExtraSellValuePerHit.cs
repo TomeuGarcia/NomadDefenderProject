@@ -20,8 +20,8 @@ public class TurretPassiveAbility_ExtraSellValuePerHit : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.HitsToIncrement);
-        ApplyDescriptionCorrection(_abilityDataModel.SellValueIncrementAmount);
+        UpdateDescriptionVariable(_abilityDataModel.HitsToIncrement);
+        UpdateDescriptionVariable(_abilityDataModel.SellValueIncrementAmount);
     }
 
 
@@ -53,13 +53,10 @@ public class TurretPassiveAbility_ExtraSellValuePerHit : ATurretPassiveAbility
         {
             return;
         }
-
         _damageHitCount = 0;
-
-        _currentSellIncrementPer1 += _abilityDataModel.SellValueIncrementAmount.Value / 100f;
-        int currentExtraSellValue = Mathf.CeilToInt(_turretOwner.CardData.PlayCost * _currentSellIncrementPer1);
         
-        OwnerSellingConfig.OverwriteExtraAddAmount(currentExtraSellValue);
+
+        OwnerSellingConfig.OverwriteExtraAddAmount(_abilityDataModel.SellValueIncrementAmount.Value);
 
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.IncreaseSellValue,
             _turretOwner.PlacingParticlesPosition, Quaternion.identity);

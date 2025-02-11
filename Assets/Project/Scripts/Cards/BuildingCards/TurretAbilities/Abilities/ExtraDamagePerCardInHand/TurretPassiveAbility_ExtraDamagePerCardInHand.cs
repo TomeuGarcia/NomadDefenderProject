@@ -13,7 +13,7 @@ public class TurretPassiveAbility_ExtraDamagePerCardInHand : ATurretPassiveAbili
     {
         _damageMultiplierPerCard = originalModel.DamagePercentBonusPerCard.Value / 100f;
 
-        ApplyDescriptionCorrection(originalModel.DamagePercentBonusPerCard);
+        UpdateDescriptionVariable(originalModel.DamagePercentBonusPerCard);
     }
 
     protected override void DoOnBeforeShootingEnemyStart()

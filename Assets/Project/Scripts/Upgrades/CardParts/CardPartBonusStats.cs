@@ -168,4 +168,9 @@ public class CardPartBonusStats : CardPart, ICardTooltipSource
         return CardTooltipDisplayData.MakeForCardPartStatsUpgrade(_descriptionTooltipPositioning, _descriptionHelper, 
             _statsDescription);
     }
+
+    public bool WithKeywords()
+    {
+        return true;
+    }
 }

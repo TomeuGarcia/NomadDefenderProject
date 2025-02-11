@@ -796,6 +796,42 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!1 &4296008955596405200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7511906906412631197}
+  m_Layer: 2
+  m_Name: TooltipPivot_Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7511906906412631197
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4296008955596405200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2114017678921558186}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -50, y: -150}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 1}
 --- !u!1 &4728543272238142509
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,9 +841,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1420989724163373295}
-  - component: {fileID: 3211515142764232979}
   - component: {fileID: 6747956387478863334}
   - component: {fileID: 626791206780223052}
+  - component: {fileID: 7744720842816439175}
   m_Layer: 0
   m_Name: MouseNotifier
   m_TagString: Untagged
@@ -830,18 +866,6 @@ Transform:
   m_Father: {fileID: 5698239489495674825}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3211515142764232979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4728543272238142509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88b4fa9bcbc6aea4d9f75206b48185a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &6747956387478863334
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -877,6 +901,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _support: {fileID: 1185256903703938477}
   _view: {fileID: 6865605042822539956}
+--- !u!114 &7744720842816439175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4728543272238142509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3023305c244ca4b83c2c10e350bce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4906928463738428388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,6 +1064,43 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -17.599983}
   m_SizeDelta: {x: 0, y: -35.2}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &5274417365124055177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2114017678921558186}
+  m_Layer: 2
+  m_Name: Tooltip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2114017678921558186
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5274417365124055177}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7511906906412631197}
+  m_Father: {fileID: 2756064283216007883}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5562797636875957315
 GameObject:
@@ -1186,7 +1259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validTileType: 1
   buildingsUtils: {fileID: 11400000, guid: 1b5d68d06ba91654fb779dfe256efc8b, type: 2}
-  meshMouseNotifier: {fileID: 3211515142764232979}
+  meshMouseNotifier: {fileID: 7744720842816439175}
   upgrader: {fileID: 8437271579559806259}
   visualUpgrades: []
   baseHolder: {fileID: 40166544886556335}
@@ -1665,6 +1738,7 @@ RectTransform:
   m_Children:
   - {fileID: 2059286006871173381}
   - {fileID: 5604612846148806602}
+  - {fileID: 2114017678921558186}
   m_Father: {fileID: 5698239489495674825}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1765,6 +1839,10 @@ MonoBehaviour:
   quickLevelDisplay: {fileID: 5604612846148806602}
   cgQuickLevelDisplay: {fileID: 6151042576676934142}
   quickLevelDisplayText: {fileID: 4970414970466111614}
+  _tooltipPoistioning:
+    _leftDisplaySpot: {fileID: 7511906906412631197}
+    _rightDisplaySpot: {fileID: 7511906906412631197}
+    _centerSpot: {fileID: 5698239489495674825}
   _sellBuildingMenu: {fileID: 397954968367874588}
   newUiParent: {fileID: 2059286006871173381}
   barImage: {fileID: 4910323287817247272}

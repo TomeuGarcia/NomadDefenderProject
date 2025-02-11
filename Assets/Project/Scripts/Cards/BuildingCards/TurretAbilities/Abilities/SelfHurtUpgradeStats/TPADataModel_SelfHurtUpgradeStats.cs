@@ -6,9 +6,11 @@ using UnityEngine;
 public class TPADataModel_SelfHurtUpgradeStats : ATurretPassiveAbilityDataModel
 {
     [Header("ABILITY CONFIG")] 
-    [SerializeField] private AbilityDescriptionVariable _damageAmount;
+    [SerializeField] private AbilityDescriptionVariable _nodeDamageAmount;
+    [SerializeField] private AbilityDescriptionVariable _bonusDamagePercent;
     
-    public AbilityDescriptionVariable DamageAmount => _damageAmount;
+    public AbilityDescriptionVariable NodeDamageAmount => _nodeDamageAmount;
+    public AbilityDescriptionVariable BonusDamagePercent => _bonusDamagePercent;
     
 
     

@@ -67,6 +67,11 @@ public class CardPartAttack : CardPart, ICardTooltipSource
         return CardTooltipDisplayData.MakeForProjectileCardPart(_descriptionTooltipPositioning, turretPartAttack, _projectileDescription);
     }
 
+    public bool WithKeywords()
+    {
+        return true;
+    }
+
     public override void SetNotDiscovered()
     {
         base.SetNotDiscovered();

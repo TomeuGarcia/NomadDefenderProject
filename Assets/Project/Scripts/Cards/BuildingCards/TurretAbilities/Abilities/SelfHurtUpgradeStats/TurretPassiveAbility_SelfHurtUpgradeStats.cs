@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
 {
     private TurretBuilding _turretOwner;
     private TurretBinder _binder;
     private bool _isSubscribed;
+    private float _damageMultiplier;
 
     private readonly TPADataModel_SelfHurtUpgradeStats _abilityDataModel;
     
@@ -13,7 +15,9 @@ public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
-        ApplyDescriptionCorrection(_abilityDataModel.DamageAmount);
+        _damageMultiplier = 1f + (_abilityDataModel.BonusDamagePercent.Value / 100f);
+        UpdateDescriptionVariable(_abilityDataModel.BonusDamagePercent);
+        UpdateDescriptionVariable(_abilityDataModel.NodeDamageAmount);
     }
 
 
@@ -71,17 +75,21 @@ public class TurretPassiveAbility_SelfHurtUpgradeStats : ATurretPassiveAbility
     {
         await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
-        _turretOwner.Upgrader.FreeTurretUpgrade();
+        // _turretOwner.Upgrader.FreeTurretUpgrade(); XD not anymore
 
         if (ServiceLocator.GetInstance().TDLocationsUtils
             .GetHealthiestLocation(_turretOwner.Position, out PathLocation pathLocation))
         {
-            pathLocation.TakeDamage(_abilityDataModel.DamageAmount.Value);
+            pathLocation.TakeDamage(_abilityDataModel.NodeDamageAmount.Value);
         }
 
         HideBinder();
     }
 
+    public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
+    {
+        damageAttack.UpdateDamage(Mathf.RoundToInt(damageAttack.Damage * _damageMultiplier));
+    }
 
 
 
