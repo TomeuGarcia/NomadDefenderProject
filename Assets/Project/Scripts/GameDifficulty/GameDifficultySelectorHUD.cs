@@ -69,6 +69,11 @@ public class GameDifficultySelectorHUD : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+
+        if (_demoManagerConfig.DemoEnabled) // DEMO only on Normal difficulty
+        {
+            _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
+        }
     }
     
     private void OnDestroy()
