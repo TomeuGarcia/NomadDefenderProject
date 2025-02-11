@@ -15,7 +15,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             _cards = cards;
             _initShowGoalPositions = new Vector3[cards.Length];
-            Vector3 startOffset = new Vector3(0, -3, -1);
+            Vector3 startOffset = new Vector3(0, -3, 1);
 
             for (int i = 0; i < cards.Length; ++i)
             {

@@ -6,6 +6,7 @@ using UnityEngine;
 public class FacilityFlickeringLight : MonoBehaviour
 {
     [Header("GENERAL")]
+    [SerializeField] private bool _activateOnAwake = false;
     [SerializeField] private Light _light;
     [SerializeField] private bool _flicker;
     [SerializeField] private MeshRenderer _lightMR;
@@ -38,6 +39,11 @@ public class FacilityFlickeringLight : MonoBehaviour
 
         _defaultIntensity = _light.intensity;
         _light.gameObject.SetActive(false);
+
+        if(_activateOnAwake)
+        {
+            Activate();
+        }
     }
 
     public void Activate()

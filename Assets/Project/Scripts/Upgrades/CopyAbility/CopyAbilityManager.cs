@@ -10,6 +10,9 @@ using Random = UnityEngine.Random;
 
 public class CopyAbilityManager : MonoBehaviour
 {
+    [Header("GENERAL")]
+    [SerializeField] private MachineManager _machineManager;
+
     [Header("CAMERA")]
     [SerializeField] private Camera _mouseDragCamera;
     
@@ -236,11 +239,13 @@ public class CopyAbilityManager : MonoBehaviour
     
     private void EnableCopyToButton()
     {
+        _machineManager.Ready();
         _confirmButton.SetEnabled();
     }
 
     private void DisableCopyToButton()
     {
+        _machineManager.Warning();
         _confirmButton.SetDisabled();
     }
 
@@ -287,6 +292,9 @@ public class CopyAbilityManager : MonoBehaviour
     
     private void OnConfirmButtonClicked(AbilityManagerConfirmButton confirmButton)
     {
+        //TODO - AAA
+        _machineManager.Replace();
+
         FinalDisableInteractions();
         DisableCardPreview();
         StartCoroutine(PlayConfirmLogic());
@@ -310,9 +318,11 @@ public class CopyAbilityManager : MonoBehaviour
     {
         _textsAnimator.ClearInitText();
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_BeforeModifyingCard());
-        StartCoroutine(_textsAnimator.PlayCompleteText());
         yield return StartCoroutine(ModifyCopyToCard());
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_AfterModifyingCard());
+        yield return new WaitForSeconds(2.75f);
+        StartCoroutine(_textsAnimator.PlayCompleteText());
+        yield return new WaitForSeconds(0.25f);
         yield return StartCoroutine(_cardHandAnimator.PlayFinishHideCards(
             _upgradeCardHolder.Cards,
             _upgradeCardHolder.CurrentlyPlacedCards().ToArray()));
