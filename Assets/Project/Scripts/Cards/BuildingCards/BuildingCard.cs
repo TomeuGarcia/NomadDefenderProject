@@ -16,8 +16,9 @@ public abstract class BuildingCard : MonoBehaviour
     public CardBuildingType cardBuildingType { get; protected set; }
 
 
-    public enum CardLocation { NONE, DECK, HAND }
-    [HideInInspector] public CardLocation cardLocation = CardLocation.NONE;
+    public enum CardLocation { NONE, DECK, HAND, PLACED }
+
+    public CardLocation cardLocation { get; set; } = CardLocation.NONE;
     private bool isRepositioning = false;
     public bool IsRepositioning => isRepositioning;
 
@@ -117,7 +118,7 @@ public abstract class BuildingCard : MonoBehaviour
     public const float redrawHoldDuration = 0.5f;
 
     [Header("DESCRIPTION")] 
-    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    [SerializeField] protected CardTooltipDisplayData.WorldPositioning _descriptionTooltipPositioning;
     
 
 

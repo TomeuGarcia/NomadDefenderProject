@@ -10,7 +10,7 @@ public abstract class RangeBuilding : Building
     public List<Enemy> Enemies => enemies;
 
     [Header("COMPONENTS")]
-    [SerializeField] private MouseOverNotifier meshMouseNotifier;
+    [SerializeField] private MouseOverlapNotifier meshMouseNotifier;
     //[SerializeField] protected GameObject rangePlaneMeshObject;
     //protected Material rangePlaneMaterial;
 
@@ -42,17 +42,25 @@ public abstract class RangeBuilding : Building
     public Vector3 Position => transform.position;
     
     public abstract float CurrentRadiusRange { get; }
-    
+
+    protected bool _gameOverDisabled = false;
 
     private void OnEnable()
     {
         if (triggerNotifier != null) { SubscribeToTriggerNotifier(); }
+        TDGameManager.OnGameOverStart += SetGameOverDisabled;
     }
     private void OnDisable()
     {
         if (triggerNotifier != null) { UnsubscribeToTriggerNotifier(); }
+        TDGameManager.OnGameOverStart -= SetGameOverDisabled;
     }
 
+
+    private void SetGameOverDisabled()
+    {
+        _gameOverDisabled = true;
+    }
 
     private void Awake()
     {
@@ -136,8 +144,23 @@ public abstract class RangeBuilding : Building
     {
         if (OnEnemyExitRange != null) OnEnemyExitRange(enemyToDelete);
         enemies.Remove(enemyToDelete);
+    }
+    private void DeleteEnemyFromList(int enemyIndexToDelete)
+    {
+        if (OnEnemyExitRange != null) OnEnemyExitRange(enemies[enemyIndexToDelete]);
+        enemies.RemoveAt(enemyIndexToDelete);
+    }
 
-        //SortEnemies();
+    protected void UpdateEnemiesInRange()
+    {
+        for (int i = 0; i < enemies.Count; ++i)
+        {
+            if (enemies[i].DiesFromQueuedDamage())
+            {
+                DeleteEnemyFromList(i);
+                --i;
+            }
+        }
     }
 
     private void SortEnemies()

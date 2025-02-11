@@ -29,9 +29,9 @@ public class CardAbilityKeyword : ScriptableObject
     public Color NameColor => _descriptionVariableColor;
 
 
-    public void ApplyDescriptionModifications(EditableCardAbilityDescription abilityDescription)
+    public void ApplyModificationsToDescription(EditableCardAbilityDescription abilityDescription)
     {
-        Dictionary<string, string> variableToKeyword = new Dictionary<string, string>()
+        Dictionary<string, string> variableToKeyword = new()
         {
             { _descriptionVariable, NameForDescription(false) }
         };

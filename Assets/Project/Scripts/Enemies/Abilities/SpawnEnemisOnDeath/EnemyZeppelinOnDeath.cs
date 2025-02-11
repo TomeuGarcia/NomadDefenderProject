@@ -13,11 +13,11 @@ public class EnemyZeppelinOnDeath : MonoBehaviour
 
     private void OnEnable()
     {
-        _enemy.OnEnemyDeath += SpawnEnemies;
+        _enemy.OnBeforeEnemyDeath += SpawnEnemies;
     }
     private void OnDisable()
     {
-        _enemy.OnEnemyDeath -= SpawnEnemies;
+        _enemy.OnBeforeEnemyDeath -= SpawnEnemies;
     }
 
 
@@ -37,6 +37,8 @@ public class EnemyZeppelinOnDeath : MonoBehaviour
         EnemyAttackDestination attackDestination,
         PathNode ownerCurrentNode, float ownerToNextNodeT)
     {
+        spawner.IncrementActiveEnemiesCount(_zeppelinConfig.NumberOfSpawns);
+        
         for (int i = 0; i < _zeppelinConfig.NumberOfSpawns; ++i)
         {
             spawner.SpawnEnemyNotIncludedInWave(

@@ -38,6 +38,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     [Header("PATH LOCATIONS")]
     [SerializeField] private PathLocation[] pathLocations;
     private int numAliveLocations = 0;
+    private int _futureNumAliveLocations = 0;
 
     [SerializeField] private bool hasToSendBattleState = true;
     private bool alreadyPlayedVictoryOrGameOver = false;
@@ -64,7 +65,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
         
-        numAliveLocations = pathLocations.Length;        
+        _futureNumAliveLocations = numAliveLocations = pathLocations.Length;        
 
         InitLocationsVisuals();
     }
@@ -191,10 +192,16 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
     private void CheckVictory()
     {
-        if (HasAliveLocationsLeft())
+        if (!HasAliveLocationsLeft() || RedirectedDamageWillKill())
         {
-            Victory();
+            if (!alreadyPlayedVictoryOrGameOver)
+            {
+                GameOver();
+            }
+            return;
         }
+        
+        Victory();
     }
     private void Victory()
     {
@@ -378,7 +385,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
 
 
-
     private void OnTriedToAttackDeadLocation(Enemy enemy, PathLocation attackedLocation)
     {
         if (pathLocations.Length < 2)
@@ -386,10 +392,15 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
             return;
         }
 
+        if (RedirectedDamageWillKill())
+        {
+            return;
+        }
+
         PathLocation otherLocation = attackedLocation == pathLocations[0]
             ? pathLocations[1] 
             : pathLocations[0];
-
+        
         if (!otherLocation.CanTakeDamage())
         {
             return;
@@ -401,5 +412,16 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         EnemyRedirectedDamage redirectedDamage = Instantiate(_redirectedDamagePrefab, 
             attackedLocation.Position + Vector3.up, Quaternion.identity);
         redirectedDamage.Init(enemy, attackedLocation, otherLocation);
+
+        if (redirectedDamage.DamageWillKill())
+        {
+            _futureNumAliveLocations = numAliveLocations - 1;
+        }
+    }
+
+
+    private bool RedirectedDamageWillKill()
+    {
+        return _futureNumAliveLocations <= 0;
     }
 }

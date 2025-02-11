@@ -23,14 +23,27 @@ MonoBehaviour:
       rgba: 4278216698
   _descriptionModel:
     _abilityName: closeCombat
-    _abilityDescription: Deal more damage the closer the target.
+    _abilityDescription: 'Deal [more] damage the closer the target.
+
+      Deal {less}
+      damage the further the target.
+
+      (Ranging from -50% to +150%)'
     _descriptionKeywords: []
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 11561658ac9584548bf390ce24d73877, type: 2}
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
+    - {fileID: 11400000, guid: e20715151919b2542a68b4763cd452bd, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
   _damageMultiplierOverDistance:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 2.0056038
+      time: 0.5
+      value: 2.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -47,32 +60,23 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 5.5346622
-      value: 0.32292762
-      inSlope: -0.2983496
-      outSlope: -0.2983496
+      time: 5.022407
+      value: 0.49665654
+      inSlope: -0.0026852607
+      outSlope: -0.0026852607
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 1
     - serializedVersion: 3
-      time: 5.538833
-      value: 0.32167795
+      time: 5.026578
+      value: 0.49540687
       inSlope: -0.30084056
       outSlope: -0.30084056
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 10
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db18122cfcbd49e28c490cddb1641609, type: 3}
+  m_Name: TurretAbility_DeadlyDiscount
+  m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 0}
+    _projectileAddOn: {fileID: 0}
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: 3d0fa69d37b97824c8a7d658d34180e7, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: 3d0fa69d37b97824c8a7d658d34180e7, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4294967295
+  _descriptionModel:
+    _abilityName: deadlyDiscount
+    _abilityDescription: "WHILE_IN_HAND: After every [KILLS_COUNT] Enemy kills, decrement
+      this card's cost by -COST_DECREMENT\u2666"
+    _descriptionKeywords:
+    - {fileID: 11400000, guid: 79c8916f54e211f46832d00e100cb260, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}
+    - {fileID: 11400000, guid: 176a0396b400bac48825c2484ee577e8, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
+  _killsToDecrement:
+    _name: KILLS_COUNT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 10
+    _floatConstantValue: 0
+  _playCostDecrementAmount:
+    _name: COST_DECREMENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 10
+    _floatConstantValue: 0

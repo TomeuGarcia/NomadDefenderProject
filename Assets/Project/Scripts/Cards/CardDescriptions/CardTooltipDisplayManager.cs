@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -48,7 +49,7 @@ public class CardTooltipDisplayManager : MonoBehaviour
         StopDisplayingTooltip();
         CardTooltipDisplayData displayData = descriptionProvider.MakeTooltipDisplayData();
             
-        MakeTooltipContentsForAbilitiesAndKeywords(displayData.Elements,
+        MakeTooltipContentsForAbilitiesAndKeywords(displayData.Elements, descriptionProvider.WithKeywords(),
             out CardAbilityTooltip.Content[] abilityContents,
             out CardAbilityTooltip.Content[] keywordContents);
         
@@ -66,6 +67,7 @@ public class CardTooltipDisplayManager : MonoBehaviour
     
 
     private void MakeTooltipContentsForAbilitiesAndKeywords(CardTooltipDisplayData.Element[] displayDataElements,
+        bool withKeywords,
         out CardAbilityTooltip.Content[] abilityContents, 
         out CardAbilityTooltip.Content[] keywordContents)
     {
@@ -82,7 +84,12 @@ public class CardTooltipDisplayManager : MonoBehaviour
                 keywordsSet.Add(abilityKeyword);
             }
         }
-        
+
+        if (!withKeywords)
+        {
+            keywordContents = Array.Empty<CardAbilityTooltip.Content>();
+            return;
+        }
         
         keywordContents = new CardAbilityTooltip.Content[keywordsSet.Count];
         int keywordsI = 0;

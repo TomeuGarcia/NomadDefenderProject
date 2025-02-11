@@ -24,6 +24,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
     
     
     protected float MovementSpeed => _dataModel.MovementSpeed;
+    protected float _damageMultiplier;
 
 
     private TurretPartProjectileDataModel _dataModel;
@@ -64,6 +65,7 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
         _dataModel = dataModel;
         _turretProjectileView = MakeTurretProjectileView();
         _enemiesToIgnore = new HashSet<Enemy>();
+        InitDamageMultiplier();
     }
 
     public void ProjectileShotInit(ITurretShootingLifetimeCycle shootingLifetimeCycle, 
@@ -228,6 +230,11 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
         _targetEnemy?.OnWillBeAttacked(_damageAttack);
     }
 
+    private void InitDamageMultiplier()
+    {
+        _damageMultiplier = _dataModel.DamageMultiplier;
+    }
+
     protected abstract int ComputeDamage();
 
     protected abstract ITurretProjectileView MakeTurretProjectileView();
@@ -235,6 +242,8 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
 
     private HashSet<Enemy> _enemiesToIgnore;
+    public IReadOnlyCollection<Enemy> EnemiesToIgnore => _enemiesToIgnore;
+    
     public void AddEnemyToIgnore(Enemy enemy)
     {
         _enemiesToIgnore.Add(enemy);

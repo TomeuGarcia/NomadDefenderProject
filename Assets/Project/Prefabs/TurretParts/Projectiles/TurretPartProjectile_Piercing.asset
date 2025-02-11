@@ -25,10 +25,16 @@ MonoBehaviour:
   _materialForTurretPreview: {fileID: 2100000, guid: 2403e277ab7c2b14a90150116787d37a,
     type: 2}
   _movementSpeed: 20
+  _damagePercentMultiplier:
+    _name: DAMAGE_PERCENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 65
+    _floatConstantValue: 0
   _descriptionModel:
     _abilityName: piercing
-    _abilityDescription: "Straight-shot Projectile that passes through Enemies. \nDeals
-      x65% of damage per hit."
+    _abilityDescription: "Straight-shot Projectile that goes through Enemies. \nDeals
+      xDAMAGE_PERCENT% of damage per hit."
     _descriptionKeywords: []
     _descriptionlessKeywords: []
     _descriptionPatterns:

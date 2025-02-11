@@ -46,7 +46,7 @@ public class CardTooltipDisplayGroup : MonoBehaviour
         CardAbilityTooltip.Content[] abilityContents,
         CardAbilityTooltip.Content[] keywordContents,
         Camera displayCamera,
-        CardTooltipDisplayData.Positioning displayPositioning)
+        CardTooltipDisplayData.IPositioning displayPositioning)
     {
         gameObject.SetActive(true);
         SpawnTooltips(tooltipFactory, abilityContents, keywordContents);
@@ -77,9 +77,9 @@ public class CardTooltipDisplayGroup : MonoBehaviour
         _keywordsColumn.ShowTooltips();
     }
 
-    private void PositionTooltips(Camera displayCamera, CardTooltipDisplayData.Positioning displayPositioning)
+    private void PositionTooltips(Camera displayCamera, CardTooltipDisplayData.IPositioning displayPositioning)
     {
-        displayPositioning.TODO_GetCanvasDisplayPosition(displayCamera,
+        displayPositioning.GetCanvasDisplayPosition(displayCamera,
             out bool displayRightSide, out Vector3 displayPosition);
 
         if (displayRightSide)

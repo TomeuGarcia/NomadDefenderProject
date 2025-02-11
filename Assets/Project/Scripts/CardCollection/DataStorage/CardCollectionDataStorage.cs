@@ -86,28 +86,22 @@ public class CardCollectionDataStorage : ScriptableObject
         SaveData();
     }
 
-    private const int CESAR = 912;
+    private readonly CaesarCipher _caesarCipher = new (912);
 
     [Button()]
     private void LoadData()
     {
         CheckFile();
 
-        string storedContent = File.ReadAllText(PathToFile + FileName);
-        char[] codedContent = new char[storedContent.Length];
-        for (int i = 0; i < storedContent.Length; ++i)
-        {
-            codedContent[i] = (char)(storedContent[i] - CESAR);
-        }
-        storedContent = new string(codedContent);
-        
+        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile + FileName));
+
         DataWrapper storedData = JsonUtility.FromJson<DataWrapper>(storedContent);
 
         _discoveredProjectiles = new Dictionary<TurretPartProjectileDataModel, bool>(_projectiles.Length);
         foreach (DataWrapper.ProjectileData projectileData in storedData.projectilesData)
         {
             TurretPartProjectileDataModel projectile = ProjectileNameToDataModel(projectileData.name);
-            _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);    
+            _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);
         }
         
         _discoveredPassiveAbilities = new Dictionary<ATurretPassiveAbilityDataModel, bool>(_passiveAbilities.Length);
@@ -123,14 +117,8 @@ public class CardCollectionDataStorage : ScriptableObject
     {
         DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);
         
-        string contentToStore = JsonUtility.ToJson(dataToStore);
-        char[] codedContent = new char[contentToStore.Length];
-        for (int i = 0; i < contentToStore.Length; ++i)
-        {
-            codedContent[i] = (char)(contentToStore[i] + CESAR);
-        }
-        contentToStore = new string(codedContent);
-        
+        string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
+
         File.WriteAllText(PathToFile + FileName, contentToStore);
     }
 
@@ -138,9 +126,12 @@ public class CardCollectionDataStorage : ScriptableObject
     private void CheckFile()
     {
         string directory = PathToFile;
-        if (!Directory.Exists(directory))
+        string directoryWithFile = directory + FileName;
+        if (!Directory.Exists(directory) || !File.Exists(directoryWithFile))
         {
             Directory.CreateDirectory(directory);
+            FileStream fileStream = File.Create(directoryWithFile);
+            fileStream.Close();
             ResetDiscoveries();
             SaveData();
         }
@@ -150,12 +141,9 @@ public class CardCollectionDataStorage : ScriptableObject
     [Button()]
     public void DoReset()
     {
-        string directory = PathToFile;
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
+        CheckFile();
         ResetDiscoveries();
+        DiscoverFirsts();
         SaveData();
     }
     
@@ -183,8 +171,12 @@ public class CardCollectionDataStorage : ScriptableObject
             if (Random.Range(0, 2) < 1) Discover(passiveAbility);
         }
     }
-    
-    
+
+    private void DiscoverFirsts()
+    {
+        Discover(_projectiles[0]);
+        Discover(_passiveAbilities[0]);
+    }
 
     private TurretPartProjectileDataModel ProjectileNameToDataModel(string name)
     {

@@ -6,6 +6,7 @@ public class CurrencyOverTimeDropper
     private CurrencyDropOverTimeConfig _config;
     private readonly ITDCurrencySpawnService _currencySpawner;
     private readonly ICurrencyDropOverTimeView _view;
+    private readonly float _extraDropPeriod;
     private readonly Timer _dropTimer;
     private Vector3 _spawnPosition;
 
@@ -14,12 +15,13 @@ public class CurrencyOverTimeDropper
     public Action OnCurrencyDropped;
 
     public CurrencyOverTimeDropper(CurrencyDropOverTimeConfig config, ITDCurrencySpawnService currencySpawner,
-        ICurrencyDropOverTimeView view)
+        ICurrencyDropOverTimeView view, float extraDropPeriod = 0f)
     {
         _config = config;
         _currencySpawner = currencySpawner;
         _view = view;
-        _dropTimer = new Timer(_config.DropPerioid);
+        _extraDropPeriod = Mathf.Max(extraDropPeriod, -_config.DropPerioid);
+        _dropTimer = new Timer(_config.DropPerioid + _extraDropPeriod);
         _spawnPosition = TEMP_CURRENCY_SPAWN_POSITION;
 
         _config.OnValuesUpdated += OnConfigValuesUpdated;
@@ -60,7 +62,7 @@ public class CurrencyOverTimeDropper
 
     private void OnConfigValuesUpdated()
     {
-        _dropTimer.Duration = _config.DropPerioid;
+        _dropTimer.Duration = _config.DropPerioid + _extraDropPeriod;
     }
 
     public void SetConfig(CurrencyDropOverTimeConfig config)

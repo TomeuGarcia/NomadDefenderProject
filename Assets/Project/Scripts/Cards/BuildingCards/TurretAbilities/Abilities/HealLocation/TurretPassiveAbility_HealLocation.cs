@@ -14,20 +14,15 @@ public class TurretPassiveAbility_HealLocation : ATurretPassiveAbility
     {
         _abilityDataModel = originalModel;
         _healAmount = 1;
-        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
+        UpdateDescriptionVariable(_abilityDataModel.HealAmount.Name, _healAmount);
     }
 
 
-    public override void OnAddedToTurretCard(TurretCardData cardData)
+    public override void OnCardInitialized(TurretBuildingCard ownerCard)
     {
-        _healAmount = cardData.CardUpgradeLevel;
-        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
-    }
-
-    public override void OnTurretCardUpgraded(TurretCardData cardData)
-    {
-        _healAmount = cardData.CardUpgradeLevel;
-        ApplyDescriptionCorrection(_abilityDataModel.HealAmount.Name, _healAmount);
+        ResetDescription();
+        _healAmount = ownerCard.CardData.CardUpgradeLevel;
+        UpdateDescriptionVariable(_abilityDataModel.HealAmount.Name, _healAmount);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)

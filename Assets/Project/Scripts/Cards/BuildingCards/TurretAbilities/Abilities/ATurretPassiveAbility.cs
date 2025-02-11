@@ -19,7 +19,7 @@ public abstract class ATurretPassiveAbility
         }
     }
 
-    private readonly EditableCardAbilityDescription _abilityDescription;
+    private EditableCardAbilityDescription _abilityDescription;
     private readonly Dictionary<string, string> _descriptionCorrections;
     public EditableCardAbilityDescription AbilityDescription => _abilityDescription;
 
@@ -36,21 +36,26 @@ public abstract class ATurretPassiveAbility
     {
         OriginalModel = originalModel;
         
-        _abilityDescription = OriginalModel.MakeDescription();
+        ResetDescription();
         _descriptionCorrections = new Dictionary<string, string>();
 
         _projectileParticleFactory = ProjectileParticleFactory.GetInstance();
     }
 
-    protected void ApplyDescriptionCorrection(string name, int value)
+    protected void ResetDescription()
     {
-        ApplyDescriptionCorrection(name, value.ToString());
+        _abilityDescription = OriginalModel.MakeDescription();
     }
-    protected void ApplyDescriptionCorrection(AbilityDescriptionVariable constantVariable)
+
+    protected void UpdateDescriptionVariable(string name, int value)
     {
-        ApplyDescriptionCorrection(constantVariable.Name, constantVariable.ValueAsString());
+        UpdateDescriptionVariable(name, value.ToString());
     }
-    private void ApplyDescriptionCorrection(string name, string value)
+    protected void UpdateDescriptionVariable(AbilityDescriptionVariable constantVariable)
+    {
+        UpdateDescriptionVariable(constantVariable.Name, constantVariable.ValueAsString());
+    }
+    private void UpdateDescriptionVariable(string name, string value)
     {
         if (_descriptionCorrections.ContainsKey(name))
         {
@@ -80,6 +85,7 @@ public abstract class ATurretPassiveAbility
     
     public virtual void OnTDGameStart(BuildingCard ownerCard, DeckBuildingCards deck) { }
     public virtual void OnCardInitialized(TurretBuildingCard ownerCard) { }
+    public virtual void OnCardDestroyed() { }
     
     public virtual void OnAddedToTurretCard(TurretCardData cardData) { } 
     public virtual void OnRemovedFromTurretCard() { } 

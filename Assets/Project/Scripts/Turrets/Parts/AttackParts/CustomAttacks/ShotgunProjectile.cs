@@ -12,7 +12,6 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     private const float RADIUS_DISTANCE_MULTIPLIER = 2.5f;
     private const float HALF_SHOOT_ANGLE = 30f;
-    private const float TOTAL_DAMAGE_MULTIPLIER = 1.5f;
     
     
     private void Awake()
@@ -22,6 +21,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
             bullet.Configure(this);
         }
     }
+    
 
     protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
@@ -86,7 +86,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     protected override int ComputeDamage()
     {
-        return (int)(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER / _bullets.Length);
+        return Mathf.RoundToInt(TurretOwner.Stats.Damage * _damageMultiplier);
     }
     
     public override bool QueuesDamageToEnemies()

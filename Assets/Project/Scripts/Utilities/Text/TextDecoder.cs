@@ -120,14 +120,17 @@ public class TextDecoder : MonoBehaviour
     private Coroutine _updateCharCoroutine;
     private IEnumerator DecodeString(int currentIndexLine)
     {
-        _updateCharCoroutine = StartCoroutine(UpdateCharIndex(currentIndexLine));
+        int length = decodingParameters.ignoreTags
+            ? textStrings[currentIndexLine].Length - 1
+            : textStrings[currentIndexLine].Length;
+        
+        _updateCharCoroutine = StartCoroutine(UpdateCharIndex(currentIndexLine, length));
 
-        while (indexChar <= textStrings[currentIndexLine].Length)
+        while (indexChar <= length)
         {
             DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, indexChar);
             yield return new WaitForSecondsRealtime(decodingParameters.updateDecodeTime);
         }
-
         DecodeUpdate(textStrings[currentIndexLine], decodingDictionary, textStrings[currentIndexLine].Length);
 
         if (_updateCharCoroutine != null)
@@ -136,14 +139,10 @@ public class TextDecoder : MonoBehaviour
         }
     }
 
-    IEnumerator UpdateCharIndex(int currentIndexLine)
+    IEnumerator UpdateCharIndex(int currentIndexLine, int length)
     {
         //skip to startDecodingIndex
         indexChar = decodingParameters.startDecodingIndex;
-
-        int length = decodingParameters.ignoreTags
-            ? textStrings[currentIndexLine].Length - 1
-            : textStrings[currentIndexLine].Length;
 
         while (indexChar <= length)
         {
@@ -271,7 +270,7 @@ public class TextDecoder : MonoBehaviour
         indexChar = int.MaxValue;
         FinishAllCoroutines();
         
-        int tempIndexLine = indexLine;
+        int tempIndexLine = Mathf.Min(indexLine, textStrings.Count - 1);
         ClearDecoder();
         indexLine = tempIndexLine;
         textComponent.text = textStrings[indexLine];

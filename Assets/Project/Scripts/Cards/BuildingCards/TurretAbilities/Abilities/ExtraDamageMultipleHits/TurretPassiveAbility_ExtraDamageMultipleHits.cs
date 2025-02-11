@@ -11,6 +11,12 @@ public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbilit
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
+        
+        int damageMultiplierIncrementPercent = Mathf.RoundToInt(_abilityDataModel.DamageMultiplierIncrementVariable.FloatValue * 100);
+        UpdateDescriptionVariable(_abilityDataModel.DamageMultiplierIncrementVariable.Name, damageMultiplierIncrementPercent);
+        
+        int maxDamageMultiplierPercent = Mathf.RoundToInt((_abilityDataModel.MaxDamageMultiplierVariable.FloatValue - 1f) * 100);
+        UpdateDescriptionVariable(_abilityDataModel.MaxDamageMultiplierVariable.Name, maxDamageMultiplierPercent);
     }
 
 

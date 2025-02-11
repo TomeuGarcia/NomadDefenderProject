@@ -5,12 +5,14 @@ using DG.Tweening;
 using Scripts.ObjectPooling;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class EnemyDisplayUI : MonoBehaviour
 {
     [SerializeField] private Image _image;
-    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshProUGUI _quantityText;
+    [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private CanvasGroup _canvasGroup;
 
     private Material _imageMaterial;
@@ -21,6 +23,7 @@ public class EnemyDisplayUI : MonoBehaviour
         CheckInitMaterial();
         _imageMaterial.SetInt("_EnemyPhotoIndex", enemyTypeConfig.View.PhotoIndex);
         _imageMaterial.SetInt("_WithArmor", withArmor ? 1 : 0);
+        _nameText.text = enemyTypeConfig.View.DisplayName;
     }
 
     private void CheckInitMaterial()
@@ -34,7 +37,7 @@ public class EnemyDisplayUI : MonoBehaviour
     
     public void SetText(string text)
     {
-        _text.text = text;
+        _quantityText.text = text;
     }
 
 
@@ -58,13 +61,13 @@ public class EnemyDisplayUI : MonoBehaviour
     
     public void PlayResetAnimation()
     {
-        _text.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
+        _quantityText.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
         _image.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f);
     }
     public void PlayTextUpdateAnimation()
     {
-        _text.transform.DOPunchScale(Vector3.one * 0.4f, 0.3f, 1, 1f);
-        _text.DOColor(new Color(1, 0.5f, 0, 1), 0.15f)
-            .OnComplete(() => _text.DOColor(Color.white, 0.15f));
+        _quantityText.transform.DOPunchScale(Vector3.one * 0.4f, 0.3f, 1, 1f);
+        _quantityText.DOColor(new Color(1, 0.5f, 0, 1), 0.15f)
+            .OnComplete(() => _quantityText.DOColor(Color.white, 0.15f));
     }
 }

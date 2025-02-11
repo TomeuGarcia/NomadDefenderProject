@@ -9,6 +9,11 @@ public class ResultsScreen : MonoBehaviour
 {
     [Header("RUN STATE")]
     [SerializeField] private InterfaceReference<IRunStateData, ScriptableObject> _runStateData;
+    [SerializeField] private InterfaceReference<IGameProgressionStatus, ScriptableObject> _gameProgressionStatus;
+
+    [Header("DEMO")] 
+    [SerializeField] private DemoManagerConfig _demoManagerConfig;
+
     private IRunStateData RunStateData => _runStateData.Value;
 
 
@@ -27,8 +32,17 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private Button _continueButton;
     [SerializeField] private Graphic[] _continueButtonArrows;
     [SerializeField] private MouseOverNotifier _continueButtonMouseNotifier;
-    
-    
+
+    private void Awake()
+    {
+        PauseMenu.GetInstance().GameCanBePaused = false;
+    }
+
+    private void OnDestroy()
+    {
+        PauseMenu.GetInstance().GameCanBePaused = true;
+    }
+
     private void Start()
     {
         Init();
@@ -62,7 +76,7 @@ public class ResultsScreen : MonoBehaviour
     
     private void CheckAchievements()
     {
-        AchievementDefinitions.VictoryWithoutTakingDamage.Check(RunStateData.TotalDamageTaken);
+        AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken);
         AchievementDefinitions.VictoryWithoutUpgradingBuildings.Check(RunStateData.TotalBuildingsUpgraded);
     }
 
@@ -74,7 +88,7 @@ public class ResultsScreen : MonoBehaviour
 
         for (int i = 1; i < turretCards.Length; ++i)
         {
-            TurretCardData currentTurretCard = turretCards[0];
+            TurretCardData currentTurretCard = turretCards[i];
 
             if (currentTurretCard.Statistics.TotalKills > mostKillsTurretCard.Statistics.TotalKills)
             {
@@ -130,10 +144,11 @@ public class ResultsScreen : MonoBehaviour
         
         ResultsScreenView.InitData viewInitData = new ResultsScreenView.InitData(
             _camera, 
-            mostKillsTurretCardObject.gameObject,
-            mostDamageTurretCardObject.gameObject,
+            mostKillsTurretCardObject.gameObject, mostKillsTurretCard.Statistics.TotalKills,
+            mostDamageTurretCardObject.gameObject, mostDamageTurretCard.Statistics.TotalDamageDealt,
             mostKillsAndDamageCardsAreTheSame,
             mostDamagingEnemyExists ? mostDamagingEnemy.gameObject : null,
+            mostDamagingEnemyExists ? damage : 0,
             mostDamagingEnemyExists
             );
 
@@ -182,15 +197,29 @@ public class ResultsScreen : MonoBehaviour
     {
         _continueButton.interactable = false;
         
-        _continueButton.transform.DOPunchScale(Vector3.one * 0.15f, 0.5f, 7);
-        _continueButton.transform.DOPunchPosition(Vector3.back * 0.1f, 0.3f, 3);
+        _continueButton.transform.DOPunchScale(Vector3.one * 0.30f, 0.5f, 7);
+        _continueButton.transform.DOPunchPosition(Vector3.back * 0.10f, 0.3f, 3);
         GameAudioManager.GetInstance().PlayCardSelected();
         
         await Task.Delay(TimeSpan.FromSeconds(0.5f));
         
         if (RunStateData.Victory)
         {
-            SceneLoader.GetInstance().StartLoadGameEndCredits();
+            if (_gameProgressionStatus.Value.Game.VictoriesCount > 1)
+            {
+                SceneLoader.GetInstance().StartLoadMainMenu();
+            }
+            else
+            {
+                if (_demoManagerConfig.DemoEnabled)
+                {
+                    SceneLoader.GetInstance().StartLoadDemoThanksForPlaying();
+                }
+                else
+                {                
+                    SceneLoader.GetInstance().StartLoadGameEndCredits();
+                }
+            }
         }
         else
         {

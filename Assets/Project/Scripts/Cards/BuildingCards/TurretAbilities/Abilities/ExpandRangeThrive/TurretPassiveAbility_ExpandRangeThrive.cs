@@ -11,7 +11,7 @@ public class TurretPassiveAbility_ExpandRangeThrive : ATurretPassiveAbility
         : base(originalModel)
     {
         _originalModel = originalModel;
-        ApplyDescriptionCorrection(originalModel.RadiusRangeIncrement);
+        UpdateDescriptionVariable(originalModel.RadiusRangeIncrement);
     }
 
     public override void OnTurretCreated(TurretBuilding turretOwner)

@@ -22,7 +22,7 @@ public class EnemyRedirectedDamage : MonoBehaviour
     private Vector3 _endPoint;
 
     private float _defaultTrailTime;
-
+    
     private void Awake()
     {
         _defaultTrailTime = _trailRenderer.time;
@@ -84,5 +84,10 @@ public class EnemyRedirectedDamage : MonoBehaviour
         _reachTargetParticles.Play();
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
+    }
+
+    public bool DamageWillKill()
+    {
+        return _targetLocation.healthSystem.health - _enemySource.Damage <= 0;
     }
 }

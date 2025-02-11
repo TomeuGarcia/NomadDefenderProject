@@ -86,8 +86,9 @@ public class TurretBuilding : RangeBuilding
 
     private void Update()
     {
-        if (!isFunctional || IsDisabled) return;
+        if (!isFunctional || IsDisabled || _gameOverDisabled) return;
 
+        UpdateEnemiesInRange();
         _shootingController.UpdateShoot();
         LookAtTarget();
     }
@@ -297,6 +298,8 @@ public class TurretBuilding : RangeBuilding
 
     public override void HideQuickLevelUI()
     {
+        if (InBattleBuildingUpgrader.IsWindowOpen) return;
+
         Upgrader.HideQuickLevelDisplay();
     }
 

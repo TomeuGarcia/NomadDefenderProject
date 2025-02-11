@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb701d7f7b240538341cb3c8870608b, type: 3}
+  m_Name: EnemyType_SpeedBoosterSpawner_Armor
+  m_EditorClassIdentifier: 
+  _baseStats:
+    _damage: 1
+    _health: 120
+    _armor: 120
+    _currencyDrop: 15
+    _moveSpeed: 1.25
+  _view:
+    _displayName: booster
+    _photoScale: 0.8
+    _photoRotation: {x: 20, y: 45, z: 20}
+    _photoOffset: {x: 0, y: 0.15}
+    _particlesSpawn: 7
+    _particlesDeath: 9
+    _particlesAttack: 10
+  _nonArmoredVersion: {fileID: 11400000, guid: 86c05f02547edde4e933a91e3f92341c, type: 2}
+  _startSpawnRandomInterval: {x: 0.25, y: 1}
+  _spawnTravelDistance: 5
+  _speedBoosterConfig: {fileID: 11400000, guid: 27c7193a87c83ac40ad327e4bc7fe2ed,
+    type: 2}

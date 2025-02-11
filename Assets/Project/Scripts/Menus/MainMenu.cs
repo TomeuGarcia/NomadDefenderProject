@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper;
 using TMPro;
 using UnityEngine;
 
@@ -34,7 +35,8 @@ public class MainMenu : MonoBehaviour
 
     [Header("UNLOCKING")] 
     [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
-    
+    [SerializeField] private InterfaceReference<IGameProgressionUpdater, ScriptableObject> _gameProgressionUpdater;
+
     [Header("STEAM")]
     [SerializeField, Min(0)] private float _steamStartDelay = 2.5f;
     [SerializeField] private CanvasGroup _steamCanvasGroup;
@@ -43,19 +45,15 @@ public class MainMenu : MonoBehaviour
     [Header("CARD COLLECTION")] 
     [SerializeField] private CardCollectionDataStorage _cardCollection;
 
-    [Header("UPCOMING CHANGES")]
-    [SerializeField, Min(0)] private float _upcomingChangesStartDelay = 2.5f;
-    [SerializeField] private CanvasGroup _upcomingChangesCanvasGroup;
-    [SerializeField] private TextDecoder _upcomingChangesDecoder;
-
+    [Header("DIFFICULTY")] 
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+    
 
     [Header("MATERIALS SETUP")]
     [SerializeField] private Material obstacleTilesMaterial;
     [SerializeField] private Material tilesMaterial;
     [SerializeField] private Material outerPlanesMaterial;
 
-    [Header("COMING CHANGES")]
-    [SerializeField] private ComingChangesMenu _comingChangesMenu;
 
     [Header("PROCEED NEW GAME")] 
     [SerializeField] private GameObject _proceedNewGame;
@@ -175,7 +173,6 @@ public class MainMenu : MonoBehaviour
         {
             StopAllCoroutines();
             _steamCanvasGroup.alpha = 1;
-            _upcomingChangesCanvasGroup.alpha = 1;
             StartCoroutine(ShowProceedNewGame());
         }
         
@@ -314,6 +311,7 @@ public class MainMenu : MonoBehaviour
         ButtonClickedPunch(newGameYesButtonText);
         DoYesProceedNewGame();
     }
+    
 
     private void DoYesProceedNewGame()
     {
@@ -330,6 +328,9 @@ public class MainMenu : MonoBehaviour
         _cardCollection.DoReset();
 
         _unlockableTrophiesManager.SetAllTrophiesLocked();
+        _gameProgressionUpdater.Value.ResetEverything();
+
+        _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());
@@ -353,7 +354,6 @@ public class MainMenu : MonoBehaviour
             
         _defaultMenuCG.DOFade(0, 0.1f);
         _steamCanvasGroup.DOFade(0, 0.1f);
-        _upcomingChangesCanvasGroup.DOFade(0, 0.1f);
         
         _defaultMenu.SetActive(false);
         _proceedNewGame.SetActive(true);
@@ -386,7 +386,7 @@ public class MainMenu : MonoBehaviour
         
         
         yield return new WaitForSeconds(0.1f);
-        _upcomingChangesCanvasGroup.alpha = _steamCanvasGroup.alpha = _defaultMenuCG.alpha = 1;
+        _steamCanvasGroup.alpha = _defaultMenuCG.alpha = 1;
         SetupTextDecoderManager(false);
         textDecoderManager.DecodeTexts();
         StartCoroutine(PlayShowSteamAnimation());
@@ -396,9 +396,7 @@ public class MainMenu : MonoBehaviour
     private IEnumerator PlayShowSteamAnimation()
     {
         _steamCanvasGroup.alpha = 0;
-        _upcomingChangesCanvasGroup.alpha = 0;
         yield return StartCoroutine(PlayShowItemAnimation(_steamCanvasGroup, _steamStartDelay, _steamDecoder));
-        yield return StartCoroutine(PlayShowItemAnimation(_upcomingChangesCanvasGroup, _upcomingChangesStartDelay, _upcomingChangesDecoder));
     }
     
     private IEnumerator PlayShowItemAnimation(CanvasGroup canvasGroup, float startDelay, TextDecoder textDecoder)
@@ -424,9 +422,5 @@ public class MainMenu : MonoBehaviour
     {
         Application.OpenURL(STEAM_WISHLIST_LINK);
     }
-    
-    public void OpenComingChanges()
-    {
-        _comingChangesMenu.Open();
-    }
+
 }

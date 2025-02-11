@@ -23,9 +23,19 @@ MonoBehaviour:
       rgba: 4287483392
   _descriptionModel:
     _abilityName: snipeShot
-    _abilityDescription: Deal more damage the further the target.
+    _abilityDescription: 'Deal [more] damage the further the target.
+
+      Deal
+      {less} damage the closer the target.
+
+      (Ranging from -50% to +300%)'
     _descriptionKeywords: []
     _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 11561658ac9584548bf390ce24d73877, type: 2}
+    - {fileID: 11400000, guid: d89f567a16e1d5b4697a8f2e3f09d909, type: 2}
+    - {fileID: 11400000, guid: 007a76abcba833a4b8cf5698ac6a9685, type: 2}
+    - {fileID: 11400000, guid: e20715151919b2542a68b4763cd452bd, type: 2}
   _otherReferencedProjectiles: []
   _otherReferencedPassives: []
   _damageMultiplierOverDistance:
@@ -33,7 +43,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0

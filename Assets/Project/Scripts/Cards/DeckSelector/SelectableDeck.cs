@@ -152,6 +152,11 @@ public class SelectableDeck : MonoBehaviour
         _selectKeyCode = selectKeyCode;
     }
 
+    public void InitSetDeck(CardDeckAsset deckAsset)
+    {
+        _deck = deckAsset;
+    }
+
     public void InitSpawnCards(ICardSpawnService cardSpawnService)
     {
         _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent(), cardsHolder);

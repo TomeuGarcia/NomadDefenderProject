@@ -7,9 +7,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private GameObject _sphereHolder;
     [SerializeField] private TrailRenderer _trailRenderer;
-
-    private const float TOTAL_DAMAGE_MULTIPLIER = 0.5f;
-
+    
     private static int s_currentlyAliveOrbitings = 0;
 
     
@@ -85,7 +83,7 @@ public class OrbitingProjectile : ATurretProjectileBehaviour
     
     protected override int ComputeDamage()
     {
-        return Mathf.CeilToInt(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER);
+        return Mathf.RoundToInt(TurretOwner.Stats.Damage * _damageMultiplier);
     }
 
     protected override ITurretProjectileView MakeTurretProjectileView()

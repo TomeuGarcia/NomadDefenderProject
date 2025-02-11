@@ -23,6 +23,8 @@ public static class SOAssetPaths
     public const string LEVEL_CREATION_BRUSHES = LEVEL_CREATION + "Brushes/";
 
     public const string GAME_RUN = MENU_ROOT + "Run/";
+    public const string DEMO = MENU_ROOT + "Demo/";
+    public const string GAMEDIFFICULTY = MENU_ROOT + "GameDifficulty/";
     
     public const string TD_GAME = MENU_ROOT + "TD Game/";
     public const string TD_CURRENCYDROP = TD_GAME + "Currency Drop/";
@@ -54,4 +56,6 @@ public static class SOAssetPaths
     
     public const string UNLOCKABLES = MENU_ROOT + "Unlockables/";
     public const string ACHIEVEMENTS = MENU_ROOT + "Achievements/";
+    
+    public const string GAME_PROGRESSION = MENU_ROOT + "GameProgression/";
 }

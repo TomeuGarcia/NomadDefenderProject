@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,12 @@ public class RecyclableParticles : RecyclableObject
 {
     [SerializeField] private bool _playOnInit = true;
     [SerializeField] private ParticleSystem _particles;
+    private Transform _originalParent;
+
+    private void Awake()
+    {
+        _originalParent = transform.parent;
+    }
 
     private void OnParticleSystemStopped()
     {
@@ -21,7 +28,7 @@ public class RecyclableParticles : RecyclableObject
 
     internal override void RecycledReleased()
     {
-
+        transform.SetParent(_originalParent);
     }
 
 

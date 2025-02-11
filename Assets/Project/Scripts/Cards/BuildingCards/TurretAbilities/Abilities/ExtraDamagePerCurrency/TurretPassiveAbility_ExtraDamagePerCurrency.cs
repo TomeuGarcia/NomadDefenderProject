@@ -15,8 +15,8 @@ public class TurretPassiveAbility_ExtraDamagePerCurrency : ATurretPassiveAbility
     {
         _abilityDataModel = originalModel;
 
-        ApplyDescriptionCorrection(originalModel.CurrencyStepForBonus);
-        ApplyDescriptionCorrection(originalModel.DamagePercentBonus);
+        UpdateDescriptionVariable(originalModel.CurrencyStepForBonus);
+        UpdateDescriptionVariable(originalModel.DamagePercentBonus);
     }
 
     

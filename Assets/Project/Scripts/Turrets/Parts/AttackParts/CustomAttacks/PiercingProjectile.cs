@@ -15,7 +15,6 @@ public class PiercingProjectile : ATurretProjectileBehaviour
     [SerializeField] private ParticleSystem _hitParticles;
 
     [SerializeField] private float _distance = 15;
-    private const float TOTAL_DAMAGE_MULTIPLIER = 0.65f;
     
     private float _currentDamageMultiplier = 0f;
     private Vector3 _goalPosition;
@@ -96,7 +95,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     protected override int ComputeDamage()
     {
-        return Mathf.CeilToInt(TurretOwner.Stats.Damage * TOTAL_DAMAGE_MULTIPLIER);
+        return Mathf.RoundToInt(TurretOwner.Stats.Damage * _damageMultiplier);
     }
     
     protected override ITurretProjectileView MakeTurretProjectileView()

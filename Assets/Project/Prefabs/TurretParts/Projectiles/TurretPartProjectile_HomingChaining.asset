@@ -25,14 +25,21 @@ MonoBehaviour:
   _materialForTurretPreview: {fileID: 2100000, guid: e590b0bdfdf7d5543a20f8fd9e67920c,
     type: 2}
   _movementSpeed: 1
+  _damagePercentMultiplier:
+    _name: DAMAGE_PERCENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 65
+    _floatConstantValue: 0
   _descriptionModel:
     _abilityName: chaining
-    _abilityDescription: 'HOMING Projectile that targets 1 Enemy and spreads up to
-      2 close Enemies.
+    _abilityDescription: 'HOMING Projectile that targets one Enemy and spreads up
+      to [2] close Enemies.
 
-      Deals x50% of damage per hit.'
+      Deals xDAMAGE_PERCENT% of damage per hit.'
     _descriptionKeywords:
     - {fileID: 11400000, guid: 497bd1749b04af5408c98e2d5325f5a6, type: 2}
     _descriptionlessKeywords: []
     _descriptionPatterns:
     - {fileID: 11400000, guid: 7eddb89cbc9c9df438c9f892767417ec, type: 2}
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}

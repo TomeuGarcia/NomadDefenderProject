@@ -29,4 +29,10 @@ public class ResultScreenStat : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
     }
+
+    public void CompleteAnimation()
+    {
+        _nameText.SetStringInstantly();
+        _valueText.SetStringInstantly();
+    }
 }

@@ -6,7 +6,7 @@ public class EditableCardAbilityDescription
     public string Name { get; private set; }
     public string NameForDisplay => '/' + Name;
     public string Description { get; private set; }
-    public readonly CardAbilityKeyword[] Keywords;
+    public CardAbilityKeyword[] Keywords { get; private set; }
     
 
     public EditableCardAbilityDescription(string name, string description, CardAbilityKeyword[] keywords)
@@ -18,7 +18,7 @@ public class EditableCardAbilityDescription
 
     public void ApplyDescriptionModifications(Dictionary<string, string> keywordsToValues)
     {
-        foreach (KeyValuePair<string,string> keywordToValue in keywordsToValues)
+        foreach (KeyValuePair<string, string> keywordToValue in keywordsToValues)
         {
             Description = Description.Replace(keywordToValue.Key, keywordToValue.Value);
         }

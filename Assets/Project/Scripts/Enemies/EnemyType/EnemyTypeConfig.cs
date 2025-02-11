@@ -28,11 +28,27 @@ public class EnemyTypeConfig : ScriptableObject
     [System.Serializable]
     public class ViewConfig
     {
+        [SerializeField] private string _displayName;
+        
+        [Space(10)] 
         [SerializeField, Min(0)] private float _photoScale = 1;
-        [SerializeField, Min(0)] private Vector3 _photoRotation = new Vector3(20, 45, 20);
+        [SerializeField] private Vector3 _photoRotation = new Vector3(20, 45, 20);
+        [SerializeField] private Vector2 _photoOffset = Vector2.zero;
+
+        [Space(10)] 
+        [SerializeField] private ParticleTypes _particlesSpawn = ParticleTypes.EnemySpawnSmall;
+        [SerializeField] private ParticleTypes _particlesDeath = ParticleTypes.EnemyDeathSmall;
+        [SerializeField] private ParticleTypes _particlesAttack = ParticleTypes.EnemyAttack;
+        
+        public string DisplayName => '/' + _displayName;
         public float PhotoScale => _photoScale;
         public Quaternion PhotoRotation => Quaternion.Euler(_photoRotation);
+        public Vector3 PhotoOffset => _photoOffset;
         public int PhotoIndex { get; set; }
+
+        public ParticleTypes ParticlesSpawn => _particlesSpawn;
+        public ParticleTypes ParticlesDeath => _particlesDeath;
+        public ParticleTypes ParticlesAttack => _particlesAttack;
     }
 
     [SerializeField] private Stats _baseStats;
@@ -47,5 +63,5 @@ public class EnemyTypeConfig : ScriptableObject
 
     public EnemyTypeConfig NonArmored => IsArmored ? _nonArmoredVersion : this;
 
-    private bool IsArmored => _baseStats.Armor > 0;
+    public bool IsArmored => _baseStats.Armor > 0;
 }

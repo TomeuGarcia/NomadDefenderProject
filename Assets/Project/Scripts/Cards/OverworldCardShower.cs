@@ -53,17 +53,28 @@ public class OverworldCardShower : MonoBehaviour
 
         if (showButtons)
         {
-            showDeckButton.gameObject.SetActive(true);
-            backToMapButton.gameObject.SetActive(false); 
-            StartCoroutine(PlayGameStartAnimation());
+            ShowButtons();
         }
         else
         {
-            showDeckButton.gameObject.SetActive(false);
-            backToMapButton.gameObject.SetActive(false);
+            HideButtons();
         }
-
     }
+
+    public void ShowButtons()
+    {
+        showDeckButton.gameObject.SetActive(true);
+        backToMapButton.gameObject.SetActive(false); 
+        StartCoroutine(PlayGameStartAnimation());
+    }
+    
+    public void HideButtons()
+    {
+        showDeckButton.gameObject.SetActive(false);
+        backToMapButton.gameObject.SetActive(false);
+    }
+
+
 
     private void OnDisable()
     {
@@ -97,9 +108,6 @@ public class OverworldCardShower : MonoBehaviour
     private void Init()
     {
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(cardShowerCamera);
-
-        showDeckButton.gameObject.SetActive(true);
-        backToMapButton.gameObject.SetActive(false);
 
         showingDeck = false;
 

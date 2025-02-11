@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +9,29 @@ public class ResultsScreenView : MonoBehaviour
     {
         public Camera Camera { get; }
         public GameObject MostKillsCard { get; }
+        public int MostKillsCardCount { get; }
         public GameObject MostDamageCard { get; }
+        public int MostDamageCardCount { get; }
         public bool MostKillsAndDamageAreTheSame { get; }
         public GameObject MostDamagingEnemy { get; }
+        public int MostDamagingEnemyCount { get; }
         public bool ExistsMostDamagingEnemy { get; }
 
         public InitData(Camera camera,
-            GameObject mostKillsCard, GameObject mostDamageCard, bool mostKillsAndDamageAreTheSame,
-            GameObject mostDamagingEnemy, bool existsMostDamagingEnemy)
+            GameObject mostKillsCard, int mostKillsCardCount, 
+            GameObject mostDamageCard, int mostDamageCardCount, 
+            bool mostKillsAndDamageAreTheSame,
+            GameObject mostDamagingEnemy, int mostDamagingEnemyCount, 
+            bool existsMostDamagingEnemy)
         {
             Camera = camera;
             MostKillsCard = mostKillsCard;
+            MostKillsCardCount = mostKillsCardCount;
             MostDamageCard = mostDamageCard;
+            MostDamageCardCount = mostDamageCardCount;
             MostKillsAndDamageAreTheSame = mostKillsAndDamageAreTheSame;
             MostDamagingEnemy = mostDamagingEnemy;
+            MostDamagingEnemyCount = mostDamagingEnemyCount;
             ExistsMostDamagingEnemy = existsMostDamagingEnemy;
         }
     }
@@ -75,6 +85,18 @@ public class ResultsScreenView : MonoBehaviour
             yield return coroutinesParent.StartCoroutine(_totalDamageTaken.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_totalDestroyedNodes.PlayAnimation());
         }
+
+        public void CompleteAnimations()
+        {
+            _simulationTime.CompleteAnimation();
+            _nodesReached.CompleteAnimation();
+            _buildingsPlaced.CompleteAnimation();
+            _buildingsUpgraded.CompleteAnimation();
+            _totalDamageDealt.CompleteAnimation();
+            _highestDamageDealt.CompleteAnimation();
+            _totalDamageTaken.CompleteAnimation();
+            _totalDestroyedNodes.CompleteAnimation();
+        }
     }
 
     
@@ -118,7 +140,7 @@ public class ResultsScreenView : MonoBehaviour
     [SerializeField] private GameObject _mapVictoryObjects;
     [SerializeField] private GameObject _mapDefeatObjects;
 
-
+    private bool _finishedPlayingShowAnimation = false;
 
     private InitData _initData;
     
@@ -151,17 +173,25 @@ public class ResultsScreenView : MonoBehaviour
         {
             _mostKillsCardScreenPreviewer.InitToNotShow();
             _mostDamageCardScreenPreviewer.InitToNotShow();
-            _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
+
+            string extraTextMostKillsAndDamage = 
+                (initData.MostKillsCardCount.ToString("N0") + " & " + initData.MostDamageCardCount.ToString("N0"))
+                .Replace(',', '.');
+            _mostKillsAndDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKillsAndDamage);
+            InitCard(initData.MostKillsCard);
         }
         else
         {
-            _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard);
-            _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard);
+            string extraTextMostKills = initData.MostKillsCardCount.ToString("N0").Replace(',', '.');
+            string extraTextMostDamage = initData.MostDamageCardCount.ToString("N0").Replace(',', '.');
+            _mostKillsCardScreenPreviewer.InitToShow(initData.Camera, initData.MostKillsCard, extraTextMostKills);
+            _mostDamageCardScreenPreviewer.InitToShow(initData.Camera, initData.MostDamageCard, extraTextMostDamage);
             InitCard(initData.MostKillsCard);
             InitCard(initData.MostDamageCard);
         }
         
-        _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy);
+        string extraTextMostDamagingEnemy =  initData.ExistsMostDamagingEnemy ? initData.MostDamagingEnemyCount.ToString() : "";
+        _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy, extraTextMostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
         
@@ -179,16 +209,16 @@ public class ResultsScreenView : MonoBehaviour
         Vector3 cardPosition = card.transform.position;
         card.GetComponent<BuildingCard>().InitPositions(cardPosition, Vector3.zero, cardPosition);
     }
-    
-    
+
     public void StartPlayingShowAnimation(IRunStateData runStateData)
     {
         StartCoroutine(PlayShowAnimation(runStateData));
     }
+
     
     private IEnumerator PlayShowAnimation(IRunStateData runStateData)
     {
-        yield return new WaitForSeconds(1f);
+        _finishedPlayingShowAnimation = false;
         if(runStateData.Victory)
         {
             yield return StartCoroutine(ShowTitleFades(_fadeVictory, _scrollVictory));
@@ -197,11 +227,15 @@ public class ResultsScreenView : MonoBehaviour
         {
             yield return StartCoroutine(ShowTitleFades(_fadeDefeat, _scrollDefeat));
         }
+        
+        StartCoroutine(WaitForShowAnimationSkip(runStateData));
+        
         yield return StartCoroutine(PlayShowTitleAnimation(runStateData));
         yield return StartCoroutine(PlayShowStatsAnimation());
         yield return StartCoroutine(PlayShowDeckAnimation());
         yield return StartCoroutine(PlayShowEnemiesAnimation());
         yield return StartCoroutine(PlayShowContinueButton());
+        _finishedPlayingShowAnimation = true;
     }
 
     private IEnumerator PlayShowTitleAnimation(IRunStateData runStateData)
@@ -269,4 +303,66 @@ public class ResultsScreenView : MonoBehaviour
 
         _maskIntro.StartScroll(scrollFadeParent);
     }
+    
+    
+    private IEnumerator WaitForShowAnimationSkip(IRunStateData runStateData)
+    {
+        while (!_finishedPlayingShowAnimation)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                CancelShowAnimation(runStateData);
+                _finishedPlayingShowAnimation = true;
+            }            
+            yield return null;
+        }
+    }
+
+    private void CancelShowAnimation(IRunStateData runStateData)
+    {
+        StopAllCoroutines();
+
+        bool playingVictory = runStateData.Victory;
+        TextDecoder titleDecoder = playingVictory ? _victoryTitle : _defeatTitle;
+        CompletePlayingDecoder(titleDecoder);
+        CompletePlayingDecoder(_resultsSubtitle);
+        
+        
+        CompletePlayingDecoder(_statsHeader);
+        _stats.CompleteAnimations();
+
+        
+        CompletePlayingDecoder(_deckHeader);
+        CompletePlayingDecoder(_deckNameSubheader);
+        if (_initData.MostKillsAndDamageAreTheSame)
+        {
+            _mostKillsAndDamageCardScreenPreviewer.CompleteShowAnimation();
+        }
+        else
+        {
+            _mostKillsCardScreenPreviewer.CompleteShowAnimation();
+            _mostDamageCardScreenPreviewer.CompleteShowAnimation();
+        }
+        
+        
+        CompletePlayingDecoder(_enemiesHeader);
+        if (!_initData.ExistsMostDamagingEnemy)
+        {
+            CompletePlayingDecoder(_noDamageEnemyText);
+        }
+        _mostDamagingEnemyScreenPreviewer.CompleteShowAnimation(); 
+        _initData.MostDamagingEnemy.GetComponent<Enemy>().InitWithoutFunctionality();
+        
+        
+        
+        CompletePlayingDecoder(_continueButtonText);
+        _continueTextArrows.SetActive(true);
+        _continueButton.interactable = true;
+    }
+
+    private void CompletePlayingDecoder(TextDecoder textDecoder)
+    {
+        textDecoder.SetStringInstantly();
+    }
+
 }

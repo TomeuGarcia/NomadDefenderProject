@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
@@ -21,8 +22,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         gameObject.SetActive(false);
     }
     
-    public void InitToShow(Camera camera, GameObject objectToPreview)
+    public void InitToShow(Camera camera, GameObject objectToPreview, string appendedText)
     {
+        _text.SetTextStrings(_text.textComponent.text += '\n' + "<size=150%>"+ appendedText + "</size>");
+        
         if(objectToPreview.GetComponent<Enemy>() != null)
         {
             FindDespicableObjects(objectToPreview.transform);
@@ -80,5 +83,10 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
         _text.Activate();
         yield return new WaitUntil(() => _text.FinishedLine);
     }
-    
+
+    public void CompleteShowAnimation()
+    {
+        _objectToPreview.SetActive(true);
+        _text.SetStringInstantly();
+    }
 }
