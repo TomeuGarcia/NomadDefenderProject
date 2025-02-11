@@ -209,8 +209,6 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
-
-        AchievementDefinitions.WinBattleWithOnly1Building.Check(BuildingPlacer.TotalPlacedBuildingsThisBattle);
         
         
         StartCoroutine(VictoryAnimation());

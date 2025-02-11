@@ -76,8 +76,8 @@ public class ResultsScreen : MonoBehaviour
     
     private void CheckAchievements()
     {
-        AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken);
-        AchievementDefinitions.VictoryWithoutUpgradingBuildings.Check(RunStateData.TotalBuildingsUpgraded);
+        AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken,
+            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
     }
 
     private ResultsScreenView.InitData MakeViewInitData()

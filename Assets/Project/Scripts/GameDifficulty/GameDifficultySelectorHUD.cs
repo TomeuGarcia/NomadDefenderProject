@@ -48,6 +48,7 @@ public class GameDifficultySelectorHUD : MonoBehaviour
 
     [Header("DEMO")] 
     [SerializeField] private DemoManagerConfig _demoManagerConfig;
+    [SerializeField] private bool _debugAlwaysHideButtons;
     
     [Header("DIFFICULTY CONFIG")] 
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
@@ -64,9 +65,14 @@ public class GameDifficultySelectorHUD : MonoBehaviour
             button.Init(_gameDifficultyConfig);
         }
 
-        if (_demoManagerConfig.DemoEnabled)
+        if (_demoManagerConfig.DemoEnabled || _debugAlwaysHideButtons)
         {
             gameObject.SetActive(false);
+        }
+
+        if (_demoManagerConfig.DemoEnabled) // DEMO only on Normal difficulty
+        {
+            _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
         }
     }
     
