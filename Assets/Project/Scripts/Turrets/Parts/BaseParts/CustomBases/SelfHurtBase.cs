@@ -130,11 +130,14 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         UpdateExplosionDamage();
 
-        if (newStatLevel == 3)
+        if (newStatLevel == 2)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
             UpdateAreaPlaneSize(ownerSupportBuilding, rangePlane, rangePlaneMaterial);
             UpdateParticlesRange(ownerSupportBuilding.CurrentRadiusRange);
+        }
+        else if (newStatLevel == 3)
+        {
             rocketTop.DOBlendableMoveBy(rocketTopMoveBy, 1.0f);
         }
 
@@ -148,7 +151,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
     private void UpdateExplosionDamage()
     {
-        explosionDamage = (int)(baseExplosionDamage * explosionDamagePer1Multiplier[currentLvl]);
+        explosionDamage = Mathf.RoundToInt(baseExplosionDamage * explosionDamagePer1Multiplier[currentLvl]);
         
     }
 

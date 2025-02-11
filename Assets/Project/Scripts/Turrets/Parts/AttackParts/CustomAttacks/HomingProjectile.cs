@@ -4,7 +4,8 @@ using UnityEngine;
 public class HomingProjectile : ATurretProjectileBehaviour
 {
     [SerializeField] protected Lerp lerp;
-    
+
+    protected bool TargetedEnemyIsStillValid => _targetEnemy != null && _targetEnemy.gameObject.activeInHierarchy;
     
     protected sealed override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
     {
@@ -36,15 +37,23 @@ public class HomingProjectile : ATurretProjectileBehaviour
     protected IEnumerator WaitForLerpFinish()
     {
         yield return new WaitUntil(() => lerp.finishedPositionLerp);
-        if (_targetEnemy.IsDead()) yield break;
+        if (_targetEnemy.IsDead())
+        {
+            Disappear();
+            yield break;
+        }
         OnEnemyReached();
     }
 
     protected virtual void OnEnemyReached()
     {
-        if (_targetEnemy != null && _targetEnemy.gameObject.activeInHierarchy)
+        if (TargetedEnemyIsStillValid)
         {
             EnemyHit();
+        }
+        else
+        {
+            Disappear();
         }
     }
     

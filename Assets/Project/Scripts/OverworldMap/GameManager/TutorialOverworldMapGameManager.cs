@@ -50,6 +50,7 @@ public class TutorialOverworldMapGameManager : OverworldMapGameManager
         }
 
         _overworldMapVolume.DeactivateVolume();
+        InitDemo();
     }
 
 

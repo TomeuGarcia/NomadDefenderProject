@@ -161,7 +161,11 @@ public class SupportBuilding : RangeBuilding
 
     public override void HideQuickLevelUI() 
     {
-        Upgrader.HideQuickLevelDisplay();
+        if (!InBattleBuildingUpgrader.IsWindowOpen)
+        {
+            Upgrader.HideQuickLevelDisplay();
+        }
+        
         basePart.GotUnoveredWhenPlaced();
     }
 

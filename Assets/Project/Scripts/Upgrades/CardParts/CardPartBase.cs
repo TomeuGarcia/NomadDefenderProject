@@ -113,6 +113,11 @@ public class CardPartBase : CardPart, ICardTooltipSource
         return tooltipDisplayData;
     }
 
+    public bool WithKeywords()
+    {
+        return true;
+    }
+
     public override void SetNotDiscovered()
     {
         base.SetNotDiscovered();

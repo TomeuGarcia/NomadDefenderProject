@@ -89,6 +89,11 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
     }
 
 
+    public override CardTooltipDisplayData MakeTooltipDisplayData()
+    {
+        return CardTooltipDisplayData.MakeForTurretCard(_tooltipPoistioning, _turretBuilding.CardData);
+    }
+
     protected override void CheckHoveredButtonsCanNowUpgrade()
     {
         if (_allStatsUpgradeButton.IsButtonHovered) _allStatsUpgradeButton.SetHighlighted();

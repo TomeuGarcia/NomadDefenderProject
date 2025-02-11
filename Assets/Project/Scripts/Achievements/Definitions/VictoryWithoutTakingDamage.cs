@@ -1,12 +1,13 @@
 public static partial class AchievementDefinitions
 {
-    public static class VictoryWithoutTakingDamage
+    public static class VictoryWithLessThanDamage
     {
-        public static void Check(int totalDamageTaken)
+        public static void Check(int totalDamageTaken, GameDifficultyType currentDifficulty)
         {
-            if (totalDamageTaken < 0)
+            const int damageThreshold = 5;
+            if (totalDamageTaken <= damageThreshold && currentDifficulty == GameDifficultyType.Hard)
             {
-                AchievementsManager.UnlockAchievement(AchievementType.VictoryWithoutTakingDamage);
+                AchievementsManager.UnlockAchievement(AchievementType.VictoryWithLessThanDamage);
             }
         }
     }

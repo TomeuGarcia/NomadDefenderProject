@@ -10,10 +10,8 @@ public enum AchievementType
     OrbitingsStack,
     NegativePlayCostCard,
     
-    VictoryWithoutTakingDamage,
-    VictoryWithoutUpgradingBuildings,
-    WinBattleWithOnly1Building,
-    
+    VictoryWithLessThanDamage,
+
     HoardCurrencyAmount,
     UpgradeBuildingToMax,
     HaveAmountOfBuildingsSimultaneously,
@@ -22,5 +20,7 @@ public enum AchievementType
     HaveTurretWithShotsPerSecondAmount,
     UnlockAllStarterDecks,
     
-    DiscoverAllProjectilesAndAbilities
+    DiscoverAllProjectilesAndAbilities,
+    
+    HardDifficulty_Victory,
 }

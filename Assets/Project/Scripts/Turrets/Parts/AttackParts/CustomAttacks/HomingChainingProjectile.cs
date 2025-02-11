@@ -7,7 +7,6 @@ public class HomingChainingProjectile : HomingProjectile
 {
     [Header("STATS")]
     [SerializeField] private LayerMask enemyLayerMask;
-    [SerializeField, Range(0f, 1f)] private float damageMultiplier = 0.5f;
     [SerializeField, Min(1)] private int maxChainedTargets = 1;
     [SerializeField, Min(0f)] private float chainRadius;
 
@@ -15,6 +14,9 @@ public class HomingChainingProjectile : HomingProjectile
     private Enemy[] _chainTargetedEnemies;
     private TurretDamageAttack[] _chainTargetedDamage;
     private bool _isChaining;
+    
+
+
 
     protected override void OnShotInitialized()
     {
@@ -25,6 +27,12 @@ public class HomingChainingProjectile : HomingProjectile
 
     protected override void OnEnemyReached()
     {
+        if (!TargetedEnemyIsStillValid)
+        {
+            Disappear();
+            return;
+        }
+        
         GameObject hitParticles = ProjectileParticleFactory.GetInstance()
             .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         hitParticles.transform.parent = gameObject.transform.parent;
@@ -42,13 +50,16 @@ public class HomingChainingProjectile : HomingProjectile
         }
 
 
-        if (_currentChainedTarget < _chainTargetedEnemies.Length)
+        int chainTargetsCount = _chainTargetedEnemies.Length;
+        if (_currentChainedTarget < chainTargetsCount)
         {
             _targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
             lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());            
         }
-        else
+        
+        if (chainTargetsCount < 1 ||
+            _currentChainedTarget >= chainTargetsCount - 1)
         {
             Disappear();
         }
@@ -57,8 +68,7 @@ public class HomingChainingProjectile : HomingProjectile
     private void DoTargetedEnemyHit()
     {
         DamageTargetEnemy(_damageAttack);
-
-
+        
         _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(_targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
         _chainTargetedDamage = new TurretDamageAttack[_chainTargetedEnemies.Length];
         for (int i = 0; i < _chainTargetedEnemies.Length; i++)
@@ -83,7 +93,7 @@ public class HomingChainingProjectile : HomingProjectile
     protected override int ComputeDamage()
     {
         int damage = TurretOwner.Stats.Damage;
-        damage = Mathf.RoundToInt(damage * damageMultiplier);
+        damage = Mathf.RoundToInt(damage * _damageMultiplier);
         return damage;
     }
     

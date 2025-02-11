@@ -14,7 +14,8 @@ public class TPADataModel_Berserker : ATurretPassiveAbilityDataModel
     public AbilityDescriptionVariable BerserkerDuration => _berserkerDuration;
     public BerserkerTurretBuildingVisuals VisualsPrefab => _berserkerVisualsPrefab;
     public ProjectileViewAddOnConfig BerserkerActiveAddOn => _berserkerActiveAddOn;
-    
+
+    public float MaxBerserkerDuration => 10f;
     
     public override ATurretPassiveAbility MakePassiveAbility()
     {

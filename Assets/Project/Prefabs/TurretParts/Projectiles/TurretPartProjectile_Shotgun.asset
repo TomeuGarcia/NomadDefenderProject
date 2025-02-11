@@ -25,12 +25,18 @@ MonoBehaviour:
   _materialForTurretPreview: {fileID: 2100000, guid: acb67fa17e7f0624caf970ca6bb87556,
     type: 2}
   _movementSpeed: 15
+  _damagePercentMultiplier:
+    _name: DAMAGE_PERCENT
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 25
+    _floatConstantValue: 0
   _descriptionModel:
     _abilityName: shotgun
     _abilityDescription: 'Projectile that splits into 6 straight-shot Bullets within
       a cone.
 
-      Deals x25% of damage per hit.'
+      Deals xDAMAGE_PERCENT% of damage per hit.'
     _descriptionKeywords: []
     _descriptionlessKeywords: []
     _descriptionPatterns:

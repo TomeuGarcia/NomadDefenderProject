@@ -1,5 +1,7 @@
 using System;
+using System.Runtime.CompilerServices;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 namespace Project.Scripts.Upgrades.CopyAbility
@@ -9,6 +11,8 @@ namespace Project.Scripts.Upgrades.CopyAbility
         [SerializeField] private MouseOverNotifier _mouseOverNotifier;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private GameObject _selectedMark;
+        [SerializeField] private MeshRenderer _mesh;
+        private Material _material;
 
         private bool _isSelected;
         private bool _isEnabled;
@@ -20,6 +24,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
 
         public Action<AbilityManagerCopyFromButton> OnClicked;
+
 
 
         private void OnEnable()
@@ -37,7 +42,8 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         private void Awake()
         {
-            _spriteDefaultScale = _spriteRenderer.transform.localScale;
+            _material = _mesh.material;
+            //_spriteDefaultScale = _spriteRenderer.transform.localScale;
             _selectionDefaultScale = _selectedMark.transform.localScale;
             SetDisabled();
         }
@@ -45,12 +51,14 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         public void SetEnabled(ATurretPassiveAbilityDataModel abilityDataModel)
         {
+            //Debug.Log("SetEnabled");
             AbilityDataModel = abilityDataModel;
 
-            _spriteRenderer.sprite = AbilityDataModel.View.Sprite;
-            _spriteRenderer.color = AbilityDataModel.View.Color;
+            _material.DOFloat(1.0f, "_EnableCoef", 0.25f).SetEase(Ease.OutCubic);
+            _material.SetTexture("_Texture", AbilityDataModel.View.Sprite.texture);
+            _material.SetColor("_InnerColor", AbilityDataModel.View.Color);
             
-            _spriteRenderer.gameObject.SetActive(true);
+            //_spriteRenderer.gameObject.SetActive(true);
 
             _isEnabled = true;
             
@@ -60,7 +68,10 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         public void SetDisabled()
         {
-            _spriteRenderer.gameObject.SetActive(false);
+            //Debug.Log("SetDisabled");
+            _material.DOFloat(0.0f, "_EnableCoef", 0.25f).SetEase(Ease.InCubic);
+            //_material.SetFloat("_Enabled", 0f);
+            //_spriteRenderer.gameObject.SetActive(false);
             SetNotSelected();
             _isEnabled = false;
             StopWaitingForSelectedAnimation();
@@ -68,21 +79,26 @@ namespace Project.Scripts.Upgrades.CopyAbility
 
         public void SetFinalDisabled()
         {
+            //Debug.Log("SetFinalDisabled");
             SetDisabled();
-            // Extra button animation would go here
+
+            _material.DOFloat(0.0f, "_AlphaCoef", 0.25f).SetEase(Ease.OutCubic);
         }
 
 
         public void SetSelected()
         {
+            //Debug.Log("SetSelected");
             _isSelected = true;
-            SetHighlighted(true);
+            SetSelectedView(true);
             PlaySelectedAnimation();
         }
         public void SetNotSelected()
         {
+            //Debug.Log("SetNotSelected");
             _isSelected = false;
-            SetHighlighted(false);
+            SetSelectedView(false);
+            SetHoveredView(false);
             _selectedMark.transform.localScale = _selectionDefaultScale;
             StopWaitingForSelectedAnimation();
         }
@@ -92,29 +108,40 @@ namespace Project.Scripts.Upgrades.CopyAbility
         private void OnHover()
         {
             if (_isSelected || !_isEnabled) return;
-            
-            SetHighlighted(true);
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
+
+            SetHoveredView(true);
             StopWaitingForSelectedAnimation();
         }
         private void OnUnhover()
         {
             if (_isSelected || !_isEnabled) return;
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
 
-            SetHighlighted(false);
+            SetHoveredView(false);
             PlayWaitingForSelectedAnimation();
         }
         private void OnPressed()
         {
             if (_isSelected || !_isEnabled) return;
-            
+            GameAudioManager.GetInstance().PlayCardInfoHidden();
+
             OnClicked?.Invoke(this);
             StopWaitingForSelectedAnimation();
         }
 
 
-        private void SetHighlighted(bool highlighted)
+        private void SetSelectedView(bool selected)
         {
-            _selectedMark.gameObject.SetActive(highlighted);
+            _material.DOFloat(selected ? 1.0f : 0.0f, "_SelectCoef", 0.2f).SetEase(Ease.OutCubic);
+        }
+
+        private void SetHoveredView(bool highlighted)
+        {
+            //_material.SetFloat("_HoverCoef", highlighted ? 1.0f : 0.0f);
+            
+            _material.DOComplete();
+            _material.DOFloat(highlighted ? 1.0f : 0.0f, "_HoverCoef", 0.1f);
         }
 
         private void PlayWaitingForSelectedAnimation()

@@ -33,6 +33,9 @@ public class TurretPartProjectileDataModel : ScriptableObject
     [Header("STATS CONFIG")] 
     [SerializeField, Min(0f)] private float _movementSpeed = 2f;
     public float MovementSpeed => _movementSpeed;
+
+    [SerializeField] private AbilityDescriptionVariable _damagePercentMultiplier;
+    public float DamageMultiplier => _damagePercentMultiplier.Value / 100f;
     
 
     [Header("ABILITY INFO")] 
@@ -42,7 +45,14 @@ public class TurretPartProjectileDataModel : ScriptableObject
 
     public EditableCardAbilityDescription MakeAbilityDescription()
     {
-        return _descriptionModel.MakeEditableDescription();
+        EditableCardAbilityDescription description = _descriptionModel.MakeEditableDescription();
+        Dictionary<string, string> modifications = new()
+        {
+            { _damagePercentMultiplier.Name, _damagePercentMultiplier.Value.ToString() }
+        };
+
+        description.ApplyDescriptionModifications(modifications);
+        return description;
     }
 
 

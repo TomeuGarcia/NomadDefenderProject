@@ -112,6 +112,7 @@ public class BattleTutorialManager : MonoBehaviour
 
         speedUpButtonHolder.GetComponent<CanvasGroup>().alpha = 0;
         speedUpButtonHolder.SetActive(false);
+        speedUpButton.InitNumSpeed();
 
         deckInterface.GetComponent<CanvasGroup>().alpha = 0;
         deckInterface.SetActive(false);
@@ -254,7 +255,6 @@ public class BattleTutorialManager : MonoBehaviour
 
         scriptedSequence.NextLine(); //6
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
-
         _backBackgroundCardsHighlight.DOFade(_backBackgroundCardsHighlightAlpha, 0.3f);
         
         yield return new WaitForSeconds(0.5f); 
@@ -393,18 +393,19 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
         _cardsMotionConfig.SetTDGameplayHandMode();
         _hand.InitCardsInHand(false);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
         
 
         
-        GameTime.SetTimeScale(1);
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
         BuildingCard.LockAllCardsFromHover = false;
         _hand.CanBeHidden = true;
         _hand.InitCardsInHand();
 
         
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
+        GameTime.SetTimeScale(1);
+        
         scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
@@ -435,14 +436,15 @@ public class BattleTutorialManager : MonoBehaviour
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
         _cardsMotionConfig.SetTDGameplayHandMode();
         
-        yield return new WaitForSeconds(2.5f);
-        
-        
-        GameTime.SetTimeScale(1);
+        yield return new WaitForSeconds(1.5f);
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
         BuildingCard.LockAllCardsFromHover = false;
         _hand.CanBeHidden = true;
         _hand.InitCardsInHand();
+        
+        
+        yield return new WaitForSeconds(2.5f);
+        GameTime.SetTimeScale(1);
         
         scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -541,10 +543,10 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
         
 
+        scriptedSequence.dialogSystem.SetMaxLinesOnScreen(18);
         StartCoroutine(KeepPrinting());
-        yield return new WaitForSecondsRealtime(2.75f);
+        yield return new WaitForSecondsRealtime(3.75f);
 
-        
 
         //Finish scene and load next
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
@@ -554,7 +556,7 @@ public class BattleTutorialManager : MonoBehaviour
 
     private IEnumerator KeepPrinting()
     {
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 16; ++i)
         {
             scriptedSequence.NextLine();
             yield return new WaitForSecondsRealtime(0.25f);

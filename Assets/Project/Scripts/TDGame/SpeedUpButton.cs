@@ -37,7 +37,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void Awake()
     {
-        numSpeeds = timeScales.Length;
+        InitNumSpeed();
         IsTimePaused = false;
         UpdateTimeSpeed();
         PauseMenu.GameIsPaused = false;
@@ -117,6 +117,11 @@ public class SpeedUpButton : MonoBehaviour
         }
     }
 
+    public void InitNumSpeed()
+    {
+        numSpeeds = timeScales.Length;
+    }
+    
     public void ChangeTimeSpeed()
     {
         current = (current + 1) % numSpeeds;

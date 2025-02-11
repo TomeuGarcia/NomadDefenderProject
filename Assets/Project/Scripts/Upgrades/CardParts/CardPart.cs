@@ -37,7 +37,7 @@ public abstract class CardPart : MonoBehaviour
     [HideInInspector] public bool hideInfoWhenSelected = true;
 
     [Header("DESCRIPTION")]
-    [SerializeField] protected CardTooltipDisplayData.Positioning _descriptionTooltipPositioning;
+    [SerializeField] protected CardTooltipDisplayData.WorldPositioning _descriptionTooltipPositioning;
     
     
     private Vector3 standardPosition;
