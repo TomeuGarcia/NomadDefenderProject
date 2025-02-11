@@ -11,9 +11,7 @@ public enum AchievementType
     NegativePlayCostCard,
     
     VictoryWithLessThanDamage,
-    VictoryWithoutUpgradingBuildings,
-    WinBattleWithOnly1Building,
-    
+
     HoardCurrencyAmount,
     UpgradeBuildingToMax,
     HaveAmountOfBuildingsSimultaneously,
@@ -22,5 +20,7 @@ public enum AchievementType
     HaveTurretWithShotsPerSecondAmount,
     UnlockAllStarterDecks,
     
-    DiscoverAllProjectilesAndAbilities
+    DiscoverAllProjectilesAndAbilities,
+    
+    HardDifficulty_Victory,
 }

@@ -98,6 +98,8 @@ public class GameManager : MonoBehaviour
         StarterDecksUnlocker.GetInstance().UnlockNextDeck();
         _unlockableTrophiesManager.Unlock(_cardDeckInUseData.WinTrophyModel);
 
+        AchievementDefinitions.HardDifficultyVictory.Check(ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+        
         AchievementDefinitions.StarterDeck_Victory_Frost.Check(decksLibrary.IsUsingFrostDeck());
         AchievementDefinitions.StarterDeck_Victory_Repeater.Check(decksLibrary.IsUsingRepeaterDeck());
         AchievementDefinitions.StarterDeck_Victory_Currency.Check(decksLibrary.IsUsingCurrencyDeck());
