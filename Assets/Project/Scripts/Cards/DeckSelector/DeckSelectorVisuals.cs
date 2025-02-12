@@ -95,4 +95,9 @@ public class DeckSelectorVisuals : MonoBehaviour
         _runButtonMat.DOFloat(0.0f, "_HoverCoef", 0.1f);
     }
 
+    public void OnButtonPressed()
+    {
+        _runButtonMat.DOFloat(1.0f, "_SelectCoef", 0.1f);
+    }
+
 }
