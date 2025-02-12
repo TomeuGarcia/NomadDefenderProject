@@ -52,6 +52,9 @@ public class BuildingsUtils : ScriptableObject
 
     [SerializeField] private Color previewCanNOTBePlacedColor = Color.red;
     public Color PreviewCanNOTBePlacedColor => previewCanNOTBePlacedColor;
+    
+    [SerializeField] private Color previewCanNOTBePlacedYetColor = Color.red;
+    public Color PreviewCanNOTBePlacedYetColor => previewCanNOTBePlacedYetColor;
 
 
     [SerializeField] private Color previewPunchCanNOTBePlacedColor = Color.white;

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("RUN STATE")] 
     [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
     [SerializeField] private InterfaceReference<IGameProgressionUpdater, ScriptableObject> _gameProgressionUpdater;
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
 
     [Header("CANVAS")]
     [SerializeField] protected GameObject victoryHolder;
@@ -252,6 +253,7 @@ public class GameManager : MonoBehaviour
         if (victory)
         {
             _gameProgressionUpdater.Value.IncrementVictoryCount();
+            _gameDifficultyConfig.UnlockDifficulty(GameDifficultyType.Hard);
         }
     }
 

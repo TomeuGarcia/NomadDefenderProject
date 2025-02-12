@@ -332,13 +332,15 @@ public class TurretBuilding : RangeBuilding
     public override void SetPreviewCanBePlacedColor() 
     {
         previewColorInUse = buildingsUtils.PreviewCanBePlacedColor;
-        SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
+        SetBuildingPartsColor(previewColorInUse);
     }
 
-    public override void SetPreviewCanNOTBePlacedColor() 
+    public override void SetPreviewCanNOTBePlacedColor(bool notYet) 
     {
-        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
-        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+        previewColorInUse = notYet 
+            ? buildingsUtils.PreviewCanNOTBePlacedYetColor
+            : buildingsUtils.PreviewCanNOTBePlacedColor;
+        SetBuildingPartsColor(previewColorInUse);
     }
 
     

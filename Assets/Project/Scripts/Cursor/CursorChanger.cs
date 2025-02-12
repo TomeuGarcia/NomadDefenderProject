@@ -31,17 +31,23 @@ public class CursorChanger : MonoBehaviour
     {
         ServiceLocator.GetInstance().CursorChanger = this;
         DontDestroyOnLoad(gameObject);
+        
+        #if UNITY_EDITOR
+        _cursorImage.enabled = false;
+        #endif
     }
     
     private void Update()
     {
-        Cursor.visible = false;
         _cursorMove.position = Input.mousePosition;
-
+        #if UNITY_EDITOR
+        #else
+        Cursor.visible = false;
         if (Cursor.lockState != CursorLockMode.Confined && Input.GetKeyDown(KeyCode.Mouse0))
         {
             Cursor.lockState = CursorLockMode.Confined;
         }
+        #endif
     }
 
     public void ChangeCursorContext(CursorContext cursorContext)
