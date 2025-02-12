@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DeckSelectorVisuals : MonoBehaviour
 {
+    [SerializeField] private DeckSelector _deckSelector;
     [SerializeField] private MeshRenderer _runButtonMesh;
     private Material _runButtonMat;
     [SerializeField] private Transform runSimulationButtonTransform;
@@ -79,11 +80,17 @@ public class DeckSelectorVisuals : MonoBehaviour
 
     public void OnButtonEnter()
     {
+        if(!_deckSelector.StartButtonInteractable)
+            return;
+
         GameAudioManager.GetInstance().PlayCardInfoShown();
         _runButtonMat.DOFloat(1.0f, "_HoverCoef", 0.1f);
     }
     public void OnButtonExit()
     {
+        if (!_deckSelector.StartButtonInteractable)
+            return;
+
         GameAudioManager.GetInstance().PlayCardInfoHidden();
         _runButtonMat.DOFloat(0.0f, "_HoverCoef", 0.1f);
     }

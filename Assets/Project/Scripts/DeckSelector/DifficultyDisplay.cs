@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,9 +10,11 @@ public class DifficultyDisplay : MonoBehaviour
     {
         [SerializeField] private string _displayText;
         [SerializeField] private DecodingParameters _decodingParameters;
+        [SerializeField] private Color _lightColor;
 
         public string DisplayText => _displayText;
         public DecodingParameters DecodingParameters => _decodingParameters;
+        public Color LightColor => _lightColor;
     }
 
 
@@ -27,8 +30,9 @@ public class DifficultyDisplay : MonoBehaviour
     [SerializeField] private Button _leftArrow;
     [SerializeField] private Button _rightArrow;
     [SerializeField] private GameObject _watcher;
-    [SerializeField] private MeshRenderer _crossMesh;
-    private Material _crossMat;
+    [SerializeField] private GameObject _lockedObject;
+    [SerializeField] private Light _bottomLight;
+    [SerializeField] private GameObject _runButton;
     [SerializeField] private Difficulty[] _difficulties;
 
     private GameDifficultyType _selectedGameDifficultyType;
@@ -36,8 +40,6 @@ public class DifficultyDisplay : MonoBehaviour
 
     private void Awake()
     {
-        _crossMat = _crossMesh.material;
-
         _selectedGameDifficultyType = _gameDifficultyConfig.CurrentGameDifficulty;
         UpdateDifficulty();
 
@@ -80,6 +82,9 @@ public class DifficultyDisplay : MonoBehaviour
             _leftArrow.interactable = false;
             _rightArrow.interactable = true;
 
+            _lockedObject.SetActive(false);
+            _runButton.SetActive(true);
+
             _watcher.SetActive(false);
         }
         else if(_selectedGameDifficultyType == GameDifficultyType.Hard)
@@ -87,12 +92,21 @@ public class DifficultyDisplay : MonoBehaviour
             _leftArrow.interactable = true;
             _rightArrow.interactable = false;
 
+            /*if (_demoManagerConfig.DemoEnabled || ) //TODO - 
+            {
+                _lockedObject.SetActive(true);
+                _runButton.SetActive(false);
+            }*/
+
             _watcher.SetActive(true);
         }
         else
         {
             _leftArrow.interactable = true;
             _rightArrow.interactable = true;
+
+            _lockedObject.SetActive(false);
+            _runButton.SetActive(true);
 
             _watcher.SetActive(false);
         }
@@ -102,6 +116,9 @@ public class DifficultyDisplay : MonoBehaviour
 
     private void DecodeDifficultyDisplay(Difficulty difficulty)
     {
+        _bottomLight.DOKill();
+        _bottomLight.DOColor(difficulty.LightColor, 0.25f);
+
         _textDecoder.StopAllCoroutines();
 
         _textDecoder.SetDecodingParameters(difficulty.DecodingParameters);

@@ -35,6 +35,9 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private MeshRenderer startSimulationFlashMesh2;
     private Material startSimulationFlashMaterial;
 
+    private bool _startButtonInteractable = false;
+    public bool StartButtonInteractable => _startButtonInteractable;
+
     private float currentFill = 0.0f;
     private bool _busySelectingDeck;
 
@@ -52,6 +55,7 @@ public class DeckSelector : MonoBehaviour
         Init();
 
         startSimulationButton.interactable = false;
+        _startButtonInteractable = false;
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
         CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
@@ -159,6 +163,7 @@ public class DeckSelector : MonoBehaviour
         }
 
         startSimulationButton.interactable = true;
+        _startButtonInteractable = true;
         if (currentFill == 0)
         {
             //ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
@@ -246,5 +251,4 @@ public class DeckSelector : MonoBehaviour
             currentlySelectedDeck.Deck);
 
     }
-    
 }
