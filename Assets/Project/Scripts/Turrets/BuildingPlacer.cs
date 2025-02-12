@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
 {
+    [SerializeField] private CurrencyCounter _currencyCounter;
+    
     private BuildingCard selectedBuildingCard = null;
     private Building selectedBuilding = null;
     private List<Building> placedBuildings = new List<Building>();
@@ -84,11 +86,15 @@ public class BuildingPlacer : MonoBehaviour
 
         placingEnabled = true;
         dragAndDropCardCoroutine = StartCoroutine(ClickDropCoroutine());
+
+
+        InitEnoughCurrencyToPlaceBuilding();
+        _currencyCounter.OnCurrencyAdded += OnCurrencyGainedWhilePlacingBuilding;
     }
 
     public void DisablePlacing()
     {
-        if ( selectedBuilding != null)
+        if (selectedBuilding != null)
         {
             selectedBuilding.GotDisabledPlacing();
         }
@@ -107,6 +113,8 @@ public class BuildingPlacer : MonoBehaviour
         if (dragAndDropCardCoroutine != null) StopCoroutine(dragAndDropCardCoroutine);
         placingEnabled = false;
         currentHoveredTile = null;
+
+        _currencyCounter.OnCurrencyAdded -= OnCurrencyGainedWhilePlacingBuilding;
 
         if (OnPlacingBuildingsDisabled != null) OnPlacingBuildingsDisabled();
     }
@@ -163,18 +171,28 @@ public class BuildingPlacer : MonoBehaviour
 
     private void TryPlaceBuilding(Tile tile)
     {
-        if (CanPlaceBuildingOnTile(selectedBuilding, tile))
+        int cardCost = selectedBuilding.BuildingCard.GetCardPlayCost();
+        
+        if (!_currencyCounter.HasEnoughCurrency(cardCost))
         {
-            PlaceSelectedBuilding(tile);
+            _currencyCounter.PlayNotEnoughCurrencyAnimation();
+            selectedBuilding.BuildingCard.PlayCanNotBePlayedAnimation();
+            selectedBuilding.PlayCanNOTBePlacedColorPunch();
+        }
+        else if (!CanPlaceBuildingOnTile(selectedBuilding, tile))
+        {
+            selectedBuilding.PlayCanNOTBePlacedColorPunch();
         }
         else
         {
-            GameAudioManager.GetInstance().PlayError();
-            selectedBuilding.PlayCanNOTBePlacedColorPunch();
-            
-            StartCoroutine(DelayedDisablePlacing(0.4f));
-            if (OnBuildingCantBePlaced != null) OnBuildingCantBePlaced(selectedBuildingCard);
+            PlaceSelectedBuilding(tile);
+            return;
         }
+
+
+        GameAudioManager.GetInstance().PlayError();
+        StartCoroutine(DelayedDisablePlacing(0.4f));
+        if (OnBuildingCantBePlaced != null) OnBuildingCantBePlaced(selectedBuildingCard);
     }
 
     private bool CanPlaceBuildingOnTile(Building building, Tile tile)
@@ -250,13 +268,23 @@ public class BuildingPlacer : MonoBehaviour
         building.transform.position = tile.buildingPlacePosition;
         building.ShowRangePlane();
 
+        bool hasEnoughCurrencyToPlace =
+            _currencyCounter.HasEnoughCurrency(selectedBuilding.BuildingCard.GetCardPlayCost());
+        
         if (CanPlaceBuildingOnTile(building, tile))
         {
-            building.SetPreviewCanBePlacedColor();
+            if (hasEnoughCurrencyToPlace)
+            {
+                building.SetPreviewCanBePlacedColor();
+            }
+            else
+            {
+                building.SetPreviewCanNOTBePlacedColor(true);
+            }
         }
         else
         {
-            building.SetPreviewCanNOTBePlacedColor();
+            building.SetPreviewCanNOTBePlacedColor(false);
         }
     }
 
@@ -301,5 +329,56 @@ public class BuildingPlacer : MonoBehaviour
         {
             GameAudioManager.GetInstance().PlayTurretCardUnplaced(TurretPartBody.BodyType.SENTRY);
         }
+    }
+
+
+    
+    private bool _hadEnoughCurrencyToPlaceBuilding;
+
+    private void InitEnoughCurrencyToPlaceBuilding()
+    {
+        _hadEnoughCurrencyToPlaceBuilding =
+            _currencyCounter.HasEnoughCurrency(selectedBuilding.BuildingCard.GetCardPlayCost());
+
+        if (!_hadEnoughCurrencyToPlaceBuilding)
+        {
+            selectedBuilding.ShowMissingCurrencyToPlace();
+            UpdateSelectedBuildingMissingCurrency();
+        }
+        else
+        {
+            selectedBuilding.HideMissingCurrencyToPlace();
+        }
+    }
+    
+    private void OnCurrencyGainedWhilePlacingBuilding()
+    {
+        if (_hadEnoughCurrencyToPlaceBuilding) return;
+
+        int playCost = selectedBuilding.BuildingCard.GetCardPlayCost();
+        bool startedToHaveEnoughCurrency = !_hadEnoughCurrencyToPlaceBuilding &&
+                                           _currencyCounter.HasEnoughCurrency(playCost);
+        
+        if (startedToHaveEnoughCurrency)
+        {
+            selectedBuilding.HideMissingCurrencyToPlace();
+            selectedBuilding.BuildingCard.SetCanNotBePlayedPermanent(false);
+
+            if (currentHoveredTile != null)
+            {
+                ShowAndPositionSelectedBuilding(selectedBuildingCard, selectedBuilding, currentHoveredTile);
+            }
+        }
+        else
+        {
+            UpdateSelectedBuildingMissingCurrency();
+        }
+    }
+
+    private void UpdateSelectedBuildingMissingCurrency()
+    {
+        int playCost = selectedBuilding.BuildingCard.GetCardPlayCost();
+        int missingCurrency = playCost - _currencyCounter.CurrencyCount;
+        selectedBuilding.UpdateMissingCurrencyToPlace(playCost);
     }
 }

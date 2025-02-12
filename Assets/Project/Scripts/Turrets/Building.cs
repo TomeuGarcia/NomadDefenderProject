@@ -2,8 +2,10 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
 public abstract class Building : MonoBehaviour
@@ -58,6 +60,7 @@ public abstract class Building : MonoBehaviour
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.BuildingPlaced,
             PlacingParticlesPosition, Quaternion.identity);
         DoGotPlaced();
+        HideMissingCurrencyToPlace();
     }
 
     protected abstract void DoGotPlaced();
@@ -101,7 +104,7 @@ public abstract class Building : MonoBehaviour
     protected Color previewColorInUse;
     public virtual void SetBuildingPartsColor(Color color) { }
     public virtual void SetPreviewCanBePlacedColor() { }
-    public virtual void SetPreviewCanNOTBePlacedColor() { }
+    public virtual void SetPreviewCanNOTBePlacedColor(bool notYet) { }
 
     public void PlayCanNOTBePlacedColorPunch()
     {
@@ -134,5 +137,32 @@ public abstract class Building : MonoBehaviour
         SetBuildingPartsColor(previewColorInUse);
     }
 
+
+    [Header("MISSING CURRENCY")] 
+    [SerializeField] private GameObject _missingCurrencyHolder;
+    [SerializeField] private TMP_Text _missingCurrencyText;
+    [SerializeField] private Image _missingCurrencyIcon;
+    private Color _defaultMissingCurrencyColor;
+    
+    public void UpdateMissingCurrencyToPlace(int missingCurrencyAmount)
+    {
+        _missingCurrencyText.text = missingCurrencyAmount.ToString();
+return;
+        _missingCurrencyText.color = _missingCurrencyIcon.color = Color.cyan;
+        _missingCurrencyText.DOKill();
+        _missingCurrencyText.DOColor(_defaultMissingCurrencyColor, 0.2f);
+        _missingCurrencyIcon.DOKill();
+        _missingCurrencyIcon.DOColor(_defaultMissingCurrencyColor, 0.2f);
+    }
+
+    public void ShowMissingCurrencyToPlace()
+    {
+        _missingCurrencyHolder.SetActive(true);
+        _defaultMissingCurrencyColor = _missingCurrencyText.color;
+    }
+    public void HideMissingCurrencyToPlace()
+    {
+        _missingCurrencyHolder.SetActive(false);
+    }
 
 }

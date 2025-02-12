@@ -264,7 +264,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         IsWindowOpen = true;
 
-        //HideQuickLevelDisplay();
+        HideQuickLevelDisplay(); //
     }
 
     public void CloseWindow()
@@ -282,7 +282,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         AutomaticWindowCloseStop();
         
-        HideQuickLevelDisplay(); //
+        //HideQuickLevelDisplay(); //
     }
     private IEnumerator OpenWindowCooldown()
     {

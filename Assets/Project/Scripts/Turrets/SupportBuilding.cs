@@ -204,10 +204,13 @@ public class SupportBuilding : RangeBuilding
         SetBuildingPartsColor(buildingsUtils.PreviewCanBePlacedColor);
     }
 
-    public override void SetPreviewCanNOTBePlacedColor()
+    public override void SetPreviewCanNOTBePlacedColor(bool notYet)
     {
-        previewColorInUse = buildingsUtils.PreviewCanNOTBePlacedColor;
-        SetBuildingPartsColor(buildingsUtils.PreviewCanNOTBePlacedColor);
+        previewColorInUse = notYet
+            ? buildingsUtils.PreviewCanNOTBePlacedYetColor
+            : buildingsUtils.PreviewCanNOTBePlacedColor;
+        
+        SetBuildingPartsColor(previewColorInUse);
     }
 
 

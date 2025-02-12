@@ -330,7 +330,7 @@ public class MainMenu : MonoBehaviour
         _unlockableTrophiesManager.SetAllTrophiesLocked();
         _gameProgressionUpdater.Value.ResetEverything();
 
-        _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
+        _gameDifficultyConfig.ResetState();
         
         ServiceLocator.GetInstance().RunInfo.SetNewGame(true);
         StartCoroutine(DoPlay());

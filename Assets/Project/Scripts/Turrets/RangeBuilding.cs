@@ -69,6 +69,7 @@ public abstract class RangeBuilding : Building
     protected override void AwakeInit()
     {
         ResetEnemySortFunction();
+        HideMissingCurrencyToPlace();
     }
 
     public TurretPartBase_Prefab GetBasePart()

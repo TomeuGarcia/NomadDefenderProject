@@ -581,6 +581,11 @@ public abstract class BuildingCard : MonoBehaviour
         }        
     }
 
+    public void SetCanNotBePlayedPermanent(bool canNotBePlayed)
+    {
+        _view.SetCanNotBePlayed(canNotBePlayed);
+    }
+
 
     public float borderFillValue01 = 0f;
     private Coroutine decreaseBorderFillCoroutine;

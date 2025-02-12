@@ -34,6 +34,8 @@ public class SlowBase : TurretPartBase_Prefab
         AwakeInit();
 
         _particleFactory = ServiceLocator.GetInstance().ParticleFactory;
+        
+        slowPlane.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -158,11 +160,17 @@ public class SlowBase : TurretPartBase_Prefab
         baseCollider.GetCollider().enabled = true;
         StartCoroutine(PlayTogglePartAppearanceAnimation(slowPlane, true));
     }
-    
-    
+
+
+    public override void OnGetPlaced()
+    {
+        slowPlane.gameObject.SetActive(true);
+    }
+
     public override void OnGetUnplaced()
     {
         StopSlowingEnemiesByThis();
+        slowPlane.gameObject.SetActive(false);
     }
 
     private void StopSlowingEnemiesByThis()

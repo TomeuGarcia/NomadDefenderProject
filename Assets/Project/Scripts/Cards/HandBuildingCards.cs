@@ -634,6 +634,7 @@ public class HandBuildingCards : MonoBehaviour
     private void ResetToStandardWhenPlacingCancelled(BuildingCard cardToBePlaced)
     {
         selectedCard = cardToBePlaced;
+        selectedCard.SetCanNotBePlayedPermanent(false);
         ResetAndSetStandardCard(selectedCard);
         _tdGameViewUtilities.StopMarkingGroundTiles();
     }
@@ -678,18 +679,12 @@ public class HandBuildingCards : MonoBehaviour
     private void CheckSelectCard(BuildingCard card)
     {
         if (AlreadyHasSelectedCard) return;
-
-        int cardCost = card.GetCardPlayCost();
-
-        if (currencyCounter.HasEnoughCurrency(cardCost))
+        
+        
+        SetSelectedCard(card);  //
+        if (!currencyCounter.HasEnoughCurrency(card.GetCardPlayCost()))
         {
-            SetSelectedCard(card);            
-        }
-        else
-        {
-            GameAudioManager.GetInstance().PlayError();
-            currencyCounter.PlayNotEnoughCurrencyAnimation();
-            card.PlayCanNotBePlayedAnimation();
+            card.SetCanNotBePlayedPermanent(true);
         }
     }
 
