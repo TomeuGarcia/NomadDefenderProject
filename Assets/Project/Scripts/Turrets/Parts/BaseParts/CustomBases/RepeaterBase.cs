@@ -61,6 +61,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         HideAllTurretBinders();
         currentDamagePer1Increment = damagePer1Increments[0];
         repeatAreaPlaneMaterial = repeatAreaPlane.materials[0];
+        
+        repeatAreaPlane.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -125,6 +127,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.gameObject.SetActive(true);
         fakeEnemy.SetCanBeTargeted(false);
         HideAllTurretBinders();
+        
+        repeatAreaPlane.gameObject.SetActive(true);
     }
 
     public override void OnGetUnplaced()
@@ -132,6 +136,8 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.Deactivate();
         fakeEnemy.SetCanBeTargeted(false);
         HideAllTurretBinders();
+        
+        repeatAreaPlane.gameObject.SetActive(false);
     }
 
 
