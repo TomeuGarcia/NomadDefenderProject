@@ -34,7 +34,8 @@ public class OptionsMenu : MonoBehaviour
             out float musicSoundSliderValue,
             out float sfxSoundSliderValue,
             out bool fullScreen,
-            out GameDifficultyType gameDifficultyType
+            out GameDifficultyType gameDifficultyType,
+            out GameDifficultyType[] unlockedGameDifficultyType
             );
 
         
@@ -45,6 +46,7 @@ public class OptionsMenu : MonoBehaviour
         _screenOptionsController.Init(fullScreen);
         
         _gameDifficultyConfig.SetDifficulty(gameDifficultyType);
+        _gameDifficultyConfig.Init(unlockedGameDifficultyType);
 
         SetMasterMixerVolume(_masterSoundSlider.value);
         SetMusicMixerVolume(_musicSlider.value);
@@ -93,15 +95,27 @@ public class OptionsMenu : MonoBehaviour
         [SerializeField] public float SFXSoundVolume = 1.0f;
         [SerializeField] public bool FullScreen = true;
         [SerializeField] public GameDifficultyType GameDifficultyType = GameDifficultyType.Normal;
+        [SerializeField] public GameDifficultyType[] UnlockedGameDifficulties =
+            { GameDifficultyType.Easy, GameDifficultyType.Normal };
 
         public SaveDataWrapper(float masterSoundVolume, float musicSoundVolume, float sfxSoundVolume, bool fullScreen,
-            GameDifficultyType gameDifficultyType)
+            GameDifficultyType gameDifficultyType, GameDifficultyType[] unlockedGameDifficulties)
         {
             MasterSoundVolume = masterSoundVolume;
             MusicSoundVolume = musicSoundVolume;
             SFXSoundVolume = sfxSoundVolume;
             FullScreen = fullScreen;
             GameDifficultyType = gameDifficultyType;
+            UnlockedGameDifficulties = unlockedGameDifficulties;
+        }
+
+        public void CheckFixes()
+        {
+            if (UnlockedGameDifficulties == null)
+            {
+                UnlockedGameDifficulties = new[]
+                    { GameDifficultyType.Easy, GameDifficultyType.Normal };
+            }
         }
     }
     
@@ -111,19 +125,22 @@ public class OptionsMenu : MonoBehaviour
         out float musicSoundSliderValue, 
         out float sfxSoundSliderValue, 
         out bool fullScreen, 
-        out GameDifficultyType gameDifficultyType
+        out GameDifficultyType gameDifficultyType,
+        out GameDifficultyType[] unlockedGameDifficulties
         )
     {
         CheckFile();
 
         string storedContent = File.ReadAllText(PathToFile + FileName);
         SaveDataWrapper storedData = JsonUtility.FromJson<SaveDataWrapper>(storedContent);
+        storedData.CheckFixes();
 
         masterSoundSliderValue = storedData.MasterSoundVolume;
         musicSoundSliderValue = storedData.MusicSoundVolume;
         sfxSoundSliderValue = storedData.SFXSoundVolume;
         fullScreen = storedData.FullScreen;
         gameDifficultyType = storedData.GameDifficultyType;
+        unlockedGameDifficulties = storedData.UnlockedGameDifficulties;
     }
 
     private void SaveOptions()
@@ -133,7 +150,8 @@ public class OptionsMenu : MonoBehaviour
             _musicSlider.value,
             _sfxSlider.value,
             _screenOptionsController.IsCurrentlyFullscreen,
-            _gameDifficultyConfig.CurrentGameDifficulty
+            _gameDifficultyConfig.CurrentGameDifficulty,
+            _gameDifficultyConfig.UnlockedGameDifficulties
             );
             
         string contentToStore = JsonUtility.ToJson(dataToStore);

@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using NaughtyAttributes;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameDifficultyConfig", 
@@ -17,7 +20,24 @@ public class GameDifficultyConfig : ScriptableObject, IGameDifficultySettingsSou
     [SerializeField] private GameDifficultySettings _hard;
 
     public GameDifficultyType CurrentGameDifficulty => _gameDifficulty;
-    
+
+
+    private HashSet<GameDifficultyType> _unlockedGameDifficulties;
+    public GameDifficultyType[] UnlockedGameDifficulties => _unlockedGameDifficulties.ToArray();
+
+    public void Init(GameDifficultyType[] unlockedGameDifficulties)
+    {
+        _unlockedGameDifficulties = new HashSet<GameDifficultyType>(unlockedGameDifficulties);
+    }
+
+    public void ResetState()
+    {
+        _unlockedGameDifficulties = new HashSet<GameDifficultyType>
+            { GameDifficultyType.Easy, GameDifficultyType.Normal };
+
+        SetDifficulty(GameDifficultyType.Normal);
+    }
+
 
     public void SetDifficulty(GameDifficultyType gameDifficulty)
     {
@@ -39,5 +59,32 @@ public class GameDifficultyConfig : ScriptableObject, IGameDifficultySettingsSou
         return null;
     }
     
+    
+    
+    public void UnlockDifficulty(GameDifficultyType gameDifficulty)
+    {
+        if (!_unlockedGameDifficulties.Contains(gameDifficulty))
+        {
+            _unlockedGameDifficulties.Add(gameDifficulty);
+        }
+    }
+
+
+    [Button()]
+    private void DebugUnlockAllDifficulties()
+    {
+        int difficultiesCount = Enum.GetValues(typeof(GameDifficultyType)).Length;
+
+        for (int i = 0; i < difficultiesCount; ++i)
+        {
+            UnlockDifficulty((GameDifficultyType)i);
+        }
+    }
+    
+    [Button()]
+    private void DebugRevertUnlockDifficulties()
+    {
+        ResetState();
+    }
     
 }

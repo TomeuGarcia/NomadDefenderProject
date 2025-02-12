@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,14 @@ public class GameDifficultySelectorHUD : MonoBehaviour
         public void Init(GameDifficultyConfig gameDifficultyConfig)
         {
             _gameDifficultyConfig = gameDifficultyConfig;
+            bool isUnlocked = _gameDifficultyConfig.UnlockedGameDifficulties.Contains(_difficulty);
+
+            if (!isUnlocked)
+            {
+                _button.gameObject.SetActive(false);
+                return;
+            }
+            
             _button.onClick.AddListener(OnButtonClicked);
 
             if (gameDifficultyConfig.CurrentGameDifficulty == _difficulty)
@@ -65,14 +74,9 @@ public class GameDifficultySelectorHUD : MonoBehaviour
             button.Init(_gameDifficultyConfig);
         }
 
-        if (_demoManagerConfig.DemoEnabled || _debugAlwaysHideButtons)
+        if (_debugAlwaysHideButtons)
         {
             gameObject.SetActive(false);
-        }
-
-        if (_demoManagerConfig.DemoEnabled) // DEMO only on Normal difficulty
-        {
-            _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
         }
     }
     
