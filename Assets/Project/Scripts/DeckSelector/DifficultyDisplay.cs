@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,6 @@ public class DifficultyDisplay : MonoBehaviour
 
     [Header("DEMO")]
     [SerializeField] private DemoManagerConfig _demoManagerConfig;
-    [SerializeField] private bool _debugAlwaysHideButtons;
 
     [Header("VIEW")]
     [SerializeField] private TextDecoder _textDecoder;
@@ -38,22 +38,10 @@ public class DifficultyDisplay : MonoBehaviour
     private GameDifficultyType _selectedGameDifficultyType;
 
 
-    private void Awake()
+    private void OnEnable()
     {
         _selectedGameDifficultyType = _gameDifficultyConfig.CurrentGameDifficulty;
         UpdateDifficulty();
-
-        //TODO - DELETE
-        return;
-        if (_demoManagerConfig.DemoEnabled || _debugAlwaysHideButtons)
-        {
-            gameObject.SetActive(false);
-        }
-
-        if (_demoManagerConfig.DemoEnabled) // DEMO only on Normal difficulty
-        {
-            _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
-        }
     }
 
     public void IncreaseDifficulty()
@@ -92,11 +80,12 @@ public class DifficultyDisplay : MonoBehaviour
             _leftArrow.interactable = true;
             _rightArrow.interactable = false;
 
-            /*if (_demoManagerConfig.DemoEnabled || ) //TODO - 
+            if (_demoManagerConfig.DemoEnabled || 
+                _gameDifficultyConfig.UnlockedGameDifficulties.Contains(_selectedGameDifficultyType))
             {
                 _lockedObject.SetActive(true);
                 _runButton.SetActive(false);
-            }*/
+            }
 
             _watcher.SetActive(true);
         }

@@ -42,6 +42,13 @@ public class UpgradeMachineControl : MonoBehaviour
     [SerializeField] private MaterialLerp.FloatData cableEnergyCoefFD;
 
 
+    [Space]
+    [SerializeField] private MouseOverNotifier _combineMouseNotifier;
+    [SerializeField] private MeshRenderer _combineButtonMesh;
+    private Material _combineButtonMat;
+    private bool _buttonEnabled;
+
+
 
     private List<Material> tempMaterials = new List<Material>();
 
@@ -53,6 +60,11 @@ public class UpgradeMachineControl : MonoBehaviour
 
     private void Awake()
     {
+        _buttonEnabled = false;
+        _combineButtonMat = _combineButtonMesh.material;
+        _combineButtonMat.SetFloat("_EnableCoef", 0.0f);
+        _combineButtonMat.SetFloat("_AlphaCoef", 0.0f);
+
         RenderSettings.reflectionIntensity = 0.0f;
 
         StartCoroutine(Activate());
@@ -61,16 +73,36 @@ public class UpgradeMachineControl : MonoBehaviour
 
         leftInsertCardText.alpha = 0f;
         rightInsertCardText.alpha = 0f;
+
+        _combineMouseNotifier.OnMouseEntered += OnHover;
+        _combineMouseNotifier.OnMouseExited += OnUnhover;
     }
     private void OnDestroy()
     {
         RenderSettings.reflectionIntensity = 1.0f;
     }
 
+    private void OnHover()
+    {
+        if(_buttonEnabled)
+        {
+            _combineButtonMat.DOFloat(1.0f, "_HoverCoef", 0.1f);
+        }
+    }
+
+    private void OnUnhover()
+    {
+        if (_buttonEnabled)
+        {
+            _combineButtonMat.DOFloat(0.0f, "_HoverCoef", 0.1f);
+        }
+    }
+
     private IEnumerator Activate()
     {
         yield return new WaitForSeconds(2.0f);
 
+        _combineButtonMat.DOFloat(1.0f, "_AlphaCoef", 0.2f);
         StartCoroutine(leftCardSlot.Activate());
         GameAudioManager.GetInstance().PlayCardSlotAppears();
         yield return new WaitForSeconds(0.5f);
@@ -252,6 +284,9 @@ public class UpgradeMachineControl : MonoBehaviour
         screenButton.transform.DOLocalMoveY(0.0f, 0.2f);
         buttonFD.invert = false;
         StartCoroutine(MaterialLerp.FloatLerp(buttonFD, new Material[1] { screenButtonOutline.materials[1] }));
+
+        _combineButtonMat.DOFloat(1.0f, "_EnableCoef", 0.2f);
+        _buttonEnabled = true;
     }
 
     public void DeactivateButton()
@@ -264,11 +299,18 @@ public class UpgradeMachineControl : MonoBehaviour
         screenButton.transform.DOLocalMoveY(-0.082f, 0.2f);
         buttonFD.invert = true;
         StartCoroutine(MaterialLerp.FloatLerp(buttonFD, new Material[1] { screenButtonOutline.materials[1] }));
+
+        _combineButtonMat.DOFloat(0.0f, "_EnableCoef", 0.2f);
+        _buttonEnabled = false;
     }
 
     public void Replace()
     {
         if (OnReplaceStart != null) OnReplaceStart();
+
+        _buttonEnabled = false;
+        _combineButtonMat.DOFloat(1.0f, "_SelectCoef", 0.1f);
+        _combineButtonMat.DOFloat(0.0f, "_AlphaCoef", 0.2f);
 
         rightCardSlot.PulsePanel(0);
         leftCardSlot.PulsePanel(0);
@@ -297,6 +339,8 @@ public class UpgradeMachineControl : MonoBehaviour
         fuseButtonText.DOComplete();
         fuseButtonText.color = Color.red;
         fuseButtonText.DOColor(Color.grey, 0.3f);
+        _buttonEnabled = false;
+        _combineButtonMat.DOFloat(0.0f, "_EnableCoef", 0.2f);
     }
 
     private IEnumerator EnergyFill()
