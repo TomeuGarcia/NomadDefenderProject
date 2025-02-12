@@ -132,11 +132,11 @@ public class DifficultyDisplay : MonoBehaviour
 
     public void ButtonHover()
     {
-        GameAudioManager.GetInstance().PlayCardHovered();
+        //GameAudioManager.GetInstance().PlayCardInfoMoveShown();
     }
 
     public void ButtonUnhover()
     {
-        GameAudioManager.GetInstance().PlayCardHoverExit();
+        //GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
     }
 }

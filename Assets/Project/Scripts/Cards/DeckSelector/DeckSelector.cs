@@ -44,13 +44,6 @@ public class DeckSelector : MonoBehaviour
 
     private void Awake()
     {
-        //TODO - DELETE
-
-        var foundTextMeshObjects = FindObjectsByType<Light>(FindObjectsSortMode.None);
-        Debug.Log("AAAAAAAAAAAA     " + foundTextMeshObjects + " : " + foundTextMeshObjects.Length);
-
-        //TODO - DELETE
-
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(Camera.main);
         _cardsMotionConfig.SetUpgradeSceneMode();
 
