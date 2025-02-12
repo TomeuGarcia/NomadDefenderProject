@@ -33,6 +33,7 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private MeshRenderer startSimulationFlashMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh2;
     [SerializeField] private GameObject _difficultySelector;
+    [SerializeField] private GameObject _difficultySelectorMeshes;
     private Material startSimulationFlashMaterial;
 
     private bool _startButtonInteractable = false;
@@ -57,6 +58,7 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = false;
         _startButtonInteractable = false;
         _difficultySelector.SetActive(false);
+        _difficultySelectorMeshes.SetActive(false);
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
         CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
@@ -167,6 +169,7 @@ public class DeckSelector : MonoBehaviour
         if(!_startButtonInteractable)
         {
             _difficultySelector.SetActive(true);
+            _difficultySelectorMeshes.SetActive(true);
         }
         _startButtonInteractable = true;
         if (currentFill == 0)
