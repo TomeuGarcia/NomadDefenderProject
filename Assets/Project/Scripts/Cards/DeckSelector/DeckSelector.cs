@@ -124,6 +124,13 @@ public class DeckSelector : MonoBehaviour
 
     private IEnumerator DoOnDeckSelected(SelectableDeck selectableDeck)
     {
+        startSimulationButton.interactable = true;
+        if (!_startButtonInteractable)
+        {
+            _difficultySelector.SetActive(true);
+            _difficultySelectorMeshes.SetActive(true);
+        }
+
         _busySelectingDeck = true;
         SelectableDeck previouslySelectedDeck = null;
         if (currentlySelectedDeck != null && currentlySelectedDeck != selectableDeck)
@@ -165,12 +172,6 @@ public class DeckSelector : MonoBehaviour
             }
         }
 
-        startSimulationButton.interactable = true;
-        if(!_startButtonInteractable)
-        {
-            _difficultySelector.SetActive(true);
-            _difficultySelectorMeshes.SetActive(true);
-        }
         _startButtonInteractable = true;
         if (currentFill == 0)
         {
