@@ -171,6 +171,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
         pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
         pathFollower.SetMoveSpeedMultiplier(1f);
+        _ignoreStunned = false;
 
         CanBeTargetedFlag = true;
     }
