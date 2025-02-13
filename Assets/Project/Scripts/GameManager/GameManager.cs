@@ -89,8 +89,7 @@ public class GameManager : MonoBehaviour
     public void StartDemoVictory(DemoManager.IVictoryDialogue demoVictoryDialogue)
     {
         victoryHolder.SetActive(true);
-        StartCoroutine(DoStartVictory(demoVictoryDialogue.PlayVictoryDialogue));
-        UnlockVictoryContent();
+        StartCoroutine(DoStartVictory(demoVictoryDialogue.PlayVictoryDialogue)); 
     }
     
 
