@@ -170,7 +170,7 @@ public class FIComputerButton : AFacilityInteractable
         _titleTextShadow.gameObject.SetActive(true);
         yield return new WaitForSeconds(_deformedMapTime);
         _backgroundMap.localScale = Vector3.one;
-        _computerNoiseBackgroundAudio.StartPlaying();
+        //_computerNoiseBackgroundAudio.StartPlaying();
         
         _cardCollection.TurnOn();
     }
