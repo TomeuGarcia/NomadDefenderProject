@@ -130,6 +130,7 @@ public class DeckSelector : MonoBehaviour
             _difficultySelector.SetActive(true);
             _difficultySelectorMeshes.SetActive(true);
         }
+        _startButtonInteractable = true;
 
         _busySelectingDeck = true;
         SelectableDeck previouslySelectedDeck = null;
@@ -172,7 +173,6 @@ public class DeckSelector : MonoBehaviour
             }
         }
 
-        _startButtonInteractable = true;
         if (currentFill == 0)
         {
             //ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
