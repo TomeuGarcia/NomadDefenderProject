@@ -30,8 +30,6 @@ public abstract class BuildingCard : MonoBehaviour
     [SerializeField] private CardMotionEffectsController _motionEffectsController;
     public CardMotionEffectsController MotionEffectsController => _motionEffectsController;
 
-    [Header("BUILDING PREFAB")]
-    [SerializeField] public GameObject buildingPrefab;
     [HideInInspector] public GameObject copyBuildingPrefab;
 
     public bool AlreadySpawnedCopyBuildingPrefab => copyBuildingPrefab != null;

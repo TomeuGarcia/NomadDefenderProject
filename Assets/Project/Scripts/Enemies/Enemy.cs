@@ -313,7 +313,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     private IEnumerator DoIgnoreStunned(float stunDuration)
     {
         _ignoreStunned = true;
-        yield return new WaitForSeconds(stunDuration + 0.2f);
+        yield return new WaitForSeconds(stunDuration + 0.1f);
         _ignoreStunned = false;
     }
 

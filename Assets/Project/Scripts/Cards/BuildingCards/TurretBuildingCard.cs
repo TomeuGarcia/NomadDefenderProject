@@ -127,6 +127,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     public override void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter)
     {
+        GameObject buildingPrefab = ServiceLocator.GetInstance().CardSpawnService.GetTurretBuildingPrefab().gameObject;
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 
