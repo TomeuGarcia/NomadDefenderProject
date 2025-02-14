@@ -15,7 +15,12 @@ public class CoreConfigurations : ScriptableObject
     [SerializeField, Expandable] private OWMapDecoratorSettings _mapDecorationSettings;
     [SerializeField, Expandable] private OWMapDecoratorUtils _mapDecorationUtils;
     [SerializeField, Expandable] private OWMapGenerationSettings _mapGenerationSettings;
-
+    
+    
+    [Space(20)]
+    [Header("DEMO")] 
+    [SerializeField, Expandable] private MapScenesLibrary _mapScenesLibrary;
+    
     
     [Space(20)]
     [Header("DEMO")] 
