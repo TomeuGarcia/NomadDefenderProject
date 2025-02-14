@@ -380,10 +380,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         cardDisplayer.ResetAll();
 
-        if (gameFinished)
-        {
-            cardDisplayer.gameObject.SetActive(false);
-        }
+        cardDisplayer.gameObject.SetActive(!gameFinished);
 
         mapEventSystemGO.SetActive(true);
 
@@ -400,7 +397,7 @@ public class OverworldMapGameManager : MonoBehaviour
         cardDisplayer.DestroyAllCards();
         if (gameFinished)
         {
-            cardDisplayer.gameObject.SetActive(false);
+            cardDisplayer.gameObject.SetActive(!gameFinished);
         }
 
         mapEventSystemGO.SetActive(false);

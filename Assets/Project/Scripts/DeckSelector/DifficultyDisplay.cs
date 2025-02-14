@@ -80,7 +80,7 @@ public class DifficultyDisplay : MonoBehaviour
     private void OnEnable()
     {
         _lockNotifier.OnMousePressed += PressedLock; 
-        UpdateDifficulty();
+        SilentUpdateDifficulty();
     }
 
     private void OnDisable()
@@ -110,14 +110,17 @@ public class DifficultyDisplay : MonoBehaviour
         UpdateDifficulty();
     }
 
-    private void UpdateDifficulty()
+    private void SilentUpdateDifficulty()
     {
         _gameDifficultyConfig.SetDifficulty(_selectedGameDifficultyType);
 
         int difficultyIndex = (int)_selectedGameDifficultyType;
         _difficulties[difficultyIndex].ApplyState(_leftArrow, _rightArrow, _lockedObject, _runButton, _watcher);
         DecodeDifficultyDisplay(_difficulties[difficultyIndex]);
-        
+    }
+    private void UpdateDifficulty()
+    {
+        SilentUpdateDifficulty();        
         GameAudioManager.GetInstance().PlayCardSelected();
     }
 
