@@ -7,6 +7,7 @@ public class AnchoredSoulLink : MonoBehaviour
 {
     private void OnMouseDown()
     {
+        PauseMenu.GetInstance().Pause();
         Application.OpenURL("https://dhelpra-games.itch.io/anchoredsoul");
     }
 }

@@ -43,6 +43,9 @@ public class TurretBuilding : RangeBuilding
     [Header("PARTICLES")]
     [SerializeField] private Transform _upgradeParticlesPosition;
 
+    [Header("OTHER")] 
+    [SerializeField] private DisableableBuilding_Turret _disableableBuilding;
+
 
     public bool IsDisabled { get; set; } = false;
 
@@ -67,6 +70,7 @@ public class TurretBuilding : RangeBuilding
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
         IsPlaced = false;
+        _disableableBuilding.Init(this);
     }
 
 
@@ -80,6 +84,7 @@ public class TurretBuilding : RangeBuilding
         _abilitiesObjectLifetimeCycle.OnTurretDestroyed();
         _shootingController.ClearAllProjectiles();
         _viewAddOnController.StopViewingAddOns();
+        _disableableBuilding.Cancel();
     }
 
 
@@ -260,6 +265,7 @@ public class TurretBuilding : RangeBuilding
         
         _abilitiesPlacingLifetimeCycle.OnTurretPlaced(this);
         _viewAddOnController.StartViewingAddOns();
+        _disableableBuilding.Ready();
     }
 
     protected override void DoGotUnplaced()
@@ -270,6 +276,7 @@ public class TurretBuilding : RangeBuilding
         upgrader.ResetState();
         _abilitiesPlacingLifetimeCycle.OnTurretUnplaced();
         _extraRadiusRange = 0f;
+        _disableableBuilding.Cancel();
     }
 
     public override void GotEnabledPlacing()

@@ -2,13 +2,30 @@ using UnityEngine;
 
 public class DisableableBuilding_Turret : MonoBehaviour, IDisableableBuilding
 {
-    [SerializeField] private TurretBuilding _turret;
     [SerializeField] private DisableableBuildingView _view;
+    private TurretBuilding _turret;
+    private bool _activeForDisable;
+
+
+    public void Init(TurretBuilding turret)
+    {
+        _turret = turret;
+        _activeForDisable = false;
+    }
+
+    public void Ready()
+    {
+        _activeForDisable = true;
+    }
+    public void Cancel()
+    {
+        _activeForDisable = false;
+    }
     
     
     public bool CanBeDisabled()
     {
-        return gameObject.activeInHierarchy;
+        return gameObject.activeInHierarchy && _activeForDisable;
     }
     
     public void StartDisabled()
