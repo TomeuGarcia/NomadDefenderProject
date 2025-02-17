@@ -121,7 +121,7 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void Start()
     {
-        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder);
+        deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder, true);
         previewTurretCard.MotionEffectsController.DisableMotion();
 
         SetButtonNotReady();

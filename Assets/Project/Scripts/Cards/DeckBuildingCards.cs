@@ -20,7 +20,7 @@ public class DeckBuildingCards : MonoBehaviour
 
     public void Init(ICardDeckShuffler deckShuffler) 
     {
-        cards = deckShuffler.ShuffleCards(new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform)));
+        cards = deckShuffler.ShuffleCards(new List<BuildingCard>(deckInUse.SpawnCurrentDeckBuildingCards(transform, false)));
 
         float upStep = 0.1f;
         float numCards = cards.Count;

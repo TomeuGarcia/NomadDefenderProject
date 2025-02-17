@@ -101,7 +101,7 @@ public class CopyAbilityManager : MonoBehaviour
         
 
         _cardsMotionConfig.SetUpgradeSceneMode();
-        _deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder);
+        _deckCards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardSpawnHolder, true);
         _numberOfCards = Mathf.Min(_numberOfCards, _deckInUse.CurrentDeckContent.TurretCardsData.Length);
         
         _previewTurretCard.MotionEffectsController.DisableMotion();

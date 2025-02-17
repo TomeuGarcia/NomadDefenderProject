@@ -35,9 +35,9 @@ public class CardDeckInUseData : ScriptableObject
     }
 
 
-    public BuildingCard[] SpawnCurrentDeckBuildingCards(Transform cardsParent)
+    public BuildingCard[] SpawnCurrentDeckBuildingCards(Transform cardsParent, bool toPermanentlyModifyCards)
     {
-        return _cardSpawnService.MakeAllCardsFromDeck(_currentDeckContent, cardsParent);
+        return _cardSpawnService.MakeAllCardsFromDeck(_currentDeckContent, cardsParent, toPermanentlyModifyCards);
     }
     
 }

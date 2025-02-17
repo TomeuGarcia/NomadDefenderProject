@@ -37,27 +37,26 @@ public class TurretCardData
 
     
     public TurretCardData(TurretCardData other) 
-        : this(other, other.StatsController == null)
+        : this(other, other.StatsController == null, false)
     {
     }
     
-    public TurretCardData(TurretCardData other, bool makeNewStats)
+    public TurretCardData(TurretCardData other, bool makeNewStats, bool keepStatistics)
     {
         OriginalModel = other.OriginalModel;
         PlayCost = other.PlayCost;
         CardUpgradeLevel = other.CardUpgradeLevel;
         SharedPartsGroup = new TurretCardPartsGroup(other.SharedPartsGroup);
         BuildingSellingConfig = new BuildingSellingConfig(other.BuildingSellingConfig);
-        Statistics = new TurretCardStatistics();
 
+        Statistics = keepStatistics ? other.Statistics : new TurretCardStatistics();
+
+        StatsController = other.StatsController;
         if (makeNewStats)
         {
-            MakeStatsControllerFromParts();
+            MakeStatsControllerFromCurrent();
         }
-        else
-        {
-            StatsController = other.StatsController;
-        }
+
         
         PassiveAbilitiesController = new TurretPassiveAbilitiesController(this, other.PassiveAbilitiesController);
         
@@ -69,6 +68,15 @@ public class TurretCardData
     private void MakeStatsControllerFromParts()
     {
         StatsController = new TurretCardStatsController(
+            SharedPartsGroup.Body.DamageStat,
+            SharedPartsGroup.Body.ShotsPerSecondStat,
+            SharedPartsGroup.Body.RadiusRangeStat
+        );
+    }
+    private void MakeStatsControllerFromCurrent()
+    {
+        StatsController = new TurretCardStatsController(
+            StatsController,
             SharedPartsGroup.Body.DamageStat,
             SharedPartsGroup.Body.ShotsPerSecondStat,
             SharedPartsGroup.Body.RadiusRangeStat
