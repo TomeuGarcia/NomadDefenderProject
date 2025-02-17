@@ -16,13 +16,24 @@ public class TurretIdleAnimator : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayAnimation();
+    }
+
+    private void OnDisable()
+    {
+        StopAnimation();
+    }
+
+    public void PlayAnimation()
+    {
         _turretHead.DOKill();
         _turretHead.localPosition = Vector3.zero;
         _turretHead.DOShakePosition(_duration, _strength, _vibrato, _randomness, false, false, ShakeRandomnessMode.Full).SetLoops(-1);
     }
 
-    private void OnDisable()
+    public void StopAnimation()
     {
         _turretHead.DOKill();
+        _turretHead.localPosition = Vector3.zero;
     }
 }

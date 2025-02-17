@@ -14,6 +14,10 @@ public class TurretPartBody_Prefab : MonoBehaviour
     private Material[][] defaultMaterials;
     private Material[][] previewMaterials;
 
+    [Header("ANIMATIONS")]
+    [SerializeField] private TurretDisabledAnimation _disabledAnimation;
+    [SerializeField] private TurretIdleAnimator _idleAnimator;
+    
     
     [Header("TURRET UPGRADE VISUALS")]
     [SerializeField] private GameObject[] turretUpgradeVisuals;
@@ -81,4 +85,18 @@ public class TurretPartBody_Prefab : MonoBehaviour
         if (level > turretUpgradeVisuals.Length || level <= 0) return;
         turretUpgradeVisuals[level-1].SetActive(true);
     }
+
+    public void PlayEnterDisableAnimation()
+    {
+        _disabledAnimation.PlayDo();
+        _idleAnimator.StopAnimation();
+        _view.SetMaterial(_disabledAnimation.RemoveColorMaterial);
+    }
+    public void PlayExitDisableAnimation()
+    {
+        _disabledAnimation.PlayUndo();
+        _idleAnimator.PlayAnimation();
+        _view.SetDefaultMaterial();
+    }
+    
 }

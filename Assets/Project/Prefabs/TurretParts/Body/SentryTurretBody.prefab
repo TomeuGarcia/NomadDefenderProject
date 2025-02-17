@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 6082083359724565835}
   - component: {fileID: 4012727072143204407}
   - component: {fileID: 1079721912561730600}
+  - component: {fileID: 7036049214415301485}
   m_Layer: 0
   m_Name: SentryTurretBody
   m_TagString: Untagged
@@ -243,6 +244,8 @@ MonoBehaviour:
   binderPoint: {fileID: 1775238808017634135}
   _addOnsParent: {fileID: 4523072875052669514}
   shootingPointParent: {fileID: 7529818123539723678}
+  _disabledAnimation: {fileID: 7036049214415301485}
+  _idleAnimator: {fileID: 1079721912561730600}
   turretUpgradeVisuals:
   - {fileID: 5195463505668029879}
   - {fileID: 929710024794787851}
@@ -264,6 +267,29 @@ MonoBehaviour:
   _strength: 0.025
   _vibrato: 10
   _randomness: 90
+--- !u!114 &7036049214415301485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6082083359724565836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b573913f3910e3440a0ad8bda47b71cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _headTransform: {fileID: 2098492230144636901}
+  _headLookDownTween:
+    _value: {x: 30, y: -20, z: -5}
+    _duration: 0.5
+    _ease: 30
+  _headLookUpTween:
+    _value: {x: 0, y: 0, z: 0}
+    _duration: 0.5
+    _ease: 6
+  _removeColorMaterial: {fileID: 2100000, guid: 47e9e1f74107af74aa53178d3d6acf51,
+    type: 2}
 --- !u!1 &6344325437779717451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1062,12 @@ Transform:
 --- !u!1 &929710024794787851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6743303510164018262, guid: 64ee9f787ff94f7468511d9030fabe16,
+    type: 3}
+  m_PrefabInstance: {fileID: 5869308001923089501}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2098492230144636901 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5506968958865765304, guid: 64ee9f787ff94f7468511d9030fabe16,
     type: 3}
   m_PrefabInstance: {fileID: 5869308001923089501}
   m_PrefabAsset: {fileID: 0}
