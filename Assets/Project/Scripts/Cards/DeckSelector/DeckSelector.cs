@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Project.Scripts.CardCollection.DataStorage;
 using UnityEngine;
@@ -33,6 +32,8 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private MeshRenderer runInnerButtonMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh2;
+    [SerializeField] private GameObject _difficultySelector;
+    [SerializeField] private GameObject _difficultySelectorMeshes;
     private Material startSimulationFlashMaterial;
 
     private bool _startButtonInteractable = false;
@@ -56,6 +57,8 @@ public class DeckSelector : MonoBehaviour
 
         startSimulationButton.interactable = false;
         _startButtonInteractable = false;
+        _difficultySelector.SetActive(false);
+        _difficultySelectorMeshes.SetActive(false);
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
         CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
@@ -121,6 +124,14 @@ public class DeckSelector : MonoBehaviour
 
     private IEnumerator DoOnDeckSelected(SelectableDeck selectableDeck)
     {
+        startSimulationButton.interactable = true;
+        if (!_startButtonInteractable)
+        {
+            _difficultySelector.SetActive(true);
+            _difficultySelectorMeshes.SetActive(true);
+        }
+        _startButtonInteractable = true;
+
         _busySelectingDeck = true;
         SelectableDeck previouslySelectedDeck = null;
         if (currentlySelectedDeck != null && currentlySelectedDeck != selectableDeck)
@@ -162,8 +173,6 @@ public class DeckSelector : MonoBehaviour
             }
         }
 
-        startSimulationButton.interactable = true;
-        _startButtonInteractable = true;
         if (currentFill == 0)
         {
             //ChangeBorderLight(runButtonMesh, "_FillCoef", 0.0f, 1.0f);
@@ -182,6 +191,7 @@ public class DeckSelector : MonoBehaviour
 
     private async void OnStartSimulationButtonPressed()
     {
+        deckSelectorVisuals.OnButtonPressed();
         startSimulationButton.enabled = false;
 
         //_startButtonParticles.Play();

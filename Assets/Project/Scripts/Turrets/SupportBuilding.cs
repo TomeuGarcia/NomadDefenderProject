@@ -21,6 +21,9 @@ public class SupportBuilding : RangeBuilding
 
     [Header("PARTICLES")]
     [SerializeField] private Transform _upgradeParticlesPosition;
+
+    [Header("OTHER")] 
+    [SerializeField] private DisableableBuilding_Support _disableableBuilding;
     
     public override Vector3 PlacingParticlesPosition => basePart.PlacedParticlesSpot;
 
@@ -36,6 +39,7 @@ public class SupportBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
+        _disableableBuilding.Init(this);
     }
 
     private void ResetVisualUpgrades()
@@ -53,6 +57,8 @@ public class SupportBuilding : RangeBuilding
             _statsController.OnStatsUpdated -= OnControllerUpdatedStats;
             _statsController.ResetUpgradeLevel();
         }
+        
+        _disableableBuilding.Cancel();
     }
 
 
@@ -127,6 +133,8 @@ public class SupportBuilding : RangeBuilding
         Upgrader.OnUpgrade += PlayUpgradeAnimation;
 
         InvokeOnPlaced();
+        
+        _disableableBuilding.Ready();
     }
 
     protected override void DoGotUnplaced()
@@ -138,6 +146,8 @@ public class SupportBuilding : RangeBuilding
         basePart.ResetAreaPlaneSize(this);
         upgrader.ResetState();
         UpdateRange();
+        
+        _disableableBuilding.Cancel();
     }
 
     public override void GotEnabledPlacing()

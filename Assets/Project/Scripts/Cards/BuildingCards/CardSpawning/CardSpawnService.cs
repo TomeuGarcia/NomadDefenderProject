@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class CardSpawnService : MonoBehaviour, ICardSpawnService
 {
-    [SerializeField] private TurretBuildingCard _turretCardPrefab;
-    [SerializeField] private SupportBuildingCard _supportCardPrefab;
+    [SerializeField] private CardSpawnServiceConfig _config;
 
     private void Start()
     {
@@ -13,6 +12,18 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
     }
 
 
+    public TurretBuilding GetTurretBuildingPrefab()
+    {
+        return _config.TurretPrefab;
+    }
+
+    public SupportBuilding GetSupportBuildingPrefab()
+    {
+        return _config.SupportPrefab;
+    }
+
+    
+    
     public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent)
     {
         TurretCardData[] turretCardsData = deckContent.TurretCardsData;
@@ -36,13 +47,13 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
     
     public TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData, Transform parent)
     {
-        TurretBuildingCard turretCard = Instantiate(_turretCardPrefab, parent);
+        TurretBuildingCard turretCard = Instantiate(_config.TurretCardPrefab, parent);
         turretCard.InitWithData(cardData);
         return turretCard;
     }
     private SupportBuildingCard MakeNewSupportCard_FromData(SupportCardData cardData, Transform parent)
     {
-        SupportBuildingCard supportCard = Instantiate(_supportCardPrefab, parent);
+        SupportBuildingCard supportCard = Instantiate(_config.SupportCardPrefab, parent);
         supportCard.InitWithData(cardData);
         return supportCard;
     }

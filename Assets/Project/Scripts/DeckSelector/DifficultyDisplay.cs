@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,29 @@ public class DifficultyDisplay : MonoBehaviour
         public string DisplayText => _displayText;
         public DecodingParameters DecodingParameters => _decodingParameters;
         public Color LightColor => _lightColor;
+
+        private bool _isLeftmost;
+        private bool _isRightmost;
+        private bool _isUnlocked;
+
+        public void Init(bool isLeftmost, bool isRightmost, bool isUnlocked)
+        {
+            _isLeftmost = isLeftmost;
+            _isRightmost = isRightmost;
+            _isUnlocked = isUnlocked;
+        }
+
+        public void ApplyState(Button leftArrow, Button rightArrow, 
+            GameObject lockedObject, GameObject runButton, GameObject watcher)
+        {
+            leftArrow.interactable = !_isLeftmost;
+            rightArrow.interactable = !_isRightmost;
+
+            lockedObject.SetActive(_isUnlocked);
+            runButton.SetActive(!_isUnlocked);
+            
+            watcher.SetActive(_isRightmost);
+        }
     }
 
 
@@ -23,7 +47,6 @@ public class DifficultyDisplay : MonoBehaviour
 
     [Header("DEMO")]
     [SerializeField] private DemoManagerConfig _demoManagerConfig;
-    [SerializeField] private bool _debugAlwaysHideButtons;
 
     [Header("VIEW")]
     [SerializeField] private TextDecoder _textDecoder;
@@ -33,6 +56,7 @@ public class DifficultyDisplay : MonoBehaviour
     [SerializeField] private GameObject _lockedObject;
     [SerializeField] private Light _bottomLight;
     [SerializeField] private GameObject _runButton;
+    [SerializeField] private MouseOverNotifier _lockNotifier;
     [SerializeField] private Difficulty[] _difficulties;
 
     private GameDifficultyType _selectedGameDifficultyType;
@@ -41,19 +65,34 @@ public class DifficultyDisplay : MonoBehaviour
     private void Awake()
     {
         _selectedGameDifficultyType = _gameDifficultyConfig.CurrentGameDifficulty;
-        UpdateDifficulty();
-
-        //TODO - DELETE
-        return;
-        if (_demoManagerConfig.DemoEnabled || _debugAlwaysHideButtons)
+        
+        for (int i = 0; i < _difficulties.Length; ++i)
         {
-            gameObject.SetActive(false);
+            bool isLeftmost = i == 0;
+            bool isRightmost = i == _difficulties.Length - 1;
+            bool isUnlocked = _gameDifficultyConfig.UnlockedGameDifficulties.Contains(_selectedGameDifficultyType) &&
+                              (_demoManagerConfig.DemoEnabled && ((GameDifficultyType)i == GameDifficultyType.Hard));
+            
+            _difficulties[i].Init(isLeftmost, isRightmost, isUnlocked);
         }
+    }
 
-        if (_demoManagerConfig.DemoEnabled) // DEMO only on Normal difficulty
-        {
-            _gameDifficultyConfig.SetDifficulty(GameDifficultyType.Normal);
-        }
+    private void OnEnable()
+    {
+        _lockNotifier.OnMousePressed += PressedLock; 
+        SilentUpdateDifficulty();
+    }
+
+    private void OnDisable()
+    {
+        _lockNotifier.OnMousePressed -= PressedLock;
+    }
+
+    private void PressedLock()
+    {
+        _lockedObject.transform.DOComplete();
+        _lockedObject.transform.DOShakePosition(0.15f, 0.05f, 100, 90, false, false, ShakeRandomnessMode.Full);
+        GameAudioManager.GetInstance().PlayError();
     }
 
     public void IncreaseDifficulty()
@@ -71,47 +110,18 @@ public class DifficultyDisplay : MonoBehaviour
         UpdateDifficulty();
     }
 
-    private void UpdateDifficulty()
+    private void SilentUpdateDifficulty()
     {
         _gameDifficultyConfig.SetDifficulty(_selectedGameDifficultyType);
 
+        int difficultyIndex = (int)_selectedGameDifficultyType;
+        _difficulties[difficultyIndex].ApplyState(_leftArrow, _rightArrow, _lockedObject, _runButton, _watcher);
+        DecodeDifficultyDisplay(_difficulties[difficultyIndex]);
+    }
+    private void UpdateDifficulty()
+    {
+        SilentUpdateDifficulty();        
         GameAudioManager.GetInstance().PlayCardSelected();
-
-        if(_selectedGameDifficultyType == GameDifficultyType.Easy)
-        {
-            _leftArrow.interactable = false;
-            _rightArrow.interactable = true;
-
-            _lockedObject.SetActive(false);
-            _runButton.SetActive(true);
-
-            _watcher.SetActive(false);
-        }
-        else if(_selectedGameDifficultyType == GameDifficultyType.Hard)
-        {
-            _leftArrow.interactable = true;
-            _rightArrow.interactable = false;
-
-            /*if (_demoManagerConfig.DemoEnabled || ) //TODO - 
-            {
-                _lockedObject.SetActive(true);
-                _runButton.SetActive(false);
-            }*/
-
-            _watcher.SetActive(true);
-        }
-        else
-        {
-            _leftArrow.interactable = true;
-            _rightArrow.interactable = true;
-
-            _lockedObject.SetActive(false);
-            _runButton.SetActive(true);
-
-            _watcher.SetActive(false);
-        }
-
-        DecodeDifficultyDisplay(_difficulties[(int)_selectedGameDifficultyType]);
     }
 
     private void DecodeDifficultyDisplay(Difficulty difficulty)
@@ -125,5 +135,15 @@ public class DifficultyDisplay : MonoBehaviour
         _textDecoder.ResetDecoder();
         _textDecoder.SetTextStrings(difficulty.DisplayText);
         _textDecoder.Activate();
+    }
+
+    public void ButtonHover()
+    {
+        //GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+    }
+
+    public void ButtonUnhover()
+    {
+        //GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
     }
 }

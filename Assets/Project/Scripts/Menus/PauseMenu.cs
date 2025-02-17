@@ -104,9 +104,9 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = true;
     }
 
-    void Pause()
+    public void Pause()
     {
-        if (!GameCanBePaused) return;
+        if (!GameCanBePaused || GameIsPaused) return;
 
         if (button != null)
         {

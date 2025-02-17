@@ -40,6 +40,10 @@ public class CursorChanger : MonoBehaviour
     private void Update()
     {
         _cursorMove.position = Input.mousePosition;
+        if (Input.GetKeyDown(KeyCode.H) && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift))
+        {
+            _cursorImage.gameObject.SetActive(!_cursorImage.gameObject.activeInHierarchy);
+        }
         #if UNITY_EDITOR
         #else
         Cursor.visible = false;

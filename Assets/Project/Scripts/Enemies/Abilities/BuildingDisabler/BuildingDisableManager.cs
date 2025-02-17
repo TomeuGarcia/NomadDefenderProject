@@ -70,7 +70,7 @@ public class BuildingDisableManager : MonoBehaviour
             IDisableableBuilding disableableBuilding = currentDisabledBuildingPair.Key;
             disableableBuilding.UpdateDisabled(disableTimer.Ratio01);
             
-            if (disableTimer.HasFinished())
+            if (disableTimer.HasFinished() || !disableableBuilding.CanBeDisabled())
             {
                 _disableableBuildingsToRemove.Add(disableableBuilding);
             }

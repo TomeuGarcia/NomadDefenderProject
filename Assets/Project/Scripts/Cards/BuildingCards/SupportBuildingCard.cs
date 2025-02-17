@@ -35,6 +35,7 @@ public class SupportBuildingCard : BuildingCard, ICardTooltipSource
 
     public override void CreateCopyBuildingPrefab(Transform spawnTransform, CurrencyCounter currencyCounter)
     {
+        GameObject buildingPrefab = ServiceLocator.GetInstance().CardSpawnService.GetSupportBuildingPrefab().gameObject;
         copyBuildingPrefab = Instantiate(buildingPrefab, Vector3.zero, Quaternion.identity);
         copyBuildingPrefab.transform.SetParent(spawnTransform);
 

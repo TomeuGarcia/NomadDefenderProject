@@ -3,8 +3,12 @@ using UnityEngine;
 
 public interface ICardSpawnService
 {
-    public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent);
-    public TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData, Transform parent);
-    public TurretBuildingCard MakeNewTurretCard_FromDataModel(TurretCardDataModel cardDataModel, Transform parent);
-    public SupportBuildingCard MakeNewSupportCard_FromDataModel(SupportCardDataModel cardDataModel, Transform parent);
+    TurretBuilding GetTurretBuildingPrefab();
+    SupportBuilding GetSupportBuildingPrefab();
+    
+    
+    BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent);
+    TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData, Transform parent);
+    TurretBuildingCard MakeNewTurretCard_FromDataModel(TurretCardDataModel cardDataModel, Transform parent);
+    SupportBuildingCard MakeNewSupportCard_FromDataModel(SupportCardDataModel cardDataModel, Transform parent);
 }

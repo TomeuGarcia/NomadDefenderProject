@@ -26,7 +26,7 @@ public class ResultsScreenObjectPreviewer : MonoBehaviour
     {
         _text.SetTextStrings(_text.textComponent.text += '\n' + "<size=150%>"+ appendedText + "</size>");
         
-        if(objectToPreview.GetComponent<Enemy>() != null)
+        if(objectToPreview != null && objectToPreview.GetComponent<Enemy>() != null)
         {
             FindDespicableObjects(objectToPreview.transform);
         }

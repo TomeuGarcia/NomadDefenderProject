@@ -177,6 +177,8 @@ public class SelectableDeck : MonoBehaviour
             card.RootCardTransform.localPosition = i * arrangeCardsData.DisplacementBetweenCards;
 
             card.MotionEffectsController.DisableMotion();
+
+            card.ResizeColliderForShowcase();
         }
     }
 

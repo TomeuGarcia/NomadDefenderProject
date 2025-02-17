@@ -3,12 +3,30 @@ using UnityEngine.Serialization;
 
 public class DisableableBuilding_Support : MonoBehaviour, IDisableableBuilding
 {
-    [SerializeField] private SupportBuilding _support;
     [SerializeField] private DisableableBuildingView _view;
+    private SupportBuilding _support;
+    private bool _activeForDisable;
 
+
+    public void Init(SupportBuilding support)
+    {
+        _support = support;
+        _activeForDisable = false;
+    }
+
+    public void Ready()
+    {
+        _activeForDisable = true;
+    }
+    public void Cancel()
+    {
+        _activeForDisable = false;
+    }
+    
+    
     public bool CanBeDisabled()
     {
-        return gameObject.activeInHierarchy;
+        return gameObject.activeInHierarchy && _activeForDisable;
     }
 
     public void StartDisabled()
