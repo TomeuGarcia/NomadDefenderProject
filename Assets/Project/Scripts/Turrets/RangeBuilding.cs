@@ -126,6 +126,15 @@ public abstract class RangeBuilding : Building
         }            
     }
 
+    public void RemoveAllEnemiesInRange()
+    {
+        for (int i = 0; i < enemies.Count; ++i)
+        {
+            Enemy enemy = enemies[i];
+            enemy.OnEnemyDeactivated -= DeleteEnemyFromList;
+        }
+        enemies.Clear();
+    }
 
     private void AddEnemy(Enemy enemy)
     {
