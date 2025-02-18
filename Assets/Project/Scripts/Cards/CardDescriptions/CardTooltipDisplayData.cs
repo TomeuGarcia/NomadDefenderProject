@@ -218,7 +218,7 @@ public class CardTooltipDisplayData
     {
         Element[] elements = new[]
         {
-            new Element(statsDescription, descriptionHelper.UpgradeSprite, descriptionHelper.SpriteColor, false)
+            new Element(statsDescription, descriptionHelper.UpgradeSprite, descriptionHelper.SpriteColor, true)
         };
 
         return new CardTooltipDisplayData(displayPositioning, elements);

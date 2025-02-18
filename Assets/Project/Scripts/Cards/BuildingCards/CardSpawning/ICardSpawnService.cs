@@ -7,7 +7,7 @@ public interface ICardSpawnService
     SupportBuilding GetSupportBuildingPrefab();
     
     
-    BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent);
+    BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent, bool toPermanentlyModifyCards);
     TurretBuildingCard MakeNewTurretCard_FromData(TurretCardData cardData, Transform parent);
     TurretBuildingCard MakeNewTurretCard_FromDataModel(TurretCardDataModel cardDataModel, Transform parent);
     SupportBuildingCard MakeNewSupportCard_FromDataModel(SupportCardDataModel cardDataModel, Transform parent);

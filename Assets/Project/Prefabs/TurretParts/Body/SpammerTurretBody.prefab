@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 6901535849871159827}
   - component: {fileID: 4328199890081654639}
   - component: {fileID: 4719113248516302865}
+  - component: {fileID: 8958337954588002820}
   m_Layer: 0
   m_Name: SpammerTurretBody
   m_TagString: Untagged
@@ -179,6 +180,8 @@ MonoBehaviour:
   binderPoint: {fileID: 2466129078074119076}
   _addOnsParent: {fileID: 6250587320636494334}
   shootingPointParent: {fileID: 7511029477227301686}
+  _disabledAnimation: {fileID: 8958337954588002820}
+  _idleAnimator: {fileID: 4719113248516302865}
   turretUpgradeVisuals:
   - {fileID: 7591643364468710238}
   - {fileID: 8301409048512432549}
@@ -200,6 +203,29 @@ MonoBehaviour:
   _strength: 0.025
   _vibrato: 12
   _randomness: 90
+--- !u!114 &8958337954588002820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901535849871159828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b573913f3910e3440a0ad8bda47b71cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _headTransform: {fileID: 4122347096585184195}
+  _headLookDownTween:
+    _value: {x: 30, y: -20, z: -5}
+    _duration: 0.5
+    _ease: 30
+  _headLookUpTween:
+    _value: {x: 0, y: 0, z: 0}
+    _duration: 0.5
+    _ease: 6
+  _removeColorMaterial: {fileID: 2100000, guid: 47e9e1f74107af74aa53178d3d6acf51,
+    type: 2}
 --- !u!1 &8402246201630970852
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +333,12 @@ PrefabInstance:
 --- !u!4 &2178884531124030824 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6901535849871159827, guid: 35f1b406798796c4b8be1501c9de9db9,
+    type: 3}
+  m_PrefabInstance: {fileID: 4754637536453492603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4122347096585184195 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8704993476600585400, guid: 35f1b406798796c4b8be1501c9de9db9,
     type: 3}
   m_PrefabInstance: {fileID: 4754637536453492603}
   m_PrefabAsset: {fileID: 0}

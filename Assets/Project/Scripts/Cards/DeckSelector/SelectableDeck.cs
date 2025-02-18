@@ -159,7 +159,7 @@ public class SelectableDeck : MonoBehaviour
 
     public void InitSpawnCards(ICardSpawnService cardSpawnService)
     {
-        _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent(), cardsHolder);
+        _cards = cardSpawnService.MakeAllCardsFromDeck(_deck.MakeDeckContent(), cardsHolder, true);
     }
 
     public void InitArrangeCards(ArrangeCardsData arrangeCardsData)

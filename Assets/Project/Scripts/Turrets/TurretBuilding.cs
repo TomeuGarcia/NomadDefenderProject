@@ -70,7 +70,6 @@ public class TurretBuilding : RangeBuilding
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.TURRET;
         IsPlaced = false;
-        _disableableBuilding.Init(this);
     }
 
 
@@ -134,6 +133,7 @@ public class TurretBuilding : RangeBuilding
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretPartBody.bodyType, ProjectileDataModel.MaterialForTurret);
+        _disableableBuilding.Init(this, bodyPart);
 
         basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, CurrentRadiusRange);

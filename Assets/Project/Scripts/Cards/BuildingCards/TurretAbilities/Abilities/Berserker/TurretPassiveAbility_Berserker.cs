@@ -39,11 +39,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     public override void OnTurretDestroyed()
     {
         PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
-        if (_isInBerserkerMode)
-        {
-            ResetStats();
-            _isInBerserkerMode = false;
-        }
+        StopBerserkMode();
     }
 
     protected override void OnTurretPlaced()
@@ -61,7 +57,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
 
     public override void OnTurretUnplaced()
     {
-        _berserkCountdownTimer = 0f;
+        StopBerserkMode();
     }
 
 
@@ -103,15 +99,19 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
             _berserkCountdownTimer -= GameTime.DeltaTime;
             await Task.Yield();
         }
-        _berserkCountdownTimer = 0.0f;
 
-        _berserkerVisuals.StopBerserkVisuals();
+        StopBerserkMode();
+    }
 
+    private void StopBerserkMode()
+    {
         if (_isInBerserkerMode)
         {
+            _berserkerVisuals.StopBerserkVisuals();
             ResetStats();
         }
         
+        _berserkCountdownTimer = 0.0f;
         _isInBerserkerMode = false;
     }
 
@@ -124,6 +124,7 @@ public class TurretPassiveAbility_Berserker : ATurretPassiveAbility
     {
         _turretOwner.StatsBonusController.RemoveBonusBaseStatsMultiplication(_hyperStatsMultiplier);
     }
+    
     
     
 }

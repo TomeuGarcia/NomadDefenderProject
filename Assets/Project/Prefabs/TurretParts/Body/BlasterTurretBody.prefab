@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 6901535849871159827}
   - component: {fileID: 4328199890081654639}
   - component: {fileID: 6907266956459257262}
+  - component: {fileID: 1665706622364058710}
   m_Layer: 0
   m_Name: BlasterTurretBody
   m_TagString: Untagged
@@ -212,6 +213,8 @@ MonoBehaviour:
   binderPoint: {fileID: 8068711354322317798}
   _addOnsParent: {fileID: 4343476885551178793}
   shootingPointParent: {fileID: 7050595552286264547}
+  _disabledAnimation: {fileID: 1665706622364058710}
+  _idleAnimator: {fileID: 6907266956459257262}
   turretUpgradeVisuals:
   - {fileID: 1336651885829831914}
   - {fileID: 1680733201355022573}
@@ -233,6 +236,29 @@ MonoBehaviour:
   _strength: 0.025
   _vibrato: 8
   _randomness: 90
+--- !u!114 &1665706622364058710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901535849871159828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b573913f3910e3440a0ad8bda47b71cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _headTransform: {fileID: 760263508232559053}
+  _headLookDownTween:
+    _value: {x: 30, y: -20, z: -5}
+    _duration: 0.5
+    _ease: 30
+  _headLookUpTween:
+    _value: {x: 0, y: 0, z: 0}
+    _duration: 0.5
+    _ease: 6
+  _removeColorMaterial: {fileID: 2100000, guid: 47e9e1f74107af74aa53178d3d6acf51,
+    type: 2}
 --- !u!1 &8124442393416328207
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +394,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79e65b695e62c0347a119636e0d4177f, type: 3}
+--- !u!4 &760263508232559053 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5227168525006648528, guid: 79e65b695e62c0347a119636e0d4177f,
+    type: 3}
+  m_PrefabInstance: {fileID: 4757593092058213661}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &769413282150902204 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5236521951168103585, guid: 79e65b695e62c0347a119636e0d4177f,

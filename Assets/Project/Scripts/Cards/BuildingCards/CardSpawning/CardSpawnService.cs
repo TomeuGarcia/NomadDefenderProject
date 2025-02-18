@@ -24,7 +24,8 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
 
     
     
-    public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent)
+    public BuildingCard[] MakeAllCardsFromDeck(CardDeckContent deckContent, Transform parent,
+        bool toPermanentlyModifyCards)
     {
         TurretCardData[] turretCardsData = deckContent.TurretCardsData;
         SupportCardData[] supportCardsData = deckContent.SupportCardsData;
@@ -33,7 +34,10 @@ public class CardSpawnService : MonoBehaviour, ICardSpawnService
 
         for (int cardsI = 0; cardsI < turretCardsData.Length; ++cardsI)
         {
-            buildingCards[cardsI] = MakeNewTurretCard_FromData(turretCardsData[cardsI], parent);
+            TurretCardData cardData = toPermanentlyModifyCards
+                ? turretCardsData[cardsI]
+                : new TurretCardData(turretCardsData[cardsI], true, true);
+            buildingCards[cardsI] = MakeNewTurretCard_FromData(cardData, parent);
         }
         for (int cardsI = turretCardsData.Length, i = 0; i < supportCardsData.Length; ++cardsI, ++i)
         {

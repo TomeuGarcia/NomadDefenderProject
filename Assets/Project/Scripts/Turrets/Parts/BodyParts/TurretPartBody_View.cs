@@ -43,9 +43,13 @@ public class TurretPartBody_View : MonoBehaviour
 
     public void SetDefaultMaterial()
     {
+        SetMaterial(_defaultMaterial);
+    }
+    public void SetMaterial(Material material)
+    {
         foreach (TurretBodyMaterialAssigner materialAssigner in _allMaterialAssigners)
         {
-            materialAssigner.Assign(_defaultMaterial);
+            materialAssigner.Assign(material);
         }
     }
 

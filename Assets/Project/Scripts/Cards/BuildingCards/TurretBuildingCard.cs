@@ -52,6 +52,11 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
         AwakeInit(CardBuildingType.TURRET);
     }
 
+    private void Start()
+    {
+        cardLevelText.enabled = true;
+    }
+
     protected override void DoOnDestroy()
     {
         CardData.PassiveAbilitiesController.OnCardDestroyed();

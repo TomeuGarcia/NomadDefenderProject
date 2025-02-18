@@ -111,7 +111,7 @@ public class OverworldCardShower : MonoBehaviour
 
         showingDeck = false;
 
-        cards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardsHolder);
+        cards = _deckInUse.SpawnCurrentDeckBuildingCards(_cardsHolder, true);
         foreach (BuildingCard itCard in cards)
         {
             itCard.OnCardUnhovered += SetStandardCard;
@@ -121,7 +121,6 @@ public class OverworldCardShower : MonoBehaviour
             itCard.RootCardTransform.rotation = Quaternion.Euler(90, 0, 0);
             itCard.InitPositions(Vector3.up * 3.5f, Vector3.zero, itCard.RootCardTransform.position);
             itCard.RootCardTransform.SetParent(_cardsHolder);
-
         }
     }
 
