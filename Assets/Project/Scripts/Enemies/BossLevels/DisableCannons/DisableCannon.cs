@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using NaughtyAttributes;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 
 public class DisableCannon : MonoBehaviour
@@ -14,34 +12,26 @@ public class DisableCannon : MonoBehaviour
     [SerializeField] private ParticleSystem _missileParticle;
     [SerializeField] private ParticleSystem _missileLandParticle;
     
-    [Header("TESTING")]
-    [SerializeField] private Transform _targetTest;
-    [SerializeField, Min(0)] private Vector2Int _targetOffsetTest = new Vector2Int(8, 8);
-    [SerializeField] private GameObject _missileTest;
 
+    private DisableMineFactory _disableMineFactory;
+    
 
-    private void Awake()
+    public void Init(DisableMineFactory disableMineFactory)
     {
+        _disableMineFactory = disableMineFactory;
         _shootAnimator.Init();
     }
 
 
-    [Button()]
-    private void TestLaunchMissile()
+
+    public void LaunchMissile(Vector3 missileEndPosition)
     {
-        Vector3 missileEndPosition = _targetTest.position + new Vector3(
-            Random.Range(-_targetOffsetTest.x, _targetOffsetTest.x), 
-            0, 
-            Random.Range(-_targetOffsetTest.y, _targetOffsetTest.y));
-        
         StartCoroutine(MissileTravel(missileEndPosition));
     }
 
     private IEnumerator MissileTravel(Vector3 missileEndPosition)
     {
         _shootAnimator.PlayAnimation();
-        
-        _missileTest.SetActive(false);
         
         Vector3 missileEndOffset = missileEndPosition - _missileParticle.transform.position;
         
@@ -54,11 +44,11 @@ public class DisableCannon : MonoBehaviour
         
         yield return new WaitForSeconds(_missileParticle.main.startLifetime.constant);
 
-        _missileTest.transform.position = missileEndPosition;
-        _missileTest.SetActive(true);
 
         _missileLandParticle.transform.position = missileEndPosition;
         _missileLandParticle.Play();
+        
+        _disableMineFactory.Create(missileEndPosition);
     } 
     
     

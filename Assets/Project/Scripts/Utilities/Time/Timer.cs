@@ -18,6 +18,7 @@ public class Timer
     public void Update(float deltaTime)
     {
         CurrentTime += deltaTime;
+        CurrentTime = Mathf.Clamp(CurrentTime, 0f, Duration);
     }
 
     public bool HasFinished()
