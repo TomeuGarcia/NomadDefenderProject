@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
@@ -116,6 +117,9 @@ public class EnemyWaveManager : MonoBehaviour
     private bool enemyPathFollowerTrailsEnabled;
     private static Vector3 enemyPathFollowerTrailsPositionOffset = Vector3.zero;// Vector3.up * 0.5f;
 
+
+    public EnemyWaveTracker EnemyWaveTracker { get; private set; } = new EnemyWaveTracker();
+    
     public bool WaveStartPaused { get; set; } = false;
     
 
@@ -138,10 +142,18 @@ public class EnemyWaveManager : MonoBehaviour
         activeWaves = _pathsStartData.Length;
 
         Dictionary<PathNode, PathStartData> repeatedStartPathNodes = new(_pathsStartData.Length);
+        HashSet<EnemyWaveSpawner> spawners = new HashSet<EnemyWaveSpawner>(_pathsStartData.Length);
 
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
+
+            if (spawners.Contains(pathStartData.EnemyWaveSpawner))
+            {
+                Debug.LogError("ENEMY SPAWNER can't appear repeated on different PathStartData");
+            }
+            spawners.Add(pathStartData.EnemyWaveSpawner);
+            
             PathNode startPathNode = pathStartData.StartNode;
             pathStartData.EnemyWaveSpawner.Init(startPathNode);
             
@@ -168,6 +180,8 @@ public class EnemyWaveManager : MonoBehaviour
         
         StartCoroutine(SetupEnemyPathFollowerTrails());
 
+        EnemyWaveTracker.Init(spawners.ToArray());
+        
         
         Enemy.OnEnemyDeathGlobal += OnEnemyDeath;
         Enemy.OnEnemySuicide += OnEnemyDeath;
@@ -182,6 +196,8 @@ public class EnemyWaveManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        EnemyWaveTracker.Cleanup();
+        
         Enemy.OnEnemyDeathGlobal -= OnEnemyDeath;
         Enemy.OnEnemySuicide -= OnEnemyDeath;
     }
@@ -358,6 +374,7 @@ public class EnemyWaveManager : MonoBehaviour
             }
             PrintConsoleLine(TextTypes.SYSTEM, "Waiting for new wave...");
             
+            EnemyWaveTracker.OnWaveFinished();
         }
     }
 

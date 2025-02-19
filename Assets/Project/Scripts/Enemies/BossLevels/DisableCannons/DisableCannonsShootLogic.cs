@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class DisableCannonsShootLogic : MonoBehaviour
 {
+    public enum ShootingFunctions
+    {
+        RandomBuilding_HardTarget,
+        RandomBuilding_SoftTarget,
+        RandomBuilding_SoftTarget_Backwards,
+    }
+    
+    
     private Tile[] _defaultAvailableTiles;
     private HashSet<Tile> _currentlyAvailableTiles;
     private IDisableCannonsShootController _shootController;
@@ -16,25 +24,21 @@ public class DisableCannonsShootLogic : MonoBehaviour
         _shootController = shootController;
     }
 
-
-    [Button()]
-    private void ShootFocusingRandomBuilding_3_HardTarget()
+    public void Shoot(ShootingFunctions shootingFunction, int numberOfShots)
     {
-        ShootFocusingRandomBuilding(3, 1, 0, 1, 4);
+        switch (shootingFunction)
+        {
+            case ShootingFunctions.RandomBuilding_HardTarget:
+                ShootFocusingRandomBuilding(numberOfShots, 1, 0, 1, 4);
+                break;
+            case ShootingFunctions.RandomBuilding_SoftTarget:
+                ShootFocusingRandomBuilding(numberOfShots, 2, 2, 1, 8);
+                break;
+            case ShootingFunctions.RandomBuilding_SoftTarget_Backwards:
+                ShootFocusingRandomBuilding(numberOfShots, 5, -2, 1, 8);
+                break;
+        }
     }
-
-    [Button()]
-    private void ShootFocusingRandomBuilding_3_SoftTarget()
-    {
-        ShootFocusingRandomBuilding(3, 2, 2, 1, 8);
-    }
-    
-    [Button()]
-    private void ShootFocusingRandomBuilding_3_SoftTargetBackwards()
-    {
-        ShootFocusingRandomBuilding(3, 5, -2, 1, 8);
-    }
-    
 
 
     private void ShootFocusingRandomBuilding(int numberOfShots, 
