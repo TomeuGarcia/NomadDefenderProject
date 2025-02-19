@@ -5,24 +5,41 @@ using UnityEngine;
 public class DisableCannonShootAnimator : MonoBehaviour
 {
     [System.Serializable]
-    private class CannonRecoilBeat
+    public class CannonRecoilBeat
     {
+        private enum Mode { Position, Rotation }
+        
         [SerializeField] private Transform _transform;
+        [SerializeField] private Mode _mode = Mode.Position;
         [SerializeField, Min(0)] private float _delay = 0f;
         [SerializeField, Min(0)] private float _duration = 1f;
-        [SerializeField] private Vector3 _maxMoveAmount;
+        [SerializeField] private Vector3 _amount;
         [SerializeField] private AnimationCurve _amountMultiplier;
 
         private Timer _animationTimer;
         private Vector3 _defaultLocalPosition;
+        private Quaternion _defaultLocalRotation;
 
         public void Init()
         {
             _animationTimer = new Timer(_duration);
             _defaultLocalPosition = _transform.localPosition;
+            _defaultLocalRotation = _transform.localRotation;
         }
 
-        public IEnumerator PlayAnimation()
+        public IEnumerator PlayAnimation(MonoBehaviour source)
+        {
+            switch (_mode)
+            {
+                case Mode.Position:
+                    yield return source.StartCoroutine(PlayPositionAnimation());
+                    break;
+                case Mode.Rotation:
+                    yield return source.StartCoroutine(PlayRotationAnimation());
+                    break;
+            }
+        }
+        public IEnumerator PlayPositionAnimation()
         {
             _animationTimer.Duration = _duration;
             _animationTimer.Reset();
@@ -32,9 +49,29 @@ public class DisableCannonShootAnimator : MonoBehaviour
             while (!_animationTimer.HasFinished())
             {
                 float offsetMultiplier = _amountMultiplier.Evaluate(_animationTimer.Ratio01);
-                Vector3 currentLocalPosition = _defaultLocalPosition + (_maxMoveAmount * offsetMultiplier);
+                Vector3 currentLocalPosition = _defaultLocalPosition + (_amount * offsetMultiplier);
                     
                 _transform.localPosition = currentLocalPosition;
+                
+                _animationTimer.Update(Time.deltaTime);
+                yield return null;
+            }
+        }
+        public IEnumerator PlayRotationAnimation()
+        {
+            _animationTimer.Duration = _duration;
+            _animationTimer.Reset();
+
+            Quaternion goalLocalRotation = _defaultLocalRotation * Quaternion.Euler(_amount);
+            
+            yield return new WaitForSeconds(_delay);
+
+            while (!_animationTimer.HasFinished())
+            {
+                float t = _amountMultiplier.Evaluate(_animationTimer.Ratio01);
+                Quaternion currentLocalRotation = Quaternion.LerpUnclamped(_defaultLocalRotation, goalLocalRotation, t);
+                    
+                _transform.localRotation = currentLocalRotation;
                 
                 _animationTimer.Update(Time.deltaTime);
                 yield return null;
@@ -100,7 +137,7 @@ public class DisableCannonShootAnimator : MonoBehaviour
     {
         foreach (CannonRecoilBeat cannonRecoilBeat in _cannonRecoilBeats)
         {
-            StartCoroutine(cannonRecoilBeat.PlayAnimation());
+            StartCoroutine(cannonRecoilBeat.PlayAnimation(this));
         }
         foreach (CannonLightBeat cannonLightBeat in _cannonLightBeats)
         {
