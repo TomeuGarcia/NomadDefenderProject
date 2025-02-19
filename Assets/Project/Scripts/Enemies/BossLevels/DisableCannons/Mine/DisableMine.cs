@@ -29,6 +29,9 @@ public class DisableMine : RecyclableObject
     private Timer _lifetimeTimer;
     private bool _update;
 
+    private IDisableMineDisappearListener _disappearListener;
+    public Tile OccupiedTile { get; private set; }
+
     private void Awake()
     {
         _logicConfig = _config.LogicConfig;
@@ -49,8 +52,24 @@ public class DisableMine : RecyclableObject
         _mouseOverlapNotifier.OnMouseExited -= OnMouseExited;        
     }
     
-    internal override void RecycledInit()
+    internal override void RecycledInit() { }
+
+    internal override void RecycledReleased()
     {
+        _disappearListener.OnDisableMineDisappeared(this);
+        OccupiedTile = null;
+    }
+
+    public void Prepare(Tile occupiedTile, IDisableMineDisappearListener disappearListener)
+    {
+        gameObject.SetActive(false);
+        OccupiedTile = occupiedTile;
+        _disappearListener = disappearListener;
+    }
+
+    public void Appear()
+    {
+        gameObject.SetActive(true);
         _view.Init();
         _view.PlayAppearAnimation();
         
@@ -60,12 +79,7 @@ public class DisableMine : RecyclableObject
         _update = true;
         StartCoroutine(UpdateLoop());
     }
-
-    internal override void RecycledReleased()
-    {
-        
-    }
-
+    
 
     private IEnumerator UpdateLoop()
     {
@@ -109,8 +123,11 @@ public class DisableMine : RecyclableObject
 
     private void OnMousePressed()
     {
-        _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
-        _view.PlayTakeDamageAnimation();
+        if (_update)
+        {
+            _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
+            _view.PlayTakeDamageAnimation();
+        }
     }
 
     private void OnMouseEntered()

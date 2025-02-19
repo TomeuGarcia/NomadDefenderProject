@@ -18,14 +18,15 @@ public class DisableMineView : MonoBehaviour
     
     
     [Header("MINE")]
+    [SerializeField] private GameObject _viewHolder;
     [SerializeField] private Transform _mineHolder;
-    [SerializeField] private GameObject _hoverHolder;
     [SerializeField] private ParticleSystem _damagedParticles;
     [SerializeField] private ParticleSystem _clearedDestroyParticles;
 
     [Header("HUD")]
     [SerializeField] private Image _timerFillImage;
     [SerializeField] private GameObject _hudHolder;
+    [SerializeField] private Graphic[] _hudHoverGraphics;
     private Color _originalFillImageColor;
 
 
@@ -45,6 +46,10 @@ public class DisableMineView : MonoBehaviour
         _mineHolder.localScale = Vector3.one;
         _mineHolder.localRotation = Quaternion.identity;
         
+        _timerFillImage.DOKill();
+        _timerFillImage.color = _originalFillImageColor;
+        
+        _viewHolder.SetActive(true);
         _hudHolder.SetActive(true);
         
         HideHovered();
@@ -64,8 +69,8 @@ public class DisableMineView : MonoBehaviour
         _damagedParticles.Play();
         _mineHolder.PunchRotation(_config.TakeDamageRotationPunch);
 
-        _timerFillImage.color = Color.cyan;
         _timerFillImage.DOComplete();
+        _timerFillImage.color = Color.cyan;
         _timerFillImage.DOColor(_originalFillImageColor, 0.3f).SetEase(Ease.InQuad);
     }
 
@@ -74,6 +79,10 @@ public class DisableMineView : MonoBehaviour
         _clearedDestroyParticles.Play();
         _hudHolder.SetActive(false);
         yield return new WaitForSeconds(_config.TakeDamageRotationPunch.Duration);
+        
+        _viewHolder.SetActive(false);
+        yield return new WaitUntil(() => !_clearedDestroyParticles.isEmitting);
+        yield return new WaitForSeconds(_clearedDestroyParticles.main.startLifetime.constantMax);
     }
     
     public IEnumerator PlayLifetimeEndDestroy()
@@ -86,11 +95,17 @@ public class DisableMineView : MonoBehaviour
 
     public void ShowHovered()
     {
-        _hoverHolder.SetActive(true);
+        foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
+        {
+            hudHoverGraphic.color = Color.cyan;
+        }
     }
     public void HideHovered()
     {
-        _hoverHolder.SetActive(false);        
+        foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
+        {
+            hudHoverGraphic.color = Color.white;
+        }      
     }
     
 }

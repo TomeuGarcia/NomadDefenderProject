@@ -36,7 +36,7 @@ public class DisableCannonShootAnimator : MonoBehaviour
                     
                 _transform.localPosition = currentLocalPosition;
                 
-                _animationTimer.Update(GameTime.DeltaTime);
+                _animationTimer.Update(Time.deltaTime);
                 yield return null;
             }
         }
@@ -71,7 +71,7 @@ public class DisableCannonShootAnimator : MonoBehaviour
                 float t = _intensityMultiplier.Evaluate(_animationTimer.Ratio01);
                 _light.intensity = Mathf.LerpUnclamped(_intensityFade.x, _intensityFade.y, t);
 
-                _animationTimer.Update(GameTime.DeltaTime);
+                _animationTimer.Update(Time.deltaTime);
                 yield return null;
             }
         }

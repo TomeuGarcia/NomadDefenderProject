@@ -11,21 +11,20 @@ public class DisableCannon : MonoBehaviour
     [Header("PARTICLES")]
     [SerializeField] private ParticleSystem _missileParticle;
     [SerializeField] private ParticleSystem _missileLandParticle;
+
+    private DisableMine _disableMineToMakeAppear;
     
 
-    private DisableMineFactory _disableMineFactory;
-    
-
-    public void Init(DisableMineFactory disableMineFactory)
+    public void Init()
     {
-        _disableMineFactory = disableMineFactory;
         _shootAnimator.Init();
     }
 
 
 
-    public void LaunchMissile(Vector3 missileEndPosition)
+    public void LaunchMissile(Vector3 missileEndPosition, DisableMine disableMineToMakeAppear)
     {
+        _disableMineToMakeAppear = disableMineToMakeAppear;
         StartCoroutine(MissileTravel(missileEndPosition));
     }
 
@@ -34,6 +33,7 @@ public class DisableCannon : MonoBehaviour
         _shootAnimator.PlayAnimation();
         
         Vector3 missileEndOffset = missileEndPosition - _missileParticle.transform.position;
+        missileEndOffset = transform.rotation * missileEndOffset;
         
         ParticleSystem.VelocityOverLifetimeModule velocityOverLifetimeModule = _missileParticle.velocityOverLifetime;
         velocityOverLifetimeModule.orbitalOffsetX = missileEndOffset.x;
@@ -48,7 +48,7 @@ public class DisableCannon : MonoBehaviour
         _missileLandParticle.transform.position = missileEndPosition;
         _missileLandParticle.Play();
         
-        _disableMineFactory.Create(missileEndPosition);
+        _disableMineToMakeAppear.Appear();
     } 
     
     

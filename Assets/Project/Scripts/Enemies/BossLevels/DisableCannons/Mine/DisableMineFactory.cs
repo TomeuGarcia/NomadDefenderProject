@@ -13,8 +13,8 @@ public class DisableMineFactory : MonoBehaviour
         _pool = _objectPoolInitData.MakeInitializedObjectPool(transform);
     }
 
-    public void Create(Vector3 position)
+    public DisableMine Create(Vector3 position)
     {
-        _pool.Spawn<DisableMine>(position, Quaternion.identity);
+        return _pool.Spawn<DisableMine>(position, Quaternion.identity);
     }
 }
