@@ -24,7 +24,8 @@ public class ScreenOptionsController : MonoBehaviour
         _fixedResolutionToggle.onValueChanged.AddListener(OnFixedResolutionTogglePressed);
 
         OnWidowedTogglePressed(_windowedToggle.isOn);
-        OnFixedResolutionTogglePressed(_fixedResolutionToggle.isOn);
+        //OnFixedResolutionTogglePressed(_fixedResolutionToggle.isOn);
+        SetScreenResolution(_fixedResolution);
 
         _windowedToggle.isOn = fullScreen;
     }

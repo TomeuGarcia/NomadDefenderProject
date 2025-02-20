@@ -38,6 +38,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     [SerializeField] private ParticleSystem canUpgradeParticles;
     private bool canUpgardeParticlesAreActive = false;
     [SerializeField] private Transform canUpgradeTextHolder;
+    [SerializeField] private GameObject _canUpgradeTextHolder2;
     private Vector3 canUpgradeTextHolderStartPosition;
     [SerializeField] private CanvasGroup cgCanUpgradeText;
 
@@ -596,6 +597,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         }
     }
 
+
+    public void SetCanUpgradeVisibility(bool isVisible)
+    {
+        _canUpgradeTextHolder2.SetActive(isVisible);
+    }
 
     private void ShowCanUpgradeText()
     {

@@ -39,7 +39,7 @@ public class SupportBuilding : RangeBuilding
     {
         base.AwakeInit();
         CardBuildingType = BuildingCard.CardBuildingType.SUPPORT;
-        _disableableBuilding.Init(this);
+        _disableableBuilding.Init(this, upgrader);
     }
 
     private void ResetVisualUpgrades()

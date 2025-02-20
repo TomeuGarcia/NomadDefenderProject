@@ -106,15 +106,19 @@ public class SlowBase : TurretPartBase_Prefab
 
     private void SlowEnemy(Enemy enemy)
     {
+        Debug.Log("SLOW 1");
+        
         if(s_slowedEnemies.TryGetValue(enemy, out var slowedEnemy))
         {
             slowedEnemy.slowQuantity += 1;
+            Debug.Log("SLOW 2");
         }
         else
         {
             enemy.SetMoveSpeed(currentSlowSpeedCoef);
             s_slowedEnemies[enemy] = new SlowData { slowQuantity = 1, slowCoefApplied = currentSlowSpeedCoef };
             SpawnSlowBreakParticles(enemy);
+            Debug.Log("SLOW 3");
         }
         
         _slowedEnemiesByThis.Add(enemy);
@@ -180,6 +184,11 @@ public class SlowBase : TurretPartBase_Prefab
         {
             StopEnemySlow(enemy);
         }
+        
+        Debug.Log("STOP SLOW 1: " +  _slowedEnemiesByThis.Count);
+        Debug.Log("STOP SLOW 2: " +s_slowedEnemies.Count);
+
+        _ownerBuilding.RemoveAllEnemiesInRange();
     }
 
 }
