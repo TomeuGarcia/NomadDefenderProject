@@ -7,7 +7,7 @@ public class EnemyTypeConfig_BuildingDisabler : EnemyTypeConfig
 {
     [Space(30)]
     [Header("BUILDING DISABLER")]
-    [Expandable] [SerializeField] private BuildingDisableWaveConfig _buildingDisableWaveConfig;
+    [Expandable] [SerializeField] private BuildingDisableBombConfig _buildingDisableBombConfig;
     
-    public BuildingDisableWaveConfig BuildingDisableWaveConfig => _buildingDisableWaveConfig;
+    public BuildingDisableBombConfig BuildingDisableBombConfig => _buildingDisableBombConfig;
 }
