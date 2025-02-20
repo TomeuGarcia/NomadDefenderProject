@@ -7,6 +7,7 @@ public class DisableCannon : MonoBehaviour
 {
     [Header("ANIMATIONS")]
     [SerializeField] private DisableCannonShootAnimator _shootAnimator;
+    [SerializeField] private DisableCannonActivateAnimator _activateAnimator;
     
     [Header("PARTICLES")]
     [SerializeField] private ParticleSystem _missileParticle;
@@ -49,8 +50,18 @@ public class DisableCannon : MonoBehaviour
         _missileLandParticle.Play();
         
         _disableMineToMakeAppear.Appear();
-    } 
+    }
+
+
+    public void PlayEnterActive()
+    {
+        _activateAnimator.PlayEnterActiveAnimation();
+    }
     
+    public void PlayEnterNotActive()
+    {
+        _activateAnimator.PlayEnterNotActiveAnimation();
+    }
     
 
 }

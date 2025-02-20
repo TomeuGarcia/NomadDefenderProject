@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class DisableCannonShootAnimator : MonoBehaviour
@@ -133,6 +134,7 @@ public class DisableCannonShootAnimator : MonoBehaviour
         }
     }
     
+    [Button()]
     public void PlayAnimation()
     {
         foreach (CannonRecoilBeat cannonRecoilBeat in _cannonRecoilBeats)

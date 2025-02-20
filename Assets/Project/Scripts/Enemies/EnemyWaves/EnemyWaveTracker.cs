@@ -9,6 +9,7 @@ public class EnemyWaveTracker
     public int EnemyCountInCurrentWave { get; private set; }
 
     public Action OnEnemyCountUpdate;
+    public Action OnBeforeEnemyWaveFinished;
     
     
     
@@ -42,6 +43,7 @@ public class EnemyWaveTracker
     
     public void OnWaveFinished()
     {
+        OnBeforeEnemyWaveFinished?.Invoke();
         ++CurrentWaveIndex;
         EnemyCountInCurrentWave = 0;
     }
