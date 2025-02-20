@@ -5,13 +5,15 @@ public class DisableableBuilding_Turret : MonoBehaviour, IDisableableBuilding
     [SerializeField] private DisableableBuildingView _view;
     private TurretBuilding _turret;
     private TurretPartBody_Prefab _turretBody;
+    private InBattleBuildingUpgrader _inBattleBuildingUpgrader;
     private bool _activeForDisable;
 
 
-    public void Init(TurretBuilding turret, TurretPartBody_Prefab turretBody)
+    public void Init(TurretBuilding turret, TurretPartBody_Prefab turretBody, InBattleBuildingUpgrader inBattleBuildingUpgrader)
     {
         _turret = turret;
         _turretBody = turretBody;
+        _inBattleBuildingUpgrader = inBattleBuildingUpgrader;
         _activeForDisable = false;
     }
 
@@ -35,6 +37,7 @@ public class DisableableBuilding_Turret : MonoBehaviour, IDisableableBuilding
         _turret.IsDisabled = true;
         _view.Show();
         _turretBody.PlayEnterDisableAnimation();
+        _inBattleBuildingUpgrader.SetCanUpgradeVisibility(false);
     }
 
     public void RestartDisabled()
@@ -47,6 +50,7 @@ public class DisableableBuilding_Turret : MonoBehaviour, IDisableableBuilding
         _turret.IsDisabled = false;
         _view.Hide();
         _turretBody.PlayExitDisableAnimation();
+        _inBattleBuildingUpgrader.SetCanUpgradeVisibility(true);
     }
 
     public void UpdateDisabled(float disabledRatio01)

@@ -133,7 +133,7 @@ public class TurretBuilding : RangeBuilding
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretPartBody.bodyType, ProjectileDataModel.MaterialForTurret);
-        _disableableBuilding.Init(this, bodyPart);
+        _disableableBuilding.Init(this, bodyPart, upgrader);
 
         basePart = Instantiate(turretPartBody.BasePartPrimitive.Prefab, baseHolder).GetComponent<TurretPartBase_Prefab>();
         basePart.Init(this, CurrentRadiusRange);
