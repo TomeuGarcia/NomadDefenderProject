@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Scripts.ObjectPooling;
 
-
 public class BuildingDisableWaveFactory : MonoBehaviour
 {
     [System.Serializable]

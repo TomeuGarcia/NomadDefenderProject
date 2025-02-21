@@ -18,7 +18,7 @@ public class EnemyBuildingDisabler : MonoBehaviour
 
     private void SpawnBuildingDisableWave(Enemy enemy)
     {
-        BuildingDisableWave disabler = BuildingDisableWaveFactory.Instance.Create(_buildingDisablerConfig.BuildingDisableWaveConfig,
+        BuildingDisableBomb disabler = BuildingDisableBombFactory.Instance.Create(_buildingDisablerConfig.BuildingDisableBombConfig,
             transform.position, Quaternion.identity);
         disabler.transform.position = transform.position;
         disabler.transform.rotation = transform.rotation;

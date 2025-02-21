@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eccf163e57f4ad6b136d5d7d04deb3c, type: 3}
-  m_Name: BuildingDisableWaveConfig_Enemy
+  m_Script: {fileID: 11500000, guid: 260f89e4d7ab4cc49a3bf2f2e6620a3c, type: 3}
+  m_Name: BuildingDisableBombConfig_Enemy
   m_EditorClassIdentifier: 
-  _radius: 1.5
-  _buildingsLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  _disableDuration: 2
-  _delayBeforeApplying: 0.65
+  _delayBeforeApplying: 0.5
   _animation:
     _duration: 1.5
     _fadeEase:
@@ -34,7 +29,7 @@ MonoBehaviour:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0.79955465
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -72,3 +67,4 @@ MonoBehaviour:
       m_RotationOrder: 4
     _EMPEndPosition: {x: 0, y: 0.168, z: 0}
     _EMPEndRotation: {x: 20, y: 0, z: 0}
+  _waveConfig: {fileID: 11400000, guid: b465f4fd8b302b84286d2b14c5c9b144, type: 2}
