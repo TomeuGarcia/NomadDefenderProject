@@ -32,6 +32,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     public delegate void TD_GM_BattleStateAction(out BattleStateResult battleStateResult);
     public static event TD_GM_BattleStateAction OnQueryReferenceToBattleStateResult;
 
+    public static Action OnSceneFinish;
+
 
     // BattleStateResult
     private BattleStateResult battleStateResult;
@@ -73,6 +75,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     private void OnDestroy()
     {
         ServiceLocator.GetInstance().DynamicProjectileShootingService.Clear();
+        OnSceneFinish?.Invoke();
     }
 
     private void OnEnable()

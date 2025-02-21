@@ -29,7 +29,9 @@ public class BuildingDisableWave : RecyclableObject
         _config = config;
 
         _EMPHitParticles.Play();
+        _waveAudioSource.Play();
         ApplyWaveEffect();
+        StartCoroutine(LateRecycle());
     }
 
     private void ApplyWaveEffect()
@@ -50,5 +52,12 @@ public class BuildingDisableWave : RecyclableObject
         {
             _hitAudioSource.Play();
         }
+    }
+
+    private IEnumerator LateRecycle()
+    {
+        yield return new WaitUntil(() => !_hitAudioSource.isPlaying);
+        yield return new WaitUntil(() => !_EMPHitParticles.isEmitting);
+        Recycle();
     }
 }

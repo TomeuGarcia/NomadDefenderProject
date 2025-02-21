@@ -128,10 +128,13 @@ public class BattleTutorialManager : MonoBehaviour
         _placeABuildingGroup.Init();
         _currencyTutorialGroup.Init();
         _drawCardTutorialGroup.Init();
+
+        MouseOverlapNotifier.GlobalDisabled = true;
     }
 
     private void OnDestroy()
     {
+        MouseOverlapNotifier.GlobalDisabled = false;
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
     }
 
@@ -297,7 +300,6 @@ public class BattleTutorialManager : MonoBehaviour
         //Finishes Cards Tutorial
         _cardsMotionConfig.SetTDGameplayHandMode();
 
-
         //Skips Redraw
         scriptedSequence.Clear();
         tutoCardDrawer.FinishRedraws();
@@ -311,6 +313,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f);
         yield return new WaitForSeconds(2.0f);
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
+        MouseOverlapNotifier.GlobalDisabled = false;
 
 
 
@@ -326,6 +329,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => waveStarted );
         StopTutorial(_placeABuildingGroup);
 
+        MouseOverlapNotifier.GlobalDisabled = true;
         BuildingCard.LockAllCardsFromHover = true;
         yield return new WaitForSeconds(0.25f);
 
@@ -333,7 +337,8 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(PlayTutorial(_currencyTutorialGroup));
         _backBackgroundCardsHighlight.DOFade(0, 0.3f);
         BuildingCard.LockAllCardsFromHover = false;
-        
+        MouseOverlapNotifier.GlobalDisabled = false;
+
 
         scriptedSequence.NextLine(); //9
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
@@ -360,6 +365,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitUntil(() => wavesCounter > 1);
         scriptedSequence.Clear();
         EnemyWaveInfoDisplayer.InteractionEnabled = false;
+        MouseOverlapNotifier.GlobalDisabled = true;
 
 
         _hand.CanBeHidden = false;
@@ -409,6 +415,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();//12
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
+        MouseOverlapNotifier.GlobalDisabled = false;
 
         
 
@@ -417,6 +424,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.Clear();
         yield return new WaitForSeconds(0.5f);
         EnemyWaveInfoDisplayer.InteractionEnabled = false;
+        MouseOverlapNotifier.GlobalDisabled = true;
 
 
         _hand.CanBeHidden = false;
@@ -449,6 +457,7 @@ public class BattleTutorialManager : MonoBehaviour
         scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
+        MouseOverlapNotifier.GlobalDisabled = false;
 
         //Wave 4/5
         yield return new WaitUntil(() => wavesCounter > 3 );

@@ -38,6 +38,13 @@ public class BuildingDisableManager : MonoBehaviour
     {
         _currentDisabledBuildings = new Dictionary<IDisableableBuilding, BuildingDisableState>(5);
         _disableableBuildingsToRemove = new List<IDisableableBuilding>(5);
+
+        TDGameManager.OnSceneFinish += OnSceneFinishClearAll;
+    }
+    
+    private void OnDestroy()
+    {
+        TDGameManager.OnSceneFinish -= OnSceneFinishClearAll;
     }
 
     public void HandleNewBuilding(IDisableableBuilding disableableBuilding, float disableDuration)
@@ -83,6 +90,12 @@ public class BuildingDisableManager : MonoBehaviour
         }
         _disableableBuildingsToRemove.Clear();
     }
-    
+
+
+    private void OnSceneFinishClearAll()
+    {
+        _currentDisabledBuildings.Clear();
+        _disableableBuildingsToRemove.Clear();
+    }
     
 }

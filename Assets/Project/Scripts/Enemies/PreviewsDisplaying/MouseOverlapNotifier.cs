@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MouseOverlapNotifier : MonoBehaviour
 {
+    public static bool GlobalDisabled = false;
+    
     public event Action OnMouseEntered;
     public event Action OnMouseExited;
     public event Action OnMousePressed;
@@ -22,6 +24,16 @@ public class MouseOverlapNotifier : MonoBehaviour
 
     private void Update()
     {
+        if (GlobalDisabled)
+        {
+            if (_isBeingOverlapped)
+            {
+                _isBeingOverlapped = false;
+                OnMouseExited?.Invoke();
+            }
+            return;
+        }
+        
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, 1 << gameObject.layer, QueryTriggerInteraction.Collide))
         {
