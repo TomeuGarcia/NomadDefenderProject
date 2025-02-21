@@ -37,7 +37,7 @@ public class DeckSelector : MonoBehaviour
     private Material startSimulationFlashMaterial;
 
     private bool _startButtonInteractable = false;
-    public bool StartButtonInteractable => _startButtonInteractable;
+    public bool StartButtonInteractable => _startButtonInteractable && startSimulationButton.enabled;
 
     private float currentFill = 0.0f;
     private bool _busySelectingDeck;

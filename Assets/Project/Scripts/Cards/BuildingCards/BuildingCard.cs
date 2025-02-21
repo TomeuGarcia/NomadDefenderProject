@@ -420,9 +420,9 @@ public abstract class BuildingCard : MonoBehaviour
         DisableMouseInteraction();
 
         CardTransform.DOComplete(true);
-        CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, unhoverTime)
+        CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, duration)
             .SetEase(_motionConfig.ToStandard_Move_Ease);
-        CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, unhoverTime)
+        CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, duration)
             .SetEase(_motionConfig.ToStandard_Rot_Ease)
             .OnComplete(() => {
                 EnableMouseInteraction();

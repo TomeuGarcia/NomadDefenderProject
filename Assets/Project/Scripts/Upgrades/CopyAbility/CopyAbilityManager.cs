@@ -320,7 +320,7 @@ public class CopyAbilityManager : MonoBehaviour
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_BeforeModifyingCard());
         yield return StartCoroutine(ModifyCopyToCard());
         yield return StartCoroutine(_machineAnimator.PlayConfirmAnimation_AfterModifyingCard());
-        yield return new WaitForSeconds(2.75f);
+        yield return new WaitForSeconds(1.25f);
         StartCoroutine(_textsAnimator.PlayCompleteText());
         yield return new WaitForSeconds(0.25f);
         yield return StartCoroutine(_cardHandAnimator.PlayFinishHideCards(
@@ -331,6 +331,8 @@ public class CopyAbilityManager : MonoBehaviour
 
     private IEnumerator ModifyCopyToCard()
     {
+        yield return new WaitForSeconds(2.5f);
+        
         _copyToCard.AddNewPassive(_selectedCopyFromButton.AbilityDataModel);
         _copyToCard.IncrementCardLevel(1, false);
 

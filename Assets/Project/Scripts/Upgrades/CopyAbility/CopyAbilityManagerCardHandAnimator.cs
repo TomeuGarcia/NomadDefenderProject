@@ -55,8 +55,15 @@ namespace Project.Scripts.Upgrades.CopyAbility
         {
             foreach (var card in placedCards)
             {
-                card.StandardState(true, duration: 2.0f);
-                yield return new WaitForSeconds(0.5f);
+                Vector3 moveBy = Vector3.back * 1.0f +
+                                 Vector3.right * (card.CardTransform.position.x > 0 ? -1.25f : 1.25f);
+            
+                card.CardTransform.DOBlendableMoveBy(moveBy,0.2f)
+                    .SetEase(Ease.OutSine);
+                yield return new WaitForSeconds(0.2f);
+                
+                card.StandardState(true, duration: 0.25f);
+                yield return new WaitForSeconds(0.1f);
             }
             yield return new WaitForSeconds(0.2f);
         
@@ -68,7 +75,7 @@ namespace Project.Scripts.Upgrades.CopyAbility
                 Vector3 goalPosition = card.CardTransform.position + new Vector3(0, -3, -1);
                 
                 card.CardTransform.DOMove(goalPosition, 0.3f)
-                    .SetEase(Ease.OutSine);
+                    .SetEase(Ease.InOutQuart);
                 
                 yield return new WaitForSeconds(0.1f);
             }
