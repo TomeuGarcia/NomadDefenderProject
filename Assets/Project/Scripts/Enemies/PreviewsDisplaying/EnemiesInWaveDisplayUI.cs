@@ -27,7 +27,7 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
                 UpdateText();
                 EnemyDisplayUI.PlayResetAnimation();
             }
-
+            
             public void Cleanup()
             {
                 Destroy(EnemyDisplayUI.gameObject);
@@ -101,11 +101,13 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
     [Header("LOGIC")]
     [SerializeField] private EnemyDisplayUI _enemyDisplayPrefab;
     [SerializeField] private Transform _entriesHolder;
+    [SerializeField] private Transform _totalEntriesHolder;
     
     [Header("ANIMATION")]
     [SerializeField] private CanvasGroup _canvasGroup;
     
     
+    private DisplayData _totalDisplayData;
     private DisplayData _currentDisplayData;
     private bool _isShowing;
 
@@ -130,6 +132,15 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
         Instance = null;
     }
 
+    public void InitTotal(DisplayData totalDisplayData)
+    {
+        _totalDisplayData = totalDisplayData;
+        foreach (DisplayData.Entry entry in _totalDisplayData.Entries)
+        {
+            entry.EnemyDisplayUI.InitAsTotal();
+        }
+    }
+
 
     public void Show(DisplayData displayData)
     {
@@ -143,8 +154,9 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
     private IEnumerator PlayShowAnimation()
     {
         _currentDisplayData.ActivateViews();
+        _totalDisplayData.ActivateViews();
         _animationState = AnimationState.Showing;
-        
+
         for (int i = 0; i < 2; ++i)
         {
             _canvasGroup.alpha = 0;
@@ -154,15 +166,16 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         
-        yield return new WaitForSeconds(0.1f);
-
         for (int i = 0; i < _currentDisplayData.Entries.Length; ++i)
         {
-            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
             _currentDisplayData.Entries[i].EnemyDisplayUI.Show();
-            yield return new WaitForSeconds(0.1f);
         }
-        
+        for (int i = 0; i < _totalDisplayData.Entries.Length; ++i)
+        {
+            _totalDisplayData.Entries[i].EnemyDisplayUI.Show();
+        }
+        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+
         _animationState = AnimationState.None;
     }
     
@@ -179,10 +192,13 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
         
         for (int i = _currentDisplayData.Entries.Length - 1; i >= 0; --i)
         {
-            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
             _currentDisplayData.Entries[i].EnemyDisplayUI.Hide();
-            yield return new WaitForSeconds(0.1f);
         }
+        for (int i = _currentDisplayData.Entries.Length - 1; i >= 0; --i)
+        {
+            _totalDisplayData.Entries[i].EnemyDisplayUI.Hide();
+        }
+        GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         
         for (int i = 0; i < 2; ++i)
         {
@@ -194,6 +210,7 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
         }
         
         _currentDisplayData.DeactivateViews();
+        _totalDisplayData.DeactivateViews();
         _animationState = AnimationState.None;
     }
 
@@ -201,6 +218,10 @@ public class EnemiesInWaveDisplayUI : MonoBehaviour
     public EnemyDisplayUI ProvideEnemyDisplay()
     {
         return Instantiate(_enemyDisplayPrefab, _entriesHolder);
+    }
+    public EnemyDisplayUI ProvideEnemyDisplayForTotal()
+    {
+        return Instantiate(_enemyDisplayPrefab, _totalEntriesHolder);
     }
 
     public bool IsShowingDisplayData(DisplayData displayData)

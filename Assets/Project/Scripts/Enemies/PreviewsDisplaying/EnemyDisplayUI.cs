@@ -26,6 +26,11 @@ public class EnemyDisplayUI : MonoBehaviour
         _nameText.text = enemyTypeConfig.View.DisplayName;
     }
 
+    public void InitAsTotal()
+    {
+        _quantityText.gameObject.SetActive(false);
+    }
+    
     private void CheckInitMaterial()
     {
         if (_imageMaterial == null)

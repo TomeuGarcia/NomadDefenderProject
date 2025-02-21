@@ -290,4 +290,42 @@ public class EnemyWaveSpawner : ScriptableObject
         currentWave = enemyWaves.Length - 2;
         return currentWave;
     }
+
+
+    public HashSet<EnemyTypeConfig> AllEnemyTypesInWaves()
+    {
+        HashSet<EnemyTypeConfig> pendingNonArmoredTypes = new();
+
+        HashSet<EnemyTypeConfig> allArmoredTypes = new();
+        foreach (EnemyWave enemyWave in enemyWaves)
+        {
+            EnemyInWave[] enemiesInWave = enemyWave.enemiesInWave;
+            foreach (EnemyInWave enemyInWave in enemiesInWave)
+            {
+                EnemyTypeConfig enemyType = enemyInWave.EnemyType;
+                if (!enemyType.IsArmored)
+                {
+                    pendingNonArmoredTypes.Add(enemyType);
+                }
+                else
+                {
+                    allArmoredTypes.Add(enemyType);
+                }
+            }
+        }
+
+        foreach (EnemyTypeConfig armoredType in allArmoredTypes)
+        {
+            EnemyTypeConfig armoredTypeOriginal = armoredType.NonArmored;
+            pendingNonArmoredTypes.Remove(armoredTypeOriginal);
+        }
+
+        foreach (EnemyTypeConfig pendingNonArmoredType in pendingNonArmoredTypes)
+        {
+            allArmoredTypes.Add(pendingNonArmoredType);
+        }
+
+        return allArmoredTypes;
+    }
+
 }

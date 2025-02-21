@@ -177,7 +177,8 @@ public class EnemyWaveManager : MonoBehaviour
             repeatedStartPathNodes.Add(startPathNode, pathStartData);
         }
 
-        
+        InitTotalEnemiesDisplay();
+
         StartCoroutine(SetupEnemyPathFollowerTrails());
 
         EnemyWaveTracker.Init(spawners.ToArray());
@@ -187,6 +188,42 @@ public class EnemyWaveManager : MonoBehaviour
         Enemy.OnEnemySuicide += OnEnemyDeath;
     }
 
+    private void InitTotalEnemiesDisplay()
+    {
+        HashSet<EnemyTypeConfig> allEnemyTypesInBattle = new();
+        foreach (PathStartData pathStartData in _pathsStartData)
+        {
+            HashSet<EnemyTypeConfig> enemyTypesInSpawner = pathStartData.EnemyWaveSpawner.AllEnemyTypesInWaves();
+            foreach (EnemyTypeConfig enemyTypeInSpawner in enemyTypesInSpawner)
+            {
+                if (enemyTypeInSpawner.IsArmored && allEnemyTypesInBattle.Contains(enemyTypeInSpawner.NonArmored))
+                {
+                    allEnemyTypesInBattle.Remove(enemyTypeInSpawner.NonArmored);
+                }
+
+                allEnemyTypesInBattle.Add(enemyTypeInSpawner);
+            }
+        }
+        
+        
+        List<EnemiesInWaveDisplayUI.DisplayData.Entry> entries = new();
+        foreach (EnemyTypeConfig enemyTypeInBattle in allEnemyTypesInBattle)
+        {
+            EnemyTypeConfig enemyType = enemyTypeInBattle.IsArmored ? enemyTypeInBattle.NonArmored : enemyTypeInBattle;
+            EnemyDisplayUI enemyDisplayUI = EnemiesInWaveDisplayUI.Instance.ProvideEnemyDisplayForTotal();
+            
+            entries.Add(new EnemiesInWaveDisplayUI.DisplayData.Entry(
+                enemyType, 0, enemyTypeInBattle.IsArmored, enemyDisplayUI));
+        }
+
+        
+        EnemiesInWaveDisplayUI.DisplayData totalEnemiesDisplayData = new();
+        totalEnemiesDisplayData.Reset(entries.ToArray());
+        
+        EnemiesInWaveDisplayUI.Instance.InitTotal(totalEnemiesDisplayData);
+    }
+    
+    
     private void Start()
     {
         Init();
