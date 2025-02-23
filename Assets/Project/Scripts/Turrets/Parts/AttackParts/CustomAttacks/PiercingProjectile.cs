@@ -33,10 +33,9 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         damageCollider.enabled = true;
         _targetEnemy = targetEnemy;
 
-        Vector3 directionToEnemy = Vector3.ProjectOnPlane(_targetEnemy.Position - Position, Vector3.up).normalized;
-        transform.forward = directionToEnemy;
-
         ComputeGoalPosition();
+        transform.rotation = Quaternion.FromToRotation(_directionToGoalPosition, Vector3.forward);
+
         //transform.LookAt(_goalPosition);
 
         _rigidbody.DOMove(_goalPosition, _distance / MovementSpeed)

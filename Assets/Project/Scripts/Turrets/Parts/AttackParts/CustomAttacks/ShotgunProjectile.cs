@@ -33,7 +33,9 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         base.ProjectileShotInit(targetEnemy, owner);
         
         _damageAttack = CreateDamageAttack(targetEnemy);
-        SharedInitEnd(targetEnemy);
+        Vector3 directionToTarget = Vector3.ProjectOnPlane(targetEnemy.Position - owner.Position, Vector3.up).normalized;
+        
+        SharedInitEnd(targetEnemy, directionToTarget);
     }
 
     protected sealed override void ProjectileShotInit_PrecomputedAndQueued(TurretBuilding owner,
@@ -42,17 +44,20 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         base.ProjectileShotInit_PrecomputedAndQueued(owner, precomputedDamageAttack);
         
         _damageAttack = precomputedDamageAttack;
-        SharedInitEnd(precomputedDamageAttack.Target);
-    }
 
-    private void SharedInitEnd(Enemy targetEnemy)
+        Enemy targetEnemy = precomputedDamageAttack.Target;
+        Vector3 directionToTarget = Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized;
+        
+        SharedInitEnd(targetEnemy, directionToTarget);
+    }
+    
+    
+    private void SharedInitEnd(Enemy targetEnemy, Vector3 directionToTarget)
     {
         _targetEnemy = targetEnemy;
         float bulletMoveDistance = TurretOwner.Stats.RadiusRange * RADIUS_DISTANCE_MULTIPLIER;
         float bulletMoveDuration = bulletMoveDistance / MovementSpeed;
-
-        Vector3 directionToTarget =
-            Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized;
+        
         Quaternion rotationToTarget = Quaternion.FromToRotation(Vector3.forward, directionToTarget);
 
         InitPreemptiveHits();

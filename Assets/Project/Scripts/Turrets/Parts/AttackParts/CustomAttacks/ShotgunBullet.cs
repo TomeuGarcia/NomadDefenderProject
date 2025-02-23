@@ -7,6 +7,7 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
 {
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private ParticleSystem _hitParticles;
 
     private IListener _listener;
     private bool _disappearing;
@@ -39,7 +40,7 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
         if (_disappearing) return;
         
         _listener.OnEnemyHit(enemy);
-        StartDisappearing();
+        StartDisappearing(true);
     }
 
 
@@ -66,7 +67,7 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
     {
         if (!_disappearing)
         {
-            StartDisappearing();
+            StartDisappearing(false);
         }
     }
 
@@ -77,18 +78,27 @@ public class ShotgunBullet : MonoBehaviour, TurretMultipleProjectileView.ISource
 
     
 
-    private void StartDisappearing()
+    private void StartDisappearing(bool hitEnemy)
     {
-        StartCoroutine(WaitToDisable());
+        StartCoroutine(WaitToDisable(hitEnemy));
     }
-    private IEnumerator WaitToDisable()
+    private IEnumerator WaitToDisable(bool hitEnemy)
     {
         _disappearing = true;
         
         _rigidbody.DOKill(false);
         _trailRenderer.emitting = false;
 
-        yield return new WaitForSeconds(0.2f);
+        if (hitEnemy)
+        {
+            _hitParticles.Play();
+            yield return new WaitUntil(() => !_hitParticles.isEmitting);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+
         Disable();
     }
     private void Disable()
