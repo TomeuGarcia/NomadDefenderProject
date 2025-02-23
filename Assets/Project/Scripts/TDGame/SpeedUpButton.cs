@@ -13,6 +13,7 @@ public class SpeedUpButton : MonoBehaviour
     {
         [SerializeField] public int timeMultiplier;
         [SerializeField] public string text;
+        [SerializeField] public bool isBuggy;
     }
     
     [SerializeField] private SpeedScale[] timeScales;
@@ -32,6 +33,7 @@ public class SpeedUpButton : MonoBehaviour
     private bool gameFinished = false;
 
     public bool IsTimePaused { get; private set; }
+    public static bool UsingBuggyTimeScale { get; private set; }
 
     public static Action OnGameSpeedInteracted;
 
@@ -181,6 +183,8 @@ public class SpeedUpButton : MonoBehaviour
         timeSpeedCountText.text = speedScale.text;
         timeSpeedCountLeftText.text = previousSpeedScale.text;
         timeSpeedCountRightText.text = nextSpeedScale.text;
+
+        UsingBuggyTimeScale = speedScale.isBuggy;
     }
 
     private void PauseTimeScale()

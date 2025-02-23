@@ -31,11 +31,11 @@ public class AreaStateFactory : MonoBehaviour
 
     private void OnEnable()
     {
-        TDGameManager.OnEndGameResetPools += ResetPools;
+        TDGameManager.OnSceneFinish += ResetPools;
     }
     private void OnDisable()
     {
-        TDGameManager.OnEndGameResetPools -= ResetPools;
+        TDGameManager.OnSceneFinish -= ResetPools;
     }
     public static AreaStateFactory GetInstance()
     {

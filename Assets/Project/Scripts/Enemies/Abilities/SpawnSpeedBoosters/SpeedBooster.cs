@@ -39,12 +39,12 @@ public class SpeedBooster : RecyclableObject
 
     private void OnEnable()
     {
-        TDGameManager.OnEndGameResetPools += ForceRecycle;
+        TDGameManager.OnSceneFinish += ForceRecycle;
         PauseMenu.OnGameSurrender += ForceRecycle;
     }
     private void OnDisable()
     {
-        TDGameManager.OnEndGameResetPools -= ForceRecycle;
+        TDGameManager.OnSceneFinish -= ForceRecycle;
         PauseMenu.OnGameSurrender -= ForceRecycle;
     }
 

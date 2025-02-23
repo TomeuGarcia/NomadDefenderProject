@@ -259,13 +259,63 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
         enemy = other.gameObject.GetComponent<Enemy>();
 
-        if (_enemiesToIgnore.Contains(enemy) || enemy.IsDead())
+        return CheckEnemy(enemy);
+    }
+    protected bool CheckEnemy(Enemy enemy)
+    {
+        return !_enemiesToIgnore.Contains(enemy) && !enemy.IsDead();
+    }
+
+
+    protected List<Enemy> ComputeIntersectingEnemies(Vector3 origin, Vector3 direction, float distance, float enemyRadius = 0.25f)
+    {
+        origin.y = 0;
+        
+        List<Enemy> intersectingEnemies = new List<Enemy>(10);
+        IReadOnlyCollection<Enemy> activeEnemies = EnemyFactory.GetInstance().GetActiveEnemies();
+
+        foreach (Enemy activeEnemy in activeEnemies)
         {
-            enemy = null;
-            return false;
+            Vector3 enemyPosition = activeEnemy.Position;
+            enemyPosition.y = 0;
+            if (Vector3.Distance(origin, enemyPosition) > distance)
+            {
+                continue;
+            }
+            
+            float t = Vector3.Dot(enemyPosition - origin, direction);
+            Vector3 p = origin + direction * t;
+            float y = Vector3.Distance(enemyPosition, p);
+
+            bool hit = y < enemyRadius;
+            if (hit)
+            {
+                intersectingEnemies.Add(activeEnemy);
+            }
+        }
+
+        return intersectingEnemies;
+    }
+    protected Enemy ComputeClosestIntersectingEnemy(Vector3 origin, Vector3 direction, float distance, float enemyRadius = 0.25f)
+    {
+        List<Enemy> intersectingEnemies = ComputeIntersectingEnemies(origin, direction, distance, enemyRadius);
+
+        Enemy closestIntersectingEnemy = null;
+        float closestIntersectingEnemyDistance = float.MaxValue;
+
+        foreach (Enemy intersectingEnemy  in intersectingEnemies)
+        {
+            float distanceToEnemy = Vector3.Distance(origin, intersectingEnemy.Position);
+            if (distanceToEnemy < closestIntersectingEnemyDistance)
+            {
+                closestIntersectingEnemy = intersectingEnemy;
+                closestIntersectingEnemyDistance = distanceToEnemy;
+            }
         }
         
-        return true;
+        return closestIntersectingEnemy;
     }
+
     
+
 }

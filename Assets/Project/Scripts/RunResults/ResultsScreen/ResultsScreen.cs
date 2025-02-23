@@ -26,7 +26,6 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private ResultScreenEnemyInteractions _enemyInteractions;
     [SerializeField] private FullScreenPassRendererFeature _fullScreenEffect;
 
-    [SerializeField] private int _damagePerClick;
     
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private Button _continueButton;
@@ -131,13 +130,13 @@ public class ResultsScreen : MonoBehaviour
         Enemy mostDamagingEnemy = null;
         if (mostDamagingEnemyExists)
         {
-            mostDamagingEnemy = EnemyFactory.GetInstance()
-                .GetEnemyGameObject(enemyType, transform.position, Quaternion.identity, transform)
-                .GetComponent<Enemy>();
+            mostDamagingEnemy = EnemyFactory.GetInstance().CreateEnemy(enemyType, transform.position, Quaternion.identity, transform);
+            mostDamagingEnemy.gameObject.SetActive(false);
             mostDamagingEnemy.InitWithoutFunctionality();
 
-            
-            _enemyInteractions.Init(mostDamagingEnemy, _damagePerClick);
+            const float hitsToKill = 3f;
+            int damageToDeal = Mathf.RoundToInt(mostDamagingEnemy.HealthSystem.GetMaxHealth() / hitsToKill);
+            _enemyInteractions.Init(mostDamagingEnemy, damageToDeal);
         }
         
         

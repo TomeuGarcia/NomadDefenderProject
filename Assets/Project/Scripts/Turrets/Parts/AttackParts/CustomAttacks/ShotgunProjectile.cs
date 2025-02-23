@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,10 +10,12 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
 
     [SerializeField] private ShotgunBullet[] _bullets;
     private int _activeBulletsCounter;
+    private List<Enemy> _preemptiveEnemyHits;
 
     private const float RADIUS_DISTANCE_MULTIPLIER = 2.5f;
     private const float HALF_SHOOT_ANGLE = 30f;
-    
+
+    private int NumberOfBullets => _bullets.Length;
     
     private void Awake()
     {
@@ -20,6 +23,8 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         {
             bullet.Configure(this);
         }
+
+        _preemptiveEnemyHits = new List<Enemy>(NumberOfBullets);
     }
     
 
@@ -49,18 +54,22 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         Vector3 directionToTarget =
             Vector3.ProjectOnPlane(targetEnemy.Position - Position, Vector3.up).normalized;
         Quaternion rotationToTarget = Quaternion.FromToRotation(Vector3.forward, directionToTarget);
-        
 
-        float angleStep = (HALF_SHOOT_ANGLE * 2) / _bullets.Length;
+        InitPreemptiveHits();
+        
+        float angleStep = (HALF_SHOOT_ANGLE * 2) / NumberOfBullets;
         float accumulatedAngles = -HALF_SHOOT_ANGLE;
-        for (int i = 0; i < _bullets.Length; ++i)
+        for (int i = 0; i < NumberOfBullets; ++i)
         {
-            float randomAngle = accumulatedAngles + Random.Range(0, angleStep);
-            Quaternion bulletRotation = Quaternion.AngleAxis(randomAngle, Vector3.up) * rotationToTarget;
+            //float randomAngle = accumulatedAngles + Random.Range(0, angleStep);
+            //Quaternion bulletRotation = Quaternion.AngleAxis(randomAngle, Vector3.up) * rotationToTarget;
+            Quaternion bulletRotation = Quaternion.AngleAxis(accumulatedAngles, Vector3.up) * rotationToTarget;
             
             ShotgunBullet bullet = _bullets[i];
             bullet.StartMoving(bulletRotation, bulletMoveDistance, bulletMoveDuration);
 
+            ComputePreemptiveHit(bulletRotation, bulletMoveDistance);
+            
             accumulatedAngles += angleStep;
         }
 
@@ -71,8 +80,40 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     protected override void OnShotInitialized()
     {
         base.OnShotInitialized();
-        _activeBulletsCounter = _bullets.Length;
+        _activeBulletsCounter = NumberOfBullets;
     }
+    
+    
+    
+
+    private void InitPreemptiveHits()
+    {
+        _preemptiveEnemyHits.Clear();
+    }
+    private void ComputePreemptiveHit(Quaternion bulletRotation, float distance)
+    {
+        if (SpeedUpButton.UsingBuggyTimeScale)
+        {
+            Vector3 directionToGoalPosition = bulletRotation * Vector3.forward;
+            Enemy preemptivelyHitEnemy = ComputeClosestIntersectingEnemy(Position, directionToGoalPosition, distance);
+            if (preemptivelyHitEnemy != null)
+            {
+                _preemptiveEnemyHits.Add(preemptivelyHitEnemy);
+            }
+        }
+    }
+    private void ApplyPreemptiveHits()
+    {
+        foreach (Enemy preemptiveEnemyHit in _preemptiveEnemyHits)
+        {
+            if (CheckEnemy(preemptiveEnemyHit))
+            {
+                OnEnemyHit(preemptiveEnemyHit);
+            }
+        }
+    }
+    
+    
 
     private void EnemyHit()
     {
@@ -122,7 +163,8 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
         {
             return;
         }
-        
+
+        ApplyPreemptiveHits();
         Disappear();
     }
     

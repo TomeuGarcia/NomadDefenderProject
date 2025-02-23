@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -16,7 +17,11 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     [SerializeField] private float _distance = 15;
     
+    private List<Enemy> _preemptiveEnemyHits;
+    private static readonly List<Enemy> NoPreemptiveEnemyHits = new(0);
+    
     private float _currentDamageMultiplier = 0f;
+    private Vector3 _directionToGoalPosition;
     private Vector3 _goalPosition;
 
     protected override void ProjectileShotInit(Enemy targetEnemy, TurretBuilding owner)
@@ -29,7 +34,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         _targetEnemy = targetEnemy;
 
         Vector3 directionToEnemy = Vector3.ProjectOnPlane(_targetEnemy.Position - Position, Vector3.up).normalized;
-        transform.rotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
+        transform.forward = directionToEnemy;
 
         ComputeGoalPosition();
         //transform.LookAt(_goalPosition);
@@ -38,6 +43,7 @@ public class PiercingProjectile : ATurretProjectileBehaviour
             .OnComplete(OnGoalPositionReached);
         
         _damageAttack = CreateDamageAttack(_targetEnemy);
+        ComputePreemptiveHits();
         OnShotInitialized();
     }
 
@@ -48,8 +54,30 @@ public class PiercingProjectile : ATurretProjectileBehaviour
 
     private void ComputeGoalPosition()
     {
-        _goalPosition = _spawnerObjectPosition + ((_targetEnemy.Position - _spawnerObjectPosition).normalized *_distance);
+        _directionToGoalPosition = _targetEnemy.Position - _spawnerObjectPosition;
+        _directionToGoalPosition.y = 0;
+        _directionToGoalPosition.Normalize();
+        
+        _goalPosition = _spawnerObjectPosition + (_directionToGoalPosition *_distance);
         _goalPosition.y = _spawnerObjectPosition.y;
+    }
+
+    
+    private void ComputePreemptiveHits()
+    {
+        _preemptiveEnemyHits = SpeedUpButton.UsingBuggyTimeScale
+            ? ComputeIntersectingEnemies(Position, _directionToGoalPosition, _distance)
+            : NoPreemptiveEnemyHits;
+    }
+    private void ApplyPreemptiveHits()
+    {
+        foreach (Enemy preemptiveEnemyHit in _preemptiveEnemyHits)
+        {
+            if (CheckEnemy(preemptiveEnemyHit))
+            {
+                EnemyHit(preemptiveEnemyHit);
+            }
+        }
     }
 
 
@@ -62,19 +90,25 @@ public class PiercingProjectile : ATurretProjectileBehaviour
         arrow.SetActive(false);
         damageCollider.enabled = false;
         disableParticles.SetActive(true);
+        ApplyPreemptiveHits();
         yield return new WaitUntil(() => !disableParticles.activeInHierarchy);
-
+        
         Disable();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CheckEnemyOnTriggerEnter(other, out Enemy enemy))
+        TryDamageEnemyFromCollider(other);
+    }
+
+    private void TryDamageEnemyFromCollider(Collider collider)
+    {
+        if (CheckEnemyOnTriggerEnter(collider, out Enemy enemy))
         {
             EnemyHit(enemy);
         }
     }
-    
+
     private void EnemyHit(Enemy enemy)
     {
         GameObject temp = ProjectileParticleFactory.GetInstance()

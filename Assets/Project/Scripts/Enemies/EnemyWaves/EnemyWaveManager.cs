@@ -53,7 +53,7 @@ public class EnemyWaveManager : MonoBehaviour
             _mouseOverNotifier.OnMouseExited += HidePathViewer;
         }
 
-        ~PathStartData()
+        public void Cleanup()
         {
             _mouseOverNotifier.OnMouseEntered -= ShowPathViewer;
             _mouseOverNotifier.OnMouseExited -= HidePathViewer;
@@ -92,6 +92,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     [SerializeField] private PathStartData[] _pathsStartData;
     [SerializeField] private PathEndData[] _pathsEndData;
+    private List<PathStartData> _initializedPathsStartData;
 
 
     [SerializeField] ConsoleDialogSystem consoleDialog;
@@ -144,6 +145,8 @@ public class EnemyWaveManager : MonoBehaviour
         Dictionary<PathNode, PathStartData> repeatedStartPathNodes = new(_pathsStartData.Length);
         HashSet<EnemyWaveSpawner> spawners = new HashSet<EnemyWaveSpawner>(_pathsStartData.Length);
 
+        _initializedPathsStartData = new List<PathStartData>(_pathsStartData.Length);
+        
         for (int i = 0; i< _pathsStartData.Length; i++)
         {
             PathStartData pathStartData = _pathsStartData[i];
@@ -175,6 +178,7 @@ public class EnemyWaveManager : MonoBehaviour
                 Instantiate(enemyWaveInfoPrefab, startPathNode.transform), EnemiesInWaveDisplayUI.Instance);
                 
             repeatedStartPathNodes.Add(startPathNode, pathStartData);
+            _initializedPathsStartData.Add(pathStartData);
         }
 
         InitTotalEnemiesDisplay();
@@ -237,6 +241,11 @@ public class EnemyWaveManager : MonoBehaviour
         
         Enemy.OnEnemyDeathGlobal -= OnEnemyDeath;
         Enemy.OnEnemySuicide -= OnEnemyDeath;
+
+        foreach (PathStartData pathStartData in _initializedPathsStartData)
+        {
+            pathStartData.Cleanup();
+        }
     }
 
     private void OnEnable()

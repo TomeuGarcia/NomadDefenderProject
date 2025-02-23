@@ -68,7 +68,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     private static readonly Quaternion _particleSpawnRotation = Quaternion.Euler(90, 0, 0);
     
-    
+    private IActiveEnemiesTracker _activeEnemiesTracker;
+
     private void Awake()
     {
         ResetStats();
@@ -188,6 +189,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
         ServiceLocator.GetInstance().ParticleFactory
             .Create(_typeConfig.View.ParticlesSpawn, _meshCenter.position, _particleSpawnRotation);
+        
+        _activeEnemiesTracker.AddActiveEnemy(this);
     }
 
 
@@ -343,6 +346,8 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
         pathFollower.CheckDeactivateCoroutines();
         gameObject.SetActive(false);
+        
+        _activeEnemiesTracker?.RemoveActiveEnemy(this);
     }
 
 
@@ -451,5 +456,11 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         _speedBoostCoroutine = null;
     }
 
+
+
+    public void SetActiveEnemiesTracker(IActiveEnemiesTracker activeEnemiesTracker)
+    {
+        _activeEnemiesTracker = activeEnemiesTracker;
+    }
     
 }

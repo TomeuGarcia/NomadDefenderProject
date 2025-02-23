@@ -62,11 +62,8 @@ public class EnemiesPhotograph : MonoBehaviour
             position += enemyTypeConfig.View.PhotoOffset;
             Quaternion rotation = enemyTypeConfig.View.PhotoRotation;
 
-            GameObject enemyGameObject = 
-                enemyFactory.GetEnemyGameObject(enemyTypeConfig, position, rotation, _enemiesSpawnTransform);
-            enemyGameObject.SetActive(true);
+            Enemy enemy = enemyFactory.CreateEnemy(enemyTypeConfig, position, rotation, _enemiesSpawnTransform);
             
-            Enemy enemy = enemyGameObject.GetComponent<Enemy>();
             enemy.InitWithoutFunctionality();
 
             enemyTypeConfig.View.PhotoIndex = photoIndexCounter;

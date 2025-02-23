@@ -235,12 +235,10 @@ public class EnemyWaveSpawner : ScriptableObject
     {
         if (OnEnemySpawn != null) OnEnemySpawn(this);
 
-        GameObject enemyGameObject = EnemyFactory.GetInstance()
-            .GetEnemyGameObject(enemyType, startingNode.Position, Quaternion.identity, spawnParent);
-        enemyGameObject.SetActive(true);
+        Enemy spawnedEnemy = EnemyFactory.GetInstance()
+            .CreateEnemy(enemyType, startingNode.Position, Quaternion.identity, spawnParent);
 
         /////////////
-        Enemy spawnedEnemy = enemyGameObject.GetComponent<Enemy>();
         spawnedEnemy.ApplyWaveStatMultiplier(CalcWaveMultiplier());
         
         Vector3 positionOffset = (spawnOffset.x * spawnedEnemy.transformToMove.right) + 

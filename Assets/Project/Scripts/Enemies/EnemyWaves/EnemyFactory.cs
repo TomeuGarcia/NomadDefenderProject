@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFactory : MonoBehaviour
+public class EnemyFactory : MonoBehaviour, IActiveEnemiesTracker
 {
     [System.Serializable]
     private struct EnemyTypeToPool
@@ -20,6 +20,7 @@ public class EnemyFactory : MonoBehaviour
 
     [SerializeField] private Enemy _nullEnemy;
 
+    private List<Enemy> _activeEnemies;
 
 
     private void Awake()
@@ -37,11 +38,11 @@ public class EnemyFactory : MonoBehaviour
     }
     private void OnEnable()
     {
-        TDGameManager.OnEndGameResetPools += ResetPools;
+        TDGameManager.OnSceneFinish += ResetPools;
     }
     private void OnDisable()
     {
-        TDGameManager.OnEndGameResetPools -= ResetPools;
+        TDGameManager.OnSceneFinish -= ResetPools;
     }
 
 
@@ -59,11 +60,18 @@ public class EnemyFactory : MonoBehaviour
         {
             sortedEnemies[enemyTypeToPool.type] = enemyTypeToPool.pool;
         }
+        
+        _activeEnemies = new List<Enemy>(100);
     }
 
-    public GameObject GetEnemyGameObject(EnemyTypeConfig enemyType, Vector3 position, Quaternion rotation, Transform spawnTransform)
+    public Enemy CreateEnemy(EnemyTypeConfig enemyType, Vector3 position, Quaternion rotation, Transform spawnTransform)
     {
-        return sortedEnemies[enemyType].GetObject(position, rotation, spawnTransform);
+        Enemy enemy = sortedEnemies[enemyType].GetObject(position, rotation, spawnTransform).GetComponent<Enemy>();
+        enemy.gameObject.SetActive(true);
+        
+        enemy.SetActiveEnemiesTracker(this);
+        
+        return enemy;
     }
 
     public Enemy GetNullEnemy()
@@ -77,8 +85,22 @@ public class EnemyFactory : MonoBehaviour
         {
             enemyTypeToPool.pool.ResetObjectsList();
         }
+        
+        _activeEnemies.Clear();
     }
 
-    
+    public void AddActiveEnemy(Enemy enemy)
+    {
+        _activeEnemies.Add(enemy);
+    }
 
+    public void RemoveActiveEnemy(Enemy enemy)
+    {
+        _activeEnemies.Remove(enemy);
+    }
+
+    public IReadOnlyCollection<Enemy> GetActiveEnemies()
+    {
+        return _activeEnemies;
+    }
 }
