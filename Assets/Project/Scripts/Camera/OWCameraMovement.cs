@@ -37,7 +37,7 @@ public class OWCameraMovement : MonoBehaviour
 
                 if (difference == 0) { return; }
 
-                MoveCameraDragging(-difference);
+                MoveCameraDragging(-difference, out float excess);
                 
                 lastDragPos = Input.mousePosition.y;
             }
@@ -50,9 +50,12 @@ public class OWCameraMovement : MonoBehaviour
         }
     }
 
-    private void MoveCameraDragging(float moveAmount)
+    private void MoveCameraDragging(float moveAmount, out float excess)
     {
-        float newPos = Mathf.Clamp(transform.position.z + moveAmount * speed, dragRange.x, dragRange.y);
+        float desiredPosition = transform.position.z + moveAmount * speed;
+        float newPos = Mathf.Clamp(desiredPosition, dragRange.x, dragRange.y);
+        excess = desiredPosition - newPos;
+        
         transform.position = new Vector3(transform.position.x, transform.position.y, newPos);
     }
 
@@ -74,7 +77,9 @@ public class OWCameraMovement : MonoBehaviour
         
         _goalMouseScroll += moveAmount;
         
-        MoveCameraDragging(-moveAmount);
+        MoveCameraDragging(-moveAmount, out float excess);
+
+        _goalMouseScroll -= excess;
     }
     
     public void Init(Vector3 newDistanceToNextLevel, float maxDistance)
