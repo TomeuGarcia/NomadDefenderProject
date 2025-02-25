@@ -365,18 +365,18 @@ public class RepeaterBase : TurretPartBase_Prefab
 
     private void LookAtTargetEnemy()
     {
-        Vector3 lookPosition = targetedEnemy != null ? targetedEnemy.Position : targetedEnemy.Position;
+        Vector3 lookPosition = targetedEnemy.Position;
 
         Vector3 lookDirection = Vector3.ProjectOnPlane(lookPosition - rotateTransform.position, Vector3.up).normalized;
 
-        if (Vector3.Dot(lookDirection, rotateTransform.forward) > 0.95f)
+        if (Vector3.Dot(lookDirection, rotateTransform.forward) > 0.98f)
         {
             return;
         }
 
         Quaternion targetRot = Quaternion.LookRotation(lookDirection, rotateTransform.up);
 
-        Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 800.0f * Time.deltaTime * GameTime.TimeScale);
+        Quaternion endRotation = Quaternion.RotateTowards(rotateTransform.rotation, targetRot, 300.0f * Time.deltaTime);
         Vector3 endEuler = endRotation.eulerAngles;
 
         rotateTransform.rotation = Quaternion.Euler(0f, endEuler.y, 0f);
