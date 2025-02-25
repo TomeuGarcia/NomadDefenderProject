@@ -23,6 +23,7 @@ public class PathFollower : MonoBehaviour
     private float _speedMultiplier;
     [SerializeField, Min(0f)] public float _rotationSpeed = 300f;
     private float _baseMoveSpeed;
+    private float _moveSpeedDashMultiplier = 1f;
     [SerializeField] private Rigidbody _rigidbodyToMove;
 
     // Path Follow Control
@@ -113,9 +114,14 @@ public class PathFollower : MonoBehaviour
         _baseMoveSpeed = baseMoveSpeed;
         UpdateMoveSpeed();
     }
+    public void UpdateBaseMoveSpeedDash(float moveSpeedDashMultiplier)
+    {
+        _moveSpeedDashMultiplier = moveSpeedDashMultiplier;
+        UpdateMoveSpeed();
+    }
     private void UpdateMoveSpeed()
     {
-        moveSpeed = (_baseMoveSpeed * _speedMultiplier);
+        moveSpeed = (_baseMoveSpeed * _speedMultiplier * _moveSpeedDashMultiplier);
         step = moveSpeed / distanceStartToEnd;
     }
     
