@@ -25,7 +25,7 @@ public class ResultsScreen : MonoBehaviour
     [SerializeField] private ResultsScreenView _view;
     [SerializeField] private ResultScreenEnemyInteractions _enemyInteractions;
     [SerializeField] private FullScreenPassRendererFeature _fullScreenEffect;
-
+    [SerializeField] private Transform _spawnsHolder;
     
     [Header("CONTINUE BUTTON")] 
     [SerializeField] private Button _continueButton;
@@ -102,7 +102,7 @@ public class ResultsScreen : MonoBehaviour
 
         bool mostKillsAndDamageCardsAreTheSame = mostKillsTurretCard == mostDamageTurretCard;
         TurretBuildingCard mostKillsTurretCardObject =
-            ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostKillsTurretCard, transform);
+            ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostKillsTurretCard, _spawnsHolder);
         
         mostKillsTurretCardObject.OnCardUnhovered += SetStandardCard;
         mostKillsTurretCardObject.OnCardHovered += SetHoveredCard;
@@ -116,7 +116,7 @@ public class ResultsScreen : MonoBehaviour
         else
         {
             mostDamageTurretCardObject =
-                ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostDamageTurretCard, transform);
+                ServiceLocator.GetInstance().CardSpawnService.MakeNewTurretCard_FromData(mostDamageTurretCard, _spawnsHolder);
             
             mostDamageTurretCardObject.OnCardUnhovered += SetStandardCard;
             mostDamageTurretCardObject.OnCardHovered += SetHoveredCard;
@@ -130,7 +130,7 @@ public class ResultsScreen : MonoBehaviour
         Enemy mostDamagingEnemy = null;
         if (mostDamagingEnemyExists)
         {
-            mostDamagingEnemy = EnemyFactory.GetInstance().CreateEnemy(enemyType, transform.position, Quaternion.identity, transform);
+            mostDamagingEnemy = EnemyFactory.GetInstance().CreateEnemy(enemyType, transform.position, Quaternion.identity, _spawnsHolder);
             mostDamagingEnemy.gameObject.SetActive(false);
             mostDamagingEnemy.InitWithoutFunctionality();
 
@@ -172,26 +172,24 @@ public class ResultsScreen : MonoBehaviour
     private void OnContinueButtonHover()
     {
         if (!_continueButton.interactable) return;
-        
-        Color color = _continueButton.colors.highlightedColor;
-        _continueButton.targetGraphic.color = color;
-        foreach (Graphic continueButtonArrow in _continueButtonArrows)
-        {
-            continueButtonArrow.color = color;
-        }
+        SetContinueButtonColor(_continueButton.colors.highlightedColor);
     }
 
     private void OnContinueButtonUnhover()
     {
         if (!_continueButton.interactable) return;
+        SetContinueButtonColor(_continueButton.colors.normalColor);
+    }
 
-        Color color = _continueButton.colors.normalColor;
+    private void SetContinueButtonColor(Color color)
+    {
         _continueButton.targetGraphic.color = color;
         foreach (Graphic continueButtonArrow in _continueButtonArrows)
         {
             continueButtonArrow.color = color;
         }
     }
+    
     private async void OnContinueButtonClicked()
     {
         _continueButton.interactable = false;
@@ -201,28 +199,77 @@ public class ResultsScreen : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardSelected();
         
         await Task.Delay(TimeSpan.FromSeconds(0.5f));
+
+        if (_comingFromVictoryUnlocks)
+        {
+            OnContinueButtonClickedAfterUnlocks_Victory_Normal();
+            return;
+        }
         
         if (RunStateData.Victory)
         {
-            if (_gameProgressionStatus.Value.Game.VictoriesCount > 1)
+            if (_demoManagerConfig.DemoEnabled)
             {
-                SceneLoader.GetInstance().StartLoadMainMenu();
+                OnContinueButtonClicked_Victory_Demo();
             }
             else
             {
-                if (_demoManagerConfig.DemoEnabled)
-                {
-                    SceneLoader.GetInstance().StartLoadDemoThanksForPlaying();
-                }
-                else
-                {                
-                    SceneLoader.GetInstance().StartLoadGameEndCredits();
-                }
+                OnContinueButtonClicked_Victory_Normal();
             }
         }
         else
         {
+            OnContinueButtonClicked_Defeat();
+        }
+    }
+
+    private void OnContinueButtonClicked_Defeat()
+    {
+        SceneLoader.GetInstance().StartLoadMainMenu();
+    }
+    
+    private void OnContinueButtonClicked_Victory_Demo()
+    {
+        if (_gameProgressionStatus.Value.Game.VictoriesCount > 1)
+        {
             SceneLoader.GetInstance().StartLoadMainMenu();
+        }
+        else
+        {
+            SceneLoader.GetInstance().StartLoadDemoThanksForPlaying();
+        }
+    }
+
+
+    private bool _comingFromVictoryUnlocks = false;
+    private void OnContinueButtonClicked_Victory_Normal()
+    {
+        bool unlockDifficulty = _runStateData.Value.UnlockDifficulty;
+        bool unlocksStarterDeck = _runStateData.Value.UnlockStarterDeck;
+        bool hasPendingUnlocks = _runStateData.Value.HasPendingUnlocks;
+
+        if (hasPendingUnlocks)
+        {
+            SetContinueButtonColor(_continueButton.colors.normalColor);
+            _spawnsHolder.gameObject.SetActive(false);
+            _view.StartPlayingShowUnlocksAnimation(unlockDifficulty, unlocksStarterDeck);
+            _comingFromVictoryUnlocks = true;
+        }
+        else
+        {
+            OnContinueButtonClickedAfterUnlocks_Victory_Normal();
+        }
+    }
+    
+    private void OnContinueButtonClickedAfterUnlocks_Victory_Normal()
+    {
+        if (_gameProgressionStatus.Value.Game.VictoriesCount > 1)
+        {
+            SceneLoader.GetInstance().StartLoadMainMenu();
+        }
+        else
+        {
+            SceneLoader.GetInstance().StartLoadGameEndCredits();
         }
     }
 }

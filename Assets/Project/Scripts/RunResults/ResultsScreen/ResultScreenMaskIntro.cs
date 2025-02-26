@@ -25,23 +25,32 @@ public class ResultScreenMaskIntro : MonoBehaviour
     [SerializeField] private float _initialPosition;
     [SerializeField] private float _endPosition;
 
+    private bool _scrolling;
+
     private void Awake()
     {
         _initialPosition += 100.0f;
         _endPosition += 100.0f;
 
         _mask.padding = _initialMask;
+        _scrolling = false;
     }
 
     public void StartScroll(RectTransform scrollFadeParent)
     {
+        _mask.padding = _initialMask;
+        
         DOTween.To(() => _mask.padding,
         w => _mask.padding = w,
         _endMask,
         _animationTime
         ).SetEase(_ease);
 
-        StartCoroutine(ScrollParent(scrollFadeParent));
+        if (!_scrolling)
+        {
+            StartCoroutine(ScrollParent(scrollFadeParent));
+            _scrolling = true;
+        }
     }
 
     private IEnumerator ScrollParent(RectTransform scrollFadeParent)

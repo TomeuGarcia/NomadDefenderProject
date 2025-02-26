@@ -17,4 +17,10 @@ public interface IRunStateData
     
     int TotalDamageTaken { get; }
     bool MostDamagingEnemy(out EnemyTypeConfig enemyType, out int damage);
+    
+    
+    
+    bool UnlockDifficulty { get; }
+    bool UnlockStarterDeck { get; }
+    bool HasPendingUnlocks { get; }
 }

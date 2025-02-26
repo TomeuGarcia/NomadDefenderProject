@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     [Header("RUN STATE")] 
     [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
-    [SerializeField] private InterfaceReference<IGameProgressionUpdater, ScriptableObject> _gameProgressionUpdater;
+    [SerializeField] private GameProgressionStatus _gameProgressionStatus;
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
 
     [Header("CANVAS")]
@@ -248,11 +248,18 @@ public class GameManager : MonoBehaviour
 
     private void SharedFinishRun(bool victory)
     {
-        _runStateInit.Value.Finish(victory);
+        _runStateInit.Value.Finish(victory,
+            _gameProgressionStatus.Game.UnlocksHardDifficulty, 
+            _gameProgressionStatus.Game.UnlocksStarterDeck);
+        
         if (victory)
         {
-            _gameProgressionUpdater.Value.IncrementVictoryCount();
-            _gameDifficultyConfig.UnlockDifficulty(GameDifficultyType.Hard);
+            _gameProgressionStatus.IncrementVictoryCount();
+
+            if (_gameProgressionStatus.Game.UnlocksHardDifficulty)
+            {
+                _gameDifficultyConfig.UnlockDifficulty(GameDifficultyType.Hard);
+            }
         }
     }
 

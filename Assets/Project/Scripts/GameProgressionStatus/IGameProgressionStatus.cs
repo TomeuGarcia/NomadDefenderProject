@@ -6,7 +6,9 @@ public interface IGameProgressionStatus
 {
     public class GameStatus
     {
-        public readonly int VictoriesCount;
+        public int VictoriesCount { get; }
+        public bool UnlocksHardDifficulty => VictoriesCount == 1;
+        public bool UnlocksStarterDeck => VictoriesCount is > 0 and <= 2;
 
         public GameStatus(int victoriesCount)
         {

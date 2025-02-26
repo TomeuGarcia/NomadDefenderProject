@@ -62,6 +62,9 @@ public class RunState : ScriptableObject,
         return enemyType != null;
     }
 
+    public bool UnlockDifficulty { get; private set; }
+    public bool UnlockStarterDeck { get; private set; }
+    public bool HasPendingUnlocks => UnlockDifficulty || UnlockStarterDeck;
 
     public int DestroyedNodes { get; private set; }
     
@@ -88,10 +91,13 @@ public class RunState : ScriptableObject,
     }
     
 
-    public void Finish(bool victory)
+    public void Finish(bool victory, bool unlockDifficulty, bool unlockStarterDeck)
     {
         Victory = victory;
         RunDuration = Time.time - _startTime;
+        
+        UnlockDifficulty = unlockDifficulty;
+        UnlockStarterDeck = unlockStarterDeck;
     }
 
     
