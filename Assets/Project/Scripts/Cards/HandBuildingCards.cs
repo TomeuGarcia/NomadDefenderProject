@@ -125,6 +125,7 @@ public class HandBuildingCards : MonoBehaviour
     private void OnDestroy()
     {
         _cardsMotionConfig.SetUpgradeSceneMode();
+        EnableInteractionWithPlacedElements();
     }
 
 
@@ -596,6 +597,7 @@ public class HandBuildingCards : MonoBehaviour
 
         // Audio
         GameAudioManager.GetInstance().PlayCardHovered();
+        DisableInteractionWithPlacedElements();
     }
 
 
@@ -625,6 +627,7 @@ public class HandBuildingCards : MonoBehaviour
         }
 
         card.RedrawHoverIndication(false);
+        EnableInteractionWithPlacedElements();
     }
 
     private void EnablePlacingAfterDragged(BuildingCard cardToBePlaced)
@@ -637,6 +640,7 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.SetCanNotBePlayedPermanent(false);
         ResetAndSetStandardCard(selectedCard);
         _tdGameViewUtilities.StopMarkingGroundTiles();
+        EnableInteractionWithPlacedElements();
     }
     private void ResetAndSetStandardCardAfterDragBack(BuildingCard card)
     {
@@ -730,6 +734,7 @@ public class HandBuildingCards : MonoBehaviour
 
         // Audio
         GameAudioManager.GetInstance().PlayCurrencySpent();
+        EnableInteractionWithPlacedElements();
     }
 
     private void SubtractCurrencyAndRemoveCard()
@@ -990,4 +995,15 @@ public class HandBuildingCards : MonoBehaviour
         return cards;
     }
 
+
+
+    private void DisableInteractionWithPlacedElements()
+    {
+        MouseOverlapNotifier.GlobalDisabled = true;
+    }
+    private void EnableInteractionWithPlacedElements()
+    {
+        MouseOverlapNotifier.GlobalDisabled = false;
+    }
+    
 }

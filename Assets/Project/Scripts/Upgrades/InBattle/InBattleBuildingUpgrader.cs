@@ -510,6 +510,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         quickLevelDisplay.gameObject.SetActive(true);
         cgQuickLevelDisplay.DOFade(1f, 0.1f);
 
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         //ShowCanUpgradeText();
         ShowTooltip();
     }
