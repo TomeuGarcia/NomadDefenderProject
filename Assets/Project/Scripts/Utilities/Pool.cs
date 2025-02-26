@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Pool : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject pooledObject;
+    [SerializeField] private GameObject pooledObject;
+    [SerializeField, Min(0)] private int _initialAmount = 10; 
     private bool missingObjects = true;
 
-    private List<GameObject> objects = new List<GameObject>();
+    private List<GameObject> objects;
     
     public interface IListener
     {
@@ -26,13 +26,22 @@ public class Pool : MonoBehaviour
     
     public void ResetObjectsList()
     {
-        objects = new List<GameObject>();
+        if (objects != null)
+        {
+            foreach (GameObject o in objects)
+            {
+                Destroy(o);
+            }
+            objects.Clear();
+        }
+        
+        objects = new List<GameObject>(_initialAmount);
+        for (int i = 0; i < _initialAmount; ++i)
+        {
+            GetObject();
+        }
     }
 
-    public void SetPooledObject(GameObject gameObject)
-    {
-        pooledObject = gameObject;
-    }
 
     public GameObject GetObject()
     {

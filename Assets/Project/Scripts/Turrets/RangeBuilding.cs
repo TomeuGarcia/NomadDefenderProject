@@ -43,23 +43,23 @@ public abstract class RangeBuilding : Building
     
     public abstract float CurrentRadiusRange { get; }
 
-    protected bool _gameOverDisabled = false;
+    protected bool _gameFinishedDisabled = false;
 
     private void OnEnable()
     {
         if (triggerNotifier != null) { SubscribeToTriggerNotifier(); }
-        TDGameManager.OnGameOverStart += SetGameOverDisabled;
+        TDGameManager.OnGameFinishStart += SetGameOverDisabled;
     }
     private void OnDisable()
     {
         if (triggerNotifier != null) { UnsubscribeToTriggerNotifier(); }
-        TDGameManager.OnGameOverStart -= SetGameOverDisabled;
+        TDGameManager.OnGameFinishStart -= SetGameOverDisabled;
     }
 
 
     private void SetGameOverDisabled()
     {
-        _gameOverDisabled = true;
+        _gameFinishedDisabled = true;
     }
 
     private void Awake()

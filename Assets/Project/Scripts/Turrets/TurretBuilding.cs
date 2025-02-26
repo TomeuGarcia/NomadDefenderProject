@@ -90,7 +90,7 @@ public class TurretBuilding : RangeBuilding
 
     private void Update()
     {
-        if (!isFunctional || IsDisabled || _gameOverDisabled) return;
+        if (!isFunctional || IsDisabled || _gameFinishedDisabled) return;
 
         UpdateEnemiesInRange();
         _shootingController.UpdateShoot();
