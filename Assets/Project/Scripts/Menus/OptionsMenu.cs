@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
 {
-    [SerializeField] private TextManager textManager;
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
     
     [Header("AUDIO")]
@@ -71,12 +70,9 @@ public class OptionsMenu : MonoBehaviour
     public void Show()
     {
         SetNewGameNotAvailable();
-        textManager.ResetTexts();
-        StartCoroutine(textManager.DecodeTextsWithDelay());
     }
     public void Hide()
     {
-        textManager.ResetTexts();
     }
 
     public void SetNewGameAvailable()
