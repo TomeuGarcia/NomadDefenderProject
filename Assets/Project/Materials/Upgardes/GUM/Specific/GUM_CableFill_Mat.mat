@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-869985958086663552
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GUM_SideIndicator_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 977caadbf1c502048bfcd5098f895cb3,
+  m_Name: GUM_CableFill_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: e4fccd9819e29d044bdbd350013055d5,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _SampleTexture2D_9aa311bd949b43f189efa002afb5528c_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: efe593d1e9d2d6044874364b36dd1b40, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,29 +55,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BorderWidth: 0.2
-    - _FillCoef: 1
-    - _InnerWidth: 0.4
-    - _MaskSize: 1
+    - _ColorStep: 0
+    - _FillCoef: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _XStretchCoef: 0.95
     m_Colors:
-    - _InnerColor: {r: 0.1386614, g: 1.5471698, b: 1.4392585, a: 0}
-    - _MaskOffset: {r: 0, g: 0.93, b: 0, a: 0}
-    - _OuterColor: {r: 0.09420614, g: 0.6886792, b: 0.6595931, a: 0}
-    - _TopMaskScale: {r: 1, g: 0.05, b: 0, a: 0}
+    - _ColorA: {r: 0, g: 1.0592737, b: 0.20566301, a: 0}
+    - _ColorB: {r: 1, g: 1, b: 1, a: 0}
+    - _OffColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0}
+    - _OffColorCable: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &3658862697086317500
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
