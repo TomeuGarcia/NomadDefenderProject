@@ -67,8 +67,6 @@ public class DeckSelector : MonoBehaviour
         startSimulationFlashMaterial = startSimulationFlashMesh.material;
         startSimulationFlashMesh.material = startSimulationFlashMaterial;
         startSimulationFlashMesh2.material = startSimulationFlashMaterial;
-
-        PauseMenu.GetInstance().GameCanBePaused = true;
     }
 
     private void Update()

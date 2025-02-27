@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class FacilityPointAndClickManager : MonoBehaviour
 {
-    public bool CanInteract => _canInteract;
+    public bool CanInteract => _canInteract && !_interactingLocked;
     private bool _canInteract = true;
+    private bool _interactingLocked = false;
 
     [SerializeField] private List<AFacilityInteractable> _interactables = new();
 
@@ -28,5 +29,10 @@ public class FacilityPointAndClickManager : MonoBehaviour
     public void FinishedInteraction()
     {
         _canInteract = true;
+    }
+
+    public void SetInteractingLocked(bool interactingLocked)
+    {
+        _interactingLocked = interactingLocked;
     }
 }

@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 0.5f);
         DoAwake();
     }
 

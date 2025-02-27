@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class InitScene : MonoBehaviour
 {
-    public delegate void InitSceneAction();
-    public static event InitSceneAction OnStart;
-
     [SerializeField] private InitSceneInstaller _initSceneInstaller;
 
 
@@ -15,6 +12,7 @@ public class InitScene : MonoBehaviour
         _initSceneInstaller.Install(ServiceLocator.GetInstance());
 
         yield return null;
-        if (OnStart != null) OnStart();
+        SceneLoader.GetInstance().LoadFacilityInstantly();
+        GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 0.5f);
     }
 }

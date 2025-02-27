@@ -27,7 +27,8 @@ public class PauseMenu : MonoBehaviour
 
 
     [SerializeField] private OptionsMenu optionsMenuUI;
-    
+
+    public bool ShowingOptions => optionsMenuUI.gameObject.activeInHierarchy;
 
 
     private static Color fadedInColor = Color.white;
@@ -37,6 +38,8 @@ public class PauseMenu : MonoBehaviour
     static PauseMenu instance;
 
     public static Action OnGameSurrender;
+
+    public bool CanPauseNormally { get; set; } = true;
 
 
     private void Start()
@@ -70,13 +73,27 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (CanPauseNormally)
             {
-                Resume();
+                if (GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
             else
             {
-                Pause();
+                if (ShowingOptions)
+                {
+                    LeaveOptionsMenu();
+                }
+                else
+                {
+                    MainMenuOptions();
+                }
             }
         }
     }
@@ -132,9 +149,13 @@ public class PauseMenu : MonoBehaviour
         CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
     }
 
+
+    public Action OnEnterMainMenuOptions;
     public void MainMenuOptions()
     {
         GoToOptionsMenu();
+        optionsMenuUI.SetNewGameAvailable();
+        OnEnterMainMenuOptions?.Invoke();
     }
 
     public void LoadMenu()
@@ -198,12 +219,16 @@ public class PauseMenu : MonoBehaviour
     }
     public void ButtonUnhovered()
     {
-        button.transform.DOKill();
-        button.image.DOKill();
-        buttonText.DOKill();
-        button.image.color = fadedInColor;
-        buttonText.color = fadedInColor;
-        buttonText.rectTransform.DOScale(Vector3.one, 0.1f).SetUpdate(true);
+        if (button != null)
+        {
+            button.transform.DOKill();
+            button.image.DOKill();
+            buttonText.DOKill();
+            button.image.color = fadedInColor;
+            buttonText.color = fadedInColor;
+            buttonText.rectTransform.DOScale(Vector3.one, 0.1f).SetUpdate(true);
+        }
+
 
         //ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
         GameAudioManager.GetInstance().PlayCardInfoHidden();

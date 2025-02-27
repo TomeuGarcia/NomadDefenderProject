@@ -3,9 +3,12 @@ using TMPro;
 using UnityEngine;
 
 
-public class FICardCollectionButton : AFacilityInteractable
+public class FIScreenButton : AFacilityInteractable
 {
+    [SerializeField] private AScreenButtonInteraction _interaction;
     [SerializeField] private PointAndClickClickableObject _caller;
+    [SerializeField] private bool _destroyCallerOnInteract = true;
+    [SerializeField, Min(0)] private float _interactionDelay = 0.3f;
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Color _textColorHovered = Color.cyan;
     private Color _textColorUnhovered;
@@ -15,6 +18,8 @@ public class FICardCollectionButton : AFacilityInteractable
     [SerializeField] private GameObject _screenParent;
     [SerializeField] private Collider _interactableCollider;
 
+    
+    
     public void Init(bool enabled, FacilityManager facilityManager)
     {
         _facilityManager = facilityManager;
@@ -25,11 +30,15 @@ public class FICardCollectionButton : AFacilityInteractable
     
     protected override IEnumerator DoInteract()
     {
-        Destroy(_caller);
-        GameAudioManager.GetInstance().PlayCardSelected();
-        yield return new WaitForSeconds(0.3f);
+        if (_destroyCallerOnInteract)
+        {
+            Destroy(_caller);
+        }
         
-        _facilityManager.TransitionToCardCollection();        
+        GameAudioManager.GetInstance().PlayCardSelected();
+        yield return new WaitForSeconds(_interactionDelay);
+        
+        _interaction.DoInteract(_facilityManager);
     }
 
     public override void Hovered()

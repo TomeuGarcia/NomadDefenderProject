@@ -137,7 +137,6 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        return;
         if (Input.GetKeyDown(KeyCode.F))
         {
             skipFirstBattle = true;

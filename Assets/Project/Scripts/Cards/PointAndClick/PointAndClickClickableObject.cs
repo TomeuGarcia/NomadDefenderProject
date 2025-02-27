@@ -22,17 +22,7 @@ public class PointAndClickClickableObject : MonoBehaviour
     private void OnMouseEnter()
     {
         if (!gameObject.activeInHierarchy) return;
-
-        if (_outline != null)
-        {
-            _highlighted = true;
-            //_outline.enabled = true;
-        }
-        else
-        {
-            //_outline = gameObject.AddComponent<Outline>();
-            _highlighted = true;
-        }
+        
 
         MouseHoverCheck(true);
     }
@@ -55,9 +45,10 @@ public class PointAndClickClickableObject : MonoBehaviour
         //}
 
         _cursorChanger.RegularCursor();
-        if (_interactable.CanInteract())
+        if (_interactable.CanInteract() || _highlighted)
         {
             _interactable.Unhovered();
+            _highlighted = false;
         }
     }
 
@@ -81,7 +72,18 @@ public class PointAndClickClickableObject : MonoBehaviour
             {
                 _interactable.Hovered();
             }
-            return;
+            
+            if (_outline != null)
+            {
+                _highlighted = true;
+                //_outline.enabled = true;
+            }
+            else
+            {
+                //_outline = gameObject.AddComponent<Outline>();
+                _highlighted = true;
+            }
+            
         }
         else if (_interactable.WaitingToInteract())
         {

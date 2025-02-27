@@ -57,17 +57,6 @@ public class SceneLoader : MonoBehaviour
         alreadyLoadingNextScene = false;
     }
 
-    private void OnEnable()
-    {
-        InitScene.OnStart += StartLoadMainMenu;
-    }
-
-    private void OnDisable()
-    {
-        InitScene.OnStart -= StartLoadMainMenu;
-    }
-
-
 
     private void ShutAnimation(float duration)
     {
@@ -101,11 +90,35 @@ public class SceneLoader : MonoBehaviour
 
         alreadyLoadingNextScene = false;
     }
+    
+    private IEnumerator DoLoadSceneInstantly(LoadSceneFunction loadSceneFunction)
+    {
+        alreadyLoadingNextScene = true;
+
+        bottomBlackImage.fillAmount = topBlackImage.fillAmount = 1f;
+        yield return new WaitForSeconds(shutAnimDuration);
+
+        loadSceneFunction();
+        yield return new WaitForSeconds(loadSceneDuration);
+
+        topBlackImage.DOFade(0f, openAnimDuration);
+        bottomBlackImage.DOFade(0f, openAnimDuration);
+        yield return new WaitForSeconds(openAnimDuration);
+        bottomBlackImage.fillAmount = topBlackImage.fillAmount = 0f;
+        topBlackImage.DOFade(1f, 0.001f);
+        bottomBlackImage.DOFade(1f, 0.001f);
+
+        alreadyLoadingNextScene = false;
+    }
 
 
     public void LoadFacility()
     {
         StartCoroutine(DoLoadScene(LoadFacilityScene));
+    }
+    public void LoadFacilityInstantly()
+    {
+        StartCoroutine(DoLoadSceneInstantly(LoadFacilityScene));
     }
 
     public void LoadDeckSelector()
@@ -192,7 +205,8 @@ public class SceneLoader : MonoBehaviour
 
     public void StartLoadMainMenu()
     {
-        StartCoroutine(DoLoadScene(LoadMainMenu));
+        //StartCoroutine(DoLoadScene(LoadMainMenu));
+        LoadFacility();
     }
     private void LoadMainMenu()
     {
