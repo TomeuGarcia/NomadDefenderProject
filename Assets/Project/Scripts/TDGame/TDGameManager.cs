@@ -24,7 +24,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
     public delegate void TDGameManagerAction();
     public static event TDGameManagerAction OnGameFinishStart;
-    public static event TDGameManagerAction OnVictoryComplete;
+    public static event TDGameManagerAction OnVictoryStart;
     public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
     public static event TDGameManagerAction OnEndGameResetPools;
@@ -213,7 +213,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
         
-        
+        OnVictoryStart?.Invoke();
         StartCoroutine(VictoryAnimation());
         CommonFinishGame();
     }

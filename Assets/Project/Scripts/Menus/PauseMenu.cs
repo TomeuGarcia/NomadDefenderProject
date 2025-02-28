@@ -16,7 +16,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject pauseMenuUI;
     [SerializeField] private CanvasGroup interactionCanvasGroup;
     public bool GameCanBePaused { get; set; } = true;
-    [SerializeField] TextManager textManager;
 
     private Button button;
     private TextMeshProUGUI buttonText;
@@ -116,7 +115,6 @@ public class PauseMenu : MonoBehaviour
         //GameAudioManager.GetInstance().NormalMusicPitch();
         Time.timeScale = lastTimeScale;   //segurament s ha de fer d un altre manera
         GameIsPaused = false;
-        textManager.ResetTexts();        
 
         OWMap_Node.IsGlobalInteractable = true;
     }
@@ -132,7 +130,6 @@ public class PauseMenu : MonoBehaviour
             buttonText.color = fadedInColor;
         }
         //Camera.main.GetComponent<OWCameraMovement>().CanDrag(false);//accedir a cameraMovement per quan estic en batalla
-        StartCoroutine(textManager.DecodeTextsWithDelay());
         EventSystem.current.SetSelectedGameObject(null);
         //GameAudioManager.GetInstance().PausedMusicPitch();
         //textManager.SetActive(true);
@@ -170,7 +167,6 @@ public class PauseMenu : MonoBehaviour
         interactionCanvasGroup.interactable = false;
 
         OWMap_Node.IsGlobalInteractable = true;
-        textManager.ResetTexts();
 
         SceneLoader.GetInstance().StartLoadMainMenu();
         pauseMenuUI.SetActive(false);

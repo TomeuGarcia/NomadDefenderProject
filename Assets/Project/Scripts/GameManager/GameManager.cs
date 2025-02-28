@@ -156,14 +156,13 @@ public class GameManager : MonoBehaviour
     private void StartGameOver()
     {
         gameOverHolder.SetActive(true);
-
         StartCoroutine(DoStartGameOver());
     }
     private IEnumerator DoStartGameOver()
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(5.0f);//2.0f
         gameOverTitleTextDecoder.Activate();
 
         yield return new WaitForSeconds(1.0f);

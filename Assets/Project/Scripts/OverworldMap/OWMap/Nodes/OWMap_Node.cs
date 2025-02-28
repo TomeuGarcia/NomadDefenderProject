@@ -86,6 +86,7 @@ public class OWMap_Node : MonoBehaviour
     private OWMap_Connection cameFromConnection;
     private OWMap_Connection[] nextLevelConnections;
     public OWMap_Connection[] GetNextLevelConnections() { return nextLevelConnections; }
+    public OWMap_Node[] NextLevelNodes => mapReferencesData.nextLevelNodes;
 
     
 

@@ -224,7 +224,8 @@ public class HandBuildingCards : MonoBehaviour
                 card.StartRepositioning(finalPosition, repositionDuration);
                 if (withRotation)
                 {
-                    card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration);
+                    card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
+                        .SetUpdate(true);
                 }
                 
                 DelayedSetupCard(card, selectedPosition, hiddenDisplacement, finalPosition, i, repositionDuration);
@@ -277,6 +278,7 @@ public class HandBuildingCards : MonoBehaviour
     }
 
 
+    [Button()]
     public void InitCardsInHandAfterPlayingCard()
     {
         float cardCount = cards.Count;
@@ -305,7 +307,8 @@ public class HandBuildingCards : MonoBehaviour
                 () => {
                     card.InitPositions(selectedPosition, hiddenDisplacement, finalPosition - hiddenDisplacement);
                     UpdateHandSideBlockers();
-                });
+                })
+                .SetUpdate(true);
         }
 
     }
@@ -345,7 +348,9 @@ public class HandBuildingCards : MonoBehaviour
             int cardIndex = i;
             card.StartRepositioning(finalPosition, repositionDuration);
             card.RootCardTransform.DOLocalRotate(rotation.eulerAngles, repositionDuration)
-                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, finalPosition, cardIndex));
+                .OnComplete(() => SetupCardForRedraw(card, selectedPosition, hiddenDisplacement, finalPosition, cardIndex))
+                .SetUpdate(true);
+
         }
     }
     private void SetupCardForRedraw(BuildingCard card, Vector3 selectedPosition, Vector3 hiddenDisplacement, Vector3 finalPosition, int index)
@@ -657,11 +662,13 @@ public class HandBuildingCards : MonoBehaviour
 
         if (AreCardsBeingAdded) 
         {
-            selectedCard.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f);
+            selectedCard.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f)
+                .SetUpdate(true);
         }
         else
         {
-            selectedCard.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f);
+            selectedCard.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f)
+                .SetUpdate(true);
         }
         
 
@@ -795,7 +802,9 @@ public class HandBuildingCards : MonoBehaviour
             foreach (BuildingCard card in cards)
             {
                 if (card != selectedCard)
-                    card.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f).OnComplete(() => isHandBeingHidden = false);
+                    card.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f)
+                        .OnComplete(() => isHandBeingHidden = false)
+                        .SetUpdate(true);
             }
         }
         else
@@ -843,7 +852,10 @@ public class HandBuildingCards : MonoBehaviour
             }
             else
             {
-                card.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f).OnComplete(() => isHandBeingShown = false);
+                card.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f)
+                    .OnComplete(() => isHandBeingShown = false)
+                    .SetUpdate(true);
+
                 ++i;
 
             }

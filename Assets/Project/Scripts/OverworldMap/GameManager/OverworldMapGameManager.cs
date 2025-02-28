@@ -45,6 +45,9 @@ public class OverworldMapGameManager : MonoBehaviour
 
     [Header("DEMO")] 
     [SerializeField] private DemoManager _demoManager;
+
+    [Header("LISTENERS")] 
+    [SerializeField] private AOWMapLifetimeListener[] _lifetimeListeners;
     
 
     protected bool canDisplayDeck = true;
@@ -176,6 +179,11 @@ public class OverworldMapGameManager : MonoBehaviour
             
             _runStateUpdate.Value.IncrementNodesReached();
         }
+        
+        foreach (AOWMapLifetimeListener lifetimeListener in _lifetimeListeners)
+        {
+            lifetimeListener.OnNodeSelected(owMapNode);
+        }
 
         // scuffed camera shake :)
         //owMapPawn.FollowCameraTransform.DOPunchRotation(new Vector3(Random.Range(0.5f, 1.0f), Random.Range(0f, 0.4f), Random.Range(0f, 0.4f)) * 2f, 0.5f);
@@ -222,6 +230,17 @@ public class OverworldMapGameManager : MonoBehaviour
             owMapPawn.MoveCameraToNextLevel();            
         }
         moveCameraAfterNodeScene = true;
+
+
+        OWMap_Node firstNextNode = null;
+        if (!currentNode.GetMapReferencesData().isLastLevelNode)
+        {
+            firstNextNode = currentNode.NextLevelNodes[0];
+        }
+        foreach (AOWMapLifetimeListener lifetimeListener in _lifetimeListeners)
+        {
+            lifetimeListener.OnComeBackFromNodeScene(currentNode, firstNextNode);
+        }
     }
     private void ResumeMap()
     {
@@ -238,7 +257,9 @@ public class OverworldMapGameManager : MonoBehaviour
         }
 
         if (TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP))
+        {
             StartCommunicationWithNextNodes(currentNode);
+        }
 
 
         DisableCurrentLevelNodesInfoDisplay();
@@ -320,6 +341,11 @@ public class OverworldMapGameManager : MonoBehaviour
                 currentNode.GetNextLevelConnections()[i].LightConnection(true);
             }
             //currentNode.GetNextLevelConnections()[i].LightConnection(nodeResults[i].healthState == NodeEnums.HealthState.DESTROYED);
+        }
+
+        foreach (AOWMapLifetimeListener lifetimeListener in _lifetimeListeners)
+        {
+            lifetimeListener.OnBattleResultsSet(nodeResults);
         }
     }
     private void ApplyBattleStateResultForUpgradeBackToBack()
