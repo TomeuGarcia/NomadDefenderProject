@@ -14,6 +14,8 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     float lastTimeScale;
     [SerializeField] GameObject pauseMenuUI;
+    [SerializeField] private GameObject[] _viewAdditions;
+    
     [SerializeField] private CanvasGroup interactionCanvasGroup;
     public bool GameCanBePaused { get; set; } = true;
 
@@ -49,6 +51,7 @@ public class PauseMenu : MonoBehaviour
         optionsMenuUI.gameObject.SetActive(false);
         pauseMenuUI.SetActive(false);
         SetSurrenderTextVisibility(false);
+        HideView();
     }
     private void Awake()
     {
@@ -98,6 +101,21 @@ public class PauseMenu : MonoBehaviour
     }
 
 
+    private void ShowView()
+    {
+        foreach (GameObject viewAddition in _viewAdditions)
+        {
+            viewAddition.SetActive(true);
+        }
+    }
+    private void HideView()
+    {
+        foreach (GameObject viewAddition in _viewAdditions)
+        {
+            viewAddition.SetActive(false);
+        }
+    }
+
     public void Resume()
     {
 
@@ -119,6 +137,7 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = true;
         
         SetSurrenderTextVisibility(false);
+        HideView();
     }
 
     public void Pause()
@@ -146,6 +165,8 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = false;
 
         CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+        
+        ShowView();
     }
 
 
@@ -155,6 +176,7 @@ public class PauseMenu : MonoBehaviour
         GoToOptionsMenu();
         optionsMenuUI.SetNewGameAvailable();
         OnEnterMainMenuOptions?.Invoke();
+        ShowView();
     }
 
     public void LoadMenu()
@@ -261,6 +283,7 @@ public class PauseMenu : MonoBehaviour
         optionsMenuUI.Hide();
         optionsMenuUI.gameObject.SetActive(false);
         SetSurrenderTextVisibility(false);
+        HideView();
     }
 
 }
