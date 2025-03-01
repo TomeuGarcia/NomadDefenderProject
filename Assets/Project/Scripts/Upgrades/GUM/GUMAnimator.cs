@@ -73,20 +73,27 @@ public class GUMAnimator : MonoBehaviour
 
     public void Ready()
     {
-
+        foreach (GUMCableFillCheckpoint checkpoint in _cableFillStarts)
+        {
+            checkpoint.StartReadyFill();
+        }
     }
     public void UnReady()
     {
-
+        foreach (GUMCableFillCheckpoint checkpoint in _cableFillStarts)
+        {
+            checkpoint.StartUnReadyFill();
+        }
     }
 
     public void Upgrading()
     {
         _leftIndicator.Upgrading();
         _rightIndicator.Upgrading();
+
         foreach (GUMCableFillCheckpoint checkpoint in _cableFillStarts)
         {
-            checkpoint.Fill();
+            checkpoint.StartUpgradingFill();
         }
     }
 }

@@ -1,9 +1,11 @@
-using System.Collections;
-using Unity.VisualScripting;
+using DG.Tweening;
 using UnityEngine;
 
 public class GUMCableFillCheckpoint : MonoBehaviour
 {
+    [SerializeField, Min(0f)] private float _timeToFill;
+    [SerializeField] private Ease _ease;
+
     [SerializeField] private GUMCableFillCheckpoint[] _nextCheckpoints;
     [SerializeField] private MeshRenderer[] _meshes;
     private Material[] _materials;
@@ -18,16 +20,38 @@ public class GUMCableFillCheckpoint : MonoBehaviour
         }
     }
 
-    public void Fill()
+    public void StartReadyFill()
     {
-        //_materials.D
+        Fill(1.0f, "_ReadyCoef", _timeToFill, _ease);
+    }
+    public void StartUnReadyFill()
+    {
+        Fill(0.0f, "_ReadyCoef", _timeToFill, _ease);
+    }
+    public void StartUpgradingFill()
+    {
+        Fill(1.0f, "_UpgradingCoef", _timeToFill, _ease);
     }
 
-    private void FillCompleted()
+    public void Fill(float endValue, string propertyName, float duration, Ease ease)
+    {
+        Sequence sequence = DOTween.Sequence();
+
+        foreach (Material mat in _materials)
+        {
+            sequence.Join(mat.DOFloat(endValue, propertyName, duration)).SetEase(ease);
+        }
+        
+        sequence.OnComplete(() => {
+            FillCompleted(endValue, propertyName, duration, ease);
+        });
+    }
+
+    private void FillCompleted(float endValue, string propertyName, float duration, Ease ease)
     {
         foreach (var next in _nextCheckpoints)
         {
-            next.Fill();
+            next.Fill(endValue, propertyName, duration, ease);
         }
     }
 }
