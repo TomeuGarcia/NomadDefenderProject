@@ -32,7 +32,7 @@ public abstract class AProjectileShootingController
     
     public float TimeSinceLastShot { get; protected set; }
     public Vector3 LastTargetedPosition { get; protected set; }
-    public abstract void UpdateShoot();
+    public abstract void UpdateShoot(float deltaTime);
 
 
     protected AProjectileShootingController(CreateData createData)

@@ -22,12 +22,11 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
         _targetingController = newTargetingController;
     }
 
-    public override void UpdateShoot()
+    public override void UpdateShoot(float deltaTime)
     {
         _targetingController.ComputeNextTargetedEnemy();
         bool targetEnemyExists = _targetingController.TargetEnemyExists();
         
-        float deltaTime = GameTime.DeltaTime;
         TimeSinceLastShot += deltaTime;
         
         if (targetEnemyExists)

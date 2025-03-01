@@ -19,9 +19,8 @@ public class ProjectileShootingController_ProjectileHoarding : AProjectileShooti
         _hoardedProjectiles = new List<ATurretProjectileBehaviour>(_maxHoardedProjectilesCount);
     }
     
-    public override void UpdateShoot()
+    public override void UpdateShoot(float deltaTime)
     {
-        float deltaTime = GameTime.DeltaTime;
         TimeSinceLastShot += deltaTime;
         
         LastTargetedPosition = _turretOwner.Position + _turretOwner.BodyPartTransform.forward;

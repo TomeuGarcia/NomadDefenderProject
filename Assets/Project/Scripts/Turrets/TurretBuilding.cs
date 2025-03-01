@@ -22,6 +22,7 @@ public class TurretBuilding : RangeBuilding
 
 
     private AProjectileShootingController _shootingController;
+    public AProjectileShootingController ShootingController => _shootingController;
     public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
 
     public Vector3 Position => transform.position;
@@ -93,7 +94,7 @@ public class TurretBuilding : RangeBuilding
         if (!isFunctional || IsDisabled || _gameFinishedDisabled) return;
 
         UpdateEnemiesInRange();
-        _shootingController.UpdateShoot();
+        _shootingController.UpdateShoot(GameTime.DeltaTime);
         LookAtTarget();
     }
 
@@ -101,7 +102,7 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Vector3 lookDirection = 
-            Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up)
+            Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyHolder.transform.position, Vector3.up)
                 .normalized;
         
         Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
@@ -209,7 +210,7 @@ public class TurretBuilding : RangeBuilding
             basePart.baseCollider.ShowPreviewRange(
                 CurrentRadiusRange,
                 _extraRadiusRange + _statsController.NextLevelStatsPreview.RadiusRange);
-            OnUpgradePreviewRangeShown.Invoke(this);
+            OnUpgradePreviewRangeShown?.Invoke(this);
         }
     }
     public override void HideUpgradePreviewRange()
