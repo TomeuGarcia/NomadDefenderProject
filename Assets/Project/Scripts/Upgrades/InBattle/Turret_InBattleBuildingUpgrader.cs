@@ -166,6 +166,7 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         if (_allStatsUpgradeButton.IsButtonHovered) _allStatsUpgradeButton.OnButtonUnhovered();
 
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
+        _turretBuilding.HideUpgradePreviewRange();
     }
 
     private IEnumerator CloseAnimation()
@@ -259,6 +260,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         InvokeOnUpgrade(TurretUpgradeType.ATTACK);
         InvokeOnUpgrade(TurretUpgradeType.CADENCE);
         InvokeOnUpgrade(TurretUpgradeType.RANGE);
+        
+        _turretBuilding.ShowUpgradePreviewRange();
     }
 
     public override void FreeTurretUpgrade() 
@@ -271,6 +274,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _damageUpgradeStat.ViewProgression(NextDamageStatValueText);
         _fireRateUpgradeStat.ViewProgression(NextFireRateStatValueText);
         _rangeUpgradeStat.ViewProgression(NextRangeStatValueText);
+        
+        _turretBuilding.ShowUpgradePreviewRange();
     }
     private void OnUpgradeAllStatsButtonUnhovered()
     {
@@ -278,6 +283,8 @@ public class Turret_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         _fireRateUpgradeStat.HideProgression();
         _rangeUpgradeStat.HideProgression();
 
+        _turretBuilding.HideUpgradePreviewRange();
+        
         AllButtonsFadeIn();
     }
 

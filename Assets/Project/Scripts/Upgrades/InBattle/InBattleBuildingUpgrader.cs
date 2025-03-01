@@ -264,6 +264,7 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
         PlayOpenAnimation();
 
         IsWindowOpen = true;
+        _building.CanHideRange = false;
 
         HideQuickLevelDisplay(); //
     }
@@ -283,6 +284,8 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
         AutomaticWindowCloseStop();
         
+        _building.CanHideRange = true;
+        _building.HideRangePlane();
         //HideQuickLevelDisplay(); //
     }
     private IEnumerator OpenWindowCooldown()
@@ -323,6 +326,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
     }
 
 
+    public bool IsUpgradedToMax()
+    {
+        return IsCardUpgradedToMax(CurrentBuildingLevel);
+    }
+    
     protected bool CanUpgrade()
     {
         if (IsCardUpgradedToMax(CurrentBuildingLevel)) return false;

@@ -258,17 +258,27 @@ public abstract class RangeBuilding : Building
         return enemies.ToArray();
     }
 
+    public bool CanHideRange { get; set; } = true;
     public override void ShowRangePlane()
     {        
+        if (!CanHideRange) return;
         basePart.baseCollider.ShowRange();
         if (OnShowRangePlane != null) OnShowRangePlane();
     }
     public override void HideRangePlane()
     {
+        if (!CanHideRange) return;
         basePart.baseCollider.HideRange();
+        HideUpgradePreviewRange();
         if (OnHideRangePlane != null) OnHideRangePlane();
     }
     protected abstract void UpdateRange();
+    public abstract void ShowUpgradePreviewRange();
+
+    public virtual void HideUpgradePreviewRange()
+    {
+        basePart.baseCollider.HidePreviewRange();
+    }
 
 
     public void ShowUpgrades()

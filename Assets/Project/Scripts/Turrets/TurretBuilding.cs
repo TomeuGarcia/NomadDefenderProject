@@ -196,6 +196,28 @@ public class TurretBuilding : RangeBuilding
         basePart.baseCollider.UpdateRange(CurrentRadiusRange);
     }
 
+    public static Action<Building> OnUpgradePreviewRangeShown;
+    public static Action OnUpgradePreviewRangeHidden;
+    public override void ShowUpgradePreviewRange()
+    {
+        if (upgrader.IsUpgradedToMax())
+        {
+            HideUpgradePreviewRange();
+        }
+        else
+        {
+            basePart.baseCollider.ShowPreviewRange(
+                CurrentRadiusRange,
+                _extraRadiusRange + _statsController.NextLevelStatsPreview.RadiusRange);
+            OnUpgradePreviewRangeShown.Invoke(this);
+        }
+    }
+    public override void HideUpgradePreviewRange()
+    {
+        base.HideUpgradePreviewRange();
+        OnUpgradePreviewRangeHidden?.Invoke();
+    }
+
     public void AddExtraRadiusRangeAndUpdate(float extraAmount)
     {
         _extraRadiusRange += extraAmount;

@@ -22,6 +22,8 @@ public class TurretPartBase_Prefab : MonoBehaviour
     
     protected bool AbilityIsDisabled { get; private set; }
 
+    public bool NextUpgradeUpdatesRange { get; protected set; } = false;
+
 
     private void Awake()
     {

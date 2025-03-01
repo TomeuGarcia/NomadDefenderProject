@@ -48,7 +48,7 @@ public class PauseMenu : MonoBehaviour
 
         optionsMenuUI.gameObject.SetActive(false);
         pauseMenuUI.SetActive(false);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
     }
     private void Awake()
     {
@@ -117,6 +117,8 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = false;
 
         OWMap_Node.IsGlobalInteractable = true;
+        
+        SetSurrenderTextVisibility(false);
     }
 
     public void Pause()
@@ -170,13 +172,14 @@ public class PauseMenu : MonoBehaviour
 
         SceneLoader.GetInstance().StartLoadMainMenu();
         pauseMenuUI.SetActive(false);
+        
+        SetSurrenderTextVisibility(false);
     }
 
     public void HideUI()
     {
         pauseMenuUI.SetActive(false);
-        mainMenuButtonText.gameObject.SetActive(true);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
     }
 
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)
@@ -233,13 +236,17 @@ public class PauseMenu : MonoBehaviour
 
     public void MainMenuHoverShowSurrender()
     {
-        mainMenuButtonText.gameObject.SetActive(false);
-        surrenderText.gameObject.SetActive(true);
+        SetSurrenderTextVisibility(true);
     }
     public void MainMenuUnhoverHideSurrender()
     {
-        mainMenuButtonText.gameObject.SetActive(true);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
+    }
+
+    private void SetSurrenderTextVisibility(bool surrenderIsVisible)
+    {
+        mainMenuButtonText.gameObject.SetActive(!surrenderIsVisible);
+        surrenderText.gameObject.SetActive(surrenderIsVisible);
     }
 
     public void GoToOptionsMenu()
@@ -253,6 +260,7 @@ public class PauseMenu : MonoBehaviour
         ButtonUnhovered();
         optionsMenuUI.Hide();
         optionsMenuUI.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
     }
 
 }

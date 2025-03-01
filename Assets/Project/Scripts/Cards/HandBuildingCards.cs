@@ -615,9 +615,11 @@ public class HandBuildingCards : MonoBehaviour
             //StartCoroutine("DelayedHideHand");
             StartCoroutine(DelayedTryHideHandAfterDraw(0.05f));
         }
+        
 
         hoveredCard = null;
         card.StandardState();
+        card.SetCanNotBePlayedPermanent(false);
 
 
         //if (card.isShowingInfo)
