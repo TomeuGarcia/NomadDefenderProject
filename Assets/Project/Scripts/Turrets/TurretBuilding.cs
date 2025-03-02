@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretBuilding : RangeBuilding
+public class TurretBuilding : RangeBuilding, ElectricWireSegment.IAttachable
 {
     private TurretCardStatsController _statsController;
     public TurretStatsSnapshot Stats => _statsController.CurrentStats;
@@ -373,5 +373,9 @@ public class TurretBuilding : RangeBuilding
         SetBuildingPartsColor(previewColorInUse);
     }
 
-    
+
+    Vector3 ElectricWireSegment.IAttachable.GetAttachPosition()
+    {
+        return Position + (Vector3.up * 0.5f);
+    }
 }

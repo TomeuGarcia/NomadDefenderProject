@@ -32,6 +32,8 @@ public class BuildingPlacer : MonoBehaviour
     public delegate void BuildingPlacerAction();
     public event BuildingPlacerAction OnBuildingPlaced;
     public static Action<RangeBuilding> OnRangedBuildingPlaced;
+    public static Action<TurretBuilding> OnTurretBuildingPlaced;
+    public static Action<Building> OnBuildingUnplaced;
     public static event BuildingPlacerAction OnBuildingPlacedGlobal;
 
     public static event BuildingPlacerAction OnPlacingBuildingsDisabled;
@@ -222,6 +224,11 @@ public class BuildingPlacer : MonoBehaviour
         {
             OnRangedBuildingPlaced?.Invoke(placedRangedBuilding); 
         }
+
+        if (selectedBuilding is TurretBuilding placedTurretBuilding)
+        {
+            OnTurretBuildingPlaced?.Invoke(placedTurretBuilding);
+        }
         
         selectedBuildingCard = null;
         selectedBuilding = null;
@@ -329,6 +336,8 @@ public class BuildingPlacer : MonoBehaviour
         {
             GameAudioManager.GetInstance().PlayTurretCardUnplaced(TurretPartBody.BodyType.SENTRY);
         }
+        
+        OnBuildingUnplaced?.Invoke(building);
     }
 
 

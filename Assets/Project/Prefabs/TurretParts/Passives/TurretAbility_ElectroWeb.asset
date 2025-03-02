@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d10b287a274293bf7e5368745b3d09, type: 3}
+  m_Name: TurretAbility_ElectroWeb
+  m_EditorClassIdentifier: 
+  _optionalViewAddOns:
+    _turretAddOn: {fileID: 11400000, guid: 846f944ac1e0e8445b3ee09063001faf, type: 2}
+    _projectileAddOn: {fileID: 0}
+  _viewConfig:
+    _sprite: {fileID: 21300000, guid: e24251f55392b8d47beacc924336f3f8, type: 3}
+    _spriteAsTexture: {fileID: 2800000, guid: e24251f55392b8d47beacc924336f3f8, type: 3}
+    _color:
+      serializedVersion: 2
+      rgba: 4290354694
+  _descriptionModel:
+    _abilityName: electroWeb
+    _abilityDescription: Connect this Turret with other Turrets with [NUMBER_OF_PASSIVES]
+      [or] [more] Passive Abilities with a wire that STUNS for [STUN_DURATION] seconds
+      and deals [DAMAGE] damage to Enemies.
+    _descriptionKeywords:
+    - {fileID: 11400000, guid: 37818ddd2ed6ae64b819013772cc42e3, type: 2}
+    _descriptionlessKeywords: []
+    _descriptionPatterns:
+    - {fileID: 11400000, guid: 1511bbc315101884b8d60d883205ef1f, type: 2}
+  _otherReferencedProjectiles: []
+  _otherReferencedPassives: []
+  _numberOfPassives:
+    _name: NUMBER_OF_PASSIVES
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 2
+    _floatConstantValue: 0
+  _wireDamage:
+    _name: DAMAGE
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 20
+    _floatConstantValue: 0
+  _wireStunDuration:
+    _name: STUN_DURATION
+    _isDynamic: 0
+    _isFloat: 1
+    _constantValue: 0
+    _floatConstantValue: 0.5
+  _wireColorGradient:
+    serializedVersion: 2
+    key0: {r: 0, g: 0.6618707, b: 1, a: 1}
+    key1: {r: 0, g: 0.31312633, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  _stackedWireDamage:
+    _name: STACKED_DAMAGE
+    _isDynamic: 0
+    _isFloat: 0
+    _constantValue: 50
+    _floatConstantValue: 0
+  _stackedWireStunDuration:
+    _name: STACKED_STUN_DURATION
+    _isDynamic: 0
+    _isFloat: 1
+    _constantValue: 0
+    _floatConstantValue: 0.8
+  _stackedWireColorGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0.09067249, a: 1}
+    key1: {r: 0, g: 0.5955162, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 15998
+    ctime1: 37586
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
