@@ -70,8 +70,8 @@ public class DisableCannonsController : MonoBehaviour, IDisableCannonsShootContr
             DisableCannon cannon = _availableDisableCannons[cannonIndex];
             
             cannon.LaunchMissile(missileEndPosition, mine);
-            
-            yield return new WaitForSeconds(_delayBetweenCannonShots);
+
+            yield return StartCoroutine(GameTime.WaitForSeconds(_delayBetweenCannonShots));
         }
     }
 
@@ -113,7 +113,7 @@ public class DisableCannonsController : MonoBehaviour, IDisableCannonsShootContr
         for (int i = 0; i < newAddedCannons.Count; ++i)
         {
             newAddedCannons[i].PlayEnterActive();
-            yield return new WaitForSeconds(_delayBetweenCannonActivations);
+            yield return StartCoroutine(GameTime.WaitForSeconds(_delayBetweenCannonActivations));
         }
     }
     
@@ -139,7 +139,7 @@ public class DisableCannonsController : MonoBehaviour, IDisableCannonsShootContr
         for (int i = 0; i < randomlySortedCannons.Length; ++i)
         {
             randomlySortedCannons[i].PlayEnterNotActive();
-            yield return new WaitForSeconds(_delayBetweenCannonDeactivations);
+            yield return StartCoroutine(GameTime.WaitForSeconds(_delayBetweenCannonDeactivations));
         }
     }
     

@@ -123,7 +123,7 @@ public class DisableMine : RecyclableObject
 
     private void OnMousePressed()
     {
-        if (_update)
+        if (_update && !PauseMenu.GameIsPaused)
         {
             _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
             _view.PlayTakeDamageAnimation();

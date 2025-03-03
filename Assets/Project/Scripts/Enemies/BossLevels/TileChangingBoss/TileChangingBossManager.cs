@@ -108,15 +108,19 @@ public class TileChangingBossManager : MonoBehaviour
         
         yield return StartCoroutine(nextLevelEvent.Dialogue.PlayBeforeAnimationLines());
 
-        bool isFirstEvent = !_firstEventHappened;
-        if (isFirstEvent)
+        if (!nextLevelEvent.SkipChangeAnimation)
         {
-            GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BOSS_BATTLE, 0.1f);
-            _firstEventHappened = true;            
+            bool isFirstEvent = !_firstEventHappened;
+            if (isFirstEvent)
+            {
+                GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.BOSS_BATTLE, 0.1f);
+                _firstEventHappened = true;            
+            }
+
+            StartCoroutine(ShowNext(0.2f, oldLevelEvent, nextLevelEvent));
+            yield return StartCoroutine(PlayShowNextAnimation(!isFirstEvent));
         }
 
-        StartCoroutine(ShowNext(0.2f, oldLevelEvent, nextLevelEvent));
-        yield return StartCoroutine(PlayShowNextAnimation(!isFirstEvent));
         yield return StartCoroutine(nextLevelEvent.Dialogue.PlayAfterAnimationLines());
 
         
