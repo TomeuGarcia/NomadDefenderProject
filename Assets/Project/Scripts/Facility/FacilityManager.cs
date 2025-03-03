@@ -24,8 +24,9 @@ public class FacilityManager : MonoBehaviour
         _cursorChanger = ServiceLocator.GetInstance().CursorChanger;
         PauseMenu.GetInstance().GameCanBePaused = true;
         PauseMenu.GetInstance().CanPauseNormally = false;
-        
-        
+        PauseMenu.GetInstance().CanDisplayNewGame = true;
+
+
         bool finishedTutorials = TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.BATTLE) &&
                                  TutorialsSaverLoader.GetInstance().IsTutorialDone(Tutorials.OW_MAP);
         if (!finishedTutorials)
@@ -76,6 +77,7 @@ public class FacilityManager : MonoBehaviour
         ServiceLocator.GetInstance().RunInfo.SetNewGame(false);
         PauseMenu.GetInstance().GameCanBePaused = false;
         PauseMenu.GetInstance().CanPauseNormally = true;
+        PauseMenu.GetInstance().CanDisplayNewGame = false;
     }
 
     private void Update()

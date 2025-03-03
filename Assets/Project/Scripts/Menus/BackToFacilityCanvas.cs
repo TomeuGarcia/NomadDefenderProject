@@ -10,11 +10,14 @@ public class BackToFacilityCanvas : MonoBehaviour
     {
         _backButton.onClick.AddListener(SceneLoader.GetInstance().LoadFacility);
         PauseMenu.GetInstance().GameCanBePaused = false;
+        PauseMenu.GetInstance().CanPauseNormally = false;
     }
 
     private void OnDestroy()
     {
         PauseMenu.GetInstance().GameCanBePaused = true;
+        PauseMenu.GetInstance().CanPauseNormally = true;
+
     }
 
     public void OnBackButtonHover()

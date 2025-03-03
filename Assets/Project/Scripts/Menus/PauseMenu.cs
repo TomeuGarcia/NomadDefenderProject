@@ -41,6 +41,7 @@ public class PauseMenu : MonoBehaviour
     public static Action OnGameSurrender;
 
     public bool CanPauseNormally { get; set; } = true;
+    public bool CanDisplayNewGame { get; set; } = false;
 
 
     private void Start()
@@ -174,7 +175,11 @@ public class PauseMenu : MonoBehaviour
     public void MainMenuOptions()
     {
         GoToOptionsMenu();
-        optionsMenuUI.SetNewGameAvailable();
+        if (CanDisplayNewGame)
+        {
+            optionsMenuUI.SetNewGameAvailable();
+        }
+        
         OnEnterMainMenuOptions?.Invoke();
         ShowView();
     }
@@ -193,15 +198,14 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = true;
 
         SceneLoader.GetInstance().StartLoadMainMenu();
-        pauseMenuUI.SetActive(false);
-        
-        SetSurrenderTextVisibility(false);
+        HideUI();
     }
 
     public void HideUI()
     {
         pauseMenuUI.SetActive(false);
         SetSurrenderTextVisibility(false);
+        HideView();
     }
 
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)
