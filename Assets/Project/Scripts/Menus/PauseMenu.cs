@@ -198,7 +198,7 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = true;
 
         SceneLoader.GetInstance().StartLoadMainMenu();
-        HideUI();
+        Resume();
     }
 
     public void HideUI()
@@ -287,7 +287,11 @@ public class PauseMenu : MonoBehaviour
         optionsMenuUI.Hide();
         optionsMenuUI.gameObject.SetActive(false);
         SetSurrenderTextVisibility(false);
-        HideView();
+
+        if (!CanPauseNormally)
+        {
+            HideView();
+        }
     }
 
 }

@@ -22,6 +22,7 @@ public class DisableMineView : MonoBehaviour
     [SerializeField] private Transform _mineHolder;
     [SerializeField] private ParticleSystem _damagedParticles;
     [SerializeField] private ParticleSystem _clearedDestroyParticles;
+    [SerializeField] private ParticleSystem _lifetimeEndParticles;
 
     [Header("HUD")]
     [SerializeField] private Image _timerFillImage;
@@ -95,6 +96,8 @@ public class DisableMineView : MonoBehaviour
     {
         _mineHolder.Scale(_config.LifetimeEndScale);
         yield return new WaitForSeconds(_config.TakeDamageRotationPunch.Duration);
+        _lifetimeEndParticles.Play();
+        yield return new WaitUntil(() => !_lifetimeEndParticles.isEmitting);
     }
 
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class BackToFacilityCanvas : MonoBehaviour
 {
     [SerializeField] private Button _backButton;
+    private bool _interactionEnabled = true;
 
     private void Awake()
     {
@@ -17,11 +18,26 @@ public class BackToFacilityCanvas : MonoBehaviour
     {
         PauseMenu.GetInstance().GameCanBePaused = true;
         PauseMenu.GetInstance().CanPauseNormally = true;
-
+        ClearButtons();
     }
 
     public void OnBackButtonHover()
     {
-        GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        if (_interactionEnabled)
+        {
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+        }
+    }
+
+    private void ClearButtons()
+    {
+        _backButton.onClick.RemoveAllListeners();
+    }
+    
+    public void DisableButtonsInteraction()
+    {
+        ClearButtons();
+        _interactionEnabled = false;
+        _backButton.interactable = false;
     }
 }

@@ -115,6 +115,7 @@ public class DisableMine : RecyclableObject
         if (wasCleared)
         {
             AnyMineWasCleared = true;
+            GameAudioManager.GetInstance().PlayCannonMineCleared();
             yield return StartCoroutine(_view.PlayClearedDestroy());
         }
         else
@@ -127,6 +128,7 @@ public class DisableMine : RecyclableObject
         Recycle();
     }
 
+    
 
     private void OnMousePressed()
     {

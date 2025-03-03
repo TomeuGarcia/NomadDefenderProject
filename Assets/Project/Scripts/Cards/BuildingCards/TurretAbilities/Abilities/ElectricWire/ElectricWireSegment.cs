@@ -45,7 +45,7 @@ public class ElectricWireSegment : RecyclableObject
             lightningMainModule.startLifetime = originToTargetDistance / 10f;
             
             ParticleSystem.MainModule sparksMainModule = _sparksParticles.main;
-            sparksMainModule.startLifetime = originToTargetDistance / 10f;
+            sparksMainModule.startLifetime = (originToTargetDistance / 10f) * 2f;
             
             _lightningParticles.Play();
             _sparksParticles.Play();

@@ -136,6 +136,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSourceBuffer _disableCannonActivateBuffer;
     [SerializeField] private AudioSourceBuffer _disableCannonDeactivateBuffer;
     [SerializeField] private AudioSourceBuffer _cannonMineDamagedBuffer;
+    [SerializeField] private AudioSourceBuffer _cannonMineClearedBuffer;
 
     [Header("OTHER EFFECTS")]
     [SerializeField] private AudioSource effectsAudioSource;
@@ -892,6 +893,10 @@ public class GameAudioManager : MonoBehaviour
     public void PlayCannonMineDamaged()
     {
         _cannonMineDamagedBuffer.Play();
+    }
+    public void PlayCannonMineCleared()
+    {
+        _cannonMineClearedBuffer.Play();
     }
     
 

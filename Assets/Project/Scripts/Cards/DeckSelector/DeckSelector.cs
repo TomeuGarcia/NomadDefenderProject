@@ -23,7 +23,8 @@ public class DeckSelector : MonoBehaviour
     private SelectableDeck currentlySelectedDeck;
     [SerializeField] private DeckSelectorDebugDeckMap _debugDeckMap;
 
-    [Header("UI")]
+    [Header("UI")] 
+    [SerializeField] private BackToFacilityCanvas _backToFacilityCanvas;
     [SerializeField] private Button startSimulationButton;
     [SerializeField] private Light _startButtonLight;
     [SerializeField] private ParticleSystem _startButtonParticles;
@@ -189,6 +190,8 @@ public class DeckSelector : MonoBehaviour
 
     private async void OnStartSimulationButtonPressed()
     {
+        _backToFacilityCanvas.DisableButtonsInteraction();
+        
         deckSelectorVisuals.OnButtonPressed();
         startSimulationButton.enabled = false;
 
