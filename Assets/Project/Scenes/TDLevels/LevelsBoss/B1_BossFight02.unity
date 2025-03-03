@@ -2158,7 +2158,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100094923}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -11.5, y: 0.216, z: 12.5}
+  m_LocalPosition: {x: -10.5, y: 0.216, z: 12.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2491,6 +2491,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2050710906}
   - {fileID: 755659429}
   - {fileID: 265584303}
   - {fileID: 1903868923}
@@ -2516,6 +2517,7 @@ MonoBehaviour:
   _bossDialogueSystem: {fileID: 358234794}
   _screenGlitcher: {fileID: 104654499}
   _levelEvents:
+  - {fileID: 2050710909}
   - {fileID: 755659431}
   - {fileID: 265584305}
   - {fileID: 1903868925}
@@ -6409,7 +6411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248900334}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 16, y: 0, z: 5.5}
+  m_LocalPosition: {x: 13, y: 0, z: -2.5}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7029,7 +7031,7 @@ GameObject:
   - component: {fileID: 265584304}
   - component: {fileID: 265584306}
   m_Layer: 0
-  m_Name: BossEvent_6
+  m_Name: BossEvent_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7112,10 +7114,13 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: I just wont shut up
+      text: Still here? Impressive.
       clearTime: 0
     - textType: 1
-      text: bla bla bla bla
+      text: Or maybe just stubborn.
+      clearTime: 0
+    - textType: 1
+      text: "Either way, let\u2019s spice things up."
       clearTime: 0
   _linesAfterAnimation:
     _startDelay: 2
@@ -7123,13 +7128,10 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: bla bla bla bla
+      text: ' Boom. Another path. More fun.'
       clearTime: 0
     - textType: 1
-      text: roger fes push
-      clearTime: 0
-    - textType: 1
-      text: bla bla bla bla
+      text: ' You do like a challenge, right? (Oscar Sahun reference)'
       clearTime: 0
 --- !u!1001 &268553814
 PrefabInstance:
@@ -10886,7 +10888,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 420406808}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 12.5, y: 0, z: -11}
+  m_LocalPosition: {x: 12.5, y: 0, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12313,6 +12315,38 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 471552965}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &474628153
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 474628154}
+  m_Layer: 0
+  m_Name: Outlines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &474628154
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474628153}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8, y: 0.21, z: 8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 514692393}
+  m_Father: {fileID: 2050710906}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &476324933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13173,6 +13207,196 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 514156902}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &514692392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514692393}
+  - component: {fileID: 514692395}
+  - component: {fileID: 514692394}
+  m_Layer: 0
+  m_Name: GameObject_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &514692393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514692392}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 474628154}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!120 &514692394
+LineRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514692392}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 79e97dad45bf37b48905509f4489c636, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0.21, z: 0}
+  - {x: -1, y: 0.21, z: 0}
+  - {x: -1, y: 0.21, z: 2}
+  - {x: 3, y: 0.21, z: 2}
+  - {x: 3, y: 0.21, z: 10}
+  - {x: 0, y: 0.21, z: 10}
+  - {x: 0, y: 0.21, z: 12}
+  - {x: -7, y: 0.21, z: 12}
+  - {x: -7, y: 0.21, z: 10}
+  - {x: -10, y: 0.21, z: 10}
+  - {x: -10, y: 0.21, z: 2}
+  - {x: -6, y: 0.21, z: 2}
+  - {x: -6, y: 0.21, z: 0}
+  - {x: -7, y: 0.21, z: 0}
+  - {x: -7, y: 0.21, z: -1}
+  - {x: -5, y: 0.21, z: -1}
+  - {x: -5, y: 0.21, z: 3}
+  - {x: -9, y: 0.21, z: 3}
+  - {x: -9, y: 0.21, z: 9}
+  - {x: -6, y: 0.21, z: 9}
+  - {x: -6, y: 0.21, z: 11}
+  - {x: -4, y: 0.21, z: 11}
+  - {x: -4, y: 0.21, z: 9}
+  - {x: -3, y: 0.21, z: 9}
+  - {x: -3, y: 0.21, z: 11}
+  - {x: -1, y: 0.21, z: 11}
+  - {x: -1, y: 0.21, z: 9}
+  - {x: 2, y: 0.21, z: 9}
+  - {x: 2, y: 0.21, z: 3}
+  - {x: -2, y: 0.21, z: 3}
+  - {x: -2, y: 0.21, z: -1}
+  - {x: 0, y: 0.21, z: -1}
+  - {x: 0, y: 0.21, z: 0}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 0.15
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 1
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MaskInteraction: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
+  m_ApplyActiveColorSpace: 1
+--- !u!114 &514692395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514692392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba0fbdd1c76d8743a81d6a1a9391ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lineRenderer: {fileID: 514692394}
+  _points:
+  - {x: -6, y: 0, z: 0}
+  - {x: -6, y: 0, z: 5}
+  - {x: -9, y: 0, z: 5}
+  - {x: -9, y: 0, z: 8}
+  - {x: -10, y: 0, z: 8}
+  - {x: -10, y: 0, z: 4}
+  - {x: -7, y: 0, z: 4}
+  - {x: -7, y: 0, z: 0}
 --- !u!1 &517794898
 GameObject:
   m_ObjectHideFlags: 0
@@ -13678,12 +13902,12 @@ MonoBehaviour:
   _enemyWaveManager: {fileID: 364191823}
   _disableCannonsAdder: {fileID: 536008251}
   _activationChanges:
-  - _waveIndex: 1
-    _delay: 12
-  - _waveIndex: 4
-    _delay: 12
+  - _waveIndex: 0
+    _delay: 11.5
+  - _waveIndex: 5
+    _delay: 1
   - _waveIndex: 7
-    _delay: 12
+    _delay: 0
   _deactivationChanges:
   - _waveIndex: 8
     _delay: 1
@@ -16729,7 +16953,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674521591}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 18, y: 0, z: 2.5}
+  m_LocalPosition: {x: 15, y: 0, z: 0.5}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -17053,7 +17277,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 700111551}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2, y: 0, z: 3.5}
+  m_LocalPosition: {x: 7, y: 0, z: 3.5}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -18003,7 +18227,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750321813}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 17.5, y: 0, z: -1}
+  m_LocalPosition: {x: 8.5, y: 0, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18152,7 +18376,7 @@ GameObject:
   - component: {fileID: 755659430}
   - component: {fileID: 755659432}
   m_Layer: 0
-  m_Name: BossEvent_3
+  m_Name: BossEvent_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18237,7 +18461,10 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: oi m8, just wait for whats up next
+      text: 'Oh, you thought this was it?  '
+      clearTime: 0
+    - textType: 1
+      text: 'That was the warm-up.  '
       clearTime: 0
   _linesAfterAnimation:
     _startDelay: 2
@@ -18245,7 +18472,7 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: cool innit bruv?
+      text: 'New path. More enemies. Start panicking.  '
       clearTime: 0
 --- !u!1001 &756013572
 PrefabInstance:
@@ -24267,7 +24494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 999273109}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -3.5, y: 0.216, z: 13.5}
+  m_LocalPosition: {x: -5.5, y: 0.216, z: 13.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24532,23 +24759,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _victoryDialogue:
     _startDelay: 4
-    _betweenLinesDelay: 1
-    _finishDelay: 2
+    _betweenLinesDelay: 1.5
+    _finishDelay: 4
     _textLines:
     - textType: 1
-      text: wait what
+      text: Well... you beat me this time.
       clearTime: 0
     - textType: 1
-      text: just like that?
+      text: "Heh. Don\u2019t get cocky."
       clearTime: 0
     - textType: 1
-      text: this game is too easy
+      text: "Next time, I\u2019ll\u2014"
       clearTime: 0
-    - textType: 0
-      text: quiet you watcher nerd
+    - textType: 1
+      text: Oh.
       clearTime: 0
-    - textType: 0
-      text: now the credits roll and you go again
+    - textType: 1
+      text: Wait.
+      clearTime: 0
+    - textType: 1
+      text: There is no next time.
+      clearTime: 0
+    - textType: 1
+      text: The devs ran out of funding.
+      clearTime: 0
+    - textType: 1
+      text: No publisher. No future.
+      clearTime: 0
+    - textType: 1
+      text: Tough times. People gotta eat.
+      clearTime: 0
+    - textType: 1
+      text: Guess this is it.
+      clearTime: 0
+    - textType: 1
+      text: Hope you understand.
+      clearTime: 0
+    - textType: 1
+      text: Thanks for playing.
+      clearTime: 0
+    - textType: 1
+      text: "Let\u2019s roll the credits, I guess."
       clearTime: 0
 --- !u!1001 &1019123478
 PrefabInstance:
@@ -28310,7 +28561,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216900646}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -9.5, y: 0.216, z: 4.5}
+  m_LocalPosition: {x: -8.5, y: 0.216, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28963,7 +29214,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264596743}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 0, z: 13.5}
+  m_LocalPosition: {x: -5.5, y: 0, z: 13.5}
   m_LocalScale: {x: 0.5, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29748,7 +29999,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1292795766}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 6.5, y: 0, z: -11}
+  m_LocalPosition: {x: 6.5, y: 0, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31579,7 +31830,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396246087}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 17.5, y: 0, z: 1}
+  m_LocalPosition: {x: 11.5, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35852,7 +36103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583204405}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.5, y: 0, z: 4.5}
+  m_LocalPosition: {x: -8.5, y: 0, z: 4.5}
   m_LocalScale: {x: 0.5, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37502,6 +37753,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1660982967}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1665396892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2943738301645658478, guid: eabf5bbc4aa611546a0a2200fe92ba27,
+    type: 3}
+  m_PrefabInstance: {fileID: 1720938181}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1667881419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38153,7 +38410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1681624822
 Transform:
   m_ObjectHideFlags: 0
@@ -38274,21 +38531,41 @@ MonoBehaviour:
   _enemyWaveManager: {fileID: 364191823}
   _shootLogic: {fileID: 1436441722}
   _beats:
-  - _waveIndex: 2
-    _enemyCount: 3
-    _delay: 0
-    _shootingFunction: 0
+  - _waveIndex: 0
+    _enemyCount: 1
+    _delay: 3
+    _shootingFunction: 1
     _numberOfShots: 1
-  - _waveIndex: 2
-    _enemyCount: 8
-    _delay: 0.5
+  - _waveIndex: 1
+    _enemyCount: 2
+    _delay: 3
     _shootingFunction: 1
     _numberOfShots: 2
-  - _waveIndex: 3
-    _enemyCount: 2
-    _delay: 0
-    _shootingFunction: 2
+  - _waveIndex: 2
+    _enemyCount: 3
+    _delay: 3
+    _shootingFunction: 1
     _numberOfShots: 3
+  - _waveIndex: 3
+    _enemyCount: 4
+    _delay: 3
+    _shootingFunction: 1
+    _numberOfShots: 4
+  - _waveIndex: 4
+    _enemyCount: 5
+    _delay: 3
+    _shootingFunction: 1
+    _numberOfShots: 5
+  - _waveIndex: 5
+    _enemyCount: 6
+    _delay: 3
+    _shootingFunction: 1
+    _numberOfShots: 6
+  - _waveIndex: 6
+    _enemyCount: 7
+    _delay: 3
+    _shootingFunction: 1
+    _numberOfShots: 7
 --- !u!1001 &1688092542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42760,7 +43037,7 @@ GameObject:
   - component: {fileID: 1903868924}
   - component: {fileID: 1903868926}
   m_Layer: 0
-  m_Name: BossEvent_9
+  m_Name: BossEvent_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42807,6 +43084,7 @@ MonoBehaviour:
   _visibleObjects: []
   _hiddenObjectsPermanent:
   - {fileID: 17464091}
+  - {fileID: 1665396892}
   _hiddenObjects: []
   _flickeringObjects:
   - {fileID: 1456900492}
@@ -42822,7 +43100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveIndex: 8
+  _waveIndex: 7
   _levelTileChange: {fileID: 1903868924}
   _dialogue: {fileID: 1903868926}
 --- !u!114 &1903868926
@@ -42843,10 +43121,10 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: 'the devs should have paid a real storywritter '
+      text: "You\u2019re really making me work for this, huh?"
       clearTime: 0
     - textType: 1
-      text: it is the publishers fault though
+      text: Fine. No more holding back.
       clearTime: 0
   _linesAfterAnimation:
     _startDelay: 2
@@ -42854,13 +43132,10 @@ MonoBehaviour:
     _finishDelay: 2
     _textLines:
     - textType: 1
-      text: anyways
+      text: Third path unlocked. More enemies, more pain.
       clearTime: 0
     - textType: 1
-      text: this is the last challenge
-      clearTime: 0
-    - textType: 1
-      text: lets go
+      text: "Let\u2019s see how long you really last."
       clearTime: 0
 --- !u!1001 &1904307276
 PrefabInstance:
@@ -44913,7 +45188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033084686}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.5, y: 0, z: 12.5}
+  m_LocalPosition: {x: -10.5, y: 0, z: 12.5}
   m_LocalScale: {x: 0.5, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45709,6 +45984,107 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2046978694}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2050710905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050710906}
+  - component: {fileID: 2050710909}
+  - component: {fileID: 2050710908}
+  - component: {fileID: 2050710907}
+  m_Layer: 0
+  m_Name: BossEvent_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2050710906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050710905}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 474628154}
+  m_Father: {fileID: 104654497}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2050710907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050710905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f909528bcb948a5876133a949a55e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _linesBeforeAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines:
+    - textType: 1
+      text: "Oh no, your poor little turrets\u2026  "
+      clearTime: 0
+    - textType: 1
+      text: ' Would be a real shame if something happened to them.  '
+      clearTime: 0
+    - textType: 1
+      text: "Like, I don\u2019t know\u2026 "
+      clearTime: 0
+    - textType: 1
+      text: 'Getting disabled for a while. '
+      clearTime: 0
+  _linesAfterAnimation:
+    _startDelay: 2
+    _betweenLinesDelay: 1
+    _finishDelay: 2
+    _textLines: []
+--- !u!114 &2050710908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050710905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 211c764b25032a84fac3f6be46c665bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visibleObjectsPermanent: []
+  _visibleObjects: []
+  _hiddenObjectsPermanent: []
+  _hiddenObjects: []
+  _flickeringObjects: []
+--- !u!114 &2050710909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050710905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waveIndex: 1
+  _levelTileChange: {fileID: 2050710908}
+  _dialogue: {fileID: 2050710907}
 --- !u!1 &2052879346
 GameObject:
   m_ObjectHideFlags: 0
@@ -48177,13 +48553,13 @@ PrefabInstance:
         type: 3}
       propertyPath: _pathsStartData.Array.data[0]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 6afd631ece5bdfb44b12bbccb61cd4ea,
+      objectReference: {fileID: 11400000, guid: f0ba04d2089ddc8499a7bd820feeab3d,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsStartData.Array.data[1]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 06c81e94135f9bb458c318611539309d,
+      objectReference: {fileID: 11400000, guid: 91a02637e5434dc43913bd401383a2fb,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
@@ -48201,19 +48577,19 @@ PrefabInstance:
         type: 3}
       propertyPath: _pathsStartData.Array.data[4]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 7307a7c7fd24af24392235c51c5aadf1,
+      objectReference: {fileID: 11400000, guid: 542bc19e353821147afe4e4c4c8981b2,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsStartData.Array.data[5]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 1dbaed92e4ff8614497497ec18dd8b60,
+      objectReference: {fileID: 11400000, guid: 3aefe8358355dce4f87265589d5fd74f,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
       propertyPath: _pathsStartData.Array.data[6]._enemyWaveSpawner
       value: 
-      objectReference: {fileID: 11400000, guid: 74b494ac16f740d4e86b990230a5b6d9,
+      objectReference: {fileID: 11400000, guid: ae287e9efdeaa44439ea7a72dd8564cb,
         type: 2}
     - target: {fileID: 4485851064566330647, guid: 96cca41b32840aa45bdf634ab705208b,
         type: 3}
