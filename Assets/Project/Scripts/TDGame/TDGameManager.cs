@@ -71,12 +71,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         InitLocationsVisuals();
     }
-
-    private void OnDestroy()
-    {
-        ServiceLocator.GetInstance().DynamicProjectileShootingService.Clear();
-        OnSceneFinish?.Invoke();
-    }
+    
 
     private void OnEnable()
     {        
@@ -93,6 +88,9 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
     private void OnDisable()
     {
+        ServiceLocator.GetInstance().DynamicProjectileShootingService.Clear();
+        OnSceneFinish?.Invoke();
+        
         if (!FirstCardWasPlayed)
         {
             HandBuildingCards.OnCardPlayed -= EnableFirstCardPlayed;

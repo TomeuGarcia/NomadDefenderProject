@@ -8,11 +8,13 @@ public class DisableMine : RecyclableObject
     [System.Serializable]
     public class LogicConfig
     {
+        [SerializeField, Min(0f)] private float _takeDamageCooldown = 0.2f;
         [SerializeField, Min(0f)] private float _totalLifetimeDuration = 3f;
         [SerializeField, Range(0f, 1f)] private float _startLifetimeRatio = 0.5f;
         [SerializeField, Min(0f)] private float _lifetimeRemovePerClick = 0.75f;
         [SerializeField] private BuildingDisableWaveConfig _disableWaveConfig;
         
+        public float TakeDamageCooldown => _takeDamageCooldown;
         public float TotalLifetimeDuration => _totalLifetimeDuration;
         public float StartLifetimeTime => _startLifetimeRatio * _totalLifetimeDuration;
         public float LifetimeRemovePerClick => _lifetimeRemovePerClick;
@@ -28,6 +30,7 @@ public class DisableMine : RecyclableObject
     private LogicConfig _logicConfig;
     private Timer _lifetimeTimer;
     private bool _update;
+    private bool _isOnDamageCooldown = false;
 
     private IDisableMineDisappearListener _disappearListener;
     public Tile OccupiedTile { get; private set; }
@@ -67,6 +70,7 @@ public class DisableMine : RecyclableObject
         gameObject.SetActive(false);
         OccupiedTile = occupiedTile;
         _disappearListener = disappearListener;
+        _isOnDamageCooldown = false;
     }
 
     public void Appear()
@@ -132,12 +136,20 @@ public class DisableMine : RecyclableObject
 
     private void OnMousePressed()
     {
-        if (_update && !PauseMenu.GameIsPaused && !SpeedUpButton.Instance.IsTimePaused)
+        if (_update && !_isOnDamageCooldown && !PauseMenu.GameIsPaused && !SpeedUpButton.Instance.IsTimePaused)
         {
             _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
             _view.PlayTakeDamageAnimation();
             GameAudioManager.GetInstance().PlayCannonMineDamaged();
+            StartCoroutine(TakeDamageCooldown());
         }
+    }
+
+    private IEnumerator TakeDamageCooldown()
+    {
+        _isOnDamageCooldown = true;
+        yield return new WaitForSeconds(_config.LogicConfig.TakeDamageCooldown);
+        _isOnDamageCooldown = false;
     }
 
     private void OnMouseEntered()
@@ -145,6 +157,7 @@ public class DisableMine : RecyclableObject
         if (_update)
         {
             _view.ShowHovered();
+            GameAudioManager.GetInstance().PlayCardInfoMoveHidden();
         }
     }
     private void OnMouseExited()
