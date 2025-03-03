@@ -32,6 +32,8 @@ public class DisableMine : RecyclableObject
     private IDisableMineDisappearListener _disappearListener;
     public Tile OccupiedTile { get; private set; }
 
+    public static bool AnyMineWasCleared { get; set; } = false;
+
     private void Awake()
     {
         _logicConfig = _config.LogicConfig;
@@ -72,6 +74,10 @@ public class DisableMine : RecyclableObject
         gameObject.SetActive(true);
         _view.Init();
         _view.PlayAppearAnimation();
+        if (AnyMineWasCleared)
+        {
+            _view.HideClick();
+        }
         
         _lifetimeTimer.Reset();
         _lifetimeTimer.Update(Mathf.Max(0.01f, _logicConfig.StartLifetimeTime));
@@ -108,6 +114,7 @@ public class DisableMine : RecyclableObject
         
         if (wasCleared)
         {
+            AnyMineWasCleared = true;
             yield return StartCoroutine(_view.PlayClearedDestroy());
         }
         else
@@ -123,10 +130,11 @@ public class DisableMine : RecyclableObject
 
     private void OnMousePressed()
     {
-        if (_update && !PauseMenu.GameIsPaused)
+        if (_update && !PauseMenu.GameIsPaused && !SpeedUpButton.Instance.IsTimePaused)
         {
             _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
             _view.PlayTakeDamageAnimation();
+            GameAudioManager.GetInstance().PlayCannonMineDamaged();
         }
     }
 

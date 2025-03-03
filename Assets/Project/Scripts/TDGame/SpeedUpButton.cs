@@ -36,9 +36,12 @@ public class SpeedUpButton : MonoBehaviour
     public static bool UsingBuggyTimeScale { get; private set; }
 
     public static Action OnGameSpeedInteracted;
+    
+    public static SpeedUpButton Instance { get; private set; }
 
     private void Awake()
     {
+        Instance = this;
         InitNumSpeed();
         IsTimePaused = false;
         UpdateTimeSpeed();
@@ -64,6 +67,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void OnDestroy()
     {
+        Instance = null;
         Time.timeScale = 1.0f;
     }
 

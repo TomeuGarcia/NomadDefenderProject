@@ -31,6 +31,7 @@ public class DisableCannonsController : MonoBehaviour, IDisableCannonsShootContr
     private void Awake()
     {
         _disableMineFactory.Init();
+        DisableMine.AnyMineWasCleared = false;
         
         
         List<Tile> shootTiles = new List<Tile>(_shootTilesParent.childCount);

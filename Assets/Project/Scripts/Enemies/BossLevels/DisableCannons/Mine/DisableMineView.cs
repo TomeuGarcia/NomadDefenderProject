@@ -26,6 +26,7 @@ public class DisableMineView : MonoBehaviour
     [Header("HUD")]
     [SerializeField] private Image _timerFillImage;
     [SerializeField] private GameObject _hudHolder;
+    [SerializeField] private GameObject _clickUIHolder;
     [SerializeField] private Graphic[] _hudHoverGraphics;
     private Color _originalFillImageColor;
 
@@ -53,6 +54,11 @@ public class DisableMineView : MonoBehaviour
         _hudHolder.SetActive(true);
         
         HideHovered();
+    }
+
+    public void HideClick()
+    {
+        _clickUIHolder.SetActive(false);
     }
 
     public void UpdateTimer(float ratio01)
@@ -98,13 +104,16 @@ public class DisableMineView : MonoBehaviour
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
             hudHoverGraphic.color = Color.cyan;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one * 1.1f;
         }
     }
     public void HideHovered()
     {
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
-            hudHoverGraphic.color = Color.white;
+            //hudHoverGraphic.color = Color.white;
+            hudHoverGraphic.color = _originalFillImageColor;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one;
         }      
     }
     
