@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4047420749360632132}
   - component: {fileID: 7314741639398687240}
   - component: {fileID: 70874285755118373}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spot Light_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,12 +25,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 300733772582745875}
-  m_LocalRotation: {x: 0.9985251, y: -0, z: -0, w: 0.05429322}
-  m_LocalPosition: {x: 0.194, y: 0.103, z: 0.705}
+  m_LocalRotation: {x: 0.998525, y: -0, z: -0, w: 0.054293208}
+  m_LocalPosition: {x: 0.19400005, y: 0.102999926, z: 0.7049997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3603668917173974940}
+  m_Father: {fileID: 7288452637651250281}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 173.775, y: 0, z: 0}
 --- !u!108 &7314741639398687240
@@ -82,7 +82,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -118,6 +118,40 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &311831749223331446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5961405169688563808}
+  m_Layer: 8
+  m_Name: Ready
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5961405169688563808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311831749223331446}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7443197146338534663}
+  - {fileID: 8143397897132735317}
+  - {fileID: 2646685041876040221}
+  m_Father: {fileID: 1289704392848730917}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &561461113325260789
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +163,7 @@ GameObject:
   - component: {fileID: 5696017444904143242}
   - component: {fileID: 1000045588183313757}
   - component: {fileID: 6876592852293602406}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotLeftBotHookSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +215,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: -2656436889676018670, guid: f4d9fd981beca004e8ca9f3c9e1056b5, type: 3}
   - {fileID: 6890453346842779304, guid: f4d9fd981beca004e8ca9f3c9e1056b5, type: 3}
-  - {fileID: 2100000, guid: f4a87a4db14c2154ea6b0a78d13e56ad, type: 2}
+  - {fileID: 2100000, guid: 0e7035962fede0d4fbb20595e1f176e3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -214,7 +248,7 @@ GameObject:
   - component: {fileID: 5734198873227245688}
   - component: {fileID: 4245787844979942355}
   - component: {fileID: 7710680195409946436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookSnap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +331,7 @@ GameObject:
   - component: {fileID: 2169474160144387863}
   - component: {fileID: 3881431911112224233}
   - component: {fileID: 1142756450073125942}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +414,7 @@ GameObject:
   - component: {fileID: 5738411695751416333}
   - component: {fileID: 5022124874852398993}
   - component: {fileID: 2796102919236157768}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ExtraSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +497,7 @@ GameObject:
   - component: {fileID: 4463604591542844064}
   - component: {fileID: 2407554374463822369}
   - component: {fileID: 3495013325361010148}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +580,7 @@ GameObject:
   - component: {fileID: 5697006059087347812}
   - component: {fileID: 2817434273951235052}
   - component: {fileID: 2178217819469461633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +663,7 @@ GameObject:
   - component: {fileID: 7494745963322017970}
   - component: {fileID: 4596724937333476958}
   - component: {fileID: 5596159117789294927}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -712,7 +746,7 @@ GameObject:
   - component: {fileID: 7552464905663258304}
   - component: {fileID: 5112194002957484894}
   - component: {fileID: 8220065652151861826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -727,7 +761,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2643654032984385306}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00016021729, y: 0, z: 5.094429}
+  m_LocalPosition: {x: 0.0001602173, y: 0, z: 5.094429}
   m_LocalScale: {x: 40, y: 40, z: 40}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -805,7 +839,7 @@ GameObject:
   - component: {fileID: 1718060568683814225}
   - component: {fileID: 4277510670331861207}
   - component: {fileID: 4475712613067011196}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -877,6 +911,157 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2843204947311854539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7443197146338534663}
+  - component: {fileID: 7201780251069492501}
+  - component: {fileID: 8393005302225960911}
+  m_Layer: 8
+  m_Name: Spot Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7443197146338534663
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2843204947311854539}
+  m_LocalRotation: {x: 0.998525, y: -0, z: -0, w: 0.054293208}
+  m_LocalPosition: {x: -0.2797, y: 0.102999926, z: 0.7049997}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5961405169688563808}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 173.775, y: 0, z: 0}
+--- !u!108 &7201780251069492501
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2843204947311854539}
+  m_Enabled: 0
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &8393005302225960911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2843204947311854539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+--- !u!1 &2930359855108982461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289704392848730917}
+  m_Layer: 8
+  m_Name: Lights
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289704392848730917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2930359855108982461}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7288452637651250281}
+  - {fileID: 5961405169688563808}
+  m_Father: {fileID: 3603668917173974940}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3434909842131510298
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,7 +1073,7 @@ GameObject:
   - component: {fileID: 6235442846694090344}
   - component: {fileID: 5728564938192116959}
   - component: {fileID: 577947883187631541}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotTopLeftHook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -971,7 +1156,7 @@ GameObject:
   - component: {fileID: 8578004399847844112}
   - component: {fileID: 5428211334518574367}
   - component: {fileID: 3421094368338467339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spot Light_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -986,11 +1171,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3458025770555156364}
   m_LocalRotation: {x: 0.99910146, y: -0, z: -0, w: -0.042382125}
-  m_LocalPosition: {x: -0.009, y: 0.426, z: 0.89}
+  m_LocalPosition: {x: -0.009000015, y: 0.42599988, z: 0.88999915}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3603668917173974940}
+  m_Father: {fileID: 7288452637651250281}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 184.858, y: 0, z: 0}
 --- !u!108 &5428211334518574367
@@ -1042,7 +1227,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -1089,7 +1274,7 @@ GameObject:
   - component: {fileID: 3522982134276290124}
   - component: {fileID: 3992429145312264596}
   - component: {fileID: 8817616596915825075}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookSnap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,7 +1357,7 @@ GameObject:
   - component: {fileID: 3603668917173974940}
   - component: {fileID: 1018653478183850214}
   - component: {fileID: 6281573312837900212}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1187,7 +1372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662261360790958207}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000077962875, y: 0.034487247, z: 1.7453461}
+  m_LocalPosition: {x: 0.00007796288, y: 0.034487247, z: 1.7453461}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1201,9 +1386,7 @@ Transform:
   - {fileID: 4463604591542844064}
   - {fileID: 9103462625482537728}
   - {fileID: 3396268689380491556}
-  - {fileID: 1271240765819418660}
-  - {fileID: 4047420749360632132}
-  - {fileID: 8578004399847844112}
+  - {fileID: 1289704392848730917}
   m_Father: {fileID: 7552464905663258304}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1271,7 +1454,7 @@ GameObject:
   - component: {fileID: 6453861397287742842}
   - component: {fileID: 4954018858566573969}
   - component: {fileID: 4502784234838522745}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1355,7 +1538,7 @@ GameObject:
   - component: {fileID: 1271240765819418660}
   - component: {fileID: 1372093352490725737}
   - component: {fileID: 5041834789296984854}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1369,12 +1552,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3867733757239135028}
-  m_LocalRotation: {x: 0.9985251, y: -0, z: -0, w: 0.05429322}
-  m_LocalPosition: {x: -0.2797, y: 0.103, z: 0.705}
+  m_LocalRotation: {x: 0.998525, y: -0, z: -0, w: 0.054293208}
+  m_LocalPosition: {x: -0.2797, y: 0.102999926, z: 0.7049997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3603668917173974940}
+  m_Father: {fileID: 7288452637651250281}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 173.775, y: 0, z: 0}
 --- !u!108 &1372093352490725737
@@ -1426,7 +1609,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -1473,7 +1656,7 @@ GameObject:
   - component: {fileID: 359534835062109529}
   - component: {fileID: 9029721167110175650}
   - component: {fileID: 6089758029112089217}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1556,7 +1739,7 @@ GameObject:
   - component: {fileID: 4419817428490289278}
   - component: {fileID: 3359125769883414983}
   - component: {fileID: 1501651496731672518}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ExtraSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1639,7 +1822,7 @@ GameObject:
   - component: {fileID: 6187648901126590729}
   - component: {fileID: 5398545619175693042}
   - component: {fileID: 1133542189255354980}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1720,7 +1903,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3596902362043035536}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GUM_CardSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1734,7 +1917,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4889427158170875887}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: -2.757344, y: 1.1154993, z: 1.3858172}
   m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
   m_ConstrainProportionsScale: 0
@@ -1744,7 +1927,7 @@ Transform:
   - {fileID: 3945761577889370322}
   m_Father: {fileID: 0}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
 --- !u!1 &5109877891142327889
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,7 +1939,7 @@ GameObject:
   - component: {fileID: 2186980061645761710}
   - component: {fileID: 4917442865829069301}
   - component: {fileID: 1808842576576942155}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookAxis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1832,6 +2015,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5147931753000842392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7288452637651250281}
+  m_Layer: 8
+  m_Name: Warning
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7288452637651250281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5147931753000842392}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1271240765819418660}
+  - {fileID: 4047420749360632132}
+  - {fileID: 8578004399847844112}
+  m_Father: {fileID: 1289704392848730917}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5179082459870213768
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,7 +2060,7 @@ GameObject:
   - component: {fileID: 6151602868343475170}
   - component: {fileID: 1196330634505991733}
   - component: {fileID: 3596637514949937485}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1926,7 +2143,7 @@ GameObject:
   - component: {fileID: 3945761577889370322}
   - component: {fileID: 2082151270183932073}
   - component: {fileID: 2080984487236349508}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookAxisSupport_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2010,7 +2227,7 @@ GameObject:
   - component: {fileID: 5823179141284926476}
   - component: {fileID: 6183745544704299058}
   - component: {fileID: 3047721627589392331}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookAxisSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2083,6 +2300,242 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6367803539616425615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8143397897132735317}
+  - component: {fileID: 4967399962013942398}
+  - component: {fileID: 1802503795438227200}
+  m_Layer: 8
+  m_Name: Spot Light_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8143397897132735317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367803539616425615}
+  m_LocalRotation: {x: 0.998525, y: -0, z: -0, w: 0.054293208}
+  m_LocalPosition: {x: 0.19400005, y: 0.102999926, z: 0.7049997}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5961405169688563808}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 173.775, y: 0, z: 0}
+--- !u!108 &4967399962013942398
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367803539616425615}
+  m_Enabled: 0
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &1802503795438227200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367803539616425615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+--- !u!1 &6398116372316104484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2646685041876040221}
+  - component: {fileID: 6124025658973376351}
+  - component: {fileID: 2118233714496595828}
+  m_Layer: 8
+  m_Name: Spot Light_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2646685041876040221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6398116372316104484}
+  m_LocalRotation: {x: 0.99910146, y: -0, z: -0, w: -0.042382125}
+  m_LocalPosition: {x: -0.009000015, y: 0.42599988, z: 0.88999915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5961405169688563808}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 184.858, y: 0, z: 0}
+--- !u!108 &6124025658973376351
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6398116372316104484}
+  m_Enabled: 0
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 2
+  m_Range: 10
+  m_SpotAngle: 83.0616
+  m_InnerSpotAngle: 58.28193
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &2118233714496595828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6398116372316104484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &6654696559392662692
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,7 +2547,7 @@ GameObject:
   - component: {fileID: 9103462625482537728}
   - component: {fileID: 2373552895253753373}
   - component: {fileID: 6147497381243674453}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2177,7 +2630,7 @@ GameObject:
   - component: {fileID: 3396268689380491556}
   - component: {fileID: 5277000723442300580}
   - component: {fileID: 2567929648774385913}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotLeftBotHookSlot.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2230,7 +2683,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -1188406269807256565, guid: f4d9fd981beca004e8ca9f3c9e1056b5, type: 3}
-  - {fileID: 2100000, guid: f4a87a4db14c2154ea6b0a78d13e56ad, type: 2}
+  - {fileID: 2100000, guid: 0e7035962fede0d4fbb20595e1f176e3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2263,7 +2716,7 @@ GameObject:
   - component: {fileID: 3489802679913544239}
   - component: {fileID: 1424841262269872420}
   - component: {fileID: 11051259337384944}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotTopLeftHook.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2346,7 +2799,7 @@ GameObject:
   - component: {fileID: 7332775754369614249}
   - component: {fileID: 7923855287112116288}
   - component: {fileID: 4127406270718524067}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SlotBase_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2429,7 +2882,7 @@ GameObject:
   - component: {fileID: 4653276240440056581}
   - component: {fileID: 5298940870017612896}
   - component: {fileID: 6053095010516154526}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2512,7 +2965,7 @@ GameObject:
   - component: {fileID: 216364198582066139}
   - component: {fileID: 5482772693404425491}
   - component: {fileID: 1083083618043120407}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2595,7 +3048,7 @@ GameObject:
   - component: {fileID: 5809152358910652591}
   - component: {fileID: 3469703781334191263}
   - component: {fileID: 915603369789850631}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2679,7 +3132,7 @@ GameObject:
   - component: {fileID: 2336163880286359407}
   - component: {fileID: 3399998262910742682}
   - component: {fileID: 4100309870169176793}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HookAxis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2766,7 +3219,7 @@ GameObject:
   - component: {fileID: 52806202720536719}
   - component: {fileID: 4548574877653852670}
   - component: {fileID: 775782860261823235}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2850,7 +3303,7 @@ GameObject:
   - component: {fileID: 3668663289199336712}
   - component: {fileID: 4993339339216763393}
   - component: {fileID: 7278534803398651761}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}

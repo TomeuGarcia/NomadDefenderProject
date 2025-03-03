@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class GUMSideIndicator : MonoBehaviour
 {
@@ -15,6 +13,12 @@ public class GUMSideIndicator : MonoBehaviour
     [SerializeField] private GameObject _readyLight;
     [SerializeField] private GameObject _upgradingLight;
 
+    [Header("CARD SLOT")]
+    [SerializeField] private GameObject _sWarningLightParent;
+    [SerializeField] private GameObject _sReadyLightParent;
+    [SerializeField] private MeshRenderer[] _sIndMeshes;
+    private Material[] _sIndMaterials;
+
     private string _readyProppertyName = "_ReadyCoef";
     private string _upgradingProppertyName = "_UpgradingCoef";
 
@@ -22,6 +26,13 @@ public class GUMSideIndicator : MonoBehaviour
     {
         _botMaterial = _botMeshRenderer.material;
         _topMaterial = _topMeshRenderer.material;
+
+        _sIndMaterials = new Material[_sIndMeshes.Length];
+
+        for (int i = 0; i < _sIndMeshes.Length; i++)
+        {
+            _sIndMaterials[i] = _sIndMeshes[i].materials[i+1];
+        }
     }
 
     private IEnumerator Blink(string propperty, float initialValue)
@@ -44,6 +55,11 @@ public class GUMSideIndicator : MonoBehaviour
         _botMaterial.SetFloat(propperty, value);
         _topMaterial.SetFloat(propperty, value);
 
+        foreach(Material mat in _sIndMaterials)
+        {
+            mat.SetFloat(propperty, value);
+        }
+
         SetLight(propperty, value);
     }
 
@@ -55,11 +71,25 @@ public class GUMSideIndicator : MonoBehaviour
         {
             _warningLight.SetActive(!active);
             _readyLight.SetActive(active);
+
+            foreach (Transform t in _sWarningLightParent.transform)
+            {
+                t.GetComponent<Light>().enabled = !active;
+            }
+            foreach (Transform t in _sReadyLightParent.transform)
+            {
+                t.GetComponent<Light>().enabled = active;
+            }
         }
         else
         {
             _readyLight.SetActive(!active);
             _upgradingLight.SetActive(active);
+
+            foreach(Transform t in _sWarningLightParent.transform)
+            {
+                t.GetComponent<Light>().enabled = !active;
+            }
         }
     }
 

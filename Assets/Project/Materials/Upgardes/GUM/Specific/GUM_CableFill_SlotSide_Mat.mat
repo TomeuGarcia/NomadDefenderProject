@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GUM_CableFill_Mat
+  m_Name: GUM_CableFill_SlotSide_Mat
   m_Shader: {fileID: -6465566751694194690, guid: e4fccd9819e29d044bdbd350013055d5,
     type: 3}
   m_Parent: {fileID: 0}
@@ -57,17 +57,19 @@ Material:
     m_Floats:
     - _AvailableFillCoef: 0
     - _ColorStep: 1
+    - _FadeAddition: -1
     - _FillCoef: 0
-    - _NoiseScale: 2
-    - _NoiseSpeed: 4
+    - _NoiseCoef: 1
+    - _NoiseScale: 0
+    - _NoiseSpeed: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReadyCoef: 0
     - _UpgradingCoef: 0
     m_Colors:
-    - _BaseColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
-    - _ColorA: {r: 0, g: 0.3537508, b: 1.0592737, a: 0}
-    - _ColorB: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0}
-    - _OffColor: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 1, g: 0.6084906, b: 0.6084906, a: 0}
+    - _ColorA: {r: 0, g: 0.7075016, b: 2.1185474, a: 0}
+    - _ColorB: {r: 2, g: 2, b: 2, a: 0}
+    - _OffColor: {r: 2, g: 0, b: 0, a: 0}
     - _OffColorCable: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

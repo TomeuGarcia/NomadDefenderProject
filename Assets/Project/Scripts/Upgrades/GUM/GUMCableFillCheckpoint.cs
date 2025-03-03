@@ -6,6 +6,7 @@ public class GUMCableFillCheckpoint : MonoBehaviour
     [SerializeField, Min(0f)] private float _timeToFill;
     [SerializeField] private Ease _ease;
 
+    [SerializeField] private MeshRenderer _checkpointMesh;
     [SerializeField] private GUMCableFillCheckpoint[] _nextCheckpoints;
     [SerializeField] private MeshRenderer[] _meshes;
     private Material[] _materials;
@@ -33,6 +34,24 @@ public class GUMCableFillCheckpoint : MonoBehaviour
         Fill(1.0f, "_UpgradingCoef", _timeToFill, _ease);
     }
 
+    public void ShutDown()
+    {
+        foreach (Material mat in _materials)
+        {
+            mat.SetFloat("_ReadyCoef", 0.0f);
+            mat.SetFloat("_UpgradingCoef", 0.0f);
+        }
+        if (_checkpointMesh != null)
+        {
+            _checkpointMesh.materials[2].SetFloat("_ReadyCoef", 0.0f);
+            _checkpointMesh.materials[2].SetFloat("_UpgradingCoef", 0.0f);
+        }
+        foreach (var next in _nextCheckpoints)
+        {
+            next.ShutDown();
+        }
+    }
+
     public void Fill(float endValue, string propertyName, float duration, Ease ease)
     {
         Sequence sequence = DOTween.Sequence();
@@ -49,6 +68,10 @@ public class GUMCableFillCheckpoint : MonoBehaviour
 
     private void FillCompleted(float endValue, string propertyName, float duration, Ease ease)
     {
+        if(_checkpointMesh != null)
+        {
+            _checkpointMesh.materials[2].SetFloat(propertyName, endValue);
+        }
         foreach (var next in _nextCheckpoints)
         {
             next.Fill(endValue, propertyName, duration, ease);
