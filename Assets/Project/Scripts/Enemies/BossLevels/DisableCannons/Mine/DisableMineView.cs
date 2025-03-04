@@ -22,10 +22,12 @@ public class DisableMineView : MonoBehaviour
     [SerializeField] private Transform _mineHolder;
     [SerializeField] private ParticleSystem _damagedParticles;
     [SerializeField] private ParticleSystem _clearedDestroyParticles;
+    [SerializeField] private ParticleSystem _lifetimeEndParticles;
 
     [Header("HUD")]
     [SerializeField] private Image _timerFillImage;
     [SerializeField] private GameObject _hudHolder;
+    [SerializeField] private GameObject _clickUIHolder;
     [SerializeField] private Graphic[] _hudHoverGraphics;
     private Color _originalFillImageColor;
 
@@ -53,6 +55,11 @@ public class DisableMineView : MonoBehaviour
         _hudHolder.SetActive(true);
         
         HideHovered();
+    }
+
+    public void HideClick()
+    {
+        _clickUIHolder.SetActive(false);
     }
 
     public void UpdateTimer(float ratio01)
@@ -89,6 +96,8 @@ public class DisableMineView : MonoBehaviour
     {
         _mineHolder.Scale(_config.LifetimeEndScale);
         yield return new WaitForSeconds(_config.TakeDamageRotationPunch.Duration);
+        _lifetimeEndParticles.Play();
+        yield return new WaitUntil(() => !_lifetimeEndParticles.isEmitting);
     }
 
 
@@ -98,13 +107,16 @@ public class DisableMineView : MonoBehaviour
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
             hudHoverGraphic.color = Color.cyan;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one * 1.1f;
         }
     }
     public void HideHovered()
     {
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
-            hudHoverGraphic.color = Color.white;
+            //hudHoverGraphic.color = Color.white;
+            hudHoverGraphic.color = _originalFillImageColor;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one;
         }      
     }
     

@@ -7093,6 +7093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skipChangeAnimation: 0
   _waveIndex: 5
   _levelTileChange: {fileID: 265584304}
   _dialogue: {fileID: 265584306}
@@ -18440,6 +18441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skipChangeAnimation: 0
   _waveIndex: 2
   _levelTileChange: {fileID: 755659430}
   _dialogue: {fileID: 755659432}
@@ -38531,15 +38533,15 @@ MonoBehaviour:
   _enemyWaveManager: {fileID: 364191823}
   _shootLogic: {fileID: 1436441722}
   _beats:
-  - _waveIndex: 0
-    _enemyCount: 1
-    _delay: 3
-    _shootingFunction: 1
-    _numberOfShots: 1
   - _waveIndex: 1
     _enemyCount: 2
     _delay: 3
-    _shootingFunction: 1
+    _shootingFunction: 0
+    _numberOfShots: 2
+  - _waveIndex: 1
+    _enemyCount: 3
+    _delay: 6
+    _shootingFunction: 0
     _numberOfShots: 2
   - _waveIndex: 2
     _enemyCount: 3
@@ -43100,6 +43102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skipChangeAnimation: 0
   _waveIndex: 7
   _levelTileChange: {fileID: 1903868924}
   _dialogue: {fileID: 1903868926}
@@ -46082,6 +46085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e196f3582fb4652afb3eed93aecaf9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skipChangeAnimation: 1
   _waveIndex: 1
   _levelTileChange: {fileID: 2050710908}
   _dialogue: {fileID: 2050710907}

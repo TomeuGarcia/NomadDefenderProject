@@ -5,6 +5,8 @@ public interface IRunStateData
     CardDeckContent DeckContent { get; }
     float RunDuration { get; }
     string RunDurationAsString();
+    int BattleVictories { get; }
+    int PerfectDefenseBattleVictories { get; }
     int NodesReached { get; }
     int DestroyedNodes { get; }
     
@@ -17,4 +19,10 @@ public interface IRunStateData
     
     int TotalDamageTaken { get; }
     bool MostDamagingEnemy(out EnemyTypeConfig enemyType, out int damage);
+    
+    
+    
+    bool UnlockDifficulty { get; }
+    bool UnlockStarterDeck { get; }
+    bool HasPendingUnlocks { get; }
 }

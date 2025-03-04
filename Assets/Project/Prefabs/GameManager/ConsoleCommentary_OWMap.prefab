@@ -1,0 +1,229 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2731979282170377169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7419288651178188916}
+  - component: {fileID: 5228183397868775499}
+  m_Layer: 0
+  m_Name: ConsoleCommentary_OWMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7419288651178188916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731979282170377169}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5228183397868775499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731979282170377169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07868d2485e043d4bb229bfb316679fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _consoleDialog: {fileID: 0}
+  _runState: {fileID: 11400000, guid: a087e2a282d44c94790bd8f1f7f1ee14, type: 2}
+  _reachMidComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: Things will get harder from here on
+      clearTime: 0
+    - textType: 1
+      text: Improved rewards await you ahead
+      clearTime: 0
+    - textType: 1
+      text: Time to stock up on upgrades
+      clearTime: 0
+    - textType: 1
+      text: Prepare to face stronger enemies
+      clearTime: 0
+    - textType: 1
+      text: Things are about to get spicy
+      clearTime: 0
+    - textType: 1
+      text: Just try to not get yourself killed
+      clearTime: 0
+    - textType: 1
+      text: You better start getting stronger by now
+      clearTime: 0
+  _reachLateComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: I hope you loaded on some Passive Abilities
+      clearTime: 0
+    - textType: 1
+      text: Bad placement will earn you a punishment now
+      clearTime: 0
+    - textType: 1
+      text: Will you withstand the challenge?
+      clearTime: 0
+    - textType: 1
+      text: Afraid?
+      clearTime: 0
+    - textType: 1
+      text: I hope you get that spiral level
+      clearTime: 0
+    - textType: 1
+      text: I <3 Glados
+      clearTime: 0
+  _reachBossComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: Wait, are we really doing this?
+      clearTime: 0
+    - textType: 1
+      text: Get yourself ready
+      clearTime: 0
+    - textType: 1
+      text: You had your chance to gear up
+      clearTime: 0
+    - textType: 1
+      text: I hope the predefined messages are not bothering you
+      clearTime: 0
+  _lostEarlyComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: A rough start
+      clearTime: 0
+    - textType: 1
+      text: Are you struggling with the deck?
+      clearTime: 0
+    - textType: 1
+      text: '"Vist i no vist"'
+      clearTime: 0
+    - textType: 1
+      text: "Do like me: experiment w\u0336i\u0336t\u0336h\u0336 p\u0336e\u0336o\u0336p\u0336l\u0336e\u0336
+        to get stronger"
+      clearTime: 0
+    - textType: 1
+      text: I might be a harsh teacher, I know
+      clearTime: 0
+    - textType: 1
+      text: That hit harder than the fat Turret
+      clearTime: 0
+    - textType: 1
+      text: Average playtester experience
+      clearTime: 0
+  _lostMidComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: I thought you were getting the hang of it
+      clearTime: 0
+    - textType: 1
+      text: Maybe try on a lower difficulty
+      clearTime: 0
+    - textType: 1
+      text: The difficulty might be spiking
+      clearTime: 0
+    - textType: 1
+      text: But there was still half way to go...
+      clearTime: 0
+    - textType: 1
+      text: Do you need to get carried by a strong deck?
+      clearTime: 0
+    - textType: 1
+      text: Not the outcome I was exactly expecting
+      clearTime: 0
+  _lostLateComments:
+    _delay: 1.5
+    _possibleTextLines:
+    - textType: 1
+      text: I was almost rooting for you
+      clearTime: 0
+    - textType: 1
+      text: That level sounded like a pain
+      clearTime: 0
+    - textType: 1
+      text: The bigger they come, the harder they fall
+      clearTime: 0
+    - textType: 1
+      text: By now you shouldn't be a novice anymore
+      clearTime: 0
+    - textType: 1
+      text: Try maxing Piercing + StunTouch next time
+      clearTime: 0
+  _perfectDefenseComments:
+    _progressiveComments:
+    - _delay: 1.4
+      _possibleTextLines:
+      - textType: 1
+        text: Perfect Defense on Early is but trivial
+        clearTime: 0
+      - textType: 1
+        text: Quite easy... for now
+        clearTime: 0
+      - textType: 1
+        text: Early battles make for a good warm-up
+        clearTime: 0
+    - _delay: 1.4
+      _possibleTextLines:
+      - textType: 1
+        text: Mid levels aren't even hard
+        clearTime: 0
+      - textType: 1
+        text: That was smooth
+        clearTime: 0
+      - textType: 1
+        text: Great plays, but I would do better
+        clearTime: 0
+    - _delay: 1.4
+      _possibleTextLines:
+      - textType: 1
+        text: You are on a streak, keep up
+        clearTime: 0
+      - textType: 1
+        text: I will not tolerate less from you
+        clearTime: 0
+      - textType: 1
+        text: You are rising my expectations
+        clearTime: 0
+    - _delay: 1.4
+      _possibleTextLines:
+      - textType: 1
+        text: No way you pulled that off
+        clearTime: 0
+      - textType: 1
+        text: Clearly I need to make that level harder
+        clearTime: 0
+      - textType: 1
+        text: That... was truely an impressive defense
+        clearTime: 0
+    - _delay: 1.4
+      _possibleTextLines:
+      - textType: 1
+        text: That defensive strat was off my radar
+        clearTime: 0
+      - textType: 1
+        text: You must have a busted deck... or be cheating
+        clearTime: 0
+      - textType: 1
+        text: Only 0.00001% of users can crush levels like that.
+        clearTime: 0

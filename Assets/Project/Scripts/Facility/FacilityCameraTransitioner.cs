@@ -16,6 +16,7 @@ public class FacilityCameraTransitioner : AFacilityInteractable
     [SerializeField] private List<Image> _titleArrows = new();
     [SerializeField] private TMP_Text _titleText;
     [SerializeField] private Collider _interactableCollider;
+    [SerializeField] private GameObject[] _objectsToDisableOnAnimationStart;
 
     [Header("PARAMETERS")]
     [SerializeField] private Color32 _hoveredTextColor;
@@ -60,6 +61,11 @@ public class FacilityCameraTransitioner : AFacilityInteractable
 
     public void TransitionToComputer()
     {
+        foreach (GameObject objectsToDisable in _objectsToDisableOnAnimationStart)
+        {
+            objectsToDisable.SetActive(false);
+        }
+        
         _facilityUITransitioner.PrepareLoading();
 
         DOTween.To(() => _vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain,

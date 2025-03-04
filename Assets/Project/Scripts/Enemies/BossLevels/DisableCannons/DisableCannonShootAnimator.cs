@@ -33,19 +33,19 @@ public class DisableCannonShootAnimator : MonoBehaviour
             switch (_mode)
             {
                 case Mode.Position:
-                    yield return source.StartCoroutine(PlayPositionAnimation());
+                    yield return source.StartCoroutine(PlayPositionAnimation(source));
                     break;
                 case Mode.Rotation:
-                    yield return source.StartCoroutine(PlayRotationAnimation());
+                    yield return source.StartCoroutine(PlayRotationAnimation(source));
                     break;
             }
         }
-        public IEnumerator PlayPositionAnimation()
+        public IEnumerator PlayPositionAnimation(MonoBehaviour source)
         {
             _animationTimer.Duration = _duration;
             _animationTimer.Reset();
             
-            yield return new WaitForSeconds(_delay);
+            yield return source.StartCoroutine(GameTime.WaitForSeconds(_delay));
 
             while (!_animationTimer.HasFinished())
             {
@@ -58,14 +58,14 @@ public class DisableCannonShootAnimator : MonoBehaviour
                 yield return null;
             }
         }
-        public IEnumerator PlayRotationAnimation()
+        public IEnumerator PlayRotationAnimation(MonoBehaviour source)
         {
             _animationTimer.Duration = _duration;
             _animationTimer.Reset();
 
             Quaternion goalLocalRotation = _defaultLocalRotation * Quaternion.Euler(_amount);
             
-            yield return new WaitForSeconds(_delay);
+            yield return source.StartCoroutine(GameTime.WaitForSeconds(_delay));
 
             while (!_animationTimer.HasFinished())
             {

@@ -71,8 +71,11 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile += RepeatProjectile;
         fakeEnemy.OnGetPosition += ComputeTargetAndAssignFakeEnemyPosition;
 
-        BuildingPlacer.OnPlacingBuildingsDisabled += HideFirstTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile += ConnectFirstBinderWithBuilding;
+        BuildingPlacer.OnPlacingBuildingsDisabled += HideFirstTurretBinder;
+
+        TurretBuilding.OnUpgradePreviewRangeShown += ConnectFirstBinderWithBuildingFutureRange;
+        TurretBuilding.OnUpgradePreviewRangeHidden += HideFirstTurretBinder;
     }
 
     private void OnDisable()
@@ -81,8 +84,11 @@ public class RepeaterBase : TurretPartBase_Prefab
         fakeEnemy.OnAttackedByProjectile -= RepeatProjectile;
         fakeEnemy.OnGetPosition -= ComputeTargetAndAssignFakeEnemyPosition;
 
-        BuildingPlacer.OnPlacingBuildingsDisabled -= HideFirstTurretBinder;
         BuildingPlacer.OnPreviewTurretBuildingHoversTile -= ConnectFirstBinderWithBuilding;
+        BuildingPlacer.OnPlacingBuildingsDisabled -= HideFirstTurretBinder;
+        
+        TurretBuilding.OnUpgradePreviewRangeShown -= ConnectFirstBinderWithBuildingFutureRange;
+        TurretBuilding.OnUpgradePreviewRangeHidden -= HideFirstTurretBinder;
     }
 
     private void Update()
@@ -168,6 +174,15 @@ public class RepeaterBase : TurretPartBase_Prefab
         base.Upgrade(ownerSupportBuilding, newStatLevel);
         currentLvl = newStatLevel;
 
+        if (newStatLevel == 1)
+        {
+            NextUpgradeUpdatesRange = true;
+        }
+        else
+        {
+            NextUpgradeUpdatesRange = false;
+        }
+        
         if (newStatLevel == 2)
         {
             ownerSupportBuilding.UpgradeRangeIncrementingLevel();
@@ -424,21 +439,27 @@ public class RepeaterBase : TurretPartBase_Prefab
 
         for (int i = 0; i < currentPlacedBuildings.Length && i < turretBinderMeshes.Length; ++i)
         {
-            ConnectBinderWithBuilding(currentPlacedBuildings[i], turretBinderMeshes[i]);
+            ConnectBinderWithBuilding(currentPlacedBuildings[i], turretBinderMeshes[i], true);
         }
     }
 
     private void ConnectFirstBinderWithBuilding(Building building)
     {
-        ConnectBinderWithBuilding(building, turretBinderMeshes[0]);
+        ConnectBinderWithBuilding(building, turretBinderMeshes[0], true);
+    }
+    private void ConnectFirstBinderWithBuildingFutureRange(Building building)
+    {
+        ConnectBinderWithBuilding(building, turretBinderMeshes[0], false);
     }
 
-    private void ConnectBinderWithBuilding(Building building, MeshRenderer binderMesh)
+    private void ConnectBinderWithBuilding(Building building, MeshRenderer binderMesh, bool withCurrentRange)
     {
         if (building.CardBuildingType == BuildingCard.CardBuildingType.TURRET)
         {
             TurretBuilding turretBuilding = building as TurretBuilding;
-            bool isTurretWithinRange = turretBuilding.GetBasePart().baseCollider.ColliderIsWithinRange(fakeEnemy.SphereCollider);
+            bool isTurretWithinRange = withCurrentRange
+                ? turretBuilding.GetBasePart().baseCollider.ColliderIsWithinRange(fakeEnemy.SphereCollider)
+                : turretBuilding.GetBasePart().baseCollider.ColliderWillBeWithinRange(fakeEnemy.SphereCollider);
 
             if (isTurretWithinRange)
             {

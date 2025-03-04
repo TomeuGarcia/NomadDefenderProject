@@ -264,6 +264,12 @@ public class TextDecoder : MonoBehaviour
         ClearText();
         InitDecodingVariables();
     }
+    
+    public void ClearAndStop()
+    {
+        ClearDecoder();
+        FinishAllCoroutines();
+    }
 
     public void SetStringInstantly()
     {

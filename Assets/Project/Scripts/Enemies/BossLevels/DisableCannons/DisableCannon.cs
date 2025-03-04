@@ -32,6 +32,7 @@ public class DisableCannon : MonoBehaviour
     private IEnumerator MissileTravel(Vector3 missileEndPosition)
     {
         _shootAnimator.PlayAnimation();
+        GameAudioManager.GetInstance().PlayDisableCannonShoot();
         
         Vector3 missileEndOffset = missileEndPosition - _missileParticle.transform.position;
         missileEndOffset = transform.rotation * missileEndOffset;
@@ -48,6 +49,7 @@ public class DisableCannon : MonoBehaviour
 
         _missileLandParticle.transform.position = missileEndPosition;
         _missileLandParticle.Play();
+        GameAudioManager.GetInstance().PlayDisableCannonMissileLand();
         
         _disableMineToMakeAppear.Appear();
     }
@@ -56,11 +58,13 @@ public class DisableCannon : MonoBehaviour
     public void PlayEnterActive()
     {
         _activateAnimator.PlayEnterActiveAnimation();
+        GameAudioManager.GetInstance().PlayCannonActivation();
     }
     
     public void PlayEnterNotActive()
     {
         _activateAnimator.PlayEnterNotActiveAnimation();
+        GameAudioManager.GetInstance().PlayCannonDeactivation();
     }
     
 

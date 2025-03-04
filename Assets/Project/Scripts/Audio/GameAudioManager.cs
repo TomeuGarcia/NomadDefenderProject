@@ -130,6 +130,14 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource containerLightOnAudioSource;
     [SerializeField] private AudioSource containerPistonUpAudioSource;
 
+    [Header("DISABLE CANNONS")] 
+    [SerializeField] private AudioSourceBuffer _disableCannonShootBuffer;
+    [SerializeField] private AudioSourceBuffer _disableCannonMissileLandBuffer;
+    [SerializeField] private AudioSourceBuffer _disableCannonActivateBuffer;
+    [SerializeField] private AudioSourceBuffer _disableCannonDeactivateBuffer;
+    [SerializeField] private AudioSourceBuffer _cannonMineDamagedBuffer;
+    [SerializeField] private AudioSourceBuffer _cannonMineClearedBuffer;
+
     [Header("OTHER EFFECTS")]
     [SerializeField] private AudioSource effectsAudioSource;
     [SerializeField] private AudioClip smokeBurst;
@@ -162,23 +170,7 @@ public class GameAudioManager : MonoBehaviour
         musicDefaultVolume = musicAudioSource.volume;
         cardAudioLoopStartVolume = cardsAudioLoopSource.volume;
     }
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.N))
-    //    {
-    //        NextMusic1();
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.P))
-    //    {
-    //        float volume = Mathf.Clamp01(musicAudioSource.volume + 0.05f);
-    //        musicAudioSource.volume = volume;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.O))
-    //    {
-    //        float volume = Mathf.Clamp01(musicAudioSource.volume - 0.05f);
-    //        musicAudioSource.volume = volume;
-    //    }
-    //}
+
 
     public static GameAudioManager GetInstance()
     {
@@ -879,6 +871,34 @@ public class GameAudioManager : MonoBehaviour
         containerPistonUpAudioSource.pitch = Random.Range(0.9f, 1.0f);
         containerPistonUpAudioSource.Play();
     }
+    
+    
+    // DISABLE CANNON
+    public void PlayDisableCannonShoot()
+    {
+        _disableCannonShootBuffer.Play();
+    }
+    public void PlayDisableCannonMissileLand()
+    {
+        _disableCannonMissileLandBuffer.Play();
+    }
+    public void PlayCannonActivation()
+    {
+        _disableCannonActivateBuffer.Play();
+    }
+    public void PlayCannonDeactivation()
+    {
+        _disableCannonDeactivateBuffer.Play();
+    }
+    public void PlayCannonMineDamaged()
+    {
+        _cannonMineDamagedBuffer.Play();
+    }
+    public void PlayCannonMineCleared()
+    {
+        _cannonMineClearedBuffer.Play();
+    }
+    
 
 
     // OTHER EFFECTS

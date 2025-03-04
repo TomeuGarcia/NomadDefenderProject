@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretBuilding : RangeBuilding
+public class TurretBuilding : RangeBuilding, ElectricWireSegment.IAttachable
 {
     private TurretCardStatsController _statsController;
     public TurretStatsSnapshot Stats => _statsController.CurrentStats;
@@ -22,6 +22,7 @@ public class TurretBuilding : RangeBuilding
 
 
     private AProjectileShootingController _shootingController;
+    public AProjectileShootingController ShootingController => _shootingController;
     public float TimeSinceLastShot => _shootingController.TimeSinceLastShot;
 
     public Vector3 Position => transform.position;
@@ -90,10 +91,10 @@ public class TurretBuilding : RangeBuilding
 
     private void Update()
     {
-        if (!isFunctional || IsDisabled || _gameOverDisabled) return;
+        if (!isFunctional || IsDisabled || _gameFinishedDisabled) return;
 
         UpdateEnemiesInRange();
-        _shootingController.UpdateShoot();
+        _shootingController.UpdateShoot(GameTime.DeltaTime);
         LookAtTarget();
     }
 
@@ -101,7 +102,7 @@ public class TurretBuilding : RangeBuilding
     private void LookAtTarget()
     {
         Vector3 lookDirection = 
-            Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyPart.transform.position, Vector3.up)
+            Vector3.ProjectOnPlane(_shootingController.LastTargetedPosition - bodyHolder.transform.position, Vector3.up)
                 .normalized;
         
         Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
@@ -194,6 +195,28 @@ public class TurretBuilding : RangeBuilding
     protected override void UpdateRange()
     {
         basePart.baseCollider.UpdateRange(CurrentRadiusRange);
+    }
+
+    public static Action<Building> OnUpgradePreviewRangeShown;
+    public static Action OnUpgradePreviewRangeHidden;
+    public override void ShowUpgradePreviewRange()
+    {
+        if (upgrader.IsUpgradedToMax())
+        {
+            HideUpgradePreviewRange();
+        }
+        else
+        {
+            basePart.baseCollider.ShowPreviewRange(
+                CurrentRadiusRange,
+                _extraRadiusRange + _statsController.NextLevelStatsPreview.RadiusRange);
+            OnUpgradePreviewRangeShown?.Invoke(this);
+        }
+    }
+    public override void HideUpgradePreviewRange()
+    {
+        base.HideUpgradePreviewRange();
+        OnUpgradePreviewRangeHidden?.Invoke();
     }
 
     public void AddExtraRadiusRangeAndUpdate(float extraAmount)
@@ -350,5 +373,9 @@ public class TurretBuilding : RangeBuilding
         SetBuildingPartsColor(previewColorInUse);
     }
 
-    
+
+    Vector3 ElectricWireSegment.IAttachable.GetAttachPosition()
+    {
+        return Position + (Vector3.up * 0.5f);
+    }
 }

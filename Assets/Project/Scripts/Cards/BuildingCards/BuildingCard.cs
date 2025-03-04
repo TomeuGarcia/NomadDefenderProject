@@ -360,7 +360,8 @@ public abstract class BuildingCard : MonoBehaviour
 
         RootCardTransform.DOMove(finalPosition, duration)
             .SetEase(_motionConfig.Repositioning_Move_Ease)
-            .OnComplete(EndRepositioning);
+            .OnComplete(EndRepositioning)
+            .SetUpdate(true);
     }
     private void EndRepositioning()
     {
@@ -421,13 +422,16 @@ public abstract class BuildingCard : MonoBehaviour
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(local_standardPosition - CardTransform.localPosition, duration)
-            .SetEase(_motionConfig.ToStandard_Move_Ease);
+            .SetEase(_motionConfig.ToStandard_Move_Ease)
+            .SetUpdate(true);
+
         CardTransform.DOBlendableLocalRotateBy(local_standardRotation_euler - CardTransform.rotation.eulerAngles, duration)
             .SetEase(_motionConfig.ToStandard_Rot_Ease)
             .OnComplete(() => {
                 EnableMouseInteraction();
                 if (repositionColliderOnEnd) RepositionColliderToCardTransform();
-            });
+            })
+            .SetUpdate(true);
     }
 
     public void HoveredStateRedraw(bool rotate = true, bool useAdditionalOffset = false)
@@ -445,12 +449,14 @@ public abstract class BuildingCard : MonoBehaviour
 
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableLocalMoveBy(moveBy, hoverTime)
-            .SetEase(_motionConfig.Hovered_Move_Ease);
+            .SetEase(_motionConfig.Hovered_Move_Ease)
+            .SetUpdate(true);
 
         if (rotate)
         {
             CardTransform.DOBlendableRotateBy(-RootCardTransform.localRotation.eulerAngles, hoverTime)
-                .SetEase(_motionConfig.Hovered_Rot_Ease);
+                .SetEase(_motionConfig.Hovered_Rot_Ease)
+                .SetUpdate(true);
         }
     }
 
@@ -496,6 +502,7 @@ public abstract class BuildingCard : MonoBehaviour
         CardTransform.DOComplete(true);
         CardTransform.DOBlendableMoveBy(selectedPosition - CardTransform.position, selectedTime)
             .SetEase(_motionConfig.Selected_Move_Ease)
+            .SetUpdate(true)
             .OnComplete(() => {
             if (enableInteractionOnEnd) EnableMouseInteraction();
             if (repositionColliderOnEnd) RepositionColliderToCardTransform();
@@ -749,7 +756,8 @@ public abstract class BuildingCard : MonoBehaviour
         _view.PlayCanNotBePlayedAnimation();
 
         CardTransform.DOComplete(true);
-        CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f);
+        CardTransform.DOPunchRotation(CardTransform.forward * 10f, canNotBePlayedAnimDuration, 8, 0.8f)
+            .SetUpdate(true);
     }
 
 

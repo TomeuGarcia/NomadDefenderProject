@@ -95,6 +95,14 @@ public class SlowBase : TurretPartBase_Prefab
         }
         
         
+        if (newStatLevel == 1)
+        {
+            NextUpgradeUpdatesRange = true;
+        }
+        else
+        {
+            NextUpgradeUpdatesRange = false;
+        }
         
         if (newStatLevel == 2)
         {

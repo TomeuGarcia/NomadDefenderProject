@@ -21,6 +21,7 @@ public class EnemyDisplayUI : MonoBehaviour
     public void Init(EnemyTypeConfig enemyTypeConfig, bool withArmor)
     {
         CheckInitMaterial();
+        _imageMaterial.SetTexture("_EnemyPhoto", EnemyPhotoPersistent.Instance.PhotoTexture);
         _imageMaterial.SetInt("_EnemyPhotoIndex", enemyTypeConfig.View.PhotoIndex);
         _imageMaterial.SetInt("_WithArmor", withArmor ? 1 : 0);
         _nameText.text = enemyTypeConfig.View.DisplayName;

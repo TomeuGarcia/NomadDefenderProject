@@ -7,16 +7,22 @@ using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
 {
-    [SerializeField] private TextManager textManager;
+    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+    
+    [Header("AUDIO")]
     [SerializeField] private AudioMixersController audioMixersController;
-
     [SerializeField] private Slider _masterSoundSlider;
     [SerializeField] private Slider _musicSlider;
     [SerializeField] private Slider _sfxSlider;
 
+    [Header("SCREEN")]
     [SerializeField] private ScreenOptionsController _screenOptionsController;
 
-    [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
+    [Header("NEW GAME")]
+    [SerializeField] private Button _newGameButton;
+    [SerializeField] private NewGameManager _newGameManager;
+
+    
     
     private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Settings/";
     private string FileName => "Options.json";
@@ -51,6 +57,9 @@ public class OptionsMenu : MonoBehaviour
         SetMasterMixerVolume(_masterSoundSlider.value);
         SetMusicMixerVolume(_musicSlider.value);
         SetSFXMixerVolume(_sfxSlider.value);
+        
+        _newGameManager.Init();
+        _newGameButton.onClick.AddListener(_newGameManager.Show);
     }
 
     private void OnDestroy()
@@ -60,12 +69,19 @@ public class OptionsMenu : MonoBehaviour
 
     public void Show()
     {
-        textManager.ResetTexts();
-        StartCoroutine(textManager.DecodeTextsWithDelay());
+        SetNewGameNotAvailable();
     }
     public void Hide()
     {
-        textManager.ResetTexts();
+    }
+
+    public void SetNewGameAvailable()
+    {
+        _newGameButton.gameObject.SetActive(true);
+    }
+    private void SetNewGameNotAvailable()
+    {
+        _newGameButton.gameObject.SetActive(false);
     }
 
 
