@@ -31,7 +31,8 @@ public class CurrencySpawner : MonoBehaviour, ITDCurrencySpawnService
         GameObject currency = currencyPool.GetObject(position + (Vector3.up * 0.2f), Quaternion.identity, spawnTransform);
         currency.transform.SetParent(spawnTransform);
 
-        currency.gameObject.GetComponent<DroppedCurrency>().SetValue(currencyValue);
-        currency.SetActive(true);
+        DroppedCurrency droppedCurrency = currency.gameObject.GetComponent<DroppedCurrency>();
+        droppedCurrency.SetValue(currencyValue);
+        droppedCurrency.InitPickUp();
     }
 }

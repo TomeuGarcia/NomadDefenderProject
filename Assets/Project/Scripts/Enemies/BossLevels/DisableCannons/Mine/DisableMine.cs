@@ -94,6 +94,7 @@ public class DisableMine : RecyclableObject
     private IEnumerator UpdateLoop()
     {
         bool wasCleared = false;
+        bool lifetimeFinished = false;
         while (_update)
         {
             wasCleared = _lifetimeTimer.CurrentTime.AlmostZero();
@@ -102,7 +103,7 @@ public class DisableMine : RecyclableObject
                 _update = false;
             }
 
-            bool lifetimeFinished = _lifetimeTimer.HasFinished();
+            lifetimeFinished = _lifetimeTimer.HasFinished();
             if (lifetimeFinished)
             {
                 _update = false;
@@ -122,14 +123,14 @@ public class DisableMine : RecyclableObject
             GameAudioManager.GetInstance().PlayCannonMineCleared();
             yield return StartCoroutine(_view.PlayClearedDestroy());
         }
-        else
+        else if (lifetimeFinished)
         {
             yield return StartCoroutine(_view.PlayLifetimeEndDestroy());
             BuildingDisableWaveFactory.Instance.Create(_logicConfig.DisableWaveConfig, 
                 transform.position, Quaternion.identity);
         }
 
-        Recycle();
+        FinishLifetime();
     }
 
     
@@ -166,6 +167,13 @@ public class DisableMine : RecyclableObject
         {
             _view.HideHovered();
         }
+    }
+
+
+    private void FinishLifetime()
+    {
+        Recycle();
+        StopAllCoroutines();
     }
 
 }
