@@ -10,6 +10,7 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private Image topBlackImage;
     [SerializeField] private Image bottomBlackImage;
+    [SerializeField] private Image fullBlackFadeImage;
 
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Color shutColor;
@@ -53,6 +54,7 @@ public class SceneLoader : MonoBehaviour
 
         topBlackImage.fillAmount = 0f;
         bottomBlackImage.fillAmount = 0f;
+        fullBlackFadeImage.color = new Color(0, 0, 0, 0);
 
         alreadyLoadingNextScene = false;
     }
@@ -95,22 +97,17 @@ public class SceneLoader : MonoBehaviour
     {
         alreadyLoadingNextScene = true;
 
-        bottomBlackImage.fillAmount = topBlackImage.fillAmount = 1f;
+        fullBlackFadeImage.DOFade(1f, 0.00001f);
         yield return new WaitForSeconds(shutAnimDuration);
 
         loadSceneFunction();
-        yield return new WaitForSeconds(loadSceneDuration);
-
-        topBlackImage.DOFade(0f, openAnimDuration);
-        bottomBlackImage.DOFade(0f, openAnimDuration);
+        yield return new WaitForSeconds(loadSceneDuration + 0.5f);
+        
+        fullBlackFadeImage.DOFade(0f, openAnimDuration);
         yield return new WaitForSeconds(openAnimDuration);
-        bottomBlackImage.fillAmount = topBlackImage.fillAmount = 0f;
-        topBlackImage.DOFade(1f, 0.001f);
-        bottomBlackImage.DOFade(1f, 0.001f);
 
         alreadyLoadingNextScene = false;
     }
-
 
     public void LoadFacility()
     {

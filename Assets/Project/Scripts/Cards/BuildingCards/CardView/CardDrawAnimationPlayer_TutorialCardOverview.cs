@@ -115,7 +115,6 @@ public class CardDrawAnimationPlayer_TutorialCardOverview : CardDrawAnimationPla
         
         _currentTutorialObject = nextTutorialObject;
         _currentTutorialObject.SetActive(true);
-        
         textDecoder.Activate();
     }
 
