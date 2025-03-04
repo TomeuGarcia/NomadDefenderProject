@@ -31,6 +31,7 @@ public class SpeedUpButton : MonoBehaviour
     private int current = 0;
     private int numSpeeds = 0;
     private bool gameFinished = false;
+    private bool _inputsAreDisabled = false;
 
     public bool IsTimePaused { get; private set; }
     public static bool UsingBuggyTimeScale { get; private set; }
@@ -86,7 +87,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.GameIsPaused || gameFinished) return;
+        if (PauseMenu.GameIsPaused || gameFinished || _inputsAreDisabled) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -297,4 +298,31 @@ public class SpeedUpButton : MonoBehaviour
 
 
 
+
+    public void SetSpeedTo0AndDisableInteractions()
+    {
+        // TODO - disable buttons interactions & update() inputs
+        incrementButton.interactable = false;
+        decrementButton.interactable = false;
+        _inputsAreDisabled = true;
+
+        // TODO - if paused, exit from paused
+        _gamePausedDisplay.SetActive(false);
+
+
+        // TODO - in the end, set GameSpeed to 0
+        PauseTimeScale();
+        Time.timeScale = 1;
+    }
+    public void ResumeSpeedAndEnableInteractions()
+    {
+        // TODO - enable buttons interactions & update() inputs
+        incrementButton.interactable = true;
+        decrementButton.interactable = true;
+        _inputsAreDisabled = false;
+
+        // TODO - in the end, set GameSpeed to 1 / return to default speed
+        SetCurrentTimeSpeed(0);
+    }
+    
 }

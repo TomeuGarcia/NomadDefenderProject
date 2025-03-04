@@ -22,7 +22,9 @@ public class TileChangingBossManager : MonoBehaviour
     private bool _firstEventHappened;
 
     [Header("EXTRA")] 
-    [SerializeField] private int _extraCurency = 0;
+    [SerializeField] private TextLine _extraCurrencyText;
+    [SerializeField, Min(0)] private int _extraCurency = 0;
+    [SerializeField, Min(1)] private int _extraCurencyTimes = 1;
     
     private void Awake()
     {
@@ -103,7 +105,7 @@ public class TileChangingBossManager : MonoBehaviour
         }
         
         _enemyWaveManager.WaveStartPaused = true;
-        GameTime.SetTimeScale(0);
+        SpeedUpButton.Instance.SetSpeedTo0AndDisableInteractions();
 
         
         yield return StartCoroutine(nextLevelEvent.Dialogue.PlayBeforeAnimationLines());
@@ -125,7 +127,7 @@ public class TileChangingBossManager : MonoBehaviour
 
         
         _enemyWaveManager.WaveStartPaused = false;
-        GameTime.SetTimeScale(1);
+        SpeedUpButton.Instance.ResumeSpeedAndEnableInteractions();
     }
     
 
@@ -164,7 +166,20 @@ public class TileChangingBossManager : MonoBehaviour
 
     private IEnumerator SumExtraCurrency()
     {
-        yield return new WaitForSeconds(1.5f);
-        ServiceLocator.GetInstance().CurrencyCounter.AddCurrency(_extraCurency);
+        yield return new WaitForSeconds(7.0f);
+        
+        _bossDialogueSystem.PrintLine(_extraCurrencyText);
+        yield return new WaitUntil(_bossDialogueSystem.IsLinePrinted);
+
+        float delay = 0.5f;
+        for (int i = 0; i < _extraCurencyTimes; ++i)
+        {
+            yield return new WaitForSeconds(delay);
+            ServiceLocator.GetInstance().CurrencyCounter.AddCurrency(_extraCurency);
+            delay *= 0.8f;
+        }
+        
+        yield return new WaitForSeconds(1.0f);
+        _bossDialogueSystem.Clear();
     }
 }
