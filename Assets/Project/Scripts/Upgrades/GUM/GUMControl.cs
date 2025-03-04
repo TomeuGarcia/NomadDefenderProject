@@ -8,9 +8,11 @@ using UnityEngine.Device;
 public class GUMControl : MonoBehaviour
 {
     [SerializeField] private GUMAnimator _GUMAnimator;
+    [SerializeField] private UpgradeMachineControl _upgradeMachineControl;
 
     [Header("SCREEN")]
-    [SerializeField] private MeshRenderer _screen;
+    [SerializeField] private MeshRenderer _screenMesh;
+    [SerializeField] private MeshRenderer _screenTransitionMesh;
     private Material _screenTransitionMat;
     private Material _screenMat;
 
@@ -22,11 +24,6 @@ public class GUMControl : MonoBehaviour
 
     [Header("MATERIAL LERP DATA")]
     [SerializeField] private MaterialLerp.FloatData screenTransitionFD;
-    [SerializeField] private MaterialLerp.FloatData screenFD;
-
-    public delegate void UpgradeMachineControlAction();
-    public event UpgradeMachineControlAction OnReplaceStart;
-    public event UpgradeMachineControlAction OnReplaceCardPrinted;
 
     private void Awake()
     {
@@ -35,20 +32,24 @@ public class GUMControl : MonoBehaviour
         _combineButtonMat.SetFloat("_EnableCoef", 0.0f);
         _combineButtonMat.SetFloat("_AlphaCoef", 0.0f);
 
-        //RenderSettings.reflectionIntensity = 0.0f;
+        _screenMat = _screenMesh.materials[1];
+        _screenTransitionMat = _screenTransitionMesh.materials[0];
+
+        RenderSettings.reflectionIntensity = 0.0f;
 
         _combineMouseNotifier.OnMouseEntered += OnHover;
         _combineMouseNotifier.OnMouseExited += OnUnhover;
+    }
 
+    private void Start()
+    {
         StartCoroutine(Enter());
     }
 
-    /*
     private void OnDestroy()
     {
         RenderSettings.reflectionIntensity = 1.0f;
     }
-    */
 
 
     // BUTTON
@@ -57,6 +58,7 @@ public class GUMControl : MonoBehaviour
         if (_buttonEnabled)
         {
             _combineButtonMat.DOFloat(1.0f, "_HoverCoef", 0.1f);
+            GameAudioManager.GetInstance().PlayCardHovered();
         }
     }
     private void OnUnhover()
@@ -64,15 +66,24 @@ public class GUMControl : MonoBehaviour
         if (_buttonEnabled)
         {
             _combineButtonMat.DOFloat(0.0f, "_HoverCoef", 0.1f);
+            GameAudioManager.GetInstance().PlayCardHoverExit();
         }
     }
     public void ActivateButton()
     {
+        screenTransitionFD.invert = false;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { _screenTransitionMat }));
 
+        _combineButtonMat.DOFloat(1.0f, "_EnableCoef", 0.2f);
+        _buttonEnabled = true;
     }
     public void DeactivateButton()
     {
+        screenTransitionFD.invert = true;
+        StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { _screenTransitionMat }));
 
+        _combineButtonMat.DOFloat(0.0f, "_EnableCoef", 0.2f);
+        _buttonEnabled = false;
     }
 
 
@@ -113,22 +124,21 @@ public class GUMControl : MonoBehaviour
 
     public void Upgrading()
     {
-        if (OnReplaceStart != null) OnReplaceStart();
+        GameAudioManager.GetInstance().PlayUpgradeButtonPressed();
         _GUMAnimator.Upgrading();
 
         _combineButtonMat.DOFloat(1.0f, "_SelectCoef", 0.1f);
         _combineButtonMat.DOFloat(0.0f, "_AlphaCoef", 0.2f);
     }
 
-    //TODO - CALL THIS FUNCTION FROM ANIMATION TY
     public void ShutDown()
     {
-        TODO
+        _GUMAnimator.ShutDown();
         screenTransitionFD.invert = true;
         screenTransitionFD.time = 0.25f;
         StartCoroutine(MaterialLerp.FloatLerp(screenTransitionFD, new Material[1] { _screenTransitionMat }));
 
-        if (OnReplaceCardPrinted != null) OnReplaceCardPrinted();
+        _upgradeMachineControl.ShutDown();
 
         _screenMat.DOFloat(0, "_FirstFillCoef", 0.2f);
         _screenMat.DOFloat(0, "_SecondFillCoef", 0.2f);

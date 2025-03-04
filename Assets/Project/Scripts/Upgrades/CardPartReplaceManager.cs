@@ -428,7 +428,7 @@ public class CardPartReplaceManager : MonoBehaviour
             //buttonMaterial.SetFloat("_IsAlwaysOn", 1f);
             //StartCoroutine(ReplecementAnimation());
 
-            //upgradeMachineControl.Replace();
+            upgradeMachineControl.Replace();
             _GUMControl.Upgrading();
             // Audio
             GameAudioManager.GetInstance().PlayUpgradeButtonPressed();

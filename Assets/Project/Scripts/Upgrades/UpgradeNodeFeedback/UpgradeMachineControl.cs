@@ -174,25 +174,25 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void LeftPanelStartPulsing()
     {
-        leftCardSlot.ResetStartTime();
-        leftCardSlot.PulsePanel(1);
+        //leftCardSlot.ResetStartTime();
+        //leftCardSlot.PulsePanel(1);
         leftInsertCardText.DOFade(1f, 0.1f);
     }
     public void LeftPanelStopPulsing()
     {
-        leftCardSlot.PulsePanel(0);
+        //leftCardSlot.PulsePanel(0);
         leftInsertCardText.DOFade(0f, 0.1f);
     }
     
     public void RightPanelStartPulsing()
     {
-        rightCardSlot.ResetStartTime();
-        rightCardSlot.PulsePanel(1);
+        //rightCardSlot.ResetStartTime();
+        //rightCardSlot.PulsePanel(1);
         rightInsertCardText.DOFade(1f, 0.1f);
     }
     public void RightPanelStopPulsing()
     {
-        rightCardSlot.PulsePanel(0);
+        //rightCardSlot.PulsePanel(0);
         rightInsertCardText.DOFade(0f, 0.1f);
     }
 
@@ -307,6 +307,7 @@ public class UpgradeMachineControl : MonoBehaviour
     public void Replace()
     {
         if (OnReplaceStart != null) OnReplaceStart();
+        return;
 
         _buttonEnabled = false;
         _combineButtonMat.DOFloat(1.0f, "_SelectCoef", 0.1f);
@@ -386,5 +387,10 @@ public class UpgradeMachineControl : MonoBehaviour
         Material screenFillMaterial = screen.materials[2];
         screenFillMaterial.DOFloat(0, "_FirstFillCoef", 0.2f);
         screenFillMaterial.DOFloat(0, "_SecondFillCoef", 0.2f);
+    }
+
+    public void ShutDown()
+    {
+        if (OnReplaceCardPrinted != null) OnReplaceCardPrinted();
     }
 }

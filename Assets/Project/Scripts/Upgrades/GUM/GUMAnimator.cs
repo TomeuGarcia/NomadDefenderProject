@@ -26,6 +26,7 @@ public class GUMAnimator : MonoBehaviour
 
     private void Update()
     {
+        return;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Enter();
