@@ -25,6 +25,7 @@ public class CardPartReplaceManager : MonoBehaviour
     private BuildingCard[] deckCards;
 
     [Header("MACHINE")]
+    [SerializeField] private GUMControl _GUMControl;
     [SerializeField] private UpgradeMachineControl upgradeMachineControl;
     [SerializeField] private GameObject incompletePreviewCard;
 
@@ -427,16 +428,16 @@ public class CardPartReplaceManager : MonoBehaviour
             //buttonMaterial.SetFloat("_IsAlwaysOn", 1f);
             //StartCoroutine(ReplecementAnimation());
 
-            upgradeMachineControl.Replace();
-
+            //upgradeMachineControl.Replace();
+            _GUMControl.Upgrading();
             // Audio
             GameAudioManager.GetInstance().PlayUpgradeButtonPressed();
         }
         else
         {
             // Audio
-            GameAudioManager.GetInstance().PlayUpgradeButtonCantBePressed();
-            upgradeMachineControl.CantReplace();
+            //GameAudioManager.GetInstance().PlayUpgradeButtonCantBePressed();
+            //upgradeMachineControl.CantReplace();
         }
     }
 
@@ -502,7 +503,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void CardWasSelected()
     {
         cardIsReady = true;
-        upgradeMachineControl.SelectLeftCard();
+        //upgradeMachineControl.SelectLeftCard();
+        _GUMControl.LeftReady();
 
         if (partIsReady)
         {
@@ -517,7 +519,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void CardWasUnselected()
     {
         cardIsReady = false;
-        upgradeMachineControl.RetrieveLeftCard();
+        //upgradeMachineControl.RetrieveLeftCard();
+        _GUMControl.LeftUnReady();
 
         if (partIsReady)
         {
@@ -533,7 +536,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void PartWasSelected()
     {
         partIsReady = true;
-        upgradeMachineControl.SelectRightCard();
+        //upgradeMachineControl.SelectRightCard();
+        _GUMControl.RightReady();
 
         if (cardIsReady)
         {
@@ -548,7 +552,8 @@ public class CardPartReplaceManager : MonoBehaviour
     private void PartWasUnselected()
     {
         partIsReady = false;
-        upgradeMachineControl.RetrieveRightCard();
+        //upgradeMachineControl.RetrieveRightCard();
+        _GUMControl.RightUnReady();
 
         if (cardIsReady)
         {
@@ -565,12 +570,14 @@ public class CardPartReplaceManager : MonoBehaviour
 
     private void SetButtonReady()
     {
-        upgradeMachineControl.ActivateButton();
+        //upgradeMachineControl.ActivateButton();
+        _GUMControl.ActivateButton();
     }
 
     private void SetButtonNotReady()
     {
-        upgradeMachineControl.DeactivateButton();
+        //upgradeMachineControl.DeactivateButton();
+        _GUMControl.DeactivateButton();
     }
 
     private void InvokeReplacementDone()
