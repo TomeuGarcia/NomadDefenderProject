@@ -9,12 +9,13 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 {
     [Header("CONFIG")]
     [SerializeField] private TDGameManagerConfig _config;
+    [SerializeField] private RunState _runState;
 
     [Header("SCENE MANAGEMENT")]
     [SerializeField] private MapSceneNotifier mapSceneNotifier;
 
 
-    [Header("Canvas")]
+    [Header("Canvas")] 
     [SerializeField] private GameObject victoryHolder;
     [SerializeField] private Transform victoryTextTransform;
     [SerializeField] private GameObject defeatHolder;
@@ -25,6 +26,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     public delegate void TDGameManagerAction();
     public static event TDGameManagerAction OnGameFinishStart;
     public static event TDGameManagerAction OnVictoryStart;
+    public static event TDGameManagerAction OnPerfectDefenseVictoryStart;
     public static event TDGameManagerAction OnGameOverStart;
     public static event TDGameManagerAction OnGameOverComplete;
     public static event TDGameManagerAction OnEndGameResetPools;
@@ -56,6 +58,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
     public bool GameHasFinished { get; private set; } = false;
 
+    public bool PerfectDefense { get; private set; } = true;
+
     private void Awake()
     {
         ServiceLocator.GetInstance().TDGameState = this;
@@ -63,6 +67,7 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         victoryHolder.SetActive(false);
         defeatHolder.SetActive(false);
+        PerfectDefense = true;
 
         if (OnQueryReferenceToBattleStateResult != null)
             OnQueryReferenceToBattleStateResult(out battleStateResult);
@@ -84,6 +89,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         {
             pathLocations[i].OnDeath += DecreaseAliveLocationsAndCheckGameOver;
         }
+
+        PathLocation.OnTakeDamage += OnPathLocationTakesDamage;
     }
 
     private void OnDisable()
@@ -104,6 +111,8 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         {
             pathLocations[i].OnDeath -= DecreaseAliveLocationsAndCheckGameOver;
         }
+    
+        PathLocation.OnTakeDamage -= OnPathLocationTakesDamage;
     }
 
     private void InitLocationsVisuals()
@@ -210,6 +219,12 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         alreadyPlayedVictoryOrGameOver = true;
         Debug.Log("Victory");
+
+        _runState.IncrementBattleVictories(PerfectDefense);
+        if (PerfectDefense)
+        {
+            OnPerfectDefenseVictoryStart?.Invoke();
+        }
         
         OnVictoryStart?.Invoke();
         StartCoroutine(VictoryAnimation());
@@ -422,5 +437,10 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     private bool RedirectedDamageWillKill()
     {
         return _futureNumAliveLocations <= 0;
+    }
+
+    private void OnPathLocationTakesDamage(PathLocation pathLocation)
+    {
+        PerfectDefense = false;
     }
 }

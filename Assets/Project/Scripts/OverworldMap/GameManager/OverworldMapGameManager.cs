@@ -239,7 +239,7 @@ public class OverworldMapGameManager : MonoBehaviour
         }
         foreach (AOWMapLifetimeListener lifetimeListener in _lifetimeListeners)
         {
-            lifetimeListener.OnComeBackFromNodeScene(currentNode, firstNextNode);
+            lifetimeListener.OnComeBackFromNodeScene(currentNode, firstNextNode, IsCurrentNodeBattle());
         }
     }
     private void ResumeMap()

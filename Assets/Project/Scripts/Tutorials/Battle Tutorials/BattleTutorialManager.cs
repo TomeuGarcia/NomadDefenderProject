@@ -39,6 +39,7 @@ public class BattleTutorialManager : MonoBehaviour
 
 
     [SerializeField] private TDGameManager tDGameManager;
+    [SerializeField] private RunState _runState;
 
     [Header("GLITCH")]
     [SerializeField] private Volume globalVolume;
@@ -561,6 +562,7 @@ public class BattleTutorialManager : MonoBehaviour
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.OWMAP, 1f);
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
         tDGameManager.ForceFinishScene();
+        _runState.IncrementBattleVictories(tDGameManager.PerfectDefense);
     }
 
     private IEnumerator KeepPrinting()

@@ -5,6 +5,8 @@ public interface IRunStateData
     CardDeckContent DeckContent { get; }
     float RunDuration { get; }
     string RunDurationAsString();
+    int BattleVictories { get; }
+    int PerfectDefenseBattleVictories { get; }
     int NodesReached { get; }
     int DestroyedNodes { get; }
     

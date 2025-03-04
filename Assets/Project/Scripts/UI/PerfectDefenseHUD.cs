@@ -37,7 +37,6 @@ public class PerfectDefenseHUD : MonoBehaviour
     }
 
 
-    [SerializeField] private InterfaceReference<IRunStateData, ScriptableObject> _runStateData;
     [SerializeField, Min(0)] private float _delay = 0.5f;
     [SerializeField] private CanvasGroup _holderCG;
     [SerializeField] private GraphicMotion[] _graphicMotions;
@@ -45,11 +44,11 @@ public class PerfectDefenseHUD : MonoBehaviour
 
     private void OnEnable()
     {
-        TDGameManager.OnVictoryStart += CheckDisplayPerfectDefense;
+        TDGameManager.OnPerfectDefenseVictoryStart += DelayedPlayAnimation;
     }
     private void OnDisable()
     {
-        TDGameManager.OnVictoryStart -= CheckDisplayPerfectDefense;
+        TDGameManager.OnPerfectDefenseVictoryStart -= DelayedPlayAnimation;
     }
 
     private void Awake()
@@ -57,16 +56,11 @@ public class PerfectDefenseHUD : MonoBehaviour
         _holderCG.alpha = 0f;
     }
 
-
-    private void CheckDisplayPerfectDefense()
+    private void DelayedPlayAnimation()
     {
-        if (_runStateData.Value.TotalDamageTaken <= 0)
-        {
-            StartCoroutine(DelayedPlayAnimation());
-        }
+        StartCoroutine(DoDelayedPlayAnimation());
     }
-
-    private IEnumerator DelayedPlayAnimation()
+    private IEnumerator DoDelayedPlayAnimation()
     {
         yield return new WaitForSeconds(_delay);
         PlayAnimation();
