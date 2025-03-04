@@ -31,6 +31,7 @@ public class DisableMine : RecyclableObject
     private Timer _lifetimeTimer;
     private bool _update;
     private bool _isOnDamageCooldown = false;
+    private bool _queueTakeDamage;
 
     private IDisableMineDisappearListener _disappearListener;
     public Tile OccupiedTile { get; private set; }
@@ -71,6 +72,7 @@ public class DisableMine : RecyclableObject
         OccupiedTile = occupiedTile;
         _disappearListener = disappearListener;
         _isOnDamageCooldown = false;
+        _update = false;
     }
 
     public void Appear()
@@ -87,6 +89,7 @@ public class DisableMine : RecyclableObject
         _lifetimeTimer.Update(Mathf.Max(0.01f, _logicConfig.StartLifetimeTime));
 
         _update = true;
+        StartCoroutine(TakeDamageCooldown());
         StartCoroutine(UpdateLoop());
     }
     
@@ -95,39 +98,56 @@ public class DisableMine : RecyclableObject
     {
         bool wasCleared = false;
         bool lifetimeFinished = false;
+        bool doSomethingAfterUpdate = false;
+        
         while (_update)
         {
+            if (_queueTakeDamage)
+            {
+                _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
+                _queueTakeDamage = false;
+            }
+            
             wasCleared = _lifetimeTimer.CurrentTime.AlmostZero();
             if (wasCleared)
             {
                 _update = false;
+                doSomethingAfterUpdate = true;
             }
 
             lifetimeFinished = _lifetimeTimer.HasFinished();
             if (lifetimeFinished)
             {
                 _update = false;
+                doSomethingAfterUpdate = true;
             }
-        
+
             _lifetimeTimer.Update(GameTime.DeltaTime);
             _view.UpdateTimer(_lifetimeTimer.Ratio01);
 
             yield return null;
         }
 
-        _view.HideHovered();
+        if (!doSomethingAfterUpdate) // idk wtf is happening - if I don't do this, it is bugged
+        {
+            lifetimeFinished = false;
+            wasCleared = true;
+        }
         
-        if (wasCleared)
+        
+        _view.HideHovered();
+        if (lifetimeFinished)
+        {
+            GameAudioManager.GetInstance().PlayCannonMineExplodes();
+            yield return StartCoroutine(_view.PlayLifetimeEndDestroy());
+            BuildingDisableWaveFactory.Instance.Create(_logicConfig.DisableWaveConfig, 
+                transform.position, Quaternion.identity);
+        }
+        else
         {
             AnyMineWasCleared = true;
             GameAudioManager.GetInstance().PlayCannonMineCleared();
             yield return StartCoroutine(_view.PlayClearedDestroy());
-        }
-        else if (lifetimeFinished)
-        {
-            yield return StartCoroutine(_view.PlayLifetimeEndDestroy());
-            BuildingDisableWaveFactory.Instance.Create(_logicConfig.DisableWaveConfig, 
-                transform.position, Quaternion.identity);
         }
 
         FinishLifetime();
@@ -139,7 +159,7 @@ public class DisableMine : RecyclableObject
     {
         if (_update && !_isOnDamageCooldown && !PauseMenu.GameIsPaused && !SpeedUpButton.Instance.IsTimePaused)
         {
-            _lifetimeTimer.Update(-_logicConfig.LifetimeRemovePerClick);
+            _queueTakeDamage = true;
             _view.PlayTakeDamageAnimation();
             GameAudioManager.GetInstance().PlayCannonMineDamaged();
             StartCoroutine(TakeDamageCooldown());

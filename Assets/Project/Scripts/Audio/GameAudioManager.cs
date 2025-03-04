@@ -137,6 +137,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSourceBuffer _disableCannonDeactivateBuffer;
     [SerializeField] private AudioSourceBuffer _cannonMineDamagedBuffer;
     [SerializeField] private AudioSourceBuffer _cannonMineClearedBuffer;
+    [SerializeField] private AudioSourceBuffer _cannonMineExplodesBuffer;
 
     [Header("OTHER EFFECTS")]
     [SerializeField] private AudioSource effectsAudioSource;
@@ -898,8 +899,11 @@ public class GameAudioManager : MonoBehaviour
     {
         _cannonMineClearedBuffer.Play();
     }
+    public void PlayCannonMineExplodes()
+    {
+        _cannonMineExplodesBuffer.Play();
+    }
     
-
 
     // OTHER EFFECTS
     public void PlaySmokeBurst()
