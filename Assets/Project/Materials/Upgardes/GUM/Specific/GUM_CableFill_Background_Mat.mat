@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6561019592097627548
+--- !u!114 &-869985958086663552
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OuterPlaneGround_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 23b0c1bff7bfbfa45b0fb9b222c2b48d,
+  m_Name: GUM_CableFill_Background_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: e4fccd9819e29d044bdbd350013055d5,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,12 +37,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_f65fd0fde1d745c5951dfd9c0387f4f5_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 22f8d48bf4113d444b059f95769e1dfe, type: 3}
+    - _SampleTexture2D_9aa311bd949b43f189efa002afb5528c_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: efe593d1e9d2d6044874364b36dd1b40, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -59,28 +55,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdditionalErrorWireStep2: 2.516434
-    - _BrightColorIncrease: 0.03
-    - _ErrorNoiseScale: 2
-    - _ErrorNoiseStrength: 0.5
-    - _ErrorWiresStep: 0
-    - _LerpWireColors: 0
-    - _NoiseScale: 0.1
+    - _AvailableFillCoef: 0
+    - _ColorStep: 1
+    - _FadeAddition: 0
+    - _FillCoef: 0
+    - _NoiseCoef: 1
+    - _NoiseScale: 2
+    - _NoiseSpeed: 4
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0
-    - _SquareScaleCoef: 2
-    - _WireColorLerpPeriod: 1
-    - _WireEdge: 0.614
-    - _WiresScale: 0.17
+    - _ReadyCoef: 0
+    - _UpgradingCoef: 0
     m_Colors:
-    - _BaseColor1: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor2: {r: 0, g: 0.1254902, b: 0.14117648, a: 1}
-    - _BrightErrorColor: {r: 47.937256, g: 0, b: 0, a: 0}
-    - _ErrorOriginOffset: {r: -12.25, g: 0, b: 17.79, a: 0}
-    - _ErrorOriginOffset2: {r: -1000, g: -1000, b: -1000, a: 0}
-    - _WiresColor: {r: 0, g: 0.09411765, b: 0.11372549, a: 1}
-    - _WiresColor2: {r: 0.2086226, g: 0.7218053, b: 1.078732, a: 1}
-    - _WiresErrorColor: {r: 4.237095, g: 0.3105724, b: 0, a: 0}
-    - _WiresOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 0}
+    - _ColorA: {r: 0, g: 1.0592737, b: 0.20566301, a: 0}
+    - _ColorB: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0}
+    - _OffColor: {r: 0, g: 0, b: 0, a: 0}
+    - _OffColorCable: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

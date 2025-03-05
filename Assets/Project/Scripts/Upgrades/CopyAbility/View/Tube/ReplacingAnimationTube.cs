@@ -30,7 +30,7 @@ public class ReplacingAnimationTube : MonoBehaviour
     [SerializeField] private TweenConfig _leftAirConfig;
     [SerializeField] private TweenConfig _leftAirSpeedConfig;
 
-    private float _uniqueAmbientIntensity = 0.5f;
+    private float _uniqueAmbientIntensity = 0.7f;
     private float _ambientIntensity;
 
     private void Awake()
