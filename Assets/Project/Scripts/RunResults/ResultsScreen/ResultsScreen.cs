@@ -85,13 +85,13 @@ public class ResultsScreen : MonoBehaviour
         StarterDeckSaveData starterDeckSaveData = _gameProgressionStatus.Value.Game.StarterDecksSaveStatus.
             GetDeckSaveDataByName(_runStateData.Value.StarterDeck);
 
-        starterDeckSaveData.UpdateHighscore(
-            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty,
-            _runStateData.Value.MakeDeckHighscore()
-        );
+        GameDifficultyType gameDifficulty =
+            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty;
+        
+        starterDeckSaveData.UpdateHighscore(gameDifficulty, _runStateData.Value.MakeDeckHighscore());
 
 
-        if (RunStateData.TotalDamageTaken < 1)
+        if (RunStateData.TotalDamageTaken < 1 && gameDifficulty >= GameDifficultyType.Hard)
         {
             _gameProgressionStatus.Value.Game.SetBeatARunWithFullPerfectDefense();
         }
