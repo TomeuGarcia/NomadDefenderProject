@@ -1825,6 +1825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 94249913}
   - component: {fileID: 94249915}
+  - component: {fileID: 94249916}
   - component: {fileID: 94249914}
   m_Layer: 14
   m_Name: Credits_Text
@@ -1988,6 +1989,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &94249916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94249912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decodingParameters: {fileID: 11400000, guid: 965ae0439251cd741a669dbc4081342f, type: 2}
+  advanceDecoding: 1
+  textStrings: []
+  textComponent: {fileID: 94249914}
 --- !u!1 &96723597
 GameObject:
   m_ObjectHideFlags: 0
@@ -17472,6 +17489,7 @@ GameObject:
   m_Component:
   - component: {fileID: 983520521}
   - component: {fileID: 983520523}
+  - component: {fileID: 983520524}
   - component: {fileID: 983520522}
   m_Layer: 14
   m_Name: Options_Text
@@ -17635,6 +17653,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &983520524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983520520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decodingParameters: {fileID: 11400000, guid: 965ae0439251cd741a669dbc4081342f, type: 2}
+  advanceDecoding: 1
+  textStrings: []
+  textComponent: {fileID: 983520522}
 --- !u!1001 &989650084
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21077,6 +21111,8 @@ MonoBehaviour:
   _textColorHovered: {r: 0, g: 0.40392157, b: 0.47058824, a: 1}
   _screenParent: {fileID: 1073841616}
   _interactableCollider: {fileID: 408841908}
+  _startDecodeDelay: 1.5
+  _textDecoder: {fileID: 983520524}
 --- !u!114 &1142178160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22296,6 +22332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1215463714}
   - component: {fileID: 1215463716}
+  - component: {fileID: 1215463717}
   - component: {fileID: 1215463715}
   m_Layer: 14
   m_Name: Collection_Text
@@ -22459,6 +22496,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1215463717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215463713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decodingParameters: {fileID: 11400000, guid: 965ae0439251cd741a669dbc4081342f, type: 2}
+  advanceDecoding: 1
+  textStrings: []
+  textComponent: {fileID: 1215463715}
 --- !u!1 &1216321047
 GameObject:
   m_ObjectHideFlags: 0
@@ -26764,6 +26817,9 @@ MonoBehaviour:
   _startOnInteractables:
   - {fileID: 919132147534531704}
   - {fileID: 202292063}
+  - {fileID: 2134650190}
+  - {fileID: 1142178159}
+  - {fileID: 1487537646}
 --- !u!4 &1389716274
 Transform:
   m_ObjectHideFlags: 0
@@ -28163,6 +28219,8 @@ MonoBehaviour:
   _textColorHovered: {r: 0, g: 0.40392157, b: 0.47058824, a: 1}
   _screenParent: {fileID: 521204631}
   _interactableCollider: {fileID: 667020029}
+  _startDecodeDelay: 1.75
+  _textDecoder: {fileID: 94249916}
 --- !u!114 &1487537647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47628,6 +47686,8 @@ MonoBehaviour:
   _textColorHovered: {r: 0, g: 0.40392157, b: 0.47058824, a: 1}
   _screenParent: {fileID: 64898388}
   _interactableCollider: {fileID: 1551169563}
+  _startDecodeDelay: 1.25
+  _textDecoder: {fileID: 1215463717}
 --- !u!114 &2134650191
 MonoBehaviour:
   m_ObjectHideFlags: 0

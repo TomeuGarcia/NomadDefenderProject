@@ -28,7 +28,7 @@ public class FacilityUITransitioner : MonoBehaviour
     private void Start()
     {
         _loadingBar.fillAmount = 0.0f;
-
+        
         _loadingText.gameObject.SetActive(false);
         _completedText.gameObject.SetActive(false);
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FIScreenButton : AFacilityInteractable
 {
+    [Header("CONFIG")]
     [SerializeField] private AScreenButtonInteraction _interaction;
     [SerializeField] private PointAndClickClickableObject _caller;
     [SerializeField] private bool _destroyCallerOnInteract = true;
@@ -18,6 +19,10 @@ public class FIScreenButton : AFacilityInteractable
     [SerializeField] private GameObject _screenParent;
     [SerializeField] private Collider _interactableCollider;
 
+
+    [Header("START ON")] 
+    [SerializeField, Min(0)] private float _startDecodeDelay = 1.5f;
+    [SerializeField] private TextDecoder _textDecoder;
     
     
     public void Init(bool enabled, FacilityManager facilityManager)
@@ -64,4 +69,17 @@ public class FIScreenButton : AFacilityInteractable
         _screenParent.SetActive(false);
         _interactableCollider.enabled = false;
     }
+
+
+    public override void InteractedStart()
+    {
+        StartCoroutine(DoInteractedStart());
+    }
+
+    private IEnumerator DoInteractedStart()
+    {
+        yield return new WaitForSeconds(_startDecodeDelay);
+        _textDecoder.Activate();
+    }
+
 }
