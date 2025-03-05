@@ -13876,6 +13876,8 @@ MonoBehaviour:
   _upgradeMachineControl: {fileID: 2216302319443053145}
   _screenMesh: {fileID: 362849575136720289}
   _screenTransitionMesh: {fileID: 2687289692305095123}
+  _leftCardSlotAS: {fileID: 1387080786484443026}
+  _rightCardSlotAS: {fileID: 6062110880922587429}
   _combineMouseNotifier: {fileID: 380590518838467976}
   _combineButtonMesh: {fileID: 5062125523547828351}
   screenTransitionFD:
@@ -29117,6 +29119,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3309068893818130698}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &6062110880922587429 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8776632878637826095, guid: 6a0f594221a42be4f9ae0e4bbd134de8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3309068893818130698}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6388582506912985967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8450126540733260389, guid: 6a0f594221a42be4f9ae0e4bbd134de8,
@@ -33647,11 +33655,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GUM_CardSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 8776632878637826095, guid: 6a0f594221a42be4f9ae0e4bbd134de8,
+        type: 3}
+      propertyPath: Pan2D
+      value: -0.7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a0f594221a42be4f9ae0e4bbd134de8, type: 3}
+--- !u!82 &1387080786484443026 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8776632878637826095, guid: 6a0f594221a42be4f9ae0e4bbd134de8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7706569059257841597}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2285536038792582616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8450126540733260389, guid: 6a0f594221a42be4f9ae0e4bbd134de8,

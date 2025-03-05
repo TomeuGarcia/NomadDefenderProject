@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -15,6 +16,10 @@ public class GUMControl : MonoBehaviour
     [SerializeField] private MeshRenderer _screenTransitionMesh;
     private Material _screenTransitionMat;
     private Material _screenMat;
+
+    [Header("AUDIO")]
+    [SerializeField] private AudioSource _leftCardSlotAS;
+    [SerializeField] private AudioSource _rightCardSlotAS;
 
     [Header("BUTTON")]
     [SerializeField] private MouseOverNotifier _combineMouseNotifier;
@@ -90,6 +95,7 @@ public class GUMControl : MonoBehaviour
     // GUM ANIMATOR
     public IEnumerator Enter()
     {
+        yield return new WaitForSeconds(0.65f);
         _GUMAnimator.Enter();
         yield return new WaitForSeconds(2.0f);
         _combineButtonMat.DOFloat(1.0f, "_AlphaCoef", 0.2f);
@@ -142,5 +148,41 @@ public class GUMControl : MonoBehaviour
 
         _screenMat.DOFloat(0, "_FirstFillCoef", 0.2f);
         _screenMat.DOFloat(0, "_SecondFillCoef", 0.2f);
+    }
+
+    public void OpenResultCardSlot()
+    {
+        GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
+        GameAudioManager.GetInstance().PlaySmokeBurst();
+    }
+
+    //SOUNDS
+    public void PlayContainerPistonUp()
+    {
+        GameAudioManager.GetInstance().PlayContainerPistonUp();
+    }
+    public void PlayContainerLightOn()
+    {
+        GameAudioManager.GetInstance().PlayContainerLightOn();
+    }
+    public void PlayCardSlotAppears()
+    {
+        GameAudioManager.GetInstance().PlayCardSlotAppears();
+    }
+    public void PlayReplaceMachineLoad()
+    {
+        GameAudioManager.GetInstance().PlayReplaceMachineLoad();
+    }
+    public void PlayCardSlotPlacerAppears()
+    {
+        GameAudioManager.GetInstance().PlayCardSlotPlacerAppears();
+    }
+    public void PlayLightLeft()
+    {
+        _leftCardSlotAS.Play();
+    }
+    public void PlayLightRight()
+    {
+        _rightCardSlotAS.Play();
     }
 }

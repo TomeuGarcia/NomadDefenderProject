@@ -359,7 +359,7 @@ public class UpgradeMachineControl : MonoBehaviour
         StartCoroutine(MaterialLerp.FloatLerp(cableTransitionCoefFD, tempMaterials.ToArray()));
         //yield return new WaitForSeconds(0.75f);
 
-        GameAudioManager.GetInstance().PlayReplaceMachineLoad();
+        //GameAudioManager.GetInstance().PlayReplaceMachineLoad();
 
         //Cable Energy a 1
         yield return new WaitForSeconds(cableTransitionCoefFD.time);

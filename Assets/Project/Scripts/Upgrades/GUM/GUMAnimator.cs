@@ -21,7 +21,6 @@ public class GUMAnimator : MonoBehaviour
     {
         _ambientIntensity = RenderSettings.ambientIntensity;
         RenderSettings.ambientIntensity = _uniqueAmbientIntensity;
-        Enter();
     }
 
     private void Update()

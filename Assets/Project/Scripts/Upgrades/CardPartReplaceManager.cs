@@ -711,8 +711,8 @@ public class CardPartReplaceManager : MonoBehaviour
     {
         cardPartHolder.ReplaceStartStopInteractions();
         upgradeCardHolder.StopInteractions();
-        GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
-        GameAudioManager.GetInstance().PlaySmokeBurst();
+        //GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
+        //GameAudioManager.GetInstance().PlaySmokeBurst();
         printParticles_PS.Play();
         yield return new WaitForSeconds(1.7f);
         

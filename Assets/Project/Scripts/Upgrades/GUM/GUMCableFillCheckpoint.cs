@@ -31,7 +31,7 @@ public class GUMCableFillCheckpoint : MonoBehaviour
     }
     public void StartUpgradingFill()
     {
-        Fill(1.0f, "_UpgradingCoef", _timeToFill, _ease);
+        Fill(1.0f, "_UpgradingCoef", _timeToFill * 2.0f, _ease);
     }
 
     public void ShutDown()
