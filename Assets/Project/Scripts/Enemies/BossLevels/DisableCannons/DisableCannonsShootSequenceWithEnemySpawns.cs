@@ -72,7 +72,7 @@ public class DisableCannonsShootSequenceWithEnemySpawns : MonoBehaviour
 
     private IEnumerator BeatTrigger(Beat beat)
     {
-        yield return new WaitForSeconds(beat.Delay);
+        yield return StartCoroutine(GameTime.WaitForSeconds(beat.Delay));
         
         _shootLogic.Shoot(beat.ShootingFunction, beat.NumberOfShots);
     }

@@ -9,6 +9,7 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
     public ITurretStatState RadiusRangeStatState => _radiusRangeStatState;
 
     public SupportStatsSnapshot CurrentStats { get; private set; }
+    public SupportStatsSnapshot NextLevelStatsPreview { get; private set; }
 
     public int CurrentUpgradeLevel { get; private set; }
 
@@ -24,6 +25,7 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
         CurrentStats = new SupportStatsSnapshot(
             _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
+        UpdateNextLevelStatsPreview();
     }
 
     public void IncrementUpgradeLevel()
@@ -43,7 +45,15 @@ public class SupportCardStatsController : ISupportStatsStateSource, IBuildingUpg
         CurrentStats.Reset(
             _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
-
+        UpdateNextLevelStatsPreview();
+        
         OnStatsUpdated?.Invoke();
+    }
+    
+    private void UpdateNextLevelStatsPreview()
+    {
+        int nextUpgradeLevel = CurrentUpgradeLevel + 1;
+        NextLevelStatsPreview = new SupportStatsSnapshot(
+            _radiusRangeStatState.GetValueByLevel(nextUpgradeLevel));
     }
 }

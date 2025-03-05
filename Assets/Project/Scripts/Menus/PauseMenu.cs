@@ -14,9 +14,10 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     float lastTimeScale;
     [SerializeField] GameObject pauseMenuUI;
+    [SerializeField] private GameObject[] _viewAdditions;
+    
     [SerializeField] private CanvasGroup interactionCanvasGroup;
     public bool GameCanBePaused { get; set; } = true;
-    [SerializeField] TextManager textManager;
 
     private Button button;
     private TextMeshProUGUI buttonText;
@@ -27,7 +28,8 @@ public class PauseMenu : MonoBehaviour
 
 
     [SerializeField] private OptionsMenu optionsMenuUI;
-    
+
+    public bool ShowingOptions => optionsMenuUI.gameObject.activeInHierarchy;
 
 
     private static Color fadedInColor = Color.white;
@@ -38,6 +40,9 @@ public class PauseMenu : MonoBehaviour
 
     public static Action OnGameSurrender;
 
+    public bool CanPauseNormally { get; set; } = true;
+    public bool CanDisplayNewGame { get; set; } = false;
+
 
     private void Start()
     {
@@ -46,7 +51,8 @@ public class PauseMenu : MonoBehaviour
 
         optionsMenuUI.gameObject.SetActive(false);
         pauseMenuUI.SetActive(false);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
+        HideView();
     }
     private void Awake()
     {
@@ -70,17 +76,46 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (CanPauseNormally)
             {
-                Resume();
+                if (GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
             else
             {
-                Pause();
+                if (ShowingOptions)
+                {
+                    LeaveOptionsMenu();
+                }
+                else
+                {
+                    MainMenuOptions();
+                }
             }
         }
     }
 
+
+    private void ShowView()
+    {
+        foreach (GameObject viewAddition in _viewAdditions)
+        {
+            viewAddition.SetActive(true);
+        }
+    }
+    private void HideView()
+    {
+        foreach (GameObject viewAddition in _viewAdditions)
+        {
+            viewAddition.SetActive(false);
+        }
+    }
 
     public void Resume()
     {
@@ -99,9 +134,11 @@ public class PauseMenu : MonoBehaviour
         //GameAudioManager.GetInstance().NormalMusicPitch();
         Time.timeScale = lastTimeScale;   //segurament s ha de fer d un altre manera
         GameIsPaused = false;
-        textManager.ResetTexts();        
 
         OWMap_Node.IsGlobalInteractable = true;
+        
+        SetSurrenderTextVisibility(false);
+        HideView();
     }
 
     public void Pause()
@@ -115,7 +152,6 @@ public class PauseMenu : MonoBehaviour
             buttonText.color = fadedInColor;
         }
         //Camera.main.GetComponent<OWCameraMovement>().CanDrag(false);//accedir a cameraMovement per quan estic en batalla
-        StartCoroutine(textManager.DecodeTextsWithDelay());
         EventSystem.current.SetSelectedGameObject(null);
         //GameAudioManager.GetInstance().PausedMusicPitch();
         //textManager.SetActive(true);
@@ -130,11 +166,22 @@ public class PauseMenu : MonoBehaviour
         OWMap_Node.IsGlobalInteractable = false;
 
         CardTooltipDisplayManager.GetInstance().StopDisplayingTooltip();
+        
+        ShowView();
     }
 
+
+    public Action OnEnterMainMenuOptions;
     public void MainMenuOptions()
     {
         GoToOptionsMenu();
+        if (CanDisplayNewGame)
+        {
+            optionsMenuUI.SetNewGameAvailable();
+        }
+        
+        OnEnterMainMenuOptions?.Invoke();
+        ShowView();
     }
 
     public void LoadMenu()
@@ -149,17 +196,16 @@ public class PauseMenu : MonoBehaviour
         interactionCanvasGroup.interactable = false;
 
         OWMap_Node.IsGlobalInteractable = true;
-        textManager.ResetTexts();
 
         SceneLoader.GetInstance().StartLoadMainMenu();
-        pauseMenuUI.SetActive(false);
+        Resume();
     }
 
     public void HideUI()
     {
         pauseMenuUI.SetActive(false);
-        mainMenuButtonText.gameObject.SetActive(true);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
+        HideView();
     }
 
     private void TextFadeIn(TextMeshProUGUI text, bool onEndFadeOut = true)
@@ -198,12 +244,16 @@ public class PauseMenu : MonoBehaviour
     }
     public void ButtonUnhovered()
     {
-        button.transform.DOKill();
-        button.image.DOKill();
-        buttonText.DOKill();
-        button.image.color = fadedInColor;
-        buttonText.color = fadedInColor;
-        buttonText.rectTransform.DOScale(Vector3.one, 0.1f).SetUpdate(true);
+        if (button != null)
+        {
+            button.transform.DOKill();
+            button.image.DOKill();
+            buttonText.DOKill();
+            button.image.color = fadedInColor;
+            buttonText.color = fadedInColor;
+            buttonText.rectTransform.DOScale(Vector3.one, 0.1f).SetUpdate(true);
+        }
+
 
         //ButtonFadeOut(finishRedrawsButton, finishRedrawsButtonText, true);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
@@ -212,13 +262,17 @@ public class PauseMenu : MonoBehaviour
 
     public void MainMenuHoverShowSurrender()
     {
-        mainMenuButtonText.gameObject.SetActive(false);
-        surrenderText.gameObject.SetActive(true);
+        SetSurrenderTextVisibility(true);
     }
     public void MainMenuUnhoverHideSurrender()
     {
-        mainMenuButtonText.gameObject.SetActive(true);
-        surrenderText.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
+    }
+
+    private void SetSurrenderTextVisibility(bool surrenderIsVisible)
+    {
+        mainMenuButtonText.gameObject.SetActive(!surrenderIsVisible);
+        surrenderText.gameObject.SetActive(surrenderIsVisible);
     }
 
     public void GoToOptionsMenu()
@@ -232,6 +286,12 @@ public class PauseMenu : MonoBehaviour
         ButtonUnhovered();
         optionsMenuUI.Hide();
         optionsMenuUI.gameObject.SetActive(false);
+        SetSurrenderTextVisibility(false);
+
+        if (!CanPauseNormally)
+        {
+            HideView();
+        }
     }
 
 }

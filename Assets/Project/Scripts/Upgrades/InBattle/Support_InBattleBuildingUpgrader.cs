@@ -162,6 +162,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         {
             OnSupportButtonUnhovered();
         }
+        
+        _supportBuilding.HideUpgradePreviewRange();
 
         closeAnimationCoroutine = StartCoroutine(CloseAnimation());
     }
@@ -217,6 +219,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         bool highlight = CanUpgrade();
         //float fillValue = (float)(supportLvl + 1) * supportFillBarCoef
         //_supportUpgradeButton.OnButtonHovered();
+        
+        _supportBuilding.ShowUpgradePreviewRange();
     }
 
     public void OnSupportButtonUnhovered()
@@ -224,6 +228,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         // (float)supportLvl * supportFillBarCoef
         //_supportUpgradeButton.OnButtonUnhovered();
         _supportUpgradeButton.ButtonFadeIn();
+        
+        _supportBuilding.HideUpgradePreviewRange();
     }
 
     private void StopAllButtonsFade(bool abilityFadeOut, bool highlight)
@@ -277,6 +283,8 @@ public class Support_InBattleBuildingUpgrader : InBattleBuildingUpgrader
         CheckStopParticlesCanUpgrade();
         PlayPositiveAnimationTextCostPunch();
         InvokeOnUpgrade(TurretUpgradeType.SUPPORT);
+        
+        _supportBuilding.ShowUpgradePreviewRange();
     }
 
     /*

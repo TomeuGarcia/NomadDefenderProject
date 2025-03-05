@@ -8,8 +8,13 @@ public class EnemyTypeConfig_Dasher : EnemyTypeConfig
     [Header("DASH")]
     [SerializeField, Min(0)] private float _stopDuration = 1.0f;
     [SerializeField, Min(0)] private float _dashTravelDistance = 5.0f;
+    
+    [Header("DASH WHEN BOOSTED")]
+    [SerializeField, Min(0)] private float _extraDashTimeWhenBoosted = 1.0f;
+    
     public float StopDuration => _stopDuration;
     public float DashTravelDistance => _dashTravelDistance;
+    public float ExtraDashTimeWhenBoosted => _extraDashTimeWhenBoosted;
     
     
     

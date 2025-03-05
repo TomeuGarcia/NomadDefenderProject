@@ -1,5 +1,6 @@
 public interface IRunStateUpdate 
 {
+    void IncrementBattleVictories(bool perfectDefense);
     void IncrementNodesReached();
     void IncrementDestroyedNodes();
     void IncrementPlacedBuildings();

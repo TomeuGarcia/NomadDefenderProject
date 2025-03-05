@@ -12,7 +12,6 @@ public class CardCollectionManager : MonoBehaviour
     [SerializeField] private CardCollectionDataStorage _cardCollection;
     [SerializeField] private Camera _camera;
     [SerializeField] private CardMotionConfig _cardMotionConfig;
-    [SerializeField] private Button _backButton;
     [SerializeField] private TextDecoder _discoveredPercentText;
     [SerializeField] private TextDecoder _discoveriesText;
 
@@ -41,8 +40,6 @@ public class CardCollectionManager : MonoBehaviour
         InitDiscoveredPercent(discoveredProjectilesCount, projectileCardTransforms.Length,
             discoveredPassivesCount, passiveAbilityCardTransforms.Length);
         StartCoroutine(PlaySceneStartAnimation(projectileCardTransforms, passiveAbilityCardTransforms));
-        
-        _backButton.onClick.AddListener(SceneLoader.GetInstance().LoadFacility);
     }
     
 

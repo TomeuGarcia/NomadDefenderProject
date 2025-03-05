@@ -13,6 +13,16 @@ public class WorldSpaceLineRendererEditor : UnityEditor.Editor
         _worldSpaceLineRenderer = target as WorldSpaceLineRenderer;
     }
 
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        
+        if (GUILayout.Button("Update"))
+        {
+            _worldSpaceLineRenderer.UpdateLine();
+        }
+    }
+
     private void OnSceneGUI()
     {
         DrawButtons();

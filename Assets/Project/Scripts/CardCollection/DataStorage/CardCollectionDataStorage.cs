@@ -86,6 +86,7 @@ public class CardCollectionDataStorage : ScriptableObject
         SaveData();
     }
 
+    
     private readonly CaesarCipher _caesarCipher = new (912);
 
     [Button()]
@@ -101,16 +102,37 @@ public class CardCollectionDataStorage : ScriptableObject
         foreach (DataWrapper.ProjectileData projectileData in storedData.projectilesData)
         {
             TurretPartProjectileDataModel projectile = ProjectileNameToDataModel(projectileData.name);
-            _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);
+            if (projectile != null)
+            {
+                _discoveredProjectiles.Add(projectile, projectileData.wasDiscovered);
+            }
         }
         
         _discoveredPassiveAbilities = new Dictionary<ATurretPassiveAbilityDataModel, bool>(_passiveAbilities.Length);
         foreach (DataWrapper.PassiveAbilityData passiveAbilityData in storedData.passiveAbilitiesData)
         {
             ATurretPassiveAbilityDataModel passiveAbility = PassiveAbilityNameToDataModel(passiveAbilityData.name);
-            _discoveredPassiveAbilities.Add(passiveAbility, passiveAbilityData.wasDiscovered);    
+            if (passiveAbility != null)
+            {
+                _discoveredPassiveAbilities.Add(passiveAbility, passiveAbilityData.wasDiscovered);
+            }
+        }
+
+        UpdateMissingData();
+    }
+    private void UpdateMissingData()
+    {
+        foreach (TurretPartProjectileDataModel projectile in _projectiles)
+        {
+            _discoveredProjectiles.TryAdd(projectile, false);
+        }
+        foreach (ATurretPassiveAbilityDataModel passiveAbility in _passiveAbilities)
+        {
+            _discoveredPassiveAbilities.TryAdd(passiveAbility, false);
         }
     }
+    
+    
     
     [Button()]
     private void SaveData()

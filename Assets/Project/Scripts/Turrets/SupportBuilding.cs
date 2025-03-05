@@ -87,6 +87,21 @@ public class SupportBuilding : RangeBuilding
     {
         basePart.baseCollider.UpdateRange(CurrentRadiusRange);
     }
+
+    public override void ShowUpgradePreviewRange()
+    {
+        if (upgrader.IsUpgradedToMax() || !basePart.NextUpgradeUpdatesRange)
+        {
+            HideUpgradePreviewRange();
+        }
+        else
+        {
+            basePart.baseCollider.ShowPreviewRange(
+                CurrentRadiusRange,
+                _statsController.NextLevelStatsPreview.RadiusRange);
+        }
+    }
+
     private void OnControllerUpdatedStats()
     {
         UpdateRange();

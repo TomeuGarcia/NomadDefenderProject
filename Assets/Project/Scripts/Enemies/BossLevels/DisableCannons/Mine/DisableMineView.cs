@@ -10,10 +10,8 @@ public class DisableMineView : MonoBehaviour
     {
         [SerializeField] private TweenPunchConfig _appearScalePunch;
         [SerializeField] private TweenPunchConfig _takeDamageRotationPunch;
-        [SerializeField] private TweenConfig _lifetimeEndScale;
         public TweenPunchConfig AppearScalePunch => _appearScalePunch;
         public TweenPunchConfig TakeDamageRotationPunch => _takeDamageRotationPunch;
-        public TweenConfig LifetimeEndScale => _lifetimeEndScale;
     }
     
     
@@ -22,10 +20,12 @@ public class DisableMineView : MonoBehaviour
     [SerializeField] private Transform _mineHolder;
     [SerializeField] private ParticleSystem _damagedParticles;
     [SerializeField] private ParticleSystem _clearedDestroyParticles;
+    [SerializeField] private ParticleSystem _lifetimeEndParticles;
 
     [Header("HUD")]
     [SerializeField] private Image _timerFillImage;
     [SerializeField] private GameObject _hudHolder;
+    [SerializeField] private GameObject _clickUIHolder;
     [SerializeField] private Graphic[] _hudHoverGraphics;
     private Color _originalFillImageColor;
 
@@ -55,6 +55,11 @@ public class DisableMineView : MonoBehaviour
         HideHovered();
     }
 
+    public void HideClick()
+    {
+        _clickUIHolder.SetActive(false);
+    }
+
     public void UpdateTimer(float ratio01)
     {
         _timerFillImage.fillAmount = ratio01;
@@ -76,19 +81,20 @@ public class DisableMineView : MonoBehaviour
 
     public IEnumerator PlayClearedDestroy()
     {
+        _clearedDestroyParticles.Stop();
         _clearedDestroyParticles.Play();
         _hudHolder.SetActive(false);
-        yield return new WaitForSeconds(_config.TakeDamageRotationPunch.Duration);
-        
         _viewHolder.SetActive(false);
-        yield return new WaitUntil(() => !_clearedDestroyParticles.isEmitting);
-        yield return new WaitForSeconds(_clearedDestroyParticles.main.startLifetime.constantMax);
+        yield return new WaitForSeconds(_clearedDestroyParticles.main.duration);
     }
     
     public IEnumerator PlayLifetimeEndDestroy()
     {
-        _mineHolder.Scale(_config.LifetimeEndScale);
-        yield return new WaitForSeconds(_config.TakeDamageRotationPunch.Duration);
+        _viewHolder.SetActive(false);
+        _hudHolder.SetActive(false);
+
+        _lifetimeEndParticles.Play();
+        yield return new WaitForSeconds(0.4f);
     }
 
 
@@ -98,13 +104,16 @@ public class DisableMineView : MonoBehaviour
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
             hudHoverGraphic.color = Color.cyan;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one * 1.1f;
         }
     }
     public void HideHovered()
     {
         foreach (Graphic hudHoverGraphic in _hudHoverGraphics)
         {
-            hudHoverGraphic.color = Color.white;
+            //hudHoverGraphic.color = Color.white;
+            hudHoverGraphic.color = _originalFillImageColor;
+            hudHoverGraphic.rectTransform.localScale = Vector3.one;
         }      
     }
     

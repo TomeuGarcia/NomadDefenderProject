@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OWMapVisualEventManager : MonoBehaviour
 {
-    [SerializeField] private BrokenKeepOutWall brokenKeepOutWall;
+    [SerializeField] private BrokenKeepOutWall[] brokenKeepOutWalls;
     [SerializeField] private DarknessFog darknessFog;
 
     private void Start()
@@ -17,12 +17,25 @@ public class OWMapVisualEventManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         yield return darknessFog.Dissipate();
-        yield return brokenKeepOutWall.InitialBlink();
+        for (int i = 0; i < brokenKeepOutWalls.Length; ++i)
+        {
+            if (i == 0)
+            {
+                yield return StartCoroutine(brokenKeepOutWalls[i].InitialBlink());
+            }
+            else
+            {
+                StartCoroutine(brokenKeepOutWalls[i].InitialBlink());
+            }
+        }
     }
 
     public void TurnOffKeepOutWall()
     {
-        StartCoroutine(brokenKeepOutWall.InitialBlink());
+        for (int i = 0; i < brokenKeepOutWalls.Length; ++i)
+        {
+            StartCoroutine(brokenKeepOutWalls[i].InitialBlink());
+        }
     }
 
     public void DissipateDarkFog()

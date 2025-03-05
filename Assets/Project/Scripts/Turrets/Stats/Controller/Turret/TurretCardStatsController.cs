@@ -14,6 +14,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
 
 
     public TurretStatsSnapshot CurrentStats { get; private set; }
+    public TurretStatsSnapshot NextLevelStatsPreview { get; private set; }
     public int CurrentUpgradeLevel { get; private set; }
 
     public Action OnStatsUpdated;
@@ -53,6 +54,7 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
             _shotsPerSecondInvertedStatState.GetValueByLevel(CurrentUpgradeLevel),
             _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
+        UpdateNextLevelStatsPreview();
     }
     public void UpdateCurrentStats()
     {
@@ -61,8 +63,18 @@ public class TurretCardStatsController : ITurretStatsStateSource, ITurretStatsBo
             _shotsPerSecondInvertedStatState.GetValueByLevel(CurrentUpgradeLevel),
             _radiusRangeStatState.GetValueByLevel(CurrentUpgradeLevel)
         );
+        UpdateNextLevelStatsPreview();
         
         OnStatsUpdated?.Invoke();
+    }
+
+    private void UpdateNextLevelStatsPreview()
+    {
+        int nextUpgradeLevel = CurrentUpgradeLevel + 1;
+        NextLevelStatsPreview = new TurretStatsSnapshot(
+            (int)_damageStatState.GetValueByLevel(nextUpgradeLevel),
+            _shotsPerSecondInvertedStatState.GetValueByLevel(nextUpgradeLevel),
+            _radiusRangeStatState.GetValueByLevel(nextUpgradeLevel));
     }
 
     public void IncrementUpgradeLevel()

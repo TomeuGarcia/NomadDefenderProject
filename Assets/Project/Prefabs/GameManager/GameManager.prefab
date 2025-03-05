@@ -151,10 +151,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Successful simulation
+  m_text: SIMULATION SUCCESS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 081f6d9fc8608474386885eda8218569, type: 2}
-  m_sharedMaterial: {fileID: 6456808893600034581, guid: 081f6d9fc8608474386885eda8218569,
+  m_fontAsset: {fileID: 11400000, guid: 48c06a1883069d14eaa4a43f55b1e356, type: 2}
+  m_sharedMaterial: {fileID: -2594589591909203713, guid: 48c06a1883069d14eaa4a43f55b1e356,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56
-  m_fontSizeBase: 56
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -304,10 +304,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation failed
+  m_text: SIMULATION FAILED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 081f6d9fc8608474386885eda8218569, type: 2}
-  m_sharedMaterial: {fileID: 6456808893600034581, guid: 081f6d9fc8608474386885eda8218569,
+  m_fontAsset: {fileID: 11400000, guid: 48c06a1883069d14eaa4a43f55b1e356, type: 2}
+  m_sharedMaterial: {fileID: -2594589591909203713, guid: 48c06a1883069d14eaa4a43f55b1e356,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -332,8 +332,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56
-  m_fontSizeBase: 56
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -444,8 +444,8 @@ MonoBehaviour:
     type: 2}
   _runStateInit:
     _underlyingValue: {fileID: 11400000, guid: a087e2a282d44c94790bd8f1f7f1ee14, type: 2}
-  _gameProgressionUpdater:
-    _underlyingValue: {fileID: 11400000, guid: 78f347cbff8ea0240bbc57712126cacd, type: 2}
+  _gameProgressionStatus: {fileID: 11400000, guid: 78f347cbff8ea0240bbc57712126cacd,
+    type: 2}
   _gameDifficultyConfig: {fileID: 11400000, guid: 0377d4b5ae8b4a740aa583716da94238,
     type: 2}
   victoryHolder: {fileID: 7572405312008728669}
@@ -1278,6 +1278,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CanvasDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751314, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
         type: 3}

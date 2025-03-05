@@ -29,6 +29,8 @@ public class TutorialCardOverviewAddOnExtra_Passives : ITutorialCardOverviewAddO
             foreach (var passiveIconDisplay in _passivesIconDisplays)
             {
                 passiveIconDisplay.ShowBorder();
+                GameAudioManager.GetInstance().PlayCardInfoShown();
+
                 yield return new WaitForSeconds(0.12f);
                 passiveIconDisplay.HideBorder();
             }

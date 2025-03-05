@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DisableMineConfig_Default
   m_EditorClassIdentifier: 
   _logicConfig:
+    _takeDamageCooldown: 0.2
     _totalLifetimeDuration: 8
     _startLifetimeRatio: 0.2
     _lifetimeRemovePerClick: 2
@@ -32,6 +33,6 @@ MonoBehaviour:
       _elasticity: 1
       _ease: 4
     _lifetimeEndScale:
-      _value: {x: 2, y: -0.25, z: 2}
-      _duration: 1
+      _value: {x: 1, y: -0.25, z: 2}
+      _duration: 0.3
       _ease: 15

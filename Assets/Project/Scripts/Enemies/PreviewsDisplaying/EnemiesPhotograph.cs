@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class EnemiesPhotograph : MonoBehaviour
 {
+    [SerializeField] private EnemyPhotoPersistent _enemyPhotoPersistent;
     [SerializeField] private RenderTexture _renderTexture;
     [SerializeField] private Camera _camera;
     [SerializeField] private AllEnemyTypeConfigsCollection _enemyTypesCollection;
@@ -20,8 +21,11 @@ public class EnemiesPhotograph : MonoBehaviour
 
     private List<Enemy> _enemies;
 
+    public bool Finished { get; private set; }
+    
     private IEnumerator Start()
     {
+        Finished = false;
         Init();
         SpawnEnemies();
         DrawGrid();
@@ -32,6 +36,8 @@ public class EnemiesPhotograph : MonoBehaviour
         _camera.targetTexture = null;
         yield return null;
         yield return null;
+        _enemyPhotoPersistent.Init(_renderTexture);
+        Finished = true;
     }
 
     private void Init()

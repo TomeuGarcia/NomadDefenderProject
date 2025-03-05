@@ -10,6 +10,7 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private Image topBlackImage;
     [SerializeField] private Image bottomBlackImage;
+    [SerializeField] private Image fullBlackFadeImage;
 
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Color shutColor;
@@ -53,20 +54,10 @@ public class SceneLoader : MonoBehaviour
 
         topBlackImage.fillAmount = 0f;
         bottomBlackImage.fillAmount = 0f;
+        fullBlackFadeImage.color = new Color(0, 0, 0, 0);
 
         alreadyLoadingNextScene = false;
     }
-
-    private void OnEnable()
-    {
-        InitScene.OnStart += StartLoadMainMenu;
-    }
-
-    private void OnDisable()
-    {
-        InitScene.OnStart -= StartLoadMainMenu;
-    }
-
 
 
     private void ShutAnimation(float duration)
@@ -101,11 +92,30 @@ public class SceneLoader : MonoBehaviour
 
         alreadyLoadingNextScene = false;
     }
+    
+    private IEnumerator DoLoadSceneInstantly(LoadSceneFunction loadSceneFunction)
+    {
+        alreadyLoadingNextScene = true;
 
+        fullBlackFadeImage.DOFade(1f, 0.00001f);
+        yield return new WaitForSeconds(shutAnimDuration);
+
+        loadSceneFunction();
+        yield return new WaitForSeconds(loadSceneDuration + 0.5f);
+        
+        fullBlackFadeImage.DOFade(0f, openAnimDuration);
+        yield return new WaitForSeconds(openAnimDuration);
+
+        alreadyLoadingNextScene = false;
+    }
 
     public void LoadFacility()
     {
         StartCoroutine(DoLoadScene(LoadFacilityScene));
+    }
+    public void LoadFacilityInstantly()
+    {
+        StartCoroutine(DoLoadSceneInstantly(LoadFacilityScene));
     }
 
     public void LoadDeckSelector()
@@ -192,7 +202,8 @@ public class SceneLoader : MonoBehaviour
 
     public void StartLoadMainMenu()
     {
-        StartCoroutine(DoLoadScene(LoadMainMenu));
+        //StartCoroutine(DoLoadScene(LoadMainMenu));
+        LoadFacility();
     }
     private void LoadMainMenu()
     {

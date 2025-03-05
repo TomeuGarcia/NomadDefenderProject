@@ -274,7 +274,8 @@ public class OverworldMapDecorator : MonoBehaviour
 
         if (iterations == MAX_ITERATIONS)
         {
-            throw new Exception("WTF bro, dUtils.AvailableUpgrades might be missing entries with high enough chances!");
+            Debug.LogError("WTF bro, dUtils.AvailableUpgrades might be missing entries with high enough chances!");
+            availableUpgradeTypes.Add(UpgradeType.NEW_TURRET_CARD); //To fill with something 
         }
         
     }

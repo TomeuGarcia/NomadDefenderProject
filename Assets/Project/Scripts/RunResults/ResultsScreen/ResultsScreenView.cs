@@ -143,7 +143,16 @@ public class ResultsScreenView : MonoBehaviour
     private bool _finishedPlayingShowAnimation = false;
 
     private InitData _initData;
-    
+
+
+    [Space(100)] 
+    [Header("UNLOCKS")] 
+    [SerializeField] private GameObject _defaultContentHolder;
+    [SerializeField] private GameObject _unlocksContentHolder;
+    [SerializeField] private TextDecoder _unlocksHeader;
+    [SerializeField] private TextDecoder _unlockedDifficultyTextDecoder;
+    [SerializeField] private TextDecoder _unlockedStarterDeckTextDecoder;
+
 
     public void Init(IRunStateData runStateData, InitData initData, Button continueButton)
     {
@@ -151,6 +160,9 @@ public class ResultsScreenView : MonoBehaviour
         _continueButton = continueButton;
         _stats.Init(runStateData, _statPrefab, _statSeparatorPrefab);
 
+        _defaultContentHolder.SetActive(true);
+        _unlocksContentHolder.SetActive(false);
+        
         ResultChanges(runStateData);
 
         SetupShowAnimation(runStateData, initData);
@@ -194,7 +206,12 @@ public class ResultsScreenView : MonoBehaviour
         _mostDamagingEnemyScreenPreviewer.InitToShow(initData.Camera, initData.MostDamagingEnemy, extraTextMostDamagingEnemy);
 
         _deckNameSubheader.SetTextStrings(runStateData.StarterDeck.DeckName + " starter deck");
-        
+
+        if (runStateData.HasPendingUnlocks)
+        {
+            _continueButtonText.ResetDecoder();
+            _continueButtonText.SetTextStrings("NEXT");
+        }
         _continueButton.interactable = false;
 
         //Fades
@@ -290,6 +307,8 @@ public class ResultsScreenView : MonoBehaviour
         _continueButton.interactable = true;
     }
     
+    
+    
 
     private IEnumerator PlayTextDecoder(TextDecoder textDecoder)
     {
@@ -367,6 +386,63 @@ public class ResultsScreenView : MonoBehaviour
     private void CompletePlayingDecoder(TextDecoder textDecoder)
     {
         textDecoder.SetStringInstantly();
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void StartPlayingShowUnlocksAnimation(bool showDifficultyUnlock, bool showStarterDeckUnlock)
+    {
+        StartCoroutine(PlayShowUnlocksAnimation(showDifficultyUnlock, showStarterDeckUnlock));
+    }
+
+    
+    private IEnumerator PlayShowUnlocksAnimation(bool showDifficultyUnlock, bool showStarterDeckUnlock)
+    {
+        _finishedPlayingShowAnimation = false;
+        
+        _continueTextArrows.SetActive(false);
+        _continueButton.interactable = false;
+        _continueButtonText.ResetDecoder();
+        _continueButtonText.SetTextStrings("SUBMIT");
+        
+        _defaultContentHolder.SetActive(false);
+        _unlocksContentHolder.SetActive(true);
+        
+
+        _maskIntro.StartScroll(_scrollVictory);
+        
+        yield return StartCoroutine(PlayTextDecoder(_unlocksHeader));        
+        
+        
+        if (showDifficultyUnlock)
+        {
+            yield return StartCoroutine(PlayTextDecoder(_unlockedDifficultyTextDecoder));
+        }
+        else
+        {
+            _unlockedDifficultyTextDecoder.gameObject.SetActive(false);
+        }
+        if (showStarterDeckUnlock)
+        {
+            yield return StartCoroutine(PlayTextDecoder(_unlockedStarterDeckTextDecoder));
+        }
+        else
+        {
+            _unlockedStarterDeckTextDecoder.gameObject.SetActive(false);   
+        }
+        
+        
+        yield return StartCoroutine(PlayShowContinueButton());
+        _finishedPlayingShowAnimation = true;
     }
 
 }

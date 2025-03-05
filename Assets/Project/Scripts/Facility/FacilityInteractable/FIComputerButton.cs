@@ -31,7 +31,7 @@ public class FIComputerButton : AFacilityInteractable
     [SerializeField] private GameObject _titleTextShadow;
     [SerializeField] private FlickeringLightGroup _flickeringLightGroup;
     [SerializeField] private List<BootUpFragment> _bootUpTexts = new();
-    [SerializeField] private FICardCollectionButton _cardCollection;
+    [SerializeField] private FIScreenButton[] _linkedButtonScreens;
 
     [Header("AUDIO")]
     [SerializeField] private RandomSoundsCollection _computerButtonAudio;
@@ -172,7 +172,10 @@ public class FIComputerButton : AFacilityInteractable
         _backgroundMap.localScale = Vector3.one;
         //_computerNoiseBackgroundAudio.StartPlaying();
         
-        _cardCollection.TurnOn();
+        foreach (FIScreenButton linkedButtonScreen in _linkedButtonScreens)
+        {
+            linkedButtonScreen.TurnOn();
+        }
     }
 
     private IEnumerator TurnOff()
@@ -188,7 +191,10 @@ public class FIComputerButton : AFacilityInteractable
         _titleDecoder.gameObject.SetActive(false);
         _screenParent.gameObject.SetActive(false);
 
-        _cardCollection.TurnOff();
+        foreach (FIScreenButton linkedButtonScreen in _linkedButtonScreens)
+        {
+            linkedButtonScreen.TurnOff();
+        }
 
         yield return null;
     }
@@ -209,7 +215,10 @@ public class FIComputerButton : AFacilityInteractable
         {
             _manager.IsPCOn = false;
             ComputerTurnOffAudio();
-            _cardCollection.TurnOff();
+            foreach (FIScreenButton linkedButtonScreen in _linkedButtonScreens)
+            {
+                linkedButtonScreen.TurnOff();
+            }
         }
 
         _titleDecoder.textComponent.color = _defaultTextColor;

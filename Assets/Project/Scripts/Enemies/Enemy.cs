@@ -172,6 +172,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         currencyDrop = _typeConfig.BaseStats.CurrencyDrop;
         pathFollower.UpdateBaseMoveSpeed(_typeConfig.BaseStats.MoveSpeed);
         pathFollower.SetMoveSpeedMultiplier(1f);
+        pathFollower.UpdateBaseMoveSpeedDash(1f);
         _ignoreStunned = false;
 
         CanBeTargetedFlag = true;
@@ -414,6 +415,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
 
     private Coroutine _speedBoostCoroutine = null;
+    public Action OnSpeedBoostReceived;
     public void ApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
     {
         if (_speedBoostCoroutine != null)
@@ -421,6 +423,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
             StopCoroutine(_speedBoostCoroutine);
         }
         _speedBoostCoroutine = StartCoroutine(DoApplySpeedBoosterMultiplier(boost));
+        OnSpeedBoostReceived?.Invoke();
     }
 
     private IEnumerator DoApplySpeedBoosterMultiplier(SpeedBooster.Boost boost)
@@ -430,7 +433,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         Timer speedTransitionTimer = new Timer(boost.AccelerateDuration);
         while (!speedTransitionTimer.HasFinished())
         {
-            speedTransitionTimer.Update(Time.deltaTime);
+            speedTransitionTimer.Update(GameTime.DeltaTime);
             pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
                 _typeConfig.BaseStats.MoveSpeed, boostedSpeed, speedTransitionTimer.Ratio01));
             
@@ -445,7 +448,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         speedTransitionTimer.Duration = boost.DecelerateDuration;
         while (!speedTransitionTimer.HasFinished())
         {
-            speedTransitionTimer.Update(Time.deltaTime);
+            speedTransitionTimer.Update(GameTime.DeltaTime);
             pathFollower.UpdateBaseMoveSpeed(Mathf.LerpUnclamped(
                 boostedSpeed, _typeConfig.BaseStats.MoveSpeed, speedTransitionTimer.Ratio01));
             

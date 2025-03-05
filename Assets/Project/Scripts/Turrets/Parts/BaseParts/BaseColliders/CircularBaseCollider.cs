@@ -5,6 +5,7 @@ using UnityEngine;
 public class CircularBaseCollider : BaseCollider
 {
     [SerializeField] private CapsuleCollider rangeCollider;
+    private float _nextRange;
 
     public override void UpdateRange(float statsRange)
     {
@@ -52,6 +53,19 @@ public class CircularBaseCollider : BaseCollider
         return bounds.Contains(rangeColliderSurfacePoint);
     }
 
+    protected override void UpdatePreviewRange(float currentRangeStat, float nextRangeStat)
+    {
+        float currentPlaneRange = currentRangeStat * 2 + 1; //only for square
+        float nextPlaneRange = nextRangeStat * 2 + 1; //only for square
+        float changeMultiplier = currentPlaneRange / nextPlaneRange;
+        
+        _nextRange = rangeCollider.radius * (1f / changeMultiplier);
+
+        upgradePreviewRangePlaneMesh.transform.localScale = Vector3.one * (nextPlaneRange / 10f);
+        upgradePreviewRangePlaneMaterial.SetFloat("_TileNum", nextPlaneRange);
+        upgradePreviewRangePlaneMaterial.SetFloat("_InnerMask", changeMultiplier);
+    }
+
     public override Collider GetCollider()
     {
         return rangeCollider;
@@ -59,13 +73,24 @@ public class CircularBaseCollider : BaseCollider
 
     public override bool ColliderIsWithinRange(SphereCollider otherCollider)
     {
+        return ColliderWithinRange(otherCollider, rangeCollider.radius);
+    }
+
+    public override bool ColliderWillBeWithinRange(SphereCollider otherCollider)
+    {
+        return ColliderWithinRange(otherCollider, _nextRange);
+    }
+    
+    private bool ColliderWithinRange(SphereCollider otherCollider, float thisColliderRadius)
+    {
         Vector3 otherPosition = otherCollider.transform.position;
         otherPosition.y = 0;
         Vector3 thisPosition = rangeCollider.transform.position;
         thisPosition.y = 0;
         
         float distance = (otherPosition - thisPosition).magnitude;
-
-        return distance <= (rangeCollider.radius + otherCollider.radius);
+        float radiusSum = thisColliderRadius + otherCollider.radius;
+        
+        return distance <= radiusSum;
     }
 }

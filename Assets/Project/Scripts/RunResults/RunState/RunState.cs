@@ -40,6 +40,8 @@ public class RunState : ScriptableObject,
         return duration;
     }
 
+    public int BattleVictories { get; private set; }
+    public int PerfectDefenseBattleVictories { get; private set; }
     public int NodesReached { get; private set; }
     public int TotalBuildingsPlaced { get; private set; }
     public int TotalBuildingsUpgraded { get; private set; }
@@ -63,6 +65,10 @@ public class RunState : ScriptableObject,
     }
 
 
+    public bool UnlockDifficulty { get; private set; }
+    public bool UnlockStarterDeck { get; private set; }
+    public bool HasPendingUnlocks => UnlockDifficulty || UnlockStarterDeck;
+
     public int DestroyedNodes { get; private set; }
     
 
@@ -75,6 +81,10 @@ public class RunState : ScriptableObject,
         
         StarterDeck = starterDeck;
         DeckContent = currentDeckContent;
+
+        BattleVictories = 0;
+        PerfectDefenseBattleVictories = 0;
+        
         RunDuration = 0;
         NodesReached = 0;
         DestroyedNodes = 0;
@@ -88,14 +98,26 @@ public class RunState : ScriptableObject,
     }
     
 
-    public void Finish(bool victory)
+    public void Finish(bool victory, bool unlockDifficulty, bool unlockStarterDeck)
     {
         Victory = victory;
         RunDuration = Time.time - _startTime;
+        
+        UnlockDifficulty = unlockDifficulty;
+        UnlockStarterDeck = unlockStarterDeck;
     }
 
-    
-    
+
+
+    public void IncrementBattleVictories(bool perfectDefense)
+    {
+        ++BattleVictories;
+        if (TotalDamageTaken <= 0)
+        {
+            ++PerfectDefenseBattleVictories;
+        }
+    }
+
     public void IncrementNodesReached()
     {
         ++NodesReached;

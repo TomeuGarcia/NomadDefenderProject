@@ -18,7 +18,10 @@ public class TutorialCardOverviewAddOnExtra_Projectile : ITutorialCardOverviewAd
         while (!owner.Finished && times < maxTimes)
         {
             _projectileIconDisplay.ShowBorder();
+            GameAudioManager.GetInstance().PlayCardInfoShown();
+
             yield return new WaitForSeconds(0.15f);
+            
             _projectileIconDisplay.HideBorder();
             yield return new WaitForSeconds(0.15f);
             ++times;

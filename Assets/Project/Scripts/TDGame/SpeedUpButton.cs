@@ -31,14 +31,18 @@ public class SpeedUpButton : MonoBehaviour
     private int current = 0;
     private int numSpeeds = 0;
     private bool gameFinished = false;
+    private bool _inputsAreDisabled = false;
 
     public bool IsTimePaused { get; private set; }
     public static bool UsingBuggyTimeScale { get; private set; }
 
     public static Action OnGameSpeedInteracted;
+    
+    public static SpeedUpButton Instance { get; private set; }
 
     private void Awake()
     {
+        Instance = this;
         InitNumSpeed();
         IsTimePaused = false;
         UpdateTimeSpeed();
@@ -64,6 +68,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void OnDestroy()
     {
+        Instance = null;
         Time.timeScale = 1.0f;
     }
 
@@ -82,7 +87,7 @@ public class SpeedUpButton : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.GameIsPaused || gameFinished) return;
+        if (PauseMenu.GameIsPaused || gameFinished || _inputsAreDisabled) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -141,17 +146,20 @@ public class SpeedUpButton : MonoBehaviour
         decrementButton.enabled = false;
         
         gameObject.SetActive(false);
+        _inputsAreDisabled = true;
     }
 
     public void CompletelyEnableTimeSpeed()
     {
         current = 0;
         UpdateTimeSpeed();
-        
+        _gamePausedDisplay.SetActive(true); // Make visible that the game is paused
+
         incrementButton.enabled = true;
         decrementButton.enabled = true;
         
         gameObject.SetActive(true);
+        _inputsAreDisabled = false;
     }
 
     private void ResetTimeOnGameEnd()
@@ -238,11 +246,11 @@ public class SpeedUpButton : MonoBehaviour
         float t = 0.2f;
 
         incrementButton.image.DOComplete(true);
-        incrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => { 
+        incrementButton.image.DOColor(Color.white, t).OnComplete(() => { 
             if (isIncrementButtonHovered) {
-                incrementButton.image.DOBlendableColor(Color.cyan, t); 
+                incrementButton.image.DOColor(Color.cyan, t); 
             } 
-        }).SetUpdate(UpdateType.Late, true);
+        }).SetUpdate(true);
     }
     private void DecrementButtonPressed()
     {
@@ -251,12 +259,12 @@ public class SpeedUpButton : MonoBehaviour
         float t = 0.2f;
 
         decrementButton.image.DOComplete(true);
-        decrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => {
+        decrementButton.image.DOColor(Color.white, t).OnComplete(() => {
             if (isDecrementButtonHovered)
             {
-                decrementButton.image.DOBlendableColor(Color.cyan, t);
+                decrementButton.image.DOColor(Color.cyan, t);
             }
-        }).SetUpdate(UpdateType.Late, true);
+        }).SetUpdate(true);
     }
 
 
@@ -293,4 +301,32 @@ public class SpeedUpButton : MonoBehaviour
 
 
 
+
+    public void SetSpeedTo0AndDisableInteractions()
+    {
+        // disable buttons interactions & update() inputs
+        incrementButton.enabled = false;
+        decrementButton.enabled = false;
+        _inputsAreDisabled = true;
+
+        // if paused, exit from paused
+        _gamePausedDisplay.SetActive(false);
+
+
+        // in the end, set GameSpeed to 0
+        current = 0;
+        PauseTimeScale();
+        Time.timeScale = 1;
+    }
+    public void ResumeSpeedAndEnableInteractions()
+    {
+        // enable buttons interactions & update() inputs
+        incrementButton.enabled = true;
+        decrementButton.enabled = true;
+        _inputsAreDisabled = false;
+
+        // in the end, set GameSpeed to 1 / return to default speed
+        SetCurrentTimeSpeed(0);
+    }
+    
 }

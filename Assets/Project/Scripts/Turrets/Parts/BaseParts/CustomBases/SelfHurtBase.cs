@@ -129,6 +129,16 @@ public class SelfHurtBase : TurretPartBase_Prefab
         base.Upgrade(ownerSupportBuilding, newStatLevel);
 
         UpdateExplosionDamage();
+        
+        
+        if (newStatLevel == 1)
+        {
+            NextUpgradeUpdatesRange = true;
+        }
+        else
+        {
+            NextUpgradeUpdatesRange = false;
+        }
 
         if (newStatLevel == 2)
         {
