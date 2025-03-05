@@ -3315,6 +3315,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 152957482}
+  - component: {fileID: 152957483}
   m_Layer: 0
   m_Name: Certificate
   m_TagString: Untagged
@@ -3329,17 +3330,31 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152957481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.513, y: 0.974, z: 2.972}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.513, y: 0.974, z: 1.9719999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 352157146}
   - {fileID: 683261796}
   - {fileID: 163478014}
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 170745912}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &152957483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152957481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c66f4f3a0e6a3e4584ffacf623e8a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameProgressionStatus: {fileID: 11400000, guid: 78f347cbff8ea0240bbc57712126cacd,
+    type: 2}
 --- !u!1 &154270449
 GameObject:
   m_ObjectHideFlags: 0
@@ -3765,6 +3780,7 @@ Transform:
   - {fileID: 1437150804}
   - {fileID: 1139354618}
   - {fileID: 154270450}
+  - {fileID: 152957482}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8460,7 +8476,7 @@ GameObject:
   - component: {fileID: 352157148}
   - component: {fileID: 352157147}
   m_Layer: 14
-  m_Name: Text (TMP)
+  m_Name: Certificate_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17784,7 +17800,7 @@ GameObject:
   - component: {fileID: 933791386}
   - component: {fileID: 933791388}
   - component: {fileID: 933791387}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Screen_01
   m_TagString: PointAndClickSelectable
   m_Icon: {fileID: 0}
@@ -17799,7 +17815,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933791385}
   m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0.000000044703484}
-  m_LocalPosition: {x: -0.009909966, y: 0.020000935, z: -0.5181537}
+  m_LocalPosition: {x: -0.01, y: -0.036, z: -0.518}
   m_LocalScale: {x: 2.743876, y: 2.7562187, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19010,7 +19026,7 @@ GameObject:
   - component: {fileID: 1028637729}
   - component: {fileID: 1028637731}
   - component: {fileID: 1028637730}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Screen_02
   m_TagString: PointAndClickSelectable
   m_Icon: {fileID: 0}
@@ -19025,7 +19041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028637728}
   m_LocalRotation: {x: -0, y: -0.000000021073424, z: -0.000000021073424, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.72}
+  m_LocalPosition: {x: -0, y: -0, z: -0.386}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50635,6 +50651,8 @@ MonoBehaviour:
   _objectsToDisableOnAnimationStart:
   - {fileID: 1142178157}
   - {fileID: 1487537644}
+  - {fileID: 735506096}
+  - {fileID: 352157145}
   _hoveredTextColor:
     serializedVersion: 2
     rgba: 4294639360

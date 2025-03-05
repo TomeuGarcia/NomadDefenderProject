@@ -89,6 +89,12 @@ public class ResultsScreen : MonoBehaviour
             ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty,
             _runStateData.Value.MakeDeckHighscore()
         );
+
+
+        if (RunStateData.TotalDamageTaken < 1)
+        {
+            _gameProgressionStatus.Value.Game.SetBeatARunWithFullPerfectDefense();
+        }
     }
 
     private ResultsScreenView.InitData MakeViewInitData()
