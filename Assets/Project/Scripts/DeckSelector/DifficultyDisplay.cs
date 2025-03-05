@@ -45,6 +45,9 @@ public class DifficultyDisplay : MonoBehaviour
     [Header("DIFFICULTY CONFIG")]
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
 
+    [Header("HIGHSCORE")] 
+    [SerializeField] private DeckSelectorHighscoreDisplayer _highscoreDisplayer;
+
     [Header("DEMO")]
     [SerializeField] private DemoManagerConfig _demoManagerConfig;
 
@@ -58,11 +61,12 @@ public class DifficultyDisplay : MonoBehaviour
     [SerializeField] private GameObject _runButton;
     [SerializeField] private MouseOverNotifier _lockNotifier;
     [SerializeField] private Difficulty[] _difficulties;
+    public Difficulty CurrentDifficultyDisplay { get; private set; }
 
     private GameDifficultyType _selectedGameDifficultyType;
 
 
-    private void Awake()
+    public void Init()
     {
         _selectedGameDifficultyType = _gameDifficultyConfig.CurrentGameDifficulty;
         
@@ -75,6 +79,9 @@ public class DifficultyDisplay : MonoBehaviour
             
             _difficulties[i].Init(isLeftmost, isRightmost, isUnlocked);
         }
+        
+        gameObject.SetActive(false);
+        _textDecoder.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -115,12 +122,14 @@ public class DifficultyDisplay : MonoBehaviour
         _gameDifficultyConfig.SetDifficulty(_selectedGameDifficultyType);
 
         int difficultyIndex = (int)_selectedGameDifficultyType;
-        _difficulties[difficultyIndex].ApplyState(_leftArrow, _rightArrow, _lockedObject, _runButton, _watcher);
+        CurrentDifficultyDisplay = _difficulties[difficultyIndex];
+        CurrentDifficultyDisplay.ApplyState(_leftArrow, _rightArrow, _lockedObject, _runButton, _watcher);
         DecodeDifficultyDisplay(_difficulties[difficultyIndex]);
     }
     private void UpdateDifficulty()
     {
         SilentUpdateDifficulty();        
+        _highscoreDisplayer.Show();
         GameAudioManager.GetInstance().PlayCardSelected();
     }
 
@@ -129,6 +138,7 @@ public class DifficultyDisplay : MonoBehaviour
         _bottomLight.DOKill();
         _bottomLight.DOColor(difficulty.LightColor, 0.25f);
 
+        _textDecoder.gameObject.SetActive(true);
         _textDecoder.StopAllCoroutines();
 
         _textDecoder.SetDecodingParameters(difficulty.DecodingParameters);

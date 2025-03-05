@@ -234,6 +234,7 @@ Transform:
   - {fileID: 3296872465188595976}
   - {fileID: 9137596358781741429}
   - {fileID: 7490159035383853915}
+  - {fileID: 4814555000036508343}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -270,6 +271,7 @@ MonoBehaviour:
   _mainPassive: {fileID: 0}
   _unlockedCardsHolder: {fileID: 6194647709808690272}
   _lock: {fileID: 7794630047682528133}
+  _victoriesDisplayer: {fileID: 4504836630501476118}
 --- !u!65 &8990557148789142646
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10874,4 +10876,95 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2133200198897450774, guid: 9bb78f6a83803774f835acefaf6a0113,
     type: 3}
   m_PrefabInstance: {fileID: 2310718870490049905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6602365549416605775
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1957897077773942116}
+    m_Modifications:
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8774873761641709777, guid: 478ada748b99e444181f0c8140973bf5,
+        type: 3}
+      propertyPath: m_Name
+      value: StarterDeckVictoriesDisplay
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 478ada748b99e444181f0c8140973bf5, type: 3}
+--- !u!114 &4504836630501476118 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7288008855340298073, guid: 478ada748b99e444181f0c8140973bf5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6602365549416605775}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b599b821070d8e498af7ef0ef50e198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &4814555000036508343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1833224803977341688, guid: 478ada748b99e444181f0c8140973bf5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6602365549416605775}
   m_PrefabAsset: {fileID: 0}

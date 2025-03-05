@@ -6,6 +6,12 @@ using UnityEngine;
     menuName = SOAssetPaths.GAME_PROGRESSION + "GameProgressionStatus")]
 public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, IGameProgressionUpdater
 {
+    [SerializeField, Expandable] private DecksLibrary _decksLibrary;
+    [SerializeField, Expandable] private GameDifficultyConfig _gameDifficultyConfig;
+
+    [Header("DEBUGGING")] 
+    [SerializeField] private CardDeckAsset _debugAddDeckVictory;
+    
     private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Cards/";
     private string FileName => "GameProgression.json";
     
@@ -19,16 +25,23 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     private class GameStatusDataWrapper
     {
         [SerializeField] public int victoriesCount;
+        [SerializeField] public StarterDecksSaveStatus starterDecksSaveStatus;
         
         public GameStatusDataWrapper(IGameProgressionStatus.GameStatus gameStatus)
         {
             victoriesCount = gameStatus.VictoriesCount;
+            starterDecksSaveStatus = gameStatus.StarterDecksSaveStatus;
         }
 
-        public IGameProgressionStatus.GameStatus MakeGameStatus()
+        public IGameProgressionStatus.GameStatus MakeGameStatus(CardDeckAsset[] possibleStarterDecks)
         {
-            return new IGameProgressionStatus.GameStatus(victoriesCount);
+            IGameProgressionStatus.GameStatus gameStatus =
+                new IGameProgressionStatus.GameStatus(victoriesCount, starterDecksSaveStatus);
+            gameStatus.ValidateCorrectLoading(possibleStarterDecks);
+            return gameStatus;
         }
+        
+        
     }
 
 
@@ -48,9 +61,9 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
         ResetStatus();
     }
 
-    public void IncrementVictoryCount()
+    public void IncrementVictoryCount(CardDeckAsset starterDeck)
     {
-        Game = new IGameProgressionStatus.GameStatus(Game.VictoriesCount + 1);
+        Game.IncrementVictoriesCount(starterDeck, _gameDifficultyConfig.CurrentGameDifficulty);
     }
     
 
@@ -61,7 +74,9 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
         CheckFile();
 
         string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile + FileName));
-        Game = JsonUtility.FromJson<GameStatusDataWrapper>(storedContent).MakeGameStatus();
+
+        GameStatusDataWrapper gameWrapper = JsonUtility.FromJson<GameStatusDataWrapper>(storedContent);
+        Game = gameWrapper.MakeGameStatus(_decksLibrary.GetAllPossibleStarterDecks());
     }
     
     
@@ -93,6 +108,19 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
 
     private void ResetStatus()
     {
-        Game = new IGameProgressionStatus.GameStatus(0);
+        Game = new IGameProgressionStatus.GameStatus(_decksLibrary.GetAllPossibleStarterDecks());
+    }
+
+
+    [Button()]
+    private void Debug_AddDeckVictory()
+    {
+        Game.StarterDecksSaveStatus.IncrementDeckVictory(_debugAddDeckVictory, _gameDifficultyConfig.CurrentGameDifficulty);
+    }
+    
+    [Button()]
+    private void Debug_ResetAllDeckVictories()
+    {
+        Game.StarterDecksSaveStatus.ResetAll();
     }
 }

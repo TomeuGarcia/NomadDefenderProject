@@ -60,10 +60,10 @@ public class ResultsScreenView : MonoBehaviour
             InstantiateStat("buildingsUpgraded", runStateData.TotalBuildingsUpgraded.ToString(), statPrefab, out _buildingsUpgraded);
             Instantiate(statSeparatorPrefab, _statsParent);
             InstantiateStat("totalDamageDealt", runStateData.TotalDamageDealt.ToString("N0"), statPrefab, out _totalDamageDealt);
-            InstantiateStat("highestDamageDealt", runStateData.HighestDamageDealt.ToString("N0"), statPrefab, out _highestDamageDealt);
+            InstantiateStat("singleHitDamage", runStateData.HighestDamageDealt.ToString("N0"), statPrefab, out _highestDamageDealt);
             Instantiate(statSeparatorPrefab, _statsParent);
-            InstantiateStat("totalDamageTaken", runStateData.TotalDamageTaken.ToString(), statPrefab, out _totalDamageTaken);
-            InstantiateStat("totalDestroyedNodes", runStateData.DestroyedNodes.ToString(), statPrefab, out _totalDestroyedNodes);
+            InstantiateStat("healthLost", runStateData.TotalDamageTaken.ToString(), statPrefab, out _totalDamageTaken);
+            InstantiateStat("destroyedNodes", runStateData.DestroyedNodes.ToString(), statPrefab, out _totalDestroyedNodes);
         }
 
         private void InstantiateStat(string statName, string statValue, ResultScreenStat statPrefab, out ResultScreenStat stat)
