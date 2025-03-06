@@ -91,7 +91,13 @@ public class TurretPassiveAbility_ElectricWire : ATurretPassiveAbility,
     {
         if (placedBuilding is TurretBuilding placedTurret && placedTurret != _turretOwner)
         {
-            ElectricWiresManager.Instance.CreateSegment(this, _turretOwner, placedTurret);
+            bool hasEnoughPassives = placedTurret.CardData.PassiveAbilitiesController.CurrentNumberOfPassives 
+                                     >= _originalModel.NumberOfPassives.Value;
+
+            if (hasEnoughPassives)
+            {
+                ElectricWiresManager.Instance.CreateSegment(this, _turretOwner, placedTurret);
+            }
         }
     }
     
@@ -99,13 +105,7 @@ public class TurretPassiveAbility_ElectricWire : ATurretPassiveAbility,
     {
         if (placedBuilding is TurretBuilding placedTurret && placedTurret != _turretOwner)
         {
-            bool hasEnoughPassives = placedTurret.CardData.PassiveAbilitiesController.CurrentNumberOfPassives 
-                                     >= _originalModel.NumberOfPassives.Value;
-
-            if (hasEnoughPassives)
-            {
-                ElectricWiresManager.Instance.RemoveSegment(_turretOwner, placedTurret);
-            }
+            ElectricWiresManager.Instance.RemoveSegment(_turretOwner, placedTurret);
         }
     }
     
