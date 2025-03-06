@@ -38,7 +38,6 @@ public class GameDifficultyConfig : ScriptableObject, IGameDifficultySettingsSou
         SetDifficulty(GameDifficultyType.Normal);
     }
 
-
     public void SetDifficulty(GameDifficultyType gameDifficulty)
     {
         _gameDifficulty = gameDifficulty;

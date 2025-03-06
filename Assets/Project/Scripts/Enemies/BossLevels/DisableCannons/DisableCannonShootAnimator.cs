@@ -21,6 +21,8 @@ public class DisableCannonShootAnimator : MonoBehaviour
         private Vector3 _defaultLocalPosition;
         private Quaternion _defaultLocalRotation;
 
+        private Coroutine _animationCoroutine;
+        
         public void Init()
         {
             _animationTimer = new Timer(_duration);
@@ -28,7 +30,34 @@ public class DisableCannonShootAnimator : MonoBehaviour
             _defaultLocalRotation = _transform.localRotation;
         }
 
-        public IEnumerator PlayAnimation(MonoBehaviour source)
+        private void CompleteState()
+        {
+            float t = _amountMultiplier.Evaluate(1);
+            if (_mode == Mode.Position)
+            {
+                Vector3 currentLocalPosition = _defaultLocalPosition + (_amount * t);
+                _transform.localPosition = currentLocalPosition;
+            }
+            else if (_mode == Mode.Rotation)
+            {
+                Quaternion goalLocalRotation = _defaultLocalRotation * Quaternion.Euler(_amount);
+                Quaternion currentLocalRotation = Quaternion.LerpUnclamped(_defaultLocalRotation, goalLocalRotation, t);
+                _transform.localRotation = currentLocalRotation;
+            }
+        }
+
+        public void PlayAnimation(MonoBehaviour source)
+        {
+            if (_animationCoroutine != null)
+            {
+                source.StopCoroutine(_animationCoroutine);
+                CompleteState();
+            }
+
+            _animationCoroutine = source.StartCoroutine(DoPlayAnimation(source));
+        }
+
+        public IEnumerator DoPlayAnimation(MonoBehaviour source)
         {
             switch (_mode)
             {
@@ -57,6 +86,8 @@ public class DisableCannonShootAnimator : MonoBehaviour
                 _animationTimer.Update(Time.deltaTime);
                 yield return null;
             }
+
+            _animationCoroutine = null;
         }
         public IEnumerator PlayRotationAnimation(MonoBehaviour source)
         {
@@ -77,6 +108,8 @@ public class DisableCannonShootAnimator : MonoBehaviour
                 _animationTimer.Update(Time.deltaTime);
                 yield return null;
             }
+            
+            _animationCoroutine = null;
         }
     }
 
@@ -90,14 +123,34 @@ public class DisableCannonShootAnimator : MonoBehaviour
         [SerializeField] private AnimationCurve _intensityMultiplier;
         
         private Timer _animationTimer;
+        private Coroutine _animationCoroutine;
 
         public void Init()
         {
             _animationTimer = new Timer(_duration);
             _light.intensity = _intensityFade.y;
         }
+        
+        private void CompleteState()
+        {
+            float t = _intensityMultiplier.Evaluate(1);
+            _light.intensity = Mathf.LerpUnclamped(_intensityFade.x, _intensityFade.y, t);
+            _animationTimer.Update(Time.deltaTime);
+        }
 
-        public IEnumerator PlayAnimation()
+        public void PlayAnimation(MonoBehaviour source)
+        {
+            if (_animationCoroutine != null)
+            {
+                source.StopCoroutine(_animationCoroutine);
+                CompleteState();
+            }
+
+            _animationCoroutine = source.StartCoroutine(DoPlayAnimation());
+        }
+
+
+        private IEnumerator DoPlayAnimation()
         {
             _animationTimer.Duration = _duration;
             _animationTimer.Reset();
@@ -139,11 +192,11 @@ public class DisableCannonShootAnimator : MonoBehaviour
     {
         foreach (CannonRecoilBeat cannonRecoilBeat in _cannonRecoilBeats)
         {
-            StartCoroutine(cannonRecoilBeat.PlayAnimation(this));
+            cannonRecoilBeat.PlayAnimation(this);
         }
         foreach (CannonLightBeat cannonLightBeat in _cannonLightBeats)
         {
-            StartCoroutine(cannonLightBeat.PlayAnimation());
+            cannonLightBeat.PlayAnimation(this);
         }
     }
     

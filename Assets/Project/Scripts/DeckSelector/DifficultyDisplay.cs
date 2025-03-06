@@ -84,10 +84,18 @@ public class DifficultyDisplay : MonoBehaviour
         _textDecoder.gameObject.SetActive(false);
     }
 
+    public void FirstTimeShow()
+    {
+        gameObject.SetActive(true);
+        _textDecoder.gameObject.SetActive(true);
+        
+        SilentUpdateDifficulty();
+    }
+
+    
     private void OnEnable()
     {
         _lockNotifier.OnMousePressed += PressedLock; 
-        SilentUpdateDifficulty();
     }
 
     private void OnDisable()
@@ -138,7 +146,6 @@ public class DifficultyDisplay : MonoBehaviour
         _bottomLight.DOKill();
         _bottomLight.DOColor(difficulty.LightColor, 0.25f);
 
-        _textDecoder.gameObject.SetActive(true);
         _textDecoder.StopAllCoroutines();
 
         _textDecoder.SetDecodingParameters(difficulty.DecodingParameters);

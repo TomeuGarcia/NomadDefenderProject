@@ -103,7 +103,7 @@ public class DisableCannonActivateAnimator : MonoBehaviour
         }
         foreach (DisableCannonShootAnimator.CannonRecoilBeat activeMovementBeat in _activeMovementBeats)
         {
-            StartCoroutine(activeMovementBeat.PlayAnimation(this));
+            activeMovementBeat.PlayAnimation(this);
         }
     }
     
@@ -116,7 +116,7 @@ public class DisableCannonActivateAnimator : MonoBehaviour
         }
         foreach (DisableCannonShootAnimator.CannonRecoilBeat notActiveMovementBeats in _notActiveMovementBeats)
         {
-            StartCoroutine(notActiveMovementBeats.PlayAnimation(this));
+            notActiveMovementBeats.PlayAnimation(this);
         }
     }
     

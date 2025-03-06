@@ -133,7 +133,7 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = true;
         if (!_startButtonInteractable)
         {
-            _difficultySelector.gameObject.SetActive(true);
+            _difficultySelector.FirstTimeShow();
             _difficultySelectorMeshes.SetActive(true);
         }
         _startButtonInteractable = true;
