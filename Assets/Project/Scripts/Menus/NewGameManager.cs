@@ -116,13 +116,14 @@ public class NewGameManager : MonoBehaviour
     private IEnumerator DoStartNewGame()
     {
         _newGameAudioSource.Play();
+        SceneLoader.GetInstance().LoadFacilityInstantly();
+        
         yield return new WaitForSeconds(0.1f);
 
-        Hide();
-        PauseMenu.GetInstance().LeaveOptionsMenu();
-        
         ServiceLocator.GetInstance().RunInfo.SetComeFromRun(false);
-        SceneLoader.GetInstance().LoadFacilityInstantly();
+        
+        Hide();
+        PauseMenu.GetInstance().LeaveOptionsMenu();        
     }
     
     

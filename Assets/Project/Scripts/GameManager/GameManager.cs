@@ -254,7 +254,7 @@ public class GameManager : MonoBehaviour
         
         if (victory)
         {
-            _gameProgressionStatus.IncrementVictoryCount();
+            _gameProgressionStatus.IncrementVictoryCount(_cardDeckInUseData.StarterDeck);
 
             if (_gameProgressionStatus.Game.UnlocksHardDifficulty)
             {

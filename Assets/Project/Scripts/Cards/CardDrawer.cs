@@ -48,25 +48,7 @@ public class CardDrawer : MonoBehaviour
     [SerializeField]  public bool canDisplaySpeedUp = true;
     [SerializeField] public bool displayRedrawsOnGameStart = true;
     [SerializeField] public bool finishRedrawSetup = true;
-
-
-    private void OnEnable()
-    {
-        HandBuildingCards.OnQueryDrawCard += TryDrawCardAndUpdateHand;
-
-        HandBuildingCards.OnQueryRedrawCard += TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing += FinishRedrawSetupUI;
-        HandBuildingCards.ReturnCardToDeck += ReturnCardToDeck;
-    }
-
-    private void OnDisable()
-    {
-        HandBuildingCards.OnQueryDrawCard -= TryDrawCardAndUpdateHand;
-
-        HandBuildingCards.OnQueryRedrawCard -= TryRedrawCard;
-        HandBuildingCards.OnFinishRedrawing -= FinishRedrawSetupUI;
-        HandBuildingCards.ReturnCardToDeck -= ReturnCardToDeck;
-    }
+    
 
     private void Awake()
     {
@@ -88,7 +70,7 @@ public class CardDrawer : MonoBehaviour
 
         DrawStartHand(startDelay, displayRedrawsOnEnd, finishRedrawSetup);
 
-        hand.Init();
+        hand.Init(this);
         
         //HandBuildingCards.OnCardPlayed += StartDrawOverTime;
     }
@@ -149,11 +131,18 @@ public class CardDrawer : MonoBehaviour
         if (deck.HasCardsLeft())
             DrawRandomCard();
     }
-    public void TryRedrawCard()
+    public void TryRedrawCard(bool alwaysDrawTurret)
     {
         if (deck.HasCardsLeft() && canRedraw) 
         {
-            DrawTopCard();
+            if (alwaysDrawTurret)
+            {
+                UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 0f);
+            }
+            else
+            {
+                DrawTopCard();
+            }
 
             UpdateRedrawsLeftText();
             
@@ -275,6 +264,8 @@ public class CardDrawer : MonoBehaviour
         hand.RemoveCard(card);
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
+
+        //deck.TryBlacklistCard(card);
 
         battleHUD.AddHasDeckCardIcon();
     }

@@ -18,7 +18,7 @@ public class BattleTutorialManager : MonoBehaviour
     [SerializeField] private GameObject currencyBackgroundImg;
 
     //Speed Up Button (can set alpha to 0)
-    [SerializeField] private GameObject speedUpButtonHolder;
+    [SerializeField] private CanvasGroup speedUpButtonHolder;
     [SerializeField] private SpeedUpButton speedUpButton;
 
     //DeckUI (can set alpha to 0)
@@ -111,8 +111,8 @@ public class BattleTutorialManager : MonoBehaviour
         currencyBackgroundImg.GetComponent<CanvasGroup>().alpha = 0;
         currencyBackgroundImg.SetActive(false);
 
-        speedUpButtonHolder.GetComponent<CanvasGroup>().alpha = 0;
-        speedUpButtonHolder.SetActive(false);
+        speedUpButtonHolder.alpha = 0;
+        speedUpButtonHolder.gameObject.SetActive(false);
         speedUpButton.InitNumSpeed();
 
         deckInterface.GetComponent<CanvasGroup>().alpha = 0;
@@ -209,14 +209,17 @@ public class BattleTutorialManager : MonoBehaviour
             yield return null;
         }
         blackImg.alpha = 0.0f;
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(0.3f);
         blackImg.alpha = 1.0f;
         yield return new WaitForSeconds(0.1f);
         blackImg.alpha = 0.0f;
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(0.07f);
         blackImg.alpha = 1.0f;
         yield return new WaitForSeconds(0.03f);
         blackImg.alpha = 0.0f;
+        GameAudioManager.GetInstance().PlayCardInfoShown();
         yield return new WaitForSeconds(0.5f);
 
 
@@ -306,7 +309,7 @@ public class BattleTutorialManager : MonoBehaviour
         tutoCardDrawer.FinishRedraws();
         // Disable Time speed (x3 etc.)
         speedUpButton.CompletelyDisableTimeSpeed();
-        speedUpButtonHolder.SetActive(false);
+        speedUpButtonHolder.gameObject.SetActive(false);
         
         
         yield return new WaitForSeconds(0.5f);
@@ -455,6 +458,12 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         GameTime.SetTimeScale(1);
         
+        
+        speedUpButton.CompletelyEnableTimeSpeed();
+        speedUpButtonHolder.gameObject.SetActive(true);
+        StartCoroutine(EnableTimeSpeedAnimation());
+        
+        
         scriptedSequence.NextLine();//13
         yield return new WaitUntil(() => scriptedSequence.IsLinePrinted() );
         EnemyWaveInfoDisplayer.InteractionEnabled = true;
@@ -466,11 +475,13 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine();//14
         
+        
         //Wave 5/5
         yield return new WaitUntil(() => wavesCounter > 4 );
         scriptedSequence.Clear();
         yield return new WaitForSeconds(0.5f);
         scriptedSequence.NextLine();//15
+        
         
         // TODO: REDO FROM BELOW ONWARDS
         // yield return StartCoroutine(MakePlayerUpgradeTurret_Tutorial());
@@ -481,7 +492,10 @@ public class BattleTutorialManager : MonoBehaviour
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
         scriptedSequence.Clear();
 
-
+        speedUpButton.CompletelyDisableTimeSpeed();
+        speedUpButtonHolder.gameObject.SetActive(false);
+        speedUpButtonHolder.alpha = 0;
+        
         
         yield return new WaitForSeconds(2.0f);
         scriptedSequence.NextLine(); //16 Wave 6/5
@@ -563,6 +577,21 @@ public class BattleTutorialManager : MonoBehaviour
         TutorialsSaverLoader.GetInstance().SetTutorialDone(Tutorials.BATTLE);
         tDGameManager.ForceFinishScene();
         _runState.IncrementBattleVictories(tDGameManager.PerfectDefense);
+    }
+
+
+    private IEnumerator EnableTimeSpeedAnimation()
+    {
+        yield return new WaitForSeconds(2.0f);
+        for (int i = 0; i < 3; ++i)
+        {
+            speedUpButtonHolder.alpha = 0;
+            yield return new WaitForSeconds(0.2f);
+            
+            GameAudioManager.GetInstance().PlayCardInfoMoveShown();
+            speedUpButtonHolder.alpha = 1;
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 
     private IEnumerator KeepPrinting()

@@ -243,10 +243,17 @@ public class FIComputerButton : AFacilityInteractable
 
     public override void InteractedStart()
     {
-        StartCoroutine(DecodeTitleText());
-        _titleTextShadow.gameObject.SetActive(true);
+        StartCoroutine(DoInteractedStart());
+    }
+
+    private IEnumerator DoInteractedStart()
+    {
         _buttonLight.color = _buttonLightOnColor;
         _screenParent.gameObject.SetActive(true);
+        
+        yield return new WaitForSeconds(0.75f);
+        StartCoroutine(DecodeTitleText());
+        _titleTextShadow.gameObject.SetActive(true);
     }
 
     private void ComputerTurnOffAudio()

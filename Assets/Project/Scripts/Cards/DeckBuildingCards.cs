@@ -116,4 +116,26 @@ public class DeckBuildingCards : MonoBehaviour
         cards.Remove(card);
         cards.Insert(0, card);
     }
+
+
+
+    public void TryBlacklistCard(BuildingCard cardThatWasJustMulliganedToBottom)
+    {
+        if (cards.Count < 3)
+        {
+            return;
+        }
+
+        // Blacklist supports
+        if (cardThatWasJustMulliganedToBottom.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT &&
+            cards[0].cardBuildingType == BuildingCard.CardBuildingType.SUPPORT)
+        {
+            BlacklistFirstCard();
+        }
+    }
+
+    private void BlacklistFirstCard()
+    {
+        (cards[2], cards[0]) = (cards[0], cards[2]);
+    }
 }

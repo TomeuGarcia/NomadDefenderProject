@@ -68,6 +68,10 @@ public class RunState : ScriptableObject,
     public bool UnlockDifficulty { get; private set; }
     public bool UnlockStarterDeck { get; private set; }
     public bool HasPendingUnlocks => UnlockDifficulty || UnlockStarterDeck;
+    public DeckHighscore MakeDeckHighscore()
+    {
+        return new DeckHighscore(TotalDamageDealt, HighestDamageDealt, PerfectDefenseBattleVictories, TotalDamageTaken);
+    }
 
     public int DestroyedNodes { get; private set; }
     

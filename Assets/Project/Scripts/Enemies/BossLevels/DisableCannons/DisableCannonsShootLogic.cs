@@ -101,8 +101,7 @@ public class DisableCannonsShootLogic : MonoBehaviour
             new Dictionary<int, List<Tile>>(totalDistanceSteps);
 
         
-        Tile[] availableTiles = _currentlyAvailableTiles.ToArray();
-        foreach (Tile availableTile in availableTiles)
+        foreach (Tile availableTile in _currentlyAvailableTiles)
         {
             if (availableTile.isOccupied)
             {

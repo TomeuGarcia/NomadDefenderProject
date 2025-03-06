@@ -37,7 +37,7 @@ public class HandBuildingCards : MonoBehaviour
     private int redrawsLeft;
     public bool isInRedrawPhase { get; private set; } = false;
 
-
+    private CardDrawer _cardDrawer;
 
     private List<BuildingCard> cards;
 
@@ -70,12 +70,8 @@ public class HandBuildingCards : MonoBehaviour
 
 
     public delegate void HandAction();
-    public static event HandAction OnQueryDrawCard;
-    public static event HandAction OnQueryRedrawCard;
-    public static event HandAction OnFinishRedrawing;
     public static event HandAction OnCardPlayed;
     public delegate void CardAction( BuildingCard card);
-    public static event CardAction ReturnCardToDeck;
     public event HandAction OnCanAddCard;
 
     [HideInInspector] public bool cheatDrawCardActivated = true;
@@ -110,8 +106,9 @@ public class HandBuildingCards : MonoBehaviour
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(handCamera);
     }
 
-    public void Init()
+    public void Init(CardDrawer cardDrawer)
     {
+        _cardDrawer = cardDrawer;
         SetInitHandPosition();
         ComputeSelectedPosition();
         ComputeHiddenPosition();
@@ -171,7 +168,7 @@ public class HandBuildingCards : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D) && cheatDrawCardActivated && GameCheats.cheatsEnabled)
         {
-            if (OnQueryDrawCard != null) OnQueryDrawCard();
+            _cardDrawer.TryDrawCardAndUpdateHand();
         }
     }
     
@@ -395,7 +392,7 @@ public class HandBuildingCards : MonoBehaviour
         currencyCounter.OnCurrencyAdded += CheckCardsCost;
         currencyCounter.OnCurrencySpent += CheckCardsCost;
 
-        if (OnFinishRedrawing != null) OnFinishRedrawing();
+        _cardDrawer.FinishRedrawSetupUI();
 
         CheckCardsCost();
 
@@ -428,8 +425,10 @@ public class HandBuildingCards : MonoBehaviour
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
 
-        if (ReturnCardToDeck != null) ReturnCardToDeck(card);
-        if (OnQueryRedrawCard != null) OnQueryRedrawCard();
+        _cardDrawer.ReturnCardToDeck(card);
+
+        bool drawTurret = redrawsLeft < 1;
+        _cardDrawer.TryRedrawCard(drawTurret);
 
         if (!HasRedrawsLeft())
         {
@@ -895,15 +894,6 @@ public class HandBuildingCards : MonoBehaviour
             }            
         }
 
-    }
-
-
-    private IEnumerator InvokeDrawCardAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        yield return null;
-
-        if (OnQueryDrawCard != null) OnQueryDrawCard();
     }
 
     public void RemoveCard(BuildingCard card) {

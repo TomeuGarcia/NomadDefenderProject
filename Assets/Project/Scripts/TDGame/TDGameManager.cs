@@ -76,7 +76,11 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 
         InitLocationsVisuals();
     }
-    
+
+    private void OnDestroy()
+    {
+        ClearTileMaterialsState();
+    }
 
     private void OnEnable()
     {        
@@ -127,6 +131,11 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
             pathLocations[i].InitNodeVisuals(owMapNode.NodeIconTexture, owMapNode.BorderColor);
         }
 
+        ClearTileMaterialsState();
+    }
+
+    private void ClearTileMaterialsState()
+    {
         tilesMaterial.SetFloat("_ErrorWiresStep", 0f);
         tilesMaterial.SetFloat("_AdditionalErrorWiresStep2", 0f);
         tilesMaterial.SetVector("_ErrorOriginOffset", Vector3.one * -1000);

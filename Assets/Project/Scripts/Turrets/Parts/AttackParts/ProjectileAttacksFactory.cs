@@ -35,8 +35,7 @@ public class ProjectileAttacksFactory : MonoBehaviour
 
     
 
-
-    private void Awake()
+    private void Start()
     {
         if (instance == null)
         {

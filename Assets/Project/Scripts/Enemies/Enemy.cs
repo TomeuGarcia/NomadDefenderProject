@@ -360,11 +360,12 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed
     {
-        queuedDamage = (int)Mathf.Max(queuedDamage - amount, 0f);
+        queuedDamage = Mathf.Max(queuedDamage - amount, 0);
     }
 
     public virtual bool DiesFromQueuedDamage()
     {
+        if (healthSystem.HasArmor()) return false;
         return queuedDamage >= healthSystem.health;
     }
 

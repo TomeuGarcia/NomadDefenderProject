@@ -36,7 +36,8 @@ public class SelectableDeck : MonoBehaviour
 
     [Header("UNLOCK")]
     [SerializeField] private GameObject _unlockedCardsHolder;
-    [SerializeField] private GameObject _lock;    
+    [SerializeField] private GameObject _lock;
+    [SerializeField] private StarterDeckVictoriesDisplayer _victoriesDisplayer;
 
 
     public Color DeckColor {get; private set;}
@@ -152,9 +153,12 @@ public class SelectableDeck : MonoBehaviour
         _selectKeyCode = selectKeyCode;
     }
 
-    public void InitSetDeck(CardDeckAsset deckAsset)
+    public void InitSetDeck(CardDeckAsset deckAsset, StarterDecksSaveStatus deckSaveStatus)
     {
         _deck = deckAsset;
+        
+        deckSaveStatus.GetDeckVictoriesAndHighestDifficulty(deckAsset, out int winCounts, out GameDifficultyType highestDifficultyWin);
+        _victoriesDisplayer.Init(winCounts, highestDifficultyWin);
     }
 
     public void InitSpawnCards(ICardSpawnService cardSpawnService)

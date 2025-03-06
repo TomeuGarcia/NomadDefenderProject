@@ -63,7 +63,8 @@ public class ResultsScreen : MonoBehaviour
     private void Init()
     {
         CheckAchievements();
-
+        UpdateDeckHighscore();
+        
         CardTooltipDisplayManager.GetInstance().SetDisplayCamera(_inputCamera);
         ServiceLocator.GetInstance().CameraHelp.SetCardsCamera(_inputCamera);
         _cardMotionConfig.SetResultsScreenDisplayMode();
@@ -77,6 +78,23 @@ public class ResultsScreen : MonoBehaviour
     {
         AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken,
             ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+    }
+
+    private void UpdateDeckHighscore()
+    {
+        StarterDeckSaveData starterDeckSaveData = _gameProgressionStatus.Value.Game.StarterDecksSaveStatus.
+            GetDeckSaveDataByName(_runStateData.Value.StarterDeck);
+
+        GameDifficultyType gameDifficulty =
+            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty;
+        
+        starterDeckSaveData.UpdateHighscore(gameDifficulty, _runStateData.Value.MakeDeckHighscore());
+
+
+        if (RunStateData.TotalDamageTaken < 1 && gameDifficulty >= GameDifficultyType.Hard)
+        {
+            _gameProgressionStatus.Value.Game.SetBeatARunWithFullPerfectDefense();
+        }
     }
 
     private ResultsScreenView.InitData MakeViewInitData()

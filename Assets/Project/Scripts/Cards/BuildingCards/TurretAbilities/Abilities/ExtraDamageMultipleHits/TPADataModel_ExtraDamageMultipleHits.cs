@@ -5,9 +5,7 @@ using UnityEngine;
     menuName = SOAssetPaths.CARDS_ABILITIES + "MultiCrash")]
 public class TPADataModel_ExtraDamageMultipleHits : ATurretPassiveAbilityDataModel
 {
-    [Header("ABILITY CONFIG")] 
-    [SerializeField, Min(0)] private float _startingDamageMultiplier = 0.5f;
-
+    [Header("ABILITY CONFIG")]
     [SerializeField] private AbilityDescriptionVariable _damageMultiplierIncrementVariable;
     [SerializeField] private AbilityDescriptionVariable _maxDamageMultiplierVariable;
     
@@ -18,14 +16,6 @@ public class TPADataModel_ExtraDamageMultipleHits : ATurretPassiveAbilityDataMod
     {
         return new TurretPassiveAbility_ExtraDamageMultipleHits(this);
     }
-
-
-    public float DamageMultiplierByHitCount(int hitCount)
-    {
-        return Mathf.Min(
-            _maxDamageMultiplierVariable.FloatValue,
-            _startingDamageMultiplier + (_damageMultiplierIncrementVariable.FloatValue * hitCount)
-        );
-    }
+    
     
 }

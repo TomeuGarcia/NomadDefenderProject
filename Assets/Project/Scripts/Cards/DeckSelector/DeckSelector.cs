@@ -10,7 +10,11 @@ public class DeckSelector : MonoBehaviour
     [Header("DECK LIBRARY")]
     [SerializeField] private DecksLibrary deckLibrary;
     [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
+    [SerializeField] private GameProgressionStatus _gameProgressionStatus;
 
+    [Header("HIGHSCORE")] 
+    [SerializeField] private DeckSelectorHighscoreDisplayer _highscoreDisplayer;
+    
     [Header("CONFIGURATION")]
     [SerializeField] private DeckSelectorVisuals deckSelectorVisuals;
     [SerializeField] private SelectableDeck.ArrangeCardsData pileUpArrangeCardsData;
@@ -21,6 +25,7 @@ public class DeckSelector : MonoBehaviour
     [Header("SELECTABLE DECKS")]
     [SerializeField] private SelectableDeck[] selectableDecks;
     private SelectableDeck currentlySelectedDeck;
+    public CardDeckAsset CurrentlySelectedStarterDeck => currentlySelectedDeck.Deck;
     [SerializeField] private DeckSelectorDebugDeckMap _debugDeckMap;
 
     [Header("UI")] 
@@ -33,7 +38,7 @@ public class DeckSelector : MonoBehaviour
     [SerializeField] private MeshRenderer runInnerButtonMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh;
     [SerializeField] private MeshRenderer startSimulationFlashMesh2;
-    [SerializeField] private GameObject _difficultySelector;
+    [SerializeField] private DifficultyDisplay _difficultySelector;
     [SerializeField] private GameObject _difficultySelectorMeshes;
     private Material startSimulationFlashMaterial;
 
@@ -58,8 +63,9 @@ public class DeckSelector : MonoBehaviour
 
         startSimulationButton.interactable = false;
         _startButtonInteractable = false;
-        _difficultySelector.SetActive(false);
+        _difficultySelector.Init();
         _difficultySelectorMeshes.SetActive(false);
+        _highscoreDisplayer.Init(this, _difficultySelector);
         startSimulationButton.onClick.AddListener(OnStartSimulationButtonPressed);
 
         CardTooltipDisplayManager.GetInstance()?.SetDisplayCamera(Camera.main);
@@ -90,7 +96,8 @@ public class DeckSelector : MonoBehaviour
         {
             SelectableDeck selectableDeck = selectableDecks[i];
             selectableDeck.InitReferences(this);
-            selectableDeck.InitSetDeck(_debugDeckMap.RemapDeck(selectableDeck.Deck));
+            selectableDeck.InitSetDeck(_debugDeckMap.RemapDeck(selectableDeck.Deck), 
+                _gameProgressionStatus.Game.StarterDecksSaveStatus);
             selectableDeck.InitSelectKeyShortcut((KeyCode.Alpha1 + i));
             selectableDeck.InitSpawnCards(cardSpawnService);
             selectableDeck.InitArrangeCards(pileUpArrangeCardsData);
@@ -126,7 +133,7 @@ public class DeckSelector : MonoBehaviour
         startSimulationButton.interactable = true;
         if (!_startButtonInteractable)
         {
-            _difficultySelector.SetActive(true);
+            _difficultySelector.FirstTimeShow();
             _difficultySelectorMeshes.SetActive(true);
         }
         _startButtonInteractable = true;
@@ -150,6 +157,7 @@ public class DeckSelector : MonoBehaviour
         deckSelectorVisuals.ShowWires(selectableDeck.Position);
 
         currentlySelectedDeck = selectableDeck;
+        _highscoreDisplayer.Show();
 
         currentlySelectedDeck.SetSelected();
 

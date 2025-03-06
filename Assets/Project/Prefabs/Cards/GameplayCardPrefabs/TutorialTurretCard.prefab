@@ -1478,7 +1478,7 @@ MonoBehaviour:
   _tutorialText_PlayCost: {fileID: 6626430704618349712}
   _tutorialText_Damage: {fileID: 7172968295699681566}
   _tutorialText_ShotsPerSecond: {fileID: 4510604511127362397}
-  _tutorialText_Range: {fileID: 5283803554223232460}
+  _tutorialText_Range: {fileID: 4248435372808832397}
 --- !u!65 &3828335345078374437
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2431,6 +2431,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4815495498686334339}
     m_Modifications:
+    - target: {fileID: 304573970915825157, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+        type: 3}
+      propertyPath: m_Name
+      value: ConsoleText_PlayCost
+      objectReference: {fileID: 0}
     - target: {fileID: 745696377406052904, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -2955,6 +2960,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4815495498686334339}
     m_Modifications:
+    - target: {fileID: 304573970915825157, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+        type: 3}
+      propertyPath: m_Name
+      value: ConsoleText_Projectile
+      objectReference: {fileID: 0}
     - target: {fileID: 3433851718610763234, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3070,18 +3080,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1557c5ce9d83aa48b0bfd07be00155e, type: 3}
---- !u!114 &575492013355811507 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1452021747955595838, guid: a1557c5ce9d83aa48b0bfd07be00155e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1430474496735525005}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &4358759895844357487 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3433851718610763234, guid: a1557c5ce9d83aa48b0bfd07be00155e,
@@ -3578,6 +3576,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4815495498686334339}
     m_Modifications:
+    - target: {fileID: 304573970915825157, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+        type: 3}
+      propertyPath: m_Name
+      value: ConsoleText_Damage
+      objectReference: {fileID: 0}
     - target: {fileID: 745696377406052904, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -4116,6 +4119,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4815495498686334339}
     m_Modifications:
+    - target: {fileID: 304573970915825157, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+        type: 3}
+      propertyPath: m_Name
+      value: ConsoleText_Range
+      objectReference: {fileID: 0}
     - target: {fileID: 745696377406052904, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -4301,11 +4309,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6523965092713803073, guid: a1557c5ce9d83aa48b0bfd07be00155e,
-        type: 3}
-      propertyPath: textComponent
-      value: 
-      objectReference: {fileID: 575492013355811507}
     - target: {fileID: 7250254857407244797, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_Pivot.x
@@ -4342,6 +4345,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6952641767883188428}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4248435372808832397 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523965092713803073, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6952641767883188428}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b127415685f9e214ab1c4747a7846f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5754407526301963566 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3433851718610763234, guid: a1557c5ce9d83aa48b0bfd07be00155e,
@@ -4490,6 +4505,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4815495498686334339}
     m_Modifications:
+    - target: {fileID: 304573970915825157, guid: a1557c5ce9d83aa48b0bfd07be00155e,
+        type: 3}
+      propertyPath: m_Name
+      value: ConsoleText_SpS
+      objectReference: {fileID: 0}
     - target: {fileID: 745696377406052904, guid: a1557c5ce9d83aa48b0bfd07be00155e,
         type: 3}
       propertyPath: m_AnchorMax.x

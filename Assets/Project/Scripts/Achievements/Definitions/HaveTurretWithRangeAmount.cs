@@ -4,7 +4,7 @@ public static partial class AchievementDefinitions
     {
         public static void Check(TurretStatsSnapshot turretStats)
         {
-            const float amountToEqualOrSurpass = 5f;
+            const float amountToEqualOrSurpass = 7f;
             if (turretStats.RadiusRange >= amountToEqualOrSurpass)
             {
                 AchievementsManager.UnlockAchievement(AchievementType.HaveTurretWithRangeAmount);

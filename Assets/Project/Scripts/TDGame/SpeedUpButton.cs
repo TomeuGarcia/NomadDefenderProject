@@ -146,17 +146,20 @@ public class SpeedUpButton : MonoBehaviour
         decrementButton.enabled = false;
         
         gameObject.SetActive(false);
+        _inputsAreDisabled = true;
     }
 
     public void CompletelyEnableTimeSpeed()
     {
         current = 0;
         UpdateTimeSpeed();
-        
+        _gamePausedDisplay.SetActive(true); // Make visible that the game is paused
+
         incrementButton.enabled = true;
         decrementButton.enabled = true;
         
         gameObject.SetActive(true);
+        _inputsAreDisabled = false;
     }
 
     private void ResetTimeOnGameEnd()
@@ -243,11 +246,11 @@ public class SpeedUpButton : MonoBehaviour
         float t = 0.2f;
 
         incrementButton.image.DOComplete(true);
-        incrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => { 
+        incrementButton.image.DOColor(Color.white, t).OnComplete(() => { 
             if (isIncrementButtonHovered) {
-                incrementButton.image.DOBlendableColor(Color.cyan, t); 
+                incrementButton.image.DOColor(Color.cyan, t); 
             } 
-        }).SetUpdate(UpdateType.Late, true);
+        }).SetUpdate(true);
     }
     private void DecrementButtonPressed()
     {
@@ -256,12 +259,12 @@ public class SpeedUpButton : MonoBehaviour
         float t = 0.2f;
 
         decrementButton.image.DOComplete(true);
-        decrementButton.image.DOBlendableColor(Color.white, t).OnComplete(() => {
+        decrementButton.image.DOColor(Color.white, t).OnComplete(() => {
             if (isDecrementButtonHovered)
             {
-                decrementButton.image.DOBlendableColor(Color.cyan, t);
+                decrementButton.image.DOColor(Color.cyan, t);
             }
-        }).SetUpdate(UpdateType.Late, true);
+        }).SetUpdate(true);
     }
 
 
@@ -301,27 +304,28 @@ public class SpeedUpButton : MonoBehaviour
 
     public void SetSpeedTo0AndDisableInteractions()
     {
-        // TODO - disable buttons interactions & update() inputs
-        incrementButton.interactable = false;
-        decrementButton.interactable = false;
+        // disable buttons interactions & update() inputs
+        incrementButton.enabled = false;
+        decrementButton.enabled = false;
         _inputsAreDisabled = true;
 
-        // TODO - if paused, exit from paused
+        // if paused, exit from paused
         _gamePausedDisplay.SetActive(false);
 
 
-        // TODO - in the end, set GameSpeed to 0
+        // in the end, set GameSpeed to 0
+        current = 0;
         PauseTimeScale();
         Time.timeScale = 1;
     }
     public void ResumeSpeedAndEnableInteractions()
     {
-        // TODO - enable buttons interactions & update() inputs
-        incrementButton.interactable = true;
-        decrementButton.interactable = true;
+        // enable buttons interactions & update() inputs
+        incrementButton.enabled = true;
+        decrementButton.enabled = true;
         _inputsAreDisabled = false;
 
-        // TODO - in the end, set GameSpeed to 1 / return to default speed
+        // in the end, set GameSpeed to 1 / return to default speed
         SetCurrentTimeSpeed(0);
     }
     

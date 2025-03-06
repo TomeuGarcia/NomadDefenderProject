@@ -60,11 +60,7 @@ public class DisableMine : RecyclableObject
     
     internal override void RecycledInit() { }
 
-    internal override void RecycledReleased()
-    {
-        _disappearListener.OnDisableMineDisappeared(this);
-        OccupiedTile = null;
-    }
+    internal override void RecycledReleased() { }
 
     public void Prepare(Tile occupiedTile, IDisableMineDisappearListener disappearListener)
     {
@@ -192,6 +188,8 @@ public class DisableMine : RecyclableObject
 
     private void FinishLifetime()
     {
+        _disappearListener.OnDisableMineDisappeared(this);
+        OccupiedTile = null;
         Recycle();
         StopAllCoroutines();
     }

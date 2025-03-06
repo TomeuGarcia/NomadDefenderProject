@@ -61,10 +61,7 @@ public class FacilityCameraTransitioner : AFacilityInteractable
 
     public void TransitionToComputer()
     {
-        foreach (GameObject objectsToDisable in _objectsToDisableOnAnimationStart)
-        {
-            objectsToDisable.SetActive(false);
-        }
+        StartCoroutine(DoDisableEndObjects());
         
         _facilityUITransitioner.PrepareLoading();
 
@@ -88,6 +85,15 @@ public class FacilityCameraTransitioner : AFacilityInteractable
             mySequence.OnComplete(_facilityUITransitioner.StartLoading);
         } else {
             mySequence.OnComplete(_facilityUITransitioner.TransitionToNextScene);
+        }
+    }
+
+    private IEnumerator DoDisableEndObjects()
+    {
+        yield return new WaitForSeconds(0.6f);
+        foreach (GameObject objectsToDisable in _objectsToDisableOnAnimationStart)
+        {
+            objectsToDisable.SetActive(false);
         }
     }
 

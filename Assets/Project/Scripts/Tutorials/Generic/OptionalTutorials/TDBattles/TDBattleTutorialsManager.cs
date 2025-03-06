@@ -111,8 +111,12 @@ public class TDBattleTutorialsManager : MonoBehaviour
     
     private bool ShouldPlay_GameSpeedTutorial(int waveNumber)
     {
-        return waveNumber == 1 && !OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType) &&
-               !_gameSpeedInteracted;
+        if (_gameSpeedInteracted || OptionalTutorialsStateManager.IsTutorialDone(GameSpeed_TutorialType))
+        {
+            return false;
+        }
+        
+        return waveNumber == 1;
     }
     private IEnumerator Play_GameSpeedTutorial()
     {
