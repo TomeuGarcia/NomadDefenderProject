@@ -71,7 +71,7 @@ public class TurretStatsUpgradeModel : ScriptableObject
         radiusRangeStat = new StatString(_radiusRangeMultiplier, true);
 
         extraLevels = new StatString(_extraLevels, false,1);
-        if (_extraLevels == 0) extraLevels.OverwriteValue("No Lvl UPG");
+        if (_extraLevels == 0) extraLevels.OverwriteValue("+0 Lvl Up");
         
         extraPlayCost = new StatString(_extraPlayCost, false);
     }
