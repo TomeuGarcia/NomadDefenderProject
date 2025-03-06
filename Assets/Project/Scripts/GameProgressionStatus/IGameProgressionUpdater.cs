@@ -1,5 +1,5 @@
 public interface IGameProgressionUpdater
 {
     void ResetEverything();
-    void IncrementVictoryCount();
+    void IncrementVictoryCount(CardDeckAsset starterDeck);
 }

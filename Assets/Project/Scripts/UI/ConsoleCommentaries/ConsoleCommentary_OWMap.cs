@@ -65,6 +65,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
     [SerializeField] [Foldout("LOST")] private CommentPool _lostEarlyComments;
     [SerializeField] [Foldout("LOST")] private CommentPool _lostMidComments;
     [SerializeField] [Foldout("LOST")] private CommentPool _lostLateComments;
+    [SerializeField] [Foldout("LOST")] private CommentPool _lostBossComments;
 
     [SerializeField] [Foldout("PERFECT")] private CommentPoolProgressive _perfectDefenseComments;
 
@@ -170,6 +171,10 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
         else if (_previousNodeProgression == ProgressionState.LATE)
         {
             PrintCommentAndClearAfter(_lostLateComments, clearAfterDelay);
+        }
+        else if (_previousNodeProgression == ProgressionState.BOSS)
+        {
+            PrintCommentAndClearAfter(_lostBossComments, clearAfterDelay);
         }
     }
     

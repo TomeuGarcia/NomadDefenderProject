@@ -64,4 +64,9 @@ public class DecksLibrary : ScriptableObject
     {
         return IsUsingDeck(_berserkerDeck);
     }
+
+    public CardDeckAsset[] GetAllPossibleStarterDecks()
+    {
+        return new[] { _frostDeck, _repeaterDeck, _berserkerDeck, _currencyDeck };
+    }
 }

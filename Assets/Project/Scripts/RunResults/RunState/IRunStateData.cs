@@ -25,4 +25,6 @@ public interface IRunStateData
     bool UnlockDifficulty { get; }
     bool UnlockStarterDeck { get; }
     bool HasPendingUnlocks { get; }
+
+    DeckHighscore MakeDeckHighscore();
 }
