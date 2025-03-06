@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using NodeEnums;
 using System.Collections;
@@ -92,7 +93,10 @@ public class GatherNewCardManager : MonoBehaviour
 
 
         InitCardsPlacement();
+    }
 
+    private void Start()
+    {
         StartCoroutine(InitCardsAnimation());
     }
 
