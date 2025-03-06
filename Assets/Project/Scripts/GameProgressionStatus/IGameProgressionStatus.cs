@@ -29,6 +29,7 @@ public interface IGameProgressionStatus
         public void ValidateCorrectLoading(CardDeckAsset[] possibleStarterDecks)
         {
             if (StarterDecksSaveStatus == null ||
+                StarterDecksSaveStatus.starterDecksCollectionSaveData == null ||
                 StarterDecksSaveStatus.starterDecksCollectionSaveData.Length < possibleStarterDecks.Length)
             {
                 StarterDecksSaveStatus = new StarterDecksSaveStatus(possibleStarterDecks);

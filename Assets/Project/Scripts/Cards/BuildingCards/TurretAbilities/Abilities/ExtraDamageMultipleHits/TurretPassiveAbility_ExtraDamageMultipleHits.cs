@@ -6,17 +6,20 @@ public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbilit
 {
     private readonly TPADataModel_ExtraDamageMultipleHits _abilityDataModel;
     private int _hitCount;
+
+    private float _damageMultiplierStep;
+    private float _maxMultiplierStep;
     
     public TurretPassiveAbility_ExtraDamageMultipleHits(TPADataModel_ExtraDamageMultipleHits originalModel) 
         : base(originalModel)
     {
         _abilityDataModel = originalModel;
+
+        _damageMultiplierStep = _abilityDataModel.DamageMultiplierIncrementVariable.Value / 100f;
+        _maxMultiplierStep = (_abilityDataModel.MaxDamageMultiplierVariable.Value + 100f) / 100f;
         
-        int damageMultiplierIncrementPercent = Mathf.RoundToInt(_abilityDataModel.DamageMultiplierIncrementVariable.FloatValue * 100);
-        UpdateDescriptionVariable(_abilityDataModel.DamageMultiplierIncrementVariable.Name, damageMultiplierIncrementPercent);
-        
-        int maxDamageMultiplierPercent = Mathf.RoundToInt((_abilityDataModel.MaxDamageMultiplierVariable.FloatValue - 1f) * 100);
-        UpdateDescriptionVariable(_abilityDataModel.MaxDamageMultiplierVariable.Name, maxDamageMultiplierPercent);
+        UpdateDescriptionVariable(_abilityDataModel.DamageMultiplierIncrementVariable);
+        UpdateDescriptionVariable(_abilityDataModel.MaxDamageMultiplierVariable);
     }
 
 
@@ -27,8 +30,7 @@ public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbilit
 
     public override void OnBeforeDamagingEnemy(TurretDamageAttack damageAttack)
     {
-        float damageMultiplier = _abilityDataModel.DamageMultiplierByHitCount(_hitCount);
-        
+        float damageMultiplier = Mathf.Min(_maxMultiplierStep, 1f + (_hitCount * _damageMultiplierStep));
         damageAttack.UpdateDamage((int)(damageAttack.Damage * damageMultiplier));
         
         ++_hitCount;
