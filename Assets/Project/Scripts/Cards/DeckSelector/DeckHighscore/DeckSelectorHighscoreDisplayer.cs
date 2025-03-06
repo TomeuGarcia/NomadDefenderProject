@@ -12,9 +12,13 @@ public class DeckSelectorHighscoreDisplayer : MonoBehaviour
         [SerializeField] private TextDecoder _statNameTextDecoder;
         [SerializeField] private TextDecoder _statCountTextDecoder;
 
-        public void Init(int statCount)
+        public void InitWithThousands(int statCount)
         {
             _statCountTextDecoder.SetTextStrings(statCount.ToString("N0").Replace(',', '.'));
+        }
+        public void InitWithMax(int statCount, int statMaxCount)
+        {
+            _statCountTextDecoder.SetTextStrings(statCount + "/" + statMaxCount);
         }
 
         public IEnumerator Show()
@@ -95,18 +99,18 @@ public class DeckSelectorHighscoreDisplayer : MonoBehaviour
         DeckHighscore deckHighscore = _gameProgressionStatus.Game.StarterDecksSaveStatus.
             GetDeckSaveDataByName(starterDeck).GetHighscoreByDifficulty(gameDifficulty);
         
-        _totalDamageDealtStat.Init(deckHighscore.totalDamageDealt);
-        _singleHitDamageStat.Init(deckHighscore.highestDamageDealt);
+        _totalDamageDealtStat.InitWithThousands(deckHighscore.totalDamageDealt);
+        _singleHitDamageStat.InitWithThousands(deckHighscore.highestDamageDealt);
 
         if (starterDeck.DeckName == _berserkerStarterDeck.DeckName)
         {
             statsToShow.Add(_lostHealthStat);
-            _lostHealthStat.Init(deckHighscore.lostHealth);
+            _lostHealthStat.InitWithThousands(deckHighscore.lostHealth);
         }
         else
         {
             statsToShow.Add(_perfectDefenses);
-            _perfectDefenses.Init(deckHighscore.perfectDefenseCount);
+            _perfectDefenses.InitWithMax(deckHighscore.perfectDefenseCount, 7);
         }
     }
 
