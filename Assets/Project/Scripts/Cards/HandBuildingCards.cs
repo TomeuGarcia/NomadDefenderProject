@@ -426,7 +426,9 @@ public class HandBuildingCards : MonoBehaviour
         card.cardLocation = BuildingCard.CardLocation.DECK;
 
         _cardDrawer.ReturnCardToDeck(card);
-        _cardDrawer.TryRedrawCard();
+
+        bool drawTurret = redrawsLeft < 1;
+        _cardDrawer.TryRedrawCard(drawTurret);
 
         if (!HasRedrawsLeft())
         {

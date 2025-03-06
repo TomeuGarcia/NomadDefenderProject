@@ -131,11 +131,18 @@ public class CardDrawer : MonoBehaviour
         if (deck.HasCardsLeft())
             DrawRandomCard();
     }
-    public void TryRedrawCard()
+    public void TryRedrawCard(bool alwaysDrawTurret)
     {
         if (deck.HasCardsLeft() && canRedraw) 
         {
-            DrawTopCard();
+            if (alwaysDrawTurret)
+            {
+                UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 0f);
+            }
+            else
+            {
+                DrawTopCard();
+            }
 
             UpdateRedrawsLeftText();
             
@@ -258,7 +265,7 @@ public class CardDrawer : MonoBehaviour
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
 
-        deck.TryBlacklistCard(card);
+        //deck.TryBlacklistCard(card);
 
         battleHUD.AddHasDeckCardIcon();
     }
