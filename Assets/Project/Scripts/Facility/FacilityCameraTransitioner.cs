@@ -90,7 +90,7 @@ public class FacilityCameraTransitioner : AFacilityInteractable
 
     private IEnumerator DoDisableEndObjects()
     {
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.4f);
         foreach (GameObject objectsToDisable in _objectsToDisableOnAnimationStart)
         {
             objectsToDisable.SetActive(false);
