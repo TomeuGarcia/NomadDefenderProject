@@ -212,8 +212,8 @@ public abstract class RangeBuilding : Building
 
     public static int SortByDistanceLeftToEnd(Enemy e1, Enemy e2)
     {
-        float enemy1Value = e1.PathFollower.DistanceLeftToEnd + e1.GetTargetPriorityBonus();
-        float enemy2Value = e2.PathFollower.DistanceLeftToEnd + e2.GetTargetPriorityBonus();
+        float enemy1Value = e1.DistanceLeftToEnd();// + e1.GetTargetPriorityBonus();
+        float enemy2Value = e2.DistanceLeftToEnd();// + e2.GetTargetPriorityBonus();
         return enemy1Value.CompareTo(enemy2Value);
     }
     

@@ -42,6 +42,7 @@ public class RunState : ScriptableObject,
 
     public int BattleVictories { get; private set; }
     public int PerfectDefenseBattleVictories { get; private set; }
+    public bool FullPerfectDefensesSoFar => PerfectDefenseBattleVictories == BattleVictories;
     public int NodesReached { get; private set; }
     public int TotalBuildingsPlaced { get; private set; }
     public int TotalBuildingsUpgraded { get; private set; }

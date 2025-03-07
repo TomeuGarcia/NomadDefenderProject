@@ -32,7 +32,7 @@ public class TurretPassiveAbility_ExtraDamageMultipleHits : ATurretPassiveAbilit
     {
         float damageMultiplier = Mathf.Min(_maxMultiplierStep, 1f + (_hitCount * _damageMultiplierStep));
         damageAttack.UpdateDamage((int)(damageAttack.Damage * damageMultiplier));
-        
+
         ++_hitCount;
     }
     

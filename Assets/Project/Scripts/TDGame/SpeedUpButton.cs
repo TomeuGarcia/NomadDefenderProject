@@ -174,7 +174,7 @@ public class SpeedUpButton : MonoBehaviour
         SpeedScale previousSpeedScale = timeScales[((current - 1) + numSpeeds) % numSpeeds];
         SpeedScale nextSpeedScale = timeScales[(current + 1) % numSpeeds];
 
-        bool wantsToPauseGame = speedScale.timeMultiplier == 0;
+        bool wantsToPauseGame = current == 3;
         if (wantsToPauseGame)
         {
             PauseTimeScale();

@@ -204,6 +204,10 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         return 0;
     }
 
+    public virtual float DistanceLeftToEnd()
+    {
+        return pathFollower.DistanceLeftToEnd;
+    }
 
     private void Attack()
     {

@@ -425,10 +425,10 @@ public class HandBuildingCards : MonoBehaviour
 
         card.cardLocation = BuildingCard.CardLocation.DECK;
 
+        bool shouldOnlyDrawTurret = ShouldOnlyDrawTurret();
         _cardDrawer.ReturnCardToDeck(card);
 
-        bool drawTurret = redrawsLeft < 1;
-        _cardDrawer.TryRedrawCard(drawTurret);
+        _cardDrawer.TryRedrawCard(shouldOnlyDrawTurret);
 
         if (!HasRedrawsLeft())
         {
@@ -437,6 +437,26 @@ public class HandBuildingCards : MonoBehaviour
 
         GameAudioManager.GetInstance().PlayRedrawConfirmation();
     }
+
+    private bool ShouldOnlyDrawTurret()
+    {
+        if (redrawsLeft >= 1)
+        {
+            return false;
+        }
+
+        foreach (BuildingCard card in cards)
+        {
+            bool alreadyHasSupportCard = card.cardBuildingType == BuildingCard.CardBuildingType.SUPPORT;
+            if (alreadyHasSupportCard)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     private IEnumerator RedrawHold(BuildingCard card)
     {
         card.SetBorderFillEnabled(true);

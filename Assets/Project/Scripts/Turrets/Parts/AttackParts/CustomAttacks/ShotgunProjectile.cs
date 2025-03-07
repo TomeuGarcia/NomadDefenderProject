@@ -126,6 +126,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
             .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.transform.parent = gameObject.transform.parent;
 
+        _damageAttack.UpdateDamage(ComputeDamage()); // Refresh base damage
         DamageTargetEnemy(_damageAttack);
     }
 

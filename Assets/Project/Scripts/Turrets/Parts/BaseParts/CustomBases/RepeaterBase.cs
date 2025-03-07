@@ -339,10 +339,12 @@ public class RepeaterBase : TurretPartBase_Prefab
         if (AbilityIsDisabled)
         {
             targetedEnemy = null;
+            fakeEnemy.SetReferencedEnemy(null);
             return;
         }
         
         targetedEnemy = _ownerBuilding.GetBestEnemyTarget(targetedEnemy);
+        fakeEnemy.SetReferencedEnemy(targetedEnemy);
     }
 
 

@@ -4,13 +4,8 @@ using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
 
-public class DemoManager : MonoBehaviour, DemoManager.IVictoryDialogue
+public class DemoManager : MonoBehaviour, IGameVictoryDialogue
 {
-    public interface IVictoryDialogue
-    {
-        IEnumerator PlayVictoryDialogue();
-    }
-    
     [SerializeField] private DemoManagerConfig _config;
     [SerializeField] private ScriptedSequence _victoryScriptedSequence;
     [SerializeField] private CanvasGroup _dialogueFadeCG;

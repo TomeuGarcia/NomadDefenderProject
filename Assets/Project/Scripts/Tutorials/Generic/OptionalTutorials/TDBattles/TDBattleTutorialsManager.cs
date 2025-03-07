@@ -48,6 +48,7 @@ public class TDBattleTutorialsManager : MonoBehaviour
     {
         GameTime.SetTimeScale(1f);
         BuildingCard.LockAllCardsFromHover = false;
+        MouseOverlapNotifier.GlobalDisabled = false;
     }
 
 
@@ -120,18 +121,24 @@ public class TDBattleTutorialsManager : MonoBehaviour
     }
     private IEnumerator Play_GameSpeedTutorial()
     {
-        const float delayBeforePlaying = 5f;
+        const float delayBeforePlaying = 10f;
         yield return new WaitForSeconds(delayBeforePlaying);
 
         if (!ShouldPlay_GameSpeedTutorial(1))
         {
             yield break;
         }
-
         
+        yield return new WaitUntil(() => !_hand.IsInteractingWithCards);
+
+        BuildingCard.LockAllCardsFromHover = true;
+        MouseOverlapNotifier.GlobalDisabled = true;
         GameTime.SetTimeScale(0f);
         yield return StartCoroutine(_gameSpeedTutorial.Play());
         GameTime.SetTimeScale(1f);
+        BuildingCard.LockAllCardsFromHover = false;
+        MouseOverlapNotifier.GlobalDisabled = false;
+        
         OptionalTutorialsStateManager.SetTutorialAsDone(GameSpeed_TutorialType);
     }
     private void OnGameSpeedInteracted()

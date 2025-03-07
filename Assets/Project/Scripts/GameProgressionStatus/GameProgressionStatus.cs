@@ -25,12 +25,14 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     private class GameStatusDataWrapper
     {
         [SerializeField] public int victoriesCount;
+        [SerializeField] public int victoriesCountHardDifficulty;
         [SerializeField] public bool beatARunWithFullPerfectDefense;
         [SerializeField] public StarterDecksSaveStatus starterDecksSaveStatus;
         
         public GameStatusDataWrapper(IGameProgressionStatus.GameStatus gameStatus)
         {
             victoriesCount = gameStatus.VictoriesCount;
+            victoriesCountHardDifficulty = gameStatus.VictoriesCountHardDifficulty;
             beatARunWithFullPerfectDefense = gameStatus.BeatARunWithFullPerfectDefense;
             starterDecksSaveStatus = gameStatus.StarterDecksSaveStatus;
         }
@@ -38,7 +40,8 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
         public IGameProgressionStatus.GameStatus MakeGameStatus(CardDeckAsset[] possibleStarterDecks)
         {
             IGameProgressionStatus.GameStatus gameStatus =
-                new IGameProgressionStatus.GameStatus(victoriesCount, beatARunWithFullPerfectDefense, starterDecksSaveStatus);
+                new IGameProgressionStatus.GameStatus(victoriesCount, victoriesCountHardDifficulty,
+                    beatARunWithFullPerfectDefense, starterDecksSaveStatus);
             gameStatus.ValidateCorrectLoading(possibleStarterDecks);
             return gameStatus;
         }
