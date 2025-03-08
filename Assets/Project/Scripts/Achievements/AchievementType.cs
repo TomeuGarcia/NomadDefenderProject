@@ -23,4 +23,6 @@ public enum AchievementType
     DiscoverAllProjectilesAndAbilities,
     
     HardDifficulty_Victory,
+    
+    VictoryHardRunNoDamage
 }
