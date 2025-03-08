@@ -55,6 +55,7 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     private void SharedInitEnd(Enemy targetEnemy, Vector3 directionToTarget)
     {
         _targetEnemy = targetEnemy;
+        
         float bulletMoveDistance = TurretOwner.Stats.RadiusRange * RADIUS_DISTANCE_MULTIPLIER;
         float bulletMoveDuration = bulletMoveDistance / MovementSpeed;
         
@@ -119,9 +120,10 @@ public class ShotgunProjectile : ATurretProjectileBehaviour, ShotgunBullet.IList
     }
     
     
-
     private void EnemyHit()
     {
+        _damageAttack = CreateDamageAttack(_targetEnemy);
+        
         GameObject temp = ProjectileParticleFactory.GetInstance()
             .CreateParticlesGameObject(HitParticlesType, _targetEnemy.MeshTransform.position, Quaternion.identity);
         temp.transform.parent = gameObject.transform.parent;

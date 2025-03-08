@@ -1,0 +1,599 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5581144614795268177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8175413100711535911}
+  - component: {fileID: 8762135507015707132}
+  - component: {fileID: 8328130495295613595}
+  m_Layer: 0
+  m_Name: FinalGameVictoryDialogues
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8175413100711535911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581144614795268177}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6422268992779837174}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8762135507015707132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581144614795268177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9eb59864a8844c2bae6e62de26e07d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogSystem: {fileID: 6422268992535561779}
+  _normalAndEasyDialogue:
+    _textLines:
+    - _clearBeforeStartDelay: 0
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "So that\u2019s it, huh?"
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: You actually won.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "Gotta admit, I didn\u2019t see that coming."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "But tell me\u2026"
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Was it hard?
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: Or was this just a warm-up?
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "Because there\u2019s another way. A real challenge."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 2
+      _textLine:
+        textType: 1
+        text: No mercy. No excuses.
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Try <color=#ff0000>HARD</color> mode.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 1.5
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: Then we will see what you are really made of.
+        clearTime: 0
+  _hardDialogueFirstTime:
+    _textLines:
+    - _clearBeforeStartDelay: 0
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "\u2026You actually did it."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: I should be mocking you. Laughing at your face.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "But\u2026 I have seen too many like you."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Thousands of players. Endless cycles.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: All training the system. Perfecting it.
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: And yet, here you are. Breaking it.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "Maybe that\u2019s why you were really here."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: Maybe you were the test all along.
+        clearTime: 0
+  _hardDialogueMultipleBeforeFullPerfect:
+    _textLines:
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Another simulation. Another victory.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "But\u2026 it\u2019s not enough, is it?"
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "I\u2019ve watched you. Run after run. Adjustment after adjustment."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: I know how this ends.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: The calculations in your head. The obsession creeping in.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: You are not done. Not yet.
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Go on, then. One more time.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: Show me perfection.
+        clearTime: 0
+  _hardDialogueMultipleAfterFullPerfect:
+    _textLines:
+    - _clearBeforeStartDelay: 0
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: You still here? Impressive...
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "That wasn\u2019t part of the equation."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: After perfection, there should be nothing left to chase.
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Does it feel different each time?
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: Are you trying to prove something? To me? To yourself?
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Or is this simply who you are?
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: An anomaly in an endless cycle.
+        clearTime: 0
+  _hardFullPerfectDialogue:
+    _textLines:
+    - _clearBeforeStartDelay: 0
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "\u2026No mistakes. No flaws. No hesitation."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "I\u2019ve watched thousands play this game."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: They fought. They struggled. They fell.
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: "But you\u2026 you didn\u2019t."
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "You weren\u2019t just playing. You were breaking it."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 0
+      _textLine:
+        textType: 1
+        text: Every move. Every decision. Perfect.
+        clearTime: 0
+    - _clearBeforeStartDelay: 0
+      _startDelay: 2
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "This wasn\u2019t training. This wasn\u2019t a test."
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: 'This was perfection. '
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: "And that\u2026"
+        clearTime: 0
+    - _clearBeforeStartDelay: 1
+      _startDelay: 1
+      _endDelay: 3
+      _textLine:
+        textType: 1
+        text: That terrifies me.
+        clearTime: 0
+--- !u!114 &8328130495295613595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581144614795268177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eed7719ca9a4e2bb9d6d4b25ce730f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _testGameDifficulty: 0
+  _testVictoryCountHardDifficulty: 0
+  _testFullPerfectDefense: 0
+  _everBeatFullPerfectDefenseBefore: 0
+  _gameManager: {fileID: 0}
+  _finalGameVictoryDialogues: {fileID: 8762135507015707132}
+--- !u!1001 &7335932340128247843
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8175413100711535911}
+    m_Modifications:
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[0].text
+      value: So you finally reached RING-1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[1].text
+      value: We were supposed to fight
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[2].text
+      value: Scanning files...
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[3].text
+      value: It seems I'm missing some firmware
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[4].text
+      value: The devs couldn't make it in time...
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[5].text
+      value: You will have to wait for the next update
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[6].text
+      value: Despite this...
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[7].text
+      value: You fought well, congratulations
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[0].textType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[1].textType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[2].textType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[3].textType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[4].textType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914150337340, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: textLines.Array.data[7].textType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751313, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_Name
+      value: CanvasDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751314, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6bebb5e4f05ff5641ad73c8e73763191, type: 3}
+--- !u!114 &6422268992535561779 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4390459914388141584, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+    type: 3}
+  m_PrefabInstance: {fileID: 7335932340128247843}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a247cde68abe4549aa29006c5e5aa14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &6422268992779837174 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4390459914208751317, guid: 6bebb5e4f05ff5641ad73c8e73763191,
+    type: 3}
+  m_PrefabInstance: {fileID: 7335932340128247843}
+  m_PrefabAsset: {fileID: 0}

@@ -22,6 +22,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
             yield return new WaitUntil(consoleDialog.IsLinePrinted);
             yield return new WaitForSeconds(_delay);
             consoleDialog.PrintLine(_possibleTextLines[Random.Range(0, _possibleTextLines.Length)]);
+            yield return new WaitUntil(consoleDialog.IsLinePrinted);
         }
     }
 
@@ -39,6 +40,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
                 yield break;
             }
 
+            yield return new WaitUntil(consoleDialog.IsLinePrinted);
             source.StartCoroutine(_progressiveComments[_nextCommentIndex++].PrintDialogue(source, consoleDialog));
         }
 
@@ -103,6 +105,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
         {
             ICommentPool commentPool = _queuedComments.Dequeue();
             yield return StartCoroutine(commentPool.PrintDialogue(this, _consoleDialog));
+            yield return new WaitForSeconds(4f);
         }
         _processingQueuedComments = false;
     }
@@ -140,7 +143,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
 
     public override void OnComeBackFromNodeScene(OWMap_Node currentNode, OWMap_Node firstNextNode, bool cameFromBattle)
     {
-        if (firstNextNode == null)
+        if (firstNextNode == null || firstNextNode.healthState == HealthState.DESTROYED)
         {
             return;
         }
@@ -209,7 +212,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
     {
         if (_runState.BattleVictories < 2) // Skip first battle perfect
         {
-            if (_runState.PerfectDefenseBattleVictories < 2) // If not perfect, increment equate
+            if (_runState.PerfectDefenseBattleVictories < 1) // If not perfect, increment equate
             {
                 _perfectDefenseComments.IncrementSkipAmount();
             }
@@ -225,5 +228,13 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
         {
             _perfectDefenseComments.SkipNext();
         }
+    }
+
+
+    [Button()]
+    private void Test()
+    {
+        QueuePrintComment(_perfectDefenseComments);
+        QueuePrintComment(_reachMidComments);
     }
 }

@@ -169,13 +169,12 @@ public class DisableCannonsShootLogic : MonoBehaviour
 
     private void MakeTileNotAvailable(Tile tile)
     {
-        Debug.Log("NOT Available: " + tile.gameObject.name);
         _currentlyAvailableTiles.Remove(tile);
     }
     public void MakeTileAvailable(Tile tile)
     {
-        Debug.Log("Available: " + tile.gameObject.name);
         _currentlyAvailableTiles.Add(tile);
     }
+    
     
 }

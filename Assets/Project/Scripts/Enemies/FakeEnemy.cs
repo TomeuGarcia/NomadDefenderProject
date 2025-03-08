@@ -20,6 +20,7 @@ public class FakeEnemy : Enemy
     [SerializeField] private SphereCollider sphereCollider;
     public SphereCollider SphereCollider => sphereCollider;
 
+    private Enemy _referencedEnemy;
 
     private void Awake()
     {
@@ -31,6 +32,11 @@ public class FakeEnemy : Enemy
         MeshTransform.gameObject.SetActive(false);
 
         IsFakeEnemy = true;
+    }
+
+    public void SetReferencedEnemy(Enemy referencedEnemy)
+    {
+        _referencedEnemy = referencedEnemy;
     }
 
 
@@ -46,6 +52,16 @@ public class FakeEnemy : Enemy
     public override int GetTargetPriorityBonus()
     {
         return -10000;
+    }
+
+    public override float DistanceLeftToEnd()
+    {
+        if (_referencedEnemy == null)
+        {
+            return Mathf.Infinity;
+        }
+        
+        return _referencedEnemy.DistanceLeftToEnd();
     }
 
     public override void GetStunned(float duration)

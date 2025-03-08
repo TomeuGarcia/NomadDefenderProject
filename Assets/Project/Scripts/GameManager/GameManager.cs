@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UnlockableTrophiesManager _unlockableTrophiesManager;
 
     [Header("RUN STATE")] 
-    [SerializeField] private InterfaceReference<IRunStateInitialization, ScriptableObject> _runStateInit;
+    [SerializeField] private RunState _runState;
     [SerializeField] private GameProgressionStatus _gameProgressionStatus;
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
 
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected GameObject victoryHolder;
     [SerializeField] protected CanvasGroup cgVictoryHolder;
     [SerializeField] protected GameObject gameOverHolder;
-    [SerializeField] private ScriptedSequence victoryScriptedSequence;
+    [SerializeField] private FinalGameVictoryDialogues _finalGameVictoryDialogues;
 
     [Header("TEXTS")]
     [SerializeField] protected TextDecoder victoryTitleTextDecoder;
@@ -76,21 +76,22 @@ public class GameManager : MonoBehaviour
         
         _watcherFace.SetActive(false);
         
-        _runStateInit.Value.Init(decksLibrary.DeckInUse.StarterDeck, decksLibrary.DeckInUse.CurrentDeckContent);
+        _runState.Init(decksLibrary.DeckInUse.StarterDeck, decksLibrary.DeckInUse.CurrentDeckContent);
     }
 
     [Button()]
     protected virtual void StartVictory()
     {
         victoryHolder.SetActive(true);
-        StartCoroutine(DoStartVictory(VictoryWatcherScriptedSequence));
+        SetupVictoryDialogue();
         UnlockVictoryContent();
+        StartCoroutine(DoStartVictory(_finalGameVictoryDialogues));
     }
 
-    public void StartDemoVictory(DemoManager.IVictoryDialogue demoVictoryDialogue)
+    public void StartDemoVictory(IGameVictoryDialogue gameVictoryDialogue)
     {
         victoryHolder.SetActive(true);
-        StartCoroutine(DoStartVictory(demoVictoryDialogue.PlayVictoryDialogue)); 
+        StartCoroutine(DoStartVictory(gameVictoryDialogue)); 
     }
     
 
@@ -108,8 +109,17 @@ public class GameManager : MonoBehaviour
         AchievementDefinitions.StarterDeck_Victory_All.Check();
     }
 
+    private void SetupVictoryDialogue()
+    {
+        _finalGameVictoryDialogues.Setup(
+            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty,
+            _gameProgressionStatus.Game.VictoriesCountHardDifficulty,
+            _runState.FullPerfectDefensesSoFar,
+            _gameProgressionStatus.Game.BeatARunWithFullPerfectDefense
+        );
+    }
 
-    private IEnumerator DoStartVictory(VictoryWatcherScriptedSequenceDelegate scriptedSequenceDelegate)
+    public IEnumerator DoStartVictory(IGameVictoryDialogue gameVictoryDialogue, bool endFinishRun = true)
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
 
@@ -132,7 +142,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        yield return StartCoroutine(scriptedSequenceDelegate());
+        yield return StartCoroutine(gameVictoryDialogue.PlayVictoryDialogue());
 
 
         for (int i = 0; i < 3; ++i)
@@ -146,10 +156,13 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(0.2f);
 
-        //SceneLoader.GetInstance().StartLoadGameEndCredits();
-        StartCoroutine(DelayedLoadRunResultsScreen(0f));
+        if (endFinishRun)
+        {
+            //SceneLoader.GetInstance().StartLoadGameEndCredits();
+            StartCoroutine(DelayedLoadRunResultsScreen(0f));
 
-        SharedFinishRun(true);
+            SharedFinishRun(true);
+        }
     }
 
     [Button()]
@@ -162,7 +175,7 @@ public class GameManager : MonoBehaviour
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
 
-        yield return new WaitForSeconds(5.0f);//2.0f
+        yield return new WaitForSeconds(6.0f);//2.0f
         gameOverTitleTextDecoder.Activate();
 
         yield return new WaitForSeconds(1.0f);
@@ -200,55 +213,11 @@ public class GameManager : MonoBehaviour
         GameAudioManager.GetInstance().ChangeMusic(GameAudioManager.MusicType.MENU, 2.0f);
         SceneLoader.GetInstance().LoadRunResultsScreen();
     }
-
-    delegate IEnumerator VictoryWatcherScriptedSequenceDelegate();
-    private IEnumerator VictoryWatcherScriptedSequence()
-    {
-        // 0
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1f);
-        // 1
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3f);
-
-        // 2
-        victoryScriptedSequence.Clear();
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1f);
-        // 3
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3f);
-
-        // 4
-        victoryScriptedSequence.Clear();
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1f);
-        // 5
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3f);
-
-        // 6
-        victoryScriptedSequence.Clear();
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(1f);
-        // 7
-        victoryScriptedSequence.NextLine();
-        yield return new WaitUntil(() => victoryScriptedSequence.IsLinePrinted());
-        yield return new WaitForSeconds(3f);
-
-    }
-
-
+    
+    
     private void SharedFinishRun(bool victory)
     {
-        _runStateInit.Value.Finish(victory,
+        _runState.Finish(victory,
             _gameProgressionStatus.Game.UnlocksHardDifficulty, 
             _gameProgressionStatus.Game.UnlocksStarterDeck);
         

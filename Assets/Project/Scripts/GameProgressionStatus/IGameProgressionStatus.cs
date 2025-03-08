@@ -7,6 +7,7 @@ public interface IGameProgressionStatus
     public class GameStatus
     {
         public int VictoriesCount { get; private set; }
+        public int VictoriesCountHardDifficulty { get; private set; }
         public bool BeatARunWithFullPerfectDefense { get; private set; }
         public bool UnlocksHardDifficulty => VictoriesCount == 1;
         public bool UnlocksStarterDeck => VictoriesCount is > 0 and <= 2;
@@ -15,13 +16,15 @@ public interface IGameProgressionStatus
 
         public GameStatus(CardDeckAsset[] possibleStarterDecks)
         {
-            VictoriesCount = 0;
+            VictoriesCount = VictoriesCountHardDifficulty = 0;
             BeatARunWithFullPerfectDefense = false;
             StarterDecksSaveStatus = new StarterDecksSaveStatus(possibleStarterDecks);
         }
-        public GameStatus(int victoriesCount, bool beatARunWithFullPerfectDefense, StarterDecksSaveStatus starterDecksSaveStatus)
+        public GameStatus(int victoriesCount, int victoriesCountHardDifficulty,
+            bool beatARunWithFullPerfectDefense, StarterDecksSaveStatus starterDecksSaveStatus)
         {
             VictoriesCount = victoriesCount;
+            VictoriesCountHardDifficulty = victoriesCountHardDifficulty;
             BeatARunWithFullPerfectDefense = beatARunWithFullPerfectDefense;
             StarterDecksSaveStatus = starterDecksSaveStatus;
         }
@@ -41,6 +44,11 @@ public interface IGameProgressionStatus
         public void IncrementVictoriesCount(CardDeckAsset starterDeck, GameDifficultyType gameDifficulty)
         {
             ++VictoriesCount;
+            if (gameDifficulty == GameDifficultyType.Hard)
+            {
+                ++VictoriesCountHardDifficulty;
+            }
+            
             StarterDecksSaveStatus.IncrementDeckVictory(starterDeck, gameDifficulty);
         }
 

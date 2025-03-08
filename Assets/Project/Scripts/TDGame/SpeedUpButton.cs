@@ -153,7 +153,7 @@ public class SpeedUpButton : MonoBehaviour
     {
         current = 0;
         UpdateTimeSpeed();
-        _gamePausedDisplay.SetActive(true); // Make visible that the game is paused
+        _gamePausedDisplay.SetActive(false); // Make visible that the game is paused
 
         incrementButton.enabled = true;
         decrementButton.enabled = true;
@@ -174,7 +174,7 @@ public class SpeedUpButton : MonoBehaviour
         SpeedScale previousSpeedScale = timeScales[((current - 1) + numSpeeds) % numSpeeds];
         SpeedScale nextSpeedScale = timeScales[(current + 1) % numSpeeds];
 
-        bool wantsToPauseGame = speedScale.timeMultiplier == 0;
+        bool wantsToPauseGame = current == 3;
         if (wantsToPauseGame)
         {
             PauseTimeScale();

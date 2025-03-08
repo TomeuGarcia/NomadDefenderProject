@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class InitSceneInstaller : MonoBehaviour
@@ -26,6 +27,8 @@ public class InitSceneInstaller : MonoBehaviour
 
     public void Install(ServiceLocator serviceLocator)
     {
+        DOTween.SetTweensCapacity(1250, 50);
+        
         serviceLocator.GeneralParticleFactory = new GeneralParticleFactory(_particlesParent, _generalParticlesFactoryConfig);
         serviceLocator.ParticleFactory = new ParticleFactory(_particlesFactoryConfig, _particlesParent);
         serviceLocator.CameraHelp = new CameraHelpService();
