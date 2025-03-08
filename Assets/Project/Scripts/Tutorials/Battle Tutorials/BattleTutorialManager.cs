@@ -375,6 +375,7 @@ public class BattleTutorialManager : MonoBehaviour
         _hand.CanBeHidden = false;
         BuildingCard.LockAllCardsFromHover = true;
         TurretBuildingCard projectileCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f) as TurretBuildingCard;
+        yield return new WaitForSeconds(0.5f);
         TurretBuildingCard passivesCard = tutoCardDrawer.UtilityTryDrawRandomCardOfType(BuildingCard.CardBuildingType.TURRET, 1f) as TurretBuildingCard;
         
         
@@ -445,6 +446,7 @@ public class BattleTutorialManager : MonoBehaviour
         yield return StartCoroutine(_cardOverviewPositioner.PositionToSpot());
         yield return StartCoroutine(PlaySupportTutorial(supportCard1));
         yield return StartCoroutine(_cardOverviewPositioner.UndoPositioning());
+        yield return new WaitForSeconds(0.5f);
         BuildingCard anyCard2 = tutoCardDrawer.UtilityTryDrawAnyRandomCard(1f);
         _cardsMotionConfig.SetTDGameplayHandMode();
         

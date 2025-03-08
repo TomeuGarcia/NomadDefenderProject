@@ -153,7 +153,7 @@ public class SpeedUpButton : MonoBehaviour
     {
         current = 0;
         UpdateTimeSpeed();
-        _gamePausedDisplay.SetActive(true); // Make visible that the game is paused
+        _gamePausedDisplay.SetActive(false); // Make visible that the game is paused
 
         incrementButton.enabled = true;
         decrementButton.enabled = true;
