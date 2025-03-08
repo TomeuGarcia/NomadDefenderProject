@@ -1,12 +1,15 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyIdleAnimator : MonoBehaviour
 {
     [Header("REFERENCES")]
     [SerializeField] private Transform _target;
+    private Vector3 _originalLocalPosition;
 
     [Header("PARAMETERS")]
     [SerializeField] private Vector2 _verticalDisplacementRange;
@@ -18,6 +21,11 @@ public class EnemyIdleAnimator : MonoBehaviour
     [SerializeField] private Vector2 _horizontalDisplacementDurationRange;
     [SerializeField] private Ease _horizontalEaseIn;
     [SerializeField] private Ease _horizontalEaseOut;
+
+    private void Awake()
+    {
+        _originalLocalPosition = _target.localPosition;
+    }
 
     private void StartAnimation()
     {
@@ -64,6 +72,7 @@ public class EnemyIdleAnimator : MonoBehaviour
     public void Stop()
     {
         StopAllCoroutines();
-        _target.DOComplete();
+        _target.DOKill();
+        _target.localPosition = _originalLocalPosition;
     }
 }
