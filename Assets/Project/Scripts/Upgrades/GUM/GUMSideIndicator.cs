@@ -16,8 +16,10 @@ public class GUMSideIndicator : MonoBehaviour
     [Header("CARD SLOT")]
     [SerializeField] private GameObject _sWarningLightParent;
     [SerializeField] private GameObject _sReadyLightParent;
+    [SerializeField] private MeshRenderer _sScreenMesh;
     [SerializeField] private MeshRenderer[] _sIndMeshes;
     private Material[] _sIndMaterials;
+    private Material _sScreenMaterial;
 
     private string _readyProppertyName = "_ReadyCoef";
     private string _upgradingProppertyName = "_UpgradingCoef";
@@ -28,6 +30,9 @@ public class GUMSideIndicator : MonoBehaviour
         _topMaterial = _topMeshRenderer.material;
 
         _sIndMaterials = new Material[_sIndMeshes.Length];
+        _sScreenMaterial = _sScreenMesh.materials[2];
+
+        _sScreenMaterial.SetFloat("_ReadyCoef", 0.0f);
 
         for (int i = 0; i < _sIndMeshes.Length; i++)
         {
@@ -55,7 +60,9 @@ public class GUMSideIndicator : MonoBehaviour
         _botMaterial.SetFloat(propperty, value);
         _topMaterial.SetFloat(propperty, value);
 
-        foreach(Material mat in _sIndMaterials)
+        _sScreenMaterial.SetFloat(propperty, value);
+
+        foreach (Material mat in _sIndMaterials)
         {
             mat.SetFloat(propperty, value);
         }

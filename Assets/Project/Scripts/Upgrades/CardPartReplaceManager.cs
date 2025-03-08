@@ -724,13 +724,13 @@ public class CardPartReplaceManager : MonoBehaviour
         }
 
         selectedCard.DisableMouseInteraction();
-        selectedCard.RootCardTransform.DOMove(_cardRetrieveSpot.position, 0.75f)
+        selectedCard.RootCardTransform.DOMove(_cardRetrieveSpot.position, 0.35f)
             .SetEase(Ease.InOutSine);
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.35f);
 
         yield return StartCoroutine(_partReplaceTutorials.PlayCardResultTutorials(selectedCard));
         
-        upgradeCardHolder.StartFinalRetrieve(0.2f, 0.5f, 0.2f);
+        upgradeCardHolder.StartFinalRetrieve(0.15f, 0.35f, 0.1f);
         FinishResultCard();
     }
     

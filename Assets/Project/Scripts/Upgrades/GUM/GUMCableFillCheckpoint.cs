@@ -58,7 +58,7 @@ public class GUMCableFillCheckpoint : MonoBehaviour
 
         foreach (Material mat in _materials)
         {
-            sequence.Join(mat.DOFloat(endValue, propertyName, duration)).SetEase(ease);
+            sequence.Join(mat.DOFloat(endValue, propertyName, duration * Random.Range(0.1f, 0.9f))).SetEase(ease);
         }
         
         sequence.OnComplete(() => {

@@ -11,6 +11,7 @@ public class UpgradeMachineControl : MonoBehaviour
     [Header("Left")]
     [SerializeField] private MeshRenderer leftArm;
     [SerializeField] private UpgradeCardSlot leftCardSlot;
+    [SerializeField] private GUMCardSlot _leftCardSlot;
     [SerializeField] private TMP_Text leftInsertCardText;
     [SerializeField] private List<MeshRenderer> leftCables = new List<MeshRenderer>();
     [SerializeField] private Light leftLight;
@@ -18,6 +19,7 @@ public class UpgradeMachineControl : MonoBehaviour
     [Header("Right")]
     [SerializeField] private MeshRenderer rightArm;
     [SerializeField] private UpgradeCardSlot rightCardSlot;
+    [SerializeField] private GUMCardSlot _rightCardSlot;
     [SerializeField] private TMP_Text rightInsertCardText;
     [SerializeField] private List<MeshRenderer> rightCables = new List<MeshRenderer>();
     [SerializeField] private Light rightLight;
@@ -177,11 +179,15 @@ public class UpgradeMachineControl : MonoBehaviour
         //leftCardSlot.ResetStartTime();
         //leftCardSlot.PulsePanel(1);
         leftInsertCardText.DOFade(1f, 0.1f);
+
+        _leftCardSlot.Hover();
     }
     public void LeftPanelStopPulsing()
     {
         //leftCardSlot.PulsePanel(0);
         leftInsertCardText.DOFade(0f, 0.1f);
+
+        _leftCardSlot.Unhover();
     }
     
     public void RightPanelStartPulsing()
@@ -189,11 +195,15 @@ public class UpgradeMachineControl : MonoBehaviour
         //rightCardSlot.ResetStartTime();
         //rightCardSlot.PulsePanel(1);
         rightInsertCardText.DOFade(1f, 0.1f);
+
+        _rightCardSlot.Hover();
     }
     public void RightPanelStopPulsing()
     {
         //rightCardSlot.PulsePanel(0);
         rightInsertCardText.DOFade(0f, 0.1f);
+
+        _rightCardSlot.Unhover();
     }
 
     public void SelectLeftCard()
@@ -300,12 +310,14 @@ public class UpgradeMachineControl : MonoBehaviour
         buttonFD.invert = true;
         StartCoroutine(MaterialLerp.FloatLerp(buttonFD, new Material[1] { screenButtonOutline.materials[1] }));
 
-        _combineButtonMat.DOFloat(0.0f, "_EnableCoef", 0.2f);
+        _combineButtonMat.DOFloat(0.0f, "_EnableCoef", 0.2f)
+            .OnComplete( () => { _combineMouseNotifier.gameObject.SetActive(false); });
         _buttonEnabled = false;
     }
 
     public void Replace()
     {
+        _combineMouseNotifier.gameObject.SetActive(false);
         if (OnReplaceStart != null) OnReplaceStart();
         return;
 
