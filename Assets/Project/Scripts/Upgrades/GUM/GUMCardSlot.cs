@@ -36,4 +36,9 @@ public class GUMCardSlot : MonoBehaviour
             light.range = 10.0f;
         }
     }
+
+    public void Upgrading()
+    {
+        _hoverLights.SetActive(false);
+    }
 }

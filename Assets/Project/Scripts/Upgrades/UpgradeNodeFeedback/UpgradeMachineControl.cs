@@ -317,6 +317,8 @@ public class UpgradeMachineControl : MonoBehaviour
 
     public void Replace()
     {
+        _leftCardSlot.Upgrading();
+        _rightCardSlot.Upgrading();
         _combineMouseNotifier.gameObject.SetActive(false);
         if (OnReplaceStart != null) OnReplaceStart();
         return;

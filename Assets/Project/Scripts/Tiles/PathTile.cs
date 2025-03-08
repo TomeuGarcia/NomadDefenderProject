@@ -16,6 +16,9 @@ public class PathTile : MonoBehaviour
     [SerializeField] GameObject cube;
     [SerializeField] GameObject holeFill;
 
+    [Header("BOSS")]
+    [SerializeField] GameObject _bBeam;
+
     public IEnumerator Deactivate()
     {
 
@@ -56,5 +59,32 @@ public class PathTile : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(0.0f, 100.0f, 0.0f), 1.25f);
+    }
+
+    public IEnumerator BossAnimation()
+    {
+        if (deactivated) { yield break; }
+        deactivated = true;
+        GameObject newCube = Instantiate(_bBeam, transform.parent);
+        newCube.transform.position = transform.position;
+        newCube.transform.SetParent(transform.parent);
+        yield return new WaitForSeconds(0.25f);
+
+        newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
+        StartCoroutine(BossDeactivate());
+    }
+
+    private IEnumerator BossDeactivate()
+    {
+        yield return new WaitForSeconds(0.15f);
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, 1.5f);
+        foreach (Collider col in hits)
+        {
+            if (col.gameObject.GetComponent<PathTile>() != null)
+            {
+                StartCoroutine(col.gameObject.GetComponent<PathTile>().BossAnimation());
+            }
+        }
     }
 }

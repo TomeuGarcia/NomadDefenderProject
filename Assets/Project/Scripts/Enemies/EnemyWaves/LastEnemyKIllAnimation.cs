@@ -11,6 +11,8 @@ public class LastEnemyKIllAnimation : MonoBehaviour
 {
     [HideInInspector] public static LastEnemyKIllAnimation instance { get; private set; }
 
+    [SerializeField] private bool _isBossFight = false;
+
     [Header("SLOW MOTION")]
     [SerializeField] float animationTime;
     [SerializeField] AnimationCurve animationCurve;
@@ -23,6 +25,7 @@ public class LastEnemyKIllAnimation : MonoBehaviour
     private GameObject flashingLight;
     private GameObject particles;
 
+    private Vector3[] _tileCheckOffsets;
 
     public delegate void LastEnemyKIllAnimationAction();
     public static event LastEnemyKIllAnimationAction OnQueryResumeTimescale;
@@ -38,15 +41,39 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         {
             instance = this;
         }
+
+        /*
+        float coef = 0.5f;
+        _tileCheckOffsets = new Vector3[4];
+        _tileCheckOffsets[0] = Vector3.right * coef;
+        _tileCheckOffsets[1] = Vector3.left * coef;
+        _tileCheckOffsets[2] = Vector3.forward * coef;
+        _tileCheckOffsets[3] = Vector3.back * coef;
+        */
     }
 
     public void DeathAnimation(Vector3 lastEnemyPos, bool deactivateTiles)
     {
-        StartCoroutine(StartAnimation(lastEnemyPos, true, deactivateTiles));
+        if(!_isBossFight)
+        {
+            StartCoroutine(StartAnimation(lastEnemyPos, true, deactivateTiles));
+        }
+        else
+        {
+            StartCoroutine(StartBossAnimation(lastEnemyPos, true, deactivateTiles));
+        }
     }
 
     public IEnumerator StartAnimation(Vector3 lastEnemyPos, bool lost = false, bool deactivateTiles = true)
     {
+        /*
+        //TODO - Try offsetting half a tile to each direction in order to find something
+        
+        Vector3 tilePos = new Vector3(-3.5f, 0f, 4.5f); //Close to the center of the map
+        for(int i = 0; i < _tileCheckOffsets.Length; i++)
+        { }
+        */
+
         bool doAnimation = false;
         Vector3 tilePos = Vector3.zero;
         RaycastHit[] allHits;
@@ -78,6 +105,7 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         if(doAnimation)
         {
             GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
+            Debug.Log("Last Death Tile Pos - " + tilePos);
             StartCoroutine(Particles(tilePos, lost));
 
             yield return null;
@@ -152,5 +180,51 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         //yield return new WaitForSeconds(0);
         particles.transform.GetChild(0).gameObject.GetComponent<BlastWave>().Activate();
+    }
+
+    public IEnumerator StartBossAnimation(Vector3 lastEnemyPos, bool lost = false, bool deactivateTiles = true)
+    {
+        bool doAnimation = false;
+        Vector3 tilePos = Vector3.zero;
+        RaycastHit[] allHits;
+        allHits = Physics.RaycastAll(lastEnemyPos + Vector3.up * 10.0f, Vector3.down, 100.0f);
+        foreach (RaycastHit hit in allHits)
+        {
+            if (hit.transform.gameObject.GetComponent<PathTile>() != null)
+            {
+                tilePos = new Vector3(hit.transform.position.x, 0.4f, hit.transform.position.z);
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Deactivate());
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Animation());
+                doAnimation = true;
+
+                break;
+            }
+            else if (hit.transform.gameObject.GetComponent<PathLocation>() != null)
+            {
+                tilePos = new Vector3(hit.transform.GetChild(0).position.x, 0.4f, hit.transform.GetChild(0).position.z);
+                if (deactivateTiles)
+                {
+                    hit.transform.gameObject.GetComponent<PathLocation>().Deactivate();
+                    StartCoroutine(hit.transform.gameObject.GetComponent<PathLocation>().Animation(lost));
+                }
+                doAnimation = true;
+                break;
+            }
+        }
+
+        if (doAnimation)
+        {
+            GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
+            Debug.Log("Last Death Tile Pos - " + tilePos);
+            StartCoroutine(Particles(tilePos, lost));
+
+            yield return null;
+
+            StartCoroutine(FlashingLight(tilePos, lost));
+            StartCoroutine(CameraShake());
+            StartCoroutine(ScreenFlash());
+            yield return StartCoroutine(PlayHitStop());
+        }
+        if (OnQueryResumeTimescale != null) OnQueryResumeTimescale();
     }
 }
