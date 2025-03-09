@@ -78,15 +78,23 @@ public class PathTile : MonoBehaviour
         if (_bossSpread) { yield break; }
         _bossSpread = true;
 
-        StartCoroutine(BossSpread());
+        if(repetition)
+        {
+            StartCoroutine(BossSpread());
+        }
         yield return new WaitForSeconds(0.25f);
 
         _bossUsedBeam.LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
+        if (!repetition)
+        {
+            yield return new WaitForSeconds(0.25f);
+            StartCoroutine(BossSpread());
+        }
     }
 
     private IEnumerator BossSpread()
     {
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.1f);
 
         Collider[] hits = Physics.OverlapSphere(transform.position, 1.0f);
         foreach (Collider col in hits)

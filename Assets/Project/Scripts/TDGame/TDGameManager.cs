@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Android;
 
 public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 {
@@ -77,6 +78,9 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
         _futureNumAliveLocations = numAliveLocations = pathLocations.Length;        
 
         InitLocationsVisuals();
+
+        //TOTEST
+        //_isBoss = true;
     }
 
     private void OnDestroy()
@@ -287,15 +291,15 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     {
         //victoryHolder.SetActive(true);
 
-        //TODO - CHANGE ELSE CONTENT AAAAAAA
         if(_isBoss)
         {
+            GameAudioManager.GetInstance().PlayBattleStageVictory();
+            yield return new WaitForSeconds(0.75f);
             GameAudioManager.GetInstance().PlayBattleStageBossVictory();
         }
         else
         {
-            GameAudioManager.GetInstance().PlayBattleStageBossVictory();
-            //GameAudioManager.GetInstance().PlayBattleStageVictory();
+            GameAudioManager.GetInstance().PlayBattleStageVictory();
         }
         //yield return new WaitForSeconds(1f);
 

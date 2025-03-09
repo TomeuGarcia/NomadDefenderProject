@@ -87,6 +87,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource battleAudioSource3;
     [SerializeField] private AudioClip selfHurtExplosion;
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
+    [SerializeField] private AudioSource bossVictoryAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
     [SerializeField] private AudioClip stageVictory;
     [SerializeField] private AudioClip stageBossVictory;
@@ -692,11 +693,11 @@ public class GameAudioManager : MonoBehaviour
 
     public void PlayBattleStageBossVictory()
     {
-        battleCursedWiresAudioSource.clip = stageBossVictory;
-        battleCursedWiresAudioSource.pitch = 1.0f;
-        battleCursedWiresAudioSource.volume = 1.25f;
+        bossVictoryAudioSource.clip = stageBossVictory;
+        bossVictoryAudioSource.pitch = 1.0f;
+        bossVictoryAudioSource.volume = 1.0f;
 
-        battleCursedWiresAudioSource.Play();
+        bossVictoryAudioSource.Play();
     }
 
 

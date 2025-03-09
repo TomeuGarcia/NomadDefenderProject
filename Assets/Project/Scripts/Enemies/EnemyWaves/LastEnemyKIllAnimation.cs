@@ -44,17 +44,10 @@ public class LastEnemyKIllAnimation : MonoBehaviour
             instance = this;
         }
 
-        /*
-        float coef = 0.5f;
-        _tileCheckOffsets = new Vector3[4];
-        _tileCheckOffsets[0] = Vector3.right * coef;
-        _tileCheckOffsets[1] = Vector3.left * coef;
-        _tileCheckOffsets[2] = Vector3.forward * coef;
-        _tileCheckOffsets[3] = Vector3.back * coef;
-        */
 
-        //TODO - DELEEEEEETEEEEE
-        _isBossFight = true;
+        //TOTEST
+        //_isBoss = true;
+
         if (_isBossFight)
         {
             PathTile[] _pathTiles = Resources.FindObjectsOfTypeAll<PathTile>();
@@ -85,13 +78,6 @@ public class LastEnemyKIllAnimation : MonoBehaviour
 
     public IEnumerator StartAnimation(Vector3 lastEnemyPos, bool lost = false, bool deactivateTiles = true)
     {
-        /*
-        //TODO - Try offsetting half a tile to each direction in order to find something
-        
-        Vector3 tilePos = new Vector3(-3.5f, 0f, 4.5f); //Close to the center of the map
-        for(int i = 0; i < _tileCheckOffsets.Length; i++)
-        { }
-        */
 
         bool doAnimation = false;
         Vector3 tilePos = Vector3.zero;
@@ -124,7 +110,7 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         if(doAnimation)
         {
             GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
-            Debug.Log("Last Death Tile Pos - " + tilePos);
+            //Debug.Log("Last Death Tile Pos - " + tilePos);
             StartCoroutine(Particles(tilePos, lost));
 
             yield return null;
@@ -183,6 +169,54 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         flashingLight.gameObject.GetComponent<Light>().DOIntensity(80.0f, 0.5f);
         yield return new WaitForSeconds(0.75f);
         flashingLight.gameObject.GetComponent<Light>().DOIntensity(0.0f, 1.0f);
+    }
+
+    private IEnumerator FlashingLightBoss(Vector3 tilePos, bool lost = false)
+    {
+        flashingLight = Instantiate(p_flashingLight, transform);
+
+
+        GameObject flashingLight0 = Instantiate(p_flashingLight, transform);
+        GameObject flashingLight1 = Instantiate(p_flashingLight, transform);
+        GameObject flashingLight2 = Instantiate(p_flashingLight, transform);
+        GameObject flashingLight3 = Instantiate(p_flashingLight, transform);
+        flashingLight0.SetActive(false);
+        flashingLight1.SetActive(false);
+        flashingLight2.SetActive(false);
+        flashingLight3.SetActive(false);
+
+        flashingLight.transform.localPosition = tilePos + Vector3.up * 10;
+
+        if (lost)
+        {
+            flashingLight.gameObject.GetComponent<Light>().color = new Color32(191, 0, 0, 255);
+        }
+        flashingLight.gameObject.GetComponent<Light>().DOIntensity(0.0f, 0.25f);
+        //yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
+        flashingLight.gameObject.GetComponent<Light>().DOIntensity(80.0f, 0.5f);
+        yield return new WaitForSeconds(1.65f);
+
+        flashingLight0.transform.localPosition = tilePos + Vector3.up * 20 + Vector3.right * 20;
+        flashingLight1.transform.localPosition = tilePos + Vector3.up * 20 + Vector3.left * 20;
+        flashingLight2.transform.localPosition = tilePos + Vector3.up * 20 + Vector3.forward * 20;
+        flashingLight3.transform.localPosition = tilePos + Vector3.up * 20 + Vector3.back * 20;
+
+        flashingLight0.gameObject.GetComponent<Light>().intensity = 0.0f;
+        flashingLight1.gameObject.GetComponent<Light>().intensity = 0.0f;
+        flashingLight2.gameObject.GetComponent<Light>().intensity = 0.0f;
+        flashingLight3.gameObject.GetComponent<Light>().intensity = 0.0f;
+        flashingLight0.SetActive(true);
+        flashingLight1.SetActive(true);
+        flashingLight2.SetActive(true);
+        flashingLight3.SetActive(true);
+
+        flashingLight.gameObject.GetComponent<Light>().DOIntensity(10000.0f, 2.5f).SetEase(Ease.Linear);
+
+        flashingLight0.gameObject.GetComponent<Light>().DOIntensity(10000.0f, 2.5f).SetEase(Ease.Linear);
+        flashingLight1.gameObject.GetComponent<Light>().DOIntensity(10000.0f, 2.5f).SetEase(Ease.Linear);
+        flashingLight2.gameObject.GetComponent<Light>().DOIntensity(10000.0f, 2.5f).SetEase(Ease.Linear);
+        flashingLight3.gameObject.GetComponent<Light>().DOIntensity(10000.0f, 2.5f).SetEase(Ease.Linear);
     }
 
     private IEnumerator ScreenFlash()
@@ -261,12 +295,12 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         if (doAnimation)
         {
             GameAudioManager.GetInstance().PlayEnemyLastDeathHit();
-            Debug.Log("Last Death Tile Pos - " + tilePos);
+            //Debug.Log("Last Death Tile Pos - " + tilePos);
             StartCoroutine(Particles(tilePos, lost));
 
             yield return null;
 
-            StartCoroutine(FlashingLight(tilePos, lost));
+            StartCoroutine(FlashingLightBoss(tilePos, lost));
             StartCoroutine(CameraShakeBoss());
             StartCoroutine(ScreenFlash());
             yield return StartCoroutine(PlayHitStopBoss());
