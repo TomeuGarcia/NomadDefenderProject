@@ -21,8 +21,9 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private bool GameIsPausedOrInOptions()
     {
-        return PauseMenu.GameIsPaused || !PauseMenu.GetInstance().CanPauseNormally;
+        return PauseMenu.GameIsPaused || PauseMenu.GetInstance().AnyOptionsIsBeingShown;
     }
+    
     
     private void OnMouseEnter()
     {

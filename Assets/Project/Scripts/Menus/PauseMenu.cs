@@ -28,8 +28,10 @@ public class PauseMenu : MonoBehaviour
 
 
     [SerializeField] private OptionsMenu optionsMenuUI;
+    [SerializeField] private NewGameManager _newGamManager;
 
     public bool ShowingOptions => optionsMenuUI.gameObject.activeInHierarchy;
+    public bool AnyOptionsIsBeingShown => ShowingOptions || _newGamManager.IsBeingShown;
 
 
     private static Color fadedInColor = Color.white;

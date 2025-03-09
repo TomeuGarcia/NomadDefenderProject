@@ -24,6 +24,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField] private GameDifficultyConfig _gameDifficultyConfig;
     [SerializeField] private CardCollectionDataStorage _cardCollection;
 
+    public bool IsBeingShown => _menuHolder.activeInHierarchy;
 
     public void Init()
     {
