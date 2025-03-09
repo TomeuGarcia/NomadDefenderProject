@@ -10,7 +10,7 @@ public class TurretPassiveAbility_ExtraSellValuePerHit : ATurretPassiveAbility
     private readonly TPADataModel_ExtraSellValuePerHit _abilityDataModel;
 
 
-    private float _currentSellIncrementPer1;
+    private int _currentSellIncrements;
     private int _damageHitCount;
 
     private BuildingSellingConfig OwnerSellingConfig => _turretOwner.CardData.BuildingSellingConfig;
@@ -29,14 +29,14 @@ public class TurretPassiveAbility_ExtraSellValuePerHit : ATurretPassiveAbility
     public override void OnTurretCreated(TurretBuilding turretOwner)
     {
         _turretOwner = turretOwner;
-        _currentSellIncrementPer1 = 0f;
+        _currentSellIncrements = 0;
         _damageHitCount = 0;
     }
     
     
     protected override void OnTurretPlaced()
     {
-        _currentSellIncrementPer1 = 0f;
+        _currentSellIncrements = 0;
         _damageHitCount = 0;
         OwnerSellingConfig.OverwriteExtraAddAmount(0);
     }
@@ -54,9 +54,11 @@ public class TurretPassiveAbility_ExtraSellValuePerHit : ATurretPassiveAbility
             return;
         }
         _damageHitCount = 0;
-        
+        _currentSellIncrements++;
 
-        OwnerSellingConfig.OverwriteExtraAddAmount(_abilityDataModel.SellValueIncrementAmount.Value);
+
+        int extraSellValue = _currentSellIncrements * _abilityDataModel.SellValueIncrementAmount.Value;
+        OwnerSellingConfig.OverwriteExtraAddAmount(extraSellValue);
 
         ServiceLocator.GetInstance().ParticleFactory.Create(ParticleTypes.IncreaseSellValue,
             _turretOwner.PlacingParticlesPosition, Quaternion.identity);

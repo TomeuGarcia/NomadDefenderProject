@@ -234,7 +234,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
     [Button()]
     private void Test()
     {
-        QueuePrintComment(_perfectDefenseComments);
-        QueuePrintComment(_reachMidComments);
+        _previousNodeProgression = ProgressionState.BOSS;
+        CheckPrintLostAtStage();
     }
 }
