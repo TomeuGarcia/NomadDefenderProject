@@ -240,11 +240,7 @@ public class LastEnemyKIllAnimation : MonoBehaviour
     {
         Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.1f, 30);
         yield return new WaitForSeconds(0.5f);
-        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(1.5f, 100);
-        yield return new WaitForSeconds(0.25f);
-        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.25f, 50);
-        yield return new WaitForSeconds(0.25f);
-        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.25f, 25);
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(10.0f, 125);
     }
 
     private IEnumerator Particles(Vector3 spawnPos, bool lost = false)
@@ -306,5 +302,10 @@ public class LastEnemyKIllAnimation : MonoBehaviour
             yield return StartCoroutine(PlayHitStopBoss());
         }
         if (OnQueryResumeTimescale != null) OnQueryResumeTimescale();
+    }
+
+    private void OnDestroy()
+    {
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.1f, 10);
     }
 }
