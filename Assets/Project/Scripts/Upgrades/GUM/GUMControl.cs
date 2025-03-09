@@ -153,13 +153,16 @@ public class GUMControl : MonoBehaviour
     public void OpenResultCardSlot()
     {
         GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
-        GameAudioManager.GetInstance().PlaySmokeBurst();
     }
 
     //SOUNDS
     public void PlayContainerPistonUp()
     {
         GameAudioManager.GetInstance().PlayContainerPistonUp();
+    }
+    public void PlaySmokeBurst()
+    {
+        GameAudioManager.GetInstance().PlaySmokeBurst();
     }
     public void PlayContainerLightOn()
     {
