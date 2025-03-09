@@ -460,10 +460,11 @@ public class BattleTutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         GameTime.SetTimeScale(1);
         
-        
+        /*
         speedUpButton.CompletelyEnableTimeSpeed();
         speedUpButtonHolder.gameObject.SetActive(true);
         StartCoroutine(EnableTimeSpeedAnimation());
+        */
         
         
         scriptedSequence.NextLine();//13
@@ -494,10 +495,11 @@ public class BattleTutorialManager : MonoBehaviour
         enemyWaveManager.HideWaveSpawnersInfoDisplay();
         scriptedSequence.Clear();
 
+        /*
         speedUpButton.CompletelyDisableTimeSpeed();
         speedUpButtonHolder.gameObject.SetActive(false);
         speedUpButtonHolder.alpha = 0;
-        
+        */
         
         yield return new WaitForSeconds(2.0f);
         scriptedSequence.NextLine(); //16 Wave 6/5
