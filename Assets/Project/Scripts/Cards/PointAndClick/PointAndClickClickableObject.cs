@@ -44,7 +44,6 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (GameIsPausedOrInOptions()) return;
         if (!gameObject.activeInHierarchy) return;
 
         //if (_outline != null)
@@ -54,6 +53,8 @@ public class PointAndClickClickableObject : MonoBehaviour
         //}
 
         _cursorChanger.RegularCursor();
+        if (GameIsPausedOrInOptions()) return;
+        
         if (_interactable.CanInteract() || _highlighted)
         {
             _interactable.Unhovered();
