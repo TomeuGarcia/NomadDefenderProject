@@ -8,14 +8,17 @@ public abstract class OWMap_NodeClass
     public Texture nodeSprite;
     protected int nextLevelNodes;
     protected NodeEnums.HealthState healthState; //Can create problems if its not saved as a reference
+    public Color nodeColor;
 
     public NodeEnums.ProgressionState progressionState;
 
-    public OWMap_NodeClass(NodeEnums.NodeType _nodeType, int _nextLevelNodes, ref NodeEnums.HealthState _healthState, NodeEnums.ProgressionState _progressionState) 
+    public OWMap_NodeClass(NodeEnums.NodeType _nodeType, int _nextLevelNodes, ref NodeEnums.HealthState _healthState, 
+        NodeEnums.ProgressionState _progressionState, Color _nodeColor) 
     {
         nextLevelNodes = _nextLevelNodes;
         healthState = _healthState;
         nodeType = _nodeType;
+        nodeColor = _nodeColor;
 
         progressionState = _progressionState;
     }

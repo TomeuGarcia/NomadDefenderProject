@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NodeEnums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -506,6 +507,11 @@ public class OWMap_Node : MonoBehaviour
         nodeIcon = mapIconTexture;
 
         material.SetTexture("_IconTexture", nodeIcon);
+        material.SetColor("_IconColor", nodeClass.nodeColor);
+
+        float glitchSpeed = nodeClass.progressionState == ProgressionState.BOSS ? 1.0f : 0.1f;
+        material.SetFloat("_NoiseMoveDownSpeed", glitchSpeed);
+
 
         flashMaterial.SetColor("_FlashColor", GetNodeType() == NodeEnums.NodeType.BATTLE 
             ? OWMapDecoratorUtils.s_orangeColor 

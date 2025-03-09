@@ -60,6 +60,7 @@ public class OWMapDecoratorUtils : ScriptableObject
     public List<Texture> battleNodeTextures;
     public List<Texture> emptyNodeTextures;
 
+    [SerializeField, ColorUsage(true, true)] private Color bossRedColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
     [SerializeField, ColorUsage(true, true)] private Color darkGreyColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
     [SerializeField, ColorUsage(true, true)] private Color lightGreyColor = new Color(.9f, .9f, .9f);
     [SerializeField, ColorUsage(true, true)] private Color blueColor = new Color(38f / 255f, 142f / 255f, 138f / 255f);
@@ -72,6 +73,7 @@ public class OWMapDecoratorUtils : ScriptableObject
 
 
 
+    public static Color s_bossRedColor;
     public static Color s_darkGreyColor;
     public static Color s_lightGreyColor;
     public static Color s_blueColor;
@@ -94,6 +96,7 @@ public class OWMapDecoratorUtils : ScriptableObject
 
     private void SetupStaticColors()
     {
+        s_bossRedColor = bossRedColor;
         s_darkGreyColor = darkGreyColor;
         s_lightGreyColor = lightGreyColor;
         s_blueColor = blueColor;

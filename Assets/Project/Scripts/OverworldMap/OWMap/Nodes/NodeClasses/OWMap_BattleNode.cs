@@ -8,8 +8,8 @@ public class OWMap_BattleNode : OWMap_NodeClass
     public NodeEnums.BattleType battleType;
 
     public OWMap_BattleNode(int _nextLevelNodes, ref NodeEnums.HealthState _healthState, 
-        NodeEnums.BattleType _battleType, NodeEnums.ProgressionState _progressionState) 
-        : base(NodeEnums.NodeType.BATTLE, _nextLevelNodes, ref _healthState, _progressionState) 
+        NodeEnums.BattleType _battleType, NodeEnums.ProgressionState _progressionState, Color nodeColor) 
+        : base(NodeEnums.NodeType.BATTLE, _nextLevelNodes, ref _healthState, _progressionState, nodeColor) 
     {
         battleType = _battleType;
     }

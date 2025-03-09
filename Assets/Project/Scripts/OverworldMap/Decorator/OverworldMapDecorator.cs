@@ -130,7 +130,12 @@ public class OverworldMapDecorator : MonoBehaviour
         // TODO decorate properly
         node.SetBorderColor(OWMapDecoratorUtils.s_orangeColor);
 
-        OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref node.healthState, battleType, progressionState);
+        Color nodeColor = progressionState == ProgressionState.BOSS
+            ? OWMapDecoratorUtils.s_bossRedColor
+            : OWMapDecoratorUtils.s_darkGreyColor;
+
+        OWMap_BattleNode battleNode = new OWMap_BattleNode(nextLevelNodes, ref node.healthState, battleType, 
+            progressionState, nodeColor);
         node.SetNodeClass(battleNode, dUtils.GetBattleNodeTexture(battleType));
 
         // Spawn BattleNodeInfoDisplay
