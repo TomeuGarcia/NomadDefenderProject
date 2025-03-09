@@ -89,6 +89,7 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioSource battleCursedWiresAudioSource;
     [SerializeField] private AudioClip cursedWiresWave;
     [SerializeField] private AudioClip stageVictory;
+    [SerializeField] private AudioClip stageBossVictory;
     [SerializeField] private AudioClip locationHealed;
 
     [Header("CURRENCY")]
@@ -685,6 +686,15 @@ public class GameAudioManager : MonoBehaviour
         battleCursedWiresAudioSource.clip = stageVictory;
         battleCursedWiresAudioSource.pitch = 1.0f;
         battleCursedWiresAudioSource.volume = 1.0f;
+
+        battleCursedWiresAudioSource.Play();
+    }
+
+    public void PlayBattleStageBossVictory()
+    {
+        battleCursedWiresAudioSource.clip = stageBossVictory;
+        battleCursedWiresAudioSource.pitch = 1.0f;
+        battleCursedWiresAudioSource.volume = 1.25f;
 
         battleCursedWiresAudioSource.Play();
     }

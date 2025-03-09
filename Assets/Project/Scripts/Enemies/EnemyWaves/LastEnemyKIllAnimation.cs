@@ -27,6 +27,8 @@ public class LastEnemyKIllAnimation : MonoBehaviour
 
     private Vector3[] _tileCheckOffsets;
 
+    private PathTile[] _pathTiles;
+
     public delegate void LastEnemyKIllAnimationAction();
     public static event LastEnemyKIllAnimationAction OnQueryResumeTimescale;
 
@@ -50,17 +52,34 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         _tileCheckOffsets[2] = Vector3.forward * coef;
         _tileCheckOffsets[3] = Vector3.back * coef;
         */
+
+        //TODO - DELEEEEEETEEEEE
+        _isBossFight = true;
+        if (_isBossFight)
+        {
+            PathTile[] _pathTiles = Resources.FindObjectsOfTypeAll<PathTile>();
+
+            for(int i = 0; i < _pathTiles.Length; i++)
+            {
+                _pathTiles[i].InitBoss();
+            }
+        }
     }
 
     public void DeathAnimation(Vector3 lastEnemyPos, bool deactivateTiles)
     {
-        if(!_isBossFight)
+        StartCoroutine(StartAnimation(lastEnemyPos, true, deactivateTiles));
+    }
+
+    public void FinalKillAnimation(Vector3 lastEnemyPos)
+    {
+        if (_isBossFight)
         {
-            StartCoroutine(StartAnimation(lastEnemyPos, true, deactivateTiles));
+            StartCoroutine(StartBossAnimation(lastEnemyPos));
         }
         else
         {
-            StartCoroutine(StartBossAnimation(lastEnemyPos, true, deactivateTiles));
+            StartCoroutine(StartAnimation(lastEnemyPos));
         }
     }
 
@@ -134,6 +153,22 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         }
     }
 
+    public IEnumerator PlayHitStopBoss()
+    {
+        Time.timeScale = 0.0f;
+        float currentTime = 0.0f;
+        yield return new WaitForSecondsRealtime(0.0f);
+
+        //float bossAnimationTime = 0.1f;
+        while (currentTime < animationTime)
+        {
+            currentTime += Time.unscaledDeltaTime;
+            Time.timeScale = animationCurve.Evaluate(currentTime / animationTime);
+
+            yield return null;
+        }
+    }
+
     private IEnumerator FlashingLight(Vector3 tilePos, bool lost = false)
     {
         flashingLight = Instantiate(p_flashingLight, transform);
@@ -167,6 +202,17 @@ public class LastEnemyKIllAnimation : MonoBehaviour
         Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.5f, 10);
     }
 
+    private IEnumerator CameraShakeBoss()
+    {
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.1f, 30);
+        yield return new WaitForSeconds(0.5f);
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(1.5f, 100);
+        yield return new WaitForSeconds(0.25f);
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.25f, 50);
+        yield return new WaitForSeconds(0.25f);
+        Camera.main.gameObject.GetComponent<CameraMovement>().CameraShake(0.25f, 25);
+    }
+
     private IEnumerator Particles(Vector3 spawnPos, bool lost = false)
     {
         particles = Instantiate(p_Particles, transform);
@@ -194,7 +240,7 @@ public class LastEnemyKIllAnimation : MonoBehaviour
             {
                 tilePos = new Vector3(hit.transform.position.x, 0.4f, hit.transform.position.z);
                 StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Deactivate());
-                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().Animation());
+                StartCoroutine(hit.transform.gameObject.GetComponent<PathTile>().BossAnimation());
                 doAnimation = true;
 
                 break;
@@ -221,9 +267,9 @@ public class LastEnemyKIllAnimation : MonoBehaviour
             yield return null;
 
             StartCoroutine(FlashingLight(tilePos, lost));
-            StartCoroutine(CameraShake());
+            StartCoroutine(CameraShakeBoss());
             StartCoroutine(ScreenFlash());
-            yield return StartCoroutine(PlayHitStop());
+            yield return StartCoroutine(PlayHitStopBoss());
         }
         if (OnQueryResumeTimescale != null) OnQueryResumeTimescale();
     }

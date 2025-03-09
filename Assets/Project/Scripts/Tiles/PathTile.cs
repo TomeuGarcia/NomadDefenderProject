@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class PathTile : MonoBehaviour
 {
-    private bool deactivated = false;
+
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] Material deactivatedMat;
     [SerializeField] List<int> matToChange = new List<int>();
@@ -18,6 +18,18 @@ public class PathTile : MonoBehaviour
 
     [Header("BOSS")]
     [SerializeField] GameObject _bBeam;
+    [SerializeField] GameObject _bBeamRepeat;
+
+    private Lerp _bossUsedBeam;
+
+    private bool deactivated = false;
+    private bool _bossSpread = false;
+
+    private void Awake()
+    {
+        deactivated = false;
+        _bossSpread = false;
+    }
 
     public IEnumerator Deactivate()
     {
@@ -61,30 +73,36 @@ public class PathTile : MonoBehaviour
         newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(0.0f, 100.0f, 0.0f), 1.25f);
     }
 
-    public IEnumerator BossAnimation()
+    public IEnumerator BossAnimation(bool repetition = false)
     {
-        if (deactivated) { yield break; }
-        deactivated = true;
-        GameObject newCube = Instantiate(_bBeam, transform.parent);
-        newCube.transform.position = transform.position;
-        newCube.transform.SetParent(transform.parent);
+        if (_bossSpread) { yield break; }
+        _bossSpread = true;
+
+        StartCoroutine(BossSpread());
         yield return new WaitForSeconds(0.25f);
 
-        newCube.gameObject.GetComponent<Lerp>().LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
-        StartCoroutine(BossDeactivate());
+        _bossUsedBeam.LerpScale(new Vector3(1.0f, 100.0f, 1.0f), 0.1f);
     }
 
-    private IEnumerator BossDeactivate()
+    private IEnumerator BossSpread()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.025f);
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, 1.5f);
+        Collider[] hits = Physics.OverlapSphere(transform.position, 1.0f);
         foreach (Collider col in hits)
         {
             if (col.gameObject.GetComponent<PathTile>() != null)
             {
-                StartCoroutine(col.gameObject.GetComponent<PathTile>().BossAnimation());
+                StartCoroutine(col.gameObject.GetComponent<PathTile>().BossAnimation(true));
             }
         }
+    }
+
+    public void InitBoss()
+    {
+        GameObject beam = Instantiate(_bBeam, transform.parent);
+        beam.transform.position = transform.position;
+        beam.transform.SetParent(transform.parent);
+        _bossUsedBeam = beam.gameObject.GetComponent<Lerp>();
     }
 }

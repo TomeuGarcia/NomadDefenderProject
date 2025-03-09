@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
 {
+    [SerializeField] private bool _isBoss = false;
+
     [Header("CONFIG")]
     [SerializeField] private TDGameManagerConfig _config;
     [SerializeField] private RunState _runState;
@@ -285,7 +287,16 @@ public class TDGameManager : MonoBehaviour, TDLocationsUtils, ITDGameState
     {
         //victoryHolder.SetActive(true);
 
-        GameAudioManager.GetInstance().PlayBattleStageVictory();
+        //TODO - CHANGE ELSE CONTENT AAAAAAA
+        if(_isBoss)
+        {
+            GameAudioManager.GetInstance().PlayBattleStageBossVictory();
+        }
+        else
+        {
+            GameAudioManager.GetInstance().PlayBattleStageBossVictory();
+            //GameAudioManager.GetInstance().PlayBattleStageVictory();
+        }
         //yield return new WaitForSeconds(1f);
 
         yield return new WaitForSeconds(5f);

@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
+  _positionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &6815670382449694173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,9 +73,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6902519860833660420}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!114 &2878955286119705563
@@ -92,27 +101,18 @@ MonoBehaviour:
   meshRenderer: {fileID: 5191305253218832186}
   deactivatedMat: {fileID: 2100000, guid: e5e43bef96192704aa6c58b455ef4343, type: 2}
   matToChange: 0100000002000000
-  falling: 0
   cube: {fileID: 3473474193955431661, guid: 8da5233f093cf62418cbe0ce20e3d03e, type: 3}
   holeFill: {fileID: 5967231113958032833, guid: d3e8d3c482ef5b84284f2bcac769183d,
     type: 3}
-  activateCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  deactivateCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _bBeam: {fileID: 3473474193955431661, guid: 616b332d0bac5634e9f9e9bcae869383, type: 3}
+  _bBeamRepeat: {fileID: 3473474193955431661, guid: 699f8fda95e6fec40a5f7ba78423d173,
+    type: 3}
 --- !u!1001 &6902519862042088382
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6902519860833660422}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 55b8b08377d96664c91e1c86f501c568,
@@ -196,6 +196,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55b8b08377d96664c91e1c86f501c568, type: 3}
 --- !u!23 &5191305253218832186 stripped
 MeshRenderer:
