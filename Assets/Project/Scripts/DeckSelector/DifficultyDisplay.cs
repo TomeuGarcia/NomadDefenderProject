@@ -34,8 +34,8 @@ public class DifficultyDisplay : MonoBehaviour
             leftArrow.interactable = !_isLeftmost;
             rightArrow.interactable = !_isRightmost;
 
-            lockedObject.SetActive(_isUnlocked);
-            runButton.SetActive(!_isUnlocked);
+            lockedObject.SetActive(!_isUnlocked);
+            runButton.SetActive(_isUnlocked);
             
             watcher.SetActive(_isRightmost);
         }
@@ -72,11 +72,16 @@ public class DifficultyDisplay : MonoBehaviour
         
         for (int i = 0; i < _difficulties.Length; ++i)
         {
+            GameDifficultyType difficultyType = (GameDifficultyType)i;
             bool isLeftmost = i == 0;
             bool isRightmost = i == _difficulties.Length - 1;
-            bool isUnlocked = _gameDifficultyConfig.UnlockedGameDifficulties.Contains(_selectedGameDifficultyType) &&
-                              (_demoManagerConfig.DemoEnabled && ((GameDifficultyType)i == GameDifficultyType.Hard));
-            
+            bool isUnlocked = _gameDifficultyConfig.UnlockedGameDifficulties.Contains(difficultyType);
+
+            if (_demoManagerConfig.DemoEnabled && difficultyType == GameDifficultyType.Hard)
+            {
+                isUnlocked = false;
+            }
+
             _difficulties[i].Init(isLeftmost, isRightmost, isUnlocked);
         }
         

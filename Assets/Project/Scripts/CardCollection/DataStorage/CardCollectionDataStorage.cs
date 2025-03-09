@@ -165,7 +165,7 @@ public class CardCollectionDataStorage : ScriptableObject
     {
         CheckFile();
         ResetDiscoveries();
-        DiscoverFirsts();
+        //DiscoverFirsts();
         SaveData();
     }
     
