@@ -78,7 +78,7 @@ public class DeckSelector : MonoBehaviour
 
     private void Update()
     {
-        UpdateCheatInputs();
+        //UpdateCheatInputs();
 
         if (startSimulationButton.interactable && Input.GetKeyDown(KeyCode.Space))
         {

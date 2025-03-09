@@ -19,8 +19,14 @@ public class PointAndClickClickableObject : MonoBehaviour
         _cursorChanger = ServiceLocator.GetInstance().CursorChanger;
     }
 
+    private bool GameIsPausedOrInOptions()
+    {
+        return PauseMenu.GameIsPaused || !PauseMenu.GetInstance().CanPauseNormally;
+    }
+    
     private void OnMouseEnter()
     {
+        if (GameIsPausedOrInOptions()) return;
         if (!gameObject.activeInHierarchy) return;
         
 
@@ -29,6 +35,7 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (GameIsPausedOrInOptions()) return;
         if (!gameObject.activeInHierarchy) return;
 
         MouseHoverCheck(false);
@@ -36,6 +43,7 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (GameIsPausedOrInOptions()) return;
         if (!gameObject.activeInHierarchy) return;
 
         //if (_outline != null)
@@ -54,6 +62,7 @@ public class PointAndClickClickableObject : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (GameIsPausedOrInOptions()) return;
         if (!gameObject.activeInHierarchy) return;
 
         if (_highlighted)

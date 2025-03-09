@@ -80,6 +80,7 @@ public class FacilityManager : MonoBehaviour
         PauseMenu.GetInstance().CanDisplayNewGame = false;
     }
 
+    /*
     private void Update()
     {
         // SKIP TUTORIAL
@@ -90,6 +91,7 @@ public class FacilityManager : MonoBehaviour
             TutorialsSaverLoader.GetInstance().SetAllTutorialsDone();
         }
     }
+    */
 
 
     private void ComeFromRun()
