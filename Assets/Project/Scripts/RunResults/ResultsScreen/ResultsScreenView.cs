@@ -44,6 +44,7 @@ public class ResultsScreenView : MonoBehaviour
         
         private ResultScreenStat _simulationTime;
         private ResultScreenStat _nodesReached;
+        private ResultScreenStat _perfectDefenses;
         private ResultScreenStat _buildingsPlaced;
         private ResultScreenStat _buildingsUpgraded;
         private ResultScreenStat _totalDamageDealt;
@@ -55,6 +56,7 @@ public class ResultsScreenView : MonoBehaviour
         {
             InstantiateStat("simulationTime", runStateData.RunDurationAsString(), statPrefab, out _simulationTime);
             InstantiateStat("nodesReached", runStateData.NodesReached.ToString(), statPrefab, out _nodesReached);
+            InstantiateStat("perfectDefenses", runStateData.PerfectDefenseBattleVictories.ToString() + "/7", statPrefab, out _perfectDefenses);
             Instantiate(statSeparatorPrefab, _statsParent);
             InstantiateStat("buildingsPlaced", runStateData.TotalBuildingsPlaced.ToString(), statPrefab, out _buildingsPlaced);
             InstantiateStat("buildingsUpgraded", runStateData.TotalBuildingsUpgraded.ToString(), statPrefab, out _buildingsUpgraded);
@@ -78,6 +80,7 @@ public class ResultsScreenView : MonoBehaviour
         {
             yield return coroutinesParent.StartCoroutine(_simulationTime.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_nodesReached.PlayAnimation());
+            yield return coroutinesParent.StartCoroutine(_perfectDefenses.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_buildingsPlaced.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_buildingsUpgraded.PlayAnimation());
             yield return coroutinesParent.StartCoroutine(_totalDamageDealt.PlayAnimation());
@@ -90,6 +93,7 @@ public class ResultsScreenView : MonoBehaviour
         {
             _simulationTime.CompleteAnimation();
             _nodesReached.CompleteAnimation();
+            _perfectDefenses.CompleteAnimation();
             _buildingsPlaced.CompleteAnimation();
             _buildingsUpgraded.CompleteAnimation();
             _totalDamageDealt.CompleteAnimation();
