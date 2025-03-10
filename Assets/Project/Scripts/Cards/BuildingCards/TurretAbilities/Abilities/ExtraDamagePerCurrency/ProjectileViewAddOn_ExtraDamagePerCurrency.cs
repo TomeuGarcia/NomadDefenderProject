@@ -35,7 +35,7 @@ public class ProjectileViewAddOn_ExtraDamagePerCurrency : AProjectileViewAddOn
         ParticleSystem.EmissionModule emissionModule = _lifetimeParticles.emission;
         emissionModule.rateOverDistance = steps * 2;
         ParticleSystem.MainModule shapeModule = _lifetimeParticles.main;
-        float logSteps = Mathf.Log10((steps * 0.5f) + 1f);
+        float logSteps = Mathf.Log10((steps) + 1f) * 0.5f;
         shapeModule.startSize = new ParticleSystem.MinMaxCurve(logSteps * 0.5f, logSteps);
 
         if (_projectileTrail)

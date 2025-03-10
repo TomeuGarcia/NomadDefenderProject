@@ -381,8 +381,11 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     public virtual void ApplyWaveStatMultiplier(float multiplier)
     {
         _health = Mathf.RoundToInt(_typeConfig.BaseStats.Health * multiplier);
+        _armor = Mathf.RoundToInt(_typeConfig.BaseStats.Armor * multiplier);
 
         healthSystem.UpdateHealth(_health);
+        healthSystem.UpdateArmor(_armor);
+        healthHUD.RefreshUpdate();
     }
 
     public virtual bool IsDead()

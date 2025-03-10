@@ -38,6 +38,12 @@ public class HealthHUD : MonoBehaviour
         SetArmorImageVisibility();
     }
 
+    public void RefreshUpdate()
+    {
+        healthImage.fillAmount = healthSystem.HealthRatio;
+        armorImage.fillAmount = healthSystem.GetArmorRatio();
+    }
+
     private void UpdateHealthImage(HealthSystem.UpdateType updateType)
     {
         healthImage.fillAmount = healthSystem.HealthRatio;

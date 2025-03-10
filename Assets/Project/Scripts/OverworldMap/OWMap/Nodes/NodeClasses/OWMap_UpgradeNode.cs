@@ -11,7 +11,7 @@ public class OWMap_UpgradeNode : OWMap_NodeClass
     public OWMap_UpgradeNode(int _nextLevelNodes, ref NodeEnums.HealthState _healthState, NodeEnums.UpgradeType _upgradeType, 
         NodeEnums.ProgressionState _progressionState) 
         : base(NodeEnums.NodeType.UPGRADE, _nextLevelNodes, ref _healthState, _progressionState,
-            OWMapDecoratorUtils.s_darkGreyColor) 
+            OWMapDecoratorUtils.s_darkGreyColor, Color.white) 
     {
         upgradeType= _upgradeType;
         progressionState = _progressionState;

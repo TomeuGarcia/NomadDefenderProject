@@ -120,6 +120,13 @@ public class HealthSystem
         health = newHealth;
         maxHealth = newHealth;
     }
+    public void UpdateArmor(int newArmor)
+    {
+        armor = newArmor;
+        maxArmor = newArmor;
+        spawnArmorAmount = newArmor;
+    }
+    
 
     public int GetMaxHealth()
     {

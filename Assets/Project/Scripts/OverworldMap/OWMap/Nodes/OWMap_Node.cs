@@ -508,6 +508,7 @@ public class OWMap_Node : MonoBehaviour
 
         material.SetTexture("_IconTexture", nodeIcon);
         material.SetColor("_IconColor", nodeClass.nodeColor);
+        material.SetColor("_IsInteractableIconColor", nodeClass.nodeColorInteractable);
 
         float glitchSpeed = nodeClass.progressionState == ProgressionState.BOSS ? 1.0f : 0.1f;
         material.SetFloat("_NoiseMoveDownSpeed", glitchSpeed);
@@ -517,6 +518,7 @@ public class OWMap_Node : MonoBehaviour
             ? OWMapDecoratorUtils.s_orangeColor 
             : OWMapDecoratorUtils.s_blueColor);
     }
+    
 
     public NodeEnums.NodeType GetNodeType()
     {
