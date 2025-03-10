@@ -300,6 +300,7 @@ public class TurretBuilding : RangeBuilding, ElectricWireSegment.IAttachable
         _abilitiesPlacingLifetimeCycle.OnTurretUnplaced();
         _extraRadiusRange = 0f;
         _disableableBuilding.Cancel();
+        RemoveAllEnemiesInRange();
     }
 
     public override void GotEnabledPlacing()

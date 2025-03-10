@@ -14,4 +14,5 @@ public enum ParticleTypes
     EnemyAttack,
     SpawnCardCopyInHand_SourceCard,
     OverkillShootTime,
+    ReduceCardCostWhileInHand,
 }

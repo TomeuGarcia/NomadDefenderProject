@@ -163,6 +163,7 @@ public class SupportBuilding : RangeBuilding
         UpdateRange();
         
         _disableableBuilding.Cancel();
+        RemoveAllEnemiesInRange();
     }
 
     public override void GotEnabledPlacing()

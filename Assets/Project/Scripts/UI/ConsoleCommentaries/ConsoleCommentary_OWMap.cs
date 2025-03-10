@@ -129,10 +129,10 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
 
     public override void OnBattleResultsSet(BattleStateResult.NodeBattleStateResult[] nodeResults)
     {
-        bool survived = true;
+        bool survived = false;
         foreach (var nodeResult in nodeResults)
         {
-            survived &= nodeResult.healthState != HealthState.DESTROYED;
+            survived |= nodeResult.healthState != HealthState.DESTROYED;
         }
         
         if (!survived)

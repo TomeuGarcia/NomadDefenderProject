@@ -130,6 +130,12 @@ public class CurrencyCounter : MonoBehaviour
 
     public void SubtractCurrency(int amount)
     {
+        if (amount < 0)
+        {
+            AddCurrency(-amount);
+            return;
+        }
+        
         if (isSubtracting) StopCoroutine(lastSubtractCoroutine);
 
         lastSubtractCoroutine = StartCoroutine(

@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 public class TurretPassiveAbility_ReduceCostPerOthersKills : ATurretPassiveAbility
 {
     private readonly TPADataModel_ReduceCostPerOthersKills _abilityDataModel;
@@ -81,6 +83,10 @@ public class TurretPassiveAbility_ReduceCostPerOthersKills : ATurretPassiveAbili
     {
         _ownerCard.PlayUpdatePlayCostAnimation(-_abilityDataModel.PlayCostDecrementAmount.Value);
         AchievementDefinitions.NegativePlayCostCard.Check(_ownerCard.CardData.PlayCost);
+        
+        ServiceLocator.GetInstance().ParticleFactory
+            .Create(ParticleTypes.ReduceCardCostWhileInHand, _ownerCard.CardParticlesSpot.position, Quaternion.identity)
+            .GetComponent<RecyclableParticles>();
     }
     
 
