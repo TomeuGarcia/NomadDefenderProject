@@ -224,10 +224,6 @@ public class GameManager : MonoBehaviour
     
     private void SharedFinishRun(bool victory)
     {
-        _runState.Finish(victory,
-            _gameProgressionStatus.Game.UnlocksHardDifficulty, 
-            _gameProgressionStatus.Game.UnlocksStarterDeck);
-        
         if (victory)
         {
             _gameProgressionStatus.IncrementVictoryCount(_cardDeckInUseData.StarterDeck);
@@ -237,6 +233,10 @@ public class GameManager : MonoBehaviour
                 _gameDifficultyConfig.UnlockDifficulty(GameDifficultyType.Hard);
             }
         }
+        
+        _runState.Finish(victory,
+            _gameProgressionStatus.Game.UnlocksHardDifficulty, 
+            _gameProgressionStatus.Game.UnlocksStarterDeck);
     }
 
 

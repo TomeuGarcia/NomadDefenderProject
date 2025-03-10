@@ -43,7 +43,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     private TurretCardStatsController StatsController => CardData.StatsController;
     public ITurretStatsBonusController StatsBonusController => StatsController;
-    private int PlayCost { get; set; }
+    private int PlayCost { get => CardData.PlayCost; set => CardData.SetPlayCost(value); }
 
     
 
@@ -148,7 +148,7 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
 
     public override int GetCardPlayCost()
     {
-        return PlayCost;
+        return CardData.PlayCost;
     }
     public override void UpdatePlayCost(int newPlayCost)
     {

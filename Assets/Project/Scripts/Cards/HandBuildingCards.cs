@@ -765,6 +765,7 @@ public class HandBuildingCards : MonoBehaviour
         EnableInteractionWithPlacedElements();
     }
 
+    
     private void SubtractCurrencyAndRemoveCard()
     {
         int cardCost = selectedCard.GetCardPlayCost();
