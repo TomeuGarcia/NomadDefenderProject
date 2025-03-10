@@ -69,14 +69,18 @@ public class GameManager : MonoBehaviour
     {
         decksLibrary.InitGameDeck();
 
-        victoryHolder.SetActive(false);
-        gameOverHolder.SetActive(false);
 
         PauseMenu.GetInstance().GameCanBePaused = true;
         
         _watcherFace.SetActive(false);
         
         _runState.Init(decksLibrary.DeckInUse.StarterDeck, decksLibrary.DeckInUse.CurrentDeckContent);
+    }
+
+    private void Start()
+    {
+        victoryHolder.SetActive(false);
+        gameOverHolder.SetActive(false);    
     }
 
     [Button()]
