@@ -80,8 +80,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         victoryHolder.SetActive(false);
-        gameOverHolder.SetActive(false);    
+        gameOverHolder.SetActive(false);
+        DoStart();
     }
+    
+    protected virtual void DoStart(){}
 
     [Button()]
     protected virtual void StartVictory()

@@ -30,7 +30,7 @@ public class TutorialGameManager : GameManager
         base.DoAwake();
     }
 
-    private void Start()
+    protected override void DoStart()
     {
         cardLibrary.SetContent(cardsContent);
         partLibrary.SetContent(attacksContent, bodiesContent, basesContent, bonusStatsContent);
