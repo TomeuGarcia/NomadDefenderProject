@@ -89,7 +89,8 @@ public class DeckSelector : MonoBehaviour
 
     private void Init()
     {
-        int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+        //int numberOfUnlockedDecks = StarterDecksUnlocker.GetInstance().GetNumberofUnlockedDecks();
+        int numberOfUnlockedDecks = 2 + _gameProgressionStatus.Game.VictoriesCount;
         ICardSpawnService cardSpawnService = ServiceLocator.GetInstance().CardSpawnService;
 
         for (int i = 0; i < selectableDecks.Length; ++i)
