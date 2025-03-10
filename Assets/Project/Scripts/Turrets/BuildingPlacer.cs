@@ -170,7 +170,7 @@ public class BuildingPlacer : MonoBehaviour
         HideSelectedBuilding();
     }
 
-
+    public int PreviouslyPlacedCardPlayCost { get; private set; }
     private void TryPlaceBuilding(Tile tile)
     {
         int cardCost = selectedBuilding.BuildingCard.GetCardPlayCost();
@@ -187,6 +187,7 @@ public class BuildingPlacer : MonoBehaviour
         }
         else
         {
+            PreviouslyPlacedCardPlayCost = cardCost;
             PlaceSelectedBuilding(tile);
             return;
         }

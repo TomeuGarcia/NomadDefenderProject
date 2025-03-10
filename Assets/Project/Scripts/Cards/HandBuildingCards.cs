@@ -768,7 +768,7 @@ public class HandBuildingCards : MonoBehaviour
     
     private void SubtractCurrencyAndRemoveCard()
     {
-        int cardCost = selectedCard.GetCardPlayCost();
+        int cardCost = buildingPlacer.PreviouslyPlacedCardPlayCost;
         currencyCounter.SubtractCurrency(cardCost);
 
         selectedCard.EnableMouseInteraction(); // Do this to prevent collider in the way to place turrets (RESET)
