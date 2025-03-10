@@ -6,6 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "TurretPartsLibrary")]
 public class PartsLibrary : ScriptableObject
 {
+    private const int MAX_ITERATIONS = 10;
+    
+    
     [System.Serializable]
     public struct PartsByProgressionState<T>
     {
@@ -75,16 +78,30 @@ public class PartsLibrary : ScriptableObject
         }
         */
 
-        while (holderPartsSet.Count < totalAmount)
+        int iterations = 0;
+        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
         {
             holderPartsSet.Add(attacksByProgressionState.GetRandomPart());
+            ++iterations;
         }
 
+        TurretPartProjectileDataModel[] projectilesInSet = holderPartsSet.ToArray();
+        TurretPartProjectileDataModel[] projectiles = new TurretPartProjectileDataModel[totalAmount];
+        for (int i = 0; i < projectilesInSet.Length; ++i)
+        {
+            projectiles[i] = projectilesInSet[i];
+        }
+        for (int i = projectilesInSet.Length; i < totalAmount; ++i)
+        {
+            projectiles[i] = attacksByProgressionState.GetRandomPart();
+        }
+        
 
-        return holderPartsSet.ToArray();
+        return projectiles;
     }
 
 
+    
     // BODY PARTS
     private PartsByProgressionState<TurretPartBody> GetBodiesByProgressionState(NodeEnums.ProgressionState progressionState)
     {
@@ -151,13 +168,25 @@ public class PartsLibrary : ScriptableObject
         }
         */
 
-        while (holderPartsSet.Count < totalAmount)
+        int iterations = 0;
+        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
         {
             holderPartsSet.Add(passiveByProgressionState.GetRandomPart());
+            ++iterations;
         }
 
+        ATurretPassiveAbilityDataModel[] passivesInSet = holderPartsSet.ToArray();
+        ATurretPassiveAbilityDataModel[] passives = new ATurretPassiveAbilityDataModel[totalAmount];
+        for (int i = 0; i < passivesInSet.Length; ++i)
+        {
+            passives[i] = passivesInSet[i];
+        }
+        for (int i = passivesInSet.Length; i < totalAmount; ++i)
+        {
+            passives[i] = passiveByProgressionState.GetRandomPart();
+        }
 
-        return holderPartsSet.ToArray();
+        return passives;
     }
 
 
@@ -196,12 +225,26 @@ public class PartsLibrary : ScriptableObject
         }
         */
 
-        while (holderPartsSet.Count < totalAmount)
+        
+        int iterations = 0;
+        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
         {
             holderPartsSet.Add(bonusStatsByProgressionState.GetRandomPart());
+            ++iterations;
+        }
+
+        TurretStatsUpgradeModel[] turretStatsInSet = holderPartsSet.ToArray();
+        TurretStatsUpgradeModel[] turretStats = new TurretStatsUpgradeModel[totalAmount];
+        for (int i = 0; i < turretStatsInSet.Length; ++i)
+        {
+            turretStats[i] = turretStatsInSet[i];
+        }
+        for (int i = turretStatsInSet.Length; i < totalAmount; ++i)
+        {
+            turretStats[i] = bonusStatsByProgressionState.GetRandomPart();
         }
 
 
-        return holderPartsSet.ToArray();
+        return turretStats;
     }
 }
