@@ -10,8 +10,11 @@ using Random = UnityEngine.Random;
     menuName = SOAssetPaths.CARDS + "CardCollectionDataStorage")]
 public class CardCollectionDataStorage : ScriptableObject
 {
-    private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Cards/";
-    private string FileName => "CardCollection.json";
+    private string PathToFile_StreamingAssets => Application.streamingAssetsPath + "/JSONfiles/Cards/";
+    private string PathToFile_Persistent => Application.persistentDataPath + "/Data/";
+    private const string FILE_NAME = "CardCollection.json";
+    
+    
     
     [SerializeField] private TurretPartProjectileDataModel[] _projectiles;    
     [SerializeField] private ATurretPassiveAbilityDataModel[] _passiveAbilities;
@@ -83,7 +86,7 @@ public class CardCollectionDataStorage : ScriptableObject
 
     private void OnDisable()
     {
-        SaveData();
+        SaveData(false);
     }
 
     
@@ -94,7 +97,7 @@ public class CardCollectionDataStorage : ScriptableObject
     {
         CheckFile();
 
-        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile + FileName));
+        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile_Persistent + FILE_NAME));
 
         DataWrapper storedData = JsonUtility.FromJson<DataWrapper>(storedContent);
 
@@ -135,20 +138,26 @@ public class CardCollectionDataStorage : ScriptableObject
     
     
     [Button()]
-    private void SaveData()
+    private void DebugSaveData()
     {
-        DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);
-        
+        SaveData(true);
+    }
+    
+    public void SaveData(bool toPersistent)
+    {
+        DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);        
         string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
 
-        File.WriteAllText(PathToFile + FileName, contentToStore);
+        string path = (toPersistent ? PathToFile_Persistent : PathToFile_StreamingAssets) + FILE_NAME;
+        File.WriteAllText(path, contentToStore);
     }
 
 
     private void CheckFile()
     {
-        string directory = PathToFile;
-        string directoryWithFile = directory + FileName;
+        /*
+        string directory = PathToFile_StreamingAssets;
+        string directoryWithFile = directory + FILE_NAME;
         if (!Directory.Exists(directory) || !File.Exists(directoryWithFile))
         {
             Directory.CreateDirectory(directory);
@@ -157,6 +166,23 @@ public class CardCollectionDataStorage : ScriptableObject
             ResetDiscoveries();
             SaveData();
         }
+        */
+        
+        
+        if (Directory.Exists(PathToFile_Persistent) && File.Exists(PathToFile_Persistent + FILE_NAME))
+        {
+            return;
+        }
+        
+        if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
+        {
+            Directory.CreateDirectory(PathToFile_StreamingAssets);
+            SaveData(false);
+        }
+        
+        Directory.CreateDirectory(PathToFile_Persistent);
+        File.Copy(PathToFile_StreamingAssets + FILE_NAME, PathToFile_Persistent + FILE_NAME);
+        SaveData(true);
     }
 
 
@@ -166,7 +192,7 @@ public class CardCollectionDataStorage : ScriptableObject
         CheckFile();
         ResetDiscoveries();
         //DiscoverFirsts();
-        SaveData();
+        SaveData(false);
     }
     
     [Button()]

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
+using NodeEnums;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretPartsLibrary", menuName = SOAssetPaths.TURRET_PARTS_LIBRARIES + "TurretPartsLibrary")]
@@ -34,6 +36,65 @@ public class PartsLibrary : ScriptableObject
     private PartsByProgressionState<ATurretPassiveAbilityDataModel>[] _passivesByProgressionStates;
     private Dictionary<CardPartReplaceManager.BonusStatType, PartsByProgressionState<TurretStatsUpgradeModel>[]> _bonusStatsByProgressionStatesMap;
 
+    
+    
+    [Space(40)] 
+    [SerializeField] private NodeEnums.ProgressionState _debugProgressionState;
+    [SerializeField] private NodeEnums.UpgradeType _debugUpgradeType;
+
+    [Button()]
+    private void Debug()
+    {
+        if (_debugUpgradeType == UpgradeType.REPLACE_ATTACK_PART)
+        {
+            var upgrades = GetRandomTurretPartAttacks(3, 0, false, _debugProgressionState);
+            foreach (var upgrade in upgrades)
+            {
+                UnityEngine.Debug.Log(upgrade.name);
+            }
+        }
+        else if (_debugUpgradeType == UpgradeType.REPLACE_BASE_PART)
+        {
+            var upgrades = GetRandomTurretPartBaseAndPassive(3, 0, false, _debugProgressionState);
+            foreach (var upgrade in upgrades)
+            {
+                UnityEngine.Debug.Log(upgrade.name);
+            }
+        }
+        else if (_debugUpgradeType == UpgradeType.ADD_BONUS_STATS_PART_RANGE)
+        {
+            var upgrades = GetRandomTurretStatsUpgradeModel(3, 0, false, _debugProgressionState,
+                CardPartReplaceManager.BonusStatType.RANGE);
+            foreach (var upgrade in upgrades)
+            {
+                UnityEngine.Debug.Log(upgrade.name);
+            }
+        }
+        else if (_debugUpgradeType == UpgradeType.ADD_BONUS_STATS_PART_DAMAGE)
+        {
+            var upgrades = GetRandomTurretStatsUpgradeModel(3, 0, false, _debugProgressionState,
+                CardPartReplaceManager.BonusStatType.DAMAGE);
+            foreach (var upgrade in upgrades)
+            {
+                UnityEngine.Debug.Log(upgrade.name);
+            }
+        }
+        else if (_debugUpgradeType == UpgradeType.ADD_BONUS_STATS_PART_SHOTSPERSECOND)
+        {
+            var upgrades = GetRandomTurretStatsUpgradeModel(3, 0, false, _debugProgressionState,
+                CardPartReplaceManager.BonusStatType.SHOTS_PER_SECOND);
+            foreach (var upgrade in upgrades)
+            {
+                UnityEngine.Debug.Log(upgrade.name);
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.Log("DOESN'T EXIST");
+        }
+    }
+    
+    
 
     public void SetContent(AttackPartsLibraryContent newAttacksContent, BodyPartsLibraryContent newBodiesContent, 
         PassivesLibraryContent newPassivesContent, BonusStatsPartsLibraryContent newBonusStatsContent)
@@ -232,7 +293,7 @@ public class PartsLibrary : ScriptableObject
             holderPartsSet.Add(bonusStatsByProgressionState.GetRandomPart());
             ++iterations;
         }
-
+        
         TurretStatsUpgradeModel[] turretStatsInSet = holderPartsSet.ToArray();
         TurretStatsUpgradeModel[] turretStats = new TurretStatsUpgradeModel[totalAmount];
         for (int i = 0; i < turretStatsInSet.Length; ++i)

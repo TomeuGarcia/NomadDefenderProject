@@ -22,10 +22,11 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private Button _newGameButton;
     [SerializeField] private NewGameManager _newGameManager;
 
-    
-    
-    private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Settings/";
-    private string FileName => "Options.json";
+
+
+    private string PathToFile_StreamingAssets => Application.streamingAssetsPath + "/JSONfiles/Settings/";
+    private string PathToFile_Persistent => Application.persistentDataPath + "/Settings/";
+    private const string FILE_NAME = "Options.json";
     
 
     public void Init()
@@ -34,6 +35,7 @@ public class OptionsMenu : MonoBehaviour
         _musicSlider.onValueChanged.AddListener(SetMusicMixerVolume);
         _sfxSlider.onValueChanged.AddListener(SetSFXMixerVolume);
 
+        _gameDifficultyConfig.StartupInit();
 
         LoadOptions(
             out float masterSoundSliderValue,
@@ -64,7 +66,7 @@ public class OptionsMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        SaveOptions();
+        SaveOptions(true);
     }
 
     public void Show()
@@ -147,7 +149,7 @@ public class OptionsMenu : MonoBehaviour
     {
         CheckFile();
 
-        string storedContent = File.ReadAllText(PathToFile + FileName);
+        string storedContent = File.ReadAllText(PathToFile_Persistent + FILE_NAME);
         SaveDataWrapper storedData = JsonUtility.FromJson<SaveDataWrapper>(storedContent);
         storedData.CheckFixes();
 
@@ -159,7 +161,7 @@ public class OptionsMenu : MonoBehaviour
         unlockedGameDifficulties = storedData.UnlockedGameDifficulties;
     }
 
-    private void SaveOptions()
+    private void SaveOptions(bool toPersistent)
     {
         SaveDataWrapper dataToStore = new SaveDataWrapper(
             _masterSoundSlider.value,
@@ -169,18 +171,28 @@ public class OptionsMenu : MonoBehaviour
             _gameDifficultyConfig.CurrentGameDifficulty,
             _gameDifficultyConfig.UnlockedGameDifficulties
             );
-            
+
+        string path = (toPersistent ? PathToFile_Persistent : PathToFile_StreamingAssets) + FILE_NAME;
         string contentToStore = JsonUtility.ToJson(dataToStore);
-        File.WriteAllText(PathToFile + FileName, contentToStore);
+        File.WriteAllText(path, contentToStore);
     }
     
     private void CheckFile()
     {
-        string directory = PathToFile;
-        if (!Directory.Exists(directory))
+        if (Directory.Exists(PathToFile_Persistent) && File.Exists(PathToFile_Persistent + FILE_NAME))
         {
-            Directory.CreateDirectory(directory);
-            SaveOptions();
+            return;
         }
+        
+        if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
+        {
+            Directory.CreateDirectory(PathToFile_StreamingAssets);
+            SaveOptions(false);
+        }
+        
+        Directory.CreateDirectory(PathToFile_Persistent);
+        File.Copy(PathToFile_StreamingAssets + FILE_NAME, PathToFile_Persistent + FILE_NAME);
+        SaveOptions(true);
     }
+
 }

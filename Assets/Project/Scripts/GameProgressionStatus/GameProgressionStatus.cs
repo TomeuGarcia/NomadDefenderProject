@@ -12,8 +12,11 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     [Header("DEBUGGING")] 
     [SerializeField] private CardDeckAsset _debugAddDeckVictory;
     
-    private string PathToFile => Application.streamingAssetsPath + "/JSONfiles/Cards/";
-    private string FileName => "GameProgression.json";
+    
+    private string PathToFile_StreamingAssets => Application.streamingAssetsPath + "/JSONfiles/Cards/";
+    private string PathToFile_Persistent => Application.persistentDataPath + "/Data/";
+    private const string FILE_NAME = "GameProgression.json";
+    
     
     
     private readonly CaesarCipher _caesarCipher = new (735);
@@ -57,7 +60,7 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
 
     private void OnDisable()
     {
-        SaveData();
+        SaveData(true);
     }
 
 
@@ -78,7 +81,7 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     {
         CheckFile();
 
-        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile + FileName));
+        string storedContent = _caesarCipher.Decipher(File.ReadAllText(PathToFile_Persistent + FILE_NAME));
 
         GameStatusDataWrapper gameWrapper = JsonUtility.FromJson<GameStatusDataWrapper>(storedContent);
         Game = gameWrapper.MakeGameStatus(_decksLibrary.GetAllPossibleStarterDecks());
@@ -86,20 +89,25 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     
     
     [Button()]
-    private void SaveData()
+    private void DebugSaveData()
+    {
+        SaveData(true);
+    }
+    public void SaveData(bool toPersistent)
     {
         GameStatusDataWrapper dataToStore = new GameStatusDataWrapper(Game);
-        
         string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
 
-        File.WriteAllText(PathToFile + FileName, contentToStore);
+        string path = (toPersistent ? PathToFile_Persistent : PathToFile_StreamingAssets) + FILE_NAME;
+        File.WriteAllText(path, contentToStore);
     }
 
 
     private void CheckFile()
     {
-        string directory = PathToFile;
-        string directoryWithFile = directory + FileName;
+        /*
+        string directory = PathToFile_StreamingAssets;
+        string directoryWithFile = directory + FILE_NAME;
         if (!Directory.Exists(directory) || !File.Exists(directoryWithFile))
         {
             Directory.CreateDirectory(directory);
@@ -108,6 +116,26 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
             ResetStatus();
             SaveData();
         }
+        */
+        
+        if (Directory.Exists(PathToFile_Persistent) && File.Exists(PathToFile_Persistent + FILE_NAME))
+        {
+            Debug.Log("Already exists " + PathToFile_Persistent + FILE_NAME);
+            return;
+        }
+        
+        if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
+        {
+            Debug.Log("Created Streaming");
+            Directory.CreateDirectory(PathToFile_StreamingAssets);
+            SaveData(false);
+        }
+        
+        Debug.Log("Created Persistent " + PathToFile_Persistent);
+        Debug.Log("Copy from " + PathToFile_StreamingAssets + FILE_NAME);
+        Directory.CreateDirectory(PathToFile_Persistent);
+        File.Copy(PathToFile_StreamingAssets + FILE_NAME, PathToFile_Persistent + FILE_NAME);
+        SaveData(true);
     }
 
 

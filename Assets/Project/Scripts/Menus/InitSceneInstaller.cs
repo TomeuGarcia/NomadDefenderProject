@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -18,6 +19,12 @@ public class InitSceneInstaller : MonoBehaviour
 
     [Header("DEMO")] 
     [SerializeField] private DemoManagerConfig _demoManagerConfig;
+
+
+    [Header("STORAGE")] 
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
+    [SerializeField] private GameProgressionStatus _gameProgressionStatus;
+    
     
 
     private void Awake()
@@ -39,5 +46,11 @@ public class InitSceneInstaller : MonoBehaviour
         serviceLocator.DynamicProjectileShootingService = new DynamicProjectileShootingService();
 
         serviceLocator.GameDifficultySettingsSource = _gameDifficultyConfig;
+    }
+
+    private void OnApplicationQuit()
+    {
+        _cardCollectionDataStorage.SaveData(true);
+        _gameProgressionStatus.SaveData(true);
     }
 }

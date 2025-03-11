@@ -78,6 +78,4 @@ public class BonusStatsPartsLibraryContent : ScriptableObject
             _bonusStats_Range.LateBonusStats
         };
     }
-    
-    
 }

@@ -25,6 +25,10 @@ public class GameDifficultyConfig : ScriptableObject, IGameDifficultySettingsSou
     private HashSet<GameDifficultyType> _unlockedGameDifficulties;
     public GameDifficultyType[] UnlockedGameDifficulties => _unlockedGameDifficulties.ToArray();
 
+    public void StartupInit()
+    {
+        ResetState();
+    }
     public void Init(GameDifficultyType[] unlockedGameDifficulties)
     {
         _unlockedGameDifficulties = new HashSet<GameDifficultyType>(unlockedGameDifficulties);
