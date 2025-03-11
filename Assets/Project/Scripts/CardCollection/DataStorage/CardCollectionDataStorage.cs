@@ -177,6 +177,7 @@ public class CardCollectionDataStorage : ScriptableObject
         if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
         {
             Directory.CreateDirectory(PathToFile_StreamingAssets);
+            ResetDiscoveries();
             SaveData(false);
         }
         

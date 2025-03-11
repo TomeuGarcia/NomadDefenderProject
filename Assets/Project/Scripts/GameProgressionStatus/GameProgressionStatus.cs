@@ -133,6 +133,7 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
         {
             Debug.Log("Created Streaming");
             Directory.CreateDirectory(PathToFile_StreamingAssets);
+            ResetStatus();
             SaveData(false);
         }
         
