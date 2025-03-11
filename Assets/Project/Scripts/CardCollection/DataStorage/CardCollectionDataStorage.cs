@@ -194,6 +194,7 @@ public class CardCollectionDataStorage : ScriptableObject
         ResetDiscoveries();
         //DiscoverFirsts();
         SaveData(false);
+        SaveData(true);
     }
     
     [Button()]

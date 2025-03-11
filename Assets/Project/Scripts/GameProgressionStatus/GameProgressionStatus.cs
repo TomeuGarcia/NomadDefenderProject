@@ -72,6 +72,8 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     public void ResetEverything()
     {
         ResetStatus();
+        SaveData(true);
+        SaveData(false);
     }
 
     public void IncrementVictoryCount(CardDeckAsset starterDeck)
