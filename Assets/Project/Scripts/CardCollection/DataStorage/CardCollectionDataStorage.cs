@@ -174,10 +174,10 @@ public class CardCollectionDataStorage : ScriptableObject
             return;
         }
         
+        ResetDiscoveries();
         if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
         {
             Directory.CreateDirectory(PathToFile_StreamingAssets);
-            ResetDiscoveries();
             SaveData(false);
         }
         
