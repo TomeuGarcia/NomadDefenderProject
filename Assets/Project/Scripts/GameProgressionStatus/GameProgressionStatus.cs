@@ -129,9 +129,9 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
             return;
         }
         
+        ResetStatus();
         if (!Directory.Exists(PathToFile_StreamingAssets) || !File.Exists(PathToFile_StreamingAssets + FILE_NAME))
         {
-            ResetStatus();
             Debug.Log("Created Streaming");
             Directory.CreateDirectory(PathToFile_StreamingAssets);
             SaveData(false);
