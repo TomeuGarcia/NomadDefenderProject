@@ -194,7 +194,8 @@ public class CardPartReplaceManager : MonoBehaviour
         }
 
 
-        List<BuildingCard> randomCards = new List<BuildingCard>(GetRandomDeckCards());
+        List<BuildingCard> randomCards = new List<BuildingCard>( 
+            UpgradeRoomDeckCardsFilterer.GetRandomTurretCards(deckCards, numCards, upgradeCardHolder.CardsHolder));
         for (int i = 0; i < deckCards.Length; ++i)
         {
             if (!randomCards.Contains(deckCards[i]))
@@ -340,80 +341,6 @@ public class CardPartReplaceManager : MonoBehaviour
         PrintConsoleLine(TextTypes.INSTRUCTION, "Add permanent STATS to a Turret", true, 2f);
     }
 
-
-
-
-
-
-
-    private BuildingCard[] GetRandomDeckCards()
-    {
-        // Separate MAXed cards from NON-MAXed cards
-        List<BuildingCard> maxLevelCards = new List<BuildingCard>();
-        List<BuildingCard> notMaxLevelCards = new List<BuildingCard>();
-        
-        for (int cardI = 0; cardI < deckCards.Length; ++cardI)
-        {
-            if (deckCards[cardI].cardBuildingType == BuildingCard.CardBuildingType.TURRET)
-            {
-                
-                if (deckCards[cardI].GetCardLevel() < 3)
-                {
-                    notMaxLevelCards.Add(deckCards[cardI]);
-                }
-                else
-                {
-                    maxLevelCards.Add(deckCards[cardI]);
-                }
-            }            
-        }
-
-        BuildingCard[] chosenCards = new BuildingCard[numCards];
-        int chosenCardI = 0;
-
-        const int maximumCardsOfMaxLevel = 1;
-        int numMaxedCardsToAdd = Mathf.Min(maximumCardsOfMaxLevel, maxLevelCards.Count);
-        
-
-        // If not enough NON-MAXed cards, add MAXed cards
-        if (numMaxedCardsToAdd > 0)
-        {            
-            HashSet<int> randomMaxedCardsIndices = new HashSet<int>();
-
-            while (randomMaxedCardsIndices.Count < numMaxedCardsToAdd)
-            {
-                int randomIndex = Random.Range(0, maxLevelCards.Count);
-                randomMaxedCardsIndices.Add(randomIndex);
-            }
-            foreach (int index in randomMaxedCardsIndices)
-            {
-                chosenCards[chosenCardI] = maxLevelCards[index]; 
-                ++chosenCardI;
-            }
-        }
-
-        // Add NON-MAXed cards
-        int numRemainingCards = numCards - numMaxedCardsToAdd;
-        HashSet<int> randomNotMaxedCardsIndices = new HashSet<int>();
-        while (randomNotMaxedCardsIndices.Count < numRemainingCards)
-        {
-            int randomIndex = Random.Range(0, notMaxLevelCards.Count);
-            randomNotMaxedCardsIndices.Add(randomIndex);
-        }
-        foreach (int index in randomNotMaxedCardsIndices)
-        {
-            chosenCards[chosenCardI] = notMaxLevelCards[index];
-            ++chosenCardI;
-        }
-
-        // Set parent
-        for (int cardI = 0; cardI < numCards; ++cardI)
-        {
-            chosenCards[cardI].transform.SetParent(upgradeCardHolder.CardsHolder, false);
-        }
-
-        return chosenCards.ToArray();
-    }
 
 
     public void ProceedReplace()

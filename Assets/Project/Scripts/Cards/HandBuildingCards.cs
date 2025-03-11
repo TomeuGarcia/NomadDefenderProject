@@ -114,8 +114,9 @@ public class HandBuildingCards : MonoBehaviour
         ComputeHiddenPosition();
 
         isInRedrawPhase = true;
-        InitCardsInHandForRedraw();      
+        InitCardsInHandForRedraw();
 
+        buildingPlacer.SetHand(this);
         CheckCardsCost();
     }
 
@@ -150,7 +151,6 @@ public class HandBuildingCards : MonoBehaviour
             itCard.OnCardSelected -= CheckSelectCard;
         }
 
-        buildingPlacer.OnBuildingPlaced -= OnSelectedCardPlayed;
         currencyCounter.OnCurrencyAdded -= CheckCardsCost;
         currencyCounter.OnCurrencySpent -= CheckCardsCost;        
 
@@ -388,7 +388,6 @@ public class HandBuildingCards : MonoBehaviour
             itCard.CreateCopyBuildingPrefab(buildingsHolder, currencyCounter);
         }
 
-        buildingPlacer.OnBuildingPlaced += OnSelectedCardPlayed;
         currencyCounter.OnCurrencyAdded += CheckCardsCost;
         currencyCounter.OnCurrencySpent += CheckCardsCost;
 
@@ -749,9 +748,9 @@ public class HandBuildingCards : MonoBehaviour
         GameAudioManager.GetInstance().PlayCardSelected();
     }
 
-    private void OnSelectedCardPlayed()
+    public void OnSelectedCardPlayed(int cardCost)
     {
-        SubtractCurrencyAndRemoveCard();
+        SubtractCurrencyAndRemoveCard(cardCost);
 
         if (OnCardPlayed != null) OnCardPlayed();
 
@@ -766,9 +765,8 @@ public class HandBuildingCards : MonoBehaviour
     }
 
     
-    private void SubtractCurrencyAndRemoveCard()
+    private void SubtractCurrencyAndRemoveCard(int cardCost)
     {
-        int cardCost = buildingPlacer.PreviouslyPlacedCardPlayCost;
         currencyCounter.SubtractCurrency(cardCost);
 
         selectedCard.EnableMouseInteraction(); // Do this to prevent collider in the way to place turrets (RESET)

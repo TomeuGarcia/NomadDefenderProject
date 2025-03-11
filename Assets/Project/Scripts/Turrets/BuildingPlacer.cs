@@ -27,6 +27,7 @@ public class BuildingPlacer : MonoBehaviour
     private bool isDisablePlacingDelayed = false;
 
     public int PlacedBuildingsCount => placedBuildings.Count;
+    private HandBuildingCards _handBuildingCards;
 
 
     public delegate void BuildingPlacerAction();
@@ -72,6 +73,10 @@ public class BuildingPlacer : MonoBehaviour
         selectedBuilding = null;
     }
 
+    public void SetHand(HandBuildingCards handBuildingCards)
+    {
+        _handBuildingCards = handBuildingCards;
+    }
 
     public void EnablePlacing(BuildingCard selectedBuildingCard)
     {
@@ -170,7 +175,6 @@ public class BuildingPlacer : MonoBehaviour
         HideSelectedBuilding();
     }
 
-    public int PreviouslyPlacedCardPlayCost { get; private set; }
     private void TryPlaceBuilding(Tile tile)
     {
         int cardCost = selectedBuilding.BuildingCard.GetCardPlayCost();
@@ -187,8 +191,7 @@ public class BuildingPlacer : MonoBehaviour
         }
         else
         {
-            PreviouslyPlacedCardPlayCost = cardCost;
-            PlaceSelectedBuilding(tile);
+            PlaceSelectedBuilding(tile, cardCost);
             return;
         }
 
@@ -203,7 +206,7 @@ public class BuildingPlacer : MonoBehaviour
         return building.validTileType == tile.tileType;
     }
 
-    private void PlaceSelectedBuilding(Tile tile)
+    private void PlaceSelectedBuilding(Tile tile, int cardCost)
     {
         tile.isOccupied = true;
 
@@ -233,7 +236,8 @@ public class BuildingPlacer : MonoBehaviour
         
         selectedBuildingCard = null;
         selectedBuilding = null;
-        
+
+        _handBuildingCards.OnSelectedCardPlayed(cardCost);
         if (OnBuildingPlaced != null) OnBuildingPlaced();
 
     }
