@@ -76,11 +76,14 @@ public class ResultsScreen : MonoBehaviour
     
     private void CheckAchievements()
     {
-        AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken,
-            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+        if (RunStateData.Victory)
+        {
+            AchievementDefinitions.VictoryWithLessThanDamage.Check(RunStateData.TotalDamageTaken,
+                ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
         
-        AchievementDefinitions.VictoryHardRunNoDamage.Check(RunStateData.TotalDamageTaken,
-            ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+            AchievementDefinitions.VictoryHardRunNoDamage.Check(RunStateData.TotalDamageTaken,
+                ServiceLocator.GetInstance().GameDifficultySettingsSource.CurrentGameDifficulty);
+        }
     }
 
     private void UpdateDeckHighscore()

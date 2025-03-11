@@ -127,36 +127,17 @@ public class PartsLibrary : ScriptableObject
     {
         totalAmount = Mathf.Min(totalAmount, _attacksByProgressionStates.Length);
         PartsByProgressionState<TurretPartProjectileDataModel> attacksByProgressionState = GetAttacksByProgressionState(progressionState);
-        HashSet<TurretPartProjectileDataModel> holderPartsSet = new HashSet<TurretPartProjectileDataModel>();
 
-        /*
-        if (perfect)
-        {
-            while (holderPartsSet.Count < amountPerfect)
-            {
-                holderPartsSet.Add(attacksByProgressionState.GetRandomPerfectPart());
-            }
-        }
-        */
-
-        int iterations = 0;
-        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
-        {
-            holderPartsSet.Add(attacksByProgressionState.GetRandomPart());
-            ++iterations;
-        }
-
-        TurretPartProjectileDataModel[] projectilesInSet = holderPartsSet.ToArray();
-        TurretPartProjectileDataModel[] projectiles = new TurretPartProjectileDataModel[totalAmount];
-        for (int i = 0; i < projectilesInSet.Length; ++i)
-        {
-            projectiles[i] = projectilesInSet[i];
-        }
-        for (int i = projectilesInSet.Length; i < totalAmount; ++i)
-        {
-            projectiles[i] = attacksByProgressionState.GetRandomPart();
-        }
         
+        TurretPartProjectileDataModel[] projectiles = new TurretPartProjectileDataModel[totalAmount];
+
+        List<TurretPartProjectileDataModel> possibleProjectiles = new(attacksByProgressionState.parts);
+        for (int i = 0; i < totalAmount; ++i)
+        {
+            int randomIndex = Random.Range(0, possibleProjectiles.Count);
+            projectiles[i] = possibleProjectiles[randomIndex];
+            possibleProjectiles.RemoveAt(randomIndex);
+        }
 
         return projectiles;
     }
@@ -217,34 +198,16 @@ public class PartsLibrary : ScriptableObject
     {
         totalAmount = Mathf.Min(totalAmount, _passivesByProgressionStates.Length);
         PartsByProgressionState<ATurretPassiveAbilityDataModel> passiveByProgressionState = GetBasesAndPassivesByProgressionState(progressionState);
-        HashSet<ATurretPassiveAbilityDataModel> holderPartsSet = new HashSet<ATurretPassiveAbilityDataModel>();
 
-        /*
-        if (perfect)
-        {
-            while (holderPartsSet.Count < amountPerfect)
-            {
-                holderPartsSet.Add(passiveByProgressionState.GetRandomPerfectPart());
-            }
-        }
-        */
-
-        int iterations = 0;
-        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
-        {
-            holderPartsSet.Add(passiveByProgressionState.GetRandomPart());
-            ++iterations;
-        }
-
-        ATurretPassiveAbilityDataModel[] passivesInSet = holderPartsSet.ToArray();
+        
         ATurretPassiveAbilityDataModel[] passives = new ATurretPassiveAbilityDataModel[totalAmount];
-        for (int i = 0; i < passivesInSet.Length; ++i)
+
+        List<ATurretPassiveAbilityDataModel> possiblePassives = new(passiveByProgressionState.parts);
+        for (int i = 0; i < totalAmount; ++i)
         {
-            passives[i] = passivesInSet[i];
-        }
-        for (int i = passivesInSet.Length; i < totalAmount; ++i)
-        {
-            passives[i] = passiveByProgressionState.GetRandomPart();
+            int randomIndex = Random.Range(0, possiblePassives.Count);
+            passives[i] = possiblePassives[randomIndex];
+            possiblePassives.RemoveAt(randomIndex);
         }
 
         return passives;
@@ -274,37 +237,18 @@ public class PartsLibrary : ScriptableObject
         totalAmount = Mathf.Min(totalAmount, _bonusStatsByProgressionStatesMap[bonusStatsTypes].Length);
         PartsByProgressionState<TurretStatsUpgradeModel> bonusStatsByProgressionState = 
             GetBonusStatsByProgressionState(progressionState, bonusStatsTypes);
-        HashSet<TurretStatsUpgradeModel> holderPartsSet = new HashSet<TurretStatsUpgradeModel>();
 
-        /*
-        if (perfect)
-        {
-            while (holderPartsSet.Count < amountPerfect)
-            {
-                holderPartsSet.Add(bonusStatsByProgressionState.GetRandomPerfectPart());
-            }
-        }
-        */
-
-        
-        int iterations = 0;
-        while (holderPartsSet.Count < totalAmount && iterations < MAX_ITERATIONS)
-        {
-            holderPartsSet.Add(bonusStatsByProgressionState.GetRandomPart());
-            ++iterations;
-        }
-        
-        TurretStatsUpgradeModel[] turretStatsInSet = holderPartsSet.ToArray();
+                
         TurretStatsUpgradeModel[] turretStats = new TurretStatsUpgradeModel[totalAmount];
-        for (int i = 0; i < turretStatsInSet.Length; ++i)
-        {
-            turretStats[i] = turretStatsInSet[i];
-        }
-        for (int i = turretStatsInSet.Length; i < totalAmount; ++i)
-        {
-            turretStats[i] = bonusStatsByProgressionState.GetRandomPart();
-        }
 
+        List<TurretStatsUpgradeModel> possibleBonusStats = new(bonusStatsByProgressionState.parts);
+        for (int i = 0; i < totalAmount; ++i)
+        {
+            int randomIndex = Random.Range(0, possibleBonusStats.Count);
+            turretStats[i] = possibleBonusStats[randomIndex];
+            possibleBonusStats.RemoveAt(randomIndex);
+        }
+        
 
         return turretStats;
     }
