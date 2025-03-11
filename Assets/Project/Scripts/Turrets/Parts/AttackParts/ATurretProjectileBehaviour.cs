@@ -198,10 +198,11 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
 
     protected TurretDamageAttack CreateDamageAttack(Enemy targetEnemy)
-    { 
-        TurretDamageAttack damageAttack = new TurretDamageAttack(this, targetEnemy, ComputeDamage());
+    {
+        bool isQueuedDamage = QueuesDamageToEnemies();
+        TurretDamageAttack damageAttack = new TurretDamageAttack(this, targetEnemy, ComputeDamage(), isQueuedDamage);
 
-        if (QueuesDamageToEnemies())
+        if (isQueuedDamage)
         {
             _shootingLifetimeCycle.OnBeforeDamagingEnemy(damageAttack);
         }

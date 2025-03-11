@@ -29,7 +29,7 @@ public class ResultScreenEnemyInteractions : MonoBehaviour
             return;
         }
         
-        _enemy.TakeDamage(new TurretDamageAttack(null, _enemy, _damageToDeal), OnDamageDealtToEnemy);
+        _enemy.TakeDamage(new TurretDamageAttack(null, _enemy, _damageToDeal, false), OnDamageDealtToEnemy);
         GameAudioManager.GetInstance().PlayCardInfoHidden();
     }
 

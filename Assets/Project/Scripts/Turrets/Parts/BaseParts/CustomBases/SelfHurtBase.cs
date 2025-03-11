@@ -202,8 +202,7 @@ public class SelfHurtBase : TurretPartBase_Prefab
 
         foreach (Enemy enemy in enemies)
         {
-            TurretDamageAttack explosionDamageAttack = new TurretDamageAttack(null, enemy, explosionDamage);
-            enemy.QueueDamage(explosionDamageAttack);
+            TurretDamageAttack explosionDamageAttack = new TurretDamageAttack(null, enemy, explosionDamage, false);
             enemy.TakeDamage(explosionDamageAttack, DamageEnemiesResult);
         }
     }

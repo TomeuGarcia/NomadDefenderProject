@@ -76,7 +76,6 @@ public class HomingChainingProjectile : HomingProjectile
             Enemy chainedEnemy = _chainTargetedEnemies[i];
             
             _chainTargetedDamage[i] = CreateDamageAttack(chainedEnemy);
-                //new TurretDamageAttack(_damageAttack.ProjectileSource, chainedEnemy, _damageAttack.Damage);
             chainedEnemy.QueueDamage(_chainTargetedDamage[i]);
         }
         
@@ -88,7 +87,7 @@ public class HomingChainingProjectile : HomingProjectile
         DamageTargetEnemy(_chainTargetedDamage[_currentChainedTarget]);
         ++_currentChainedTarget;
     }
-
+    
 
     protected override int ComputeDamage()
     {

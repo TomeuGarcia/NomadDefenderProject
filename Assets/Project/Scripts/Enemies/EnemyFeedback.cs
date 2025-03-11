@@ -66,8 +66,6 @@ public class EnemyFeedback : MonoBehaviour
     private void IncreaseArmor()
     {
         //play inc sound
-
-
         foreach (MeshRenderer mesh in armorCovers)
         {
             armorBrightnesLerp = MaterialLerp.FloatLerp(matLerpsData[1], mesh.materials);
@@ -98,6 +96,7 @@ public class EnemyFeedback : MonoBehaviour
             StartCoroutine(armorGainLerp);
         }
     }
+    
     private void LoseArmor()
     {
         //play break sound

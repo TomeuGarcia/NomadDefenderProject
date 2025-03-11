@@ -81,6 +81,7 @@ public class ConsoleCommentary_OWMap : AOWMapLifetimeListener
         StopAllCoroutines();
         _consoleDialog.Clear();
         _queuedComments.Clear();
+        _processingQueuedComments = false;
     }
 
     private IEnumerator DelayedClearTexts(float delay)

@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     
     // Queued damage
     private int queuedDamage = 0;
+    private bool mustDieFromQueuedDamage;
 
     public bool IsFakeEnemy { get; protected set; } = false;
     private bool collidedWithLocation = false;
@@ -120,6 +122,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         collidedWithLocation = false;
 
         queuedDamage = 0;
+        mustDieFromQueuedDamage = false;
 
         ResetStats();
 
@@ -267,15 +270,18 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         bool brokeArmor = hadArmor && !healthSystem.HasArmor();
         int damageTaken = previousHealth - healthSystem.health;
         int armorDamageTaken = previousArmor - healthSystem.armor;
-        
-        
-        RemoveQueuedDamage(damageAttack.Damage);
+
+        if (damageAttack.IsQueuedDamage)
+        {
+            RemoveQueuedDamage(damageAttack.Damage);
+        }
 
         _meshHolder.localScale = originalMeshLocalScale;
         _meshHolder.DOKill(true);
         _meshHolder.DOPunchScale(originalMeshLocalScale * -0.3f, 0.2f, 4);
 
-        bool gotKilled = healthSystem.IsDead();
+
+        bool gotKilled = healthSystem.IsDead() || mustDieFromQueuedDamage;
         if (gotKilled && !_initializedWithoutFunctionality)
         {
             Die();
@@ -355,10 +361,12 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         _activeEnemiesTracker?.RemoveActiveEnemy(this);
     }
 
-
     public virtual int QueueDamage(TurretDamageAttack damageAttack)
     {
         queuedDamage += damageAttack.Damage;
+
+        mustDieFromQueuedDamage |= DiesFromQueuedDamage();
+        
         return damageAttack.Damage;
     }
 
@@ -395,10 +403,9 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void AddHealth(int healthToAdd)
     {
-        
         healthSystem.Heal(healthToAdd);
         healthHUD.Show();
-
+        RemoveQueuedDamage(healthToAdd);
     }
 
     public virtual void AddArmor(int armorToAdd)

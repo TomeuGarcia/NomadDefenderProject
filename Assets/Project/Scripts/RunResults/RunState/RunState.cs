@@ -117,7 +117,7 @@ public class RunState : ScriptableObject,
     public void IncrementBattleVictories(bool perfectDefense)
     {
         ++BattleVictories;
-        if (TotalDamageTaken <= 0)
+        if (perfectDefense)
         {
             ++PerfectDefenseBattleVictories;
         }

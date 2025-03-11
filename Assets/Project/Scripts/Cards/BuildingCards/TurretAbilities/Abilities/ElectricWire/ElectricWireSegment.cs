@@ -204,7 +204,7 @@ public class ElectricWireSegment : RecyclableObject
 
     private void ApplyDamageToEnemy(Enemy enemy)
     {
-        TurretDamageAttack damageAttack = new TurretDamageAttack(null, enemy, _damage);
+        TurretDamageAttack damageAttack = new TurretDamageAttack(null, enemy, _damage, false);
         enemy.TakeDamage(damageAttack, OnAfterEnemyReceivingDamage);
         enemy.GetStunned(_stunDuration);
     }
