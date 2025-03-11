@@ -60,6 +60,11 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
 
     private void OnDisable()
     {
+        if(Game == null)
+        {
+            ResetStatus();
+
+        }
         SaveData(true);
     }
 
