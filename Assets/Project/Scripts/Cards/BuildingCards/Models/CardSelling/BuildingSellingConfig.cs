@@ -11,7 +11,7 @@ public class BuildingSellingConfig
     public float PlayValueMultiplier => _playValueMultiplier;
     public float UpgradesValueMultiplier => _upgradesValueMultiplier;
     
-    public int ExtraAddAmount = 0;
+    public int ExtraAddAmount { get; private set; } = 0;
     
 
     public Action OnExtraAddAmountUpdated;
