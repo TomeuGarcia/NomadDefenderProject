@@ -76,7 +76,7 @@ public class SellBuildingMenu : MonoBehaviour
 
     private void DoUpdateSellValueText()
     {
-        _sellTurretSellValueText.text = '+' + (_sellValue+ _sellingConfig.ExtraAddAmount).ToString() ;
+        _sellTurretSellValueText.text = '+' + (_sellValue + _sellingConfig.ExtraAddAmount).ToString() ;
     }
 
     public IEnumerator PlayOpenAnimation()
@@ -128,7 +128,7 @@ public class SellBuildingMenu : MonoBehaviour
         }
         
         _currencyIcon.color = _sellTurretSellValueText.color = Color.white;
-        BuildingSellingController.Instance.SellBuilding(_building, _sellValue);
+        BuildingSellingController.Instance.SellBuilding(_building, _sellValue + _sellingConfig.ExtraAddAmount);
     }
     private void OnButtonHovered()
     {
