@@ -13,6 +13,10 @@ public class FacilityManager : MonoBehaviour
     [SerializeField] private FIScreenButton _creditsButton;
     [SerializeField] private List<AFacilityInteractable> _startOnInteractables = new();
 
+    [Header("MEMORY STORAGE")]
+    [SerializeField] private CardCollectionDataStorage _cardCollectionDataStorage;
+    [SerializeField] private GameProgressionStatus _gameProgressionStatus;
+    
     private CursorChanger _cursorChanger;
 
     private bool _isNewGame;
@@ -59,6 +63,10 @@ public class FacilityManager : MonoBehaviour
         _cardCollectionButton.Init(showCardCollection, this);
         _optionsButton.Init(showCardCollection, this);
         _creditsButton.Init(showCardCollection, this);
+        
+        
+        _cardCollectionDataStorage.SaveData(true);
+        _gameProgressionStatus.SaveData(true);
     }
 
     private void OnEnable()

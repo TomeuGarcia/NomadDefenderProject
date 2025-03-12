@@ -102,6 +102,8 @@ public class GameProgressionStatus : ScriptableObject, IGameProgressionStatus, I
     }
     public void SaveData(bool toPersistent)
     {
+        CheckFile();
+        
         GameStatusDataWrapper dataToStore = new GameStatusDataWrapper(Game);
         string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
 

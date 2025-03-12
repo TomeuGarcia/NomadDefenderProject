@@ -145,6 +145,8 @@ public class CardCollectionDataStorage : ScriptableObject
     
     public void SaveData(bool toPersistent)
     {
+        CheckFile();
+        
         DataWrapper dataToStore = new DataWrapper(_discoveredProjectiles, _discoveredPassiveAbilities);        
         string contentToStore = _caesarCipher.Cipher(JsonUtility.ToJson(dataToStore));
 
