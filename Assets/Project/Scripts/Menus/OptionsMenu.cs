@@ -64,6 +64,11 @@ public class OptionsMenu : MonoBehaviour
         _newGameButton.onClick.AddListener(_newGameManager.Show);
     }
 
+    public float GetCombinedSFXandMasterVolumeCoef()
+    {
+        return _masterSoundSlider.value * _sfxSlider.value;
+    }
+
     private void OnDestroy()
     {
         SaveOptions(true);

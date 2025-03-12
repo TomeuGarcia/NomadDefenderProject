@@ -33,6 +33,8 @@ public class PauseMenu : MonoBehaviour
     public bool ShowingOptions => optionsMenuUI.gameObject.activeInHierarchy;
     public bool AnyOptionsIsBeingShown => ShowingOptions || _newGamManager.IsBeingShown;
 
+    public OptionsMenu OptionsMenu => optionsMenuUI;
+
 
     private static Color fadedInColor = Color.white;
     private static Color fadedOutColor = new Color(0.6f, 0.6f, 0.6f);

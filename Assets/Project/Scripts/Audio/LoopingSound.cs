@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LoopingSound : MonoBehaviour
@@ -22,7 +20,7 @@ public class LoopingSound : MonoBehaviour
     }
 
     public void StartPlaying()
-    {        
+    {
         if (pauseMode == PauseMode.SILENT)
         {
             if (!audioSource.isPlaying) audioSource.Play();
@@ -55,5 +53,10 @@ public class LoopingSound : MonoBehaviour
         {
             stopSequence.AppendCallback(() => audioSource.Stop());
         }
+    }
+
+    private void Update()
+    {
+        audioSource.volume = volume * PauseMenu.GetInstance().OptionsMenu.GetCombinedSFXandMasterVolumeCoef();
     }
 }
