@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using NodeEnums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -108,6 +109,13 @@ public class MapSceneLoader : MonoBehaviour
 
     public void LoadBattleScene(NodeEnums.BattleType battleType, int numLocationsToDefend)
     {
+        numLocationsToDefend = Mathf.Clamp(numLocationsToDefend, 1, 2);
+        string sceneName = GetBattleSceneName(battleType, numLocationsToDefend);
+        StartScene(sceneName);
+    }
+
+    private string GetBattleSceneName(NodeEnums.BattleType battleType, int numLocationsToDefend)
+    {
         SceneNames[] availableBattleScenes;
         SceneNames[] battleScenes;
 
@@ -157,11 +165,34 @@ public class MapSceneLoader : MonoBehaviour
             //Debug.Log("Refilling battle scenes");
         }
 
-
-        //Debug.Log("Loading Battle scene: " + sceneName);
-        StartScene(sceneName);
+        if (ValidateSceneExists(sceneName))
+        {
+            return sceneName;
+        }
+        else
+        {
+            return GetBattleSceneName(battleType, numLocationsToDefend); // recursive call
+        }
     }
 
+    private bool ValidateSceneExists(string sceneName)
+    {
+        int sceneCount = SceneManager.sceneCountInBuildSettings;     
+        for(int i = 0; i < sceneCount; ++i)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+
+            if (scenePath.Contains(sceneName))
+            {
+                return true;
+            }
+        }
+
+        Debug.LogError("Scene not found: " + sceneName);
+        return false;
+    }
+    
+    
     public void LoadTutorialScene()
     {
         currentSceneName = "InBattleTutorial";
@@ -199,4 +230,20 @@ public class MapSceneLoader : MonoBehaviour
         SceneManager.sceneUnloaded -= InvokeOnSceneFromMapUnloaded;
     }
 
+
+
+    [Space(40)]
+    [Header("DEBUG")] 
+    [SerializeField] private NodeEnums.BattleType _debugBattleType;
+    [SerializeField, Range(1, 2)] private int _debugNumLocationsToDefend = 1;
+    [SerializeField, Min(1)] private int _debugPollTimes = 1;
+
+    [Button()]
+    private void DebugPollBattleSceneName()
+    {
+        for (int i = 0; i < _debugPollTimes; ++i)
+        {
+            Debug.Log("Polled: " + GetBattleSceneName(_debugBattleType, _debugNumLocationsToDefend));
+        }
+    }
 }
