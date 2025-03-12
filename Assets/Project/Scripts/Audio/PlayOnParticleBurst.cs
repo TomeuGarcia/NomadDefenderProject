@@ -10,7 +10,14 @@ public class PlayOnParticleBurst : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] List<RandomSoundsCollection.RandomSound> soundPool = new List<RandomSound>();
 
+    private OptionsMenu _optionsMenu;
+
     private bool allParticlesDied = true;
+
+    private void Awake()
+    {
+        _optionsMenu = PauseMenu.GetInstance().OptionsMenu;
+    }
 
     void Update()
     {
@@ -20,7 +27,8 @@ public class PlayOnParticleBurst : MonoBehaviour
 
             int soundIndex = Random.Range(0, soundPool.Count);
             audioSource.clip = soundPool[soundIndex].audioClip;
-            audioSource.volume = Random.Range(soundPool[soundIndex].minVolume, soundPool[soundIndex].maxVolume);
+            audioSource.volume = Random.Range(soundPool[soundIndex].minVolume, soundPool[soundIndex].maxVolume)
+                * _optionsMenu.GetCombinedSFXandMasterVolumeCoef();
             audioSource.pitch = Random.Range(soundPool[soundIndex].minPitch, soundPool[soundIndex].maxPitch);
             audioSource.Play();
         }

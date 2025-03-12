@@ -12,11 +12,15 @@ public class LoopingSound : MonoBehaviour
     [SerializeField] private float fadeOutDuration;
     [SerializeField, Range(0, 1)] private float volume;
 
+    private OptionsMenu _optionsMenu;
+
     private void Awake()
     {
         audioSource.clip = audioClip;
         audioSource.loop = true;
         audioSource.volume = 0f;
+
+        _optionsMenu = PauseMenu.GetInstance().OptionsMenu;
     }
 
     public void StartPlaying()
@@ -57,6 +61,6 @@ public class LoopingSound : MonoBehaviour
 
     private void Update()
     {
-        audioSource.volume = volume * PauseMenu.GetInstance().OptionsMenu.GetCombinedSFXandMasterVolumeCoef();
+        audioSource.volume = volume * _optionsMenu.GetCombinedSFXandMasterVolumeCoef();
     }
 }
