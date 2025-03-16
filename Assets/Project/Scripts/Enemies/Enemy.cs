@@ -317,7 +317,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
 
     public virtual void GetStunned(float duration)
     {
-        if (IsDead() || _ignoreStunned) return;
+        if (!isActiveAndEnabled || IsDead() || _ignoreStunned) return;
         pathFollower.PauseForDuration(duration);
         StartCoroutine(DoIgnoreStunned(duration));
     }
@@ -365,9 +365,27 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
     {
         queuedDamage += damageAttack.Damage;
 
-        mustDieFromQueuedDamage |= DiesFromQueuedDamage();
+        bool diesFromQueuedDamage = DiesFromQueuedDamage();
+        if (!mustDieFromQueuedDamage && diesFromQueuedDamage)
+        {
+            StartCoroutine(EnsureDelayedKillByQueuedDamage());
+        }
+        
+        mustDieFromQueuedDamage |= diesFromQueuedDamage;
         
         return damageAttack.Damage;
+    }
+
+    private IEnumerator EnsureDelayedKillByQueuedDamage()
+    {
+        const float delayPreventKillFail = 0.5f;
+        yield return new WaitForSeconds(delayPreventKillFail);
+        bool killFailed = !healthSystem.IsDead();
+        if (killFailed)
+        {
+            Debug.Log("Kill Fail");
+            Die();
+        }
     }
 
     public virtual void RemoveQueuedDamage(int amount) // use if enemy is ever healed

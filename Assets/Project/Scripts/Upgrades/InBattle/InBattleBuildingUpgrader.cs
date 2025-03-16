@@ -164,6 +164,11 @@ public abstract class InBattleBuildingUpgrader : MonoBehaviour, InBattleUpgradeC
 
     private void Update()
     {
+        if (!buildingOwnerWasPlaced)
+        {
+            return;
+        }
+        
         bool outOfArea = !IsHoveringWindow();
 
         if (outOfArea && Input.GetMouseButtonDown(0) && visible || Input.GetMouseButtonDown(1) || Input.mouseScrollDelta.y != lastScroll)

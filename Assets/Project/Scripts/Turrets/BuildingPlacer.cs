@@ -150,6 +150,19 @@ public class BuildingPlacer : MonoBehaviour
         dragAndDropCardCoroutine = null;
     }
 
+    private void Update() // To fix bug
+    {
+        bool turretPlacingIsBugged =
+            !placingEnabled &&
+            currentHoveredTile != null &&
+            selectedBuildingCard != null;
+
+        if (turretPlacingIsBugged && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            TryPlaceBuilding(currentHoveredTile);
+        }
+    }
+
 
     private void ShowBuildingOnTilePreview(Tile tile)
     {

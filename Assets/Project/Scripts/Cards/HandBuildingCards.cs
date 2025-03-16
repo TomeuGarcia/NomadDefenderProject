@@ -680,17 +680,8 @@ public class HandBuildingCards : MonoBehaviour
         selectedCard.EnableMouseInteraction(); // Do this to prevent collider in the way to place turrets (RESET)
         SetStandardCard(selectedCard);
 
-        if (AreCardsBeingAdded) 
-        {
-            selectedCard.RootCardTransform.DOMove(card.ShownRootPosition, 0.1f)
-                .SetUpdate(true);
-        }
-        else
-        {
-            selectedCard.RootCardTransform.DOMove(card.HiddenRootPosition, 0.1f)
-                .SetUpdate(true);
-        }
-        
+        Vector3 cardFinalPosition = AreCardsBeingAdded ? card.ShownRootPosition : card.HiddenRootPosition;
+        selectedCard.StartFixRepositioning(cardFinalPosition, 0.1f);
 
         //ShowHand(true);
         //StartCoroutine(DelayedTryHideHandAfterDraw());
@@ -727,7 +718,7 @@ public class HandBuildingCards : MonoBehaviour
 
         selectedCard = card;
         selectedCard.SelectedState(true);
-        selectedCard.DisableMouseInteraction(); // Do this to prevent collider in the way to place turrets
+        //selectedCard.DisableMouseInteraction(); // Do this to prevent collider in the way to place turrets
         selectedCard.OnDragMouseUp += ResetAndSetStandardCardAfterDragBack;
 
         //if (selectedCard.isShowingInfo)

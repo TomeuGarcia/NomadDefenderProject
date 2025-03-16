@@ -4,6 +4,7 @@ using UnityEngine;
 public class HomingProjectile : ATurretProjectileBehaviour
 {
     [SerializeField] protected Lerp lerp;
+    protected bool _disappearOnKill = true;
 
     protected bool TargetedEnemyIsStillValid => _targetEnemy != null && _targetEnemy.gameObject.activeInHierarchy;
     
@@ -37,7 +38,7 @@ public class HomingProjectile : ATurretProjectileBehaviour
     protected IEnumerator WaitForLerpFinish()
     {
         yield return new WaitUntil(() => lerp.finishedPositionLerp);
-        if (_targetEnemy.IsDead())
+        if (_disappearOnKill && _targetEnemy.IsDead())
         {
             Disappear();
             yield break;

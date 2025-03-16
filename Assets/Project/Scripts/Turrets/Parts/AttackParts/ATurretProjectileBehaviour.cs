@@ -153,17 +153,11 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
 
         for (int collidersI = 0; collidersI < colliders.Length; ++collidersI)
         {
-            Enemy enemy = null;
-            colliders[collidersI].gameObject.TryGetComponent<Enemy>(out enemy);
-            if (enemy == null)
+            if (!colliders[collidersI].gameObject.TryGetComponent<Enemy>(out Enemy enemy))
             {
                 continue;
             }
 
-            if(enemy == null)
-            {
-                Debug.Log("enemy IS NULL");
-            }
             if(targetedEnemy == null)
             {
                 Debug.Log("targetedEnemy IS NULL");
@@ -177,17 +171,12 @@ public abstract class ATurretProjectileBehaviour : RecyclableObject
             }
         }
 
-        if (enemies.Count == 0) return enemies.ToArray();
-
-        enemies.Sort(SortByClosestToProjectile);
-
-        Enemy[] nearestEnemies = new Enemy[Mathf.Min(maxEnemies, enemies.Count)];
-        for (int i = 0; i < nearestEnemies.Length; ++i)
+        if (enemies.Count > 1)
         {
-            nearestEnemies[i] = enemies[i];
+            enemies.Sort(SortByClosestToProjectile);
         }
 
-        return nearestEnemies;
+        return enemies.ToArray();
     }
 
 

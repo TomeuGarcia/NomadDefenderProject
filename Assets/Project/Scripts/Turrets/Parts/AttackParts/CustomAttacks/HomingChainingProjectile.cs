@@ -10,7 +10,7 @@ public class HomingChainingProjectile : HomingProjectile
     [SerializeField, Min(1)] private int maxChainedTargets = 1;
     [SerializeField, Min(0f)] private float chainRadius;
 
-    private int _currentChainedTarget;
+    private int _currentChainedTargetIndex;
     private Enemy[] _chainTargetedEnemies;
     private TurretDamageAttack[] _chainTargetedDamage;
     private bool _isChaining;
@@ -21,8 +21,9 @@ public class HomingChainingProjectile : HomingProjectile
     protected override void OnShotInitialized()
     {
         base.OnShotInitialized();
+        _disappearOnKill = false;
         _isChaining = false;
-        _currentChainedTarget = 0;
+        _currentChainedTargetIndex = 0;
     }
 
     protected override void OnEnemyReached()
@@ -51,15 +52,15 @@ public class HomingChainingProjectile : HomingProjectile
 
 
         int chainTargetsCount = _chainTargetedEnemies.Length;
-        if (_currentChainedTarget < chainTargetsCount)
+        if (_currentChainedTargetIndex < chainTargetsCount)
         {
-            _targetEnemy = _chainTargetedEnemies[_currentChainedTarget];
+            _targetEnemy = _chainTargetedEnemies[_currentChainedTargetIndex];
             lerp.LerpPosition(_targetEnemy.MeshTransform, MovementSpeed / 2.0f);
             StartCoroutine(WaitForLerpFinish());            
         }
         
         if (chainTargetsCount < 1 ||
-            _currentChainedTarget >= chainTargetsCount - 1)
+            _currentChainedTargetIndex >= chainTargetsCount - 1)
         {
             Disappear();
         }
@@ -68,7 +69,12 @@ public class HomingChainingProjectile : HomingProjectile
     private void DoTargetedEnemyHit()
     {
         DamageTargetEnemy(_damageAttack);
-        
+        PrepareChainedTargets();
+        _isChaining = true;
+    }
+
+    private void PrepareChainedTargets()
+    {
         _chainTargetedEnemies = GetNearestEnemiesToTargetedEnemy(_targetEnemy, maxChainedTargets, chainRadius, enemyLayerMask);
         _chainTargetedDamage = new TurretDamageAttack[_chainTargetedEnemies.Length];
         for (int i = 0; i < _chainTargetedEnemies.Length; i++)
@@ -78,14 +84,12 @@ public class HomingChainingProjectile : HomingProjectile
             _chainTargetedDamage[i] = CreateDamageAttack(chainedEnemy);
             chainedEnemy.QueueDamage(_chainTargetedDamage[i]);
         }
-        
-        _isChaining = true;
     }
     
     private void DoChainedEnemyHit()
     {
-        DamageTargetEnemy(_chainTargetedDamage[_currentChainedTarget]);
-        ++_currentChainedTarget;
+        DamageTargetEnemy(_chainTargetedDamage[_currentChainedTargetIndex]);
+        ++_currentChainedTargetIndex;
     }
     
 
