@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
 using NaughtyAttributes;
+using Project.Scripts.GameManager;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -27,7 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected CanvasGroup cgVictoryHolder;
     [SerializeField] protected GameObject gameOverHolder;
     [SerializeField] private FinalGameVictoryDialogues _finalGameVictoryDialogues;
-
+    [SerializeField] private OWMapVictoryDoorAnimation _victoryDoorAnimation;
+    
     [Header("TEXTS")]
     [SerializeField] protected TextDecoder victoryTitleTextDecoder;
     [SerializeField] protected TextDecoder victorySubtitleTextDecoder;
@@ -92,13 +94,13 @@ public class GameManager : MonoBehaviour
         victoryHolder.SetActive(true);
         SetupVictoryDialogue();
         UnlockVictoryContent();
-        StartCoroutine(DoStartVictory(_finalGameVictoryDialogues));
+        StartCoroutine(DoStartVictory(_finalGameVictoryDialogues, false));
     }
 
     public void StartDemoVictory(IGameVictoryDialogue gameVictoryDialogue)
     {
         victoryHolder.SetActive(true);
-        StartCoroutine(DoStartVictory(gameVictoryDialogue)); 
+        StartCoroutine(DoStartVictory(gameVictoryDialogue, true)); 
     }
     
 
@@ -126,9 +128,10 @@ public class GameManager : MonoBehaviour
         );
     }
 
-    public IEnumerator DoStartVictory(IGameVictoryDialogue gameVictoryDialogue, bool endFinishRun = true)
+    public IEnumerator DoStartVictory(IGameVictoryDialogue gameVictoryDialogue, bool isDemo, bool endFinishRun = true)
     {
         PauseMenu.GetInstance().GameCanBePaused = false;
+
 
         yield return new WaitForSeconds(2.0f);        
         victoryTitleTextDecoder.Activate();
@@ -140,6 +143,11 @@ public class GameManager : MonoBehaviour
         GameAudioManager.GetInstance().MusicFadeOut(0.5f);
         
 
+        if (!isDemo)
+        {
+            _victoryDoorAnimation.PlayVictoryStartAnimation();
+        }
+        
         cgVictoryHolder.DOFade(0f, 0.25f);
         GameAudioManager.GetInstance().PlayRandomGlitchSound();
         globalVolume.profile = glitchVol;
@@ -152,6 +160,11 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(gameVictoryDialogue.PlayVictoryDialogue());
 
 
+        if (!isDemo)
+        {
+            _victoryDoorAnimation.PlayVictoryEndAnimation();
+        }
+        
         for (int i = 0; i < 3; ++i)
         {
             GameAudioManager.GetInstance().PlayRandomGlitchSound();
