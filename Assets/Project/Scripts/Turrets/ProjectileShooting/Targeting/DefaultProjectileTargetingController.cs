@@ -19,4 +19,9 @@ public class DefaultProjectileTargetingController : IProjectileTargetingControll
     {
         TargetedEnemy = _ownerBuilding.GetBestEnemyTarget(TargetedEnemy);  
     }
+
+    public void ClearTargetedEnemy()
+    {
+        TargetedEnemy = null;
+    }
 }

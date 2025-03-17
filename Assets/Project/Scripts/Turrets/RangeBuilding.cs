@@ -180,8 +180,6 @@ public abstract class RangeBuilding : Building
 
     public Enemy GetBestEnemyTarget(Enemy currentlyTargetedEnemy)
     {
-        SortEnemies();
-
         if (currentlyTargetedEnemy != null &&
             currentlyTargetedEnemy.CanBeTargeted() &&
             !currentlyTargetedEnemy.DiesFromQueuedDamage() &&
@@ -191,6 +189,7 @@ public abstract class RangeBuilding : Building
         }
         
 
+        SortEnemies();
         int enemyI = 0;
         while (enemyI < enemies.Count && !enemies[enemyI].CanBeTargeted())
         {

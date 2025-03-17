@@ -125,12 +125,12 @@ public class TurretBuilding : RangeBuilding, ElectricWireSegment.IAttachable
         ProjectileDataModel = CardData.SharedPartsGroup.Projectile;
         _abilitiesObjectLifetimeCycle = CardData.PassiveAbilitiesController;
         _abilitiesPlacingLifetimeCycle = CardData.PassiveAbilitiesController;
+        CardData.PassiveAbilitiesController.SetTurretOwner(this);
 
         TurretCardPartsGroup parts = turretCardData.SharedPartsGroup;
         TurretPartBody turretPartBody = parts.Body;
 
         CardLevel = turretCardData.CardUpgradeLevel;
-
         
         bodyPart = Instantiate(turretPartBody.prefab, bodyHolder).GetComponent<TurretPartBody_Prefab>();
         bodyPart.Init(turretPartBody.bodyType, ProjectileDataModel.MaterialForTurret);
@@ -253,6 +253,10 @@ public class TurretBuilding : RangeBuilding, ElectricWireSegment.IAttachable
         bodyPart.transform.DOPunchPosition(bodyPart.transform.forward * -0.1f, 0.25f, 5, 1.0f, false);
     }
 
+    public void OnShotKilledEnemy(Enemy killedEnemy)
+    {
+        _shootingController.OnEnemyKilled(killedEnemy);
+    }
 
     protected override void DisableFunctionality()
     {

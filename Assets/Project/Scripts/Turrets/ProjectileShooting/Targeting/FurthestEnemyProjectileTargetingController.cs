@@ -32,7 +32,12 @@ public class FurthestEnemyProjectileTargetingController : IProjectileTargetingCo
 
         TargetedEnemy = GetFurthestEnemy(enemies);  
     }
-    
+
+    public void ClearTargetedEnemy()
+    {
+        TargetedEnemy = null;
+    }
+
     private Enemy GetFurthestEnemy(List<Enemy> enemies)
     {
         Vector3 turretPosition = _ownerBuilding.Position;

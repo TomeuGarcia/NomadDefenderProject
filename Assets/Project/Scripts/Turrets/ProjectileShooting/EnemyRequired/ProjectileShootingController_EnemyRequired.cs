@@ -6,6 +6,8 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
     private readonly TurretStatsSnapshot _stats;
     private float _shootTimer;
     private IProjectileTargetingController _targetingController;
+
+    private bool _isTargetLocked = false;
     
     public ProjectileShootingController_EnemyRequired(CreateData createData)
         : base(createData)
@@ -24,6 +26,11 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
 
     public override void UpdateShoot(float deltaTime)
     {
+        if (!_isTargetLocked)
+        {
+            _targetingController.ClearTargetedEnemy();
+        }
+        
         _targetingController.ComputeNextTargetedEnemy();
         bool targetEnemyExists = _targetingController.TargetEnemyExists();
         
@@ -49,8 +56,19 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
         ResetShootState();
     }
 
+    public override void OnEnemyKilled(Enemy killedEnemy)
+    {
+        if (killedEnemy != _targetingController.TargetedEnemy)
+        {
+            return;
+        }
+
+        _isTargetLocked = false; // Not target locked until the first (or any) shot
+    }
+
     public override void DoShoot()
     {
+        _isTargetLocked = true; // Become target locked whenever a shot happens 
         Shoot(_targetingController.TargetedEnemy);
     }
 
