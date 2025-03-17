@@ -136,17 +136,17 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);        
         victoryTitleTextDecoder.Activate();
 
+        if (!isDemo)
+        {
+            _victoryDoorAnimation.PlayVictoryStartAnimation();
+        }
+        
+
         yield return new WaitForSeconds(1.0f);
         victorySubtitleTextDecoder.Activate();
         yield return new WaitForSeconds(4f);
 
         GameAudioManager.GetInstance().MusicFadeOut(0.5f);
-        
-
-        if (!isDemo)
-        {
-            _victoryDoorAnimation.PlayVictoryStartAnimation();
-        }
         
         cgVictoryHolder.DOFade(0f, 0.25f);
         GameAudioManager.GetInstance().PlayRandomGlitchSound();
