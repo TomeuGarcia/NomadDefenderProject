@@ -127,10 +127,15 @@ public class TDBattleTutorialsManager : MonoBehaviour
         if (!ShouldPlay_GameSpeedTutorial(1))
         {
             yield break;
-        }
+        }        
         
         yield return new WaitUntil(() => !_hand.IsInteractingWithCards);
 
+        if (_gameSpeedInteracted)
+        {
+            yield break;
+        }
+        
         BuildingCard.LockAllCardsFromHover = true;
         MouseOverlapNotifier.GlobalDisabled = true;
         GameTime.SetTimeScale(0f);

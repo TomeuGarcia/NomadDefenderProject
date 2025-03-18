@@ -427,7 +427,7 @@ public class HandBuildingCards : MonoBehaviour
         bool shouldOnlyDrawTurret = ShouldOnlyDrawTurret();
         _cardDrawer.ReturnCardToDeck(card);
 
-        _cardDrawer.TryRedrawCard(shouldOnlyDrawTurret);
+        _cardDrawer.TryRedrawCard(shouldOnlyDrawTurret, card);
 
         if (!HasRedrawsLeft())
         {

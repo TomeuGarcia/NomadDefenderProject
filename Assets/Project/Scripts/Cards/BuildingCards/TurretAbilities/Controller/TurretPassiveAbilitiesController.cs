@@ -81,6 +81,31 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
     {
         return _passiveAbilities.Count > 0;
     }
+    
+    public bool SharesAllPassiveAbilities(TurretPassiveAbilitiesController other)
+    {
+        if (_passiveAbilities.Count != other._passiveAbilities.Count)
+        {
+            return false;
+        }
+
+        bool bothHaveNoPassives = HasPassiveAbilities();
+        if (bothHaveNoPassives)
+        {
+            return true;
+        }
+        
+
+        foreach (var passiveAbility in _passiveAbilities)
+        {
+            if (!other._passiveAbilities.Contains(passiveAbility))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
     public bool HasReachedPassiveAmountLimit()
     {
         return _passiveAbilities.Count == ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET;

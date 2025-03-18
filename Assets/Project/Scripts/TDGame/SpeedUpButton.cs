@@ -92,14 +92,17 @@ public class SpeedUpButton : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetCurrentTimeSpeed(0);
+            OnGameSpeedInteracted?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SetCurrentTimeSpeed(1);
+            OnGameSpeedInteracted?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             SetCurrentTimeSpeed(2);
+            OnGameSpeedInteracted?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {

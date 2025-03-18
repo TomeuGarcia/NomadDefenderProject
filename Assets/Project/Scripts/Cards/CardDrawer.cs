@@ -131,7 +131,7 @@ public class CardDrawer : MonoBehaviour
         if (deck.HasCardsLeft())
             DrawRandomCard();
     }
-    public void TryRedrawCard(bool alwaysDrawTurret)
+    public void TryRedrawCard(bool alwaysDrawTurret, BuildingCard cardToBlacklist)
     {
         if (deck.HasCardsLeft() && canRedraw) 
         {
@@ -141,7 +141,7 @@ public class CardDrawer : MonoBehaviour
             }
             else
             {
-                DrawTopCard();
+                DrawTopCardBlacklisting(cardToBlacklist);
             }
 
             UpdateRedrawsLeftText();
@@ -185,16 +185,53 @@ public class CardDrawer : MonoBehaviour
         }
     }
 
+    private void DrawTopCardBlacklisting(BuildingCard cardToBlacklist)
+    {
+        List<BuildingCard> cards = deck.Cards;
+        
+        TurretBuildingCard turretCardToBlacklist = cardToBlacklist as TurretBuildingCard;
+        bool blacklistingTurret = turretCardToBlacklist != null;
+        SupportBuildingCard supportCardToBlacklist = cardToBlacklist as SupportBuildingCard;
+        bool blacklistingSupport = supportCardToBlacklist != null;
+
+        
+        int cardI = 0;
+        bool keepBlacklisting = true;
+        for (; cardI < (cards.Count - 1) && keepBlacklisting; ++cardI)
+        {
+            BuildingCard card = cards[cardI];
+            if (blacklistingTurret && card is TurretBuildingCard turretCard)
+            {
+                bool sharesAllPassiveAbilities = turretCardToBlacklist.CardData.PassiveAbilitiesController.
+                    SharesAllPassiveAbilities(turretCard.CardData.PassiveAbilitiesController);
+                bool sharesProjectile = turretCardToBlacklist.CardData.OriginalModel.SharedPartsGroup.Projectile ==
+                                        turretCard.CardData.OriginalModel.SharedPartsGroup.Projectile;
+                
+                keepBlacklisting = sharesAllPassiveAbilities && sharesProjectile;
+            }
+            else if (blacklistingSupport && card is SupportBuildingCard supportCard)
+            {
+                keepBlacklisting = supportCardToBlacklist.CardData.OriginalModel ==
+                                   supportCard.CardData.OriginalModel;
+            }
+            else
+            {
+                keepBlacklisting = false;
+            }
+        }
+
+        cardI = Mathf.Max(0, cardI - 1); // Revert last undesired increment
+        AddCardToHand(deck.GetAndRemoveCard(cardI));
+    }
+    
     private void DrawTopCard()
     {
         AddCardToHand(deck.GetTopCard());
-        //TryHideDeckHUD();        
     }
     private void DrawRandomCard()
     {
         BuildingCard card = deck.GetTopCard();
         AddCardToHand(card);
-        //TryHideDeckHUD();
     }
 
     private void AddCardToHand(BuildingCard card, float handShownDuration = 0.0f)
@@ -264,9 +301,7 @@ public class CardDrawer : MonoBehaviour
         hand.RemoveCard(card);
         //hand.InitCardsInHand();
         deck.AddCardToDeckBottom(card);
-
-        //deck.TryBlacklistCard(card);
-
+        
         battleHUD.AddHasDeckCardIcon();
     }
 
