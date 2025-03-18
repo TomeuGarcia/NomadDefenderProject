@@ -384,6 +384,7 @@ public class Enemy : MonoBehaviour, ISpeedBoosterUser
         if (killFailed)
         {
             Debug.Log("Kill Fail");
+            healthSystem.SetHealthAndArmorToZero();
             Die();
         }
     }

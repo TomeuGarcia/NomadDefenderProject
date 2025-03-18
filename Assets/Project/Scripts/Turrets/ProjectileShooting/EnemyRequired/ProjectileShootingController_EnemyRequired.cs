@@ -26,10 +26,21 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
 
     public override void UpdateShoot(float deltaTime)
     {
-        if (!_isTargetLocked)
+        bool targetEnemyExisted = _targetingController.TargetEnemyExists();
+        if (_isTargetLocked)
+        {
+            if (targetEnemyExisted &&
+                (_targetingController.TargetedEnemy.DiesFromQueuedDamage() ||
+                _targetingController.TargetedEnemy.HealthSystem.IsDead()))
+            {
+                _isTargetLocked = false;
+            }
+        }
+        else
         {
             _targetingController.ClearTargetedEnemy();
         }
+        
         
         _targetingController.ComputeNextTargetedEnemy();
         bool targetEnemyExists = _targetingController.TargetEnemyExists();
@@ -55,17 +66,7 @@ public class ProjectileShootingController_EnemyRequired : AProjectileShootingCon
         DoShoot();
         ResetShootState();
     }
-
-    public override void OnEnemyKilled(Enemy killedEnemy)
-    {
-        if (killedEnemy != _targetingController.TargetedEnemy)
-        {
-            return;
-        }
-
-        _isTargetLocked = false; // Not target locked until the first (or any) shot
-    }
-
+    
     public override void DoShoot()
     {
         _isTargetLocked = true; // Become target locked whenever a shot happens 

@@ -4,7 +4,6 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
 {
     private readonly List<ATurretPassiveAbility> _passiveAbilities;
     private readonly TurretCardData _cardDataOwner;
-    private TurretBuilding _turretOwner;
     
     public List<ATurretPassiveAbility> PassiveAbilities => _passiveAbilities;
     public int CurrentNumberOfPassives => _passiveAbilities.Count;
@@ -87,11 +86,6 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         return _passiveAbilities.Count == ATurretPassiveAbility.MAX_AMOUNT_FOR_TURRET;
     }
 
-
-    public void SetTurretOwner(TurretBuilding turretOwner)
-    {
-        _turretOwner = turretOwner;
-    }
     
 
     public void OnTDGameStart(BuildingCard ownerCard, DeckBuildingCards deck)
@@ -203,11 +197,6 @@ public class TurretPassiveAbilitiesController : ITurretPassiveAbilitiesNotifier
         foreach (var passiveAbility in _passiveAbilities)
         {
             passiveAbility.OnAfterDamagingEnemy(damageAttackResult);
-        }
-
-        if (damageAttackResult.Target.HealthSystem.IsDead())
-        {
-            _turretOwner.OnShotKilledEnemy(damageAttackResult.Target);
         }
     } 
 }

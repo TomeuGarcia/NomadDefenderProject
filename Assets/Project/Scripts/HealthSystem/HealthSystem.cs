@@ -97,6 +97,11 @@ public class HealthSystem
         return health <= 0;
     }
 
+    public void SetHealthAndArmorToZero()
+    {
+        health = armor = 0;
+    }
+    
     public bool IsFullHealth()
     {
         return health == maxHealth;

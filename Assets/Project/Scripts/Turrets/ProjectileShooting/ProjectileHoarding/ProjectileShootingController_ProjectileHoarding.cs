@@ -40,12 +40,7 @@ public class ProjectileShootingController_ProjectileHoarding : AProjectileShooti
 
         ResetShootState();
     }
-
-    public override void OnEnemyKilled(Enemy killedEnemy)
-    {
-        // Do nothing
-    }
-
+    
     public override void DoShoot()
     {
         ATurretProjectileBehaviour projectileBehaviour = Shoot(EnemyFactory.GetInstance().GetNullEnemy());
