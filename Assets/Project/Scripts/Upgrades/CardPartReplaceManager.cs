@@ -623,7 +623,6 @@ public class CardPartReplaceManager : MonoBehaviour
         ReplacePartInCard(selectedCard);
 
         bool replacedWithSamePart = selectedCard.ReplacedWithSamePart;
-        selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
         selectedCard.PlayLevelUpAnimation();
 
         if (replacedWithSamePart)
@@ -641,13 +640,17 @@ public class CardPartReplaceManager : MonoBehaviour
         //GameAudioManager.GetInstance().PlayCardFinalRetreivedFromUpgrader();
         //GameAudioManager.GetInstance().PlaySmokeBurst();
         printParticles_PS.Play();
-        yield return new WaitForSeconds(1.7f);
+        yield return new WaitForSeconds(1.5f);
         
+        selectedCard.PlayUpdatePlayCostAnimation(_playCostsConfig.ComputeCardPlayCostIncrement(!replacedWithSamePart, selectedCard));
+        
+        yield return new WaitForSeconds(0.2f);
         cardPartHolder.Hide(0.5f, 0.2f);
         yield return new WaitForSeconds(1.0f);
+        
         if (replacedWithSamePart)
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         selectedCard.DisableMouseInteraction();

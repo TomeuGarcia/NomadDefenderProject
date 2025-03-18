@@ -374,7 +374,11 @@ public abstract class BuildingCard : MonoBehaviour
 
     protected void InitCostText()
     {
-        playCostText.text = GetCardPlayCost().ToString();
+        SetCostText(GetCardPlayCost());
+    }
+    protected void SetCostText(int cost)
+    {
+        playCostText.text = cost.ToString();
     }
 
     public abstract void UpdatePlayCost(int newPlayCost);

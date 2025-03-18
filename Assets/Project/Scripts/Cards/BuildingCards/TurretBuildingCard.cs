@@ -316,29 +316,30 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     public void PlayUpdatePlayCostAnimation(int amountToIncrement)
     {
         int endValue = Mathf.Max(PlayCost + amountToIncrement, TurretBuilding.MIN_PLAY_COST);
+        int originalPlayCost = PlayCost;
         CardData.SetPlayCost(endValue);
 
-        if (endValue > PlayCost)
+        if (endValue > originalPlayCost)
         {
-            StartCoroutine(DoPlayPlayIncrementCostAnimation(endValue));
+            StartCoroutine(DoPlayPlayIncrementCostAnimation(originalPlayCost, endValue));
         }
         else
         {
-            StartCoroutine(DoPlayDecrementPlayCostAnimation(endValue));
+            StartCoroutine(DoPlayDecrementPlayCostAnimation(originalPlayCost, endValue));
         }
     }
 
-    private IEnumerator DoPlayDecrementPlayCostAnimation(int endValue, int decrementAmountPerTick = 1, 
-        float tickDuration = 0.03f, float startDelay = 0.4f)
+    private IEnumerator DoPlayDecrementPlayCostAnimation(int currentValue, int endValue, 
+        int decrementAmountPerTick = 1, float tickDuration = 0.03f, float startDelay = 0.4f)
     {
         playingPlayCostAnimation = true;
         yield return new WaitForSeconds(startDelay);
 
         int beforeEndValue = endValue + decrementAmountPerTick;
-        while (PlayCost > beforeEndValue)
+        while (currentValue > beforeEndValue)
         {
-            PlayCost -= decrementAmountPerTick;
-            InitCostText();
+            currentValue -= decrementAmountPerTick;
+            SetCostText(currentValue);
             GameAudioManager.GetInstance().PlayConsoleTyping(0);
             yield return new WaitForSeconds(tickDuration);
         }
@@ -352,17 +353,17 @@ public class TurretBuildingCard : BuildingCard, ICardTooltipSource
     }
 
 
-    private IEnumerator DoPlayPlayIncrementCostAnimation(int endValue, int incrementAmountPerTick = 1, 
-        float tickDuration = 0.03f, float startDelay = 0.4f)
+    private IEnumerator DoPlayPlayIncrementCostAnimation(int currentValue, int endValue, 
+        int incrementAmountPerTick = 1, float tickDuration = 0.03f, float startDelay = 0.4f)
     {
         playingPlayCostAnimation = true;
         yield return new WaitForSeconds(startDelay);
 
         int beforeEndValue = endValue - incrementAmountPerTick;
-        while (PlayCost < beforeEndValue)
+        while (currentValue < beforeEndValue)
         {
-            PlayCost += incrementAmountPerTick;
-            InitCostText();
+            currentValue += incrementAmountPerTick;
+            SetCostText(currentValue);
             GameAudioManager.GetInstance().PlayConsoleTyping(0);
             yield return new WaitForSeconds(tickDuration);
         }
